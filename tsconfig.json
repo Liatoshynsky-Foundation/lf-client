@@ -2,26 +2,34 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "allowJs": true, // Allow JavaScript files alongside TypeScript files
+    "skipLibCheck": true, // Skip checking library types for faster builds
+    "strict": true, // Enable strict type-checking options
+    "noEmit": true, // Do not emit output files (used for type-checking only)
+    "esModuleInterop": true, // Enables compatibility between CommonJS and ES Modules
+    "module": "esnext", // Use ESNext module resolution
+    "moduleResolution": "node", // Use Node module resolution strategy
+    "resolveJsonModule": true, // Allow importing JSON modules
+    "isolatedModules": true, // Ensure each file is treated as an isolated module
+    "incremental": true, // Enable incremental compilation for faster builds
+    "jsx": "react-jsx",
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "baseUrl": ".", // Base URL for module resolution
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
+    "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
+    "skipDefaultLibCheck": true, // Skip checking default library types for faster builds
+    "allowSyntheticDefaultImports": true // Allow synthetic default imports for compatibility
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "jest.config.ts" // Include Jest config file for TypeScript support
+  ],
+  "exclude": ["node_modules"] // Exclude node_modules from compilation
 }

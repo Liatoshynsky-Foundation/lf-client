@@ -13,11 +13,14 @@ const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
 
   {
+    ignores: ['node_modules', '.next', 'coverage', '.idea', '.vscode'],
+  },
+  {
     rules: {
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       'no-console': 'warn',
-      'no-unused-vars': 'off', 
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
