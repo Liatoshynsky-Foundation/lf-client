@@ -85,8 +85,7 @@ api.secret=${API_SECRET}
 
 ### Clone
 
-- Clone this repo to your local machine using `https://github.com/ita-social-projects/SOMEREPO`
-
+- Clone this repo to your local machine using `git@github.com:Liatoshynsky-Foundation/lf-client.git`
 ### Setup
 
 - If you want more syntax highlighting, format your code like this:
@@ -108,6 +107,10 @@ $ bower install
 - For all the possible languages that support syntax highlithing on GitHub (which is basically all of them), refer <a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank">here</a>.
 
 ### How to run local
+
+```bash
+npm run dev
+```
 
 ### How to run Docker
 
