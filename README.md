@@ -164,6 +164,27 @@ app/
 ## Contributing
 
 ### Git flow
+```mermaid
+gitGraph
+   commit id: "Initial commit"
+   branch develop
+   checkout develop
+   commit id: "Setup project structure"
+   branch feature/login
+   checkout feature/login
+   commit id: "Add login UI"
+   commit id: "Connect login to backend"
+   checkout develop
+   merge feature/login id: "Merge login feature"
+   branch release/1.0
+   checkout release/1.0
+   commit id: "Prepare release 1.0"
+   checkout main
+   merge release/1.0 id: "Merge release 1.0 into main"
+   commit id: "Tag version v1.0"
+   checkout develop
+   merge release/1.0 id: "Merge release 1.0 back into develop"
+```
 > To get started...
 #### Step 1
 
