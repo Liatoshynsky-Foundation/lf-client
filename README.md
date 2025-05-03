@@ -122,6 +122,40 @@ $ bower install
 
 ## Documentation
 
+### Folder structure
+
+```markdown
+app/
+├── events/
+│   ├── page.tsx (list of events)
+│   ├── [slug]/
+│   │   └── page.tsx             # /events/:slug (individual event)
+│   ├── layout.tsx               # (optional layout)
+│   ├── components/              # News-specific components
+│   │   ├── Events.tsx           # Events component
+│   │   └── Event.tsx            # Event post component
+│   └── hooks/                   # event-specific hooks
+│       ├── useEvents.ts         # Custom hook for fetching all events
+│       └── useEvent.ts          # Custom hook for fetching a single event 
+├── shared/                      # Shared components and hooks
+│   ├── components/              # Reusable UI components
+│   │   ├── Header.tsx           # Shared Header component
+│   │   └── Footer.tsx           # Shared Footer component
+│   └── hooks/                   # Reusable hooks
+│       └── useAuth.ts           # Authentication hook (example)
+├── api/
+│   ├── events/
+│   │   ├── route.ts             # API for /api/events
+│   │   └── [slug]/
+│   │       └── route.ts         # API for /api/events/:slug
+├── middleware/                  # Middlewares for handling requests
+│   ├── logger.ts                # Middleware for logging
+│   └── authentication.ts       # Middleware for authentication checks
+└── lib/
+│   └── axiosAPI.ts           # Setup for axios API
+└── constants/    
+```
+
 ---
 
 ## Contributing
