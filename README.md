@@ -184,6 +184,17 @@ gitGraph
    commit id: "Tag version v1.0"
    checkout develop
    merge release/1.0 id: "Merge release 1.0 back into develop"
+
+   checkout main
+   branch hotfix/1.0.1
+   checkout hotfix/1.0.1
+   commit id: "Fix critical bug in production"
+   checkout main
+   merge hotfix/1.0.1 id: "Merge hotfix into main"
+   commit id: "Tag version v1.0.1"
+   checkout develop
+   merge hotfix/1.0.1 id: "Merge hotfix into develop"
+
 ```
 > To get started...
 #### Step 1
