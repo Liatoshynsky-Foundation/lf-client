@@ -153,7 +153,7 @@ app/
 │   └── authentication.ts       # Middleware for authentication checks
 └── lib/
 │   └── axiosAPI.ts           # Setup for axios API
-└── constans/    
+└── constants/    
 ```
 
 ---
