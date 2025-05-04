@@ -17,7 +17,7 @@ const config: Config = {
       statements: 70,
     },
   },
-  coverageReporters: ['text', 'lcov'],
+  coverageReporters: ['text', 'lcov','json', 'html'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
