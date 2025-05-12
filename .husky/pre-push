@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+CONFIG=$(node -e "console.log(JSON.stringify(require('./.branchlintrc.config.js')))")
+
+PATTERN=$(echo "$CONFIG" | node -e "console.log(JSON.parse(process.argv[1]).pattern)" "$CONFIG")
+EXCLUDE=$(echo "$CONFIG" | node -e "console.log(JSON.parse(process.argv[1]).exclude.join('|'))" "$CONFIG")
+EXAMPLES=$(echo "$CONFIG" | node -e "console.log(JSON.parse(process.argv[1]).examples.join('\n'))" "$CONFIG")
+
+if echo "$BRANCH_NAME" | grep -qE "^($EXCLUDE)$"; then
+  exit 0
+fi
+
+if ! echo "$BRANCH_NAME" | grep -qE "$PATTERN"; then
+  echo "Error: Invalid branch name format!"
+  echo "Correct format examples:"
+  echo "$EXAMPLES"
+  echo ""
+  echo "Current branch name: $BRANCH_NAME"
+  exit 1
+fi 
