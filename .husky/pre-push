@@ -13,10 +13,13 @@ if echo "$BRANCH_NAME" | grep -qE "^($EXCLUDE)$"; then
 fi
 
 if ! echo "$BRANCH_NAME" | grep -qE "$PATTERN"; then
-  echo "Error: Invalid branch name format!"
-  echo "Correct format examples:"
+  echo "Branch name validation failed."
+  echo ""
+  echo "Expected format: <type>/<number>/<short-description>"
+  echo "Examples:"
   echo "$EXAMPLES"
   echo ""
   echo "Current branch name: $BRANCH_NAME"
+  echo ""
   exit 1
-fi 
+fi
