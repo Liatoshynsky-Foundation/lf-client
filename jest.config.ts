@@ -26,6 +26,9 @@ const config: Config = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
+  moduleNameMapper: {
+    '^~/(.*)$': '<rootDir>/app/$1'
+  },
   modulePaths: ['<rootDir>/app'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   transform: {
