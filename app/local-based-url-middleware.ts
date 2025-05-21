@@ -17,7 +17,7 @@ import {
 } from 'lib/utils/cookies';
 import { isStaticOrApiPath } from 'lib/utils/is-static-or-api-path';
 
-export function localBasedUrlMiddleware  (request: NextRequest) {
+export const localBasedUrlMiddleware  = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
 
     if (isStaticOrApiPath(pathname)) {
