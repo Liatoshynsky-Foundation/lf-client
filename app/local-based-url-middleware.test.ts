@@ -1,9 +1,22 @@
 import { localBasedUrlMiddleware } from './local-based-url-middleware';
-import { NextResponse, NextRequest } from 'next/server';
-import { getCookie, setCookie } from '~/lib/utils/cookies';
+import {
+    NextResponse,
+    type NextRequest
+} from 'next/server';
+import {
+    getCookie,
+    setCookie
+} from '~/lib/utils/cookies';
 import { isStaticOrApiPath } from '~/lib/utils/is-static-or-api-path';
-import { extractLocaleFromPath, determineLocale } from '~/lib/i18n/utils';
-import {DEFAULT_LOCALE, LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS} from '~/constants';
+import {
+    extractLocaleFromPath,
+    determineLocale
+} from '~/lib/i18n/utils';
+import {
+    DEFAULT_LOCALE,
+    LANGUAGE_COOKIES,
+    ONE_MONTH_IN_SECONDS
+} from '~/constants';
 
 const next = 'nextResponse';
 const redirect = 'redirectResponse';
@@ -68,16 +81,16 @@ describe('localBasedUrlMiddleware', () => {
     it('should set cookie and redirect if locale is missing from path', () => {
         isStaticMock.mockReturnValue(false);
         extractLocaleMock.mockReturnValue(null);
-        getCookieMock.mockReturnValue('EN');
-        determineLocaleMock.mockReturnValue('EN');
+        getCookieMock.mockReturnValue('en');
+        determineLocaleMock.mockReturnValue('en');
 
         const request = createRequest('test-page');
         const redirectSpy = jest.spyOn(NextResponse, 'redirect');
         const result = localBasedUrlMiddleware(request);
 
-        expect(determineLocaleMock).toHaveBeenCalledWith('EN');
+        expect(determineLocaleMock).toHaveBeenCalledWith('en');
         expect(redirectSpy).toHaveBeenCalledWith(new URL(`${exampleUrl}test-page`, request.url));
-        expectSetCookieCalledWith(result, 'EN');
+        expectSetCookieCalledWith(result, 'en');
         expect(result).toStrictEqual({ redirect });
     });
 
@@ -96,22 +109,22 @@ describe('localBasedUrlMiddleware', () => {
 
     it('should set cookie and return next if locale in path differs from cookie', () => {
         isStaticMock.mockReturnValue(false);
-        extractLocaleMock.mockReturnValue('UA');
-        getCookieMock.mockReturnValue('EN');
+        extractLocaleMock.mockReturnValue('ua');
+        getCookieMock.mockReturnValue('en');
 
-        const request = createRequest('UA/test');
+        const request = createRequest('ua/test-page');
         const result = localBasedUrlMiddleware(request);
 
-        expectSetCookieCalledWith(result, 'UA');
+        expectSetCookieCalledWith(result, 'ua');
         expect(result).toStrictEqual({ next });
     });
 
     it('should return only next if locale matches cookie', () => {
         isStaticMock.mockReturnValue(false);
-        extractLocaleMock.mockReturnValue('UA');
-        getCookieMock.mockReturnValue('UA');
+        extractLocaleMock.mockReturnValue('ua');
+        getCookieMock.mockReturnValue('ua');
 
-        const request = createRequest('UA/test');
+        const request = createRequest('ua/test-page');
         const result = localBasedUrlMiddleware(request);
 
         expect(setCookieMock).not.toHaveBeenCalled();

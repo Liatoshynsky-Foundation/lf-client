@@ -16,7 +16,7 @@ describe('utils tests', () => {
             }
         });
         it('should returns null if locale is not exist', () => {
-            expect(extractLocaleFromPath('/FR/some-page')).toBe(null);
+            expect(extractLocaleFromPath('/fr/some-page')).toBe(null);
             expect(extractLocaleFromPath('/invalid/path')).toBe(null);
         });
         it('should returns null for root path', () => {
@@ -32,9 +32,8 @@ describe('utils tests', () => {
         });
 
         it('should returns DEFAULT_LOCALE if the passed locale is invalid', () => {
-            expect(determineLocale('FR')).toBe(DEFAULT_LOCALE);
+            expect(determineLocale('fr')).toBe(DEFAULT_LOCALE);
             expect(determineLocale('')).toBe(DEFAULT_LOCALE);
-            expect(determineLocale(undefined)).toBe(DEFAULT_LOCALE);
         });
     });
 });

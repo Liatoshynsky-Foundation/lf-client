@@ -13,7 +13,7 @@ export const extractLocaleFromPath = (
     return null;
 };
 
-export const determineLocale = (localeFromCookie?: string): string => {
+export const determineLocale = (localeFromCookie: string): string => {
     if (localeFromCookie && SUPPORTED_LOCALES.includes(localeFromCookie)) {
         return localeFromCookie;
     }

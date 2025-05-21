@@ -3,7 +3,7 @@ import { isStaticOrApiPath } from '~/lib/utils/is-static-or-api-path';
 describe('isStaticOrApiPath', () => {
     it('should return false if it is not an /api or /.next/static path', () => {
         const pathname = [
-            '/UA/test-page',
+            '/ua/test-page',
             '/test-page',
             '/e/test-page'
         ];

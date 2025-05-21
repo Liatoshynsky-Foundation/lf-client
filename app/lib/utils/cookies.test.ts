@@ -10,11 +10,11 @@ describe('cookie tests', () => {
         it('should return the cookie value if it exists', () => {
             const request = {
                 cookies: {
-                    get: (name: string) => ({ value: 'UA' })
+                    get: (name: string) => ({ value: 'ua' })
                 }
             } as NextRequest;
 
-            expect(getCookie('lang', request)).toBe('UA');
+            expect(getCookie('lang', request)).toBe('ua');
         });
 
         it('should return an empty string if there is no cookie', () => {
