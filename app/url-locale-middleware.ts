@@ -17,7 +17,7 @@ import {
 } from 'lib/utils/cookies';
 import { isStaticOrApiPath } from 'lib/utils/is-static-or-api-path';
 
-export const localBasedUrlMiddleware  = (request: NextRequest) => {
+export const urlLocaleMiddleware  = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
 
     if (isStaticOrApiPath(pathname)) {
@@ -25,22 +25,23 @@ export const localBasedUrlMiddleware  = (request: NextRequest) => {
     }
 
     const localeInPath = extractLocaleFromPath(pathname);
-    const localeFromCookie = getCookie(LANGUAGE_COOKIES, request);
+    const rawLocaleFromCookie = getCookie(LANGUAGE_COOKIES, request);
+    const localeFromCookie = rawLocaleFromCookie.toLowerCase();
+
+    if (localeInPath && localeFromCookie !== localeInPath) {
+        const response = NextResponse.next();
+        setCookie(response, localeInPath.toLowerCase(), LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
+        return response;
+    }
 
     if (localeInPath) {
-        if (localeFromCookie !== localeInPath) {
-            const response = NextResponse.next();
-            setCookie(response, localeInPath, LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
-
-            return response;
-        }
         return NextResponse.next();
     }
 
     const locale = determineLocale(localeFromCookie || DEFAULT_LOCALE);
     const redirectUrl = new URL(`/${locale}${pathname}${search}`, request.url);
     const response = NextResponse.redirect(redirectUrl);
-    setCookie(response, locale, LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
+    setCookie(response, locale.toLowerCase(), LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
 
     return response;
 }

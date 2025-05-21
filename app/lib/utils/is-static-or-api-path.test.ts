@@ -1,9 +1,9 @@
 import { isStaticOrApiPath } from '~/lib/utils/is-static-or-api-path';
 
 describe('isStaticOrApiPath', () => {
-    it('should return false if it is not an /api or /.next/static path', () => {
+    it('should return false if it is not an /api or /_next/static path', () => {
         const pathname = [
-            '/ua/test-page',
+            '/uk/test-page',
             '/test-page',
             '/e/test-page'
         ];
@@ -12,10 +12,10 @@ describe('isStaticOrApiPath', () => {
         }
     });
 
-    it('should return true if it is an /api or /.next/static path', () => {
+    it('should return true if it is an /api or /_next/static path', () => {
         const pathname = [
             '/api/test-endpoint',
-            '/.next/static/development/',
+            '/_next/static/development/',
         ];
         for (const path of pathname) {
             expect(isStaticOrApiPath(path)).toBe(true);

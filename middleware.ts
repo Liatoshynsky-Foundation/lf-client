@@ -1,12 +1,12 @@
 import type { NextRequest } from 'next/server';
-import { localBasedUrlMiddleware } from '~/local-based-url-middleware';
+import { urlLocaleMiddleware } from '~/url-locale-middleware';
 
 export const middleware = (request: NextRequest) => {
-    return localBasedUrlMiddleware(request);
+    return urlLocaleMiddleware(request);
 }
 
 export const config = {
     matcher: [
-        '/((?!api|.next/static).*)',
+        '/((?!api|_next/static).*)',
     ],
 };

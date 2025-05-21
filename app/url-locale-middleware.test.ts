@@ -1,4 +1,4 @@
-import { localBasedUrlMiddleware } from './local-based-url-middleware';
+import { urlLocaleMiddleware } from './url-locale-middleware';
 import {
     NextResponse,
     type NextRequest
@@ -73,7 +73,7 @@ describe('localBasedUrlMiddleware', () => {
         isStaticMock.mockReturnValue(true);
 
         const request = createRequest('api/test');
-        const result = localBasedUrlMiddleware(request);
+        const result = urlLocaleMiddleware(request);
 
         expect(result).toStrictEqual({ next });
     });
@@ -86,7 +86,7 @@ describe('localBasedUrlMiddleware', () => {
 
         const request = createRequest('test-page');
         const redirectSpy = jest.spyOn(NextResponse, 'redirect');
-        const result = localBasedUrlMiddleware(request);
+        const result = urlLocaleMiddleware(request);
 
         expect(determineLocaleMock).toHaveBeenCalledWith('en');
         expect(redirectSpy).toHaveBeenCalledWith(new URL(`${exampleUrl}test-page`, request.url));
@@ -101,7 +101,7 @@ describe('localBasedUrlMiddleware', () => {
         determineLocaleMock.mockReturnValue(DEFAULT_LOCALE);
 
         const request = createRequest('test-page');
-        const result = localBasedUrlMiddleware(request);
+        const result = urlLocaleMiddleware(request);
 
         expectSetCookieCalledWith(result, DEFAULT_LOCALE);
         expect(result).toStrictEqual({ redirect });
@@ -109,23 +109,23 @@ describe('localBasedUrlMiddleware', () => {
 
     it('should set cookie and return next if locale in path differs from cookie', () => {
         isStaticMock.mockReturnValue(false);
-        extractLocaleMock.mockReturnValue('ua');
+        extractLocaleMock.mockReturnValue('uk');
         getCookieMock.mockReturnValue('en');
 
-        const request = createRequest('ua/test-page');
-        const result = localBasedUrlMiddleware(request);
+        const request = createRequest('uk/test-page');
+        const result = urlLocaleMiddleware(request);
 
-        expectSetCookieCalledWith(result, 'ua');
+        expectSetCookieCalledWith(result, 'uk');
         expect(result).toStrictEqual({ next });
     });
 
     it('should return only next if locale matches cookie', () => {
         isStaticMock.mockReturnValue(false);
-        extractLocaleMock.mockReturnValue('ua');
-        getCookieMock.mockReturnValue('ua');
+        extractLocaleMock.mockReturnValue('uk');
+        getCookieMock.mockReturnValue('uk');
 
-        const request = createRequest('ua/test-page');
-        const result = localBasedUrlMiddleware(request);
+        const request = createRequest('uk/test-page');
+        const result = urlLocaleMiddleware(request);
 
         expect(setCookieMock).not.toHaveBeenCalled();
         expect(result).toStrictEqual({ next });

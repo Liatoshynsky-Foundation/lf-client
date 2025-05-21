@@ -3,7 +3,7 @@ export const isStaticOrApiPath = (
 ): boolean => {
     const ignoredPrefixes = [
         '/api',
-        '/.next/static'
+        '/_next/static'
     ];
     return ignoredPrefixes.some(prefix => pathname.startsWith(prefix));
 };
