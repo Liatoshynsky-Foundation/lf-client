@@ -1,7 +1,7 @@
 import {
     DEFAULT_LOCALE,
     SUPPORTED_LOCALES
-} from "~/constants";
+} from '~/constants';
 
 export const extractLocaleFromPath = (
     pathname: string
@@ -11,11 +11,11 @@ export const extractLocaleFromPath = (
         return segments[1];
     }
     return null;
-}
+};
 
 export const determineLocale = (localeFromCookie?: string): string => {
     if (localeFromCookie && SUPPORTED_LOCALES.includes(localeFromCookie)) {
         return localeFromCookie;
     }
     return DEFAULT_LOCALE;
-}
+};

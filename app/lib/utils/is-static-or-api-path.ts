@@ -8,4 +8,4 @@ export const isStaticOrApiPath = (
         '/favicon.ico'
     ];
     return ignoredPrefixes.some(prefix => pathname.startsWith(prefix));
-}
+};

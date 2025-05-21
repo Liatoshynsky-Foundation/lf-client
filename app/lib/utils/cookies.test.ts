@@ -20,7 +20,7 @@ describe('cookie tests', () => {
         it('should return an empty string if there is no cookie', () => {
             const request = {
                 cookies: {
-                    get: (name: string) => undefined
+                    get: (name: string)=> undefined
                 }
             } as NextRequest;
 

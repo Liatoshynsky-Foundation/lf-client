@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
 type CookieSetter = {
     cookies: {
@@ -18,8 +18,8 @@ export const getCookie = (
     cookie: string,
     request: NextRequest
 ): string => {
-    return request.cookies.get(cookie)?.value ?? ''
-}
+    return request.cookies.get(cookie)?.value ?? '';
+};
 
 export const setCookie = (
     response: CookieSetter,
