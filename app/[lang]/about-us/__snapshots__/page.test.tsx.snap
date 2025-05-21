@@ -2,6 +2,6 @@
 
 exports[`About Component renders the About component correctly 1`] = `
 <div>
-  About
+  AboutUs
 </div>
 `;
