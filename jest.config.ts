@@ -1,4 +1,9 @@
 import type { Config } from 'jest';
+import nextJest from 'next/jest';
+
+const createJestConfig = nextJest({
+  dir: './',
+});
 
 const config: Config = {
   bail: 1,
@@ -30,4 +35,4 @@ const config: Config = {
   setupFilesAfterEnv: ['@testing-library/jest-dom'],
 };
 
-export default config;
+export default createJestConfig(config);
