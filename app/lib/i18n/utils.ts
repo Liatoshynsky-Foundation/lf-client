@@ -8,7 +8,7 @@ export const extractLocaleFromPath = (
 ): string | null => {
     const segments = pathname.split('/');
     if (segments.length > 1 && SUPPORTED_LOCALES.includes(segments[1])) {
-        return segments[1];
+        return segments[1].toLowerCase();
     }
     return null;
 };
