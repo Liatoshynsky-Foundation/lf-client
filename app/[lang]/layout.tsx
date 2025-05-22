@@ -30,7 +30,14 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Container
           maxWidth="md"
-          sx={{ border: '1px solid #ccc', padding: '20px' }}
+          sx={{
+            border: '1px solid #ccc',
+            padding: '20px',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
         >
           <Header />
           {children}
