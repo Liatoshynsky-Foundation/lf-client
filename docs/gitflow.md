@@ -70,8 +70,8 @@ gitGraph
 | `feature` | `feature/task-number/short-description` | `develop`   | `git switch -c feature/1234/add-login-ui develop`      |
 | `chore`   | `chore/task-number/short-description`   | `develop`   | `git switch -c chore/1234/update-dependencies develop` |
 | `bugfix`  | `bugfix/task-number/short-description`  | `develop`   | `git switch -c bugfix/23/fix-login-error develop`      |
-| `release` | `release/version`                       | `develop`   | `git switch -c release/1.0 develop`                    |
-| `hotfix`  | `hotfix/version`                        | `main`      | `git switch -c hotfix/1.0.1/critical-fix main`         |
+| `release` | `release/version`                       | `develop`   | `git switch -c release/1.0.0 develop`                  |
+| `hotfix`  | `hotfix/version`                        | `main`      | `git switch -c hotfix/1.0.1 main`                      |
 
 > 💡 **Note**: Use kebab-case for short descriptions. Include task/issue ID if possible.
 
