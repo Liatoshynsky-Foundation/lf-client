@@ -11,7 +11,6 @@ export const footerData = {
   ],
 };
 
-<FooterCopyrights text={footerData.text} links={footerData.links} />;
 export default function Footer() {
   return (
     <Box component="footer">
