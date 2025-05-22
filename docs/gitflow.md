@@ -9,6 +9,41 @@ This guide explains our development workflow based on GitFlow. It's designed to 
 - Controlled release process
 - Emergency fixes without disrupting development
 
+## Visual GitFlow Example
+
+```mermaid
+gitGraph
+   commit id: "Initial commit"
+   branch develop
+   checkout develop
+   commit id: "Setup project structure"
+   branch feature/login
+   checkout feature/login
+   commit id: "Add login UI"
+   commit id: "Connect login to backend"
+   checkout develop
+   merge feature/login id: "Merge login feature"
+   branch release/1.0
+   checkout release/1.0
+   commit id: "Prepare release 1.0"
+   checkout main
+   merge release/1.0 id: "Merge release 1.0 into main"
+   commit id: "Tag version v1.0"
+   checkout develop
+   merge release/1.0 id: "Merge release 1.0 back into develop"
+
+   checkout main
+   branch hotfix/1.0.1
+   checkout hotfix/1.0.1
+   commit id: "Fix critical bug in production"
+   checkout main
+   merge hotfix/1.0.1 id: "Merge hotfix into main"
+   commit id: "Tag version v1.0.1"
+   checkout develop
+   merge hotfix/1.0.1 id: "Merge hotfix into develop"
+
+```
+
 ## Branch Overview
 
 ### Core Branches
@@ -20,72 +55,57 @@ This guide explains our development workflow based on GitFlow. It's designed to 
 
 ### Supporting Branches
 
-| Type      | Created from | Merged into          | Purpose                 |
-| --------- | ------------ | -------------------- | ----------------------- |
-| `feature` | `develop`    | `develop`            | New features            |
-| `bugfix`  | `develop`    | `develop`            | Bug fixes               |
-| `hotfix`  | `main`       | `main` and `develop` | Urgent production fixes |
-| `release` | `develop`    | `main` and `develop` | Release preparation     |
+| Type      | Created from | Merged into          | Purpose                                                                       |
+| --------- | ------------ | -------------------- | ----------------------------------------------------------------------------- |
+| `feature` | `develop`    | `develop`            | Developing new functionality                                                  |
+| `chore`   | `develop`    | `develop`            | Non-feature tasks like refactoring, dependency updates, configuration changes |
+| `bugfix`  | `develop`    | `develop`            | Fixing bugs found during development                                          |
+| `hotfix`  | `main`       | `main` and `develop` | Fixing critical issues in production                                          |
+| `release` | `develop`    | `main` and `develop` | Preparing a new release                                                       |
 
-## Branch Naming Rules
+## Branch Naming & Creation
 
-Format: `type/task-number/short-description`
+| Type      | Format                                  | Base Branch | Example Command                                        |
+| --------- | --------------------------------------- | ----------- | ------------------------------------------------------ |
+| `feature` | `feature/task-number/short-description` | `develop`   | `git switch -c feature/1234/add-login-ui develop`      |
+| `chore`   | `chore/task-number/short-description`   | `develop`   | `git switch -c chore/1234/update-dependencies develop` |
+| `bugfix`  | `bugfix/task-number/short-description`  | `develop`   | `git switch -c bugfix/23/fix-login-error develop`      |
+| `release` | `release/version`                       | `develop`   | `git switch -c release/1.0.0 develop`                  |
+| `hotfix`  | `hotfix/version`                        | `main`      | `git switch -c hotfix/1.0.1 main`                      |
 
-Examples:
-
-```text
-feature/1234/add-new-feature
-bugfix/23/fix-login-issue
-hotfix/1235/critical-security-fix
-release/1236/prepare-release
-```
-
-### Branch Types and When to Use Them
-
-| Type      | When to Use                                                 |
-| --------- | ----------------------------------------------------------- |
-| `feature` | Developing new functionality                                |
-| `bugfix`  | Fixing bugs found during development                        |
-| `hotfix`  | Fixing critical issues in production                        |
-| `release` | Preparing a new release (version bump, release notes, etc.) |
+> 💡 **Note**: Use kebab-case for short descriptions. Include task/issue ID if possible.
 
 ## Development Process
 
-### 1. Starting Work
-
-Always start from the correct base branch:
+### 1. Synchronize local branches with remote
 
 ```bash
-# For new features and bug fixes
-git switch develop
-git pull
-git switch -c feature/1234/add-new-feature
-
-# For hotfixes
-git switch main
-git pull
-git switch -c hotfix/1235/critical-security-fix
+git fetch --all
 ```
 
-### 2. Making Changes
+### 2. Create a branch based on your task
+
+Use the appropriate format from the table above depending on your task type.
+
+### 3. Making Changes
 
 - Make small, focused commits
 - Follow our [commit message convention](conventional-commits.md)
 - Keep your branch up to date with the base branch
 - Test your changes thoroughly
 
-### 3. Pushing Changes
+### 4. Pushing Changes
 
 ```bash
 git push -u origin feature/1234/add-new-feature
 ```
 
-### 4. Creating Pull Requests
+### 5. Creating Pull Requests
 
 1. Go to GitHub repository
 2. Click "New Pull Request"
 3. Select:
-   - Base branch: `develop` (for features/bugfixes) or `main` (for hotfixes)
+   - Base branch: `develop` (for features/chore/bugfixes) or `main` (for hotfixes)
    - Compare branch: your feature branch
 4. Add description following our PR template
 5. Request review from team members
@@ -98,31 +118,14 @@ To maintain code quality, we have the following protections:
 
 - No direct pushes allowed
 - All changes must go through Pull Requests
-- Required approvals: 2
+- Required approvals: 3
 - Required status checks:
-  - Branch name validation
   - Commit message validation
+  - Branch name validation
+  - Linting
   - Tests passing
   - Code coverage
-  - Linting
-
-### Feature Branches
-
-- Branch name must follow convention
-- Commit messages must follow convention
-- Must be up to date with base branch before merge
-
-## Automated Checks
-
-We use automated tools to ensure code quality:
-
-| Check              | Tool       | Purpose                          |
-| ------------------ | ---------- | -------------------------------- |
-| Branch name format | Husky      | Ensures consistent branch naming |
-| Commit messages    | Commitlint | Validates commit message format  |
-| Code style         | ESLint     | Enforces coding standards        |
-| Tests              | Jest       | Ensures code works as expected   |
-| Coverage           | Jest       | Ensures adequate test coverage   |
+  - Containerization check
 
 ## Common Issues and Solutions
 
@@ -144,11 +147,3 @@ Check our [commit message convention](conventional-commits.md) and try again.
 1. Run tests locally: `npm test`
 2. Fix failing tests
 3. Push changes: `git push`
-
-## Need Help?
-
-1. Check our documentation:
-   - [Commit Message Convention](conventional-commits.md)
-   - [Project README](../README.md)
-2. Ask in the team chat
-3. Contact the project maintainers
