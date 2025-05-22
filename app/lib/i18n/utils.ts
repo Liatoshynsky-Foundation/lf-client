@@ -6,7 +6,7 @@ import {
 export const extractLocaleFromPath = (
     pathname: string
 ): string | null => {
-    const segments = pathname.split('/');
+    const segments = pathname.split('/', 2);
     if (segments.length > 1 && SUPPORTED_LOCALES.includes(segments[1])) {
         return segments[1].toLowerCase();
     }

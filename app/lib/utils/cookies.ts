@@ -28,7 +28,7 @@ export const setCookie = (
     maxAge: number
 ): void => {
     response.cookies.set(cookie, cookieValue, {
-        maxAge: maxAge,
+        maxAge,
         path: '/',
         sameSite: 'lax'
     });

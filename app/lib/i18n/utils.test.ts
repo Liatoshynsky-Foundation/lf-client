@@ -15,23 +15,23 @@ describe('utils tests', () => {
                 expect(extractLocaleFromPath(`/${locale}/some-page`)).toBe(locale);
             }
         });
-        it('should returns null if locale is not exist', () => {
+        it('should return null if locale does not exist', () => {
             expect(extractLocaleFromPath('/fr/some-page')).toBe(null);
             expect(extractLocaleFromPath('/invalid/path')).toBe(null);
         });
-        it('should returns null for root path', () => {
+        it('should return null for root path', () => {
             expect(extractLocaleFromPath('/')).toBe(null);
         });
     });
 
     describe('determineLocale', () => {
-        it('should returns a valid locale if supported', () => {
+        it('should return a valid locale if supported', () => {
             for (const locale of SUPPORTED_LOCALES) {
                 expect(determineLocale(locale)).toBe(locale);
             }
         });
 
-        it('should returns DEFAULT_LOCALE if the passed locale is invalid', () => {
+        it('should return DEFAULT_LOCALE if the passed locale is invalid', () => {
             expect(determineLocale('fr')).toBe(DEFAULT_LOCALE);
             expect(determineLocale('')).toBe(DEFAULT_LOCALE);
         });
