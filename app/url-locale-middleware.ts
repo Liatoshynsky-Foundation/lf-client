@@ -15,14 +15,9 @@ import {
     getCookie,
     setCookie,
 } from 'lib/utils/cookies';
-import { isStaticOrApiPath } from 'lib/utils/is-static-or-api-path';
 
 export const urlLocaleMiddleware  = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
-
-    if (isStaticOrApiPath(pathname)) {
-        return NextResponse.next();
-    }
 
     const localeInPath = extractLocaleFromPath(pathname);
     const rawLocaleFromCookie = getCookie(LANGUAGE_COOKIES, request);

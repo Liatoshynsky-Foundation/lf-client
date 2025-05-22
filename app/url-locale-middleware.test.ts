@@ -7,7 +7,6 @@ import {
     getCookie,
     setCookie
 } from '~/lib/utils/cookies';
-import { isStaticOrApiPath } from '~/lib/utils/is-static-or-api-path';
 import {
     extractLocaleFromPath,
     determineLocale
@@ -23,7 +22,6 @@ const redirect = 'redirectResponse';
 const exampleUrl = 'https://example.com/';
 
 jest.mock('~/lib/utils/cookies');
-jest.mock('~/lib/utils/is-static-or-api-path');
 jest.mock('~/lib/i18n/utils');
 jest.mock('next/server', () => ({
     NextResponse: {
@@ -34,7 +32,6 @@ jest.mock('next/server', () => ({
 
 const getCookieMock = getCookie as jest.Mock;
 const setCookieMock = setCookie as jest.Mock;
-const isStaticMock = isStaticOrApiPath as jest.Mock;
 const extractLocaleMock = extractLocaleFromPath as jest.Mock;
 const determineLocaleMock = determineLocale as jest.Mock;
 
@@ -69,17 +66,7 @@ describe('localBasedUrlMiddleware', () => {
         } as NextRequest;
     };
 
-    it('should skip /api paths', () => {
-        isStaticMock.mockReturnValue(true);
-
-        const request = createRequest('api/test');
-        const result = urlLocaleMiddleware(request);
-
-        expect(result).toStrictEqual({ next });
-    });
-
     it('should set cookie and redirect if locale is missing from path', () => {
-        isStaticMock.mockReturnValue(false);
         extractLocaleMock.mockReturnValue(null);
         getCookieMock.mockReturnValue('en');
         determineLocaleMock.mockReturnValue('en');
@@ -95,7 +82,6 @@ describe('localBasedUrlMiddleware', () => {
     });
 
     it('should set DEFAULT_LOCALE value there if users cookie is empty', () => {
-        isStaticMock.mockReturnValue(false);
         extractLocaleMock.mockReturnValue(null);
         getCookieMock.mockReturnValue('');
         determineLocaleMock.mockReturnValue(DEFAULT_LOCALE);
@@ -108,7 +94,6 @@ describe('localBasedUrlMiddleware', () => {
     });
 
     it('should set cookie and return next if locale in path differs from cookie', () => {
-        isStaticMock.mockReturnValue(false);
         extractLocaleMock.mockReturnValue('uk');
         getCookieMock.mockReturnValue('en');
 
@@ -120,7 +105,6 @@ describe('localBasedUrlMiddleware', () => {
     });
 
     it('should return only next if locale matches cookie', () => {
-        isStaticMock.mockReturnValue(false);
         extractLocaleMock.mockReturnValue('uk');
         getCookieMock.mockReturnValue('uk');
 
