@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import Header from '../components/Header';
 import { Container } from '@mui/material';
 
@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Container
           maxWidth="md"
-          sx={{ border: '1px solid #ccc', padding: '20px' }}
+          sx={{ border: '1px solid #ccc', padding: '20px', minWidth: '100%' }}
         >
           <Header />
           {children}
