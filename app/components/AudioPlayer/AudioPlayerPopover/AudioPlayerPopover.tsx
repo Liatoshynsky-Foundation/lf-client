@@ -89,6 +89,7 @@ const AudioPlayerPopover = ({
           ref={progressRef}
           onMouseDown={handleMouseDown}
           sx={styles.progressBar}
+          role="progressbar"
         >
           <Box sx={styles.progressLine(progress)} />
           <Box sx={styles.progressThumbSvg(progress)}>
