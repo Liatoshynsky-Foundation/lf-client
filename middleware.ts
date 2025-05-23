@@ -3,7 +3,7 @@ import { urlLocaleMiddleware } from '~/url-locale-middleware';
 
 export const middleware = (request: NextRequest) => {
     return urlLocaleMiddleware(request);
-}
+};
 
 export const config = {
     matcher: [
