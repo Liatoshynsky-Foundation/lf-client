@@ -1,14 +1,6 @@
-'use client';
-
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  MouseEvent,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, IconButton } from '@mui/material';
-import { styles } from './AudioPlayer.styles';
+import { styles } from './AudioPlayer.styles'; // Імпорт стилів
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
 type AudioPlayerProps = {
@@ -34,7 +26,6 @@ export default function AudioPlayer({
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const progressRef = useRef<HTMLDivElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -114,24 +105,25 @@ export default function AudioPlayer({
     }
   }, []);
 
-  const togglePopover = useCallback((): void => {
-    setAnchorEl((prev) => (prev ? null : buttonRef.current));
-  }, []);
-
-  const onProgressClick = useCallback((e: MouseEvent<HTMLDivElement>): void => {
+  const togglePopoverAndPlay = useCallback(() => {
     const audio = audioRef.current;
-    const bar = progressRef.current;
-    if (!audio || !bar) return;
+    if (!audio) return;
 
-    const { left, width } = bar.getBoundingClientRect();
-    const clickX = e.clientX - left;
-    const percent = Math.min(Math.max(clickX / width, 0), 1);
+    if (!isPlaying) {
+      audio.play();
+      setAnchorEl(buttonRef.current);
+    } else {
+      setAnchorEl((prev) => (prev ? null : buttonRef.current));
+    }
+  }, [isPlaying]);
 
-    audio.currentTime = percent * (audio.duration || 0);
+  const onSeek = useCallback((newProgress: number) => {
+    const audio = audioRef.current;
+    if (!audio || isNaN(audio.duration)) return;
+    audio.currentTime = newProgress * audio.duration;
   }, []);
 
   const closePopover = useCallback((): void => {
-    audioRef.current?.pause();
     setAnchorEl(null);
   }, []);
 
@@ -140,10 +132,7 @@ export default function AudioPlayer({
       <Box sx={styles.wrapper} className={className}>
         <IconButton
           sx={styles.eqButton}
-          onClick={() => {
-            togglePlay();
-            togglePopover();
-          }}
+          onClick={togglePopoverAndPlay}
           aria-label="Toggle audio player"
           ref={buttonRef}
         >
@@ -173,9 +162,8 @@ export default function AudioPlayer({
         progress={progress}
         onClose={closePopover}
         onTogglePlay={togglePlay}
-        onProgressClick={onProgressClick}
+        onSeek={onSeek}
         trackName={trackName}
-        ref={progressRef}
       />
     </>
   );
