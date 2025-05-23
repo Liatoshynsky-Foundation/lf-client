@@ -30,11 +30,32 @@ export const styles = {
         fontWeight: 400,
         lineHeight: '150%',
     },
-    linkable: {
+    email: {
         ...textStyle,
+        textDecoration: 'none',
+        color: 'var(--foreground)',
         '&:hover': {
             textDecoration: 'underline',
             cursor: 'pointer',
         },
     },
+    copy: {
+        cursor: 'pointer',
+        display: 'block',
+        width: '24px',
+        height: '24px',
+        marginTop: '4px',
+        verticalAlign: 'middle',
+        background: 'transparent no-repeat center center',
+        marginBottom: '8px',
+        marginLeft: '10px',
+        padding: '0',
+    },
+    emailContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    iconSize: 20,
 };

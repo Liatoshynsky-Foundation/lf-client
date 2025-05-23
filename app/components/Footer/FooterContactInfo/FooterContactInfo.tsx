@@ -1,6 +1,7 @@
 'use client';
-import React, { FC } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { FC, useState } from 'react';
+import Image from 'next/image';
+import { Box, Typography, Link, IconButton } from '@mui/material';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
@@ -13,30 +14,36 @@ interface FooterContactInfoProps {
 }
 
 const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {
-    const openGoogleMaps = () => {
-        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contacts.address)}`;
-        window.open(url, '_blank');
+    const [emailCopied, setEmailCopied] = useState(false);
+
+    const handleEmailCopy = () => {
+        if (emailCopied) return;
+
+        navigator.clipboard.writeText(contacts.email);
+        alert('Email copied to clipboard');
+        setEmailCopied(true);
+        setTimeout(() => {
+            setEmailCopied(false);
+        }, 2000);
     };
 
     return (
         <Box sx={styles.container}>
             <Typography sx={styles.title}>{contacts.title}</Typography>
-            <Typography
-                sx={styles.linkable}
-                onClick={openGoogleMaps}
-            >
-                {contacts.address}
-            </Typography>
+            <Typography sx={styles.text}>{contacts.address}</Typography>
             <Typography sx={styles.text}>{contacts.phone}</Typography>
-            <Typography
-                sx={styles.linkable}
-                onClick={() => {
-                    navigator.clipboard.writeText(contacts.email);
-                    alert('Email copied to clipboard');
-                }}
-            >
-                {contacts.email}
-            </Typography>
+            <Box sx={styles.emailContainer}>
+                <Link sx={styles.email} href={`mailto:${contacts.email}`}>
+                    {contacts.email}
+                </Link>
+                <IconButton onClick={handleEmailCopy} sx={styles.copy}>
+                    {emailCopied ? (
+                        <Image src="/check-icon.svg" alt="Copied" width={styles.iconSize} height={styles.iconSize} />
+                    ) : (
+                        <Image src="/copy-icon.svg" alt="Copy" width={styles.iconSize} height={styles.iconSize} />
+                    )}
+                </IconButton>
+            </Box>
         </Box>
     );
 };
