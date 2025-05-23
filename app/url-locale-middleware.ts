@@ -39,4 +39,4 @@ export const urlLocaleMiddleware  = (request: NextRequest) => {
     setCookie(response, locale.toLowerCase(), LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
 
     return response;
-}
+};
