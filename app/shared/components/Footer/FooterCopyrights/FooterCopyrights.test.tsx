@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import FooterCopyrights from './FooterCopyrights';
-import { footerData } from '../Footer';
+import { footerData } from '~/components/Footer/Footer';
 
 describe('FooterCopyrights', () => {
   test('should display footer copyright text', () => {

@@ -1,45 +1,45 @@
 import { TypographyVariantsOptions } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
-  interface TypographyVariants {
-    oswald116Bold: React.CSSProperties
-    oswald64Semibold: React.CSSProperties
-    oswald64Regular: React.CSSProperties
-    oswald28Bold: React.CSSProperties
-    mulish24Bold: React.CSSProperties
-    mulish24Regular: React.CSSProperties
-    mulish20Regular: React.CSSProperties
-    mulish20Semibold: React.CSSProperties
-    mulish20Bold: React.CSSProperties
-    mulish18Regular: React.CSSProperties
-    mulish18Italic: React.CSSProperties
-    mulish18Medium: React.CSSProperties
-    mulish16Regular: React.CSSProperties
-    mulish16Medium: React.CSSProperties
-    mulish16Italic: React.CSSProperties
-    mulish16Caption: React.CSSProperties
-    mulish14Italic: React.CSSProperties
-  }
+    interface TypographyVariants {
+        oswald116Bold: React.CSSProperties
+        oswald64Semibold: React.CSSProperties
+        oswald64Regular: React.CSSProperties
+        oswald28Bold: React.CSSProperties
+        mulish24Bold: React.CSSProperties
+        mulish24Regular: React.CSSProperties
+        mulish20Regular: React.CSSProperties
+        mulish20Semibold: React.CSSProperties
+        mulish20Bold: React.CSSProperties
+        mulish18Regular: React.CSSProperties
+        mulish18Italic: React.CSSProperties
+        mulish18Medium: React.CSSProperties
+        mulish16Regular: React.CSSProperties
+        mulish16Medium: React.CSSProperties
+        mulish16Italic: React.CSSProperties
+        mulish16Caption: React.CSSProperties
+        mulish14Italic: React.CSSProperties
+    }
 
-  interface TypographyVariantsOptions {
-    oswald116Bold?: React.CSSProperties
-    oswald64Semibold?: React.CSSProperties
-    oswald64Regular?: React.CSSProperties
-    oswald28Bold?: React.CSSProperties
-    mulish24Bold?: React.CSSProperties
-    mulish24Regular?: React.CSSProperties
-    mulish20Regular?: React.CSSProperties
-    mulish20Semibold?: React.CSSProperties
-    mulish20Bold?: React.CSSProperties
-    mulish18Regular?: React.CSSProperties
-    mulish18Italic?: React.CSSProperties
-    mulish18Medium?: React.CSSProperties
-    mulish16Regular?: React.CSSProperties
-    mulish16Medium?: React.CSSProperties
-    mulish16Italic?: React.CSSProperties
-    mulish16Caption?: React.CSSProperties
-    mulish14Italic?: React.CSSProperties
-  }
+    interface TypographyVariantsOptions {
+        oswald116Bold?: React.CSSProperties
+        oswald64Semibold?: React.CSSProperties
+        oswald64Regular?: React.CSSProperties
+        oswald28Bold?: React.CSSProperties
+        mulish24Bold?: React.CSSProperties
+        mulish24Regular?: React.CSSProperties
+        mulish20Regular?: React.CSSProperties
+        mulish20Semibold?: React.CSSProperties
+        mulish20Bold?: React.CSSProperties
+        mulish18Regular?: React.CSSProperties
+        mulish18Italic?: React.CSSProperties
+        mulish18Medium?: React.CSSProperties
+        mulish16Regular?: React.CSSProperties
+        mulish16Medium?: React.CSSProperties
+        mulish16Italic?: React.CSSProperties
+        mulish16Caption?: React.CSSProperties
+        mulish14Italic?: React.CSSProperties
+    }
 }
 
 export const AppTypography: TypographyVariantsOptions = {
