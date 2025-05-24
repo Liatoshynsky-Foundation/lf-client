@@ -9,7 +9,7 @@ import {
 
 export type Locale = typeof SUPPORTED_LOCALES[number];
 
-const getOptions = (lang = DEFAULT_LOCALE, ns: string | string[] = DEFAULT_NS) => {
+export const getOptions = (lang = DEFAULT_LOCALE, ns: string | string[] = DEFAULT_NS) => {
     return {
         supportedLngs: SUPPORTED_LOCALES,
         DEFAULT_LOCALE,
@@ -20,7 +20,7 @@ const getOptions = (lang = DEFAULT_LOCALE, ns: string | string[] = DEFAULT_NS) =
     };
 };
 
-const initI18next = async (lang: string, ns: string | string[]) => {
+export const initI18next = async (lang: string, ns: string | string[]) => {
     const i18nInstance = createInstance();
     await i18nInstance
         .use(initReactI18next)

@@ -1,6 +1,7 @@
 import {
     extractLocaleFromPath,
-    determineLocale
+    determineLocale,
+    isPublicLocalPath
 } from './utils';
 import {
     SUPPORTED_LOCALES,
@@ -34,6 +35,25 @@ describe('utils tests', () => {
         it('should return DEFAULT_LOCALE if the passed locale is invalid', () => {
             expect(determineLocale('fr')).toBe(DEFAULT_LOCALE);
             expect(determineLocale('')).toBe(DEFAULT_LOCALE);
+        });
+    });
+
+    describe('isPublicLocalPath', () => {
+        const notPublicPathname = ['/fr/some-page', '/some-page'];
+        const publicPathname = ['/fr/some-icon.svg', '/some-icon.svg'];
+
+        it('should return true for Public files', () => {
+            for (const path of publicPathname) {
+                const result = isPublicLocalPath(path);
+                expect(result).toBe(true);
+            }
+        });
+
+        it('should return false for not Public files', () => {
+            for (const path of notPublicPathname) {
+                const result = isPublicLocalPath(path);
+                expect(result).toBe(false);
+            }
         });
     });
 });
