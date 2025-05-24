@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 interface RootLayoutParams {
   children: ReactNode;
-  params: Promise<{ lang: Locale }>
+  params: Promise<{ readonly lang: Locale }>
 }
 
 export default async function RootLayout({
