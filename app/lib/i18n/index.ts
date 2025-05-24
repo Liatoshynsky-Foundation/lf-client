@@ -5,7 +5,7 @@ import {
     DEFAULT_LOCALE,
     SUPPORTED_LOCALES,
     DEFAULT_NS
-} from "~/constants";
+} from '~/constants';
 
 export type Locale = typeof SUPPORTED_LOCALES[number];
 
@@ -18,7 +18,7 @@ const getOptions = (lang = DEFAULT_LOCALE, ns: string | string[] = DEFAULT_NS) =
         DEFAULT_NS,
         ns,
     };
-}
+};
 
 const initI18next = async (lang: string, ns: string | string[]) => {
     const i18nInstance = createInstance();

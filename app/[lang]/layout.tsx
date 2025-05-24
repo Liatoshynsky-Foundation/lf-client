@@ -4,8 +4,8 @@ import Footer from '~/shared/components/Footer/Footer';
 import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
-import '../globals.css';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+import { Locale } from '~/lib/i18n';
 
 
 const geistSans = Geist({
@@ -38,7 +38,7 @@ export default async function RootLayout({
    children,
    params
 }: RootLayoutParams) {
-  const { lang } = await params
+  const { lang } = await params;
 
   return (
     <html lang={lang}>

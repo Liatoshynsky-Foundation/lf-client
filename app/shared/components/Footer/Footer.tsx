@@ -6,6 +6,7 @@ import { Locale } from "~/lib/i18n";
 import {getTranslations} from "~/lib/i18n";
 
 
+
 const contacts = {
   title: 'ГРОМАДСЬКА ОРГАНІЗАЦІЯ \n«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»',
   phone: '067 963 8366',
