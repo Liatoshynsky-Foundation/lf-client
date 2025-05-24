@@ -44,7 +44,7 @@ export const styles = {
         height: '16px',
         margin: '0 16px',
         verticalAlign: 'middle',
-        backgroundImage: 'url(./Bullet-icon.svg)',
+        backgroundImage: 'url(/Bullet-icon.svg)',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
       },

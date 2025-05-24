@@ -1,22 +1,29 @@
 import { render, screen } from '@testing-library/react';
 import FooterCopyrights from './FooterCopyrights';
-import { footerData } from '../Footer';
 
 describe('FooterCopyrights', () => {
+  const mockLinks = {
+    text: 'Mock text',
+    links: [
+      {label: 'Mock Privacy', href: '/privacy'},
+      {label: 'Mock Terms', href: '/terms'},
+    ]
+  };
+
   test('should display footer copyright text', () => {
     render(
-      <FooterCopyrights text={footerData.text} links={footerData.links} />,
+      <FooterCopyrights text={mockLinks.text} links={mockLinks.links} />,
     );
 
-    expect(screen.getByText(footerData.text)).toBeInTheDocument();
+    expect(screen.getByText(mockLinks.text)).toBeInTheDocument();
   });
 
   test('should display all footer links', () => {
     render(
-      <FooterCopyrights text={footerData.text} links={footerData.links} />,
+      <FooterCopyrights text={mockLinks.text} links={mockLinks.links} />,
     );
 
-    footerData.links.forEach(({ label, href }) => {
+    mockLinks.links.forEach(({ label, href }) => {
       const linkElement = screen.getByRole('link', { name: label });
       expect(linkElement).toBeInTheDocument();
       expect(linkElement).toHaveAttribute('href', href);

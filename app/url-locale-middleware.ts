@@ -9,7 +9,7 @@ import {
 } from '~/constants';
 import {
     extractLocaleFromPath,
-    determineLocale
+    determineLocale, isPublicLocalPath
 } from 'lib/i18n/utils';
 import {
     getCookie,
@@ -17,7 +17,11 @@ import {
 } from 'lib/utils/cookies';
 
 export const urlLocaleMiddleware  = (request: NextRequest) => {
-    const { pathname, search } = request.nextUrl;
+    const { pathname, search, origin } = request.nextUrl;
+
+    if (isPublicLocalPath(pathname)) {
+        return NextResponse.next();
+    }
 
     const localeInPath = extractLocaleFromPath(pathname);
     const rawLocaleFromCookie = getCookie(LANGUAGE_COOKIES, request);
@@ -34,7 +38,7 @@ export const urlLocaleMiddleware  = (request: NextRequest) => {
     }
 
     const locale = determineLocale(localeFromCookie || DEFAULT_LOCALE);
-    const redirectUrl = new URL(`/${locale}${pathname}${search}`, request.url);
+    const redirectUrl = new URL(`/${locale}${pathname}${search}`, origin);
     const response = NextResponse.redirect(redirectUrl);
     setCookie(response, locale.toLowerCase(), LANGUAGE_COOKIES, ONE_MONTH_IN_SECONDS);
 
