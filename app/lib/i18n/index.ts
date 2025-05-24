@@ -6,6 +6,7 @@ import {
     SUPPORTED_LOCALES,
     DEFAULT_NS
 } from '~/constants';
+import {cacheAsync} from '~/lib/utils/cache';
 
 export type Locale = typeof SUPPORTED_LOCALES[number];
 
@@ -32,9 +33,11 @@ export const initI18next = async (lang: string, ns: string | string[]) => {
 };
 
 export async function getTranslations(lang: string, ns?: string | string[]) {
-    const i18nextInstance = await initI18next(lang, ns || getOptions().DEFAULT_NS);
+    const nsKey = Array.isArray(ns) ? ns.join(',') : ns ?? getOptions().DEFAULT_NS;
+    const key = `${lang}:${nsKey}`;
+    const i18n = await cacheAsync(key, () => initI18next(lang, nsKey));
     return {
-        t: i18nextInstance.getFixedT(lang, Array.isArray(ns) ? ns[0] : ns),
-        i18n: i18nextInstance
+        t: i18n.getFixedT(lang, Array.isArray(ns) ? ns[0] : ns),
+        i18n
     };
 }
