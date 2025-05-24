@@ -21,5 +21,9 @@ export const determineLocale = (localeFromCookie: string): string => {
 };
 
 export const isIcon = (pathname: string): boolean => {
-    return /\.[^/]+$/.test(pathname);
+    const lastSlashIndex = pathname.lastIndexOf('/');
+    const lastSegment = lastSlashIndex !== -1 ? pathname.slice(lastSlashIndex + 1) : pathname;
+
+    const dotIndex = lastSegment.indexOf('.');
+    return dotIndex !== -1 && dotIndex < lastSegment.length - 1 && dotIndex > 0;
 }
