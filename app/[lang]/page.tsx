@@ -1,5 +1,5 @@
 import React from 'react';
-import {getTranslations} from "~/lib/i18n";
+import {getTranslations} from '~/lib/i18n';
 export default async function Home({
    params,
 }: {

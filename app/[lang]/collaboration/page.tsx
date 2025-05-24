@@ -6,7 +6,7 @@ interface CollaborationPageProps {
 }
 
 export async function generateMetadata({ params }: CollaborationPageProps): Promise<Metadata> {
-  const { lang } = await params
+  const { lang } = await params;
   const { t } = await getTranslations(lang, 'collaborations');
   return {
     title: t('meta_data'),
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: CollaborationPageProps): Prom
 }
 
 export default async function CollaborationPage({ params }: CollaborationPageProps) {
-    const { lang } = await params
+    const { lang } = await params;
 
     const { t } = await getTranslations(lang, 'collaborations');
 

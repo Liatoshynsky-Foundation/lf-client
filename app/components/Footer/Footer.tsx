@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import FooterCopyrights from './FooterCopyrights/FooterCopyrights';
-import { Locale } from "~/lib/i18n";
-import {getTranslations} from "~/lib/i18n";
+import { Locale } from '~/lib/i18n';
+import {getTranslations} from '~/lib/i18n';
 
 
 interface FooterProps {

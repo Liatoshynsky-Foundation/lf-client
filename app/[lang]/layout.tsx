@@ -4,7 +4,7 @@ import '../globals.css';
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header';
 import { Container } from '@mui/material';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { Locale } from '~/lib/i18n';
 
 
@@ -32,7 +32,7 @@ export default async function RootLayout({
    children,
    params
 }: RootLayoutParams) {
-  const { lang } = await params
+  const { lang } = await params;
 
   return (
     <html lang={lang}>
