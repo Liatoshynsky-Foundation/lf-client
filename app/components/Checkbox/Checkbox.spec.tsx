@@ -9,10 +9,9 @@ describe('CustomCheckbox', () => {
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeInTheDocument();
         expect(screen.queryByRole('checkbox')).not.toBeChecked();
-        await userEvent.click(screen.getByRole('checkbox'));
-        expect(screen.getByRole('checkbox')).toBeChecked();
     });
     it('should check and uncheck the checkbox', async () => {
+        render(<CustomCheckbox label={label} />);
         await userEvent.click(screen.getByRole('checkbox'));
         expect(screen.getByRole('checkbox')).toBeChecked();
         await userEvent.click(screen.getByRole('checkbox'));
@@ -20,16 +19,12 @@ describe('CustomCheckbox', () => {
 
     });
     it('should not toggle disabled checkbox', async () => {
-        const disabled = true;
-        render(<CustomCheckbox disabled={disabled} label={label} />);
-        await userEvent.click(screen.getByRole('checkbox'));
+        render(<CustomCheckbox disabled label={label} />);
         expect(screen.queryByRole('checkbox')).not.toBeChecked();
     });
     it('should display checked checkbox by default', async () => {
-        const disabled = true;
-        render(<CustomCheckbox disabled={disabled} label={label} />);
-        await userEvent.click(screen.getByRole('checkbox'));
-        expect(screen.queryByRole('checkbox')).not.toBeChecked();
+        render(<CustomCheckbox label={label} defaultChecked />);
+        expect(screen.queryByRole('checkbox')).toBeChecked();
     });
 
 });

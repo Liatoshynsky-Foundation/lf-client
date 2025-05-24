@@ -1,9 +1,8 @@
 'use client';
 import { Checkbox } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControlLabel , { FormControlLabelProps }from '@mui/material/FormControlLabel';
 import { CheckboxProps } from '@mui/material/Checkbox';
-import { FormControlLabelProps } from '@mui/material/FormControlLabel';
 import { checkboxStyles } from './Checkbox.styles';
 
 type OverlappingKeys = keyof CheckboxProps | 'control' 
