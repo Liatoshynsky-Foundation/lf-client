@@ -1,0 +1,49 @@
+version: 2
+updates:
+  # JS
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'wednesday'
+      time: '00:00'
+      timezone: 'Europe/Kyiv'
+    commit-message:
+      prefix: '[DEPENDABOT]'
+    labels:
+      - 'dependencies'
+      - 'dependabot'
+    open-pull-requests-limit: 10
+    versioning-strategy: 'increase'
+  # Docker
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '00:00'
+      timezone: 'Europe/Kyiv'
+    commit-message:
+      prefix: '[DEPENDABOT]'
+    labels:
+      - 'dependencies'
+      - 'dependabot'
+      - 'DevOps'
+    open-pull-requests-limit: 3
+    versioning-strategy: 'increase'
+  # GH Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '00:00'
+      timezone: 'Europe/Kyiv'
+    commit-message:
+      prefix: '[DEPENDABOT]'
+    labels:
+      - 'dependencies'
+      - 'dependabot'
+      - 'DevOps'
+    open-pull-requests-limit: 3
+    versioning-strategy: 'increase'
