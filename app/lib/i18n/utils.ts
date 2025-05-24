@@ -19,3 +19,11 @@ export const determineLocale = (localeFromCookie: string): string => {
     }
     return DEFAULT_LOCALE;
 };
+
+export const isIcon = (pathname: string): boolean => {
+    const lastSlashIndex = pathname.lastIndexOf('/');
+    const lastSegment = lastSlashIndex !== -1 ? pathname.slice(lastSlashIndex + 1) : pathname;
+
+    const dotIndex = lastSegment.indexOf('.');
+    return dotIndex !== -1 && dotIndex < lastSegment.length - 1 && dotIndex > 0;
+}
