@@ -3,7 +3,7 @@ import {getTranslations} from '~/lib/i18n';
 export default async function Home({
    params,
 }: {
-  params: Promise<{ lang: string }>;
+  params: Promise<{ readonly lang: string }>;
 }) {
   const { lang } = await params;
   const { t } = await getTranslations(lang, 'home');

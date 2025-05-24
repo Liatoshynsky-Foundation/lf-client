@@ -4,7 +4,7 @@ import {
 } from '~/lib/i18n';
 
 interface CollaborationPageProps {
-  params: Promise<{ lang: Locale }>;
+  params: Promise<{ readonly lang: Locale }>;
 }
 
 export default async function CollaborationPage({ params }: CollaborationPageProps) {
