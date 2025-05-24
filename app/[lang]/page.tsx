@@ -1,10 +1,16 @@
-'use client';
-import React, { ReactElement } from 'react';
+import React from 'react';
+import {getTranslations} from "~/lib/i18n";
+export default async function Home({
+   params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const { t } = await getTranslations(lang, 'home');
 
-export default function Home(): ReactElement {
   return (
     <>
-      <h1>Liatoshynsky project</h1>
+      <h1>{t('text')}</h1>
     </>
   );
 }

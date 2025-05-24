@@ -19,3 +19,13 @@ export const determineLocale = (localeFromCookie: string): string => {
     }
     return DEFAULT_LOCALE;
 };
+
+export const isPublicLocalPath = (
+    pathname: string
+): boolean => {
+    const locale = extractLocaleFromPath(pathname);
+    const pathWithoutLocale = locale ? pathname.replace(`/${locale}`, '') || '/' : pathname;
+
+    return /\.(svg|png|jpg|ico)$/.test(pathWithoutLocale);
+
+};
