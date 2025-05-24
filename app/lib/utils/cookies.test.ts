@@ -10,7 +10,7 @@ describe('cookie tests', () => {
         it('should return the cookie value if it exists', () => {
             const request = {
                 cookies: {
-                    get: (name: string) => ({ value: 'uk' })
+                    get: () => ({ value: 'uk' })
                 }
             } as NextRequest;
 
@@ -20,7 +20,7 @@ describe('cookie tests', () => {
         it('should return an empty string if there is no cookie', () => {
             const request = {
                 cookies: {
-                    get: (name: string)=> undefined
+                    get: ()=> undefined
                 }
             } as NextRequest;
 
