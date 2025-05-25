@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { successResponse, errorResponse } from '~/lib/utils/apiResponse';
 import { validateContactData } from '~/lib/utils/validateContactData';
 
 export async function POST(request: Request) {
@@ -6,8 +6,8 @@ export async function POST(request: Request) {
   const errors = validateContactData(data);
 
   if (errors.length > 0) {
-    return NextResponse.json({ success: false, errors }, { status: 400 });
+    return errorResponse(errors, 400);
   }
 
-  return NextResponse.json({ success: true });
+  return successResponse({ data, success: true });
 }
