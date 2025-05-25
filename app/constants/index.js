@@ -1,0 +1,1 @@
+export const SEVEN_DAYS_IN_SECONDS = 604800;

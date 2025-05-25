@@ -1,0 +1,45 @@
+import { createLogger, transports, format } from 'winston';
+import { MongoDB } from 'winston-mongodb';
+import { SEVEN_DAYS_IN_SECONDS } from '~/constants';
+import { mongoUrl } from '~/config';
+
+import type { TransformableInfo } from 'logform';
+
+const { combine, timestamp, printf, errors, json } = format;
+
+const formatStack = (stack: string | unknown) => {
+  if (typeof stack === 'string') {
+    return `\n📌 Stack trace:\n${stack
+      .split('\n')
+      .map((line) => '  ' + line.trim())
+      .join('\n')}`;
+  }
+  return '';
+};
+
+const logFormat = printf((info: TransformableInfo): string => {
+  const { level, message, timestamp, stack, ...rest } = info;
+  const meta =
+    Object.keys(rest).length > 0 ? JSON.stringify(rest, null, 2) : '';
+  return `🕒 ${timestamp} ${level}: ${message}${meta ? `\n${meta}` : ''}${formatStack(stack)}`;
+});
+
+const logger = createLogger({
+  format: combine(errors({ stack: true }), timestamp(), logFormat),
+  transports: [
+    new transports.Console({
+      format: combine(format.colorize(), logFormat),
+      handleExceptions: true,
+    }),
+
+    new MongoDB({
+      level: 'error',
+      db: mongoUrl,
+      collection: 'logger',
+      expireAfterSeconds: SEVEN_DAYS_IN_SECONDS,
+      format: combine(errors({ stack: true }), timestamp(), json()),
+    }),
+  ],
+});
+
+export default logger;
