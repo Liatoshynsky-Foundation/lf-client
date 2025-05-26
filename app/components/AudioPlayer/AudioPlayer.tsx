@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, IconButton } from '@mui/material';
-import { styles } from './AudioPlayer.styles'; // Імпорт стилів
+import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
 type AudioPlayerProps = {
@@ -8,9 +8,6 @@ type AudioPlayerProps = {
   trackName: string;
   loop?: boolean;
   autoplay?: boolean;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onEnd?: () => void;
   className?: string;
 };
 
@@ -19,19 +16,16 @@ export default function AudioPlayer({
   trackName,
   loop = false,
   autoplay = false,
-  onPlay,
-  onPause,
-  onEnd,
   className,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const stickHeights = [7, 19, 30, 13, 22, 7];
 
@@ -39,42 +33,35 @@ export default function AudioPlayer({
     const audio = audioRef.current;
     if (!audio) return;
 
+    const checkAudio = async () => {
+      try {
+        await audio.load();
+        if (audio.readyState === 0) throw new Error('File not loaded');
+        setError(null);
+      } catch {
+        setError('Error loading audio file.');
+      }
+    };
+
+    checkAudio();
+
     const updateProgress = () => {
       setCurrentTime(audio.currentTime);
-      setProgress(audio.currentTime / (audio.duration || 1));
     };
 
     const updatePlayState = () => {
-      const playing = !audio.paused;
-      setIsPlaying(playing);
-      if (playing) {
-        onPlay?.();
-      } else {
-        onPause?.();
-      }
+      setIsPlaying(!audio.paused);
     };
 
     const loadDuration = () => {
       if (!isNaN(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
-      } else {
-        const check = () => {
-          if (!audioRef.current) return;
-          const dur = audioRef.current.duration;
-          if (!isNaN(dur) && dur > 0) {
-            setDuration(dur);
-          } else {
-            requestAnimationFrame(check);
-          }
-        };
-        check();
       }
     };
 
     const handleEnded = () => {
       setIsPlaying(false);
       setAnchorEl(null);
-      onEnd?.();
     };
 
     audio.addEventListener('timeupdate', updateProgress);
@@ -84,7 +71,9 @@ export default function AudioPlayer({
     audio.addEventListener('loadedmetadata', loadDuration);
 
     if (audio.readyState >= 1) loadDuration();
-    if (autoplay) audio.play().catch(() => {});
+    if (autoplay) {
+      audio.play().catch(() => {});
+    }
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
@@ -93,7 +82,7 @@ export default function AudioPlayer({
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('loadedmetadata', loadDuration);
     };
-  }, [autoplay, onPlay, onPause, onEnd]);
+  }, [autoplay, src]);
 
   const togglePlay = useCallback((): void => {
     const audio = audioRef.current;
@@ -159,11 +148,12 @@ export default function AudioPlayer({
         isPlaying={isPlaying}
         currentTime={currentTime}
         duration={duration}
-        progress={progress}
+        progress={duration ? currentTime / duration : 0}
         onClose={closePopover}
         onTogglePlay={togglePlay}
         onSeek={onSeek}
         trackName={trackName}
+        error={error}
       />
     </>
   );

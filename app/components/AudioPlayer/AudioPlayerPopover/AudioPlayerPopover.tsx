@@ -12,6 +12,7 @@ interface AudioPlayerPopoverProps {
   onTogglePlay: () => void;
   onSeek: (progress: number) => void;
   trackName: string;
+  error: string | null;
 }
 
 const AudioPlayerPopover = ({
@@ -24,6 +25,7 @@ const AudioPlayerPopover = ({
   onTogglePlay,
   onSeek,
   trackName,
+  error,
 }: AudioPlayerPopoverProps) => {
   const progressRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -85,46 +87,49 @@ const AudioPlayerPopover = ({
           </Typography>
         </Box>
 
-        <Box
-          ref={progressRef}
-          onMouseDown={handleMouseDown}
-          sx={styles.progressBar}
-          role="progressbar"
-        >
-          <Box sx={styles.progressLine(progress)} />
-          <Box sx={styles.progressThumbSvg(progress)}>
-            <img
-              src="/audio-play-circle-icon.svg"
-              alt="progress thumb"
-              width={16}
-              height={16}
-            />
+        {error ? (
+          <Box sx={styles.errorMessage}>
+            <Typography>{error}</Typography>
           </Box>
-        </Box>
+        ) : (
+          <>
+            <Box
+              ref={progressRef}
+              onMouseDown={handleMouseDown}
+              sx={styles.progressBar}
+              role="progressbar"
+            >
+              <Box sx={styles.progressLine(progress)} />
+              <Box sx={styles.progressThumbSvg(progress)} />
+            </Box>
 
-        <Box sx={styles.controls}>
-          <IconButton
-            onClick={onTogglePlay}
-            aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
-            sx={styles.playPauseButton}
-          >
-            <img
-              src={isPlaying ? './pause-icon.svg' : './play-icon.svg'}
-              alt={isPlaying ? 'Pause' : 'Play'}
-              width={24}
-              height={24}
-            />
-          </IconButton>
+            <Box sx={styles.controls}>
+              <IconButton
+                onClick={onTogglePlay}
+                aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                sx={styles.playPauseButton}
+              >
+                <img
+                  src={
+                    isPlaying
+                      ? './icons/pause-icon.svg'
+                      : './icons/play-icon.svg'
+                  }
+                  alt={isPlaying ? 'Pause' : 'Play'}
+                  width={24}
+                  height={24}
+                />
+              </IconButton>
 
-          <Button fullWidth variant="contained" sx={styles.allTracksButton}>
-            Усі твори
-          </Button>
-        </Box>
+              <Button fullWidth variant="contained" sx={styles.allTracksButton}>
+                Усі твори
+              </Button>
+            </Box>
+          </>
+        )}
       </Box>
     </Popover>
   );
 };
-
-AudioPlayerPopover.displayName = 'AudioPlayerPopover';
 
 export default AudioPlayerPopover;
