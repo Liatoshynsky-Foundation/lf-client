@@ -1,5 +1,5 @@
 'use client';
-import { Checkbox } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { CheckboxProps } from '@mui/material/Checkbox';
@@ -11,18 +11,20 @@ interface CustomCheckboxProps extends CheckboxProps {
     size?: 'medium' | 'large';
 }
 type ReadonlyCustomCheckboxProps = Readonly<CustomCheckboxProps>;
-export default function CustomCheckbox({ disabled, defaultChecked, size, label } : ReadonlyCustomCheckboxProps) {
+export default function CustomCheckbox({ disabled, defaultChecked, size, label }: ReadonlyCustomCheckboxProps) {
     return (
-        <FormGroup>
-            <FormControlLabel control={
-                <Checkbox
-                sx={checkboxStyles}
-                size={size}
-                disabled={disabled}
-                defaultChecked={defaultChecked}
-            />}
-                label={label}
-            />
-        </FormGroup>
+        <Box>
+            <FormGroup>
+                <FormControlLabel control={
+                    <Checkbox
+                        sx={checkboxStyles.checkbox}
+                        size={size}
+                        disabled={disabled}
+                        defaultChecked={defaultChecked}
+                    />}
+                    label={label}
+                />
+            </FormGroup>
+        </Box>
     );
 }
