@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import Header from '../components/Header';
 import { Container } from '@mui/material';
 
@@ -37,6 +37,7 @@ export default function RootLayout({
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            minWidth: '100%',
           }}
         >
           <Header />
