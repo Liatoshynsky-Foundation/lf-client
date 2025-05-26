@@ -30,7 +30,6 @@ updates:
       - 'dependabot'
       - 'DevOps'
     open-pull-requests-limit: 3
-    versioning-strategy: 'increase'
   # GH Actions
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -46,4 +45,3 @@ updates:
       - 'dependabot'
       - 'DevOps'
     open-pull-requests-limit: 3
-    versioning-strategy: 'increase'
