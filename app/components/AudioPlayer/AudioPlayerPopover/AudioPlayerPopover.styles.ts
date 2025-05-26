@@ -101,4 +101,9 @@ export const styles = {
       backgroundColor: '#f5f5f5',
     },
   },
+  errorMessage: {
+    padding: '16px',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
 };

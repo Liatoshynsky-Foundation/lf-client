@@ -10,9 +10,6 @@ export default function Header() {
         src="/sample-music.mp3"
         trackName="цо (авторський оркестровий варіант)"
         autoplay={false}
-        onPlay={() => console.log('playing')}
-        onPause={() => console.log('paused')}
-        onEnd={() => console.log('ended')}
       />
     </Box>
   );
