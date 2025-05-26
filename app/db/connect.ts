@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { mongoUrl } from "~/config";
-import logger from "~/middleware/logger";
+import mongoose from 'mongoose';
+import { mongoUrl } from '~/config';
+import logger from '~/middleware/logger/logger';
 
 type MongooseGlobalCache = {
   conn: typeof mongoose | null;
@@ -11,14 +11,16 @@ declare global {
   var mongoose: MongooseGlobalCache | undefined;
 }
 
-let cached: MongooseGlobalCache = global.mongoose ?? { conn: null, promise: null };
+let cached: MongooseGlobalCache = global.mongoose ?? {
+  conn: null,
+  promise: null,
+};
 global.mongoose = cached;
 
 async function dbConnect() {
-
   if (!mongoUrl) {
     throw new Error(
-      "Please define the mongoUrl environment variable inside config",
+      'Failed to construct mongoUrl. Please ensure that required environment variables (MONGO_DB, MONGO_HOST, and optionally MONGO_USERNAME and MONGO_PASSWORD) are defined.',
     );
   }
 
@@ -38,7 +40,7 @@ async function dbConnect() {
     logger.info('✅ Connected to db');
   } catch (error) {
     cached.promise = null;
-    // logger.error(error);
+    logger.error('❌ Failed to connect to the database:', error);
     throw error;
   }
 
