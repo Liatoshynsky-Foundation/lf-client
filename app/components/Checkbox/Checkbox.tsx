@@ -16,7 +16,7 @@ export default function CustomCheckbox({ disabled, defaultChecked, size, label, 
             <FormGroup>
                 <FormControlLabel control={
                     <Checkbox
-                        sx={checkboxStyles.checkbox}
+                        sx={checkboxStyles}
                         size={size}
                         disabled={disabled}
                         defaultChecked={defaultChecked}
