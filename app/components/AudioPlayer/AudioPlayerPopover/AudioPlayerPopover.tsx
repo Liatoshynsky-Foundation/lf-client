@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
 import { styles } from './AudioPlayerPopover.styles';
-
+import { formatTime, calculateProgress } from 'app/utils/audioPlayerUtils';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
@@ -28,22 +28,12 @@ const AudioPlayerPopover = ({
   error,
 }: AudioPlayerPopoverProps) => {
   const progressRef = useRef<HTMLDivElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const formatTime = (time: number) =>
-    `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`;
-
-  const calculateProgress = (e: MouseEvent | React.MouseEvent) => {
-    if (!progressRef.current) return 0;
-    const { left, width } = progressRef.current.getBoundingClientRect();
-    const pos = e.clientX - left;
-    return Math.min(Math.max(pos / width, 0), 1);
-  };
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
-    onSeek(calculateProgress(e));
+    onSeek(calculateProgress(e, progressRef));
   };
 
   useEffect(() => {
@@ -51,7 +41,7 @@ const AudioPlayerPopover = ({
 
     const handleMouseMove = (e: MouseEvent) => {
       e.preventDefault();
-      onSeek(calculateProgress(e));
+      onSeek(calculateProgress(e, progressRef));
     };
 
     const handleMouseUp = (e: MouseEvent) => {

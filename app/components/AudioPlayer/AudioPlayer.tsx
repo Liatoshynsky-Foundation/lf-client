@@ -11,6 +11,8 @@ type AudioPlayerProps = {
   className?: string;
 };
 
+const stickHeights = [7, 19, 30, 13, 22, 7];
+
 export default function AudioPlayer({
   src,
   trackName,
@@ -21,52 +23,42 @@ export default function AudioPlayer({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const stickHeights = [7, 19, 30, 13, 22, 7];
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateProgress = () => {
-      setCurrentTime(audio.currentTime);
-    };
+    const controller = new AbortController();
+    const { signal } = controller;
 
-    const updatePlayState = () => {
-      setIsPlaying(!audio.paused);
-    };
-
+    const updateProgress = () => setCurrentTime(audio.currentTime);
+    const updatePlayState = () => setIsPlaying(!audio.paused);
     const loadDuration = () => {
       if (!isNaN(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
       }
     };
-
     const handleEnded = () => {
       setIsPlaying(false);
       setAnchorEl(null);
     };
-
-    const handleError = () => {
-      setError('Error loading audio file.');
-    };
-
+    const handleError = () => setError('Error loading audio file.');
     const handleLoadedMetadata = () => {
       loadDuration();
       setError(null);
     };
 
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('play', updatePlayState);
-    audio.addEventListener('pause', updatePlayState);
-    audio.addEventListener('ended', handleEnded);
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('error', handleError);
+    audio.addEventListener('timeupdate', updateProgress, { signal });
+    audio.addEventListener('play', updatePlayState, { signal });
+    audio.addEventListener('pause', updatePlayState, { signal });
+    audio.addEventListener('ended', handleEnded, { signal });
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata, { signal });
+    audio.addEventListener('error', handleError, { signal });
 
     if (audio.readyState >= 1) {
       loadDuration();
@@ -78,16 +70,11 @@ export default function AudioPlayer({
     }
 
     return () => {
-      audio.removeEventListener('timeupdate', updateProgress);
-      audio.removeEventListener('play', updatePlayState);
-      audio.removeEventListener('pause', updatePlayState);
-      audio.removeEventListener('ended', handleEnded);
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('error', handleError);
+      controller.abort();
     };
   }, [autoplay, src]);
 
-  const togglePlay = useCallback((): void => {
+  const togglePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {

@@ -70,7 +70,7 @@ describe('AudioPlayer', () => {
     const button = screen.getByRole('button', { name: /toggle audio player/i });
     fireEvent.click(button);
 
-    expect(defaultProps.onPlay).not.toHaveBeenCalled(); // You may adjust this based on actual logic
+    expect(defaultProps.onPlay).not.toHaveBeenCalled();
   });
 
   test('should pause audio and call onPause if already playing', () => {
@@ -86,7 +86,7 @@ describe('AudioPlayer', () => {
       );
     });
 
-    expect(pauseMock).not.toHaveBeenCalled(); // You may adjust this based on actual logic
+    expect(pauseMock).not.toHaveBeenCalled();
   });
 
   test('should set error state when audio error event is triggered', () => {
