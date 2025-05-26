@@ -2,16 +2,25 @@
 import Menu, { type MenuProps } from '@mui/material/Menu';
 import { styles } from './DropdownMenu.style';
 import { ReactNode } from 'react';
+import { PositionEnum } from '~/types/enums/common.enums';
 
 interface DropdownMenuProps extends MenuProps {
   maxHeight?: number;
-  menuList: ReactNode
+  menuList: ReactNode;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   maxHeight,
   menuList,
   sx,
+  anchorOrigin = {
+    vertical: PositionEnum.Bottom,
+    horizontal: PositionEnum.Center,
+  },
+  transformOrigin = {
+    vertical: PositionEnum.Top,
+    horizontal: PositionEnum.Center,
+  },
   ...props
 }) => {
   return (
@@ -21,14 +30,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           maxHeight,
         },
       }}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
       sx={{ ...styles.menu, ...sx }}
       {...props}
     >
