@@ -19,9 +19,6 @@ import {
 export const urlLocaleMiddleware = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
 
-    console.log(`urlLocaleMiddleware: pathname=${pathname}, search=${search}`);
-
-
     const localeInPath = extractLocaleFromPath(pathname);
     const rawLocaleFromCookie = getCookie(LANGUAGE_COOKIES, request);
     const localeFromCookie = rawLocaleFromCookie.toLowerCase();

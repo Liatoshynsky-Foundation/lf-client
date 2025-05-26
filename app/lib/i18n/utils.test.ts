@@ -1,7 +1,6 @@
 import {
     extractLocaleFromPath,
-    determineLocale,
-    isIcon
+    determineLocale
 } from './utils';
 import {
     SUPPORTED_LOCALES,
@@ -37,19 +36,4 @@ describe('utils tests', () => {
             expect(determineLocale('')).toBe(DEFAULT_LOCALE);
         });
     });
-
-    describe('isIcon', () => {
-        it('should return true for paths with file extensions', () => {
-            expect(isIcon('/favicon.ico')).toBe(true);
-            expect(isIcon('/images/logo.png')).toBe(true);
-            expect(isIcon('/styles/main.css')).toBe(true);
-        });
-
-        it('should return false for paths without file extensions', () => {
-            expect(isIcon('/about')).toBe(false);
-            expect(isIcon('/')).toBe(false);
-            expect(isIcon('.')).toBe(false);
-        });
-    })
-
 });
