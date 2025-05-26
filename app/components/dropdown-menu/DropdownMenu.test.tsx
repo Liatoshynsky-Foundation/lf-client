@@ -4,7 +4,7 @@ import DropdownMenu from '../dropdown-menu/DropdownMenu';
 import { MenuItem } from '@mui/material';
 
 describe('DropdownMenu', () => {
-  it('renders menu items when open is true', () => {
+  it('should render menu items when open is true', () => {
     render(
       <DropdownMenu
         open={true}
@@ -21,7 +21,7 @@ describe('DropdownMenu', () => {
     expect(screen.getByText('Item 2')).toBeInTheDocument();
   });
 
-  it('does not render when open is false', () => {
+  it('should not render when open is false', () => {
     render(
       <DropdownMenu
         open={false}
