@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import FooterCopyrights from './FooterCopyrights/FooterCopyrights';
-import FooterContactInfo from './FooterContactInfo/FooterContactInfo';
+import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
+import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 
 export const footerData = {
     text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
