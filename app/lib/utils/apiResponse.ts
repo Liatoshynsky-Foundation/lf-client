@@ -5,7 +5,7 @@ interface ErrorResponse {
   errors: string[] | Record<string, unknown>;
 }
 
-export const successResponse = <T>(data: T, status: number = 200) => {
+export const successResponse = (data: unknown, status: number = 200) => {
   return NextResponse.json(data, { status });
 };
 

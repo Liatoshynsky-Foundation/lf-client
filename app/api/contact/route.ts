@@ -1,13 +1,21 @@
 import { successResponse, errorResponse } from '~/lib/utils/apiResponse';
 import { validateContactData } from '~/lib/utils/validateContactData';
+import { validateRequestData } from '~/lib/utils/validateRequestData';
+import { ContactFormData } from '~/lib/utils/validateContactData';
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const errors = validateContactData(data);
 
-  if (errors.length > 0) {
-    return errorResponse(errors, 400);
+  const validationResult = validateRequestData<ContactFormData>(
+    data,
+    validateContactData,
+  );
+
+  if (!validationResult.valid) {
+    return errorResponse(validationResult.errors);
   }
 
-  return successResponse({ data, success: true });
+  const { value } = validationResult;
+
+  return successResponse({ data: value, success: true });
 }
