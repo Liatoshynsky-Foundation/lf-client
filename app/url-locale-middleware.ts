@@ -16,7 +16,7 @@ import {
     setCookie,
 } from 'lib/utils/cookies';
 
-export const urlLocaleMiddleware  = (request: NextRequest) => {
+export const urlLocaleMiddleware = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
 
     const localeInPath = extractLocaleFromPath(pathname);
