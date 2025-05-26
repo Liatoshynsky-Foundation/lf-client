@@ -9,8 +9,7 @@ import {
 } from '~/constants';
 import {
     extractLocaleFromPath,
-    determineLocale,
-    isIcon
+    determineLocale
 } from 'lib/i18n/utils';
 import {
     getCookie,
@@ -20,9 +19,8 @@ import {
 export const urlLocaleMiddleware = (request: NextRequest) => {
     const { pathname, search } = request.nextUrl;
 
-    if (isIcon(pathname)) {
-        return NextResponse.next();
-    }
+    console.log(`urlLocaleMiddleware: pathname=${pathname}, search=${search}`);
+
 
     const localeInPath = extractLocaleFromPath(pathname);
     const rawLocaleFromCookie = getCookie(LANGUAGE_COOKIES, request);
