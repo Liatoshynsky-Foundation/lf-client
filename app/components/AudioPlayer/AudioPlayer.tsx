@@ -33,18 +33,6 @@ export default function AudioPlayer({
     const audio = audioRef.current;
     if (!audio) return;
 
-    const checkAudio = async () => {
-      try {
-        await audio.load();
-        if (audio.readyState === 0) throw new Error('File not loaded');
-        setError(null);
-      } catch {
-        setError('Error loading audio file.');
-      }
-    };
-
-    checkAudio();
-
     const updateProgress = () => {
       setCurrentTime(audio.currentTime);
     };
@@ -64,13 +52,27 @@ export default function AudioPlayer({
       setAnchorEl(null);
     };
 
+    const handleError = () => {
+      setError('Error loading audio file.');
+    };
+
+    const handleLoadedMetadata = () => {
+      loadDuration();
+      setError(null);
+    };
+
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('play', updatePlayState);
     audio.addEventListener('pause', updatePlayState);
     audio.addEventListener('ended', handleEnded);
-    audio.addEventListener('loadedmetadata', loadDuration);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('error', handleError);
 
-    if (audio.readyState >= 1) loadDuration();
+    if (audio.readyState >= 1) {
+      loadDuration();
+      setError(null);
+    }
+
     if (autoplay) {
       audio.play().catch(() => {});
     }
@@ -80,7 +82,8 @@ export default function AudioPlayer({
       audio.removeEventListener('play', updatePlayState);
       audio.removeEventListener('pause', updatePlayState);
       audio.removeEventListener('ended', handleEnded);
-      audio.removeEventListener('loadedmetadata', loadDuration);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleError);
     };
   }, [autoplay, src]);
 
