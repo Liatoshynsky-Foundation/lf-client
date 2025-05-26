@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
 import { styles } from './AudioPlayerPopover.styles';
-import { formatTime, calculateProgress } from 'app/utils/audioPlayerUtils';
+import { formatTime, calculateProgress } from '~/lib/utils/audioPlayer';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
