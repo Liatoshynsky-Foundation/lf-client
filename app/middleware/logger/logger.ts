@@ -7,7 +7,7 @@ import type { TransformableInfo } from 'logform';
 
 const { combine, timestamp, printf, errors, json } = format;
 
-const formatStack = (stack: string | unknown) => {
+const formatStack = (stack: unknown): string => {
   if (typeof stack === 'string') {
     return `\n📌 Stack trace:\n${stack
       .split('\n')
@@ -21,7 +21,8 @@ const logFormat = printf((info: TransformableInfo): string => {
   const { level, message, timestamp, stack, ...rest } = info;
   const meta =
     Object.keys(rest).length > 0 ? JSON.stringify(rest, null, 2) : '';
-  return `🕒 ${timestamp} ${level}: ${message}${meta ? `\n${meta}` : ''}${formatStack(stack)}`;
+  const metaBlock = meta ? '\n' + meta : '';
+  return `🕒 ${timestamp} ${level}: ${message}${metaBlock}${formatStack(stack)}`;
 });
 
 const logger = createLogger({
