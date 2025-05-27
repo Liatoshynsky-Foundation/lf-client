@@ -1,3 +1,5 @@
+export * from './typography'
+
 export const SUPPORTED_LOCALES = ['uk', 'en'];
 export const DEFAULT_LOCALE = 'uk';
 export const ONE_MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
