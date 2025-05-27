@@ -15,8 +15,8 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
 }) => {
   const marks = Array.isArray(value)
     ? Array.from({ length: Math.floor((max - min) / 5) + 1 }, (_, i) => ({
-        value: min + i * 5,
-      }))
+      value: min + i * 5,
+    }))
     : undefined;
 
   return (
