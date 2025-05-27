@@ -49,7 +49,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
     [activeClassName]: router.pathname === pathname && activeClassName,
   });
 
-  const linkAs = linkAsProp || as || (href as string);
+  const linkAs = linkAsProp ?? as ?? (href as string);
   const nextjsProps = {
     to: href,
     linkAs,
