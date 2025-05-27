@@ -66,7 +66,9 @@ export default function AudioPlayer({
     }
 
     if (autoplay) {
-      audio.play().catch(() => {});
+      audio.play().catch(() => {
+        setError('Playback failed');
+      });
     }
 
     return () => {
