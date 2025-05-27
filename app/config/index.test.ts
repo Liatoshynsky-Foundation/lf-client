@@ -34,7 +34,7 @@ describe('mongoUrl', () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'remotehost';
     process.env.MONGO_USERNAME = 'user';
-    process.env.MONGO_PASSWORD = 'fake-pass';  // NOSONAR
+    process.env.MONGO_PASSWORD = 'fake-pass'; // NOSONAR
 
     const { mongoUrl } = await import('~/config/index');
     expect(mongoUrl).toBe(`mongodb+srv://user:fake-pass@remotehost/testdb`);

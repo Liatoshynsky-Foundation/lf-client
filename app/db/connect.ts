@@ -8,7 +8,8 @@ type MongooseGlobalCache = {
   promise: Promise<typeof mongoose> | null;
 };
 
-let cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache }).mongoose ?? {
+let cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache })
+  .mongoose ?? {
   conn: null,
   promise: null,
 };
@@ -16,8 +17,8 @@ let cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache })
 
 async function dbConnect() {
   if (!mongoUrl) {
-  throw new Error(errors.MISSING_MONGO_URL);
-}
+    throw new Error(errors.MISSING_MONGO_URL);
+  }
 
   if (cached.conn) {
     return cached.conn;

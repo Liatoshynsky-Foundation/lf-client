@@ -101,9 +101,7 @@ describe('dbConnect', () => {
 
     const { default: dbConnect } = await import('~/db/connect');
 
-    await expect(dbConnect()).rejects.toThrow(
-      errors.MISSING_MONGO_URL,
-    );
+    await expect(dbConnect()).rejects.toThrow(errors.MISSING_MONGO_URL);
   });
 
   it('should reset promise if connection fails', async () => {

@@ -1,4 +1,4 @@
-import { errors } from "~/constants/errors";
+import { errors } from '~/constants/errors';
 
 const getMongoUrl = (): string => {
   const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB, MONGO_HOST, MONGO_PORT } =
