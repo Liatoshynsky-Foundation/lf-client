@@ -2,12 +2,7 @@ import { Box } from '@mui/material';
 import React from 'react';
 import FooterCopyrights from '~/shared/components/Footer/FooterCopyrights/FooterCopyrights';
 import FooterContactInfo from '~/shared/components/Footer/FooterContactInfo/FooterContactInfo';
-import {
-  Locale,
-  getTranslations
-} from '~/lib/i18n';
-
-
+import { getTranslations } from 'next-intl/server';
 
 const contacts = {
   title: 'ГРОМАДСЬКА ОРГАНІЗАЦІЯ \n«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»',
@@ -15,14 +10,8 @@ const contacts = {
   email: 'liatoshynsky@gmail.com',
 };
 
-interface FooterProps {
-  readonly lang: Locale;
-}
-
-export default async function Footer({
-   lang
-}: FooterProps) {
-  const { t } = await getTranslations(lang, 'footer');
+export default async function Footer() {
+  const t = await getTranslations('footer');
 
   const footerData = {
     text: t('copyright'),

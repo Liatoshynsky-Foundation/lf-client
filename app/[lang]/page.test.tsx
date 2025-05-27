@@ -1,10 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import Home from './page';
 
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => {
+    const translations: Record<string, string> = {
+      'text': 'Liatoshynsky project',
+    };
+    return translations[key];
+  })
+}));
+
 describe('Home component', () => {
-    const params = Promise.resolve({ lang: 'en' });
-    it('should render Home component correctly', async () => {
-        render(await Home ({params: params }));
-        expect(await screen.findByText(/Liatoshynsky project/i)).toBeInTheDocument();
-    });
+  it('should render Home component correctly', async () => {
+    render(await Home ());
+    expect(await screen.findByText(/Liatoshynsky project/i)).toBeInTheDocument();
+  });
 });

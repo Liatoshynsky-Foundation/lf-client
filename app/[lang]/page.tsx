@@ -1,16 +1,7 @@
 import React from 'react';
-import {getTranslations} from '~/lib/i18n';
-export default async function Home({
-   params,
-}: {
-    readonly params: Promise<{ readonly lang: string }>;
-}) {
-  const { lang } = await params;
-  const { t } = await getTranslations(lang, 'home');
+import {getTranslations} from 'next-intl/server';
 
-  return (
-    <>
-      <h1>{t('text')}</h1>
-    </>
-  );
+export default async function Home() {
+  const t = await getTranslations('home');
+  return <h1>{t('text')}</h1>;
 }

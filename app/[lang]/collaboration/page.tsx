@@ -1,16 +1,6 @@
-import {
-    getTranslations,
-    Locale
-} from '~/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
-interface CollaborationPageProps {
-    readonly params: Promise<{ readonly lang: Locale }>;
-}
-
-export default async function CollaborationPage({ params }: CollaborationPageProps) {
-    const { lang } = await params;
-
-    const { t } = await getTranslations(lang, 'collaborations');
-
+export default async function CollaborationPage() {
+  const t = await getTranslations('collaborations');
   return <div>{t('text')}</div>;
 }

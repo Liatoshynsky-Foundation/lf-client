@@ -5,8 +5,7 @@ import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
-import { Locale } from '~/lib/i18n';
-
+import {NextIntlClientProvider} from 'next-intl';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,34 +30,36 @@ export const metadata: Metadata = {
 
 interface RootLayoutParams {
   readonly children: ReactNode;
-  readonly params: Promise<{ readonly lang: Locale }>
+  readonly params: Promise<{ readonly lang: string }>
 }
 
 export default async function RootLayout({
-   children,
-   params
+  children,
+  params
 }: RootLayoutParams) {
   const { lang } = await params;
 
   return (
     <html lang={lang}>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
-        <Container
-          maxWidth="md"
-          sx={{
-            border: '1px solid #ccc',
-            padding: '20px',
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minWidth: '100%',
-          }}
-        >
-          <Header />
-          {children}
-          <Footer lang={lang}/>
-        </Container>
+        <NextIntlClientProvider>
+            <Container
+                maxWidth="md"
+                sx={{
+                    border: '1px solid #ccc',
+                    padding: '20px',
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    minWidth: '100%',
+                }}
+            >
+            <Header />
+            {children}
+            <Footer />
+          </Container>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
