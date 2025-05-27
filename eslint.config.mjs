@@ -19,6 +19,7 @@ const eslintConfig = [
     rules: {
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
+      indent: ['error', 2],
       'no-console': 'warn',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
