@@ -15,12 +15,7 @@ const Logo: React.FC<LogoProps> = ({ variant = 'header', sx, ...props }) => {
   return (
     <Box sx={{ display: 'inline-block', ...sx }} {...props}>
       <Link href="/">
-        <Image
-          src="/logo.svg"
-          alt="logo"
-          {...size}
-          priority={variant === 'header'}
-        />
+        <Image src="/images/logo.svg" alt="logo" {...size} priority />
       </Link>
     </Box>
   );
