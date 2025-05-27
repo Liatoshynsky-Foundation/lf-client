@@ -159,6 +159,8 @@ app/
 │ └── db.ts # Optional alias to db/connect.ts
 ├── constants/
 ├── middleware.ts # Root-level middleware (i18n, auth)
+├── config/
+│ └── index.ts # Environment variable parsing and validation
 ```
 
 ---

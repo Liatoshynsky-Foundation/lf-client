@@ -1,3 +1,5 @@
+import { errors } from '~/constants/errors';
+
 const mockConnection = { connection: { readyState: 1 } };
 
 const mockMongoose = (connectImpl = jest.fn()) => {
@@ -7,13 +9,13 @@ const mockMongoose = (connectImpl = jest.fn()) => {
 };
 
 const mockConfig = (url: string | undefined) => {
-  jest.doMock('../config', () => ({
+  jest.doMock(require.resolve('~/config'), () => ({
     mongoUrl: url,
   }));
 };
 
 const mockLoggerModule = (loggerMock: any) => {
-  jest.doMock('../middleware/logger/logger', () => loggerMock);
+  jest.doMock(require.resolve('~/middleware/logger/logger'), () => loggerMock);
 };
 
 const createLoggerMock = () => ({
@@ -65,7 +67,7 @@ describe('dbConnect', () => {
     await expect(dbConnect()).rejects.toThrow('Connection failed');
 
     expect(loggerMock.error).toHaveBeenCalledWith(
-      '❌ Failed to connect to the database:',
+      errors.FAILED_TO_CONNECT_DB,
       error,
     );
   });
@@ -100,7 +102,7 @@ describe('dbConnect', () => {
     const { default: dbConnect } = await import('~/db/connect');
 
     await expect(dbConnect()).rejects.toThrow(
-      'Failed to construct mongoUrl. Please ensure that required environment variables (MONGO_DB, MONGO_HOST, and optionally MONGO_USERNAME and MONGO_PASSWORD) are defined.',
+      errors.MISSING_MONGO_URL,
     );
   });
 

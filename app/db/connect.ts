@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { mongoUrl } from '~/config';
 import logger from '~/middleware/logger/logger';
+import { errors } from '~/constants/errors';
 
 type MongooseGlobalCache = {
   conn: typeof mongoose | null;
@@ -19,10 +20,8 @@ global.mongoose = cached;
 
 async function dbConnect() {
   if (!mongoUrl) {
-    throw new Error(
-      'Failed to construct mongoUrl. Please ensure that required environment variables (MONGO_DB, MONGO_HOST, and optionally MONGO_USERNAME and MONGO_PASSWORD) are defined.',
-    );
-  }
+  throw new Error(errors.MISSING_MONGO_URL);
+}
 
   if (cached.conn) {
     return cached.conn;
@@ -40,7 +39,7 @@ async function dbConnect() {
     logger.info('✅ Connected to db');
   } catch (error) {
     cached.promise = null;
-    logger.error('❌ Failed to connect to the database:', error);
+    logger.error(errors.FAILED_TO_CONNECT_DB, error);
     throw error;
   }
 

@@ -33,6 +33,10 @@ jest.mock('winston-mongodb', () => ({
   MongoDB: jest.fn(),
 }));
 
+jest.mock('~/config', () => ({
+  mongoUrl: 'mongodb://localhost:27017/test-db',
+}));
+
 describe('Logger', () => {
   let logger: any;
 
@@ -68,13 +72,33 @@ describe('Logger', () => {
       level: 'error',
       message: 'Something went wrong',
       timestamp: '2025-05-25T00:00:00.000Z',
-      stack: 'Error: fail\n    at file.js:1:1'
+      stack: 'Error: fail\n    at file.js:1:1',
     };
 
     const result = formatter(info);
 
-    expect(result).toContain('🕒 2025-05-25T00:00:00.000Z error: Something went wrong');
+    expect(result).toContain(
+      '🕒 2025-05-25T00:00:00.000Z error: Something went wrong',
+    );
     expect(result).toContain('📌 Stack trace:');
     expect(result).toContain('at file.js:1:1');
+  });
+
+  it('formats message without stack trace if stack is not a string', () => {
+    const formatter = printfFormatterSpy!;
+    const info = {
+      level: 'warn',
+      message: 'Just a warning',
+      timestamp: '2025-05-25T00:00:00.000Z',
+      stack: undefined,
+      extra: { some: 'meta' },
+    };
+
+    const result = formatter(info);
+
+    expect(result).toContain(
+      '🕒 2025-05-25T00:00:00.000Z warn: Just a warning',
+    );
+    expect(result).not.toContain('📌 Stack trace:');
   });
 });
