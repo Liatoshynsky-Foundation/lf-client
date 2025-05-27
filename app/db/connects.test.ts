@@ -1,4 +1,10 @@
 import { errors } from '~/constants/errors';
+import type { Mongoose } from 'mongoose';
+
+type MongooseGlobalCache = {
+  conn: Mongoose | null;
+  promise: Promise<Mongoose> | null;
+};
 
 const mockConnection = { connection: { readyState: 1 } };
 
@@ -14,7 +20,10 @@ const mockConfig = (url: string | undefined) => {
   }));
 };
 
-const mockLoggerModule = (loggerMock: any) => {
+const mockLoggerModule = (loggerMock: {
+  info: jest.Mock;
+  error: jest.Mock;
+}) => {
   jest.doMock(require.resolve('~/middleware/logger/logger'), () => loggerMock);
 };
 
@@ -26,7 +35,7 @@ const createLoggerMock = () => ({
 describe('dbConnect', () => {
   beforeEach(() => {
     jest.resetModules();
-    (global as any).mongoose = undefined;
+    (global as { mongoose?: MongooseGlobalCache }).mongoose = undefined;
     jest.clearAllMocks();
   });
 
@@ -48,10 +57,10 @@ describe('dbConnect', () => {
     expect(loggerMock.info).toHaveBeenCalledWith('✅ Connected to db');
     expect(conn).toStrictEqual(mockConnection);
 
-    const cached = (global as any).mongoose;
+    const cached = (global as { mongoose?: MongooseGlobalCache }).mongoose;
     expect(cached).toBeDefined();
-    expect(cached.conn).toStrictEqual(mockConnection);
-    expect(cached.promise).toBeInstanceOf(Promise);
+    expect(cached?.conn).toStrictEqual(mockConnection);
+    expect(cached?.promise).toBeInstanceOf(Promise);
   });
 
   it('should log error if connection fails', async () => {
@@ -72,25 +81,38 @@ describe('dbConnect', () => {
     );
   });
 
-  it('should return cached connection if exists', async () => {
-    const cachedConn = { connection: { readyState: 1 } };
-    (global as any).mongoose = {
-      conn: cachedConn,
-      promise: Promise.resolve(cachedConn),
-    };
-
+  it('should connect and cache the connection (mockImplementation)', async () => {
     const loggerMock = createLoggerMock();
-    mockMongoose(jest.fn());
+
+    const fakeMongoose = {
+      connection: { readyState: 1 },
+    } as Partial<Mongoose>;
+
+    const connectMock = jest.fn().mockResolvedValue(fakeMongoose);
+
+    jest.doMock('mongoose', () => ({
+      connect: connectMock,
+    }));
+
     mockConfig('mongodb://localhost:27017/test-db');
     mockLoggerModule(loggerMock);
 
     const { default: dbConnect } = await import('~/db/connect');
     const { connect } = await import('mongoose');
+    const { mongoUrl } = await import('~/config');
 
     const conn = await dbConnect();
 
-    expect(connect as jest.Mock).not.toHaveBeenCalled();
-    expect(conn).toStrictEqual(cachedConn);
+    expect(connect).toHaveBeenCalledWith(mongoUrl, { bufferCommands: false });
+    expect(loggerMock.info).toHaveBeenCalledWith('✅ Connected to db');
+    expect(conn).toStrictEqual(fakeMongoose);
+
+    const cached = (
+      global as typeof globalThis & { mongoose: MongooseGlobalCache }
+    ).mongoose;
+    expect(cached).toBeDefined();
+    expect(cached.conn).toStrictEqual(fakeMongoose);
+    expect(cached.promise).toBeInstanceOf(Promise);
   });
 
   it('should throw if mongoUrl is not defined', async () => {
@@ -115,6 +137,9 @@ describe('dbConnect', () => {
     const { default: dbConnect } = await import('~/db/connect');
 
     await expect(dbConnect()).rejects.toThrow('Connection failed');
-    expect((global as any).mongoose.promise).toBeNull();
+    const cached = (
+      global as typeof globalThis & { mongoose: MongooseGlobalCache }
+    ).mongoose;
+    expect(cached.promise).toBeNull();
   });
 });

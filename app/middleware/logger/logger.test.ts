@@ -1,3 +1,6 @@
+import type { TransformableInfo } from 'logform';
+import type { Logger } from 'winston';
+
 const infoMock = jest.fn();
 const errorMock = jest.fn();
 const transportsMock = [
@@ -5,7 +8,7 @@ const transportsMock = [
   { silent: false, type: 'mongodb', constructor: { name: 'MongoDB' } },
 ];
 
-let printfFormatterSpy: ((info: any) => string) | null = null;
+let printfFormatterSpy: ((info: TransformableInfo) => string) | null = null;
 
 jest.mock('winston', () => ({
   createLogger: jest.fn(() => ({
@@ -38,7 +41,7 @@ jest.mock('~/config', () => ({
 }));
 
 describe('Logger', () => {
-  let logger: any;
+  let logger: Logger;
 
   beforeAll(async () => {
     logger = (await import('~/middleware/logger/logger')).default;
@@ -61,7 +64,7 @@ describe('Logger', () => {
 
   it('includes MongoDB transport', () => {
     const hasMongoDB = logger.transports.some(
-      (t: any) => t.constructor?.name === 'MongoDB',
+      (t) => t.constructor?.name === 'MongoDB',
     );
     expect(hasMongoDB).toBe(true);
   });

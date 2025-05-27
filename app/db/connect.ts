@@ -8,7 +8,7 @@ type MongooseGlobalCache = {
   promise: Promise<typeof mongoose> | null;
 };
 
-let cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache })
+const cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache })
   .mongoose ?? {
   conn: null,
   promise: null,
