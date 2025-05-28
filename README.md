@@ -1,6 +1,6 @@
 <a href="https://softserve.academy/"><img src="https://softserve.academy/pluginfile.php/1/theme_boost_union/logocompact/300x300/1739968192/softserve_academy_logo-2023.png" title="SoftServe Academy" alt="SoftServe Academy"></a>
 
-<a href="https://softserve.academy/"><img src="./liatoshynsky-thumbnail.jpg" title="Liatoshynsky Foundation" alt="Liatoshynsky Foundation"></a>
+<img src="./public/images/liatoshynsky-thumbnail.jpg" title="Liatoshynsky Foundation" alt="Liatoshynsky Foundation">
 
 # Liatoshynsky Foundation
 
@@ -46,7 +46,7 @@
 
 ### Required to install
 
-- NodeJS (6.11.4)
+- NodeJS (22.0.0)
 
 ### Environment
 
@@ -133,6 +133,11 @@ app/
 │ │ └── page.tsx # /[lang]/collaboration
 ├── shared/
 │ ├── components/
+│ │ ├── design-system/ 
+│ │ │ └── button/
+│ │ │   ├── Button.test.tsx
+│ │ │   ├── Button.tsx
+│ │ │   └── Button.styles.ts
 │ │ ├── Header.tsx
 │ │ └── Footer.tsx
 │ └── hooks/
@@ -221,42 +226,42 @@ gitGraph
 
 ### Mentors
 
-[![@kolyasalubov](https://avatars.githubusercontent.com/u/36229492?v=4&size=200)](https://github.com/kolyasalubov)
-[![@vlad-khrychov](https://avatars.githubusercontent.com/u/67462207?v=4&size=200)](https://github.com/vlad-khrychov)
+[![@kolyasalubov](https://avatars.githubusercontent.com/u/36229492?v=4&size=250)](https://github.com/kolyasalubov)
+[![@vlad-khrychov](https://avatars.githubusercontent.com/u/67462207?v=4&size=250)](https://github.com/vlad-khrychov)
 
 ### Experts
 
-[![@bandvov](https://avatars.githubusercontent.com/u/48312647?v=4&size=200)](https://github.com/bandvov)
-[![@evdma](https://avatars.githubusercontent.com/u/44940956?v=4&size=200)](https://github.com/evdma)
+[![@bandvov](https://avatars.githubusercontent.com/u/48312647?v=4&size=250)](https://github.com/bandvov)
+[![@evdma](https://avatars.githubusercontent.com/u/44940956?v=4&size=250)](https://github.com/evdma)
 
 ### Development team
 
-[![@Mav-Ivan](https://avatars.githubusercontent.com/u/110425368?v=4&size=200)](https://github.com/Mav-Ivan)
-[![@VKormylo](https://avatars.githubusercontent.com/u/65959529?v=4&size=200)](https://github.com/VKormylo)
-[![@SofiiaYevush](https://avatars.githubusercontent.com/u/142519729?v=4&size=200)](https://github.com/SofiiaYevush)
-[![@yur4uwe](https://avatars.githubusercontent.com/u/157615455?v=4&size=200)](https://github.com/yur4uwe)
-[![@uliaescha](https://avatars.githubusercontent.com/u/136600464?v=4&size=200)](https://github.com/uliaescha)
-[![@Iarynovskyi](https://avatars.githubusercontent.com/u/164883382?v=4&size=200)](https://github.com/Iarynovskyi)
-[![@danikua](https://avatars.githubusercontent.com/u/115005047?v=4&size=200)](https://github.com/danikua)
-[![@lizabre](https://avatars.githubusercontent.com/u/108484546?v=4&size=200)](https://github.com/lizabre)
-[![@oleg191006](https://avatars.githubusercontent.com/u/156513251?v=4&size=200)](https://github.com/oleg191006)
-[![@IrynaKhylchuk](https://avatars.githubusercontent.com/u/141860021?v=4&size=200)](https://github.com/IrynaKhylchuk)
-[![@luvthenika](https://avatars.githubusercontent.com/u/124041223?v=4&size=200)](https://github.com/luvthenika)
-[![@irynalaitaruk](https://avatars.githubusercontent.com/u/30904237?v=4&size=200)](https://github.com/irynalaitaruk)
-[![@Mike-Popovych](https://avatars.githubusercontent.com/u/125293578?v=4&size=200)](https://github.com/Mike-Popovych)
-[![@TARDeus524](https://avatars.githubusercontent.com/u/142096148?v=4&size=200)](https://github.com/TARDeus524)
+[![@Mav-Ivan](https://avatars.githubusercontent.com/u/110425368?v=4&size=250)](https://github.com/Mav-Ivan)
+[![@VKormylo](https://avatars.githubusercontent.com/u/65959529?v=4&size=250)](https://github.com/VKormylo)
+[![@SofiiaYevush](https://avatars.githubusercontent.com/u/142519729?v=4&size=250)](https://github.com/SofiiaYevush)
+[![@yur4uwe](https://avatars.githubusercontent.com/u/157615455?v=4&size=250)](https://github.com/yur4uwe)
+[![@uliaescha](https://avatars.githubusercontent.com/u/136600464?v=4&size=250)](https://github.com/uliaescha)
+[![@Iarynovskyi](https://avatars.githubusercontent.com/u/164883382?v=4&size=250)](https://github.com/Iarynovskyi)
+[![@danikua](https://avatars.githubusercontent.com/u/115005047?v=4&size=250)](https://github.com/danikua)
+[![@lizabre](https://avatars.githubusercontent.com/u/108484546?v=4&size=250)](https://github.com/lizabre)
+[![@oleg191006](https://avatars.githubusercontent.com/u/156513251?v=4&size=250)](https://github.com/oleg191006)
+[![@IrynaKhylchuk](https://avatars.githubusercontent.com/u/141860021?v=4&size=250)](https://github.com/IrynaKhylchuk)
+[![@luvthenika](https://avatars.githubusercontent.com/u/124041223?v=4&size=250)](https://github.com/luvthenika)
+[![@irynalaitaruk](https://avatars.githubusercontent.com/u/30904237?v=4&size=250)](https://github.com/irynalaitaruk)
+[![@Mike-Popovych](https://avatars.githubusercontent.com/u/125293578?v=4&size=250)](https://github.com/Mike-Popovych)
+[![@TARDeus524](https://avatars.githubusercontent.com/u/142096148?v=4&size=250)](https://github.com/TARDeus524)
 
 ### DevOps team
 
-[![@qwqw-333](https://avatars.githubusercontent.com/u/132368159?v=4&size=200)](https://github.com/qwqw-333)
-[![@denchik911](https://avatars.githubusercontent.com/u/61146063?v=4&size=200)](https://github.com/denchik911)
+[![@qwqw-333](https://avatars.githubusercontent.com/u/132368159?v=4&size=250)](https://github.com/qwqw-333)
+[![@denchik911](https://avatars.githubusercontent.com/u/61146063?v=4&size=250)](https://github.com/denchik911)
 
 ### Designer team
 
-[![@Nastia197](https://avatars.githubusercontent.com/u/76164279?v=4&size=200)](https://github.com/Nastia197)
-[![@a-humanenko](https://avatars.githubusercontent.com/u/192996565?v=4&size=200)](https://github.com/a-humanenko)
-[![@Valigura](https://avatars.githubusercontent.com/u/12103932?v=4&size=200)](https://github.com/Valigura)
-[![@JuliaKharaim](https://avatars.githubusercontent.com/u/170419178?v=4&size=200)](https://github.com/JuliaKharaim)
+[![@Nastia197](https://avatars.githubusercontent.com/u/76164279?v=4&size=250)](https://github.com/Nastia197)
+[![@a-humanenko](https://avatars.githubusercontent.com/u/192996565?v=4&size=250)](https://github.com/a-humanenko)
+[![@Valigura](https://avatars.githubusercontent.com/u/12103932?v=4&size=250)](https://github.com/Valigura)
+[![@JuliaKharaim](https://avatars.githubusercontent.com/u/170419178?v=4&size=250)](https://github.com/JuliaKharaim)
 
 ---
 
