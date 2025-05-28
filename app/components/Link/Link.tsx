@@ -27,22 +27,12 @@ const CustomLink = ({ path, children, startIcon, endIcon, startSVG, endSVG }: Cu
   size="small"
   sx={linkStyles.button}
   component={NextLinkComposed}
-  disableElevation={true}
-  disableRipple={true}
-  disabled={true}
+  disableElevation
+  disableRipple
   to={{ pathname: path }}
 >
   <Typography
-    fontSize={16}
-    sx={{
-      display: 'flex',
-      alignItems: 'flex-end',
-      justifyContent: 'center',
-      '&:hover': {
-        borderBottom: '1px solid',
-        backgroundColor: 'transparent',
-      },
-    }}
+    sx={linkStyles.typography}
   >
     {children}
   </Typography>
