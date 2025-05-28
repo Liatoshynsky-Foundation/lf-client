@@ -6,7 +6,7 @@ import { LangType } from '~/types/types/lang.type';
 
 export default async function CollaborationPage({
   params
-}: LangType) {
+}: Readonly<LangType>) {
   const { lang } = await params;
   setRequestLocale(lang);
   const t = await getTranslations('collaborations');
