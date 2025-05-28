@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import PersonalCard from './PersonCard';
 
 const person = {
-  photo:
+  imgURL:
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0fsVF1anYNoKb2rvT998PTshQppsUr9Ydhg&s',
   name: 'Тетяна Гомон',
   description:
@@ -13,7 +13,7 @@ describe('Personal Card', () => {
   beforeEach(() => {
     render(
       <PersonalCard
-        photo={person.photo}
+        imgURL={person.imgURL}
         name={person.name}
         description={person.description}
       />,
@@ -21,7 +21,7 @@ describe('Personal Card', () => {
   });
 
   test('should display photo', () => {
-    expect(screen.getByAltText('Person card photo')).toBeInTheDocument();
+    expect(screen.getByAltText(person.name)).toBeInTheDocument();
   });
 
   test('should display name', () => {
