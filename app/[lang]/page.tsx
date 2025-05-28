@@ -9,5 +9,5 @@ export default async function Home({
   setRequestLocale(lang);
   const t = await getTranslations('home');
 
-  return <h1>{t('text')}</h1>;
+  return <h1>{t('text')} </h1>;
 }
