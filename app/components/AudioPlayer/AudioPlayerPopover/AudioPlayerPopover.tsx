@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
 import { styles } from './AudioPlayerPopover.styles';
@@ -87,7 +89,7 @@ const AudioPlayerPopover = ({
               ref={progressRef}
               onMouseDown={handleMouseDown}
               sx={styles.progressBar}
-              role="progressbar"
+              role="progress"
             >
               <Box sx={styles.progressLine(progress)} />
               <Box sx={styles.progressThumbSvg(progress)}>

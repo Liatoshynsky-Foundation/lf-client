@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, IconButton } from '@mui/material';
 import { styles } from './AudioPlayer.styles';
@@ -11,7 +13,14 @@ type AudioPlayerProps = {
   className?: string;
 };
 
-const stickHeights = [7, 19, 30, 13, 22, 7];
+const stickHeights = [
+  { id: 'stick-1', height: 7 },
+  { id: 'stick-2', height: 19 },
+  { id: 'stick-3', height: 30 },
+  { id: 'stick-4', height: 13 },
+  { id: 'stick-5', height: 22 },
+  { id: 'stick-6', height: 7 },
+];
 
 export default function AudioPlayer({
   src,
@@ -118,9 +127,9 @@ export default function AudioPlayer({
           ref={buttonRef}
         >
           <Box display="flex" alignItems="center" gap={0.5}>
-            {stickHeights.map((height, i) => (
+            {stickHeights.map(({ id, height }, i) => (
               <Box
-                key={i}
+                key={id}
                 sx={{
                   ...styles.icon,
                   ...(isPlaying ? styles.iconAnimated : styles.iconStatic),

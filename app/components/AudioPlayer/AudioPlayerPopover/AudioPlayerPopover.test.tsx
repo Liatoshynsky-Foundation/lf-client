@@ -14,6 +14,18 @@ const defaultProps = {
   error: null,
 };
 
+const mockBoundingClientRect = {
+  width: 200,
+  left: 100,
+  top: 0,
+  right: 300,
+  bottom: 10,
+  height: 10,
+  x: 0,
+  y: 0,
+  toJSON: () => {},
+};
+
 describe('AudioPlayerPopover', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,7 +35,7 @@ describe('AudioPlayerPopover', () => {
     render(<AudioPlayerPopover {...defaultProps} />);
     expect(screen.getByText('0:30 / 2:00')).toBeInTheDocument();
     expect(screen.getByText('Test Track')).toBeInTheDocument();
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByRole('progress')).toBeInTheDocument();
   });
 
   it('should render pause icon when isPlaying is true', () => {
@@ -80,21 +92,11 @@ describe('AudioPlayerPopover', () => {
         />,
       );
 
-      const progressBar = await screen.findByRole('progressbar');
+      const progressBar = await screen.findByRole('progress');
 
       Object.defineProperty(progressBar, 'getBoundingClientRect', {
         configurable: true,
-        value: () => ({
-          width: 200,
-          left: 100,
-          top: 0,
-          right: 300,
-          bottom: 10,
-          height: 10,
-          x: 0,
-          y: 0,
-          toJSON: () => {},
-        }),
+        value: () => mockBoundingClientRect,
       });
 
       fireEvent.mouseDown(progressBar, { clientX: 150 });
