@@ -5,13 +5,13 @@ export enum ButtonSize {
 }
 
 export enum ButtonVariant {
-  FILLED = 'filled',
-  OUTLINED = 'outlined',
-  TEXT = 'text',
+  filled = 'filled',
+  outlined = 'outlined',
+  text = 'text',
 }
 
 export enum ButtonColor {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-  TERTIARY = 'tertiary',
+  primary = 'primary',
+  secondary = 'secondary',
+  tertiary = 'tertiary',
 }

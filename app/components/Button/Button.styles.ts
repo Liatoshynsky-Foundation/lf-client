@@ -36,30 +36,6 @@ export const colors = {
     800: '#412B21',
     900: '#2D1611',
   },
-  red: {
-    50: '#FCF0ED',
-    100: '#FAE2DC',
-    200: '#F7C3B6',
-    300: '#F4A593',
-    400: '#F7856A',
-    500: '#EB6343',
-    600: '#D13712',
-    700: '#A32B0E',
-    800: '#7F210B',
-    900: '#611908',
-  },
-  burgundy: {
-    50: '#F9F3F3',
-    100: '#E6D4D3',
-    200: '#D4B8B4',
-    300: '#C19C96',
-    400: '#AE7F79',
-    500: '#9B655E',
-    600: '#874943',
-    700: '#732E28',
-    800: '#600E0F',
-    900: '#3D0607',
-  },
   white: '#FDFDFD',
   black: '#190D03',
   
@@ -75,8 +51,8 @@ export const buttonBaseStyles: SxProps<Theme> = {
   borderRadius: '28px',
   fontFamily: 'Mulish, sans-serif',
   textTransform: 'none',
-  lineHeight: 1.55,
-  fontWeight: 500,
+  lineHeight: 1.50,
+  fontWeight: 600,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -89,6 +65,8 @@ export const sizeStyles = {
     fontSize: '14px',
     height: '32px',
     gap: '4px',
+    lineHeight: 1.40,
+    fontWeight: 500,
   },
   medium: {
     padding: '8px 24px',
@@ -99,7 +77,7 @@ export const sizeStyles = {
     padding: '14px 32px',
     fontSize: '18px',
     height: '56px',
-    fontWeight: 600,
+    lineHeight: 1.55,
   },
 };
 
@@ -237,13 +215,6 @@ export const variantStyles = {
         backgroundColor: colors.blue[300],
         color: colors.blue[700],
       },
-    },
-    outlined: {
-     
-    },
-    
-    text: {
-   
     },
   },
 };

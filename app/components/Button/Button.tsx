@@ -1,3 +1,4 @@
+'use client';
 import { forwardRef, ReactNode } from 'react';
 import {
   Button as MuiButton,
@@ -11,17 +12,22 @@ const sizes = ['large', 'medium', 'small'] as const;
 
 const variants = ['filled', 'outlined', 'text'] as const;
 
-const color = ['primary', 'secondary', 'tertiary'] as const;
-
 type BaseButtonProps = {
-  variant?: (typeof variants)[number];
-  color?: (typeof color)[number];
   size?: (typeof sizes)[number];
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   loading?: boolean;
-  to?: string;
-};
+  label?: string;
+} & (
+  | {
+      color?: 'primary' | 'secondary';
+      variant?: (typeof variants)[number];
+    }
+  | {
+      color: 'tertiary';
+      variant?: 'filled';
+    }
+);
 
 export type ButtonProps = BaseButtonProps &
   Omit<MuiButtonProps, keyof BaseButtonProps>;
@@ -34,6 +40,7 @@ const Button = forwardRef(
       size = 'medium',
       variant = 'filled',
       color = 'secondary',
+      label,
       className,
       disabled,
       loading,
@@ -52,7 +59,7 @@ const Button = forwardRef(
     const content = (
       <>
         {startIcon}
-        <span className="lf-btn-label">{children}</span>
+        <span className="lf-btn-label">{label || children}</span>
         {endIcon}
       </>
     );
@@ -61,8 +68,10 @@ const Button = forwardRef(
       <MuiButton
         sx={{
           ...buttonBaseStyles,
-          ...(sizeStyles[size] ?? {}),
-          ...(variantStyles[color]?.[variant] ?? {}),
+          ...sizeStyles[size],
+          ...(color === 'tertiary'
+            ? variantStyles.tertiary.filled
+            : variantStyles[color]?.[variant]),
         }}
         disabled={isDisabled}
         ref={forwardedRef}
