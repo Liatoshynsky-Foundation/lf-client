@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <Container
                     maxWidth="md"
                     sx={{ border: '1px solid #ccc', padding: '20px', minWidth: '100%' }}

@@ -4,33 +4,33 @@ import DropdownMenu from './DropdownMenu';
 import { MenuItem } from '@mui/material';
 
 describe('DropdownMenu', () => {
-    it('should render menu items when open is true', () => {
-        render(
-            <DropdownMenu
-                open={true}
-                onClose={() => { }}
-                anchorEl={document.body}
-                menuList={[
-                    <MenuItem key="1">Item 1</MenuItem>,
-                    <MenuItem key="2">Item 2</MenuItem>,
-                ]}
-            />,
-        );
+  it('should render menu items when open is true', () => {
+    render(
+      <DropdownMenu
+        open={true}
+        onClose={() => { }}
+        anchorEl={document.body}
+        menuList={[
+          <MenuItem key="1">Item 1</MenuItem>,
+          <MenuItem key="2">Item 2</MenuItem>,
+        ]}
+      />,
+    );
 
-        expect(screen.getByText('Item 1')).toBeInTheDocument();
-        expect(screen.getByText('Item 2')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+    expect(screen.getByText('Item 2')).toBeInTheDocument();
+  });
 
-    it('should not render when open is false', () => {
-        render(
-            <DropdownMenu
-                open={false}
-                onClose={() => { }}
-                anchorEl={document.body}
-                menuList={<MenuItem>Hidden Item</MenuItem>}
-            />,
-        );
+  it('should not render when open is false', () => {
+    render(
+      <DropdownMenu
+        open={false}
+        onClose={() => { }}
+        anchorEl={document.body}
+        menuList={<MenuItem>Hidden Item</MenuItem>}
+      />,
+    );
 
-        expect(screen.queryByText('Hidden Item')).not.toBeInTheDocument();
-    });
+    expect(screen.queryByText('Hidden Item')).not.toBeInTheDocument();
+  });
 });
