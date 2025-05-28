@@ -1,14 +1,23 @@
+
 export const linkStyles = {
-    color: '#52545A',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 1,
-    textDecoration: 'none',
-    '&:hover': {
-        textDecoration: 'underline',
-        backgroundColor: 'transparent',
+    button: {
+        cursor: 'pointer',
+        color: '#52545A',
+        display: 'flex',
+        borderRadius: 0,
+        '&:hover': {
+            backgroundColor: 'transparent',
+        },
+        '&:active': {
+            backgroundColor: 'transparent',
+        }
     },
-    '&:active': {
-        backgroundColor: 'transparent',
-    }
+    typography: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        '&:hover': {
+            borderBottom: '1px solid',
+        },
+    },
 };

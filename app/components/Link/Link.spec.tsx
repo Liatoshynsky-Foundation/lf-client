@@ -4,9 +4,8 @@ import '@testing-library/jest-dom';
 import HomeSvg from '../../public/house.svg';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 
-
 describe('CustomLink', () => {
-    test('should render CustomLink with correct text and href', () => {
+    test('should render CustomLink correct text and href', () => {
         render(<CustomLink path="/test">Test Link</CustomLink>);
 
         const link = screen.getByRole('link', { name: /test link/i });
@@ -16,7 +15,7 @@ describe('CustomLink', () => {
 
     test('should render front icon', () => {
         render(
-            <CustomLink path="/" frontIcon={<AccessAlarmIcon data-testid="front-icon" />}>
+            <CustomLink path="/" startIcon={<AccessAlarmIcon data-testid="front-icon" />}>
                 With Icon
             </CustomLink>
         );
@@ -26,7 +25,7 @@ describe('CustomLink', () => {
 
     test('should render back icon (SVG image)', () => {
         render(
-            <CustomLink path="/with-back-icon" backIcon={HomeSvg}>
+            <CustomLink path="/with-back-icon" endSVG={HomeSvg}>
                 With Back Icon
             </CustomLink>
         );
@@ -34,6 +33,4 @@ describe('CustomLink', () => {
         expect(img).toBeInTheDocument();
         expect(img).toHaveAttribute('src');
     });
-
-
 });
