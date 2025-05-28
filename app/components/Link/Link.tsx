@@ -27,8 +27,9 @@ const CustomLink = ({ path, children, startIcon, endIcon, startSVG, endSVG }: Cu
   size="small"
   sx={linkStyles.button}
   component={NextLinkComposed}
-  disableElevation
-  disableRipple
+  disableElevation={true}
+  disableRipple={true}
+  disabled={true}
   to={{ pathname: path }}
 >
   <Typography

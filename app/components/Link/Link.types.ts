@@ -1,13 +1,11 @@
-import { ReactElement } from 'react';
+// import { ReactElement } from 'react';
+// import { SvgIconProps } from '@mui/material/SvgIcon';
 import { StaticImageData } from 'next/image';
-import { SvgIconProps } from '@mui/material/SvgIcon';
-
-type IconType = ReactElement<SvgIconProps> | StaticImageData;
-
+type SVGType = StaticImageData | string | React.FC<React.SVGProps<SVGSVGElement>>;
 import { ButtonProps } from '@mui/material/Button'; 
 export interface CustomLinkProps extends ButtonProps {
-  frontIcon?: IconType;
-  backIcon?: IconType;
+  startSVG?: SVGType;
+  endSVG?: SVGType;
   children: React.ReactNode;
   path: string;
 }
