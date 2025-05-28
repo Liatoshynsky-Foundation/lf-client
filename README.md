@@ -1,41 +1,18 @@
 <a href="https://softserve.academy/"><img src="https://softserve.academy/pluginfile.php/1/theme_boost_union/logocompact/300x300/1739968192/softserve_academy_logo-2023.png" title="SoftServe Academy" alt="SoftServe Academy"></a>
 
-**_INSERT GRAPHIC HERE (include hyperlink in image)_**
+<img src="./public/images/liatoshynsky-thumbnail.jpg" title="Liatoshynsky Foundation" alt="Liatoshynsky Foundation">
 
-# Repository Title Goes Here
+# Liatoshynsky Foundation
 
-> Subtitle or Short Description Goes Here
+«Liatoshynsky Foundation» присвячений популяризації творчості Бориса Лятошинського – видатного українського композитора, представника модернізму та експресіонізму.
 
-> ideally one sentence
-
-> include terms/tags that can be searched
-
-**Badges will go here**
-
-- build status
-- coverage
-- issues (waffle.io maybe)
-- devDependencies
-- npm package
-- slack
-- downloads
-- gitter chat
-- license
-- etc.
-
-[![Build Status](https://img.shields.io/travis/ita-social-projects/GreenCity/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/GreenCity)
-[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/GreenCity/master?style=flat-square)](https://coveralls.io)
 [![Github Issues](https://img.shields.io/github/issues/Liatoshynsky-Foundation/lf-client?style=flat-square)](https://github.com/Liatoshynsky-Foundation/lf-client/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/Liatoshynsky-Foundation/lf-client?style=flat-square)](https://github.com/Liatoshynsky-Foundation/lf-client/pulls)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-- For more on these wonderful badges, refer to <a href="https://shields.io/" target="_blank">shields.io</a>.
-
 ---
 
-## Table of Contents (Optional)
-
-> If your `README` has a lot of info, section headers might be nice.
+## Table of Contents
 
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
@@ -48,12 +25,16 @@
   - [How to work with swagger UI](#How-to-work-with-swagger-UI)
   - [How to run tests](#How-to-run-tests)
   - [How to Checkstyle](#How-to-Checkstyle)
-- [Documentation](#Documentation))
+- [Documentation](#Documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
   - [issue flow](#git-flow)
-- [FAQ](#faq)
-- [Support](#support)
+- [Team](#team)
+  - [Mentors](#mentors)
+  - [Experts](#experts)
+  - [Development team](#development-team)
+  - [DevOps team](#devops-team)
+  - [Designer team](#designer-team)
 - [License](#license)
 
 ---
@@ -65,11 +46,7 @@
 
 ### Required to install
 
-- Python (3.6.3)
-- PostgreSQL (9.5.9)
-- Django (1.11.6)
-- NodeJS (6.11.4)
-- Redis (3.0.6)
+- NodeJS (22.0.0)
 
 ### Environment
 
@@ -126,6 +103,9 @@ npm run dev
 
 ### How to run tests
 
+- To run all unit tests open terminal and run `npm run test` in it.
+- To run single unit test file run `npm run test -- {component}.test.tsx`.
+
 ### How to Checkstyle
 
 ---
@@ -153,6 +133,11 @@ app/
 │ │ └── page.tsx # /[lang]/collaboration
 ├── shared/
 │ ├── components/
+│ │ ├── design-system/ 
+│ │ │ └── button/
+│ │ │   ├── Button.test.tsx
+│ │ │   ├── Button.tsx
+│ │ │   └── Button.styles.ts
 │ │ ├── Header.tsx
 │ │ └── Footer.tsx
 │ └── hooks/
@@ -239,29 +224,44 @@ gitGraph
 
 ## Team
 
-> Or Contributors/People
+### Mentors
 
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
+[![@kolyasalubov](https://avatars.githubusercontent.com/u/36229492?v=4&size=250)](https://github.com/kolyasalubov)
+[![@vlad-khrychov](https://avatars.githubusercontent.com/u/67462207?v=4&size=250)](https://github.com/vlad-khrychov)
 
-- You can just grab their GitHub profile image URL
-- You should probably resize their picture using `?s=200` at the end of the image URL.
+### Experts
 
----
+[![@bandvov](https://avatars.githubusercontent.com/u/48312647?v=4&size=250)](https://github.com/bandvov)
+[![@evdma](https://avatars.githubusercontent.com/u/44940956?v=4&size=250)](https://github.com/evdma)
 
-## FAQ
+### Development team
 
-- **How do I do _specifically_ so and so?**
-  - No problem! Just do this.
+[![@Mav-Ivan](https://avatars.githubusercontent.com/u/110425368?v=4&size=250)](https://github.com/Mav-Ivan)
+[![@VKormylo](https://avatars.githubusercontent.com/u/65959529?v=4&size=250)](https://github.com/VKormylo)
+[![@SofiiaYevush](https://avatars.githubusercontent.com/u/142519729?v=4&size=250)](https://github.com/SofiiaYevush)
+[![@yur4uwe](https://avatars.githubusercontent.com/u/157615455?v=4&size=250)](https://github.com/yur4uwe)
+[![@uliaescha](https://avatars.githubusercontent.com/u/136600464?v=4&size=250)](https://github.com/uliaescha)
+[![@Iarynovskyi](https://avatars.githubusercontent.com/u/164883382?v=4&size=250)](https://github.com/Iarynovskyi)
+[![@danikua](https://avatars.githubusercontent.com/u/115005047?v=4&size=250)](https://github.com/danikua)
+[![@lizabre](https://avatars.githubusercontent.com/u/108484546?v=4&size=250)](https://github.com/lizabre)
+[![@oleg191006](https://avatars.githubusercontent.com/u/156513251?v=4&size=250)](https://github.com/oleg191006)
+[![@IrynaKhylchuk](https://avatars.githubusercontent.com/u/141860021?v=4&size=250)](https://github.com/IrynaKhylchuk)
+[![@luvthenika](https://avatars.githubusercontent.com/u/124041223?v=4&size=250)](https://github.com/luvthenika)
+[![@irynalaitaruk](https://avatars.githubusercontent.com/u/30904237?v=4&size=250)](https://github.com/irynalaitaruk)
+[![@Mike-Popovych](https://avatars.githubusercontent.com/u/125293578?v=4&size=250)](https://github.com/Mike-Popovych)
+[![@TARDeus524](https://avatars.githubusercontent.com/u/142096148?v=4&size=250)](https://github.com/TARDeus524)
 
----
+### DevOps team
 
-## Support
+[![@qwqw-333](https://avatars.githubusercontent.com/u/132368159?v=4&size=250)](https://github.com/qwqw-333)
+[![@denchik911](https://avatars.githubusercontent.com/u/61146063?v=4&size=250)](https://github.com/denchik911)
 
-Reach out to me at one of the following places!
+### Designer team
 
-- Website at <a href="http://Website.com" target="_blank">`Website.com`</a>
-- Facebook at <a href="https://www.facebook.com/LiubomyrHalamaha/" target="_blank">`Liubomyr Halamaha`</a>
-- Insert more social links here.
+[![@Nastia197](https://avatars.githubusercontent.com/u/76164279?v=4&size=250)](https://github.com/Nastia197)
+[![@a-humanenko](https://avatars.githubusercontent.com/u/192996565?v=4&size=250)](https://github.com/a-humanenko)
+[![@Valigura](https://avatars.githubusercontent.com/u/12103932?v=4&size=250)](https://github.com/Valigura)
+[![@JuliaKharaim](https://avatars.githubusercontent.com/u/170419178?v=4&size=250)](https://github.com/JuliaKharaim)
 
 ---
 
