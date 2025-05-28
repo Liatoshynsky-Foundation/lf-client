@@ -1,34 +1,52 @@
-import Image from 'next/image';
+'use client';
 import { CustomLinkProps } from './Link.types';
 import { linkStyles } from './Link.styles';
 import Button from '@mui/material/Button';
 import { NextLinkComposed } from './NextLink';
-import { Box } from '@mui/material';
+import Image from 'next/image';
+import { Typography } from '@mui/material';
+// import { Box } from '@mui/material';
 
-const CustomLink = ({ frontIcon, backIcon, path, children }: CustomLinkProps) => {
-  const renderIcon = (icon?: CustomLinkProps['frontIcon']) => {
-    if (!icon) return null;
-    if (typeof icon === 'object' && 'src' in icon) {
-      return <Image src={icon} alt="icon" width={24} height={24} />;
+const CustomLink = ({ path, children, startIcon, endIcon, startSVG, endSVG }: CustomLinkProps) => {
+  const renderSVG = (svg: CustomLinkProps['startSVG']) => {
+    if (!svg) return null;
+
+    if (typeof svg === 'function') {
+      const SVGComponent = svg;
+      return <SVGComponent width={26} height={26} style={{ display: 'block' }} />;
     }
-    return icon;
+
+    return <Image src={svg} alt="icon" width={26} height={26} />;
   };
 
+
   return (
-    <Box sx={{ flexDirection: '2', gap: 2 }}>
-      <Button
-        sx={linkStyles}
-        component={NextLinkComposed}
-        disableElevation={true}
-        disableRipple={true}
-        to={{
-          pathname: path,
-        }}
-      > {renderIcon(frontIcon)}
-        {children}
-        {renderIcon(backIcon)}
-      </Button>
-    </Box>
+<Button
+  startIcon={startSVG ? renderSVG(startSVG) : startIcon}
+  endIcon={endSVG ? renderSVG(endSVG) : endIcon}
+  size="small"
+  sx={linkStyles.button}
+  component={NextLinkComposed}
+  disableElevation
+  disableRipple
+  to={{ pathname: path }}
+>
+  <Typography
+    fontSize={16}
+    sx={{
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      '&:hover': {
+        borderBottom: '1px solid',
+        backgroundColor: 'transparent',
+      },
+    }}
+  >
+    {children}
+  </Typography>
+</Button>
+
   );
 };
 
