@@ -5,8 +5,7 @@ import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
-import {NextIntlClientProvider} from 'next-intl';
-import { Locale } from 'next-intl';
+import {NextIntlClientProvider, Locale} from 'next-intl';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
