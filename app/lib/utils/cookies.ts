@@ -15,22 +15,22 @@ type CookieSetter = {
 };
 
 export const getCookie = (
-    cookie: string,
-    request: NextRequest
+  cookie: string,
+  request: NextRequest
 ): string => {
-    return request.cookies.get(cookie)?.value ?? '';
+  return request.cookies.get(cookie)?.value ?? '';
 };
 
 export const setCookie = (
-    response: CookieSetter,
-    cookieValue: string,
-    cookie: string,
-    maxAge: number
+  response: CookieSetter,
+  cookieValue: string,
+  cookie: string,
+  maxAge: number
 ): void => {
-    response.cookies.set(cookie, cookieValue, {
-        maxAge,
-        path: '/',
-        sameSite: 'lax'
-    });
+  response.cookies.set(cookie, cookieValue, {
+    maxAge,
+    path: '/',
+    sameSite: 'lax'
+  });
 };
 
