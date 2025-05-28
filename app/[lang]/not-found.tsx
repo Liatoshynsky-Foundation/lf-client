@@ -1,16 +1,19 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 export default async function CustomNotFoundPage() {
+  const t = await getTranslations('common');
+
   return<>
     <section style={{ marginBottom: '20px' }}>
-            Сторінка ще недоступна цією мовою
+      {t('404_language')}
     </section>
-    <Link href={'/'} passHref style={{
+    <Link href='/' passHref style={{
       color: 'yellow',
       fontWeight: 'bold',
       textDecoration: 'underline',
     }}>
-            Повернутись на головну
+      {t('go_home')}
     </Link>
   </>;
 }

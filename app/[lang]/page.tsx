@@ -1,7 +1,13 @@
 import React from 'react';
-import {getTranslations} from 'next-intl/server';
+import {getTranslations, setRequestLocale} from 'next-intl/server';
+import { LangType } from '~/types/types/lang.type';
 
-export default async function Home() {
+export default async function Home({
+  params
+}: LangType) {
+  const { lang } = await params;
+  setRequestLocale(lang);
   const t = await getTranslations('home');
+
   return <h1>{t('text')}</h1>;
 }

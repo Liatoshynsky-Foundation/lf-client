@@ -7,12 +7,13 @@ jest.mock('next-intl/server', () => ({
       'text': 'Liatoshynsky project',
     };
     return translations[key];
-  })
+  }),
+  setRequestLocale: jest.fn()
 }));
 
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
-    render(await Home ());
+    render(await Home ({ params: Promise.resolve({ lang: 'en' }) }));
     expect(await screen.findByText(/Liatoshynsky project/i)).toBeInTheDocument();
   });
 });
