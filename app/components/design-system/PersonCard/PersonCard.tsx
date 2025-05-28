@@ -5,29 +5,27 @@ import Logo from '../../../../public/Logo.svg';
 import Image from 'next/image';
 
 interface PersonCardProps {
-  photo: string;
+  imgURL: string;
   name: string;
   description: string;
 }
 
-const PersonCard = ({ photo, name, description }: PersonCardProps) => {
+const PersonCard: React.FC<PersonCardProps> = ({
+  imgURL,
+  name,
+  description,
+}) => {
   return (
     <Box sx={styles.container}>
       <Box sx={styles.cardContent}>
         <Box sx={styles.photoWrapper}>
+          a
           <Image
-            alt="Person card photo"
-            src={photo}
+            alt={name}
+            src={imgURL}
             width={185}
             height={166}
-            style={{
-              objectFit: 'cover',
-              borderRadius: '60% 40% 60% 40% / 55% 45% 55% 45%',
-              position: 'absolute',
-              top: '2px',
-              left: '15px',
-              transform: 'rotate(25deg)',
-            }}
+            style={styles.image}
           />
         </Box>
         <Box sx={styles.textWrapper}>

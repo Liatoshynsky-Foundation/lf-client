@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 export const styles = {
   container: {
     width: '100%',
@@ -58,4 +60,12 @@ export const styles = {
     width: { xs: '210px', md: '236px' },
     height: { xs: '78px', md: '88px' },
   },
+  image: {
+    objectFit: 'cover',
+    borderRadius: '60% 40% 60% 40% / 55% 45% 55% 45%',
+    position: 'absolute',
+    top: '2px',
+    left: '15px',
+    transform: 'rotate(25deg)',
+  } as CSSProperties,
 };
