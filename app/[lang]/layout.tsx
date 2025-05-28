@@ -6,6 +6,7 @@ import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
 import {NextIntlClientProvider} from 'next-intl';
+import { Locale } from 'next-intl';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
 
 interface RootLayoutParams {
   readonly children: ReactNode;
-  readonly params: Promise<{ readonly lang: 'en' | 'uk' }>
+  readonly params: Promise<{ readonly lang: Locale }>
 }
 
 export default async function RootLayout({

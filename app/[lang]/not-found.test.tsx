@@ -5,7 +5,7 @@ jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {
     const translations: Record<string, string> = {
       '404_language': '404 Language',
-      'go_home': 'go homee',
+      'goHome': 'go home',
     };
     return translations[key];
   })

@@ -13,7 +13,7 @@ export default async function CustomNotFoundPage() {
       fontWeight: 'bold',
       textDecoration: 'underline',
     }}>
-      {t('go_home')}
+      {t('goHome')}
     </Link>
   </>;
 }

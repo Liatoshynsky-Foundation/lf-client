@@ -16,9 +16,9 @@ export default async function Footer() {
   const footerData = {
     text: t('copyright'),
     links: [
-      { label: t('link_privacy'), href: '/privacy' },
-      { label: t('link_terms'), href: '/terms' },
-      { label: t('link_media'), href: '/media' },
+      { label: t('linkPrivacy'), href: '/privacy' },
+      { label: t('linkTerms'), href: '/terms' },
+      { label: t('linkMedia'), href: '/media' },
     ],
   };
 

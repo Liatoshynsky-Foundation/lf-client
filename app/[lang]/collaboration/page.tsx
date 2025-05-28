@@ -2,11 +2,11 @@ import {
   getTranslations,
   setRequestLocale
 } from 'next-intl/server';
-import { LangType } from '~/types/types/lang.type';
+import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
 
 export default async function CollaborationPage({
   params
-}: Readonly<LangType>) {
+}: Readonly<ParamsWithLanguage>) {
   const { lang } = await params;
   setRequestLocale(lang);
   const t = await getTranslations('collaborations');
