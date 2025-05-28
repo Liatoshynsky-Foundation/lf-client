@@ -1,4 +1,4 @@
-export * from './typography'
+export * from './typography';
 
 export const SUPPORTED_LOCALES = ['uk', 'en'];
 export const DEFAULT_LOCALE = 'uk';
