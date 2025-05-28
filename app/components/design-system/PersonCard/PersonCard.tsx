@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { styles } from './PersonCard.styles';
-import Logo from '../../../../public/Logo.svg';
 import Image from 'next/image';
 
 interface PersonCardProps {
@@ -19,7 +18,6 @@ const PersonCard: React.FC<PersonCardProps> = ({
     <Box sx={styles.container}>
       <Box sx={styles.cardContent}>
         <Box sx={styles.photoWrapper}>
-          a
           <Image
             alt={name}
             src={imgURL}
@@ -34,7 +32,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
         </Box>
       </Box>
       <Box sx={styles.logoWrapper}>
-        <Box component="img" src={Logo.src} alt="Logo" sx={styles.logo} />
+        <Box component="img" src='/images/light-logo.svg' alt="Logo" sx={styles.logo} />
       </Box>
     </Box>
   );
