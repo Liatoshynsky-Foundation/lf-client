@@ -11,20 +11,20 @@ interface CustomCheckboxProps extends CheckboxProps {
 }
 type ReadonlyCustomCheckboxProps = Readonly<CustomCheckboxProps>;
 export default function CustomCheckbox({ disabled, defaultChecked, size, label, onChange }: ReadonlyCustomCheckboxProps) {
-    return (
-        <Box>
-            <FormGroup>
-                <FormControlLabel control={
-                    <Checkbox
-                        sx={checkboxStyles}
-                        size={size}
-                        disabled={disabled}
-                        defaultChecked={defaultChecked}
-                        onChange={onChange}
-                    />}
-                    label={label}
-                />
-            </FormGroup>
-        </Box>
-    );
+  return (
+    <Box>
+      <FormGroup>
+        <FormControlLabel control={
+          <Checkbox
+            sx={checkboxStyles}
+            size={size}
+            disabled={disabled}
+            defaultChecked={defaultChecked}
+            onChange={onChange}
+          />}
+        label={label}
+        />
+      </FormGroup>
+    </Box>
+  );
 }
