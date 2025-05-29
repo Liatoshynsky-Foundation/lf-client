@@ -1,3 +1,20 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 npx lint-staged
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "No changes since last update."
+  exit 1
+fi
+
+if git diff --cached --quiet; then
+  echo ""
+  echo "No changes after lint-staged."
+  exit 1
+else
+  echo ""
+  echo "Changes after lint-staged successfully added to commit."
+  exit 0
+fi
