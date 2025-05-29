@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 describe('CustomCheckbox', () => {
   const label = 'Label';
-  it('should display checkbox', async () => {
+  it('should display checkbox', () => {
     render(<CustomCheckbox label={label} />);
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeInTheDocument();
@@ -18,11 +18,11 @@ describe('CustomCheckbox', () => {
     expect(screen.queryByRole('checkbox')).not.toBeChecked();
 
   });
-  it('should not toggle disabled checkbox', async () => {
+  it('should not toggle disabled checkbox', () => {
     render(<CustomCheckbox disabled label={label} />);
     expect(screen.queryByRole('checkbox')).not.toBeChecked();
   });
-  it('should display checked checkbox by default', async () => {
+  it('should display checked checkbox by default', () => {
     render(<CustomCheckbox label={label} defaultChecked />);
     expect(screen.queryByRole('checkbox')).toBeChecked();
   });
