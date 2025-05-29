@@ -5,6 +5,6 @@ import Header from './Header';
 
 it('renders the Header component correctly', async () => {
   render(Header());
-  const aboutElement = await screen.findByText(/Heade/i);
+  const aboutElement = await screen.findByText(/Header!/i);
   expect(aboutElement).toBeInTheDocument();
 });
