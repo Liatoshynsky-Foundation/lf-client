@@ -5,7 +5,7 @@ import { Box, IconButton } from '@mui/material';
 import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
-type AudioPlayerProps = Readonly<{
+export type AudioPlayerProps = Readonly<{
   src: string;
   trackName: string;
   loop?: boolean;
