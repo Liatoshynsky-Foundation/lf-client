@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import AudioPlayer from './AudioPlayer';
-import { AudioPlayerProps } from './AudioPlayer';
+import AudioPlayer, { AudioPlayerProps } from './AudioPlayer';
 
 describe('AudioPlayer', () => {
   const defaultProps = {
