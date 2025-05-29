@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import FooterNavigation from './FooterNavigation';
-import { sections } from './FooterNavigation';
+import FooterNavigation, { sections } from './FooterNavigation';
 
 describe('FooterNavigation', () => {
   test('should display all section titles', () => {
