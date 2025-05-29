@@ -313,7 +313,7 @@ jobs:
           fi
           
           TARGET_COMMENT_AUTHOR="github-actions[bot]" 
-          TARGET_COMMENT_MARKER="# CI Report"
+          TARGET_COMMENT_MARKER=" CI Report"
           
           JQ_QUERY_STRING=".[] | select(.user.login==\"$TARGET_COMMENT_AUTHOR\" and (.body | contains(\"$TARGET_COMMENT_MARKER\"))) | .id"
           
