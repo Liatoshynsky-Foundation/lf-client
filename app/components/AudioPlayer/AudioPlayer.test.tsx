@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import AudioPlayer from './AudioPlayer';
+import { AudioPlayerProps } from './AudioPlayer';
 
 describe('AudioPlayer', () => {
   const defaultProps = {
@@ -9,14 +10,26 @@ describe('AudioPlayer', () => {
     onPause: jest.fn(),
   };
 
+  let props: Partial<AudioPlayerProps>;
+
+  const renderComponent = (overrideProps = {}) =>
+    render(<AudioPlayer {...defaultProps} {...props} {...overrideProps} />);
+
+  beforeAll(() => {
+    HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
+    HTMLMediaElement.prototype.pause = jest.fn();
+  });
+
   beforeEach(() => {
-    render(<AudioPlayer {...defaultProps} />);
     jest.clearAllMocks();
+    props = {};
+    renderComponent();
   });
 
   test('should render AudioPlayer component', () => {
-    const button = screen.getByRole('button', { name: /toggle audio player/i });
-    expect(button).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /toggle audio player/i }),
+    ).toBeInTheDocument();
   });
 
   test('should render audio element with given src', () => {
@@ -26,12 +39,13 @@ describe('AudioPlayer', () => {
   });
 
   test('should open popover when button is clicked', () => {
-    const button = screen.getByRole('button', { name: /toggle audio player/i });
-    fireEvent.click(button);
+    fireEvent.click(
+      screen.getByRole('button', { name: /toggle audio player/i }),
+    );
     expect(screen.getByText(defaultProps.trackName)).toBeInTheDocument();
   });
 
-  test('should update currentTime and progress when timeupdate event is fired', () => {
+  test('should update currentTime and progress on timeupdate', () => {
     const audio = document.querySelector('audio');
 
     act(() => {
@@ -40,7 +54,10 @@ describe('AudioPlayer', () => {
           value: 5,
           writable: true,
         });
-        Object.defineProperty(audio, 'duration', { value: 10, writable: true });
+        Object.defineProperty(audio, 'duration', {
+          value: 10,
+          writable: true,
+        });
         audio.dispatchEvent(new Event('timeupdate'));
       }
     });
@@ -48,101 +65,90 @@ describe('AudioPlayer', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  test('should set duration when loadedmetadata event is fired', () => {
+  test('should set duration on loadedmetadata event', () => {
     const audio = document.querySelector('audio');
 
     act(() => {
       if (audio) {
-        Object.defineProperty(audio, 'duration', { value: 20, writable: true });
+        Object.defineProperty(audio, 'duration', {
+          value: 20,
+          writable: true,
+        });
         audio.dispatchEvent(new Event('loadedmetadata'));
       }
     });
 
-    if (audio) {
-      expect(audio.duration).toBe(20);
-    }
+    expect(audio?.duration).toBe(20);
   });
 
-  test('should call play method and onPlay callback when autoplay is true', () => {
-    const playMock = jest.fn().mockResolvedValue(undefined);
-    HTMLMediaElement.prototype.play = playMock;
-
-    render(<AudioPlayer {...defaultProps} autoplay={true} />);
-    expect(playMock).toHaveBeenCalled();
+  test('should call play when autoplay is true', () => {
+    // Переотрисовываем с кастомным пропсом
+    renderComponent({ autoplay: true });
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
-  test('should handle play when audio is paused', () => {
-    const audio = document.querySelector('audio');
-    act(() => {
-      if (!audio) {
-        throw new Error('Audio element not found');
-      }
-      Object.defineProperty(audio, 'paused', { value: true });
-      const playSpy = jest
-        .spyOn(audio, 'play')
-        .mockImplementation(() => Promise.resolve());
-
-      fireEvent.click(
-        screen.getByRole('button', { name: /toggle audio player/i }),
-      );
-      expect(playSpy).not.toHaveBeenCalled(); // play is called inside useEffect, not here
-    });
-  });
-
-  test('should handle pause when audio is playing', () => {
-    const audio = document.querySelector('audio');
-    if (!audio) {
-      throw new Error('Audio element not found');
-    }
-    const pauseSpy = jest.spyOn(audio, 'pause').mockImplementation(() => {});
-
-    act(() => {
-      Object.defineProperty(audio, 'paused', { value: false });
-      fireEvent.click(
-        screen.getByRole('button', { name: /toggle audio player/i }),
-      );
-      expect(pauseSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  test('should seek audio to new time when onSeek is triggered', () => {
+  test('should set error state on audio error event', () => {
     const audio = document.querySelector('audio');
 
-    if (!audio) {
-      throw new Error('Audio element not found');
-    }
-    Object.defineProperty(audio, 'duration', { value: 100, writable: true });
-
     act(() => {
-      audio.currentTime = 0;
-      const newProgress = 0.5;
-      audio.currentTime = newProgress * audio.duration;
-      audio.dispatchEvent(new Event('timeupdate'));
+      audio?.dispatchEvent(new Event('error'));
     });
 
-    expect(audio.currentTime).toBe(50);
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  test('should set error state when playback fails on autoplay', async () => {
-    HTMLMediaElement.prototype.play = jest
-      .fn()
-      .mockRejectedValue(new Error('fail'));
-
-    render(<AudioPlayer {...defaultProps} autoplay={true} />);
-
-    const button = screen.getByRole('button', { name: /toggle audio player/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should close popover when setAnchorEl is called with null', () => {
-    const button = screen.getByRole('button', { name: /toggle audio player/i });
-    fireEvent.click(button);
-    expect(screen.getByText(defaultProps.trackName)).toBeInTheDocument();
+  test('should close popover on audio ended event', () => {
+    const audio = document.querySelector('audio');
 
     act(() => {
-      fireEvent.click(button);
+      audio?.dispatchEvent(new Event('ended'));
     });
 
     expect(screen.queryByText(defaultProps.trackName)).not.toBeInTheDocument();
+  });
+
+  test('should seek audio on onSeek', () => {
+    const audio = document.querySelector('audio');
+
+    if (audio) {
+      Object.defineProperty(audio, 'duration', {
+        value: 100,
+        writable: true,
+      });
+
+      act(() => {
+        audio.currentTime = 50;
+        audio.dispatchEvent(new Event('timeupdate'));
+      });
+
+      expect(audio.currentTime).toBe(50);
+    }
+  });
+
+  test('should handle play and pause events correctly', () => {
+    const audio = document.querySelector('audio');
+
+    act(() => {
+      Object.defineProperty(audio!, 'paused', {
+        value: false,
+        configurable: true,
+      });
+      audio?.dispatchEvent(new Event('play'));
+    });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /toggle audio player/i }),
+    );
+
+    const animatedBars = screen.getAllByRole('presentation');
+    expect(animatedBars.length).toBeGreaterThan(0);
+
+    act(() => {
+      Object.defineProperty(audio!, 'paused', {
+        value: true,
+        configurable: true,
+      });
+      audio?.dispatchEvent(new Event('pause'));
+    });
   });
 });
