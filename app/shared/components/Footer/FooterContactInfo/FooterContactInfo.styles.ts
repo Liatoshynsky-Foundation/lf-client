@@ -9,7 +9,6 @@ const commonTextStyle = {
 const commonLinkStyle = {
   textDecoration: 'underline',
   '&:hover': {
-    textDecoration: 'underline',
     cursor: 'pointer',
   },
 };
@@ -46,20 +45,7 @@ export const styles = {
     ...commonLinkStyle,
     marginTop: '2px',
   },
-  copy: {
-    cursor: 'pointer',
-    display: 'block',
-    width: '24px',
-    height: '24px',
-    marginTop: '4px',
-    verticalAlign: 'middle',
-    background: 'transparent no-repeat center center',
-    marginBottom: '8px',
-    marginLeft: '10px',
-    padding: '0',
-  },
   linkContainer: {
     display: 'flex',
   },
-  iconSize: 20,
 };
