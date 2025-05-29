@@ -7,19 +7,8 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 import { IconButtonStyles } from './IconButton.styles';
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
-enum IconButtonColorVariant {
-  Primary = 'primary',
-  PrimaryOutlined = 'primaryOutlined',
-  Secondary = 'secondary',
-  SecondaryOutlined = 'secondaryOutlined',
-  Tertiary = 'tertiary',
-  Error = 'error',
-}
-enum IconButtonVariant{
-  filled = 'filled',
-  outlined = 'outlined'
-}
 interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
   variant?: IconButtonColorVariant;
   outlined?: boolean;
