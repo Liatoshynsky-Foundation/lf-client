@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { IconButton } from './IconButton';
-import { MenuIcon } from 'lucide-react';
+
 describe('IconButton', () => {
   it('should render a loader', () => {
     render(<IconButton loading={true} />);
