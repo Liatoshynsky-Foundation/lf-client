@@ -8,5 +8,5 @@ type SvgImageProps = {
 };
 
 export const SvgImage = ({ src, alt , width , height }: SvgImageProps) => (
-  <Image src={src} alt={alt} width={24} height={24} />
+  <Image src={src} alt={alt} width={width} height={height} />
 );
