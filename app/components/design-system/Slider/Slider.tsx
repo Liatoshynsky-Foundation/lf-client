@@ -89,3 +89,4 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
     </Box>
   );
 };
+

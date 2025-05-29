@@ -1,4 +1,4 @@
-import { TypographyVariantsOptions } from '@mui/material/styles'
+import { TypographyVariantsOptions } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
@@ -152,4 +152,4 @@ export const AppTypography: TypographyVariantsOptions = {
     fontStyle: 'italic',
     lineHeight: '140%',
   },
-} 
+};
