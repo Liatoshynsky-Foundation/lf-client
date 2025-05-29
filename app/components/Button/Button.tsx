@@ -6,7 +6,12 @@ import {
   ButtonProps as MuiButtonProps,
 } from '@mui/material';
 
-import { buttonBaseStyles, variantStyles, sizeStyles } from './Button.styles';
+import {
+  buttonBaseStyles,
+  variantStyles,
+  sizeStyles,
+  typographyStyles
+} from './Button.styles';
 
 const sizes = ['large', 'medium', 'small'] as const;
 
@@ -69,6 +74,7 @@ const Button = forwardRef(
         sx={{
           ...buttonBaseStyles,
           ...sizeStyles[size],
+          ...typographyStyles[color]?.[size],
           ...(color === 'tertiary'
             ? variantStyles.tertiary.filled
             : variantStyles[color]?.[variant]),

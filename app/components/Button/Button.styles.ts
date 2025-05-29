@@ -47,12 +47,72 @@ export const colors = {
   secondaryPressed: '#625A53',
 };
 
+export const typographyStyles = {
+  primary: {
+    small: { 
+      fontFamily: 'Mulish',
+      fontWeight: 400,
+      fontSize: '14px',
+      lineHeight: '140%',
+    },
+    medium: { 
+      fontFamily: 'Mulish',
+      fontWeight: 500,
+      fontSize: '16px',
+      lineHeight: '150%',
+    },
+    large: { 
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '18px',
+      lineHeight: '155%',
+    },
+  },
+  secondary: {
+    small: { 
+      fontFamily: 'Mulish',
+      fontWeight: 500,
+      fontSize: '14px',
+      lineHeight: '140%',
+    },
+    medium: { 
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '16px',
+      lineHeight: '150%',
+    },
+    large: { 
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '18px',
+      lineHeight: '155%',
+    },
+  },
+  tertiary: {
+    small: { 
+      fontFamily: 'Mulish',
+      fontWeight: 500,
+      fontSize: '14px',
+      lineHeight: '140%',
+    },
+    medium: { 
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '16px',
+      lineHeight: '150%',
+    },
+    large: { 
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '18px',
+      lineHeight: '155%',
+    },
+  },
+};
+
 export const buttonBaseStyles: SxProps<Theme> = {
   borderRadius: '28px',
-  fontFamily: 'Mulish, sans-serif',
   textTransform: 'none',
-  lineHeight: 1.50,
-  fontWeight: 600,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -62,22 +122,16 @@ export const buttonBaseStyles: SxProps<Theme> = {
 export const sizeStyles = {
   small: {
     padding: '4px 12px',
-    fontSize: '14px',
     height: '32px',
     gap: '4px',
-    lineHeight: 1.40,
-    fontWeight: 500,
   },
   medium: {
     padding: '8px 24px',
-    fontSize: '16px',
     height: '40px',
   },
   large: {
     padding: '14px 32px',
-    fontSize: '18px',
     height: '56px',
-    lineHeight: 1.55,
   },
 };
 
