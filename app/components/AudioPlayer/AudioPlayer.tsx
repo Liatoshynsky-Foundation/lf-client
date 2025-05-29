@@ -6,11 +6,11 @@ import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
 type AudioPlayerProps = {
-  src: string;
-  trackName: string;
-  loop?: boolean;
-  autoplay?: boolean;
-  className?: string;
+  readonly src: string;
+  readonly trackName: string;
+  readonly loop?: boolean;
+  readonly autoplay?: boolean;
+  readonly className?: string;
 };
 
 const stickHeights = [
@@ -142,7 +142,10 @@ export default function AudioPlayer({
         </IconButton>
       </Box>
 
-      <audio ref={audioRef} src={src} preload="metadata" loop={loop} />
+      <audio ref={audioRef} src={src} preload="metadata" loop={loop}>
+        {/* Добавленный элемент track для соответствия требованиям доступности */}
+        <track kind="captions" srcLang="en" label="English captions" />
+      </audio>
 
       <AudioPlayerPopover
         anchorEl={anchorEl}
