@@ -29,10 +29,10 @@ const mockBoundingClientRect = {
 describe('AudioPlayerPopover', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    render(<AudioPlayerPopover {...defaultProps} />);
   });
 
   it('should render correctly with provided props', () => {
-    render(<AudioPlayerPopover {...defaultProps} />);
     expect(screen.getByText('0:30 / 2:00')).toBeInTheDocument();
     expect(screen.getByText('Test Track')).toBeInTheDocument();
     expect(screen.getByRole('progress')).toBeInTheDocument();
@@ -55,25 +55,21 @@ describe('AudioPlayerPopover', () => {
   });
 
   it('should call onTogglePlay when play button is clicked', () => {
-    render(<AudioPlayerPopover {...defaultProps} />);
     const button = screen.getByRole('button', { name: /Play audio/i });
     fireEvent.click(button);
     expect(defaultProps.onTogglePlay).toHaveBeenCalled();
   });
 
   it('should call onClose when Popover closes', () => {
-    render(<AudioPlayerPopover {...defaultProps} />);
     defaultProps.onClose();
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it('should display progress thumb image', () => {
-    render(<AudioPlayerPopover {...defaultProps} />);
     expect(screen.getByAltText('progress thumb')).toBeInTheDocument();
   });
 
   it('should display "Усі твори" button', () => {
-    render(<AudioPlayerPopover {...defaultProps} />);
     expect(screen.getByText('Усі твори')).toBeInTheDocument();
   });
 
