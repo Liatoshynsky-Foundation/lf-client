@@ -45,6 +45,7 @@ export default function RootLayout({
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            minWidth: '100%',
           }}
         >
           <Header />
