@@ -5,13 +5,13 @@ import { Box, IconButton } from '@mui/material';
 import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
-type AudioPlayerProps = {
-  readonly src: string;
-  readonly trackName: string;
-  readonly loop?: boolean;
-  readonly autoplay?: boolean;
-  readonly className?: string;
-};
+type AudioPlayerProps = Readonly<{
+  src: string;
+  trackName: string;
+  loop?: boolean;
+  autoplay?: boolean;
+  className?: string;
+}>;
 
 const stickHeights = [
   { id: 'stick-1', height: 7 },
@@ -143,7 +143,6 @@ export default function AudioPlayer({
       </Box>
 
       <audio ref={audioRef} src={src} preload="metadata" loop={loop}>
-        {/* Добавленный элемент track для соответствия требованиям доступности */}
         <track kind="captions" srcLang="en" label="English captions" />
       </audio>
 
