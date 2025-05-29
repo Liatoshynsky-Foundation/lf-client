@@ -81,7 +81,6 @@ describe('AudioPlayer', () => {
   });
 
   test('should call play when autoplay is true', () => {
-    // Переотрисовываем с кастомным пропсом
     renderComponent({ autoplay: true });
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
