@@ -45,4 +45,18 @@ describe('DesignSystemSlider', () => {
     expect(screen.getByText('20')).toBeInTheDocument();
     expect(screen.getByText('80')).toBeInTheDocument();
   });
+
+  it('renders correctly when value is a single number', () => {
+    renderComponent({ value: 50 });
+    expect(screen.getByRole('slider')).toBeInTheDocument();
+  });
+
+  it('applies correct styles for big size', () => {
+    renderComponent({ size: 'big' });
+    const thumb = document.querySelector('.MuiSlider-thumb');
+    expect(thumb).toHaveStyle({
+      width: '20px',
+      height: '20px',
+    });
+  });
 });
