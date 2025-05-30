@@ -48,18 +48,18 @@ export default async function RootLayout({
     <html lang={lang}>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
         <NextIntlClientProvider>
-            <Container
-                maxWidth="md"
-                sx={{
-                    border: '1px solid #ccc',
-                    padding: '20px',
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    minWidth: '100%',
-                }}
-            >
+          <Container
+            maxWidth="md"
+            sx={{
+              border: '1px solid #ccc',
+              padding: '20px',
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minWidth: '100%',
+            }}
+          >
             <Header />
             {children}
             <Footer />
