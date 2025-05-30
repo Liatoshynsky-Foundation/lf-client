@@ -3,22 +3,25 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TooltipCustom from './Tooltip';
 
 describe('TooltipCustom Component', () => {
+  beforeEach(() => {
+    render(<TooltipCustom showArrow={false} text="My Tooltip" />);
+  });
+
   test('renders the button with tooltip', () => {
-    render(<TooltipCustom showArrow={true} text="My Tooltip" />);
     const buttonElement = screen.getByText(/My Tooltip/i);
     expect(buttonElement).toBeInTheDocument();
   });
 
-  test('shows the tooltip with arrow when hovered', async () => {
-    render(<TooltipCustom showArrow={true} text="My Tooltip" />);
-    const buttonElement = screen.getByText(/My Tooltip/i);
+
+  test('renders tooltip with arrow when showArrow is true', async () => {
+    render(<TooltipCustom showArrow={true} text="My Tooltip with Arrow" />);
+    const buttonElement = screen.getByText(/My Tooltip with Arrow/i);
     fireEvent.mouseOver(buttonElement);
-    const tooltipElement = await screen.findByText(/My Tooltip/i);
+    const tooltipElement = await screen.findByText(/My Tooltip with Arrow/i);
     expect(tooltipElement).toBeVisible();
   });
 
   test('renders tooltip without arrow when showArrow is false', async () => {
-    render(<TooltipCustom showArrow={false} text="My Tooltip" />);
     const buttonElement = screen.getByText(/My Tooltip/i);
     fireEvent.mouseOver(buttonElement);
     const tooltipElement = await screen.findByText(/My Tooltip/i);
