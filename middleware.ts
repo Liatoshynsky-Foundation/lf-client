@@ -1,12 +1,8 @@
-import type { NextRequest } from 'next/server';
-import { urlLocaleMiddleware } from '~/middleware/url-locale-middleware';
+import createMiddleware from 'next-intl/middleware';
+import {routing} from './i18n/routing';
 
-export const middleware = (request: NextRequest) => {
-  return urlLocaleMiddleware(request);
-};
+export default createMiddleware(routing);
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.[^/]+$).*)'
-  ],
+  matcher: '/((?!api|_next/static|_next/image|.*\\.[^/]+$).*)'
 };

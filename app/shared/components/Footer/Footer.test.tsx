@@ -1,15 +1,21 @@
-import { render } from '@testing-library/react';
 import Footer from '~/shared/components/Footer/Footer';
+import {render, screen} from '@testing-library/react';
 
-describe('Footer', () => {
-  it('renders without crashing', () => {
-    const { container } = render(<Footer />);
-    expect(container.querySelector('footer')).toBeInTheDocument();
-  });
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => {
+    const translations: Record<string, string> = {
+      copyright: '© 2025 My Company',
+      linkPrivacy: 'Privacy Policy',
+      linkTerms: 'Terms of Use',
+      linkMedia: 'Media Kit',
+    };
+    return translations[key];
+  })
+}));
 
-  it('has child elements', () => {
-    const { container } = render(<Footer />);
-    const footerElement = container.querySelector('footer');
-    expect(footerElement?.children.length).toBeGreaterThan(0);
+describe('Footer component', () => {
+  it('should render Footer component correctly', async () => {
+    render(await Footer());
+    expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
   });
 });
