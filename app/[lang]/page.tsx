@@ -1,10 +1,13 @@
-'use client';
-import React, { ReactElement } from 'react';
+import React from 'react';
+import {getTranslations, setRequestLocale} from 'next-intl/server';
+import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
 
-export default function Home(): ReactElement {
-  return (
-    <>
-      <h1>Liatoshynsky project</h1>
-    </>
-  );
+export default async function Home({
+  params
+}: Readonly<ParamsWithLanguage>) {
+  const { lang } = await params;
+  setRequestLocale(lang);
+  const t = await getTranslations('home');
+
+  return <h1>{t('text')} </h1>;
 }

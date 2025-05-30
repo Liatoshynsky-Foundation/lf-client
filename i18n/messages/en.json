@@ -1,0 +1,20 @@
+{
+  "collaborations": {
+    "metaData": "Liatoshynsky collaborations",
+    "text": "Collaborations"
+  },
+  "footer": {
+    "copyright": "© 2025 Liotoshynsky Foundation. All rights reserved.",
+    "linkPrivacy": "Privacy Policy",
+    "linkTerms": "Terms of Use",
+    "linkMedia": "Information for Media / Partners"
+  },
+  "home": {
+    "text": "Liatoshynsky project"
+  },
+  "common": {
+    "languageNotFound": "The page is not yet available in this language",
+    "pageNotFound": "404 Page not found",
+    "goHome": "return to home"
+  }
+}
