@@ -4,13 +4,14 @@ import { tooltipStyles, arrowStyles } from './Tooltip.styles';
 
 interface TooltipCustomProps {
   showArrow: boolean;
+  text: string;
 }
 
-const TooltipCustom: React.FC<TooltipCustomProps> = ({ showArrow }) => {
+const TooltipCustom: React.FC<TooltipCustomProps> = ({ showArrow, text }) => {
   return (
     <Box>
       <Tooltip
-        title='My Tooltip'
+        title={text}
         placement="top"
         arrow={showArrow}
         componentsProps={{
@@ -19,7 +20,7 @@ const TooltipCustom: React.FC<TooltipCustomProps> = ({ showArrow }) => {
         }}
       >
         <Typography>
-          My Tooltip
+          {text}
         </Typography>
       </Tooltip>
     </Box>
