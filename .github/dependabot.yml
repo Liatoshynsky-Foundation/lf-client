@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'weekly'
+      interval: 'quarterly'
       day: 'wednesday'
       time: '00:00'
       timezone: 'Europe/Kyiv'
@@ -19,7 +19,7 @@ updates:
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
-      interval: 'weekly'
+      interval: 'quarterly'
       day: 'monday'
       time: '00:00'
       timezone: 'Europe/Kyiv'
@@ -34,7 +34,7 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'weekly'
+      interval: 'quarterly'
       day: 'monday'
       time: '00:00'
       timezone: 'Europe/Kyiv'
