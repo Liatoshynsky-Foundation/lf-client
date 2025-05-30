@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Typography, Link } from '@mui/material';
-import { styles } from './FooterCopyrights.styles';
+import { styles } from '~/shared/components/Footer/FooterCopyrights/FooterCopyrights.styles';
 
 type LinkItem = {
-  label: string;
-  href: string;
+    label: string;
+    href: string;
 };
 
 interface FooterCopyrightsProps {
-  text: string;
-  links: LinkItem[];
+    text: string;
+    links: LinkItem[];
 }
 
 const FooterCopyrights = ({ text, links }: FooterCopyrightsProps) => {

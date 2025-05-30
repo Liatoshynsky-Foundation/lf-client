@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { urlLocaleMiddleware } from '~/url-locale-middleware';
+import { urlLocaleMiddleware } from '~/middleware/url-locale-middleware';
 
 export const middleware = (request: NextRequest) => {
   return urlLocaleMiddleware(request);

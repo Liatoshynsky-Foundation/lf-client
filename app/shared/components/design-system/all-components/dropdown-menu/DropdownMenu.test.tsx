@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import DropdownMenu from '../dropdown-menu/DropdownMenu';
+import DropdownMenu from './DropdownMenu';
 import { MenuItem } from '@mui/material';
 
 describe('DropdownMenu', () => {
@@ -8,7 +8,7 @@ describe('DropdownMenu', () => {
     render(
       <DropdownMenu
         open={true}
-        onClose={() => {}}
+        onClose={() => { }}
         anchorEl={document.body}
         menuList={[
           <MenuItem key="1">Item 1</MenuItem>,
@@ -25,7 +25,7 @@ describe('DropdownMenu', () => {
     render(
       <DropdownMenu
         open={false}
-        onClose={() => {}}
+        onClose={() => { }}
         anchorEl={document.body}
         menuList={<MenuItem>Hidden Item</MenuItem>}
       />,
