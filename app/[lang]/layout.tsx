@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish } from 'next/font/google';
 import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header';
+import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 
@@ -29,14 +29,24 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}
+      >
         <Container
           maxWidth="md"
-          sx={{ border: '1px solid #ccc', padding: '20px', minWidth: '100%' }}
+          sx={{
+            border: '1px solid #ccc',
+            padding: '20px',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minWidth: '100%',
+          }}
         >
           <Header />
           {children}
