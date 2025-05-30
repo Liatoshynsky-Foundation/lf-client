@@ -10,15 +10,15 @@ import {
   buttonBaseStyles,
   variantStyles,
   sizeStyles,
-  typographyStyles
+  typographyStyles,
 } from './Button.styles';
 
-const sizes = ['large', 'medium', 'small'] as const;
+type Size = 'large' | 'medium' | 'small';
 
-const variants = ['filled', 'outlined', 'text'] as const;
+type Variant = 'filled' | 'outlined' | 'text';
 
 type BaseButtonProps = {
-  size?: (typeof sizes)[number];
+  size?: Size;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   loading?: boolean;
@@ -26,7 +26,7 @@ type BaseButtonProps = {
 } & (
   | {
       color?: 'primary' | 'secondary';
-      variant?: (typeof variants)[number];
+      variant?: Variant;
     }
   | {
       color: 'tertiary';
@@ -46,7 +46,6 @@ const Button = forwardRef(
       variant = 'filled',
       color = 'secondary',
       label,
-      className,
       disabled,
       loading,
       startIcon,
@@ -59,12 +58,12 @@ const Button = forwardRef(
     const loader = (
       <CircularProgress color="inherit" data-testid="loader" size={25} />
     );
-    const isDisabled = disabled || loading;
+    const isDisabled = disabled ?? loading;
 
     const content = (
       <>
         {startIcon}
-        <span className="lf-btn-label">{label || children}</span>
+        <span className="lf-btn-label">{label ?? children}</span>
         {endIcon}
       </>
     );
