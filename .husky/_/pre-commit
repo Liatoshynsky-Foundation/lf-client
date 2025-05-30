@@ -5,7 +5,7 @@ RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
   echo ""
-  echo "No changes since last update."
+  echo "Lint-staged failed. Please fix linting/formatting issues before committing"
   exit 1
 fi
 
