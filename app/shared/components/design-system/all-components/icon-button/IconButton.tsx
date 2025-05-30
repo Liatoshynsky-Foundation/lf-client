@@ -3,8 +3,7 @@ import {
   IconButtonProps as MuiIconButtonProps,
   IconButton as MuiIconButton,
 } from '@mui/material';
-import { FC } from 'react';
-import { IconButtonStyles } from './IconButton.styles';
+import { CreateStyleClasses, IconButtonStyles } from './IconButton.styles';
 import {
   IconButtonColorVariant,
   IconButtonVariant,
@@ -23,7 +22,7 @@ interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
   children?: React.ReactNode;
 }
 
-export const IconButton: FC<IconButtonProps> = ({
+export const IconButton: React.FC<IconButtonProps> = ({
   variant = IconButtonColorVariant.Primary,
   size = 'medium',
   loading = false,
@@ -33,15 +32,7 @@ export const IconButton: FC<IconButtonProps> = ({
   children,
   ...props
 }) => {
-  let styleClasses = variant as string;
-  if (
-    type !== IconButtonVariant.filled &&
-    (variant === IconButtonColorVariant.Primary ||
-      variant === IconButtonColorVariant.Secondary)
-  ) {
-    styleClasses += type.charAt(0).toUpperCase() + type.slice(1);
-    console.log(styleClasses);
-  }
+  let styleClasses = CreateStyleClasses(variant, type);
   const loaderSizes = {
     small: 16,
     medium: 20,
