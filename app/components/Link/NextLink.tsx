@@ -58,13 +58,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
   if (noLinkStyle) {
     return <NextLinkComposed className={className} ref={ref} {...nextjsProps} {...other} />;
   }
-   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     router.push(href);
   };
   return (
     <MuiLink
-    onClick={handleClick}
+      onClick={handleClick}
       component={NextLinkComposed}
       className={className}
       ref={ref}
