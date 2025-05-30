@@ -1,5 +1,5 @@
 export const tooltipStyles = {
-  backgroundColor: '#52545F',
+  backgroundColor: '#52545A',
   color: '#ffffff',
   fontSize: '14px', 
   fontStyle: 'italic',
@@ -9,5 +9,5 @@ export const tooltipStyles = {
 };
 
 export const arrowStyles = {
-  color: '#52545F',
+  color: '#52545A',
 };
