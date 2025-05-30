@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish } from 'next/font/google';
 import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header';
+import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 
