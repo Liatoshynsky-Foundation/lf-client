@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Mulish } from 'next/font/google';
+import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import Footer from '~/shared/components/Footer/Footer';
 import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
@@ -19,6 +19,12 @@ const mulish = Mulish({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '700'],
   variable: '--font-mulish',
+});
+
+const oswald = Oswald({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '700'],
+  variable: '--font-oswald',
 });
 
 export const metadata: Metadata = {

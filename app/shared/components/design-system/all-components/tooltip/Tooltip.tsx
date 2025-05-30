@@ -11,6 +11,7 @@ const TooltipCustom: React.FC<TooltipCustomProps> = ({ showArrow }) => {
     <Box>
       <Tooltip
         title='My Tooltip'
+        placement="top"
         arrow={showArrow}
         componentsProps={{
           tooltip: { sx: tooltipStyles },
