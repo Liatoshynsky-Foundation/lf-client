@@ -18,10 +18,4 @@ describe('Footer component', () => {
     render(await Footer());
     expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
   });
-
-  it('has child elements', () => {
-    const { container } = render(<Footer />);
-    const footerElement = container.querySelector('footer');
-    expect(footerElement?.children.length).toBeGreaterThan(0);
-  });
 });

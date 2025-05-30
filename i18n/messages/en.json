@@ -13,8 +13,8 @@
     "text": "Liatoshynsky project"
   },
   "common": {
-    "404_language": "The page is not yet available in this language",
-    "404_page": "404 Page not found",
+    "languageNotFound": "The page is not yet available in this language",
+    "pageNotFound": "404 Page not found",
     "goHome": "return to home"
   }
 }

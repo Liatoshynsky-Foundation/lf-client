@@ -6,7 +6,7 @@ export default async function CustomNotFoundPage() {
 
   return<>
     <section style={{ marginBottom: '20px' }}>
-      {t('404_language')}
+      {t('languageNotFound')}
     </section>
     <Link href='/' passHref style={{
       color: 'yellow',

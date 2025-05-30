@@ -5,7 +5,9 @@ import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
-import {NextIntlClientProvider, Locale} from 'next-intl';
+import {NextIntlClientProvider, Locale, hasLocale} from 'next-intl';
+import {routing} from '../../i18n/routing';
+import {notFound} from 'next/navigation';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +40,9 @@ export default async function RootLayout({
   params
 }: RootLayoutParams) {
   const { lang } = await params;
+  if (!hasLocale(routing.locales, lang)) {
+    notFound();
+  }
 
   return (
     <html lang={lang}>
