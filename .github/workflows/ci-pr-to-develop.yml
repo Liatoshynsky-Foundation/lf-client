@@ -167,7 +167,7 @@ jobs:
   generate-report:
     name: Generate Test Report
     runs-on: ubuntu-latest
-    needs: ['run-lint', 'run-tests', 'docker-build']
+    needs: [ 'run-lint', 'run-tests', 'docker-build' ]
     if: always()
 
     steps:
@@ -182,13 +182,13 @@ jobs:
           DOCKER_BUILD_JOB_RESULT_ENV: ${{ needs.docker-build.result }}
         run: |
           OVERALL_ICON_VAR="✅"
-          
+
           if [[ "$LINT_JOB_RESULT_ENV" != "success" || \
                 "$TEST_JOB_RESULT_ENV" != "success" || \
                 "$DOCKER_BUILD_JOB_RESULT_ENV" != "success" ]]; then
             OVERALL_ICON_VAR="❌"
           fi
-          
+
           echo "OVERALL_ICON=$OVERALL_ICON_VAR" >> $GITHUB_OUTPUT
 
       - name: Download All Artifacts
@@ -201,100 +201,88 @@ jobs:
           CI_MARKER_BASE=" CI Report"
           OVERALL_ICON_FROM_STEP="${{ steps.overall_status.outputs.OVERALL_ICON }}"
           CI_MARKER="# $OVERALL_ICON_FROM_STEP $CI_MARKER_BASE - $(TZ="Europe/Kyiv" date +"%H:%M %d/%m/%Y")"
-          
+
           {
             echo "$CI_MARKER"
             echo ""
           } > report.txt
 
-          LINT_SUMMARY_PATH_FOR_CHECK="${{ github.workspace }}/all-artifacts/lint-results/summary-lint-errors.log"
+          function print_section() {
+            local title=$1
+            local fallback_msg=$2
+            local file_path=$3
 
-          { 
-            echo "## 📝 Lint Report"
+            echo "## $title"
             echo ""
-
-            if [[ -f "$LINT_SUMMARY_PATH_FOR_CHECK" ]]; then 
-              if grep -q -E '\[warn\]|Error:|Warning:' "$LINT_SUMMARY_PATH_FOR_CHECK"; then
-                echo '```'
-                cat "$LINT_SUMMARY_PATH_FOR_CHECK"
-                echo '```'
-              else
-                echo '```'
-                echo "✅ No lint issues found."
-                echo '```'
-              fi
+            if [[ -f "$file_path" ]]; then
+              echo '```'
+              cat "$file_path"
+              echo '```'
             else
-              echo "⚠️ Lint report file not found at $LINT_SUMMARY_PATH_FOR_CHECK."
+              echo "$fallback_msg"
             fi
             printf "\n"
-          } >> report.txt
+          }
+
+          LINT_SUMMARY_PATH="${{ github.workspace }}/all-artifacts/lint-results/summary-lint-errors.log"
+          print_section "📝 Lint Report" "⚠️ Lint report not found." "$LINT_SUMMARY_PATH" >> report.txt
+
+          echo "## 🧪 Test Results" >> report.txt
+          echo "" >> report.txt
 
           TEST_REPORTS_FOUND=false
-          {
-            echo "## 🧪 Test Results"
-            echo ""
+          for folder in $(find all-artifacts -maxdepth 1 -type d -name "tests-results-*"); do
+            TEST_REPORTS_FOUND=true
+            NODE_VERSION_FROM_FOLDER_NAME=$(basename "$folder" | sed 's/tests-results-//')
 
-            for folder in $(find all-artifacts -maxdepth 1 -type d -name "tests-results-*"); do
-              TEST_REPORTS_FOUND=true
-              NODE_VERSION_FROM_FOLDER_NAME=$(basename "$folder" | sed 's/tests-results-//')
+            SUMMARY_RESULTS_FILE_PATH="$folder/summary-tests-results-${NODE_VERSION_FROM_FOLDER_NAME}.log"
+            ERRORS_FILE_PATH="$folder/summary-tests-errors-${NODE_VERSION_FROM_FOLDER_NAME}.log" 
 
-              SUMMARY_RESULTS_FILE_PATH="$folder/summary-tests-results-${NODE_VERSION_FROM_FOLDER_NAME}.log"
-              ERRORS_FILE_PATH="$folder/summary-tests-errors-${NODE_VERSION_FROM_FOLDER_NAME}.log" 
-          
-              echo "**🔹 Node.js Version:** $NODE_VERSION_FROM_FOLDER_NAME"
-              echo ""
+            echo "**🔹 Node.js Version:** $NODE_VERSION_FROM_FOLDER_NAME" >> report.txt
+            echo "" >> report.txt
 
-              if [[ -f "$SUMMARY_RESULTS_FILE_PATH" ]]; then
-                echo "**Test Summary:**"
-                echo '```'
-                cat "$SUMMARY_RESULTS_FILE_PATH"
-                echo '```'
-              else
-                echo "⚠️ No test summary available for Node $NODE_VERSION_FROM_FOLDER_NAME."
+            print_section "**Test Summary:**" "⚠️ No test summary for Node $NODE_VERSION_FROM_FOLDER_NAME." "$SUMMARY_RESULTS_FILE_PATH" >> report.txt
+            TESTS_SUCCESSFUL="✅ All tests passed successfully."
+
+            if [[ -f "$ERRORS_FILE_PATH" ]]; then
+              if [[ -s "$ERRORS_FILE_PATH" ]] && ! grep -q "$TESTS_SUCCESSFUL" "$ERRORS_FILE_PATH"; then
+                print_section "**❌ Test Errors:**" "" "$ERRORS_FILE_PATH" >> report.txt
+              elif grep -q "$TESTS_SUCCESSFUL" "$ERRORS_FILE_PATH"; then
+                echo '```' >> report.txt
+                echo "$TESTS_SUCCESSFUL for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
+                echo '```' >> report.txt
+              elif [ ! -s "$ERRORS_FILE_PATH" ]; then
+                echo "⚠️ Empty test error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
               fi
-
-              if [[ -f "$ERRORS_FILE_PATH" ]]; then
-                if [[ -s "$ERRORS_FILE_PATH" ]] && ! grep -q "✅ All tests passed successfully." "$ERRORS_FILE_PATH"; then
-                  echo "**❌ Test Errors:**"
-                  echo '```'
-                  cat "$ERRORS_FILE_PATH"
-                  echo '```'
-                elif grep -q "✅ All tests passed successfully." "$ERRORS_FILE_PATH"; then
-                  echo '```'
-                  echo "✅ All tests passed successfully for Node $NODE_VERSION_FROM_FOLDER_NAME."
-                  echo '```'
-                elif [ ! -s "$ERRORS_FILE_PATH" ]; then
-                    echo "⚠️ Test error details inconclusive for Node $NODE_VERSION_FROM_FOLDER_NAME (empty error log)."
-                fi
-              else 
-                echo "⚠️ No specific test error log file found for Node $NODE_VERSION_FROM_FOLDER_NAME."
-              fi
-              printf "\n"
-            done
-
-            if [[ "$TEST_REPORTS_FOUND" == false ]]; then
-              echo "⚠️ No test results available."
+            else 
+              echo "⚠️ No error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
             fi
-            printf "\n"
-          } >> report.txt
-          
+            printf "\n" >> report.txt
+          done
+
+          if [[ "$TEST_REPORTS_FOUND" == false ]]; then
+            echo "⚠️ No test results available." >> report.txt
+          fi
+
+          DOCKER_LOG="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
           {
             echo "## 🐳 Docker Health Check"
             echo ""
 
             DOCKER_LOG="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
-          
+            DOCKER_SUCCESSFUL="✅ Docker image built successfully"
+            DOCKER_FAILED="❌ Docker Build Failed"
             if [[ -f "$DOCKER_LOG" ]]; then
-              if grep -q "❌ Docker build failed" "$DOCKER_LOG"; then
-                echo "**Health Check Results (with errors):**"
+              if grep -q "$DOCKER_FAILED" "$DOCKER_LOG"; then
+                echo "**$DOCKER_FAILED:**"
                 echo '```log'
                 cat "$DOCKER_LOG"
                 echo '```'
               else
-                echo "**✅ Docker image built successfully.**"
+                echo "$DOCKER_SUCCESSFUL"
               fi
             else
-              echo "⚠️ No Docker health check results available."
+              echo "⚠️ No Docker check log found."
             fi
             printf "\n"
           } >> report.txt
