@@ -14,7 +14,8 @@ export enum IconButtonColorVariant {
   Tertiary = 'tertiary',
   Error = 'error',
 }
-export enum IconButtonVariant{
+export enum IconButtonVariant {
   filled = 'filled',
-  outlined = 'outlined'
+  outlined = 'outlined',
+  icon = 'icon',
 }

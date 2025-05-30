@@ -6,13 +6,44 @@ const Colors = {
   yellow: '#FCBD28',
   error: '#E63C14',
 
-  hoverTransparent: '#FCFCFC2E',
+  hoverTransparent: '#FCFCFC29',
   focusTransparent: '#FCFCFC57',
   pressTransparent: '#FFFFFF1F',
   hoverOutlined: '#F7F5F1',
   activeOutlined: '#D3CAC0',
   hoverError: '#E63C1414',
   activeError: '#E63C143D',
+};
+
+const PrimaryIconStyles = {
+  color: Colors.black,
+  backgroundColor: Colors.white,
+  '&:hover': {
+    backgroundColor: Colors.hoverOutlined,
+  },
+  '&:active': {
+    backgroundColor: Colors.activeOutlined,
+  },
+  '&:disabled': {
+    color: Colors.gray,
+  },
+};
+
+const SecondaryIconStyles = {
+  color: Colors.white,
+  backgroundColor: Colors.black,
+  '&:hover': {
+    backgroundColor: Colors.hoverTransparent,
+  },
+  '&:focused': {
+    backgroundColor: Colors.focusTransparent,
+  },
+  '&:pressed': {
+    backgroundColor: Colors.pressTransparent,
+  },
+  '&:disabled': {
+    color: Colors.gray,
+  },
 };
 export const IconButtonStyles = {
   primary: {
@@ -26,18 +57,12 @@ export const IconButtonStyles = {
       backgroundColor: Colors.lightGray,
     },
   },
+  primaryIcon: {
+    PrimaryIconStyles,
+  },
   primaryOutlined: {
-    color: Colors.black,
-    backgroundColor: Colors.white,
-    '&:hover': {
-      backgroundColor: Colors.hoverOutlined,
-    },
-    '&:active': {
-      backgroundColor: Colors.activeOutlined,
-    },
-    '&:disabled': {
-      color: Colors.gray,
-    },
+    PrimaryIconStyles,
+    border: '1px black solid',
   },
   secondary: {
     color: Colors.black,
@@ -50,21 +75,12 @@ export const IconButtonStyles = {
       backgroundColor: Colors.lightGray,
     },
   },
+  secondaryIcon: {
+    SecondaryIconStyles,
+  },
   secondaryOutlined: {
-    color: Colors.white,
-    backgroundColor: Colors.black,
-    '&:hover': {
-      backgroundColor: Colors.hoverTransparent,
-    },
-    '&:focused': {
-      backgroundColor: Colors.focusTransparent,
-    },
-    '&:pressed': {
-      backgroundColor: Colors.pressTransparent,
-    },
-    '&:disabled': {
-      color: Colors.gray,
-    },
+    SecondaryIconStyles,
+    border: '1px white solid',
   },
   tertiary: {
     color: Colors.black,

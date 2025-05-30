@@ -7,7 +7,10 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 import { IconButtonStyles } from './IconButton.styles';
-import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
+import {
+  IconButtonColorVariant,
+  IconButtonVariant,
+} from '~/types/enums/common.enums';
 
 interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
   variant?: IconButtonColorVariant;
@@ -23,18 +26,23 @@ interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
 }
 
 export const IconButton: FC<IconButtonProps> = ({
-  variant = IconButtonColorVariant.Error,
+  variant = IconButtonColorVariant.Primary,
   size = 'medium',
   loading = false,
   disabled = false,
-  type = IconButtonVariant.outlined,
+  type = IconButtonVariant.filled,
   onClick,
   children,
   ...props
 }) => {
   let styleClasses = variant as string;
-  if(type === IconButtonVariant.outlined && (variant === IconButtonColorVariant.Primary || variant === IconButtonColorVariant.Secondary)){
-    styleClasses+="Otlined";
+  if (
+    type !== IconButtonVariant.filled &&
+    (variant === IconButtonColorVariant.Primary ||
+      variant === IconButtonColorVariant.Secondary)
+  ) {
+    styleClasses += type.charAt(0).toUpperCase() + type.slice(1);
+    console.log(styleClasses);
   }
   const loaderSizes = {
     small: 16,
