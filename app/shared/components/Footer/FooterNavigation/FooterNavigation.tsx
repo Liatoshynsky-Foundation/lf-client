@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
-import styles from './FooterNavigation.module.css';
+import { Box, Typography, Link } from '@mui/material';
+import { styles } from './FooterNavigation.styles';
 
 type LinkItem = {
   label: string;
@@ -13,6 +12,7 @@ type Section = {
   links: LinkItem[];
 };
 
+// Move the sections array outside the component
 export const sections: Section[] = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',
@@ -45,19 +45,19 @@ export const sections: Section[] = [
 
 const FooterNavigation = () => {
   return (
-    <Box className={styles.footer}>
+    <Box sx={styles.footer}>
       {sections.map((section) => (
-        <Box key={section.title} className={styles.column}>
-          <Typography className={`${styles.heading} ${styles.mulish16Caption}`}>{section.title}</Typography>
-          <ul className={styles.list}>
+        <Box key={section.title} sx={styles.column}>
+          <Typography sx={styles.heading}>{section.title}</Typography>
+          <Box component="ul" sx={styles.list}>
             {section.links.map((link) => (
               <li key={link.label}>
-                <Link href={link.href} passHref legacyBehavior>
-                  <a className={`${styles.link} ${styles.mulish16Regular}`}>{link.label}</a>
+                <Link href={link.href} sx={styles.link}>
+                  {link.label}
                 </Link>
               </li>
             ))}
-          </ul>
+          </Box>
         </Box>
       ))}
     </Box>
