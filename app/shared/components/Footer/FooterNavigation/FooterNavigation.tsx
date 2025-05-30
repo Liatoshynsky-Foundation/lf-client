@@ -12,7 +12,6 @@ type Section = {
   links: LinkItem[];
 };
 
-// Move the sections array outside the component
 export const sections: Section[] = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',
