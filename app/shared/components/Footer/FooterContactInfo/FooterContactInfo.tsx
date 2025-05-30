@@ -5,11 +5,11 @@ import { useIsMobile } from '~/shared/hooks/is-mobile/useIsMobile';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
-    contacts: {
-        title: string;
-        phone: string;
-        email: string;
-    };
+  contacts: {
+    title: string;
+    phone: string;
+    email: string;
+  };
 }
 
 const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {

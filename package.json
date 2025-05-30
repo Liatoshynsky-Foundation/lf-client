@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "npx eslint . --fix",
-    "test": "jest",
-    "prepare": "husky"
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
