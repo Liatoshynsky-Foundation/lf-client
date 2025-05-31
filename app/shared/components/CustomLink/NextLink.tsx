@@ -25,13 +25,12 @@ export type LinkProps = {
   activeClassName?: string;
   as?: NextLinkProps['as'];
   href: NextLinkProps['href'];
-  linkAs?: NextLinkProps['as']; // Useful when the as prop is shallow by styled().
+  linkAs?: NextLinkProps['as']; 
   noLinkStyle?: boolean;
 } & Omit<NextLinkComposedProps, 'to' | 'linkAs' | 'href'> &
   Omit<MuiLinkProps, 'href'>;
 
-// A styled version of the Next.js Link component:
-// https://nextjs.org/docs/pages/api-reference/components/link
+
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(props, ref) {
   const {
     activeClassName = 'active',
