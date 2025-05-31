@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Box, Typography, Link } from '@mui/material';
 import { styles } from './FooterNavigation.styles';
 
@@ -12,37 +12,11 @@ type Section = {
   links: LinkItem[];
 };
 
-export const sections: Section[] = [
-  {
-    title: 'БОРИС ЛЯТОШИНСЬКИЙ',
-    links: [
-      { label: 'Життєпис', href: '/biography' },
-      { label: 'Творчість', href: '/creativity' },
-      { label: 'Дослідження та наукові роботи', href: '/research' }
-    ]
-  },
-  {
-    title: 'ПРО ФУНДАЦІЮ',
-    links: [
-      { label: 'Про нас', href: '/about' },
-      { label: 'Новини', href: '/news' },
-      { label: 'ЗМІ про нас', href: '/media' }
-    ]
-  },
-  {
-    title: 'СПІВПРАЦЯ',
-    links: [
-      { label: 'Стати партнером', href: '/become-partner' },
-      { label: 'Наші партнери', href: '/partners' }
-    ]
-  },
-  {
-    title: 'МУЗЕЙ',
-    links: [{ label: 'Кабінет-архів', href: '/museum' }]
-  }
-];
+interface FooterNavigationProps {
+  sections: Section[];
+}
 
-const FooterNavigation = () => {
+const FooterNavigation: FC<FooterNavigationProps> = ({ sections }) => {
   return (
     <Box sx={styles.footer}>
       {sections.map((section) => (
