@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
 import { styles } from './AudioPlayerPopover.styles';
 import { formatTime, calculateProgress } from '~/lib/utils/audioPlayer';
+import Image from 'next/image';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
@@ -93,7 +94,7 @@ const AudioPlayerPopover = ({
             >
               <Box sx={styles.progressLine(progress)} />
               <Box sx={styles.progressThumbSvg(progress)}>
-                <img
+                <Image
                   src="/icons/audio-play-circle-icon.svg"
                   alt="progress thumb"
                   width={16}
@@ -108,7 +109,7 @@ const AudioPlayerPopover = ({
                 aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
                 sx={styles.playPauseButton}
               >
-                <img
+                <Image
                   src={
                     isPlaying
                       ? './icons/pause-icon.svg'
