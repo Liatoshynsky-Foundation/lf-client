@@ -32,7 +32,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   children,
   ...props
 }) => {
-  let styleClasses = CreateStyleClasses(variant, type);
+  const styleClasses = CreateStyleClasses(variant, type);
   const loaderSizes = {
     small: 16,
     medium: 20,

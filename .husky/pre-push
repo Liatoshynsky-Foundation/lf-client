@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 
@@ -23,3 +23,19 @@ if ! echo "$BRANCH_NAME" | grep -qE "$PATTERN"; then
   echo ""
   exit 1
 fi
+
+echo "🚀 Run Tests..."
+
+npm test
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "❌ Tests failed or coverage is too low."
+  echo "➡️ Check for errors above, fix them and try again."
+  echo "💡 Coverage may not reach the threshold set in jest.config."
+  exit 1
+fi
+
+echo ""
+echo "✅ Tests passed. Push allowed."
