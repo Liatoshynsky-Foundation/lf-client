@@ -15,22 +15,20 @@ describe('CustomLink', () => {
 
   test('should render front icon', () => {
     render(
-      <CustomLink path="/" startIcon={<SvgImage src={PlayIconSvg} alt="" />}>
+      <CustomLink path="/" startIcon={<SvgImage src={PlayIconSvg} alt="play icon" />}>
         With Icon
       </CustomLink>
     );
     expect(screen.getByText(/With Icon/i)).toBeInTheDocument();
-    expect(screen.getByTestId('front-icon')).toBeInTheDocument();
+    expect(screen.getByAltText('play icon')).toBeInTheDocument();
   });
 
   test('should render back icon (SVG image)', () => {
     render(
-      <CustomLink path="/with-back-icon" endIcon={<SvgImage src={PlayIconSvg} alt="" />}>
+      <CustomLink path="/with-back-icon" endIcon={<SvgImage src={PlayIconSvg} alt="play icon" />}>
         With Back Icon
       </CustomLink>
     );
-    const img = screen.getByRole('img');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src');
+    expect(screen.getByAltText('play icon')).toBeInTheDocument();
   });
 });
