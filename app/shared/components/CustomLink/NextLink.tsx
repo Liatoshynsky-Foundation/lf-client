@@ -18,6 +18,7 @@ export const NextLinkComposed = React.forwardRef<HTMLAnchorElement, NextLinkComp
 
     return <NextLink href={to} as={linkAs} ref={ref} onClick={onClick} {...other} />;
   }
+
 );
 
 export type LinkProps = {
