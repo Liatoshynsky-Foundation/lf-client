@@ -1,4 +1,4 @@
-export const linkStyles = {
+export const CustomLinkStyles = {
   button: {
     cursor: 'pointer',
     color: '#52545A',
