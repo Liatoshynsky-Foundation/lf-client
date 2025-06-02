@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import CustomBreadcrumbs from './BreadCrumbs';
 import * as nextNavigation from 'next/navigation';
 
-// Mock the usePathname hook
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next/navigation'),
   usePathname: jest.fn()
@@ -13,7 +12,7 @@ describe('CustomBreadcrumbs', () => {
     jest.resetAllMocks();
   });
 
-  test('renders Custom Breadcrumbs component', () => {
+  it('should render Custom Breadcrumbs component', () => {
     (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
 
     render(<CustomBreadcrumbs />);
@@ -21,14 +20,14 @@ describe('CustomBreadcrumbs', () => {
     expect(breadcrumbNav).toBeInTheDocument();
   });
 
-  test('renders Home page link', () => {
+  it('should render Home page link', () => {
     (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
 
     render(<CustomBreadcrumbs />);
     expect(screen.getByRole('link', { name: /home page/i })).toBeInTheDocument();
   });
 
-  test('renders 3-levels breadcrumb page link', () => {
+  it('should render 3-levels breadcrumb page link', () => {
     (nextNavigation.usePathname as jest.Mock).mockReturnValue('/level1/level2/level3');
     render(<CustomBreadcrumbs />);
 
@@ -38,7 +37,7 @@ describe('CustomBreadcrumbs', () => {
 
     expect(screen.queryByRole('link', { name: /level3/i })).not.toBeInTheDocument();
   });
-  test('renders Typography  if the element is the last in the breadcrumb', () => {
+  it('should render Typography  if the element is the last in the breadcrumb', () => {
     (nextNavigation.usePathname as jest.Mock).mockReturnValue('/about-us');
     render(<CustomBreadcrumbs />);
     expect(screen.getByRole('link', { name: /home page/i })).toBeInTheDocument();
@@ -46,7 +45,7 @@ describe('CustomBreadcrumbs', () => {
     expect(typography.tagName.toLowerCase()).toBe('p');
   });
 
-  test('renders nothing for just base path', () => {
+  it('should renders nothing for just base path', () => {
     (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
 
     render(<CustomBreadcrumbs />);
