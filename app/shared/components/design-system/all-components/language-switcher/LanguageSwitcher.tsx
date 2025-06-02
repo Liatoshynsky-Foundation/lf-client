@@ -15,10 +15,10 @@ const locales = ['uk', 'en'] as const;
 type Locale = (typeof locales)[number];
 
 export interface LanguageSwitcherProps {
-  variant?: 'icon' | 'toggle';
+  variant: 'icon' | 'toggle';
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'icon' }) => {
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
