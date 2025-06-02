@@ -18,7 +18,22 @@ export const Chip: React.FC<CustomChipProps> = ({ variant = 'filled', disabled =
       {...props}
       disabled={disabled}
       onDelete={handleDelete}
-      deleteIcon={<Image src="/icons/close-icon.svg" alt="close" width={16} height={16} />}
+      deleteIcon={
+        <button
+          onClick={handleDelete}
+          data-testid="delete-icon"
+          aria-label="delete"
+          style={{
+            all: 'unset',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+          disabled={disabled}
+        >
+          <Image src="/icons/close-icon.svg" alt="close" width={16} height={16} priority />
+        </button>
+      }
       sx={baseChipStyles(variant)}
     />
   );
