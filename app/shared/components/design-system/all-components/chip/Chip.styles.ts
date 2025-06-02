@@ -15,12 +15,17 @@ export const baseChipStyles = (variant: 'filled' | 'outlined') => {
   const isOutlined = variant === 'outlined';
 
   return {
-    fontSize: '14px',
+    height: 28,
+    CSSMathMaxWidth: 115,
+    fontSize: '16px',
     fontWeight: 500,
     fontFamily: 'inherit',
     color: ChipColors.text,
     backgroundColor: isOutlined ? 'transparent' : ChipColors.bgFilledDefault,
     border: isOutlined ? `1px solid ${ChipColors.borderOutlined}` : 'none',
+
+    alignItems: 'center',
+    justifyContent: 'space-between',
 
     '&:hover': {
       backgroundColor: isOutlined ? ChipColors.bgOutlinedHovered : ChipColors.bgFilledHover
