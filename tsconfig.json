@@ -18,9 +18,10 @@
         "name": "next"
       }
     ],
-    "baseUrl": "app", // Base URL for module resolution
+    "baseUrl": ".", // Base URL for module resolution
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./app/*"],
+      "@public/*": ["./public/*"] // Path aliases for easier imports
     },
     "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
     "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
