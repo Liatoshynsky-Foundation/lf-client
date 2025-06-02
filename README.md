@@ -234,7 +234,7 @@ gitGraph
 ### Experts
 
 [![@bandvov](https://avatars.githubusercontent.com/u/48312647?v=4&size=250)](https://github.com/bandvov)
-[![@evdma](https://avatars.githubusercontent.com/u/44940956?v=4&size=250)](https://github.com/evdma)
+[![@myevd](https://avatars.githubusercontent.com/u/177050012?v=4&size=250)](https://github.com/myevd)
 
 ### Development team
 
