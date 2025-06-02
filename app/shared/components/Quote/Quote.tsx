@@ -2,39 +2,39 @@ import { Box, Typography } from '@mui/material';
 import QuoteImage from '../../../../public/images/quote.svg';
 import { styles } from './Quote.styles';
 
-export type ImageColor = 'black' | 'burgundy';
-export type TextColor = 'black' | 'gray' | 'burgundy';
+export type Color = 'black' | 'burgundy';
 
 type SourceTextItem = {
   tittle?: string;
   data?: string;
   place?: string;
 };
-type QuoteBlockProps<T extends ImageColor> = {
-  quoteText: string;
-  sourceText: SourceTextItem;
-  quoteIconColor: T;
-  mainTextColor: T;
-  sourceTextColor: TextColor;
+
+export type QuoteBlockProps = {
+  quoteText?: string;
+  sourceText?: SourceTextItem;
+  quoteIconColor: Color;
+  mainTextColor: Color;
+  alignRight?: boolean;
 };
 
-const QuoteBlock = <T extends ImageColor>({
-  quoteText = 'Буде, звісно, дуже багато цікавого, але всього не почуєш, тому що в один вечір у різних театрах і залах проходитимуть по два концерти або опери.',
+const QuoteBlock = ({
+  quoteText,
   sourceText = {
-    tittle: 'Лист Бориса Лятошинського Маргариті Царевич',
-    data: '29 вересня 1957',
-    place: 'Берлін'
+    tittle: '',
+    data: '',
+    place: ''
   },
   quoteIconColor,
   mainTextColor,
-  sourceTextColor
-}: QuoteBlockProps<T>) => {
+  alignRight
+}: QuoteBlockProps) => {
   const allSourceText = [sourceText.tittle, sourceText.data, sourceText.place].filter(Boolean).join(', ');
 
   const sxStyles = styles({
     quoteIconColor,
     mainTextColor,
-    sourceTextColor
+    alignRight
   });
 
   return (
