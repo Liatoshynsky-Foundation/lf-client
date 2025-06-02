@@ -16,12 +16,12 @@ describe('DonationButton', () => {
     jest.clearAllMocks();
   });
 
-  test('renders button with correct label', () => {
+  it('should render the button with correct label', () => {
     const button = screen.getByRole('button', { name: /donate now/i });
     expect(button).toBeInTheDocument();
   });
 
-  test('renders button with the icon', () => {
+  it('should render button with the icon', () => {
     const icon = screen.getByAltText('Donation Button');
     expect(icon).toBeInTheDocument();
   });

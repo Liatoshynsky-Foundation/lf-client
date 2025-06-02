@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '../../design-system/all-components/button/Button';
-import DonationButtonIcon from '../../../../../public/icons/donation-button.svg';
 import { SvgImage } from '../../svg-image/SvgImage';
 import Link from 'next/link';
 
@@ -21,7 +20,7 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
         variant="outlined"
         color="primary"
         label={data.text}
-        startIcon={<SvgImage alt="Donation Button" src={DonationButtonIcon} />}
+        startIcon={<SvgImage alt="Donation Button" src="icons/donation-button.svg" width={24} height={24} />}
       />
     </Link>
   );
