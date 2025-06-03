@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { TextField, InputAdornment, SxProps } from '@mui/material';
-import Image, { StaticImageData } from 'next/image';
 import { outlinedStyles, standardStyles } from './CustomTextField.styles';
+import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 type TextFieldProps = Readonly<{
   variant?: 'standard' | 'outlined';
   disabled?: boolean;
   value?: string;
   label?: string;
-  startIcon?: StaticImageData | string;
-  endIcon?: StaticImageData | string;
+  startIcon?: string;
+  endIcon?: string;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
@@ -31,6 +31,8 @@ export default function CustomTextField({
 }: TextFieldProps) {
   const variantStyles =
     variant === 'outlined' ? outlinedStyles : standardStyles;
+  const effectiveStartIcon =
+    variant === 'standard' ? (startIcon ?? 'icons/search-icon.svg') : startIcon;
 
   return (
     <TextField
@@ -45,14 +47,19 @@ export default function CustomTextField({
       sx={{ ...variantStyles, ...sx }}
       slotProps={{
         input: {
-          startAdornment: startIcon && (
+          startAdornment: effectiveStartIcon && (
             <InputAdornment position="start">
-              <Image src={startIcon} alt="start icon" width={24} height={24} />
+              <SvgImage
+                src={effectiveStartIcon}
+                alt="start icon"
+                width={24}
+                height={24}
+              />
             </InputAdornment>
           ),
           endAdornment: endIcon && (
             <InputAdornment position="end">
-              <Image src={endIcon} alt="end icon" width={24} height={24} />
+              <SvgImage src={endIcon} alt="end icon" width={24} height={24} />
             </InputAdornment>
           ),
         },

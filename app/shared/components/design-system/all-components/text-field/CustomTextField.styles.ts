@@ -1,17 +1,18 @@
 const black = '#190D03';
+const blue600 = '#898C95';
 const blue700 = '#63666E';
+const blue800 = '#52545A';
 const error = '#E63C14';
-const yellow900 = '#673E0F';
 
 export const standardStyles = {
   '& .MuiInput-root': {
     width: '385px',
     height: '46px',
     '&:before': {
-      borderBottom: `1px solid ${black}`,
+      borderBottom: '1px solid rgba(13, 3, 61, 0.25)',
     },
     '&:hover:not(.Mui-disabled):before': {
-      borderBottom: `2px solid ${black}`,
+      borderBottom: '1px solid rgba(13, 3, 61, 0.5)',
     },
     '&.Mui-focused:after': {
       borderBottom: `2px solid ${black}`,
@@ -25,49 +26,36 @@ export const standardStyles = {
     '&.Mui-error:hover:before': {
       borderBottom: `2px solid ${error}`,
     },
-    '&.Mui-error:hover:after': {
-      borderBottom: `2px solid ${error}`,
-    },
     '&.Mui-disabled:before': {
-      borderBottom: `2px dotted ${blue700}`,
+      borderBottom: `1px solid ${blue600}`,
     },
-    '&:after': {
+    '&:not(.Mui-focused):not(.Mui-error):after': {
       borderBottom: `1px solid ${black}`,
     },
   },
-  '&.MuiFormControl-root.Mui-error': {
-    borderBottom: `2px solid ${error}`,
-  },
 
   '& .MuiInputLabel-root': {
-    color: yellow900,
-    '&.Mui-focused': {
-      color: black,
-    },
-    '&.Mui-hover': {
-      color: blue700,
-    },
-    '&.Mui-disabled': {
-      color: blue700,
-    },
-    '&.Mui-error': {
-      color: error,
-    },
+    color: black,
   },
+
   '& .MuiInputBase-input': {
-    color: yellow900,
+    color: blue800,
+    WebkitTextFillColor: blue800,
   },
 
   '& .Mui-disabled .MuiInputBase-input': {
-    color: blue700,
+    color: blue600,
+    WebkitTextFillColor: blue600,
   },
 
   '& .Mui-focused .MuiInputBase-input': {
     color: black,
+    WebkitTextFillColor: black,
   },
 
   '& .Mui-error .MuiInputBase-input': {
     color: black,
+    WebkitTextFillColor: black,
   },
 };
 
@@ -78,7 +66,7 @@ export const outlinedStyles = {
     borderRadius: '8px',
     padding: '0 16px',
     '& fieldset': {
-      border: '1px solid rgba(13, 3, 61, 0.24)',
+      border: '1px solid rgba(13, 3, 61, 0.25)',
     },
     '&:hover fieldset': {
       border: '1px solid rgba(13, 3, 61, 0.5)',
@@ -94,18 +82,23 @@ export const outlinedStyles = {
     },
   },
   '& .MuiInputLabel-root': {
-    color: '#52545a',
+    color: blue800,
+    WebkitTextFillColor: blue800,
+    '&:not(.Mui-disabled):hover': {
+      color: blue700,
+      WebkitTextFillColor: blue700,
+    },
     '&.Mui-focused': {
       color: black,
-    },
-    '&.Mui-hover': {
-      color: blue700,
+      WebkitTextFillColor: black,
     },
     '&.Mui-disabled': {
       color: blue700,
+      WebkitTextFillColor: blue700,
     },
     '&.Mui-error': {
       color: error,
+      WebkitTextFillColor: error,
     },
   },
   '& .MuiOutlinedInput-input.Mui-disabled': {
