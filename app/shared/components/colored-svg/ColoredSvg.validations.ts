@@ -5,7 +5,7 @@ export const validateSvgColor = (color: string) => {
   const hexPattern = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
   if (rgbaPattern.test(wslessColor)) {
-    const rgbaValues = wslessColor.match(rgbaPattern);
+    const rgbaValues = rgbaPattern.exec(wslessColor);
     if (rgbaValues) {
       const rgbParts = rgbaValues[0]
         .replace(/rgba?\(|\)/g, '')
