@@ -25,5 +25,9 @@ export enum SocialMediaTypes {
   YouTube = 'youtube',
   TikTok = 'tiktok',
   Linkedin = 'linkedin',
+  Messenger = 'messenger',
+  Tumblr = 'tumblr',
+  Twitter = 'twitter',
+  Whatsapp = 'whatsapp',
   AnotherMedia = 'anotherMedia'
 }
