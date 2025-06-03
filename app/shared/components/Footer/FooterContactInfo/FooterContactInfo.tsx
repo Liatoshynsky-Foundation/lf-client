@@ -1,7 +1,7 @@
 'use client';
 import React, { FC } from 'react';
 import { Box, Typography, Link } from '@mui/material';
-import { useIsMobile } from '~/shared/hooks/is-mobile/useIsMobile';
+import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
@@ -20,9 +20,7 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {
     alert('Номер телефону скопійовано до буферу обміну');
   };
 
-  const telLinkProps = isMobile
-    ? { href: `tel:${contacts.phone}` }
-    : { onClick: copyPhoneToClipboard, href: '#' };
+  const telLinkProps = isMobile ? { href: `tel:${contacts.phone}` } : { onClick: copyPhoneToClipboard, href: '#' };
 
   return (
     <Box sx={styles.container}>

@@ -1,4 +1,4 @@
-import { validateContactData } from '~/lib/utils/validateContactData';
+import { validateContactData } from '~/utils/validateContactData';
 import { errors } from '~/constants/errors';
 import { lengths } from '~/constants/validation';
 
@@ -7,7 +7,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: 'john@example.com',
-      message: 'This is a valid message.',
+      message: 'This is a valid message.'
     });
 
     expect(result).toEqual([]);
@@ -17,7 +17,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: undefined,
       email: 'john@example.com',
-      message: 'Valid message',
+      message: 'Valid message'
     });
 
     expect(result).toContain(errors.NAME_ERROR);
@@ -27,7 +27,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'A',
       email: 'john@example.com',
-      message: 'Valid message',
+      message: 'Valid message'
     });
 
     expect(result).toContain(errors.NAME_ERROR);
@@ -37,7 +37,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'A'.repeat(lengths.NAME_MAX_LENGTH + 1),
       email: 'john@example.com',
-      message: 'Valid message',
+      message: 'Valid message'
     });
 
     expect(result).toContain(errors.NAME_ERROR);
@@ -47,7 +47,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: undefined,
-      message: 'Valid message',
+      message: 'Valid message'
     });
 
     expect(result).toContain(errors.EMAIL_ERROR);
@@ -57,7 +57,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: 'invalid-email',
-      message: 'Valid message',
+      message: 'Valid message'
     });
 
     expect(result).toContain(errors.EMAIL_ERROR);
@@ -67,7 +67,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: 'john@example.com',
-      message: undefined,
+      message: undefined
     });
 
     expect(result).toContain(errors.MESSAGE_ERROR);
@@ -77,7 +77,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: 'john@example.com',
-      message: 'Too short',
+      message: 'Too short'
     });
 
     expect(result).toContain(errors.MESSAGE_ERROR);
@@ -87,7 +87,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: 'John',
       email: 'john@example.com',
-      message: 'A'.repeat(lengths.MESSAGE_MAX_LENGTH + 1),
+      message: 'A'.repeat(lengths.MESSAGE_MAX_LENGTH + 1)
     });
 
     expect(result).toContain(errors.MESSAGE_ERROR);
@@ -97,7 +97,7 @@ describe('validateContactData', () => {
     const result = validateContactData({
       name: '',
       email: 'invalid',
-      message: '',
+      message: ''
     });
 
     expect(result).toContain(errors.NAME_ERROR);

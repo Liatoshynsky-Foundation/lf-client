@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '~/shared/components/design-system/all-components/button/Button';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import Button from '~/design-system-components/button/Button';
+import { SvgImage } from '~/components/svg-image/SvgImage';
 import Link from 'next/link';
 
 type DonationButtonData = {
