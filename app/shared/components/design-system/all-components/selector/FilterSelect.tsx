@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, Typography, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import { Chip } from '../chip/Chip';
@@ -28,7 +28,6 @@ interface FilterSelectProps {
 export const FilterSelect: React.FC<FilterSelectProps> = ({
   label,
   options,
-  placeholder = 'Оберіть опції',
   defaultValues = [],
   variant = 'filled',
   disabled = false,
@@ -38,10 +37,11 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(defaultValues);
+  const iconRef = useRef<HTMLDivElement | null>(null);
 
-  const handleToggleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    if (!disabled) {
-      setAnchorEl(event.currentTarget);
+  const handleToggleMenu = () => {
+    if (!disabled && iconRef.current) {
+      setAnchorEl(iconRef.current);
     }
   };
 
@@ -97,28 +97,24 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 
   return (
     <>
-      <Box sx={filterSelectStyles.root(variant, disabled)}>
+      <Box sx={filterSelectStyles.root(variant, disabled)} onClick={handleToggleMenu}>
         <Typography sx={filterSelectStyles.label(disabled)}>{label}</Typography>
 
         <Box sx={filterSelectStyles.chipContainer}>
-          {selectedOptions.length > 0 ? (
-            <Box sx={filterSelectStyles.chipList}>
-              {selectedOptions.map((option) => (
-                <Chip
-                  key={option.value}
-                  label={option.label}
-                  variant={variant}
-                  disabled={disabled}
-                  onDelete={() => handleChipDelete(option.value)}
-                  size="small"
-                />
-              ))}
-            </Box>
-          ) : (
-            <Chip label={placeholder} variant={variant} disabled={disabled} sx={filterSelectStyles.placeholderChip} />
-          )}
+          <Box sx={filterSelectStyles.chipList}>
+            {selectedOptions.map((option) => (
+              <Chip
+                key={option.value}
+                label={option.label}
+                variant={variant}
+                disabled={disabled}
+                onDelete={() => handleChipDelete(option.value)}
+                size="small"
+              />
+            ))}
+          </Box>
 
-          <Box onClick={handleToggleMenu} sx={filterSelectStyles.dropdownIcon(disabled)}>
+          <Box ref={iconRef} sx={filterSelectStyles.dropdownIcon(disabled)}>
             <Image src="/icons/chevron-down.svg" alt="dropdown" width={16} height={16} />
           </Box>
         </Box>

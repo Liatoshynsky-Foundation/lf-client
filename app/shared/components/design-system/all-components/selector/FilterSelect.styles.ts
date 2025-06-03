@@ -29,13 +29,22 @@ export const filterSelectStyles = {
         ? `1px solid ${disabled ? FilterSelectColors.borderDisabled : FilterSelectColors.borderOutlined}`
         : 'none',
       cursor: disabled ? 'not-allowed' : 'pointer',
-      transition: 'background-color 0.2s'
+      transition: 'background-color 0.2s',
+
+      fontFamily: 'Mulish',
+      fontWeight: 600,
+      fontSize: '16px',
+      lineHeight: '150%',
+      letterSpacing: '0%'
     };
   },
 
   label: (disabled: boolean): SxProps => ({
-    fontSize: '16px',
+    fontFamily: 'Mulish',
     fontWeight: 600,
+    fontSize: '16px',
+    lineHeight: '150%',
+    letterSpacing: '0%',
     color: disabled ? FilterSelectColors.textDisabled : FilterSelectColors.text
   }),
 
@@ -66,6 +75,12 @@ export const filterSelectStyles = {
   menuItem: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+
+    fontFamily: 'Mulish',
+    fontWeight: 600,
+    fontSize: '16px',
+    lineHeight: '150%',
+    letterSpacing: '0%'
   }
 };
