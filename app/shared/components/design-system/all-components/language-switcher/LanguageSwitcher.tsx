@@ -5,7 +5,7 @@ import { MenuItem } from '@mui/material';
 import { IconButton } from '../icon-button/IconButton';
 import Button from '../button/Button';
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from '../../../../../../i18n/navigation';
+import { usePathname, useRouter } from '~/../i18n/navigation';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { styles } from './LanguageSwitcher.styles';
