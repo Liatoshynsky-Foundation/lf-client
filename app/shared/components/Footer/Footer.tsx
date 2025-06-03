@@ -5,6 +5,8 @@ import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterConta
 import { getTranslations } from 'next-intl/server';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
+import { SocialMediaTypes } from '~/types/enums/common.enums';
+import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 
 export const footerData = {
   text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
@@ -50,7 +52,20 @@ export const sections = [
     links: [{ label: 'Кабінет-архів', href: '/museum' }]
   }
 ];
-
+const SocialMedia = [
+  {
+    icon: SocialMediaTypes.Instagram,
+    href: 'https://www.instagram.com/liatoshynsky_foundation/'
+  },
+  {
+    icon: SocialMediaTypes.Facebook,
+    href: 'https://www.facebook.com/LiatoshynskyFoundation/'
+  },
+  {
+    icon: SocialMediaTypes.YouTube,
+    href: 'https://www.youtube.com/'
+  }
+];
 export default async function Footer() {
   const t = await getTranslations('footer');
 
@@ -78,6 +93,7 @@ export default async function Footer() {
       <FooterNavigation sections={sections} />
       <FooterContactInfo contacts={contacts} />
       <FooterContactAndSupport contactUs={contactUsButtonData} donation={donationButtonData} />
+      <FooterSocialMedia media={SocialMedia} />
       <FooterCopyrights text={footerData.text} links={footerData.links} />
     </Box>
   );

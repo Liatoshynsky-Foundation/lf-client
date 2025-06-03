@@ -6,16 +6,24 @@ export enum PositionEnum {
   Start = 'start',
   End = 'end',
   Vertical = 'vertical',
-  Center = 'center',
+  Center = 'center'
 }
 export enum IconButtonColorVariant {
   Primary = 'primary',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
-  Error = 'error',
+  Error = 'error'
 }
 export enum IconButtonVariant {
   filled = 'filled',
   outlined = 'outlined',
-  icon = 'icon',
+  icon = 'icon'
+}
+export enum SocialMediaTypes {
+  Instagram = 'instagram',
+  Facebook = 'facebook',
+  YouTube = 'youtube',
+  TikTok = 'tiktok',
+  Linkedin = 'linkedin',
+  AnotherMedia = 'anotherMedia'
 }
