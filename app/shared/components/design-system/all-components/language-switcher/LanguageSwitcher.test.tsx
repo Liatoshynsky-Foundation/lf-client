@@ -3,7 +3,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { usePathname, useRouter } from '../../../../../../i18n/navigation';
 import { useLocale } from 'next-intl';
 
-jest.mock('../../../../../../i18n/navigation', () => ({
+jest.mock('~/../i18n/navigation', () => ({
   useRouter: jest.fn(),
   usePathname: jest.fn()
 }));
