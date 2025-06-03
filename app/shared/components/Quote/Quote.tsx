@@ -16,20 +16,16 @@ const QuoteBlock = ({
 }: QuoteBlockProps) => {
   const allSourceText = [sourceText.tittle, sourceText.data, sourceText.place].filter(Boolean).join(', ');
 
-  const sxStyles = styles({
-    quoteIconColor,
-    mainTextColor,
-    alignRight
-  });
+  const alignKey = alignRight ? 'right' : 'left';
 
   return (
-    <Box sx={sxStyles.quoteWrapper}>
+    <Box sx={styles.mainContainer(alignKey)}>
       <Box>
-        <QuoteImage style={sxStyles.quoteIcon} />
+        <QuoteImage style={styles.image(quoteIconColor, alignKey)} />
       </Box>
-      <Box sx={sxStyles.textBlocksContainer}>
-        <Typography sx={sxStyles.mainQuoteText}>{quoteText}</Typography>
-        <Typography sx={sxStyles.sourceText}>{allSourceText}</Typography>
+      <Box sx={styles.textContainer(alignKey)}>
+        <Typography sx={styles.mainText(mainTextColor, alignKey)}>{quoteText}</Typography>
+        <Typography sx={styles.sourceText(alignKey)}>{allSourceText}</Typography>
       </Box>
     </Box>
   );
