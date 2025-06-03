@@ -1,9 +1,9 @@
-import {NextConfig} from 'next';
+import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  webpack: config => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: [
@@ -22,8 +22,15 @@ const nextConfig: NextConfig = {
         and: [/\.(ts|tsx|js|jsx|md|mdx)$/]
       }
     });
-
     return config;
+  },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js'
+      }
+    }
   }
 };
 
