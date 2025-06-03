@@ -1,4 +1,4 @@
-import type { Align } from './Quote.types';
+import type { Align } from '~/types/types/quoteComponent';
 
 export const quoteSizes = {
   width: { xs: '241px', sm: '231px', md: '305px', lg: '367px', xl: '408px' },

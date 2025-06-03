@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Quote from './Quote';
-import type { QuoteBlockProps } from './Quote.types';
+import type { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 jest.mock('next/dynamic');
 

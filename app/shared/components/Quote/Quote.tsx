@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import QuoteImage from '../../../../public/images/quote.svg';
 import { styles } from './Quote.styles';
-import { QuoteBlockProps } from './Quote.types';
+import { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 const QuoteBlock = ({
   quoteText,
