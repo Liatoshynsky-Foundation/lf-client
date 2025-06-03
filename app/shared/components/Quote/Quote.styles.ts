@@ -17,15 +17,13 @@ export const styles = (props: StylesProps) => {
       alignItems: alignItemsValue,
       flexDirection: 'column',
       width: { xs: '241px', sm: '231px', md: '305px', lg: '367px', xl: '408px' },
-      top: '478px',
-      left: '72px',
       gap: '40px'
     },
     quoteIcon: {
       width: { xs: '50px', sm: '60px' },
       height: '50px',
       color: colorMap[quoteIconColor],
-      transform: alignRight ? 'scaleX(-1)' : 0
+      transform: alignRight ? 'scaleX(-1)' : 'scaleX(1)'
     },
     textBlocksContainer: {
       display: 'flex',
