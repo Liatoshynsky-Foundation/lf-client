@@ -1,22 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import QuoteImage from '../../../../public/images/quote.svg';
 import { styles } from './Quote.styles';
-
-export type Color = 'black' | 'burgundy';
-
-type SourceTextItem = {
-  tittle?: string;
-  data?: string;
-  place?: string;
-};
-
-export type QuoteBlockProps = {
-  quoteText?: string;
-  sourceText?: SourceTextItem;
-  quoteIconColor: Color;
-  mainTextColor: Color;
-  alignRight?: boolean;
-};
+import { QuoteBlockProps } from './Quote.types';
 
 const QuoteBlock = ({
   quoteText,
