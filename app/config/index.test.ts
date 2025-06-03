@@ -16,8 +16,8 @@ describe('mongoUrl', () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'localhost';
     process.env.MONGO_PORT = '27018';
-    process.env.MONGO_USERNAME = 'dummy';
-    process.env.MONGO_PASSWORD = 'dummy'; //NOSONAR
+    process.env.MONGO_USERNAME = 'user';
+    process.env.MONGO_PASSWORD = 'fake-pass'; //NOSONAR
 
     const { mongoUrl } = await import('~/config/index');
     expect(mongoUrl).toBe('mongodb://localhost:27018/testdb');
