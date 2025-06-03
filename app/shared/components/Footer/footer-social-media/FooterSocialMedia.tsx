@@ -14,10 +14,21 @@ interface FooterSocialMediaProps {
   media: LinkIcon[];
 }
 
+function sanitizeImageType(value: string): SocialMediaTypes {
+  value = value.toLocaleLowerCase();
+  if (Object.values(SocialMediaTypes).includes(value as SocialMediaTypes)) {
+    return value as SocialMediaTypes;
+  }
+  return SocialMediaTypes.AnotherMedia;
+}
+
 const FooterSocialMedia = ({ media }: FooterSocialMediaProps) => {
   return (
     <Box sx={styles.container}>
       {media.map((item) => {
+        if (typeof item.icon === 'string') {
+          item.icon = sanitizeImageType(item.icon);
+        }
         return (
           <Link href={item.href} key={item.icon}>
             <IconButton>
