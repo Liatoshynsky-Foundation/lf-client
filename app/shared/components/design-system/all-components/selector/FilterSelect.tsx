@@ -78,6 +78,23 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const selectedOptions = options.filter((opt) => selectedValues.includes(opt.value));
   const isMaxReached = maxSelections ? selectedValues.length >= maxSelections : false;
 
+  const menuList = options.map((option) => {
+    const isSelected = selectedValues.includes(option.value);
+    const isDisabled = !isSelected && isMaxReached;
+
+    return (
+      <MenuItem
+        key={option.value}
+        onClick={() => !isDisabled && handleOptionClick(option)}
+        selected={isSelected}
+        disabled={isDisabled}
+        sx={filterSelectStyles.menuItem}
+      >
+        <span>{option.label}</span>
+      </MenuItem>
+    );
+  });
+
   return (
     <>
       <Box sx={filterSelectStyles.root(variant, disabled)}>
@@ -120,22 +137,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
           horizontal: PositionEnum.Center
         }}
         maxHeight={300}
-        menuList={options.map((option) => {
-          const isSelected = selectedValues.includes(option.value);
-          const isDisabled = !isSelected && isMaxReached;
-
-          return (
-            <MenuItem
-              key={option.value}
-              onClick={() => !isDisabled && handleOptionClick(option)}
-              selected={isSelected}
-              disabled={isDisabled}
-              sx={filterSelectStyles.menuItem}
-            >
-              <span>{option.label}</span>
-            </MenuItem>
-          );
-        })}
+        menuList={menuList}
       />
     </>
   );

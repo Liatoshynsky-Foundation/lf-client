@@ -18,6 +18,7 @@ export const baseChipStyles = (variant: 'filled' | 'outlined') => {
     height: 28,
     CSSMathMaxWidth: 115,
     fontSize: '16px',
+    paddingRight: '4px',
     fontWeight: 500,
     fontFamily: 'inherit',
     color: ChipColors.text,
