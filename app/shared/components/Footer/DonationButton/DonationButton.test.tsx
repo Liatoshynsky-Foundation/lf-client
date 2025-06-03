@@ -2,6 +2,11 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import DonationButton from './DonationButton';
 
+jest.mock('@public/icons/donation-button.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="donation-icon" />
+}));
+
 const mockData = {
   text: 'Donate Now',
   link: '/donate'
@@ -22,7 +27,8 @@ describe('DonationButton', () => {
   });
 
   it('should render button with the icon', () => {
-    const icon = screen.getByAltText('Donation Button');
+    const icon = screen.getByTestId('donation-icon');
     expect(icon).toBeInTheDocument();
+    expect(icon.parentElement).toHaveAttribute('aria-label', 'Donation Button');
   });
 });

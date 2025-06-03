@@ -2,16 +2,20 @@ import dynamic from 'next/dynamic';
 import { styles } from './ColoredSvg.styles';
 import { Box } from '@mui/material';
 import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
+import React from 'react';
 
 interface SvgProps {
-  name: string;
+  src: string;
   color: string;
+  alt: string;
   width?: string;
   height?: string;
 }
 
-export const Svg = ({ name, color, width, height }: SvgProps) => {
-  const IconComponent = dynamic(() => import(`@public/${name}.svg`));
+export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
+  const IconComponent = dynamic(() => import(`@public/${src}.svg`));
+
+  console.log(`Loading SVG icon from: @public/${src}.svg:`, IconComponent);
 
   if (!validateSvgColor(color)) {
     throw new Error(`Invalid color value: ${color}`);
@@ -30,7 +34,7 @@ export const Svg = ({ name, color, width, height }: SvgProps) => {
   };
 
   return (
-    <Box sx={{ ...styles, ...dynamicStyles }}>
+    <Box sx={{ ...styles, ...dynamicStyles }} role="img" aria-label={alt}>
       <IconComponent />
     </Box>
   );

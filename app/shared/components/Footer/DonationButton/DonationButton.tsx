@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '~/shared/components/design-system/all-components/button/Button';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import Link from 'next/link';
 
 type DonationButtonData = {
@@ -20,7 +20,7 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
         variant="outlined"
         color="primary"
         label={data.text}
-        startIcon={<SvgImage alt="Donation Button" src="icons/donation-button.svg" width={24} height={24} />}
+        startIcon={<Svg src="icons/donation-button" color="#190D03" alt="Donation Button" />}
       />
     </Link>
   );

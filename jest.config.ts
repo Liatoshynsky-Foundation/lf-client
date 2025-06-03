@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 import nextJest from 'next/jest';
 
 const createJestConfig = nextJest({
-  dir: './',
+  dir: './'
 });
 
 const config: Config = {
@@ -10,7 +10,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',
-    '!app/**/*.test.{js,jsx,ts,tsx}', // Exclude test files from coverage
+    '!app/**/*.test.{js,jsx,ts,tsx}' // Exclude test files from coverage
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
@@ -19,23 +19,24 @@ const config: Config = {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
-    },
+      statements: 80
+    }
   },
   coverageReporters: ['text', 'lcov', 'json', 'html'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
-    '^~/(.*)$': '<rootDir>/app/$1'
+    '^~/(.*)$': '<rootDir>/app/$1',
+    '^@public/(.*)$': '<rootDir>/public/$1'
   },
   modulePaths: ['<rootDir>/app'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest'
   },
   transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
-  setupFilesAfterEnv: ['@testing-library/jest-dom'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom']
 };
 
 export default createJestConfig(config);
