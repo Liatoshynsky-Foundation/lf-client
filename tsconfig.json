@@ -18,13 +18,14 @@
         "name": "next"
       }
     ],
-    "baseUrl": "app", // Base URL for module resolution
+    "baseUrl": ".", // Base URL for module resolution
     "paths": {
-      "~/*": ["./*"],
-      "~/utils/*": ["lib/utils/*"],
-      "~/design-system-components/*": ["shared/components/design-system/all-components/*"],
-      "~/components/*": ["shared/components"],
-      "~/hooks/*": ["shared/hooks"]
+      "~/*": ["app/*"],
+      "~/utils/*": ["app/lib/utils/*"],
+      "~/design-system-components/*": ["app/shared/components/design-system/all-components/*"],
+      "~/components/*": ["app/shared/components"],
+      "~/hooks/*": ["app/shared/hooks"],
+      "~/i18n/*": ["i18n/*"]
     },
     "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
     "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
