@@ -20,7 +20,11 @@
     ],
     "baseUrl": "app", // Base URL for module resolution
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "~/utils/*": ["lib/utils/*"],
+      "~/design-system-components/*": ["shared/components/design-system/all-components/*"],
+      "~/components/*": ["shared/components"],
+      "~/hooks/*": ["shared/hooks"]
     },
     "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
     "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
