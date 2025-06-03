@@ -2,7 +2,7 @@ export type Color = 'black' | 'burgundy';
 export type Align = 'left' | 'right';
 
 export type SourceTextItem = {
-  tittle?: string;
+  title?: string;
   data?: string;
   place?: string;
 };

@@ -6,7 +6,7 @@ import { QuoteBlockProps } from '~/types/types/quoteComponent';
 const QuoteBlock = ({
   quoteText,
   sourceText = {
-    tittle: '',
+    title: '',
     data: '',
     place: ''
   },
@@ -14,7 +14,7 @@ const QuoteBlock = ({
   mainTextColor,
   alignRight
 }: QuoteBlockProps) => {
-  const allSourceText = [sourceText.tittle, sourceText.data, sourceText.place].filter(Boolean).join(', ');
+  const allSourceText = [sourceText.title, sourceText.data, sourceText.place].filter(Boolean).join(', ');
 
   const alignKey = alignRight ? 'right' : 'left';
 

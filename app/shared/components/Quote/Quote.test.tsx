@@ -13,7 +13,7 @@ describe('QuoteBlock', () => {
   const defaultProps: QuoteBlockProps = {
     quoteText: 'Test',
     sourceText: {
-      tittle: 'tittle',
+      title: 'title',
       data: '1 січня 2000',
       place: 'place'
     },
@@ -29,7 +29,7 @@ describe('QuoteBlock', () => {
 
   it('should render source text combined from title, date and place', () => {
     render(<Quote {...defaultProps} />);
-    expect(screen.getByText('tittle, 1 січня 2000, place')).toBeInTheDocument();
+    expect(screen.getByText('title, 1 січня 2000, place')).toBeInTheDocument();
   });
 
   it('should render only existing source text fields', () => {
