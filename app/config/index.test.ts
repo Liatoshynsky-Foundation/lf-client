@@ -12,7 +12,7 @@ describe('mongoUrl', () => {
     process.env = originalEnv;
   });
 
-  it('returns localhost mongo url', async () => {
+  it('should return localhost mongo url', async () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'localhost';
     process.env.MONGO_PORT = '27018';
@@ -23,7 +23,7 @@ describe('mongoUrl', () => {
     expect(mongoUrl).toBe('mongodb://localhost:27018/testdb');
   });
 
-  it('returns default port if MONGO_PORT is not set', async () => {
+  it('should return default port if MONGO_PORT is not set', async () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'localhost';
     delete process.env.MONGO_PORT;
@@ -34,7 +34,7 @@ describe('mongoUrl', () => {
     expect(mongoUrl).toBe('mongodb://localhost:27017/testdb');
   });
 
-  it('returns remote mongo url with credentials', async () => {
+  it('should return remote mongo url with credentials', async () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'remotehost';
     process.env.MONGO_USERNAME = 'user';
@@ -44,7 +44,7 @@ describe('mongoUrl', () => {
     expect(mongoUrl).toBe('mongodb+srv://user:fake-pass@remotehost/testdb');
   });
 
-  it('throws Zod error if MONGO_DB is missing', async () => {
+  it('should throw Zod error if MONGO_DB is missing', async () => {
     delete process.env.MONGO_DB;
     process.env.MONGO_HOST = 'localhost';
     process.env.MONGO_USERNAME = 'user';
@@ -53,7 +53,7 @@ describe('mongoUrl', () => {
     await expect(import('~/config/index')).rejects.toThrow(envErrors.MONGO_DB.REQUIRED);
   });
 
-  it('throws Zod error if MONGO_HOST is missing', async () => {
+  it('should throw Zod error if MONGO_HOST is missing', async () => {
     process.env.MONGO_DB = 'testdb';
     delete process.env.MONGO_HOST;
     process.env.MONGO_USERNAME = 'user';
@@ -62,7 +62,7 @@ describe('mongoUrl', () => {
     await expect(import('~/config/index')).rejects.toThrow(envErrors.MONGO_HOST.REQUIRED);
   });
 
-  it('throws Zod errors if credentials are missing for remote mongo', async () => {
+  it('should throw Zod errors if credentials are missing for remote mongo', async () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'remotehost';
     delete process.env.MONGO_USERNAME;
@@ -72,7 +72,7 @@ describe('mongoUrl', () => {
     await expect(import('~/config/index')).rejects.toThrow(envErrors.MONGO_PASSWORD.REQUIRED);
   });
 
-  it('throws Zod error if MONGO_PORT is invalid', async () => {
+  it('should throw Zod error if MONGO_PORT is invalid', async () => {
     process.env.MONGO_DB = 'testdb';
     process.env.MONGO_HOST = 'localhost';
     process.env.MONGO_PORT = 'not-a-number';
