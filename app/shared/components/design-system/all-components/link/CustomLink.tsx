@@ -1,9 +1,8 @@
 import { linkStyles } from './CustomLink.styles';
-import Button from '@mui/material/Button';
 import { NextLinkComposed } from './NextLink';
 import { Typography } from '@mui/material';
+import { Button , ButtonProps } from '@mui/material';
 
-import { ButtonProps } from '@mui/material/Button';
 export interface CustomLinkProps extends ButtonProps {
   children: React.ReactNode;
   path: string;
