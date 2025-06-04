@@ -11,7 +11,7 @@ interface CustomChipProps extends Omit<MuiChipProps, 'variant'> {
 }
 
 export const Chip: React.FC<CustomChipProps> = ({ variant = 'filled', disabled = false, onDelete, ...props }) => {
-  const handleDelete = onDelete || (() => {});
+  const handleDelete = onDelete ?? (() => {});
 
   return (
     <MuiChip
