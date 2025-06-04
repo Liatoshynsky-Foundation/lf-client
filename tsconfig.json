@@ -22,7 +22,7 @@
     "paths": {
       "~/*": ["app/*"],
       "~/utils/*": ["app/lib/utils/*"],
-      "~/design-system-components/*": ["app/shared/components/design-system/all-components/*"],
+      "~/ds-components/*": ["app/shared/components/design-system/all-components/*"],
       "~/components/*": ["app/shared/components/*"],
       "~/hooks/*": ["app/shared/hooks/*"],
       "~/i18n/*": ["i18n/*"]
