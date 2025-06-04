@@ -15,8 +15,6 @@ interface SvgProps {
 export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
   const IconComponent = dynamic(() => import(`@public/${src}.svg`));
 
-  console.log(`Loading SVG icon from: @public/${src}.svg:`, IconComponent);
-
   if (!validateSvgColor(color)) {
     throw new Error(`Invalid color value: ${color}`);
   }
