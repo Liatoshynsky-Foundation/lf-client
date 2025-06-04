@@ -12,6 +12,7 @@ import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
+import ThemeRegistry from '~/shared/components/emotion-provider/ThemeRegistry';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -52,47 +53,52 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   }
   return (
     <html lang={lang}>
+      <head>
+        <meta name="emotion-insertion-point" content="" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
-        <NextIntlClientProvider>
-          <ThemeProvider>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Container
-                sx={{
-                  padding: '20px',
-                  height: '100vh',
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(12, 1fr)',
-                  columnGap: '40px',
-                  maxWidth: '1920px !important',
-                  paddingLeft: '72px',
-                  paddingRight: '72px',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  width: '100%',
-                  flex: '1',
-                  [theme.breakpoints.down('md')]: {
-                    gridTemplateColumns: 'repeat(8, 1fr)',
-                    paddingLeft: '24px',
-                    paddingRight: '24px',
-                    gap: '20px'
-                  },
-                  [theme.breakpoints.down('sm')]: {
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '16px'
-                  }
-                }}
-              >
-                <Box sx={{ gridColumn: '1 / -1' }}>
-                  <Header />
-                </Box>
-                <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
-                <Box sx={{ gridColumn: '1 / -1' }}>
-                  <Footer />
-                </Box>
-              </Container>
-            </Box>
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <ThemeRegistry>
+          <NextIntlClientProvider>
+            <ThemeProvider>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Container
+                  sx={{
+                    padding: '20px',
+                    height: '100vh',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(12, 1fr)',
+                    columnGap: '40px',
+                    maxWidth: '1920px !important',
+                    paddingLeft: '72px',
+                    paddingRight: '72px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: '100%',
+                    flex: '1',
+                    [theme.breakpoints.down('md')]: {
+                      gridTemplateColumns: 'repeat(8, 1fr)',
+                      paddingLeft: '24px',
+                      paddingRight: '24px',
+                      gap: '20px'
+                    },
+                    [theme.breakpoints.down('sm')]: {
+                      gridTemplateColumns: 'repeat(4, 1fr)',
+                      gap: '16px'
+                    }
+                  }}
+                >
+                  <Box sx={{ gridColumn: '1 / -1' }}>
+                    <Header />
+                  </Box>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
+                  <Box sx={{ gridColumn: '1 / -1' }}>
+                    <Footer />
+                  </Box>
+                </Container>
+              </Box>
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </ThemeRegistry>
       </body>
     </html>
   );
