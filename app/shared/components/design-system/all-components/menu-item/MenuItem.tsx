@@ -7,13 +7,15 @@ interface CustomMenuItemProps extends MenuItemProps {
   selected?: boolean;
 }
 
+type ReadonlyCustomMenuItemProps = Readonly<CustomMenuItemProps>;
+
 export default function CustomMenuItem({
   children,
   selected = false,
   disabled,
   onClick,
   ...props
-}: CustomMenuItemProps) {
+}: ReadonlyCustomMenuItemProps) {
   return (
     <MenuItem sx={menuItemStyles} selected={selected} disabled={disabled} onClick={onClick} {...props}>
       {children}
