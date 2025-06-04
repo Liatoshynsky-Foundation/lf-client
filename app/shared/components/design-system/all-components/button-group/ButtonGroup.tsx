@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import { Box, BoxProps } from '@mui/material';
-import { styles } from './ButtonGroup.styles';
+import { styles, defaultButtonGroupColorScheme } from './ButtonGroup.styles';
 
 interface ButtonGroupColorSettings {
   selectedButtonColor: string;
@@ -11,39 +11,31 @@ interface ButtonGroupColorSettings {
 }
 
 interface ButtonGroupProps extends BoxProps {
-  buttons: string[];
+  buttons: React.ReactNode[];
   defaultActiveButton?: number;
   colorSettings?: ButtonGroupColorSettings;
 }
 
-const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings }: ButtonGroupProps) => {
+const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props }: ButtonGroupProps) => {
   const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
     left: 0,
     width: 0
   });
 
-  const {
-    selectedButtonColor = '#190D03',
-    selectedButtonTextColor = '#FCFCFC',
-    groupBackgroundColor = '#f0f0f0',
-    buttonTextColor = '#190D03'
-  } = colorSettings || {};
+  const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
+    colorSettings ?? defaultButtonGroupColorScheme;
 
-  // Create a ref array
   const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  // Update the indicator position/width when activeButton or buttons change.
   useLayoutEffect(() => {
     if (activeButton === null || !buttons[activeButton]) {
-      // Reset indicator if no active button
       setIndicatorStyle({ left: 0, width: 0 });
       return;
     }
 
     const currentButton = buttonRefs.current[activeButton];
     if (currentButton && currentButton.parentElement) {
-      // Get bounding rects in relation to the container
       const buttonRect = currentButton.getBoundingClientRect();
       const containerRect = currentButton.parentElement.getBoundingClientRect();
 
@@ -62,8 +54,9 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings }: Button
         color: buttonTextColor,
         ...sx
       }}
+      role="group"
+      {...props}
     >
-      {/* Animated indicator */}
       <Box
         sx={{
           ...styles.selectedButton,
@@ -72,6 +65,8 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings }: Button
           left: indicatorStyle.left,
           width: indicatorStyle.width
         }}
+        role="presentation"
+        aria-hidden="true"
       />
       {buttons.map((buttonName, idx) => (
         <Box
@@ -80,7 +75,6 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings }: Button
             buttonRefs.current[idx] = el;
           }}
           sx={{
-            ...styles.defaultButton,
             color: idx === activeButton ? selectedButtonTextColor : buttonTextColor
           }}
           onClick={() => setActiveButton(idx)}

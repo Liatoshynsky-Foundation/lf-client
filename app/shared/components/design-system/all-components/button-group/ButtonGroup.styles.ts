@@ -1,3 +1,10 @@
+export const defaultButtonGroupColorScheme = {
+  selectedButtonColor: '#190D03',
+  selectedButtonTextColor: '#FCFCFC',
+  groupBackgroundColor: '#f0f0f0',
+  buttonTextColor: '#190D03'
+};
+
 export const styles = {
   selectedButton: {
     position: 'absolute',
@@ -14,22 +21,23 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '9999px',
-    backgroundColor: '#f0f0f0',
     padding: '8px',
-    position: 'relative', // Container must be relative.
-    overflow: 'hidden' // So the indicator doesn't spill out.
+    position: 'relative',
+    overflow: 'hidden',
+    width: 'fit-content'
   },
   defaultButton: {
     display: 'inline-block',
     borderRadius: '9999px',
-    color: '#190D03',
+    color: 'inherit',
     cursor: 'pointer',
-    position: 'relative', // Place buttons on top of the indicator.
+    position: 'relative',
     zIndex: 1,
     marginRight: '4px',
     padding: '1px 16px',
+    textTransform: 'none',
     '&:last-child': {
-      marginRight: 0 // Remove margin for the last button
+      marginRight: 0
     }
   }
 };
