@@ -9,20 +9,20 @@ export const FilterSelectColors = {
   borderDisabled: '#D9D9D9'
 };
 
+function getBackgroundColor(variant: 'filled' | 'outlined', disabled: boolean): string {
+  if (disabled) return FilterSelectColors.bgFilledDisabled;
+  if (variant === 'outlined') return 'transparent';
+  return FilterSelectColors.bgFilledDefault;
+}
+
+function getBorder(variant: 'filled' | 'outlined', disabled: boolean): string {
+  if (variant !== 'outlined') return 'none';
+  const borderColor = disabled ? FilterSelectColors.borderDisabled : FilterSelectColors.borderOutlined;
+  return `1px solid ${borderColor}`;
+}
+
 export const filterSelectStyles = {
   root: (variant: 'filled' | 'outlined', disabled: boolean): SxProps => {
-    const isOutlined = variant === 'outlined';
-
-    const backgroundColor = disabled
-      ? FilterSelectColors.bgFilledDisabled
-      : isOutlined
-        ? 'transparent'
-        : FilterSelectColors.bgFilledDefault;
-
-    const borderColor = disabled ? FilterSelectColors.borderDisabled : FilterSelectColors.borderOutlined;
-
-    const border = isOutlined ? `1px solid ${borderColor}` : 'none';
-
     return {
       display: 'flex',
       alignItems: 'center',
@@ -30,8 +30,8 @@ export const filterSelectStyles = {
       gap: '8px',
       borderRadius: '8px',
       padding: '6px 8px 6px 16px',
-      backgroundColor,
-      border,
+      backgroundColor: getBackgroundColor(variant, disabled),
+      border: getBorder(variant, disabled),
       cursor: disabled ? 'not-allowed' : 'pointer',
       transition: 'background-color 0.2s',
 
