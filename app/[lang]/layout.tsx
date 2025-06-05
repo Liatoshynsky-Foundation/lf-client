@@ -8,7 +8,8 @@ import { ReactNode } from 'react';
 import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
 import { routing } from '~/i18n/routing';
 import { notFound } from 'next/navigation';
-
+import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
+import ThemeProvider from '~/shared/components/design-system/all-components/theme/ThemeProvider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']
@@ -40,27 +41,41 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
-
   return (
     <html lang={lang}>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
         <NextIntlClientProvider>
-          <Container
-            maxWidth="md"
-            sx={{
-              border: '1px solid #ccc',
-              padding: '20px',
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minWidth: '100%'
-            }}
-          >
-            <Header />
-            {children}
-            <Footer />
-          </Container>
+          <ThemeProvider>
+            <Container
+              sx={{
+                border: '1px solid #ccc',
+                padding: '20px',
+                height: '100vh',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(12, auto)',
+                gap: '40px',
+                maxWidth: '1920px !important',
+                paddingLeft: '72px',
+                paddingRight: '72px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '100%',
+                [theme.breakpoints.down('sm')]: {
+                  gridTemplateColumns: 'repeat(8, auto)'
+                },
+                [theme.breakpoints.down('xs')]: {
+                  gridTemplateColumns: 'repeat(4, auto)',
+                  paddingLeft: '24px',
+                  paddingRight: '24px',
+                  gap: '16px'
+                }
+              }}
+            >
+              <Header />
+              {children}
+              <Footer />
+            </Container>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
