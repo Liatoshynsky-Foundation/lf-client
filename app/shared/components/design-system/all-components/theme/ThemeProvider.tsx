@@ -1,7 +1,9 @@
 'use client';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material';
 import { theme } from './Theme';
-
-export default function ThemeProvider({ children }: { children: Readonly<React.ReactNode> }) {
+interface ThemeProviderProps {
+  children: React.ReactNode;
+}
+export default function ThemeProvider({ children }: ThemeProviderProps) {
   return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
 }
