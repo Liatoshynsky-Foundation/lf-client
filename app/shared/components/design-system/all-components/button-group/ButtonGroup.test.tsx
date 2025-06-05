@@ -97,7 +97,7 @@ describe('Button Group', () => {
     it('should apply custom styles from colorSettings', () => {
       render(<ButtonGroup buttons={mockButtons} colorSettings={mockColorSettings} />);
 
-      const buttonGroup = screen.getByRole('group');
+      const buttonGroup = screen.getByLabelText('Button Group');
       expect(buttonGroup).toHaveStyle(`background-color: ${mockColorSettings.groupBackgroundColor}`);
       expect(buttonGroup).toHaveStyle(`color: ${mockColorSettings.buttonTextColor}`);
     });

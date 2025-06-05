@@ -23,10 +23,10 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
     width: 0
   });
 
+  const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
+
   const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
     colorSettings ?? defaultButtonGroupColorScheme;
-
-  const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   useLayoutEffect(() => {
     if (activeButton === null || !buttons[activeButton]) {
@@ -35,7 +35,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
     }
 
     const currentButton = buttonRefs.current[activeButton];
-    if (currentButton && currentButton.parentElement) {
+    if (currentButton?.parentElement) {
       const buttonRect = currentButton.getBoundingClientRect();
       const containerRect = currentButton.parentElement.getBoundingClientRect();
 
@@ -49,12 +49,12 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
   return (
     <Box
       sx={{
+        ...sx,
         ...styles.defaultButtonGroup,
         backgroundColor: groupBackgroundColor,
-        color: buttonTextColor,
-        ...sx
+        color: buttonTextColor
       }}
-      role="group"
+      aria-label="Button Group"
       {...props}
     >
       <Box
@@ -68,9 +68,9 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
         role="presentation"
         aria-hidden="true"
       />
-      {buttons.map((buttonName, idx) => (
+      {buttons.map((button, idx) => (
         <Box
-          key={idx}
+          key={(button as React.ReactElement).key}
           ref={(el: HTMLDivElement | null) => {
             buttonRefs.current[idx] = el;
           }}
@@ -79,7 +79,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
           }}
           onClick={() => setActiveButton(idx)}
         >
-          {buttonName}
+          {button}
         </Box>
       ))}
     </Box>
