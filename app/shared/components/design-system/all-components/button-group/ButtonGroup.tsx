@@ -28,6 +28,23 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
   const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
     colorSettings ?? defaultButtonGroupColorScheme;
 
+  let padding = 4;
+  if (sx && typeof sx === 'object' && !Array.isArray(sx) && 'padding' in sx) {
+    const paddingVal = (sx as { padding?: number | string }).padding ?? 0;
+
+    if (typeof paddingVal === 'number') {
+      padding = paddingVal;
+    } else if (typeof paddingVal === 'string') {
+      const paddingMatch = paddingVal.replace(/px$/, '');
+      if (!/^\d{1,5}(\.\d{1,3})?$/.test(paddingMatch)) {
+        throw new Error(`Invalid padding value: ${paddingVal}, must be a number or a string ending with 'px'.`);
+      }
+
+      padding = parseFloat(paddingMatch);
+    }
+  }
+  const rightMargin = padding / 2;
+
   useLayoutEffect(() => {
     if (activeButton === null || !buttons[activeButton]) {
       setIndicatorStyle({ left: 0, width: 0 });
@@ -40,8 +57,8 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       const containerRect = currentButton.parentElement.getBoundingClientRect();
 
       setIndicatorStyle({
-        left: buttonRect.left - containerRect.left - 5,
-        width: buttonRect.width + 10
+        left: buttonRect.left - containerRect.left - (padding - 2), // - (padding - (half of padding from height))
+        width: buttonRect.width + 2 * (padding - 2) // + 2 * (padding - (half of padding from height))
       });
     }
   }, [activeButton, buttons]);
@@ -49,8 +66,8 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
   return (
     <Box
       sx={{
-        ...sx,
         ...styles.defaultButtonGroup,
+        ...sx,
         backgroundColor: groupBackgroundColor,
         color: buttonTextColor
       }}
@@ -75,6 +92,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
             buttonRefs.current[idx] = el;
           }}
           sx={{
+            marginRight: idx < buttons.length - 1 ? `${rightMargin}px` : 0,
             color: idx === activeButton ? selectedButtonTextColor : buttonTextColor
           }}
           onClick={() => setActiveButton(idx)}

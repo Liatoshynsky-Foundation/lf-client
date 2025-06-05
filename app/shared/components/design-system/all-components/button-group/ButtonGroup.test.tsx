@@ -89,8 +89,8 @@ describe('Button Group', () => {
       const button2 = screen.getByText('Button 2').parentElement as HTMLElement;
       const indicator = screen.getByRole('presentation', { hidden: true });
 
-      expect(indicator).toHaveStyle(`left: ${button2.offsetLeft - 5}px`);
-      expect(indicator).toHaveStyle(`width: ${button2.offsetWidth + 10}px`);
+      expect(indicator).toHaveStyle(`left: ${button2.offsetLeft - 2}px`);
+      expect(indicator).toHaveStyle(`width: ${button2.offsetWidth + 4}px`);
       expect(button2).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
     });
 

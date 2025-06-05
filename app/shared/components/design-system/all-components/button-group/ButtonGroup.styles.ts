@@ -10,7 +10,6 @@ export const styles = {
     position: 'absolute',
     top: 2,
     height: 'calc(100% - 4px)',
-    backgroundColor: '#190D03',
     borderRadius: '9999px',
     transition: 'all 0.3s ease',
     zIndex: 0
@@ -21,7 +20,8 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '9999px',
-    padding: '8px',
+    padding: '4px',
+    fontFamily: 'Mulish, sans-serif',
     position: 'relative',
     overflow: 'hidden',
     width: 'fit-content'
@@ -30,6 +30,7 @@ export const styles = {
     display: 'inline-block',
     borderRadius: '9999px',
     color: 'inherit',
+    fontFamily: 'inherit',
     cursor: 'pointer',
     position: 'relative',
     zIndex: 1,
