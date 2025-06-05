@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import React from 'react';
+
+import { ButtonData } from '../types';
+
 import Button from '~/shared/components/design-system/all-components/button/Button';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
-import Link from 'next/link';
-import { ButtonData } from '../types';
 
 type ContactUsDataProps = {
   data: ButtonData;

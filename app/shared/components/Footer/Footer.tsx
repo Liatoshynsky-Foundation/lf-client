@@ -5,8 +5,6 @@ import React from 'react';
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 
-import DonationButton from './DonationButton/DonationButton';
-import FooterNavigation from './FooterNavigation/FooterNavigation';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 import { contacts, sections, SocialMedia } from './Footer.consts';
