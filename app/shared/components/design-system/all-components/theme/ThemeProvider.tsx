@@ -4,6 +4,6 @@ import { theme } from './Theme';
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
-export default function ThemeProvider({ children }: ThemeProviderProps) {
+export default function ThemeProvider({ children }: Readonly<ThemeProviderProps>) {
   return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
 }
