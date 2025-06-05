@@ -4,7 +4,7 @@ import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrig
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import { getTranslations } from 'next-intl/server';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
-import DonationButton from './DonationButton/DonationButton';
+import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
 
 export const footerData = {
   text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
@@ -65,14 +65,19 @@ export default async function Footer() {
 
   const donationButtonData = {
     text: t('donationButton'),
-    link: './donate'
+    link: '/donate'
+  };
+
+  const contactUsButtonData = {
+    text: t('contactUsButton'),
+    link: '/contact-us'
   };
 
   return (
     <Box component="footer">
       <FooterNavigation sections={sections} />
       <FooterContactInfo contacts={contacts} />
-      <DonationButton data={donationButtonData} />
+      <FooterContactAndSupport contactUs={contactUsButtonData} donation={donationButtonData} />
       <FooterCopyrights text={footerData.text} links={footerData.links} />
     </Box>
   );
