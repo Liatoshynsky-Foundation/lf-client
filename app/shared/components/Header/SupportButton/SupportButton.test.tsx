@@ -7,7 +7,11 @@ const mockData = {
   link: '/support'
 };
 
-describe('DonationButton', () => {
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
+describe('SupportButton', () => {
   beforeEach(() => {
     render(<SupportButton data={mockData} />);
   });
