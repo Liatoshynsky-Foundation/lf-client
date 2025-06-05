@@ -5,7 +5,7 @@ const basePhoto = {
     transform: 'scale(1.09)',
     zIndex: 2
   },
-  width: { xs: 95, sm: 132, md: 180, lg: 220 },
+  width: { xs: 95, sm: 127, md: 160, lg: 200 },
   aspectRatio: '3 / 4',
   cursor: 'pointer'
 };
@@ -35,8 +35,8 @@ export const styles = {
   },
   logo: {
     position: 'absolute',
-    bottom: '-33px',
-    right: { xs: '10px', sm: '30px', md: '50px', lg: '70px' },
+    bottom: '-38px',
+    right: { xs: '0', sm: '20px', md: '30px', lg: '55px' },
     zIndex: 3
   }
 };

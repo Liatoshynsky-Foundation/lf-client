@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
 import Logo from './Logo';
+import React from 'react';
+
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
 
 jest.mock('next/dynamic');
 
@@ -11,22 +16,24 @@ jest.mock('../../../../public/images/logo.svg', () => ({
   )
 }));
 
-describe('Logo test', () => {
-  test('should render Logo component for header', () => {
+describe('Logo component', () => {
+  it('renders with default variant and wraps in a link', () => {
     render(<Logo />);
-    const logo = screen.getByRole('img', { name: 'Company logo' });
 
-    // const logo = screen.getByRole('img');
+    const logo = screen.getByTestId('icon-svg');
+    const parent = logo.closest('a');
+
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('width', '96');
-    expect(logo).toHaveAttribute('height', '40');
+    expect(parent).toBeInTheDocument();
+    expect(parent).toHaveAttribute('href', '/');
   });
 
-  test('should render Logo component for footer', () => {
-    render(<Logo variant="footer" />);
-    const logo = screen.getByRole('img');
+  it('renders office variant without link', () => {
+    render(<Logo variant="office" />);
+
+    const logo = screen.getByTestId('icon-svg');
+
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('width', '127');
-    expect(logo).toHaveAttribute('height', '53');
+    expect(logo.closest('a')).toBeNull();
   });
 });
