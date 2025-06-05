@@ -1,11 +1,16 @@
 import { screen, render } from '@testing-library/react';
 import NotFoundPage from './not-found';
+import React from 'react';
+
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {
     const translations: Record<string, string> = {
-      'languageNotFound': '404 Language',
-      'goHome': 'go home',
+      languageNotFound: '404 Language',
+      goHome: 'go home'
     };
     return translations[key];
   })
