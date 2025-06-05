@@ -14,7 +14,10 @@ export const imageSizes = (isLaptopAndAbove: boolean) => {
 
 export const styles = {
   container: (mb?: number | string) => ({
-    display: 'contents',
+    display: 'grid',
+    gridTemplateColumns: 'subgrid',
+    gridColumn: '1 / -1',
+    alignItems: 'center',
     mb: `${mb ?? 72}px`
   }),
   title: {
