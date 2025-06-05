@@ -1,8 +1,8 @@
 import type { Align } from '~/types/types/quoteComponent';
 
 export const quoteSizes = {
-  width: { xs: '241px', sm: '231px', md: '305px', lg: '367px', xl: '408px' },
   height: { xs: '279px', sm: '293px', md: '315px', lg: '266px', xl: '266px' },
+  width: { xs: '240px', sm: '320px', md: '370px', lg: '430px', xl: '456px' },
   icon: { xs: '50px', sm: '60px' },
   textGap: { xs: '16px', md: '24px' }
 };

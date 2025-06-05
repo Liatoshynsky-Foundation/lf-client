@@ -10,7 +10,7 @@ export const styles = {
   },
   trapezoid: {
     background: '#FCBD28',
-    clipPath: 'polygon( 0% 7%, 100% 0%, 100% 93%, 0% 100%)',
+    clipPath: 'polygon( 0% 2%, 100% 0%, 100% 98%, 0% 100%)',
     position: 'absolute',
     width: '100%',
     height: '100%',
@@ -36,28 +36,33 @@ export const styles = {
   },
   textBlock: {
     position: 'relative',
-    paddingLeft: { xs: '20px', md: '40px', lg: '80px' },
-    paddingTop: { xs: 0, sm: '280px', md: '260px', lg: '210px' },
+    paddingLeft: { xs: '20px', sm: '30px', md: '40px', lg: '80px' },
+    paddingTop: { xs: 0, sm: '260px', md: '200px', lg: '165px' },
     zIndex: 1,
     textAlign: { xs: 'left' }
   },
   indentedLine: {
     display: 'block',
-    paddingLeft: { xs: '15px', sm: '28px', md: '70px', lg: '125px' }
+    paddingLeft: { xs: '15px', sm: '28px', md: '110px', lg: '125px' }
   },
   buttonBlock: {
     position: { xs: 'relative', sm: 'absolute' },
-    bottom: { xs: 0, sm: '60px', md: '100px', lg: '140px' },
+    bottom: { xs: 0, sm: '85px', md: '100px', lg: '140px' },
     left: { xs: 0, sm: '30px', md: '60px', lg: '110px' },
-    zIndex: 2,
     alignSelf: { xs: 'center' }
   },
   text: {
     fontFamily: 'Oswald, sans-serif',
-    fontWeight: 700,
-    verticalAlign: 'middle',
-    fontSize: { xs: '38px', sm: '63px', md: '92px', lg: '116px' },
+    fontSize: { xs: '44px', sm: '68px', md: '92px', lg: '116px' },
     lineHeight: '100%',
-    letterSpacing: '-2px'
+    letterSpacing: '-2px',
+    color: 'white'
+  },
+  media: {
+    position: { xs: 'relative', sm: 'absolute' },
+    zIndex: 1,
+    bottom: { xs: '45px', sm: '120px', md: '92px', lg: '115px' },
+    right: { xs: 'auto', sm: '30px', md: '50px', lg: '100px' },
+    alignSelf: { xs: 'center' }
   }
 };
