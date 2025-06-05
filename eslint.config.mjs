@@ -40,7 +40,7 @@ const eslintConfig = [
       'simple-import-sort/imports': [
         'error',
         {
-          groups: [['^@?\\w'], ['^~/(components|containers|hooks)/'], ['^(~/(utils|constants|styles|types)/|\\.)']]
+          groups: [['^(\\u0000|@?\\w)'], ['^~/(components|containers|hooks)/'], ['^(~/(utils|constants|styles|types)/|\\.)']]
         }
       ],
       'simple-import-sort/exports': 'error'
