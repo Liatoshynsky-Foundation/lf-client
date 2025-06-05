@@ -10,7 +10,10 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',
-    '!app/**/*.test.{js,jsx,ts,tsx}' // Exclude test files from coverage
+    '!app/**/*.test.{js,jsx,ts,tsx}',
+    '!app/**/*.{types,d}.{ts,tsx}',
+    '!app/constants/**',
+    '!app/types/**'
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
