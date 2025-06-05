@@ -42,6 +42,7 @@ describe('SectionTitle', () => {
 
   it('should render title without icon', () => {
     render(<SectionTitle icon={false}>Test title</SectionTitle>);
+
     const title = screen.getByText('Test title');
     const icon = screen.queryByAltText('ellipse');
     expect(title).toBeInTheDocument();
