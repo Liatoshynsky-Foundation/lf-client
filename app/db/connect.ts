@@ -1,17 +1,18 @@
 import mongoose from 'mongoose';
+
+import { errors } from '~/constants/errors';
+
 import { mongoUrl } from '~/config';
 import logger from '~/middleware/logger/logger';
-import { errors } from '~/constants/errors';
 
 type MongooseGlobalCache = {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 };
 
-const cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache })
-  .mongoose ?? {
+const cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache }).mongoose ?? {
   conn: null,
-  promise: null,
+  promise: null
 };
 (global as { mongoose?: MongooseGlobalCache }).mongoose = cached;
 
@@ -25,7 +26,7 @@ async function dbConnect() {
   }
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
+      bufferCommands: false
     };
     cached.promise = mongoose.connect(mongoUrl, opts).then((mongoose) => {
       return mongoose;

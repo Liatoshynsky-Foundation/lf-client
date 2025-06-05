@@ -1,17 +1,8 @@
 'use client';
+import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } from '@mui/material';
 import { forwardRef, ReactNode } from 'react';
-import {
-  Button as MuiButton,
-  CircularProgress,
-  ButtonProps as MuiButtonProps,
-} from '@mui/material';
 
-import {
-  buttonBaseStyles,
-  variantStyles,
-  sizeStyles,
-  typographyStyles,
-} from './Button.styles';
+import { buttonBaseStyles, sizeStyles, typographyStyles, variantStyles } from './Button.styles';
 
 type Size = 'large' | 'medium' | 'small';
 
@@ -34,8 +25,7 @@ type BaseButtonProps = {
     }
 );
 
-export type ButtonProps = BaseButtonProps &
-  Omit<MuiButtonProps, keyof BaseButtonProps>;
+export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
 
 type Ref = MuiButtonProps['ref'];
 
@@ -53,11 +43,9 @@ const Button = forwardRef(
       children,
       ...props
     }: ButtonProps,
-    forwardedRef: Ref,
+    forwardedRef: Ref
   ) => {
-    const loader = (
-      <CircularProgress color="inherit" data-testid="loader" size={25} />
-    );
+    const loader = <CircularProgress color="inherit" data-testid="loader" size={25} />;
     const isDisabled = disabled ?? loading;
 
     const content = (
@@ -74,9 +62,7 @@ const Button = forwardRef(
           ...buttonBaseStyles,
           ...sizeStyles[size],
           ...typographyStyles[color]?.[size],
-          ...(color === 'tertiary'
-            ? variantStyles.tertiary.filled
-            : variantStyles[color]?.[variant]),
+          ...(color === 'tertiary' ? variantStyles.tertiary.filled : variantStyles[color]?.[variant])
         }}
         disabled={isDisabled}
         ref={forwardedRef}
@@ -92,7 +78,7 @@ const Button = forwardRef(
         )}
       </MuiButton>
     );
-  },
+  }
 );
 Button.displayName = 'Button';
 

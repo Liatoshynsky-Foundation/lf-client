@@ -1,4 +1,5 @@
-import { screen, render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+
 import NotFoundPage from './not-found';
 import React from 'react';
 

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import CustomCheckbox from './Checkbox';
 import userEvent from '@testing-library/user-event';
+
+import CustomCheckbox from './Checkbox';
 
 describe('CustomCheckbox', () => {
   const label = 'Label';
@@ -16,7 +17,6 @@ describe('CustomCheckbox', () => {
     expect(screen.getByRole('checkbox')).toBeChecked();
     await userEvent.click(screen.getByRole('checkbox'));
     expect(screen.queryByRole('checkbox')).not.toBeChecked();
-
   });
   it('should not toggle disabled checkbox', () => {
     render(<CustomCheckbox disabled label={label} />);
@@ -26,5 +26,4 @@ describe('CustomCheckbox', () => {
     render(<CustomCheckbox label={label} defaultChecked />);
     expect(screen.queryByRole('checkbox')).toBeChecked();
   });
-
 });

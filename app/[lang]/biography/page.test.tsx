@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+
 import Biography from './page';
 
 it('renders the Biography component correctly', async () => {

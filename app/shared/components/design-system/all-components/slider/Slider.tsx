@@ -1,5 +1,6 @@
+import { Box, Slider, SliderProps, Typography } from '@mui/material';
 import React from 'react';
-import { Box, Typography, Slider, SliderProps } from '@mui/material';
+
 import { sliderStyles } from './Slider.styles';
 
 export interface CustomSliderProps extends Omit<SliderProps, 'size' | 'valueLabelDisplay'> {
@@ -15,8 +16,8 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
 }) => {
   const marks = Array.isArray(value)
     ? Array.from({ length: Math.floor((max - min) / 5) + 1 }, (_, i) => ({
-      value: min + i * 5,
-    }))
+        value: min + i * 5
+      }))
     : undefined;
 
   return (
@@ -24,21 +25,21 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
       {Array.isArray(value) && (
         <Box sx={sliderStyles.valueContainer}>
           <Typography
-            variant='body2'
+            variant="body2"
             sx={{
               ...sliderStyles.valueLabel,
               left: `${((value[0] - min) / (max - min)) * 100}%`,
-              fontSize: sliderStyles.valueLabel.fontSize(size),
+              fontSize: sliderStyles.valueLabel.fontSize(size)
             }}
           >
             {value[0]}
           </Typography>
           <Typography
-            variant='body2'
+            variant="body2"
             sx={{
               ...sliderStyles.valueLabel,
               left: `${((value[1] - min) / (max - min)) * 100}%`,
-              fontSize: sliderStyles.valueLabel.fontSize(size),
+              fontSize: sliderStyles.valueLabel.fontSize(size)
             }}
           >
             {value[1]}
@@ -56,31 +57,31 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
           '& .MuiSlider-thumb': {
             ...sliderStyles.slider['& .MuiSlider-thumb'],
             width: sliderStyles.slider['& .MuiSlider-thumb'].width(size),
-            height: sliderStyles.slider['& .MuiSlider-thumb'].height(size),
+            height: sliderStyles.slider['& .MuiSlider-thumb'].height(size)
           },
           '& .MuiSlider-track': {
             ...sliderStyles.slider['& .MuiSlider-track'],
-            height: sliderStyles.slider['& .MuiSlider-track'].height(size),
+            height: sliderStyles.slider['& .MuiSlider-track'].height(size)
           },
           '& .MuiSlider-rail': {
             ...sliderStyles.slider['& .MuiSlider-rail'],
-            height: sliderStyles.slider['& .MuiSlider-rail'].height(size),
-          },
+            height: sliderStyles.slider['& .MuiSlider-rail'].height(size)
+          }
         }}
       />
       <Box sx={sliderStyles.minMaxContainer}>
         <Typography
-          variant='body2'
+          variant="body2"
           sx={{
-            fontSize: sliderStyles.minMaxLabel.fontSize(size),
+            fontSize: sliderStyles.minMaxLabel.fontSize(size)
           }}
         >
           {min}
         </Typography>
         <Typography
-          variant='body2'
+          variant="body2"
           sx={{
-            fontSize: sliderStyles.minMaxLabel.fontSize(size),
+            fontSize: sliderStyles.minMaxLabel.fontSize(size)
           }}
         >
           {max}
@@ -89,4 +90,3 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
     </Box>
   );
 };
-

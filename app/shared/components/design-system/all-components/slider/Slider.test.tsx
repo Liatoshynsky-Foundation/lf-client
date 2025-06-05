@@ -1,6 +1,7 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { DesignSystemSlider, CustomSliderProps } from './Slider';
+import React from 'react';
+
+import { CustomSliderProps, DesignSystemSlider } from './Slider';
 
 describe('DesignSystemSlider', () => {
   const renderComponent = (props: Partial<CustomSliderProps> = {}) =>
@@ -24,7 +25,7 @@ describe('DesignSystemSlider', () => {
     const thumb = document.querySelector('.MuiSlider-thumb');
     expect(thumb).toHaveStyle({
       width: '12px',
-      height: '12px',
+      height: '12px'
     });
   });
 
@@ -56,7 +57,7 @@ describe('DesignSystemSlider', () => {
     const thumb = document.querySelector('.MuiSlider-thumb');
     expect(thumb).toHaveStyle({
       width: '20px',
-      height: '20px',
+      height: '20px'
     });
   });
 });

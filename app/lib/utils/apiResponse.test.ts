@@ -1,5 +1,6 @@
-import { successResponse, errorResponse } from '~/utils/apiResponse';
 import { NextResponse } from 'next/server';
+
+import { errorResponse, successResponse } from '~/utils/apiResponse';
 
 jest.mock('next/server', () => ({
   NextResponse: {

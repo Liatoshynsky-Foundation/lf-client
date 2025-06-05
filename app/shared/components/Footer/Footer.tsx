@@ -1,8 +1,11 @@
 import { Box } from '@mui/material';
-import React from 'react';
-import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
-import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import { getTranslations } from 'next-intl/server';
+import React from 'react';
+
+import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
+import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
+
+import DonationButton from './DonationButton/DonationButton';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';

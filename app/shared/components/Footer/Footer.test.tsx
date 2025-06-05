@@ -1,5 +1,6 @@
-import Footer from '~/components/Footer/Footer';
 import { render, screen } from '@testing-library/react';
+
+import Footer from '~/components/Footer/Footer';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {

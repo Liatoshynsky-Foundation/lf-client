@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, IconButton } from '@mui/material';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
@@ -19,16 +20,10 @@ const stickHeights = [
   { id: 'stick-3', height: 30 },
   { id: 'stick-4', height: 13 },
   { id: 'stick-5', height: 22 },
-  { id: 'stick-6', height: 7 },
+  { id: 'stick-6', height: 7 }
 ];
 
-export default function AudioPlayer({
-  src,
-  trackName,
-  loop = false,
-  autoplay = false,
-  className,
-}: AudioPlayerProps) {
+export default function AudioPlayer({ src, trackName, loop = false, autoplay = false, className }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -134,7 +129,7 @@ export default function AudioPlayer({
                   ...styles.icon,
                   ...(isPlaying ? styles.iconAnimated : styles.iconStatic),
                   animationDelay: isPlaying ? `${i * 0.1}s` : undefined,
-                  height,
+                  height
                 }}
               />
             ))}

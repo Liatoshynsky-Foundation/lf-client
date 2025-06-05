@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import AudioPlayerPopover from './AudioPlayerPopover';
 
 const defaultProps = {
@@ -11,7 +12,7 @@ const defaultProps = {
   onTogglePlay: jest.fn(),
   onSeek: jest.fn(),
   trackName: 'Test Track',
-  error: null,
+  error: null
 };
 
 const mockBoundingClientRect = {
@@ -23,7 +24,7 @@ const mockBoundingClientRect = {
   height: 10,
   x: 0,
   y: 0,
-  toJSON: () => {},
+  toJSON: () => {}
 };
 
 describe('AudioPlayerPopover', () => {
@@ -40,18 +41,12 @@ describe('AudioPlayerPopover', () => {
 
   it('should render pause icon when isPlaying is true', () => {
     render(<AudioPlayerPopover {...defaultProps} isPlaying={true} />);
-    expect(
-      screen.getByRole('button', { name: /Pause audio/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Pause audio/i })).toBeInTheDocument();
   });
 
   it('should not render when anchorEl is null', () => {
-    const { container } = render(
-      <AudioPlayerPopover {...defaultProps} anchorEl={null} />,
-    );
-    expect(
-      container.querySelector('[role="presentation"]'),
-    ).not.toBeInTheDocument();
+    const { container } = render(<AudioPlayerPopover {...defaultProps} anchorEl={null} />);
+    expect(container.querySelector('[role="presentation"]')).not.toBeInTheDocument();
   });
 
   it('should call onTogglePlay when play button is clicked', () => {
@@ -80,19 +75,13 @@ describe('AudioPlayerPopover', () => {
 
       const onSeekMock = jest.fn();
 
-      render(
-        <AudioPlayerPopover
-          {...defaultProps}
-          anchorEl={anchor}
-          onSeek={onSeekMock}
-        />,
-      );
+      render(<AudioPlayerPopover {...defaultProps} anchorEl={anchor} onSeek={onSeekMock} />);
 
       const progressBar = await screen.findByRole('progress');
 
       Object.defineProperty(progressBar, 'getBoundingClientRect', {
         configurable: true,
-        value: () => mockBoundingClientRect,
+        value: () => mockBoundingClientRect
       });
 
       fireEvent.mouseDown(progressBar, { clientX: 150 });

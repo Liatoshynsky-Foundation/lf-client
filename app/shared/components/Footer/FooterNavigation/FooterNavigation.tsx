@@ -1,5 +1,6 @@
+import { Box, Link, Typography } from '@mui/material';
 import React, { FC } from 'react';
-import { Box, Typography, Link } from '@mui/material';
+
 import { styles } from './FooterNavigation.styles';
 
 type LinkItem = {
