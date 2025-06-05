@@ -1,15 +1,7 @@
 import { AppTypography } from '~/constants';
 
 export const imageSizes = (isLaptopAndAbove: boolean) => {
-  return isLaptopAndAbove
-    ? {
-        width: 32,
-        height: 30
-      }
-    : {
-        width: 22,
-        height: 20
-      };
+  return isLaptopAndAbove ? { width: 32, height: 30 } : { width: 22, height: 20 };
 };
 
 export const styles = {
