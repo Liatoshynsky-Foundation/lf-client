@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '~/shared/components/design-system/all-components/button/Button';
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 
 type SupportButtonData = {
   text: string;
@@ -13,7 +13,7 @@ type SupportButtonProps = {
 
 const SupportButton: React.FC<SupportButtonProps> = ({ data }) => {
   return (
-    <Link href={data.link} passHref>
+    <Link href={data.link}>
       <Button size="medium" variant="filled" color="tertiary" label={data.text} />
     </Link>
   );

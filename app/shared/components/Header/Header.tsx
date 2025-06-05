@@ -9,7 +9,7 @@ export default async function Header() {
 
   const supportButtonData = {
     text: t('supportButton'),
-    link: './support'
+    link: '/support'
   };
 
   return (
