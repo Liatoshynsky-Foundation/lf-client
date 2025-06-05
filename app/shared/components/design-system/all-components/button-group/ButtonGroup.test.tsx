@@ -63,17 +63,13 @@ describe('Button Group', () => {
 
     it('should call the corresponding onClick handler when a button is clicked', async () => {
       const user = userEvent.setup();
-      const button1 = screen.getByText('Button 1');
-      const button2 = screen.getByText('Button 2');
-      const button3 = screen.getByText('Button 3');
-
-      await user.click(button1);
+      await user.click(screen.getByText('Button 1'));
       expect(buttonClickHandlers.button1Click).toHaveBeenCalledTimes(1);
 
-      await user.click(button2);
+      await user.click(screen.getByText('Button 2'));
       expect(buttonClickHandlers.button2Click).toHaveBeenCalledTimes(1);
 
-      await user.click(button3);
+      await user.click(screen.getByText('Button 3'));
       expect(buttonClickHandlers.button3Click).toHaveBeenCalledTimes(1);
     });
   });
@@ -85,7 +81,6 @@ describe('Button Group', () => {
 
     it('should place the indicator on the default active button if provided', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} />);
-
       const button2 = screen.getByText('Button 2').parentElement as HTMLElement;
       const indicator = screen.getByRole('presentation', { hidden: true });
 
@@ -96,10 +91,52 @@ describe('Button Group', () => {
 
     it('should apply custom styles from colorSettings', () => {
       render(<ButtonGroup buttons={mockButtons} colorSettings={mockColorSettings} />);
-
       const buttonGroup = screen.getByLabelText('Button Group');
       expect(buttonGroup).toHaveStyle(`background-color: ${mockColorSettings.groupBackgroundColor}`);
       expect(buttonGroup).toHaveStyle(`color: ${mockColorSettings.buttonTextColor}`);
+    });
+  });
+
+  describe('Padding modifications', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should compute indicator style based on custom string padding', () => {
+      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} sx={{ padding: '12px' }} />);
+
+      const indicator = screen.getByRole('presentation', { hidden: true });
+      expect(indicator).toHaveStyle('left: -10px');
+      expect(indicator).toHaveStyle('width: 20px');
+    });
+
+    it('should compute indicator style based on custom number padding', () => {
+      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: 12 }} />);
+
+      const indicator = screen.getByRole('presentation', { hidden: true });
+      expect(indicator).toHaveStyle('left: -10px');
+      expect(indicator).toHaveStyle('width: 20px');
+    });
+
+    it('should throw error if provided padding is not a number or string', () => {
+      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: undefined }} />);
+
+      const indicator = screen.getByRole('presentation', { hidden: true });
+      expect(indicator).toHaveStyle('left: -2px');
+      expect(indicator).toHaveStyle('width: 4px');
+    });
+
+    it('should throw error if provided padding string is invalid', () => {
+      expect(() => render(<ButtonGroup buttons={mockButtons} sx={{ padding: '12em' }} />)).toThrow(
+        /Invalid padding value: 12em/
+      );
+    });
+
+    it('should set indicator style to zero when activeButton is out of range', () => {
+      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={5} />);
+      const indicator = screen.getByRole('presentation', { hidden: true });
+      expect(indicator).toHaveStyle('left: 0px');
+      expect(indicator).toHaveStyle('width: 0px');
     });
   });
 });

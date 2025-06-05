@@ -30,7 +30,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
 
   let padding = 4;
   if (sx && typeof sx === 'object' && !Array.isArray(sx) && 'padding' in sx) {
-    const paddingVal = (sx as { padding?: number | string }).padding ?? 0;
+    const paddingVal = (sx as { padding?: number | string }).padding ?? 4;
 
     if (typeof paddingVal === 'number') {
       padding = paddingVal;
@@ -57,8 +57,8 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       const containerRect = currentButton.parentElement.getBoundingClientRect();
 
       setIndicatorStyle({
-        left: buttonRect.left - containerRect.left - (padding - 2), // - (padding - (half of padding from height))
-        width: buttonRect.width + 2 * (padding - 2) // + 2 * (padding - (half of padding from height))
+        left: buttonRect.left - containerRect.left - (padding - 2),
+        width: buttonRect.width + 2 * (padding - 2)
       });
     }
   }, [activeButton, buttons]);
