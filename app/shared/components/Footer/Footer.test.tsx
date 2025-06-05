@@ -1,5 +1,5 @@
-import Footer from '~/shared/components/Footer/Footer';
-import {render, screen} from '@testing-library/react';
+import Footer from '~/components/Footer/Footer';
+import { render, screen } from '@testing-library/react';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {
@@ -7,7 +7,7 @@ jest.mock('next-intl/server', () => ({
       copyright: '© 2025 My Company',
       linkPrivacy: 'Privacy Policy',
       linkTerms: 'Terms of Use',
-      linkMedia: 'Media Kit',
+      linkMedia: 'Media Kit'
     };
     return translations[key];
   })
