@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import FooterCopyrights from '~/shared/components/Footer/FooterCopyrights/FooterCopyrights';
-import FooterContactInfo from '~/shared/components/Footer/FooterContactInfo/FooterContactInfo';
+import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
+import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import { getTranslations } from 'next-intl/server';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 import DonationButton from './DonationButton/DonationButton';

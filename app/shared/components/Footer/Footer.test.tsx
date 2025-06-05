@@ -1,4 +1,4 @@
-import Footer from '~/shared/components/Footer/Footer';
+import Footer from '~/components/Footer/Footer';
 import { render, screen } from '@testing-library/react';
 
 jest.mock('@public/icons/donation-button.svg', () => ({

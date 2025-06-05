@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish } from 'next/font/google';
-import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header/Header';
+import Footer from '~/components/Footer/Footer';
+import Header from '~/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
 import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
-import { routing } from '../../i18n/routing';
+import { routing } from '~/i18n/routing';
 import { notFound } from 'next/navigation';
 
 const geistSans = Geist({

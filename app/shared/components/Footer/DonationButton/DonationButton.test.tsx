@@ -27,8 +27,7 @@ describe('DonationButton', () => {
   });
 
   it('should render button with the icon', () => {
-    const icon = screen.getByTestId('donation-icon');
+    const icon = screen.getByAltText('Donation Button');
     expect(icon).toBeInTheDocument();
-    expect(icon.parentElement).toHaveAttribute('aria-label', 'Donation Button');
   });
 });
