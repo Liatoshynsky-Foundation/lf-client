@@ -22,6 +22,6 @@ export const styles = {
     fontSize: { xs: '20px', md: '28px' },
     color: '#190D03',
     letterSpacing: '0px',
-    gridColumn: '6 / -1'
+    gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   }
 };
