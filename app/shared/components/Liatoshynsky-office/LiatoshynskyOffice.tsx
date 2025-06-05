@@ -5,15 +5,38 @@ import { styles } from './LiatoshynskyOffice.styles';
 import OfficeMedia from '~/shared/components/Liatoshynsky-office/office-media/OfficeMedia';
 import { ImageData } from '~/types/types/officeMedia';
 import { Oswald } from 'next/font/google';
+import { Link } from '~/i18n/navigation';
+import React from 'react';
+import { getTranslations } from 'next-intl/server';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = () => {
+const LiatoshynskyOffice = async () => {
+  const officeT = await getTranslations('home.liatoshynskyOffice');
+  const quoteT = await getTranslations('quote');
+
   const images: ImageData[] = [
     { src: '/images/lf-office-2.png', alt: 'Фото 1', styleKey: 'photo1' },
     { src: '/images/lf-office-1.png', alt: 'Фото 2', styleKey: 'photo2' },
     { src: '/images/lf-office-3.png', alt: 'Фото 3', styleKey: 'photo3' }
   ];
+
+  const liatoshynskyOfficeInfo = {
+    office: officeT('office'),
+    name: officeT('name')
+  };
+
+  const quoteInfo = {
+    mainText: quoteT('mainText'),
+    sourceTittle: quoteT('sourceText.tittle'),
+    sourceData: quoteT('sourceText.data'),
+    sourcePlace: quoteT('sourceText.place')
+  };
+
+  const buttonInfo = {
+    link: '/office',
+    text: officeT('goToOfficeButton')
+  };
 
   return (
     <Box sx={styles.mainContainer}>
@@ -21,13 +44,11 @@ const LiatoshynskyOffice = () => {
       <Box sx={styles.contentContainer}>
         <Box sx={styles.quoteBlock}>
           <Quote
-            quoteText={
-              'Ах, мила, милий мій котику, коли ж нарешті прийде той час, коли ми будемо разом із тобою, у вітальні, де так гарно, стоїть рояль і багато нот.'
-            }
+            quoteText={quoteInfo.mainText}
             sourceText={{
-              tittle: 'Лист Бориса Лятошинського Маргариті Царевич',
-              data: '29 вересня 1957',
-              place: 'Берлін'
+              tittle: quoteInfo.sourceTittle,
+              data: quoteInfo.sourceData,
+              place: quoteInfo.sourcePlace
             }}
             quoteIconColor="black"
             mainTextColor="black"
@@ -35,16 +56,16 @@ const LiatoshynskyOffice = () => {
           />
         </Box>
         <Box sx={styles.textBlock} className={oswald.className}>
-          <Typography sx={styles.text}>КабІНет</Typography>
-          <Typography sx={[styles.text, styles.indentedLine]}>ЛЯтоШинСькоГO</Typography>
+          <Typography sx={styles.text}>{liatoshynskyOfficeInfo.office}</Typography>
+          <Typography sx={[styles.text, styles.indentedLine]}>{liatoshynskyOfficeInfo.name}</Typography>
         </Box>
         <Box sx={styles.media}>
           <OfficeMedia images={images} />
         </Box>
         <Box sx={styles.buttonBlock}>
-          <Button size="large" color="primary">
-            Увійти до кабінету
-          </Button>
+          <Link href={buttonInfo.link} passHref>
+            <Button size="large" color="primary" label={buttonInfo.text} />
+          </Link>
         </Box>
       </Box>
     </Box>
