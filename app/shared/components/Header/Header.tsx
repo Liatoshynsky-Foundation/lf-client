@@ -1,5 +1,3 @@
-'use client';
-
 import { Box } from '@mui/material';
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
@@ -15,7 +13,12 @@ export default async function Header() {
   };
 
   return (
-      <AudioPlayer src="sample-music.mp3" trackName="цо (авторський оркестровий варіант)" autoplay={false} />
+    <Box component="header">
+      <AudioPlayer
+        src="music/sample-music.mp3"
+        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
+        autoplay={false}
+      />
       <SupportButton data={supportButtonData} />
     </Box>
   );
