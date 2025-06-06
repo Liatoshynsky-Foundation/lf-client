@@ -18,7 +18,7 @@ const mockUseBreakpoints = (overrides = {}) => {
 describe('SectionTitle', () => {
   it('should render title with icon on laptopAndAbove', () => {
     mockUseBreakpoints({ isLaptopAndAbove: true });
-    render(<SectionTitle>Test title</SectionTitle>);
+    render(<SectionTitle title="Test title" />);
 
     const title = screen.getByText('Test title');
     const icon = screen.getByAltText('ellipse');
@@ -30,7 +30,7 @@ describe('SectionTitle', () => {
 
   it('should render title with icon on tablet and mobile', () => {
     mockUseBreakpoints({ isTablet: true });
-    render(<SectionTitle>Test title</SectionTitle>);
+    render(<SectionTitle title="Test title" />);
 
     const title = screen.getByText('Test title');
     const icon = screen.getByAltText('ellipse');
@@ -41,7 +41,7 @@ describe('SectionTitle', () => {
   });
 
   it('should render title without icon', () => {
-    render(<SectionTitle icon={false}>Test title</SectionTitle>);
+    render(<SectionTitle icon={false} title="Test title" />);
 
     const title = screen.getByText('Test title');
     const icon = screen.queryByAltText('ellipse');

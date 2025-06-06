@@ -8,17 +8,17 @@ import { imageSizes, styles } from './SectionTitle.styles';
 interface SectionTitleProps {
   icon?: boolean;
   mb?: number | string;
-  children: React.ReactNode;
+  title: string;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, children }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title }) => {
   const { isLaptopAndAbove } = useBreakpoints();
 
   return (
     <Box sx={styles.container(mb)}>
       {icon && <SvgImage src="/icons/ellipse.svg" alt="ellipse" {...imageSizes(isLaptopAndAbove)} />}
       <Typography sx={styles.title} component="h2">
-        {children}
+        {title}
       </Typography>
     </Box>
   );
