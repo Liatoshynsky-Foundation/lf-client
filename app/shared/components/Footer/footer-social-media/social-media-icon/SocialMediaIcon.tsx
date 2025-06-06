@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { SocialMediaTypes } from '~/types/enums/common.enums';
