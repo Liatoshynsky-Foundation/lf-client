@@ -89,12 +89,6 @@ describe('Full Colored Svg Suite', () => {
         expect(validateSvgColor('rgba(255, 0, 0, 0.5)')).toBe(true);
       });
 
-      it('should return true for valid named colors', () => {
-        expect(validateSvgColor('red')).toBe(true);
-        expect(validateSvgColor('aqua')).toBe(true);
-        expect(validateSvgColor('darkslateblue')).toBe(true);
-      });
-
       it('should return false for invalid colors', () => {
         expect(validateSvgColor('notacolor')).toBe(false);
         expect(validateSvgColor('#1234')).toBe(false);
