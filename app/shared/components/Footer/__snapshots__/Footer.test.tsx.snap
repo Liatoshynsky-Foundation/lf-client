@@ -216,7 +216,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-1t24p43"
+        class="MuiBox-root css-1crd4se"
       >
         <div
           class="MuiBox-root css-tud7ce"
@@ -225,7 +225,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
             href="/contact-us"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1xopkoy-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-rl35mr-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="button"
             >
@@ -248,7 +248,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
             href="/donate"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-6g30rp-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-yhjurc-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="button"
             >
@@ -265,6 +265,82 @@ exports[`Footer component should render Footer component correctly 1`] = `
               <span
                 class="lf-btn-label"
               />
+            </button>
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1xpvh55"
+        >
+          <a
+            href="https://www.instagram.com/liatoshynsky_foundation/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="instagram"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/instagram.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
+            </button>
+          </a>
+          <a
+            href="https://www.facebook.com/LiatoshynskyFoundation/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="facebook"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/facebook.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
+            </button>
+          </a>
+          <a
+            href="https://www.youtube.com/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="youtube"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/youtube.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
             </button>
           </a>
         </div>
