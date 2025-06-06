@@ -1,10 +1,10 @@
-import { successResponse, errorResponse } from '~/lib/utils/apiResponse';
+import { successResponse, errorResponse } from '~/utils/apiResponse';
 import { NextResponse } from 'next/server';
 
 jest.mock('next/server', () => ({
   NextResponse: {
-    json: jest.fn(),
-  },
+    json: jest.fn()
+  }
 }));
 
 describe('apiResponse utils', () => {
@@ -30,19 +30,13 @@ describe('apiResponse utils', () => {
     const errors = ['Invalid input'];
     errorResponse(errors);
 
-    expect(NextResponse.json).toHaveBeenCalledWith(
-      { success: false, errors },
-      { status: 400 },
-    );
+    expect(NextResponse.json).toHaveBeenCalledWith({ success: false, errors }, { status: 400 });
   });
 
   it('should return an error response with custom status', () => {
     const errors = { field: 'Required' };
     errorResponse(errors, 422);
 
-    expect(NextResponse.json).toHaveBeenCalledWith(
-      { success: false, errors },
-      { status: 422 },
-    );
+    expect(NextResponse.json).toHaveBeenCalledWith({ success: false, errors }, { status: 422 });
   });
 });

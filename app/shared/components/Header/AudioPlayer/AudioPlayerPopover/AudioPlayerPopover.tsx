@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
 import { styles } from './AudioPlayerPopover.styles';
-import { formatTime, calculateProgress } from '~/lib/utils/audioPlayer';
+import { formatTime, calculateProgress } from '~/utils/audioPlayer';
 import Image from 'next/image';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
@@ -28,7 +28,7 @@ const AudioPlayerPopover = ({
   onTogglePlay,
   onSeek,
   trackName,
-  error,
+  error
 }: AudioPlayerPopoverProps) => {
   const progressRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -86,20 +86,10 @@ const AudioPlayerPopover = ({
           </Box>
         ) : (
           <>
-            <Box
-              ref={progressRef}
-              onMouseDown={handleMouseDown}
-              sx={styles.progressBar}
-              role="progress"
-            >
+            <Box ref={progressRef} onMouseDown={handleMouseDown} sx={styles.progressBar} role="progress">
               <Box sx={styles.progressLine(progress)} />
               <Box sx={styles.progressThumbSvg(progress)}>
-                <Image
-                  src="/icons/audio-play-circle-icon.svg"
-                  alt="progress thumb"
-                  width={16}
-                  height={16}
-                />
+                <Image src="/icons/audio-play-circle-icon.svg" alt="progress thumb" width={16} height={16} />
               </Box>
             </Box>
 
@@ -110,11 +100,7 @@ const AudioPlayerPopover = ({
                 sx={styles.playPauseButton}
               >
                 <Image
-                  src={
-                    isPlaying
-                      ? './icons/pause-icon.svg'
-                      : './icons/play-icon.svg'
-                  }
+                  src={isPlaying ? './icons/pause-icon.svg' : './icons/play-icon.svg'}
                   alt={isPlaying ? 'Pause' : 'Play'}
                   width={24}
                   height={24}

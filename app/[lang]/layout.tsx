@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Mulish } from 'next/font/google';
+import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import Footer from '~/shared/components/Footer/Footer';
 import Header from '~/shared/components/Header/Header';
 import { Container } from '@mui/material';
 import '../globals.css';
 import { ReactNode } from 'react';
 import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
-import { routing } from '../../i18n/routing';
+import { routing } from '~/i18n/routing';
 import { notFound } from 'next/navigation';
-
+import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
+import ThemeProvider from '~/shared/components/design-system/all-components/theme/ThemeProvider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']
@@ -23,6 +24,12 @@ const mulish = Mulish({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '700'],
   variable: '--font-mulish'
+});
+
+const oswald = Oswald({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '600', '700'],
+  variable: '--font-oswald'
 });
 
 export const metadata: Metadata = {
@@ -40,27 +47,41 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
-
   return (
     <html lang={lang}>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
         <NextIntlClientProvider>
-          <Container
-            maxWidth="md"
-            sx={{
-              border: '1px solid #ccc',
-              padding: '20px',
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minWidth: '100%'
-            }}
-          >
-            <Header />
-            {children}
-            <Footer />
-          </Container>
+          <ThemeProvider>
+            <Container
+              sx={{
+                border: '1px solid #ccc',
+                padding: '20px',
+                height: '100vh',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(12, auto)',
+                gap: '40px',
+                maxWidth: '1920px !important',
+                paddingLeft: '72px',
+                paddingRight: '72px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '100%',
+                [theme.breakpoints.down('sm')]: {
+                  gridTemplateColumns: 'repeat(8, auto)'
+                },
+                [theme.breakpoints.down('xs')]: {
+                  gridTemplateColumns: 'repeat(4, auto)',
+                  paddingLeft: '24px',
+                  paddingRight: '24px',
+                  gap: '16px'
+                }
+              }}
+            >
+              <Header />
+              {children}
+              <Footer />
+            </Container>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
