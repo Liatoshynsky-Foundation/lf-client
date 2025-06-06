@@ -11,6 +11,9 @@
     "donationButton": "Support the Foundation",
     "contactUsButton": "Contact us"
   },
+  "header": {
+    "supportButton": "Support"
+  },
   "home": {
     "text": "Liatoshynsky project"
   },

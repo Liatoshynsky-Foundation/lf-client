@@ -11,6 +11,9 @@
     "donationButton": "Підтримати діяльність фундації",
     "contactUsButton": "Напишіть нам"
   },
+  "header": {
+    "supportButton": "Підтримати"
+  },
   "home": {
     "text": "Проєкт Лятушинський"
   },
