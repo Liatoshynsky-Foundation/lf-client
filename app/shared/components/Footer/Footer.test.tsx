@@ -12,7 +12,9 @@ jest.mock('next-intl/server', () => ({
     return translations[key];
   })
 }));
-
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
 describe('Footer component', () => {
   it('should render Footer component correctly', async () => {
     render(await Footer());
