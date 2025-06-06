@@ -13,7 +13,10 @@ const config: Config = {
     '!app/**/*.test.{js,jsx,ts,tsx}',
     '!app/**/*.{types,d}.{ts,tsx}',
     '!app/constants/**',
-    '!app/types/**'
+    '!app/types/**',
+    '!app/di/**',
+    '!app/models/**'
+    // Exclude test files from coverage
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

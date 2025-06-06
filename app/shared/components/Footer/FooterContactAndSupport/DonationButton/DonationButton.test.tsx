@@ -10,7 +10,7 @@ const mockData = {
 
 describe('DonationButton', () => {
   beforeEach(() => {
-    render(<DonationButton data={mockData} />);
+    render(<DonationButton {...mockData} />);
   });
 
   afterEach(() => {

@@ -10,9 +10,9 @@ type DonationDataProps = {
   data: ButtonData;
 };
 
-const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
+const DonationButton: React.FC<DonationDataProps> = ({ link, text }) => {
   return (
-    <Link href={data.link} passHref>
+    <Link href={link} passHref>
       <Button
         size="medium"
         variant="outlined"
