@@ -20,7 +20,7 @@ describe('CustomSwitch', () => {
     const switchRoot = container.querySelector('.MuiSwitch-root');
     expect(switchRoot).toBeInTheDocument();
 
-    await user.click(switchRoot!);
+    await user.click(switchRoot as Element);
 
     expect(handleChange).not.toHaveBeenCalled();
   });
