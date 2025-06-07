@@ -16,7 +16,7 @@ export const styles = {
     clipPath: 'polygon(0 0, 100% 0, 100% 1%, 0 70%)'
   },
   footerContent: {
-    padding: '40px 24px',
+    padding: { xs: '80px 24px', md: '40px 24px' },
     display: 'flex',
     flexDirection: { xs: 'column', lg: 'row' },
     alignItems: { xs: 'center', md: 'flex-start' },
@@ -32,7 +32,8 @@ export const styles = {
     alignItems: { xs: 'center', md: 'flex-start' },
     gap: { xs: '16px', md: '24px' },
     flexWrap: { xs: 'nowrap', md: 'nowrap' },
-    padding: '30px 0 40px 0'
+    padding: '30px 0 40px 0',
+    position: 'relative'
   },
   contactAndSupportWrapper: {
     padding: { xs: '0 0 25px 0', md: '0 0 70px 0' },

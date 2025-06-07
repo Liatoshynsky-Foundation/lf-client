@@ -16,7 +16,7 @@ import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
-  const svgImagePath = '/images/footer-img.svg';
+  const svgImageBg = '/images/footer-img.svg';
   const svgImageSA = '/images/softserve-academy.svg';
 
   const footerData = {
@@ -62,7 +62,7 @@ export default async function Footer() {
         <SvgImage src={svgImageSA} alt="SoftServe Academy" width={270} height={40} />
       </Box>
       <Box sx={styles.svgContainer}>
-        <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
+        <SvgImage src={svgImageBg} alt="Lyatoshynsky Foundation" width={1400} height={165} />
       </Box>
     </Box>
   );
