@@ -11,9 +11,7 @@ jest.mock('next/dynamic');
 
 jest.mock('../../../../public/images/logo.svg', () => ({
   __esModule: true,
-  default: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg role="img" aria-label="Company logo" data-testid="icon-svg" {...props} />
-  )
+  default: (props: React.SVGProps<SVGSVGElement>) => <svg aria-label="Company logo" data-testid="icon-svg" {...props} />
 }));
 
 describe('Logo component', () => {
