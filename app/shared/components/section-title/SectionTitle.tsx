@@ -1,9 +1,11 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
+
+import { imageSizes, styles } from './SectionTitle.styles';
+
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
-import { imageSizes, styles } from './SectionTitle.styles';
 
 interface SectionTitleProps {
   icon?: boolean;

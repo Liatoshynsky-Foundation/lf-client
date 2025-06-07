@@ -5,9 +5,10 @@ import React from 'react';
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 
-import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
-import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 import { contacts, sections, SocialMedia } from './Footer.consts';
+import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
+import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
+import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
