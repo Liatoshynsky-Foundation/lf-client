@@ -57,7 +57,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
           <ThemeProvider>
             <Container
               sx={{
-                border: '1px solid #ccc',
                 padding: '20px',
                 height: '100vh',
                 display: 'grid',
@@ -82,8 +81,8 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             >
               <Header />
               {children}
-              <Footer />
             </Container>
+            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
