@@ -1,15 +1,11 @@
 import React from 'react';
-import Button from '~/shared/components/design-system/all-components/button/Button';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import Button from '~/ds-components/button/Button';
+import { SvgImage } from '~/components/svg-image/SvgImage';
 import Link from 'next/link';
-
-type DonationButtonData = {
-  text: string;
-  link: string;
-};
+import { ButtonData } from '../types';
 
 type DonationDataProps = {
-  data: DonationButtonData;
+  data: ButtonData;
 };
 
 const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
