@@ -3,10 +3,5 @@ import React from 'react';
 import LiatoshynskyOffice from '~/components/Liatoshynsky-office/LiatoshynskyOffice';
 
 export default async function Home() {
-  return (
-    <h1>
-      {' '}
-      <LiatoshynskyOffice />{' '}
-    </h1>
-  );
+  return <LiatoshynskyOffice />;
 }
