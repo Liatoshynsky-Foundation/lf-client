@@ -62,7 +62,7 @@ export const styles = {
   },
   media: {
     position: { xs: 'relative', sm: 'absolute' },
-    bottom: { xs: '45px', sm: '120px', md: '120px', lg: '145px', xl: '130px', xxl: '125px' },
+    bottom: { xs: '45px', sm: '120px', md: '105px', lg: '145px', xl: '130px', xxl: '105px' },
     right: { xs: 'auto', sm: '30px', md: '50px', lg: '80px', xxl: '175px' },
     alignSelf: 'center'
   }

@@ -12,8 +12,8 @@ const OfficeMedia: React.FC<OfficeMediaProps> = ({ images }) => {
   return (
     <Box sx={styles.mainContainer}>
       <Box sx={styles.mediaContainer}>
-        {images.map((img, i) => (
-          <Box key={i} sx={styles[img.styleKey]}>
+        {images.map((img) => (
+          <Box key={img.styleKey} sx={styles[img.styleKey]}>
             <Image src={img.src} alt={img.alt} fill sizes={imageSizes} priority />
           </Box>
         ))}

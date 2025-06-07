@@ -14,7 +14,16 @@ interface LogoProps extends BoxProps {
 const Logo: React.FC<LogoProps> = ({ color = 'black', variant = 'header', sx, ...props }) => {
   const size = logoSizes[variant];
 
-  const image = <LogoImage style={{ color }} width="100%" height="100%" role="img" aria-label="Company logo" />;
+  const image = (
+    <LogoImage
+      width="100%"
+      height="100%"
+      style={{ color }}
+      title="Company logo"
+      aria-hidden={false}
+      focusable={false}
+    />
+  );
 
   return (
     <Box

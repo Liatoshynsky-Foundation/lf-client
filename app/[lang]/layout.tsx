@@ -1,7 +1,5 @@
 import '../globals.css';
-import '../globals.css';
-import { Container } from '@mui/material';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';

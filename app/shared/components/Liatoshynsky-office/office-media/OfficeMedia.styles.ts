@@ -5,7 +5,7 @@ const basePhoto = {
     transform: 'scale(1.09)',
     zIndex: 2
   },
-  width: { xs: 95, sm: 127, md: 160, lg: 200 },
+  width: { xs: 110, sm: 133, md: 167, lg: 210, xl: 230 },
   aspectRatio: '3 / 4',
   cursor: 'pointer'
 };
