@@ -1,5 +1,6 @@
-import React from 'react';
 import { Switch, SwitchProps } from '@mui/material';
+import React from 'react';
+
 import { switchStyles } from './Switch.styles';
 
 interface CustomSwitchProps extends Omit<SwitchProps, 'onChange'> {

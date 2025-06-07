@@ -1,6 +1,7 @@
-import { renderHook } from '@testing-library/react';
-import * as mediaQuery from '@mui/material/useMediaQuery';
 import * as styles from '@mui/material/styles';
+import * as mediaQuery from '@mui/material/useMediaQuery';
+import { renderHook } from '@testing-library/react';
+
 import useBreakpoints from './useBreakpoints';
 
 jest.mock('@mui/material/useMediaQuery', () => jest.fn());

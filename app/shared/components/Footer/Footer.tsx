@@ -1,12 +1,14 @@
 import { Box } from '@mui/material';
-import React from 'react';
-import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
-import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import { getTranslations } from 'next-intl/server';
-import FooterNavigation from './FooterNavigation/FooterNavigation';
-import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
-import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
+import React from 'react';
+
+import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
+import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
+
 import { contacts, sections, SocialMedia } from './Footer.consts';
+import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
+import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
+import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 export default async function Footer() {
   const t = await getTranslations('footer');

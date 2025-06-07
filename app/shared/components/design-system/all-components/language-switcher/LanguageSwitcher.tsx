@@ -1,15 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
 import { MenuItem } from '@mui/material';
-import { IconButton } from '../icon-button/IconButton';
-import Button from '../button/Button';
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from '~/../i18n/navigation';
+import React, { useState } from 'react';
+
+import Button from '../button/Button';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { IconButton } from '../icon-button/IconButton';
 import { styles } from './LanguageSwitcher.styles';
 import { IconButtonColorVariant, IconButtonVariant, PositionEnum } from '~/types/enums/common.enums';
+
+import { usePathname, useRouter } from '~/../i18n/navigation';
+import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 const locales = ['uk', 'en'] as const;
 type Locale = (typeof locales)[number];

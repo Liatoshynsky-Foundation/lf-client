@@ -1,5 +1,7 @@
 import { MenuItem, MenuItemProps } from '@mui/material';
+
 import { menuItemStyles } from './MenuItem.styles';
+
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 interface CustomMenuItemProps extends MenuItemProps {

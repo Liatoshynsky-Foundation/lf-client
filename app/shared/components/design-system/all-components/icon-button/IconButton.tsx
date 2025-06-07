@@ -1,13 +1,7 @@
-import {
-  CircularProgress,
-  IconButtonProps as MuiIconButtonProps,
-  IconButton as MuiIconButton,
-} from '@mui/material';
+import { CircularProgress, IconButton as MuiIconButton, IconButtonProps as MuiIconButtonProps } from '@mui/material';
+
 import { CreateStyleClasses, IconButtonStyles } from './IconButton.styles';
-import {
-  IconButtonColorVariant,
-  IconButtonVariant,
-} from '~/types/enums/common.enums';
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
   variant?: IconButtonColorVariant;
@@ -36,11 +30,9 @@ export const IconButton: React.FC<IconButtonProps> = ({
   const loaderSizes = {
     small: 16,
     medium: 20,
-    large: 24,
+    large: 24
   };
-  const loader = (
-    <CircularProgress data-testid="loader" size={loaderSizes[size]} />
-  );
+  const loader = <CircularProgress data-testid="loader" size={loaderSizes[size]} />;
   const buttonContent = loading ? loader : children;
   return (
     <MuiIconButton

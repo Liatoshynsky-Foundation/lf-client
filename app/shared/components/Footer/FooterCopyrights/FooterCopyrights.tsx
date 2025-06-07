@@ -1,5 +1,6 @@
+import { Box, Link, Typography } from '@mui/material';
 import React from 'react';
-import { Box, Typography, Link } from '@mui/material';
+
 import { styles } from '~/components/Footer/FooterCopyrights/FooterCopyrights.styles';
 
 type LinkItem = {

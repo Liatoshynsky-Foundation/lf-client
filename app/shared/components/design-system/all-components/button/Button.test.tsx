@@ -1,5 +1,6 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+
 import Button from './Button';
 import { colors } from './Button.styles';
 
@@ -11,7 +12,7 @@ describe('Button Component', () => {
     render(
       <Button startIcon={startIcon} endIcon={endIcon}>
         Icons
-      </Button>,
+      </Button>
     );
 
     expect(screen.getByTestId('start-icon')).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe('Button Component', () => {
 
     expect(screen.getByRole('button')).toHaveStyle({
       backgroundColor: colors.yellow[500],
-      color: colors.black,
+      color: colors.black
     });
   });
 
@@ -32,7 +33,7 @@ describe('Button Component', () => {
     render(
       <Button loading onClick={handleClick}>
         Loading
-      </Button>,
+      </Button>
     );
 
     const button = screen.getByRole('button');
