@@ -53,7 +53,8 @@ export const styles = {
     alignSelf: 'center'
   },
   text: {
-    fontFamily: 'Oswald, sans-serif',
+    fontFamily: 'var(--font-oswald)',
+    fontWeight: 700,
     fontSize: { xs: '44px', sm: '68px', md: '92px', lg: '116px' },
     lineHeight: '100%',
     letterSpacing: '-2px',

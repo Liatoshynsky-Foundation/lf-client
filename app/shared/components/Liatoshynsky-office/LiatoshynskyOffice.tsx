@@ -1,13 +1,15 @@
 import { Box, Typography } from '@mui/material';
-import Quote from '~/shared/components/Quote/Quote';
-import Button from '~/shared/components/design-system/all-components/button/Button';
-import { styles } from './LiatoshynskyOffice.styles';
-import OfficeMedia from '~/shared/components/Liatoshynsky-office/office-media/OfficeMedia';
-import { ImageData } from '~/types/types/officeMedia';
 import { Oswald } from 'next/font/google';
-import { Link } from '~/i18n/navigation';
-import React from 'react';
 import { getTranslations } from 'next-intl/server';
+import React from 'react';
+
+import { styles } from './LiatoshynskyOffice.styles';
+import { ImageData } from '~/types/types/officeMedia';
+
+import { Link } from '~/i18n/navigation';
+import Button from '~/shared/components/design-system/all-components/button/Button';
+import OfficeMedia from '~/shared/components/Liatoshynsky-office/office-media/OfficeMedia';
+import Quote from '~/shared/components/Quote/Quote';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
@@ -46,7 +48,7 @@ const LiatoshynskyOffice = async () => {
           <Quote
             quoteText={quoteInfo.mainText}
             sourceText={{
-              tittle: quoteInfo.sourceTittle,
+              title: quoteInfo.sourceTittle,
               data: quoteInfo.sourceData,
               place: quoteInfo.sourcePlace
             }}

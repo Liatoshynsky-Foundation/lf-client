@@ -1,16 +1,18 @@
 import '../globals.css';
+import '../globals.css';
 import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
+import { ReactNode } from 'react';
+
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
 import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
-import { Box } from '@mui/material';
-import '../globals.css';
-import { ReactNode } from 'react';
-import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
+
 import { routing } from '~/i18n/routing';
 
 const geistSans = Geist({

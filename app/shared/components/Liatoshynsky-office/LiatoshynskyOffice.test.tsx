@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import LiatoshynskyOffice from './LiatoshynskyOffice';
 import React from 'react';
+
+import LiatoshynskyOffice from './LiatoshynskyOffice';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockImplementation(async (namespace) => {
