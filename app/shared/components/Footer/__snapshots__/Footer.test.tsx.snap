@@ -1,0 +1,416 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer component should render Footer component correctly 1`] = `
+<div>
+  <footer
+    class="MuiBox-root css-lfeye8"
+  >
+    <div
+      class="MuiBox-root css-7htj0b"
+    />
+    <div
+      class="MuiBox-root css-otkta4"
+    >
+      <div
+        class="MuiBox-root css-asvefe"
+      >
+        <div>
+          LanguageSwitcher Mock
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1b1a8p0"
+      >
+        <div
+          class="MuiBox-root css-1baulvz"
+        >
+          <a
+            href="/"
+          >
+            <img
+              alt="logo"
+              data-nimg="1"
+              decoding="async"
+              height="53"
+              src="/images/logo.svg"
+              style="color: transparent;"
+              width="127"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1odmn85"
+      >
+        <div
+          class="MuiBox-root css-qpwsgy"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-1d5hxon-MuiTypography-root"
+          >
+            ГРОМАДСЬКА ОРГАНІЗАЦІЯ 
+«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»
+          </p>
+          <div
+            class="MuiBox-root css-0"
+          >
+            <div
+              class="MuiBox-root css-k008qs"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-yks2ht-MuiTypography-root"
+              >
+                Телефон: 
+              </p>
+              <a
+                class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1f4bz4j-MuiTypography-root-MuiLink-root"
+                href="#"
+              >
+                067 963 8366
+              </a>
+            </div>
+            <div
+              class="MuiBox-root css-k008qs"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-yks2ht-MuiTypography-root"
+              >
+                Email: 
+              </p>
+              <a
+                class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1f4bz4j-MuiTypography-root-MuiLink-root"
+                href="mailto:liatoshynsky@gmail.com"
+              >
+                liatoshynsky@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-2vcir0"
+        >
+          <div
+            class="MuiBox-root css-1kuy7z7"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-1ed1k8u-MuiTypography-root"
+            >
+              БОРИС ЛЯТОШИНСЬКИЙ
+            </p>
+            <ul
+              class="MuiBox-root css-11lzi6h"
+            >
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/biography"
+                >
+                  Життєпис
+                </a>
+              </li>
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/creativity"
+                >
+                  Творчість
+                </a>
+              </li>
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/research"
+                >
+                  Дослідження та наукові роботи
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="MuiBox-root css-1kuy7z7"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-1ed1k8u-MuiTypography-root"
+            >
+              ПРО ФУНДАЦІЮ
+            </p>
+            <ul
+              class="MuiBox-root css-11lzi6h"
+            >
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/about-us"
+                >
+                  Про нас
+                </a>
+              </li>
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/news"
+                >
+                  Новини
+                </a>
+              </li>
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/media-about-us"
+                >
+                  ЗМІ про нас
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="MuiBox-root css-1kuy7z7"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-1ed1k8u-MuiTypography-root"
+            >
+              СПІВПРАЦЯ
+            </p>
+            <ul
+              class="MuiBox-root css-11lzi6h"
+            >
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/become-partner"
+                >
+                  Стати партнером
+                </a>
+              </li>
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/partners"
+                >
+                  Наші партнери
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="MuiBox-root css-1kuy7z7"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-1ed1k8u-MuiTypography-root"
+            >
+              МУЗЕЙ
+            </p>
+            <ul
+              class="MuiBox-root css-11lzi6h"
+            >
+              <li>
+                <a
+                  class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-8gicka-MuiTypography-root-MuiLink-root"
+                  href="/museum"
+                >
+                  Кабінет-архів
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1crd4se"
+      >
+        <div
+          class="MuiBox-root css-tud7ce"
+        >
+          <a
+            href="/contact-us"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-rl35mr-MuiButtonBase-root-MuiButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <img
+                alt="Contact Us Button"
+                data-nimg="1"
+                decoding="async"
+                height="24"
+                loading="lazy"
+                src="icons/mail-icon.svg"
+                style="color: transparent;"
+                width="24"
+              />
+              <span
+                class="lf-btn-label"
+              />
+            </button>
+          </a>
+          <a
+            href="/donate"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-yhjurc-MuiButtonBase-root-MuiButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <img
+                alt="Donation Button"
+                data-nimg="1"
+                decoding="async"
+                height="24"
+                loading="lazy"
+                src="icons/donation-button.svg"
+                style="color: transparent;"
+                width="24"
+              />
+              <span
+                class="lf-btn-label"
+              />
+            </button>
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1xpvh55"
+        >
+          <a
+            href="https://www.instagram.com/liatoshynsky_foundation/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="instagram"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/instagram.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
+            </button>
+          </a>
+          <a
+            href="https://www.facebook.com/LiatoshynskyFoundation/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="facebook"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/facebook.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
+            </button>
+          </a>
+          <a
+            href="https://www.youtube.com/"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-7syw-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="filter: brightness(0) invert(1);"
+              >
+                <img
+                  alt="youtube"
+                  data-nimg="1"
+                  decoding="async"
+                  height="20"
+                  loading="lazy"
+                  src="/icons/youtube.svg"
+                  style="color: transparent;"
+                  width="20"
+                />
+              </div>
+            </button>
+          </a>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-kfwajf"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-1qrljtn-MuiTypography-root"
+        >
+          © 2025 My Company
+        </p>
+        <ul
+          class="MuiBox-root css-rrw7ld"
+        >
+          <li>
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1hvmum-MuiTypography-root-MuiLink-root"
+              href="/privacy"
+            >
+              Privacy Policy
+            </a>
+          </li>
+          <li>
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1hvmum-MuiTypography-root-MuiLink-root"
+              href="/terms"
+            >
+              Terms of Use
+            </a>
+          </li>
+          <li>
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1hvmum-MuiTypography-root-MuiLink-root"
+              href="/media"
+            >
+              Media Kit
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-4d65gp"
+    >
+      <img
+        alt="SoftServe Academy"
+        data-nimg="1"
+        decoding="async"
+        height="40"
+        loading="lazy"
+        src="/images/softserve-academy.svg"
+        style="color: transparent;"
+        width="270"
+      />
+    </div>
+    <div
+      class="MuiBox-root css-1jwc48s"
+    >
+      <img
+        alt="Lyatoshynsky Foundation"
+        data-nimg="1"
+        decoding="async"
+        height="165"
+        loading="lazy"
+        src="/images/footer-img.svg"
+        style="color: transparent;"
+        width="1400"
+      />
+    </div>
+  </footer>
+</div>
+`;

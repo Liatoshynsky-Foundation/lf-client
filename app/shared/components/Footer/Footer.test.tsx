@@ -13,12 +13,20 @@ jest.mock('next-intl/server', () => ({
     return translations[key];
   })
 }));
+
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
+
+jest.mock('~/components/design-system/all-components/language-switcher/LanguageSwitcher', () => ({
+  __esModule: true,
+  default: jest.fn(() => <div>LanguageSwitcher Mock</div>)
+}));
+
 describe('Footer component', () => {
   it('should render Footer component correctly', async () => {
-    render(await Footer());
+    const { container } = render(await Footer());
     expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
   });
 });
