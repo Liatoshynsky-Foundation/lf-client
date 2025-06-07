@@ -1,17 +1,10 @@
-import {
-  IconButtonColorVariant,
-  IconButtonVariant,
-} from '~/types/enums/common.enums';
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
-export function CreateStyleClasses(
-  variant: IconButtonColorVariant,
-  type: IconButtonVariant,
-) {
+export function CreateStyleClasses(variant: IconButtonColorVariant, type: IconButtonVariant) {
   let styleClasses = variant as string;
   if (
     type !== IconButtonVariant.filled &&
-    (variant === IconButtonColorVariant.Primary ||
-      variant === IconButtonColorVariant.Secondary)
+    (variant === IconButtonColorVariant.Primary || variant === IconButtonColorVariant.Secondary)
   ) {
     styleClasses += type.charAt(0).toUpperCase() + type.slice(1);
   }
@@ -32,107 +25,113 @@ const Colors = {
   hoverOutlined: '#F7F5F1',
   activeOutlined: '#D3CAC0',
   hoverError: '#E63C1414',
-  activeError: '#E63C143D',
+  activeError: '#E63C143D'
 };
 
 const PrimaryIconStyles = {
+  fontSize: '0',
   color: Colors.black,
   backgroundColor: Colors.white,
   '&:hover': {
-    backgroundColor: Colors.hoverOutlined,
+    backgroundColor: Colors.hoverOutlined
   },
   '&:active': {
-    backgroundColor: Colors.activeOutlined,
+    backgroundColor: Colors.activeOutlined
   },
   '&:disabled': {
-    color: Colors.gray,
-  },
+    color: Colors.gray
+  }
 };
 
 const SecondaryIconStyles = {
+  fontSize: '0',
   color: Colors.white,
   backgroundColor: Colors.black,
   '&:hover': {
-    backgroundColor: Colors.hoverTransparent,
+    backgroundColor: Colors.hoverTransparent
   },
   '&:focused': {
-    backgroundColor: Colors.focusTransparent,
+    backgroundColor: Colors.focusTransparent
   },
   '&:pressed': {
-    backgroundColor: Colors.pressTransparent,
+    backgroundColor: Colors.pressTransparent
   },
   '&:disabled': {
-    color: Colors.gray,
-  },
+    color: Colors.gray
+  }
 };
 export const IconButtonStyles = {
   primary: {
+    fontSize: '0',
     color: Colors.white,
     backgroundColor: Colors.black,
     '&:hover': {
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black
     },
     '&:disabled': {
       color: Colors.gray,
-      backgroundColor: Colors.lightGray,
-    },
+      backgroundColor: Colors.lightGray
+    }
   },
   primaryIcon: {
-    PrimaryIconStyles,
+    PrimaryIconStyles
   },
   primaryOutlined: {
     PrimaryIconStyles,
-    border: '1px black solid',
+    border: '1px black solid'
   },
   secondary: {
+    fontSize: '0',
     color: Colors.black,
     backgroundColor: Colors.white,
     '&:hover': {
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white
     },
     '&:disabled': {
       color: Colors.gray,
-      backgroundColor: Colors.lightGray,
-    },
+      backgroundColor: Colors.lightGray
+    }
   },
   secondaryIcon: {
-    SecondaryIconStyles,
+    SecondaryIconStyles
   },
   secondaryOutlined: {
     SecondaryIconStyles,
-    border: '1px white solid',
+    border: '1px white solid'
   },
   tertiary: {
+    fontSize: '0',
     color: Colors.black,
     backgroundColor: Colors.yellow,
     '&:hover': {
       color: Colors.white,
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black
     },
     '&:focused': {
       color: Colors.black,
-      backgroundColor: Colors.yellow,
+      backgroundColor: Colors.yellow
     },
     '&:active': {
       color: Colors.black,
-      backgroundColor: Colors.yellow,
+      backgroundColor: Colors.yellow
     },
     '&:disabled': {
       color: Colors.gray,
-      backgroundColor: Colors.lightGray,
-    },
+      backgroundColor: Colors.lightGray
+    }
   },
   error: {
+    fontSize: '0',
     color: Colors.error,
     backgroundColor: Colors.white,
     '&:hover': {
-      backgroundColor: Colors.hoverError,
+      backgroundColor: Colors.hoverError
     },
     '&:active': {
-      backgroundColor: Colors.activeError,
+      backgroundColor: Colors.activeError
     },
     '&:disabled': {
-      color: Colors.gray,
-    },
-  },
+      color: Colors.gray
+    }
+  }
 };

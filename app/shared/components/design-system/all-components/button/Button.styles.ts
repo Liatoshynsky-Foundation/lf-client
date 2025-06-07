@@ -11,7 +11,7 @@ export const colors = {
     600: '#898C95',
     700: '#63666E',
     800: '#52545A',
-    900: '#3F444A',
+    900: '#3F444A'
   },
   yellow: {
     100: '#FFF8E9',
@@ -22,7 +22,7 @@ export const colors = {
     600: '#E0A01F',
     700: '#BF7D13',
     800: '#8A570C',
-    900: '#673E0F',
+    900: '#673E0F'
   },
   brown: {
     50: '#F7F5F1',
@@ -34,80 +34,80 @@ export const colors = {
     600: '#6E5A51',
     700: '#574139',
     800: '#412B21',
-    900: '#2D1611',
+    900: '#2D1611'
   },
   white: '#FDFDFD',
   black: '#190D03',
-  
+
   primaryFilledHovered: '#342A21',
   primaryFilled: '#5D554E',
   primaryOutlinedHovered: '#EAE9E8',
   primaryOutlinedPressed: '#A39F9B',
   secondaryHovered: '#2B2017',
-  secondaryPressed: '#625A53',
+  secondaryPressed: '#625A53'
 };
 
 export const typographyStyles = {
   primary: {
-    small: { 
+    small: {
       fontFamily: 'Mulish',
       fontWeight: 400,
       fontSize: '14px',
-      lineHeight: '140%',
+      lineHeight: '140%'
     },
-    medium: { 
+    medium: {
       fontFamily: 'Mulish',
       fontWeight: 500,
       fontSize: '16px',
-      lineHeight: '150%',
+      lineHeight: '150%'
     },
-    large: { 
+    large: {
       fontFamily: 'Mulish',
       fontWeight: 600,
       fontSize: '18px',
-      lineHeight: '155%',
-    },
+      lineHeight: '155%'
+    }
   },
   secondary: {
-    small: { 
+    small: {
       fontFamily: 'Mulish',
       fontWeight: 500,
       fontSize: '14px',
-      lineHeight: '140%',
+      lineHeight: '140%'
     },
-    medium: { 
+    medium: {
       fontFamily: 'Mulish',
       fontWeight: 600,
       fontSize: '16px',
-      lineHeight: '150%',
+      lineHeight: '150%'
     },
-    large: { 
+    large: {
       fontFamily: 'Mulish',
       fontWeight: 600,
       fontSize: '18px',
-      lineHeight: '155%',
-    },
+      lineHeight: '155%'
+    }
   },
   tertiary: {
-    small: { 
+    small: {
       fontFamily: 'Mulish',
       fontWeight: 500,
       fontSize: '14px',
-      lineHeight: '140%',
+      lineHeight: '140%'
     },
-    medium: { 
+    medium: {
       fontFamily: 'Mulish',
       fontWeight: 600,
       fontSize: '16px',
-      lineHeight: '150%',
+      lineHeight: '150%'
     },
-    large: { 
+    large: {
       fontFamily: 'Mulish',
       fontWeight: 600,
       fontSize: '18px',
-      lineHeight: '155%',
-    },
-  },
+      lineHeight: '155%'
+    }
+  }
 };
 
 export const buttonBaseStyles: SxProps<Theme> = {
@@ -116,23 +116,23 @@ export const buttonBaseStyles: SxProps<Theme> = {
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '8px',
+  gap: '8px'
 };
 
 export const sizeStyles = {
   small: {
     padding: '4px 12px',
     height: '32px',
-    gap: '4px',
+    gap: '4px'
   },
   medium: {
     padding: '8px 24px',
-    height: '40px',
+    height: '40px'
   },
   large: {
     padding: '14px 32px',
-    height: '56px',
-  },
+    height: '56px'
+  }
 };
 
 export const variantStyles = {
@@ -141,56 +141,56 @@ export const variantStyles = {
       backgroundColor: colors.black,
       color: colors.white,
       '&:hover': {
-        backgroundColor: colors.primaryFilledHovered,
+        backgroundColor: colors.primaryFilledHovered
       },
-      '&:focus': {
-        backgroundColor: colors.black,
+      '&:focus-visible': {
+        backgroundColor: colors.black
       },
       '&:active': {
-        backgroundColor: colors.black,
+        backgroundColor: colors.black
       },
       '&:disabled': {
         backgroundColor: colors.blue[300],
-        color: colors.blue[700],
-      },
+        color: colors.blue[700]
+      }
     },
-    
+
     outlined: {
       backgroundColor: 'transparent',
       border: `1px solid ${colors.black}`,
       color: colors.black,
       '&:hover': {
-        backgroundColor: colors.primaryOutlinedHovered,
+        backgroundColor: colors.primaryOutlinedHovered
       },
-      '&:focus': {
-        backgroundColor: colors.white,
+      '&:focus-visible': {
+        backgroundColor: colors.white
       },
       '&:active': {
-        backgroundColor: colors.white,
+        backgroundColor: colors.white
       },
       '&:disabled': {
         border: `1px solid ${colors.blue[700]}`,
-        color: colors.blue[700],
-      },
+        color: colors.blue[700]
+      }
     },
-    
+
     text: {
       backgroundColor: 'transparent',
       color: colors.black,
       '&:hover': {
-        backgroundColor: colors.primaryOutlinedHovered,
+        backgroundColor: colors.primaryOutlinedHovered
       },
-      '&:focus': {
-        backgroundColor: colors.primaryOutlinedPressed,
+      '&:focus-visible': {
+        backgroundColor: colors.primaryOutlinedPressed
       },
       '&:active': {
-        backgroundColor: colors.white,
+        backgroundColor: colors.white
       },
       '&:disabled': {
         backgroundColor: colors.blue[300],
-        color: colors.blue[700],
-      },
-    },
+        color: colors.blue[700]
+      }
+    }
   },
 
   secondary: {
@@ -198,55 +198,55 @@ export const variantStyles = {
       backgroundColor: colors.white,
       color: colors.black,
       '&:hover': {
-        backgroundColor: colors.brown[100],
+        backgroundColor: colors.brown[100]
       },
-      '&:focus': {
-        backgroundColor: colors.brown[200],
+      '&:focus-visible': {
+        backgroundColor: colors.brown[200]
       },
       '&:active': {
-        backgroundColor: colors.brown[200],
+        backgroundColor: colors.brown[200]
       },
       '&:disabled': {
         backgroundColor: colors.blue[300],
-        color: colors.blue[700],
-      },
+        color: colors.blue[700]
+      }
     },
-    
+
     outlined: {
       backgroundColor: 'transparent',
       border: `1px solid ${colors.white}`,
       color: colors.white,
       '&:hover': {
-        backgroundColor: colors.secondaryHovered,
+        backgroundColor: colors.secondaryHovered
       },
-      '&:focus': {
-        backgroundColor: colors.secondaryPressed,
+      '&:focus-visible': {
+        backgroundColor: colors.secondaryPressed
       },
       '&:active': {
-        backgroundColor: colors.secondaryPressed,
+        backgroundColor: colors.secondaryPressed
       },
       '&:disabled': {
         border: `1px solid ${colors.blue[700]}`,
-        color: colors.blue[700],
-      },
+        color: colors.blue[700]
+      }
     },
-    
+
     text: {
       backgroundColor: 'transparent',
       color: colors.white,
       '&:hover': {
-        backgroundColor: colors.secondaryHovered,
+        backgroundColor: colors.secondaryHovered
       },
-      '&:focus': {
-        backgroundColor: colors.secondaryPressed,
+      '&:focus-visible': {
+        backgroundColor: colors.secondaryPressed
       },
       '&:active': {
-        backgroundColor: colors.secondaryPressed,
+        backgroundColor: colors.secondaryPressed
       },
       '&:disabled': {
-        color: colors.blue[700],
-      },
-    },
+        color: colors.blue[700]
+      }
+    }
   },
 
   tertiary: {
@@ -255,20 +255,20 @@ export const variantStyles = {
       color: colors.black,
       '&:hover': {
         backgroundColor: colors.black,
-        color: colors.white,
+        color: colors.white
       },
-      '&:focus': {
+      '&:focus-visible': {
         backgroundColor: colors.black,
-        color: colors.white,
+        color: colors.white
       },
       '&:active': {
         backgroundColor: colors.black,
-        color: colors.white,
+        color: colors.white
       },
       '&:disabled': {
         backgroundColor: colors.blue[300],
-        color: colors.blue[700],
-      },
-    },
-  },
+        color: colors.blue[700]
+      }
+    }
+  }
 };

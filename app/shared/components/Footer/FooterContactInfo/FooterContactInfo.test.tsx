@@ -1,16 +1,16 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import FooterContactInfo from './FooterContactInfo';
-import { useIsMobile } from '~/shared/hooks/is-mobile/useIsMobile';
+import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
 
 const contacts = {
   title: 'Test Title',
   phone: '123-456-7890',
-  email: 'test@example.com',
+  email: 'test@example.com'
 };
 
 jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
-  useIsMobile: jest.fn(),
+  useIsMobile: jest.fn()
 }));
 
 describe('Contact information block inside of the Footer', () => {
@@ -23,10 +23,10 @@ describe('Contact information block inside of the Footer', () => {
           value: {
             writeText: jest.fn()
           }
-        },
+        }
       });
 
-      jest.spyOn(window, 'alert').mockImplementation(() => { });
+      jest.spyOn(window, 'alert').mockImplementation(() => {});
     });
 
     afterAll(() => {
@@ -90,5 +90,4 @@ describe('Contact information block inside of the Footer', () => {
       expect(phoneLink).toHaveAttribute('href', `tel:${contacts.phone}`);
     });
   });
-
 });
