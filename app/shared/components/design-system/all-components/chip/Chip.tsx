@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
 import { Chip as MuiChip, ChipProps as MuiChipProps } from '@mui/material';
 import Image from 'next/image';
+import React from 'react';
+
 import { baseChipStyles } from './Chip.styles';
 
 interface CustomChipProps extends Omit<MuiChipProps, 'variant'> {

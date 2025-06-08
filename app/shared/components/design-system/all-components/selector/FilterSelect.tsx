@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { Box, Typography, MenuItem } from '@mui/material';
+import { Box, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
+import React, { useRef, useState } from 'react';
+
 import { Chip } from '../chip/Chip';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
 import { filterSelectStyles } from './FilterSelect.styles';
