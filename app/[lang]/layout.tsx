@@ -1,15 +1,18 @@
+import '../globals.css';
+import { Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
-import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header/Header';
-import { Container } from '@mui/material';
-import '../globals.css';
-import { ReactNode } from 'react';
-import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
-import { routing } from '~/i18n/routing';
 import { notFound } from 'next/navigation';
-import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
-import ThemeProvider from '~/shared/components/design-system/all-components/theme/ThemeProvider';
+import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
+import { ReactNode } from 'react';
+
+import Footer from '~/components/Footer/Footer';
+import Header from '~/components/Header/Header';
+import { theme } from '~/ds-components/theme/Theme';
+import ThemeProvider from '~/ds-components/theme/ThemeProvider';
+
+import { routing } from '~/i18n/routing';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']
@@ -54,7 +57,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
           <ThemeProvider>
             <Container
               sx={{
-                border: '1px solid #ccc',
                 padding: '20px',
                 height: '100vh',
                 display: 'grid',
@@ -79,8 +81,8 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             >
               <Header />
               {children}
-              <Footer />
             </Container>
+            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

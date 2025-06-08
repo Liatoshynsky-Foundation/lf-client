@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+
 import { IconButton } from './IconButton';
 
 describe('IconButton', () => {
@@ -21,7 +22,7 @@ describe('IconButton', () => {
     render(
       <IconButton>
         <span data-testid="menu-icon">Test Value</span>
-      </IconButton>,
+      </IconButton>
     );
     const children = screen.getByTestId('menu-icon');
     expect(children).toBeInTheDocument();

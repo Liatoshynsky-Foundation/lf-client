@@ -1,7 +1,9 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import FooterContactInfo from './FooterContactInfo';
+import React from 'react';
+
 import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
+
+import FooterContactInfo from './FooterContactInfo';
 
 const contacts = {
   title: 'Test Title',

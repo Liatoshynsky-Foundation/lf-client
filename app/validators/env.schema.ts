@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { envErrors } from '~/constants/errors';
 
 export const envSchema = z

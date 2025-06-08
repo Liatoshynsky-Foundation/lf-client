@@ -1,6 +1,7 @@
-import { SocialMediaTypes } from '~/types/enums/common.enums';
-import FooterSocialMedia from './FooterSocialMedia';
 import { render } from '@testing-library/react';
+
+import FooterSocialMedia from './FooterSocialMedia';
+import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>

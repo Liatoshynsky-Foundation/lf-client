@@ -1,7 +1,9 @@
-import React from 'react';
-import Button from '~/ds-components/button/Button';
-import { SvgImage } from '~/components/svg-image/SvgImage';
 import Link from 'next/link';
+import React from 'react';
+
+import { SvgImage } from '~/components/svg-image/SvgImage';
+import Button from '~/ds-components/button/Button';
+
 import { ButtonData } from '../types';
 
 type DonationDataProps = {

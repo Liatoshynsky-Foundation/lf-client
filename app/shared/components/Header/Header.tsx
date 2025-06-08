@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import { getTranslations } from 'next-intl/server';
+import React from 'react';
+
 import AudioPlayer from './AudioPlayer/AudioPlayer';
 import SupportButton from './SupportButton/SupportButton';
 
