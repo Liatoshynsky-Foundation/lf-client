@@ -15,7 +15,11 @@ export default async function Header() {
 
   return (
     <Box component="header">
-      <AudioPlayer src="sample-music.mp3" trackName="цо (авторський оркестровий варіант)" autoplay={false} />
+      <AudioPlayer
+        src="music/sample-music.mp3"
+        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
+        autoplay={false}
+      />
       <SupportButton data={supportButtonData} />
     </Box>
   );
