@@ -8,6 +8,10 @@ const mockData = {
   link: '/contact-us'
 };
 
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
 describe('ContactUsButton', () => {
   beforeEach(() => {
     render(<ContactUsButton data={mockData} />);

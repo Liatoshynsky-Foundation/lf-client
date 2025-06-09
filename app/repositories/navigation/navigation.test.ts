@@ -1,7 +1,8 @@
-import { navigationRepository } from '~/repositories/navigation/navigation';
-import { Navigation } from '~/models/navigation/navigation';
-import { navigationSchema } from '~/validators/navigation.schema';
 import type { Locale } from 'next-intl';
+
+import { Navigation } from '~/models/navigation/navigation';
+import { navigationRepository } from '~/repositories/navigation/navigation';
+import { navigationSchema } from '~/validators/navigation.schema';
 
 jest.mock('~/models/navigation/navigation', () => ({
   Navigation: {
@@ -14,7 +15,7 @@ describe('navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  it('returns parsed and localized navigation data', async () => {
+  it('should return parsed and localized navigation data', async () => {
     const mockDocs = [
       {
         title: { uk: 'Головна', en: 'Main' },
@@ -56,7 +57,7 @@ describe('navigationRepository', () => {
     expect(Navigation.find).toHaveBeenCalled();
   });
 
-  it('throws if data does not match schema', async () => {
+  it('should throw if data does not match schema', async () => {
     const invalidDocs = [
       {
         title: { uk: 'Головна' },

@@ -16,9 +16,26 @@ jest.mock('~/di/container', () => ({
   createRequestContainer: jest.fn().mockReturnValue({
     resolve: jest.fn().mockReturnValue({
       getFooterData: jest.fn().mockResolvedValue({
-        contacts: { email: 'test@example.com', phone: '123456', organizationName: 'Test Org' },
-        donationButtonData: { supportButtonLink: '/support' },
-        footerData: {
+        contacts: {
+          foundationName: 'Test Foundation',
+          email: 'test@example.com',
+          phone: '123456'
+        },
+        contactButtonLink: '/contact-us',
+        socialLinks: [
+          {
+            platform: 'Instagram',
+            link: 'https://instagram.com/foundation',
+            icon: 'instagram'
+          },
+          {
+            platform: 'Facebook',
+            link: 'https://facebook.com/foundation',
+            icon: 'facebook'
+          }
+        ],
+        supportButtonLink: '/donate',
+        publicInfo: {
           text: '© 2025 My Company',
           links: [
             { label: 'Privacy Policy', href: '/privacy' },
@@ -65,5 +82,16 @@ describe('Footer component', () => {
     expect(await screen.findByText(/123456/i)).toBeInTheDocument();
     expect(await screen.findByText(/Donate Now/i)).toBeInTheDocument();
     expect(await screen.findByText(/© 2025 My Company/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Test Foundation/i)).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: /instagram/i })).toHaveAttribute(
+      'href',
+      'https://instagram.com/foundation'
+    );
+    expect(await screen.findByRole('link', { name: /facebook/i })).toHaveAttribute(
+      'href',
+      'https://facebook.com/foundation'
+    );
+    expect(await screen.findByRole('link', { name: /contact us/i })).toHaveAttribute('href', '/contact-us');
+    expect(await screen.findByRole('link', { name: /donate/i })).toHaveAttribute('href', '/donate');
   });
 });

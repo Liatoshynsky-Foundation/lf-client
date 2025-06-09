@@ -1,17 +1,17 @@
 import { Box } from '@mui/material';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
 import AudioPlayer from './AudioPlayer/AudioPlayer';
 import SupportButton from './SupportButton/SupportButton';
 
+import { createRequestContainer } from '~/di/container';
+
 export default async function Header() {
   const t = await getTranslations('header');
+  const locale = await getLocale();
 
-  const supportButtonData = {
-    text: t('supportButton'),
-    link: '/support'
-  };
+  const { supportButtonLink } = await createRequestContainer().resolve('headerService').getHeaderData(locale);
 
   return (
     <Box component="header">
@@ -20,7 +20,12 @@ export default async function Header() {
         trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
         autoplay={false}
       />
-      <SupportButton data={supportButtonData} />
+      <SupportButton
+        data={{
+          text: t('supportButton'),
+          link: supportButtonLink
+        }}
+      />
     </Box>
   );
 }

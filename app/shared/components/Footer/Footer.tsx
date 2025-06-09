@@ -8,7 +8,6 @@ import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterConta
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
 
-import { sections } from './Footer.consts';
 import { styles } from './Footer.styles';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
@@ -23,33 +22,8 @@ export default async function Footer() {
   const svgImagePath = '/images/footer-img.svg';
   const svgImageSA = '/images/softserve-academy.svg';
 
-  const footerData = {
-    text: t('copyright'),
-    links: [
-      { label: t('linkPrivacy'), href: '/privacy' },
-      { label: t('linkTerms'), href: '/terms' },
-      { label: t('linkMedia'), href: '/media' }
-    ]
-  };
-
-  const donationButtonData = {
-    text: t('donationButton'),
-    link: '/donate'
-  };
-
-  const contactUsButtonData = {
-    text: t('contactUsButton'),
-    link: '/contact-us'
-  };
-
-  const {
-    contacts,
-    socialLinks
-    // contactButtonLink,
-    // supportButtonLink,
-    // publicInfo,
-    // navigation
-  } = await createRequestContainer().resolve('footerService').getFooterData(locale);
+  const { contacts, socialLinks, contactButtonLink, supportButtonLink, publicInfo, navigation } =
+    await createRequestContainer().resolve('footerService').getFooterData(locale);
 
   return (
     <Box component="footer" sx={styles.footerContainer}>
@@ -63,13 +37,22 @@ export default async function Footer() {
         </Box>
         <Box sx={styles.infoAndNavigationWrapper}>
           <FooterContactInfo contacts={contacts} />
-          <FooterNavigation sections={sections} />
+          <FooterNavigation sections={navigation} />
         </Box>
         <Box sx={styles.contactAndSupportWrapper}>
-          <FooterContactAndSupport contactUs={contactUsButtonData} donation={donationButtonData} />
+          <FooterContactAndSupport
+            contactUs={{
+              text: t('contactUsButton'),
+              link: contactButtonLink
+            }}
+            donation={{
+              text: t('donationButton'),
+              link: supportButtonLink
+            }}
+          />
           <FooterSocialMedia media={socialLinks} />
         </Box>
-        <FooterCopyrights text={footerData.text} links={footerData.links} />
+        <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
       </Box>
       <Box sx={styles.copyrightWrapper}>
         <SvgImage src={svgImageSA} alt="SoftServe Academy" width={270} height={40} />

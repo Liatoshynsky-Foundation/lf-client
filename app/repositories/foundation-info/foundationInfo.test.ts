@@ -1,6 +1,7 @@
-import { contactRepository, brandingRepository, publicRepository } from './foundationInfo.repository';
-import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
+import { brandingRepository, contactRepository, publicRepository } from './foundationInfo.repository';
+
 import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
+import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
 import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
 
 jest.mock('~/models/foundation-info/foundationInfoContact', () => ({
@@ -62,7 +63,7 @@ describe('foundationInfo.repository', () => {
   });
 
   describe('contactRepository.getContactInfo', () => {
-    it('returns parsed contact info', async () => {
+    it('should return contact info without socialLinks when undefined', async () => {
       (ContactInfo.findOne as jest.Mock).mockReturnValue(mockSelect({ ...mockContactData, socialLinks: undefined }));
 
       const result = await contactRepository.getContactInfo();
@@ -74,7 +75,7 @@ describe('foundationInfo.repository', () => {
       });
     });
 
-    it('returns contact info with socialLinks', async () => {
+    it('should return full contact info including socialLinks', async () => {
       (ContactInfo.findOne as jest.Mock).mockReturnValue(mockSelect(mockContactData));
 
       const result = await contactRepository.getContactInfo();
@@ -84,7 +85,7 @@ describe('foundationInfo.repository', () => {
   });
 
   describe('brandingRepository.getBrandingInfo', () => {
-    it('returns foundation name by locale', async () => {
+    it('should return foundation name by locale', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
         mockSelect({ foundationName: mockBrandingData.foundationName })
       );
@@ -96,7 +97,7 @@ describe('foundationInfo.repository', () => {
   });
 
   describe('brandingRepository.getSupportButtonLink', () => {
-    it('returns optional support button link', async () => {
+    it('should return optional support button link', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
         mockSelect({ supportButtonLink: mockBrandingData.supportButtonLink })
       );
@@ -108,7 +109,7 @@ describe('foundationInfo.repository', () => {
   });
 
   describe('publicRepository.getPublicInfo', () => {
-    it('returns localized copyright and links', async () => {
+    it('should return localized copyright and links', async () => {
       (PublicInfo.findOne as jest.Mock).mockReturnValue(mockSelect(mockPublicData));
 
       const result = await publicRepository.getPublicInfo('en');

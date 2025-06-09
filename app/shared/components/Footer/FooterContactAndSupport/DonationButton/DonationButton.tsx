@@ -1,10 +1,11 @@
-import Link from 'next/link';
 import React from 'react';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
 import { ButtonData } from '../types';
+
+import { Link } from '~/i18n/navigation';
 
 type DonationDataProps = {
   data: ButtonData;

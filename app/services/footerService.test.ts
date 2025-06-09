@@ -84,7 +84,7 @@ describe('footerService with navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  it('returns full footer data correctly', async () => {
+  it('should return full footer data correctly', async () => {
     const result = await footerService.getFooterData('en' as Locale);
 
     expect(result).toEqual({
@@ -104,7 +104,7 @@ describe('footerService with navigationRepository', () => {
     });
   });
 
-  it('returns empty socialLinks if not provided', async () => {
+  it('should return empty socialLinks if not provided', async () => {
     contactRepositoryMock.getContactInfo.mockResolvedValueOnce({
       ...mockContactInfo,
       socialLinks: undefined

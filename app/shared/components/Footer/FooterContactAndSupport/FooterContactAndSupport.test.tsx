@@ -15,6 +15,10 @@ const mockDonation: ButtonData = {
   link: '/donate'
 };
 
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
 describe('FooterContactAndSupport', () => {
   it('renders both buttons with correct text and links', () => {
     render(<FooterContactAndSupport contactUs={mockContactUs} donation={mockDonation} />);

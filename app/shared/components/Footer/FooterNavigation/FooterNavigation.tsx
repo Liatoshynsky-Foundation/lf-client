@@ -22,7 +22,7 @@ const FooterNavigation: FC<FooterNavigationProps> = ({ sections }) => {
     <Box sx={styles.footer}>
       {sections.map((section) => (
         <Box key={section.title} sx={styles.column}>
-          <Typography sx={styles.heading}>{section.title}</Typography>
+          <Typography sx={styles.heading}>{section.title.toUpperCase()}</Typography>
           <Box component="ul" sx={styles.list}>
             {section.links.map((link) => (
               <li key={link.label}>

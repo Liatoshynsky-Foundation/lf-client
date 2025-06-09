@@ -1,4 +1,5 @@
 import { Locale } from 'next-intl';
+
 import { NavigationData } from './navigation.type';
 
 export type ContactInfoData = {
@@ -42,3 +43,5 @@ export type FooterServiceDeps = {
     getNavigation(locale: Locale): Promise<NavigationData[]>;
   };
 };
+
+export type HeaderServiceDeps = Pick<FooterServiceDeps, 'brandingRepository' | 'navigationRepository'>;
