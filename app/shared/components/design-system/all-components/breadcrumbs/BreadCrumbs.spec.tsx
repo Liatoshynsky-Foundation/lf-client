@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import CustomBreadcrumbs from './BreadCrumbs';
 import * as nextNavigation from 'next/navigation';
+
+import CustomBreadcrumbs from './CustomBreadCrumbs';
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next/navigation'),
