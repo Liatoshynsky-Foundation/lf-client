@@ -33,6 +33,10 @@ const mockSelect = (value: unknown) => ({
   })
 });
 
+const mockSelectWithoutLean = (value: unknown) => ({
+  select: jest.fn().mockResolvedValue(value)
+});
+
 const mockContactData = {
   email: 'test@example.com',
   phone: '+380123456789',
@@ -103,7 +107,7 @@ describe('foundationInfoRepository', () => {
   describe('getSupportButtonLink', () => {
     it('should return optional support button link', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
-        mockSelect({ supportButtonLink: mockBrandingData.supportButtonLink })
+        mockSelectWithoutLean({ supportButtonLink: mockBrandingData.supportButtonLink })
       );
 
       const result = await foundationInfoRepository.getSupportButtonLink();
