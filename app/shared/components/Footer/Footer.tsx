@@ -8,7 +8,7 @@ import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterConta
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
 
-import { sections, SocialMedia } from './Footer.consts';
+import { sections } from './Footer.consts';
 import { styles } from './Footer.styles';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
@@ -43,8 +43,8 @@ export default async function Footer() {
   };
 
   const {
-    contacts
-    // socialLinks,
+    contacts,
+    socialLinks
     // contactButtonLink,
     // supportButtonLink,
     // publicInfo,
@@ -67,7 +67,7 @@ export default async function Footer() {
         </Box>
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport contactUs={contactUsButtonData} donation={donationButtonData} />
-          <FooterSocialMedia media={SocialMedia} />
+          <FooterSocialMedia media={socialLinks} />
         </Box>
         <FooterCopyrights text={footerData.text} links={footerData.links} />
       </Box>

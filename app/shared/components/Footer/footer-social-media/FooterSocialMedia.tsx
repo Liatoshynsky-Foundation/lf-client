@@ -7,7 +7,7 @@ import { SocialMediaTypes } from '~/types/enums/common.enums';
 import { sanitizeSocialMediaType } from '~/lib/utils/sanitizeSocialMediaType';
 type LinkIcon = {
   icon: string | SocialMediaTypes;
-  href: string;
+  link: string;
 };
 
 interface FooterSocialMediaProps {
@@ -19,7 +19,7 @@ const FooterSocialMedia = ({ media }: FooterSocialMediaProps) => {
     if (typeof item.icon === 'string') {
       item.icon = sanitizeSocialMediaType(item.icon);
     }
-    return <SocialMediaIcon key={item.icon} icon={item.icon as SocialMediaTypes} href={item.href} />;
+    return <SocialMediaIcon key={item.icon} icon={item.icon as SocialMediaTypes} href={item.link} />;
   });
 
   return <Box sx={styles.container}>{socialMedias}</Box>;

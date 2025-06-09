@@ -1,5 +1,3 @@
-import { SocialMediaTypes } from '~/types/enums/common.enums';
-
 export const sections = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',
@@ -27,20 +25,5 @@ export const sections = [
   {
     title: 'МУЗЕЙ',
     links: [{ label: 'Кабінет-архів', href: '/museum' }]
-  }
-];
-
-export const SocialMedia = [
-  {
-    icon: SocialMediaTypes.Instagram,
-    href: 'https://www.instagram.com/liatoshynsky_foundation/'
-  },
-  {
-    icon: SocialMediaTypes.Facebook,
-    href: 'https://www.facebook.com/LiatoshynskyFoundation/'
-  },
-  {
-    icon: SocialMediaTypes.YouTube,
-    href: 'https://www.youtube.com/'
   }
 ];
