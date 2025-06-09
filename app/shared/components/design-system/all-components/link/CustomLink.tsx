@@ -1,4 +1,4 @@
-import { Button , ButtonProps,Typography  } from '@mui/material';
+import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { linkStyles } from './CustomLink.styles';
 import { NextLinkComposed } from './NextLink';

@@ -12,14 +12,14 @@ export const styles = {
     gap: '24px',
     pl: '12px',
     pt: '12px',
-    pb: '24px',
+    pb: '24px'
   },
   cardContent: {
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
     width: '100%',
-    maxWidth: { xs: '258px', md: '296px' },
+    maxWidth: { xs: '258px', md: '296px' }
   },
   photoWrapper: {
     position: 'relative',
@@ -28,37 +28,37 @@ export const styles = {
     overflow: 'hidden',
     transform: 'rotate(-25deg)',
     borderRadius: '50%',
-    backgroundColor: '#B8AEA2',
+    backgroundColor: '#B8AEA2'
   },
   textWrapper: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
-    color: '#190D03',
+    color: '#190D03'
   },
   name: {
     fontSize: { xs: '20px', md: '24px' },
     fontWeight: 700,
     textAlign: 'left',
-    fontFamily: 'inherit',
+    fontFamily: 'inherit'
   },
   description: {
     fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
     textAlign: 'left',
-    fontFamily: 'inherit',
+    fontFamily: 'inherit'
   },
   logoWrapper: {
     display: 'flex',
     alignItems: { xs: 'center', md: 'end' },
     justifyContent: { xs: 'center', md: 'left' },
     width: { xs: '258px', md: '296px' },
-    height: { xs: '180px', md: '132px' },
+    height: { xs: '180px', md: '132px' }
   },
   logo: {
     width: { xs: '210px', md: '236px' },
-    height: { xs: '78px', md: '88px' },
+    height: { xs: '78px', md: '88px' }
   },
   image: {
     objectFit: 'cover',
@@ -66,6 +66,6 @@ export const styles = {
     position: 'absolute',
     top: '2px',
     left: '15px',
-    transform: 'rotate(25deg)',
-  } as CSSProperties,
+    transform: 'rotate(25deg)'
+  } as CSSProperties
 };

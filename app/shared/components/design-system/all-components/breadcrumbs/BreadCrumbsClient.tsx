@@ -8,7 +8,7 @@ import { BreadCrumbsStyles } from './BreadCrumbs.styles';
 
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
-const BreadcrumbsClient : React.FC = () => {
+const BreadcrumbsClient: React.FC = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter((s) => s !== '' && s !== 'en' && s !== 'uk');
 
