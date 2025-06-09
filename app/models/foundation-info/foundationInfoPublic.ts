@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+
 import { FoundationInfo } from './foundationInfoBase';
 
 export const PublicInfo =
-  FoundationInfo.discriminators?.['public-info'] ||
+  FoundationInfo.discriminators?.['public-info'] ??
   FoundationInfo.discriminator(
     'public-info',
     new mongoose.Schema(

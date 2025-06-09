@@ -25,4 +25,4 @@ const navigationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Navigation = mongoose.models.Navigation || mongoose.model('Navigation', navigationSchema);
+export const Navigation = mongoose.models.Navigation ?? mongoose.model('Navigation', navigationSchema);

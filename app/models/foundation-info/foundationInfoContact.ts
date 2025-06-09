@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 import { FoundationInfo } from './foundationInfoBase';
 
 const socialLinkSchema = new mongoose.Schema(
@@ -11,7 +12,7 @@ const socialLinkSchema = new mongoose.Schema(
 );
 
 export const ContactInfo =
-  FoundationInfo.discriminators?.['contact-info'] ||
+  FoundationInfo.discriminators?.['contact-info'] ??
   FoundationInfo.discriminator(
     'contact-info',
     new mongoose.Schema({

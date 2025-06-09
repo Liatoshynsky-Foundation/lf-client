@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { model, models, Schema } from 'mongoose';
 
 const baseSchema = new Schema(
   {
@@ -10,4 +10,4 @@ const baseSchema = new Schema(
   }
 );
 
-export const FoundationInfo = models.FoundationInfo || model('FoundationInfo', baseSchema);
+export const FoundationInfo = models.FoundationInfo ?? model('FoundationInfo', baseSchema);

@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+
 import { FoundationInfo } from './foundationInfoBase';
 
 export const BrandingInfo =
-  FoundationInfo.discriminators?.['branding-info'] ||
+  FoundationInfo.discriminators?.['branding-info'] ??
   FoundationInfo.discriminator(
     'branding-info',
     new mongoose.Schema(
