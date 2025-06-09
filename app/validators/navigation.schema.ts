@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { translatedFieldSchema, translatedLinkSchema } from '~/validators/constants';
 
 export const navigationLinkSchema = translatedLinkSchema.extend({

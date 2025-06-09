@@ -1,4 +1,5 @@
 import { createContainer } from 'awilix';
+
 import { registerRepositories } from './modules/repositories.module';
 import { registerServices } from './modules/services.module';
 

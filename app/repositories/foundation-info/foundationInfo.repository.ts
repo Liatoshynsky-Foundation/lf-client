@@ -1,15 +1,17 @@
-import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
-import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
-import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
 import type { Locale } from 'next-intl';
+
 import type {
   ContactInfoData,
   FoundationNameData,
-  SupportButtonLinkData,
-  PublicInfoData
+  PublicInfoData,
+  SupportButtonLinkData
 } from '~/types/types/foundationInfo.type';
-import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
+
+import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
+import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
+import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
 import { hrefSchema } from '~/validators/constants';
+import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 
 export const contactRepository = {
   async getContactInfo(): Promise<ContactInfoData> {

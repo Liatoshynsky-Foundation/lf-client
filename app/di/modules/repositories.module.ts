@@ -1,7 +1,8 @@
 import { asFunction } from 'awilix';
+
 import {
-  contactRepository,
   brandingRepository,
+  contactRepository,
   publicRepository
 } from '~/repositories/foundation-info/foundationInfo.repository';
 import { navigationRepository } from '~/repositories/navigation/navigation';

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { hrefSchema, translatedFieldSchema, translatedLinkSchema } from './constants';
 
 export const brandingInfoSchema = z.object({

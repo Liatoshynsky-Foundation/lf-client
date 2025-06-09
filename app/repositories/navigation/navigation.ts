@@ -1,7 +1,8 @@
-import { NavigationData } from '~/types/types/navigation.type';
-import { Navigation } from '~/models/navigation/navigation';
 import type { Locale } from 'next-intl';
 
+import { NavigationData } from '~/types/types/navigation.type';
+
+import { Navigation } from '~/models/navigation/navigation';
 import { navigationSchema } from '~/validators/navigation.schema';
 
 export const navigationRepository = {
