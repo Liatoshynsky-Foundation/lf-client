@@ -1,4 +1,5 @@
 import { theme } from '~/ds-components/theme/Theme';
+
 import { ElementSizes } from '~/types/types/common.types';
 
 export function generateSizesAttribute(sizes: Pick<ElementSizes, 'width'>): string {

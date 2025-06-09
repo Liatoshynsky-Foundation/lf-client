@@ -1,5 +1,5 @@
-import { ElementSizes } from '~/types/types/common.types';
 import { BorderProps } from './ImageWithCaption';
+import { ElementSizes } from '~/types/types/common.types';
 
 export const styles = {
   container: {

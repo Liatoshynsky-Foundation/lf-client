@@ -1,8 +1,10 @@
 import { Box, BoxProps, Breakpoint, Typography, TypographyProps } from '@mui/material';
 import Image from 'next/image';
+
 import { styles } from './ImageWithCaption.styles';
-import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { ElementSizes } from '~/types/types/common.types';
+
+import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 
 export interface BorderProps {
   sizes: ElementSizes;

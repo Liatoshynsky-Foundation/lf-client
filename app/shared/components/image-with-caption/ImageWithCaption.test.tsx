@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
+
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
+
 import { ElementSizes } from '~/types/types/common.types';
 
 const sizes: ElementSizes = {
