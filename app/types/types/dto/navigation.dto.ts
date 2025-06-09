@@ -1,7 +1,7 @@
 export type NavigationLinkData = {
   label: string;
   href: string;
-  visibility: string;
+  visibility: boolean;
 };
 
 export type NavigationData = {

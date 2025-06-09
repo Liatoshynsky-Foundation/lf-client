@@ -29,12 +29,12 @@ async function dbConnect() {
       bufferCommands: false
     };
     cached.promise = mongoose.connect(mongoUrl, opts).then((mongoose) => {
+      logger.info('✅ Connected to db');
       return mongoose;
     });
   }
   try {
     cached.conn = await cached.promise;
-    logger.info('✅ Connected to db');
   } catch (error) {
     cached.promise = null;
     logger.error(errors.FAILED_TO_CONNECT_DB, error);

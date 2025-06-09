@@ -1,20 +1,17 @@
 import type { Locale } from 'next-intl';
 
-import type {
-  ContactInfoData,
-  FoundationNameData,
-  PublicInfoData,
-  SupportButtonLinkData
-} from '~/types/types/foundationInfo.type';
+import type { FoundationInfoRepository } from '~/types/types/repositories/foundationInfo.repository';
 
+import dbConnect from '~/db/connect';
 import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
 import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
 import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
-import { hrefSchema } from '~/validators/constants';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 
-export const contactRepository = {
-  async getContactInfo(): Promise<ContactInfoData> {
+export const foundationInfoRepository: FoundationInfoRepository = {
+  async getContactInfo() {
+    await dbConnect();
+
     const result = await ContactInfo.findOne({ slug: 'contact-info' })
       .select('email phone contactButtonLink socialLinks')
       .lean();
@@ -24,14 +21,13 @@ export const contactRepository = {
     return {
       email: parsed.email,
       phone: parsed.phone,
-      contactButtonLink: parsed.contactButtonLink,
       socialLinks: parsed.socialLinks
     };
-  }
-};
+  },
 
-export const brandingRepository = {
-  async getBrandingInfo(locale: Locale): Promise<FoundationNameData> {
+  async getBrandingInfo(locale: Locale) {
+    await dbConnect();
+
     const result = await BrandingInfo.findOne({ slug: 'branding-info' }).select('foundationName').lean();
 
     const parsed = brandingInfoSchema.omit({ supportButtonLink: true }).parse(result);
@@ -41,19 +37,21 @@ export const brandingRepository = {
     };
   },
 
-  async getSupportButtonLink(): Promise<SupportButtonLinkData> {
-    const result = await BrandingInfo.findOne({ slug: 'branding-info' })
-      .select('supportButtonLink')
-      .lean<SupportButtonLinkData>();
+  async getSupportButtonLink() {
+    await dbConnect();
 
-    const parsed = hrefSchema.optional().safeParse(result?.supportButtonLink);
+    const result = await BrandingInfo.findOne({ slug: 'branding-info' }).select('supportButtonLink');
 
-    return { supportButtonLink: parsed.data };
-  }
-};
+    const parsed = brandingInfoSchema.pick({ supportButtonLink: true }).parse(result);
 
-export const publicRepository = {
-  async getPublicInfo(locale: Locale): Promise<PublicInfoData> {
+    return {
+      supportButtonLink: parsed.supportButtonLink
+    };
+  },
+
+  async getPublicInfo(locale: Locale) {
+    await dbConnect();
+
     const result = await PublicInfo.findOne({ slug: 'public-info' }).select('copyright links').lean();
 
     const parsed = publicInfoSchema.parse(result);

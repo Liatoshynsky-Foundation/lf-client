@@ -4,6 +4,11 @@ import { Navigation } from '~/models/navigation/navigation';
 import { navigationRepository } from '~/repositories/navigation/navigation';
 import { navigationSchema } from '~/validators/navigation.schema';
 
+jest.mock('~/db/connect', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue(undefined)
+}));
+
 jest.mock('~/models/navigation/navigation', () => ({
   Navigation: {
     find: jest.fn()
@@ -23,12 +28,12 @@ describe('navigationRepository', () => {
           {
             label: { uk: 'Дім', en: 'Home' },
             href: '/',
-            visibility: 'true'
+            visibility: true
           },
           {
             label: { uk: 'Про нас', en: 'About' },
             href: '/about',
-            visibility: 'true'
+            visibility: true
           }
         ]
       }
@@ -48,8 +53,8 @@ describe('navigationRepository', () => {
       {
         title: 'Main',
         links: [
-          { label: 'Home', href: '/', visibility: 'true' },
-          { label: 'About', href: '/about', visibility: 'true' }
+          { label: 'Home', href: '/', visibility: true },
+          { label: 'About', href: '/about', visibility: true }
         ]
       }
     ]);
@@ -65,7 +70,7 @@ describe('navigationRepository', () => {
           {
             label: { uk: 'Дім', en: 'Home' },
             href: '/',
-            visibility: 'true'
+            visibility: true
           }
         ]
       }

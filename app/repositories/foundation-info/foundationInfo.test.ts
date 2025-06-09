@@ -1,8 +1,13 @@
-import { brandingRepository, contactRepository, publicRepository } from './foundationInfo.repository';
+import { foundationInfoRepository } from './foundationInfo.repository';
 
 import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
 import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
 import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
+
+jest.mock('~/db/connect', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue(undefined)
+}));
 
 jest.mock('~/models/foundation-info/foundationInfoContact', () => ({
   ContactInfo: {
@@ -31,7 +36,6 @@ const mockSelect = (value: unknown) => ({
 const mockContactData = {
   email: 'test@example.com',
   phone: '+380123456789',
-  contactButtonLink: 'https://example.com/contact',
   socialLinks: [
     {
       platform: 'Instagram',
@@ -57,62 +61,62 @@ const mockPublicData = {
   ]
 };
 
-describe('foundationInfo.repository', () => {
+describe('foundationInfoRepository', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('contactRepository.getContactInfo', () => {
+  describe('getContactInfo', () => {
     it('should return contact info without socialLinks when undefined', async () => {
       (ContactInfo.findOne as jest.Mock).mockReturnValue(mockSelect({ ...mockContactData, socialLinks: undefined }));
 
-      const result = await contactRepository.getContactInfo();
+      const result = await foundationInfoRepository.getContactInfo();
 
       expect(result).toEqual({
         email: mockContactData.email,
         phone: mockContactData.phone,
-        contactButtonLink: mockContactData.contactButtonLink
+        socialLinks: undefined
       });
     });
 
     it('should return full contact info including socialLinks', async () => {
       (ContactInfo.findOne as jest.Mock).mockReturnValue(mockSelect(mockContactData));
 
-      const result = await contactRepository.getContactInfo();
+      const result = await foundationInfoRepository.getContactInfo();
 
       expect(result).toEqual(mockContactData);
     });
   });
 
-  describe('brandingRepository.getBrandingInfo', () => {
+  describe('getBrandingInfo', () => {
     it('should return foundation name by locale', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
         mockSelect({ foundationName: mockBrandingData.foundationName })
       );
 
-      const result = await brandingRepository.getBrandingInfo('uk');
+      const result = await foundationInfoRepository.getBrandingInfo('uk');
 
       expect(result).toEqual({ foundationName: mockBrandingData.foundationName.uk });
     });
   });
 
-  describe('brandingRepository.getSupportButtonLink', () => {
+  describe('getSupportButtonLink', () => {
     it('should return optional support button link', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
         mockSelect({ supportButtonLink: mockBrandingData.supportButtonLink })
       );
 
-      const result = await brandingRepository.getSupportButtonLink();
+      const result = await foundationInfoRepository.getSupportButtonLink();
 
       expect(result).toEqual({ supportButtonLink: mockBrandingData.supportButtonLink });
     });
   });
 
-  describe('publicRepository.getPublicInfo', () => {
+  describe('getPublicInfo', () => {
     it('should return localized copyright and links', async () => {
       (PublicInfo.findOne as jest.Mock).mockReturnValue(mockSelect(mockPublicData));
 
-      const result = await publicRepository.getPublicInfo('en');
+      const result = await foundationInfoRepository.getPublicInfo('en');
 
       expect(result).toEqual({
         copyright: mockPublicData.copyright.en,

@@ -2,11 +2,6 @@ import { Locale } from 'next-intl';
 
 import { createHeaderService } from '~/services/headerService';
 
-jest.mock('~/db/connect', () => ({
-  __esModule: true,
-  default: jest.fn().mockResolvedValue(undefined)
-}));
-
 describe('headerService', () => {
   const mockNavigationData = [
     {
@@ -22,9 +17,8 @@ describe('headerService', () => {
     supportButtonLink: 'https://donate.com'
   };
 
-  const brandingRepositoryMock = {
-    getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData),
-    getBrandingInfo: jest.fn()
+  const foundationInfoRepositoryMock = {
+    getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData)
   };
 
   const navigationRepositoryMock = {
@@ -32,7 +26,7 @@ describe('headerService', () => {
   };
 
   const headerService = createHeaderService({
-    brandingRepository: brandingRepositoryMock,
+    foundationInfoRepository: foundationInfoRepositoryMock,
     navigationRepository: navigationRepositoryMock
   });
 
@@ -48,7 +42,7 @@ describe('headerService', () => {
       supportButtonLink: mockSupportButtonData.supportButtonLink
     });
 
-    expect(brandingRepositoryMock.getSupportButtonLink).toHaveBeenCalled();
+    expect(foundationInfoRepositoryMock.getSupportButtonLink).toHaveBeenCalled();
     expect(navigationRepositoryMock.getNavigation).toHaveBeenCalledWith('en');
   });
 });

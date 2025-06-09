@@ -18,7 +18,6 @@ export const ContactInfo =
     new mongoose.Schema({
       phone: String,
       email: String,
-      contactButtonLabel: String,
       socialLinks: [socialLinkSchema]
     })
   );

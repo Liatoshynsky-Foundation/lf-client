@@ -22,8 +22,9 @@ export default async function Footer() {
   const svgImagePath = '/images/footer-img.svg';
   const svgImageSA = '/images/softserve-academy.svg';
 
-  const { contacts, socialLinks, contactButtonLink, supportButtonLink, publicInfo, navigation } =
-    await createRequestContainer().resolve('footerService').getFooterData(locale);
+  const { contacts, socialLinks, supportButtonLink, publicInfo, navigation } = await createRequestContainer()
+    .resolve('footerService')
+    .getFooterData(locale);
 
   return (
     <Box component="footer" sx={styles.footerContainer}>
@@ -41,10 +42,7 @@ export default async function Footer() {
         </Box>
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport
-            contactUs={{
-              text: t('contactUsButton'),
-              link: contactButtonLink
-            }}
+            contactLabel={t('contactUsButton')}
             donation={{
               text: t('donationButton'),
               link: supportButtonLink

@@ -91,7 +91,7 @@ describe('Footer component', () => {
       'href',
       'https://facebook.com/foundation'
     );
-    expect(await screen.findByRole('link', { name: /contact us/i })).toHaveAttribute('href', '/contact-us');
+    expect(await screen.findByRole('button', { name: /contact us/i })).toBeInTheDocument();
     expect(await screen.findByRole('link', { name: /donate/i })).toHaveAttribute('href', '/donate');
   });
 });

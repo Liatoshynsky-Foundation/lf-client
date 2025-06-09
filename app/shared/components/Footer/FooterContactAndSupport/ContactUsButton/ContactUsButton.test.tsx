@@ -3,18 +3,11 @@ import React from 'react';
 
 import ContactUsButton from './ContactUsButton';
 
-const mockData = {
-  text: 'Contact us',
-  link: '/contact-us'
-};
-
-jest.mock('~/i18n/navigation', () => ({
-  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
-}));
-
 describe('ContactUsButton', () => {
+  const label = 'Contact us';
+
   beforeEach(() => {
-    render(<ContactUsButton data={mockData} />);
+    render(<ContactUsButton contactLabel={label} />);
   });
 
   afterEach(() => {

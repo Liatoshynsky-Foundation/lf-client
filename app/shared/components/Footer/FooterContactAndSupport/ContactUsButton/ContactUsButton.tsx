@@ -1,26 +1,21 @@
 import React from 'react';
 
-import { ButtonData } from '../types';
-
-import { Link } from '~/i18n/navigation';
 import Button from '~/shared/components/design-system/all-components/button/Button';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 type ContactUsDataProps = {
-  data: ButtonData;
+  contactLabel: string;
 };
 
-const ContactUsButton: React.FC<ContactUsDataProps> = ({ data }) => {
+const ContactUsButton: React.FC<ContactUsDataProps> = ({ contactLabel }) => {
   return (
-    <Link href={data.link} passHref>
-      <Button
-        size="medium"
-        variant="filled"
-        color="primary"
-        label={data.text}
-        startIcon={<SvgImage alt="Contact Us Button" src="/icons/mail-icon.svg" width={24} height={24} />}
-      />
-    </Link>
+    <Button
+      size="medium"
+      variant="filled"
+      color="primary"
+      label={contactLabel}
+      startIcon={<SvgImage alt="Contact Us Button" src="icons/mail-icon.svg" width={24} height={24} />}
+    />
   );
 };
 

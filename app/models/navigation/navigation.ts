@@ -12,7 +12,7 @@ const linkSchema = new mongoose.Schema(
   {
     label: { type: translatedFieldSchema, required: true },
     href: { type: String, required: true },
-    visibility: { type: String, enum: ['true', 'false'], default: 'true' }
+    visibility: { type: Boolean }
   },
   { _id: false }
 );

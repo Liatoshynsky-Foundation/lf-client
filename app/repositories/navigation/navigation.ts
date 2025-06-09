@@ -1,15 +1,18 @@
 import type { Locale } from 'next-intl';
 
-import { NavigationData } from '~/types/types/navigation.type';
+import { NavigationRepository } from '~/types/types/repositories/navigation.repository';
 
+import dbConnect from '~/db/connect';
 import { Navigation } from '~/models/navigation/navigation';
 import { navigationSchema } from '~/validators/navigation.schema';
 
-export const navigationRepository = {
-  async getNavigation(locale: Locale): Promise<NavigationData[]> {
+export const navigationRepository: NavigationRepository = {
+  async getNavigation(locale: Locale) {
+    await dbConnect();
+
     const navigations = await Navigation.find().lean();
 
-    const parsed = navigations.map((navigation) => {
+    return navigations.map((navigation) => {
       const validated = navigationSchema.parse(navigation);
 
       return {
@@ -21,7 +24,5 @@ export const navigationRepository = {
         }))
       };
     });
-
-    return parsed;
   }
 };

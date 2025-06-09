@@ -1,19 +1,11 @@
 import { Locale } from 'next-intl';
 
-import type { FooterServiceDeps } from '~/types/types/foundationInfo.type';
-
 import { createFooterService } from '~/services/footerService';
-
-jest.mock('~/db/connect', () => ({
-  __esModule: true,
-  default: jest.fn().mockResolvedValue(undefined)
-}));
 
 describe('footerService with navigationRepository', () => {
   const mockContactInfo = {
     email: 'test@example.com',
     phone: '+380123456789',
-    contactButtonLink: 'https://example.com/contact',
     socialLinks: [
       {
         platform: 'Instagram',
@@ -54,16 +46,10 @@ describe('footerService with navigationRepository', () => {
     }
   ];
 
-  const contactRepositoryMock = {
-    getContactInfo: jest.fn().mockResolvedValue(mockContactInfo)
-  };
-
-  const brandingRepositoryMock = {
+  const foundationInfoRepositoryMock = {
+    getContactInfo: jest.fn().mockResolvedValue(mockContactInfo),
     getBrandingInfo: jest.fn().mockResolvedValue(mockFoundationNameData),
-    getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData)
-  };
-
-  const publicRepositoryMock = {
+    getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData),
     getPublicInfo: jest.fn().mockResolvedValue(mockPublicInfo)
   };
 
@@ -71,10 +57,8 @@ describe('footerService with navigationRepository', () => {
     getNavigation: jest.fn().mockResolvedValue(mockNavigationData)
   };
 
-  const mockDeps: FooterServiceDeps = {
-    contactRepository: contactRepositoryMock,
-    brandingRepository: brandingRepositoryMock,
-    publicRepository: publicRepositoryMock,
+  const mockDeps = {
+    foundationInfoRepository: foundationInfoRepositoryMock,
     navigationRepository: navigationRepositoryMock
   };
 
@@ -93,7 +77,6 @@ describe('footerService with navigationRepository', () => {
         email: mockContactInfo.email,
         phone: mockContactInfo.phone
       },
-      contactButtonLink: mockContactInfo.contactButtonLink,
       socialLinks: mockContactInfo.socialLinks,
       supportButtonLink: mockSupportButtonData.supportButtonLink,
       publicInfo: {
@@ -105,7 +88,7 @@ describe('footerService with navigationRepository', () => {
   });
 
   it('should return empty socialLinks if not provided', async () => {
-    contactRepositoryMock.getContactInfo.mockResolvedValueOnce({
+    foundationInfoRepositoryMock.getContactInfo.mockResolvedValueOnce({
       ...mockContactInfo,
       socialLinks: undefined
     });
