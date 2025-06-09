@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import * as React from 'react';
+import React from 'react';
+
 
 import { BreadCrumbsStyles } from './BreadCrumbs.styles';
 import BreadcrumbsClient from './BreadCrumbsClient';
