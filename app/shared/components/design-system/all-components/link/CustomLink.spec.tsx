@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
-
 import CustomLink from './CustomLink';
-
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 describe('CustomLink', () => {

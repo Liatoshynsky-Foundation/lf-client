@@ -1,7 +1,6 @@
-import { Button , ButtonProps,Typography  } from '@mui/material';
-
 import { linkStyles } from './CustomLink.styles';
 import { NextLinkComposed } from './NextLink';
+import { Typography , Button , ButtonProps } from '@mui/material';
 
 export interface CustomLinkProps extends ButtonProps {
   children: React.ReactNode;
