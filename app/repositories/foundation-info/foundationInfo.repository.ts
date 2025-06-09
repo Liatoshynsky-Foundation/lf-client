@@ -13,14 +13,17 @@ import { hrefSchema } from '~/validators/constants';
 
 export const contactRepository = {
   async getContactInfo(): Promise<ContactInfoData> {
-    const result = await ContactInfo.findOne({ slug: 'contact-info' }).select('email phone contactButtonLink').lean();
+    const result = await ContactInfo.findOne({ slug: 'contact-info' })
+      .select('email phone contactButtonLink socialLinks')
+      .lean();
 
     const parsed = contactInfoSchema.parse(result);
 
     return {
       email: parsed.email,
       phone: parsed.phone,
-      contactButtonLink: parsed.contactButtonLink
+      contactButtonLink: parsed.contactButtonLink,
+      socialLinks: parsed.socialLinks
     };
   }
 };

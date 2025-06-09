@@ -23,7 +23,8 @@ export const createFooterService = ({
       contacts: {
         foundationName: foundationNameData.foundationName,
         email: contactInfo.email,
-        phone: contactInfo.phone
+        phone: contactInfo.phone,
+        socialLinks: contactInfo.socialLinks ?? []
       },
       donationButtonData: {
         supportButtonLink: supportButtonData.supportButtonLink ?? ''

@@ -5,8 +5,12 @@ export type ContactInfoData = {
   email?: string;
   phone?: string;
   contactButtonLink?: string;
+  socialLinks?: {
+    platform: string;
+    link: string;
+    icon: string;
+  }[];
 };
-
 export type FoundationNameData = {
   foundationName: string;
 };

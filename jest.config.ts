@@ -15,8 +15,7 @@ const config: Config = {
     '!app/constants/**',
     '!app/types/**',
     '!app/di/**',
-    '!app/models/**'
-    // Exclude test files from coverage
+    '!app/models/**' // Exclude test files from coverage
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

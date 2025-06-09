@@ -12,7 +12,19 @@ describe('footerService with navigationRepository', () => {
     contactInfo: {
       email: 'test@example.com',
       phone: '+380123456789',
-      contactButtonLink: 'https://example.com/contact'
+      contactButtonLink: 'https://example.com/contact',
+      socialLinks: [
+        {
+          platform: 'Instagram',
+          link: 'https://instagram.com/fakefoundation',
+          icon: 'instagram.svg'
+        },
+        {
+          platform: 'Facebook',
+          link: 'https://facebook.com/fakefoundation',
+          icon: 'facebook.svg'
+        }
+      ]
     },
     foundationNameData: {
       foundationName: 'Foundation Name'
@@ -68,14 +80,15 @@ describe('footerService with navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  it('returns footer data including navigation correctly', async () => {
+  it('returns footer data including socialLinks and navigation', async () => {
     const result = await footerService.getFooterData('en' as Locale);
 
     expect(result).toEqual({
       contacts: {
         foundationName: mockData.foundationNameData.foundationName,
         email: mockData.contactInfo.email,
-        phone: mockData.contactInfo.phone
+        phone: mockData.contactInfo.phone,
+        socialLinks: mockData.contactInfo.socialLinks
       },
       donationButtonData: {
         supportButtonLink: mockData.supportButtonData.supportButtonLink
@@ -92,5 +105,16 @@ describe('footerService with navigationRepository', () => {
     expect(brandingRepositoryMock.getSupportButtonLink).toHaveBeenCalled();
     expect(publicRepositoryMock.getPublicInfo).toHaveBeenCalledWith('en');
     expect(navigationRepositoryMock.getNavigation).toHaveBeenCalledWith('en');
+  });
+
+  it('returns empty socialLinks if not provided', async () => {
+    contactRepositoryMock.getContactInfo.mockResolvedValueOnce({
+      ...mockData.contactInfo,
+      socialLinks: undefined
+    });
+
+    const result = await footerService.getFooterData('en' as Locale);
+
+    expect(result.contacts.socialLinks).toEqual([]);
   });
 });

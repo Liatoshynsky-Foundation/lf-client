@@ -54,7 +54,7 @@ jest.mock('~/../public/images/logo.svg', () => ({
 }));
 
 describe('Footer component', () => {
-  it('renders footer content correctly', async () => {
+  it('should render footer content correctly', async () => {
     render(await Footer());
 
     expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
