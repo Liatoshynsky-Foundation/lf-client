@@ -2,13 +2,13 @@
 
 import { Box, Typography } from '@mui/material';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import React from 'react';
 
 import { BreadCrumbsStyles } from './BreadCrumbs.styles';
 
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
-const BreadcrumbsClient = () => {
+const BreadcrumbsClient : React.FC = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter((s) => s !== '' && s !== 'en' && s !== 'uk');
 
