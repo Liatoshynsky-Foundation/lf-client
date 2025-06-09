@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
 import LanguageSwitcher from '~/components/design-system/all-components/language-switcher/LanguageSwitcher';
@@ -8,14 +8,18 @@ import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterConta
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
 
-import { contacts, sections, SocialMedia } from './Footer.consts';
+import { sections, SocialMedia } from './Footer.consts';
 import { styles } from './Footer.styles';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
 import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndSupport';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 
+import { createRequestContainer } from '~/di/container';
+
 export default async function Footer() {
   const t = await getTranslations('footer');
+  const locale = await getLocale();
+
   const svgImagePath = '/images/footer-img.svg';
   const svgImageSA = '/images/softserve-academy.svg';
 
@@ -37,6 +41,15 @@ export default async function Footer() {
     text: t('contactUsButton'),
     link: '/contact-us'
   };
+
+  const {
+    contacts
+    // socialLinks,
+    // contactButtonLink,
+    // supportButtonLink,
+    // publicInfo,
+    // navigation
+  } = await createRequestContainer().resolve('footerService').getFooterData(locale);
 
   return (
     <Box component="footer" sx={styles.footerContainer}>

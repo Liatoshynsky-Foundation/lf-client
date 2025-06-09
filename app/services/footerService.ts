@@ -1,6 +1,8 @@
-import dbConnect from '~/db/connect';
 import { Locale } from 'next-intl';
+
 import type { FooterServiceDeps } from '~/types/types/foundationInfo.type';
+
+import dbConnect from '~/db/connect';
 
 export const createFooterService = ({
   contactRepository,
@@ -23,13 +25,12 @@ export const createFooterService = ({
       contacts: {
         foundationName: foundationNameData.foundationName,
         email: contactInfo.email,
-        phone: contactInfo.phone,
-        socialLinks: contactInfo.socialLinks ?? []
+        phone: contactInfo.phone
       },
-      donationButtonData: {
-        supportButtonLink: supportButtonData.supportButtonLink ?? ''
-      },
-      footerData: {
+      contactButtonLink: contactInfo.contactButtonLink ?? '',
+      socialLinks: contactInfo.socialLinks ?? [],
+      supportButtonLink: supportButtonData.supportButtonLink ?? '',
+      publicInfo: {
         text: publicInfo.copyright,
         links: publicInfo.links ?? []
       },

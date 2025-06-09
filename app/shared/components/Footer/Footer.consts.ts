@@ -1,20 +1,5 @@
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
-export const footerData = {
-  text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
-  links: [
-    { label: 'Політика конфіденційності', href: '/privacy' },
-    { label: 'Умови користування сайтом', href: '/terms' },
-    { label: 'Інформація для медіа / партнерів', href: '/media' }
-  ]
-};
-
-export const contacts = {
-  title: 'ГРОМАДСЬКА ОРГАНІЗАЦІЯ \n«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»',
-  phone: '067 963 8366',
-  email: 'liatoshynsky@gmail.com'
-};
-
 export const sections = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',

@@ -8,7 +8,7 @@ import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
   contacts: {
-    title: string;
+    foundationName: string;
     phone: string;
     email: string;
   };
@@ -26,7 +26,7 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {
 
   return (
     <Box sx={styles.container}>
-      <Typography sx={styles.title}>{contacts.title}</Typography>
+      <Typography sx={styles.title}>{contacts.foundationName}</Typography>
       <Box>
         <Box sx={styles.linkContainer}>
           <Typography sx={styles.weakText}>Телефон: </Typography>
