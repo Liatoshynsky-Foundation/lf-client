@@ -52,7 +52,9 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-RUN chmod -R a+r,o-w,g-w ./public
+
+RUN find ./public -type d -exec chmod 0555 {} +
+RUN find ./public -type f -exec chmod 0444 {} +
 
 USER nextjs
 
