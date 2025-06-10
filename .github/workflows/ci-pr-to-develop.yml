@@ -92,8 +92,7 @@ jobs:
           mongodb-db: ${{ secrets.MONGODB_DB }}
           mongodb-username: ${{ secrets.MONGODB_USERNAME }}
           mongodb-password: ${{ secrets.MONGO_PASSWORD }}
-          mongodb-port: ${{ secrets.MONGODB_PORT }}
-          mongodb-host: ${{ secrets.MONGODB_HOST }}
+          mongodb-port: 27017
 
       - name: Install MongoDB shell
         run: |
@@ -155,8 +154,8 @@ jobs:
           MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_DB: ${{ secrets.MONGODB_DB }}
-          MONGO_HOST: ${{ secrets.MONGODB_HOST }}
-          MONGO_PORT: ${{ secrets.MONGODB_PORT }}
+          MONGO_HOST: localhost
+          MONGO_PORT: 27017
 
       - name: Upload Test Logs
         uses: actions/upload-artifact@v4
