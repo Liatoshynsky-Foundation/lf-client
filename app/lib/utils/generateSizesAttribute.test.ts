@@ -18,4 +18,13 @@ describe('generateSizesAttribute', () => {
       '(max-width: 376px) 400px, (max-width: 768px) 600px, (max-width: 1024px) 800px, (max-width: 1448px) 1000px, 816px'
     );
   });
+
+  it('should return "100vw" if no valid breakpoints are provided', () => {
+    const input = {
+      width: {}
+    };
+
+    const result = generateSizesAttribute(input);
+    expect(result).toBe('100vw');
+  });
 });

@@ -31,13 +31,13 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   containerSx = {},
   captionSx = {}
 }) => {
-  const sizesAttibute = generateSizesAttribute(sizes);
+  const sizesAttribute = generateSizesAttribute(sizes);
 
   return (
     <Box sx={{ ...containerSx, ...styles.container } as BoxProps['sx']}>
       {border && <Box sx={styles.border(border)} data-testid="img-border" />}
       <Box sx={styles.imageContainer(sizes)}>
-        <Image style={styles.image as React.CSSProperties} src={src} fill alt={alt} sizes={sizesAttibute} />
+        <Image style={styles.image as React.CSSProperties} src={src} fill alt={alt} sizes={sizesAttribute} />
       </Box>
       <Typography sx={{ ...captionSx, ...styles.caption(sizes) } as TypographyProps['sx']}>{caption}</Typography>
     </Box>
