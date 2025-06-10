@@ -101,7 +101,7 @@ const AudioPlayerPopover = ({
                 sx={styles.playPauseButton}
               >
                 <Image
-                  src={isPlaying ? './icons/pause-icon.svg' : './icons/play-icon.svg'}
+                  src={isPlaying ? '/icons/pause-icon.svg' : '/icons/play-icon.svg'}
                   alt={isPlaying ? 'Pause' : 'Play'}
                   width={24}
                   height={24}
