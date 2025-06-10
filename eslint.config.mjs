@@ -1,5 +1,8 @@
 import { FlatCompat } from '@eslint/eslintrc';
+import pluginImport from 'eslint-plugin-import';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
 import pluginSimpleImportSort from 'eslint-plugin-simple-import-sort';
+import pluginUnusedImports from 'eslint-plugin-unused-imports';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -11,13 +14,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
 
   {
     ignores: ['node_modules', '.next', 'coverage', '.idea', '.vscode']
   },
   {
     rules: {
+      'prettier/prettier': ['error'],
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       indent: ['error', 2],
@@ -29,12 +33,21 @@ const eslintConfig = [
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_'
         }
-      ]
+      ],
+      'no-var': 'error',
+      'prefer-const': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'simple-import-sort/exports': 'error',
+      'import/no-duplicates': 'error',
+      'unused-imports/no-unused-imports': 'error'
     }
   },
   {
     plugins: {
-      'simple-import-sort': pluginSimpleImportSort
+      'simple-import-sort': pluginSimpleImportSort,
+      prettier: eslintPluginPrettier,
+      import: pluginImport,
+      'unused-imports': pluginUnusedImports
     },
     rules: {
       'simple-import-sort/imports': [
