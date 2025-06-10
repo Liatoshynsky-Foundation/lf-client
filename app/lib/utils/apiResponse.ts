@@ -11,7 +11,7 @@ export const successResponse = (data: unknown, status: number = 200) => {
 
 export const errorResponse = (
   errors: string[] | Record<string, unknown>,
-  status: number = 400,
+  status: number = 400
 ): NextResponse<ErrorResponse> => {
   return NextResponse.json({ success: false, errors }, { status });
 };

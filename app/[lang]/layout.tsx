@@ -1,5 +1,5 @@
 import '../globals.css';
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -60,7 +60,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 padding: '20px',
                 height: '100vh',
                 display: 'grid',
-                gridTemplateColumns: 'repeat(12, auto)',
+                gridTemplateColumns: 'repeat(12, 1fr)',
                 gap: '40px',
                 maxWidth: '1920px !important',
                 paddingLeft: '72px',
@@ -69,18 +69,21 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 marginRight: 'auto',
                 width: '100%',
                 [theme.breakpoints.down('sm')]: {
-                  gridTemplateColumns: 'repeat(8, auto)'
-                },
-                [theme.breakpoints.down('xs')]: {
-                  gridTemplateColumns: 'repeat(4, auto)',
+                  gridTemplateColumns: 'repeat(8, 1fr)',
                   paddingLeft: '24px',
                   paddingRight: '24px',
+                  gap: '20px'
+                },
+                [theme.breakpoints.down('xs')]: {
+                  gridTemplateColumns: 'repeat(4, 1fr)',
                   gap: '16px'
                 }
               }}
             >
-              <Header />
-              {children}
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <Header />
+              </Box>
+              <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
             </Container>
             <Footer />
           </ThemeProvider>

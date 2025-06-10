@@ -3,7 +3,7 @@ export const formatTime = (time: number): string =>
 
 export const calculateProgress = (
   e: MouseEvent | React.MouseEvent,
-  progressRef: React.RefObject<HTMLDivElement | null>,
+  progressRef: React.RefObject<HTMLDivElement | null>
 ): number => {
   if (!progressRef.current) return 0;
   const { left, width } = progressRef.current.getBoundingClientRect();

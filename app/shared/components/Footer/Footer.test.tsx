@@ -23,6 +23,11 @@ jest.mock('~/components/design-system/all-components/language-switcher/LanguageS
   default: jest.fn(() => <div>LanguageSwitcher Mock</div>)
 }));
 
+jest.mock('~/../public/images/logo.svg', () => ({
+  __esModule: true,
+  default: (props: React.SVGProps<SVGSVGElement>) => <svg aria-label="Company logo" data-testid="icon-svg" {...props} />
+}));
+
 describe('Footer component', () => {
   it('should render Footer component correctly', async () => {
     const { container } = render(await Footer());
