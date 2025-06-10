@@ -354,7 +354,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
           © 2025 My Company
         </p>
         <ul
-          class="MuiBox-root css-rrw7ld"
+          class="MuiBox-root css-1xdkrgc"
         >
           <li>
             <a
@@ -386,16 +386,24 @@ exports[`Footer component should render Footer component correctly 1`] = `
     <div
       class="MuiBox-root css-4d65gp"
     >
-      <img
-        alt="SoftServe Academy"
-        data-nimg="1"
-        decoding="async"
-        height="40"
-        loading="lazy"
-        src="/images/softserve-academy.svg"
-        style="color: transparent;"
-        width="270"
-      />
+      <section
+        class="MuiBox-root css-1c94fx6"
+        role="contentinfo"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-nxtnp8-MuiTypography-root"
+        />
+        <img
+          alt="OpenTech Academy logo"
+          data-nimg="1"
+          decoding="async"
+          height="16"
+          loading="lazy"
+          src="/images/opentech-academy.svg"
+          style="color: transparent;"
+          width="232"
+        />
+      </section>
     </div>
     <div
       class="MuiBox-root css-1jwc48s"
