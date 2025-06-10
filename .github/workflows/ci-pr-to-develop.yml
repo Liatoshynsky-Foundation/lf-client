@@ -191,13 +191,13 @@ jobs:
           DOCKER_BUILD_JOB_RESULT_ENV: ${{ needs.docker-build.result }}
         run: |
           OVERALL_ICON_VAR="✅"
-
+          
           if [[ "$LINT_JOB_RESULT_ENV" != "success" || \
                 "$TEST_JOB_RESULT_ENV" != "success" || \
                 "$DOCKER_BUILD_JOB_RESULT_ENV" != "success" ]]; then
             OVERALL_ICON_VAR="❌"
           fi
-
+          
           echo "OVERALL_ICON=$OVERALL_ICON_VAR" >> $GITHUB_OUTPUT
 
       - name: Download All Artifacts
@@ -210,17 +210,17 @@ jobs:
           CI_MARKER_BASE=" CI Report"
           OVERALL_ICON_FROM_STEP="${{ steps.overall_status.outputs.OVERALL_ICON }}"
           CI_MARKER="# $OVERALL_ICON_FROM_STEP $CI_MARKER_BASE - $(TZ="Europe/Kyiv" date +"%H:%M %d/%m/%Y")"
-
+          
           {
             echo "$CI_MARKER"
             echo ""
           } > report.txt
-
+          
           function print_section() {
             local title=$1
             local fallback_msg=$2
             local file_path=$3
-
+          
             echo "## $title"
             echo ""
             if [[ -f "$file_path" ]]; then
@@ -232,27 +232,27 @@ jobs:
             fi
             printf "\n"
           }
-
+          
           LINT_SUMMARY_PATH="${{ github.workspace }}/all-artifacts/lint-results/summary-lint-errors.log"
           print_section "📝 Lint Report" "⚠️ Lint report not found." "$LINT_SUMMARY_PATH" >> report.txt
-
+          
           echo "## 🧪 Test Results" >> report.txt
           echo "" >> report.txt
-
+          
           TEST_REPORTS_FOUND=false
           for folder in $(find all-artifacts -maxdepth 1 -type d -name "tests-results-*"); do
             TEST_REPORTS_FOUND=true
             NODE_VERSION_FROM_FOLDER_NAME=$(basename "$folder" | sed 's/tests-results-//')
-
+          
             SUMMARY_RESULTS_FILE_PATH="$folder/summary-tests-results-${NODE_VERSION_FROM_FOLDER_NAME}.log"
-            ERRORS_FILE_PATH="$folder/summary-tests-errors-${NODE_VERSION_FROM_FOLDER_NAME}.log" 
-
+            ERRORS_FILE_PATH="$folder/summary-tests-errors-${NODE_VERSION_FROM_FOLDER_NAME}.log"
+          
             echo "**🔹 Node.js Version:** $NODE_VERSION_FROM_FOLDER_NAME" >> report.txt
             echo "" >> report.txt
-
+          
             print_section "**Test Summary:**" "⚠️ No test summary for Node $NODE_VERSION_FROM_FOLDER_NAME." "$SUMMARY_RESULTS_FILE_PATH" >> report.txt
             TESTS_SUCCESSFUL="✅ All tests passed successfully."
-
+          
             if [[ -f "$ERRORS_FILE_PATH" ]]; then
               if [[ -s "$ERRORS_FILE_PATH" ]] && ! grep -q "$TESTS_SUCCESSFUL" "$ERRORS_FILE_PATH"; then
                 print_section "**❌ Test Errors:**" "" "$ERRORS_FILE_PATH" >> report.txt
@@ -263,35 +263,41 @@ jobs:
               elif [ ! -s "$ERRORS_FILE_PATH" ]; then
                 echo "⚠️ Empty test error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
               fi
-            else 
+            else
               echo "⚠️ No error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
             fi
             printf "\n" >> report.txt
           done
-
+          
           if [[ "$TEST_REPORTS_FOUND" == false ]]; then
             echo "⚠️ No test results available." >> report.txt
           fi
-
-          DOCKER_LOG="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
+   
+          DOCKER_BUILD_JOB_RESULT="${{ needs.docker-build.result }}"
+          DOCKER_LOG_PATH="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
+          
           {
-            echo "## 🐳 Docker Health Check"
+            echo "## 🐳 Docker Build Status"
             echo ""
-
-            DOCKER_LOG="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
-            DOCKER_SUCCESSFUL="✅ Docker image built successfully"
-            DOCKER_FAILED="❌ Docker Build Failed"
-            if [[ -f "$DOCKER_LOG" ]]; then
-              if grep -q "$DOCKER_FAILED" "$DOCKER_LOG"; then
-                echo "**$DOCKER_FAILED:**"
+          
+            if [ "$DOCKER_BUILD_JOB_RESULT" == "success" ]; then
+              echo "✅ Docker image built successfully."
+            elif [ "$DOCKER_BUILD_JOB_RESULT" == "failure" ]; then
+              echo "❌ Docker build failed."
+              if [[ -f "$DOCKER_LOG_PATH" ]]; then
                 echo '```log'
-                cat "$DOCKER_LOG"
+                cat "$DOCKER_LOG_PATH"
                 echo '```'
               else
-                echo "$DOCKER_SUCCESSFUL"
+                echo "⚠️ Docker build log not found."
               fi
             else
-              echo "⚠️ No Docker check log found."
+              echo "⚠️ Docker build status: $DOCKER_BUILD_JOB_RESULT."
+              if [[ -f "$DOCKER_LOG_PATH" ]]; then
+                echo '```log'
+                cat "$DOCKER_LOG_PATH"
+                echo '```'
+              fi
             fi
             printf "\n"
           } >> report.txt
