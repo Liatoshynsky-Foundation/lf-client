@@ -1,15 +1,15 @@
 import type { Locale } from 'next-intl';
 
-import { Navigation } from '~/models/navigation/navigation';
-import { navigationRepository } from '~/repositories/navigation/navigation';
+import { Navigation } from '~/infrastructure/models/navigation/navigation';
+import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
 import { navigationSchema } from '~/validators/navigation.schema';
 
-jest.mock('~/db/connect', () => ({
+jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
   default: jest.fn().mockResolvedValue(undefined)
 }));
 
-jest.mock('~/models/navigation/navigation', () => ({
+jest.mock('~/infrastructure/models/navigation/navigation', () => ({
   Navigation: {
     find: jest.fn()
   }

@@ -1,6 +1,6 @@
 import { Locale } from 'next-intl';
 
-import type { HeaderServiceDeps } from '~/types/types/services/headerService.type';
+import type { HeaderServiceDeps } from '~/domain/services/headerService.type';
 
 export const createHeaderService = ({ foundationInfoRepository, navigationRepository }: HeaderServiceDeps) => ({
   async getHeaderData(locale: Locale) {

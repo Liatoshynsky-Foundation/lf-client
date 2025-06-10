@@ -1,9 +1,8 @@
 import type { Locale } from 'next-intl';
 
-import { NavigationRepository } from '~/types/types/repositories/navigation.repository';
-
-import dbConnect from '~/db/connect';
-import { Navigation } from '~/models/navigation/navigation';
+import { NavigationRepository } from '~/domain/repositories/navigation.repository';
+import dbConnect from '~/infrastructure/db/connect';
+import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import { navigationSchema } from '~/validators/navigation.schema';
 
 export const navigationRepository: NavigationRepository = {

@@ -45,7 +45,7 @@ describe('dbConnect', () => {
     mockConfig('mongodb://localhost:27017/test-db');
     mockLoggerModule(loggerMock);
 
-    const { default: dbConnect } = await import('~/db/connect');
+    const { default: dbConnect } = await import('~/infrastructure/db/connect');
     const { connect } = await import('mongoose');
     const { mongoUrl } = await import('~/config');
 
@@ -69,7 +69,7 @@ describe('dbConnect', () => {
     mockConfig('mongodb://localhost:27017/test-db');
     mockLoggerModule(loggerMock);
 
-    const { default: dbConnect } = await import('~/db/connect');
+    const { default: dbConnect } = await import('~/infrastructure/db/connect');
 
     await expect(dbConnect()).rejects.toThrow('Connection failed');
 
@@ -92,7 +92,7 @@ describe('dbConnect', () => {
     mockConfig('mongodb://localhost:27017/test-db');
     mockLoggerModule(loggerMock);
 
-    const { default: dbConnect } = await import('~/db/connect');
+    const { default: dbConnect } = await import('~/infrastructure/db/connect');
     const { connect } = await import('mongoose');
     const { mongoUrl } = await import('~/config');
 
@@ -114,7 +114,7 @@ describe('dbConnect', () => {
     mockConfig(undefined);
     mockLoggerModule(loggerMock);
 
-    const { default: dbConnect } = await import('~/db/connect');
+    const { default: dbConnect } = await import('~/infrastructure/db/connect');
 
     await expect(dbConnect()).rejects.toThrow(errors.MISSING_MONGO_URL);
   });
@@ -127,7 +127,7 @@ describe('dbConnect', () => {
     mockConfig('mongodb://localhost:27017/test-db');
     mockLoggerModule(loggerMock);
 
-    const { default: dbConnect } = await import('~/db/connect');
+    const { default: dbConnect } = await import('~/infrastructure/db/connect');
 
     await expect(dbConnect()).rejects.toThrow('Connection failed');
     const cached = (global as typeof globalThis & { mongoose: MongooseGlobalCache }).mongoose;

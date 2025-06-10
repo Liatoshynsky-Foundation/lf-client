@@ -1,7 +1,7 @@
 import { asFunction } from 'awilix';
 
-import { foundationInfoRepository } from '~/repositories/foundation-info/foundationInfo.repository';
-import { navigationRepository } from '~/repositories/navigation/navigation';
+import { foundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
+import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
 
 export const registerRepositories = () => ({
   foundationInfoRepository: asFunction(() => foundationInfoRepository).scoped(),

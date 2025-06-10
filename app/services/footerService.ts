@@ -1,6 +1,6 @@
 import { Locale } from 'next-intl';
 
-import type { FooterServiceDeps } from '~/types/types/services/footerService.type';
+import type { FooterServiceDeps } from '~/domain/services/footerService.type';
 
 export const createFooterService = ({ foundationInfoRepository, navigationRepository }: FooterServiceDeps) => ({
   async getFooterData(locale: Locale) {

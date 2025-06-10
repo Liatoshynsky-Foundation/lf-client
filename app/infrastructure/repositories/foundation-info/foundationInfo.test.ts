@@ -1,27 +1,27 @@
 import { foundationInfoRepository } from './foundationInfo.repository';
 
-import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
-import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
-import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
+import { BrandingInfo } from '~/infrastructure/models/foundation-info/foundationInfoBranding';
+import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationInfoContact';
+import { PublicInfo } from '~/infrastructure/models/foundation-info/foundationInfoPublic';
 
-jest.mock('~/db/connect', () => ({
+jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
   default: jest.fn().mockResolvedValue(undefined)
 }));
 
-jest.mock('~/models/foundation-info/foundationInfoContact', () => ({
+jest.mock('~/infrastructure/models/foundation-info/foundationInfoContact', () => ({
   ContactInfo: {
     findOne: jest.fn()
   }
 }));
 
-jest.mock('~/models/foundation-info/foundationInfoBranding', () => ({
+jest.mock('~/infrastructure/models/foundation-info/foundationInfoBranding', () => ({
   BrandingInfo: {
     findOne: jest.fn()
   }
 }));
 
-jest.mock('~/models/foundation-info/foundationInfoPublic', () => ({
+jest.mock('~/infrastructure/models/foundation-info/foundationInfoPublic', () => ({
   PublicInfo: {
     findOne: jest.fn()
   }

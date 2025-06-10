@@ -1,20 +1,17 @@
 import type { Locale } from 'next-intl';
 
-import type { FoundationInfoRepository } from '~/types/types/repositories/foundationInfo.repository';
-
-import dbConnect from '~/db/connect';
-import { BrandingInfo } from '~/models/foundation-info/foundationInfoBranding';
-import { ContactInfo } from '~/models/foundation-info/foundationInfoContact';
-import { PublicInfo } from '~/models/foundation-info/foundationInfoPublic';
+import type { FoundationInfoRepository } from '~/domain/repositories/foundationInfo.repository';
+import dbConnect from '~/infrastructure/db/connect';
+import { BrandingInfo } from '~/infrastructure/models/foundation-info/foundationInfoBranding';
+import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationInfoContact';
+import { PublicInfo } from '~/infrastructure/models/foundation-info/foundationInfoPublic';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 
 export const foundationInfoRepository: FoundationInfoRepository = {
   async getContactInfo() {
     await dbConnect();
 
-    const result = await ContactInfo.findOne({ slug: 'contact-info' })
-      .select('email phone contactButtonLink socialLinks')
-      .lean();
+    const result = await ContactInfo.findOne({ slug: 'contact-info' }).select('email phone socialLinks').lean();
 
     const parsed = contactInfoSchema.parse(result);
 
