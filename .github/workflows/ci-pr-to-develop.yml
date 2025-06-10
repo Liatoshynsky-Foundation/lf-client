@@ -147,14 +147,23 @@ jobs:
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
           
-          {
-          docker build -t my-app-image:${{ github.sha }} . 
-          docker image inspect my-app-image:${{ github.sha }} > /dev/null
-          echo "✅ Docker image built successfully."
-          } >"$LOG_FILE" 2>&1 || {
+          docker build -t my-app-image:${{ github.sha }} . >"$LOG_FILE" 2>&1
+          BUILD_STATUS=$?
+          
+          if [ $BUILD_STATUS -eq 0 ]; then
+            docker image inspect my-app-image:${{ github.sha }} > /dev/null 2>&1
+            INSPECT_STATUS=$?
+               
+            if [ $INSPECT_STATUS -eq 0 ]; then
+              echo "✅ Docker image built successfully." >> "$LOG_FILE"
+            else
+              echo "❌ Docker image inspect failed after build." >> "$LOG_FILE"
+              exit 1 
+          fi
+          else
             echo "❌ Docker build failed. See log." >> "$LOG_FILE"
-            exit 1
-          }
+            exit 1 
+          fi
 
       - name: Upload Docker Logs
         uses: actions/upload-artifact@v4
