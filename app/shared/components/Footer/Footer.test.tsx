@@ -23,7 +23,14 @@ jest.mock('~/components/design-system/all-components/language-switcher/LanguageS
   default: jest.fn(() => <div>LanguageSwitcher Mock</div>)
 }));
 
-jest.mock('~/../public/images/logo.svg', () => ({
+jest.mock('~/public/icons/donation-button.svg', () => ({
+  __esModule: true,
+  default: (props: React.SVGProps<SVGSVGElement>) => {
+    return <svg aria-label="Donation Button" data-testid="donation-icon-svg" {...props} />;
+  }
+}));
+
+jest.mock('~/public/images/logo.svg', () => ({
   __esModule: true,
   default: (props: React.SVGProps<SVGSVGElement>) => <svg aria-label="Company logo" data-testid="icon-svg" {...props} />
 }));
