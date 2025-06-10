@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import OpenTechLogo from './OpenTechLogo';
-
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
+  __esModule: true,
   SvgImage: (props: React.ComponentProps<'img'>) => {
     const { src, alt, width, height } = props;
     return <img src={src} alt={alt} width={width} height={height} />;
