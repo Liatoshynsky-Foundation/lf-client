@@ -1,19 +1,41 @@
 import { Box, BoxProps } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
+
+import LogoImage from '~/../public/images/logo.svg';
+import { logoSizes } from '~/constants';
+import { Link } from '~/i18n/navigation';
+
+type LogoVariant = keyof typeof logoSizes;
 
 interface LogoProps extends BoxProps {
-  variant?: 'header' | 'footer';
+  variant?: LogoVariant;
+  color?: 'black' | 'white';
 }
 
-const Logo: React.FC<LogoProps> = ({ variant = 'header', sx, ...props }) => {
-  const size = variant === 'header' ? { width: 96, height: 40 } : { width: 127, height: 53 };
+const Logo: React.FC<LogoProps> = ({ color = 'black', variant = 'header', sx, ...props }) => {
+  const size = logoSizes[variant];
+
+  const image = (
+    <LogoImage
+      width="100%"
+      height="100%"
+      style={{ color }}
+      title="Company logo"
+      aria-hidden={false}
+      focusable={false}
+    />
+  );
 
   return (
-    <Box sx={{ display: 'inline-block', ...sx }} {...props}>
-      <Link href="/">
-        <Image src="/images/logo.svg" alt="logo" {...size} priority />
-      </Link>
+    <Box
+      sx={{
+        display: 'inline-block',
+        width: size.width,
+        height: size.height,
+        ...sx
+      }}
+      {...props}
+    >
+      {variant === 'office' ? image : <Link href="/">{image}</Link>}
     </Box>
   );
 };

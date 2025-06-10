@@ -15,7 +15,11 @@
     "supportButton": "Підтримати"
   },
   "home": {
-    "text": "Проєкт Лятушинський"
+    "liatoshynskyOffice": {
+      "office": "КабІНет",
+      "name": "ЛЯтоШинСькоГO",
+      "goToOfficeButton": "Увійти до кабінету"
+    }
   },
   "foundation": {
     "foundationWasCreated": "Фундація Лятошинського, заснована",

@@ -15,7 +15,11 @@
     "supportButton": "Support"
   },
   "home": {
-    "text": "Liatoshynsky project"
+    "liatoshynskyOffice": {
+      "office": "OfFicE",
+      "name": "LIaTosHynSKy",
+      "goToOfficeButton": "Go to the office"
+    }
   },
   "foundation": {
     "foundationWasCreated": "The Lyatoshynsky Foundation, established",
