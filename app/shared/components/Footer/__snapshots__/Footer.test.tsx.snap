@@ -387,9 +387,8 @@ exports[`Footer component should render Footer component correctly 1`] = `
     <div
       class="MuiBox-root css-4d65gp"
     >
-      <section
+      <div
         class="MuiBox-root css-1c94fx6"
-        role="footer"
       >
         <p
           class="MuiTypography-root MuiTypography-body1 css-nxtnp8-MuiTypography-root"
@@ -404,7 +403,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
           style="color: transparent;"
           width="232"
         />
-      </section>
+      </div>
     </div>
     <div
       class="MuiBox-root css-1jwc48s"

@@ -29,7 +29,7 @@ const OpenTechLogo: React.FC<OpenTechLogoProps> = ({ label, showAcademy = true }
   const logoConfig = showAcademy ? LOGO_CONFIG.academy : LOGO_CONFIG.default;
 
   return (
-    <Box sx={styles.container} component="section" role="footer" aria-label={label}>
+    <Box sx={styles.container}>
       <Typography sx={styles.label}>{label}</Typography>
 
       <SvgImage src={logoConfig.src} width={logoConfig.width} height={logoConfig.height} alt={logoConfig.alt} />
