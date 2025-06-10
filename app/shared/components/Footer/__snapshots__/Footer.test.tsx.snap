@@ -22,19 +22,20 @@ exports[`Footer component should render Footer component correctly 1`] = `
         class="MuiBox-root css-1b1a8p0"
       >
         <div
-          class="MuiBox-root css-1baulvz"
+          class="MuiBox-root css-1uc6j3q"
         >
           <a
             href="/"
           >
-            <img
-              alt="logo"
-              data-nimg="1"
-              decoding="async"
-              height="53"
-              src="/images/logo.svg"
-              style="color: transparent;"
-              width="127"
+            <svg
+              aria-hidden="false"
+              aria-label="Company logo"
+              data-testid="icon-svg"
+              focusable="false"
+              height="100%"
+              style="color: black;"
+              title="Company logo"
+              width="100%"
             />
           </a>
         </div>

@@ -1,12 +1,7 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
+import LiatoshynskyOffice from '~/components/Liatoshynsky-office/LiatoshynskyOffice';
 
-export default async function Home({ params }: Readonly<ParamsWithLanguage>) {
-  const { lang } = await params;
-  setRequestLocale(lang);
-  const t = await getTranslations('home');
-
-  return <h1>{t('text')} </h1>;
+export default async function Home() {
+  return <LiatoshynskyOffice />;
 }

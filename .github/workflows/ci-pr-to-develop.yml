@@ -41,7 +41,7 @@ jobs:
           set -e
 
           SUMMARY_FILE="summary-lint-errors.log"
-          grep -E '\[warn\]|Error:|Warning:' full-lint.log > "$SUMMARY_FILE" || true
+          grep -B 1 -E '\[warn\]|Error:|Warning:' full-lint.log > "$SUMMARY_FILE" || true
 
           if [ ! -s "$SUMMARY_FILE" ]; then
             echo "✅ No lint errors found." > "$SUMMARY_FILE"

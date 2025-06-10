@@ -16,7 +16,15 @@
     "supportButton": "Support"
   },
   "home": {
-    "text": "Liatoshynsky project"
+    "liatoshynskyOffice": {
+      "office": "OfFicE",
+      "name": "LIaTosHynSKy",
+      "goToOfficeButton": "Go to the office"
+    }
+  },
+  "foundation": {
+    "foundationWasCreated": "The Lyatoshynsky Foundation, established",
+    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects."
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",
