@@ -72,7 +72,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['22']
-        mongodb-version: ['6.0']
+        mongodb-version: ['8.0']
       max-parallel: 1
 
     steps:
@@ -90,7 +90,7 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-db: ${{ secrets.MONGODB_DB }}
-          mongodb-username: ${{ secrets.MONGODB_USERNAME }}
+          mongodb-username: ${{ secrets.MONGODB_USER }}
           mongodb-password: ${{ secrets.MONGO_PASSWORD }}
           mongodb-port: 27017
 
@@ -151,7 +151,7 @@ jobs:
 
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_USER: ${{ secrets.MONGO_USER }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_DB: ${{ secrets.MONGODB_DB }}
           MONGO_HOST: localhost
