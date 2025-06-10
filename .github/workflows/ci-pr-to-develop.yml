@@ -72,7 +72,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['22']
-        mongodb-version: ['8.15.0']
+        mongodb-version: ['8.0']
       max-parallel: 1
 
     steps:
