@@ -72,6 +72,8 @@ jobs:
     strategy:
       matrix:
         node-version: ['22']
+        mongodb-version: ['8.15.0']
+      max-parallel: 1
 
     steps:
       - name: Checkout repository
@@ -82,6 +84,35 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+
+      - name: Install MongoDB ${{ matrix.mongodb-version }}
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-db: ${{ secrets.MONGODB_DB }}
+          mongodb-username: ${{ secrets.MONGODB_USERNAME }}
+          mongodb-password: ${{ secrets.MONGO_PASSWORD }}
+          mongodb-port: ${{ secrets.MONGODB_PORT }}
+          mongodb-host: ${{ secrets.MONGODB_HOST }}
+
+      - name: Install MongoDB shell
+        run: |
+          sudo apt-get install -y gnupg curl
+          curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+          sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+          --dearmor
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | \
+          sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+          sudo apt-get update && sudo apt-get install -y mongodb-mongosh
+
+      - name: Check MongoDB
+        run: |
+          for i in {1..30}; do
+            mongosh --eval "db.runCommand({ ping: 1 })" localhost:27017 && echo "MongoDB is up (attempt $i)" && exit 0
+            echo "Waiting for MongoDB... (attempt $i)"
+            sleep 2
+          done
+          echo "MongoDB did not start in time!" && exit 1
 
       - name: Install dependencies
         run: npm ci
@@ -119,6 +150,14 @@ jobs:
           
           exit "$exit_code"
 
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_DB: ${{ secrets.MONGODB_DB }}
+          MONGO_HOST: ${{ secrets.MONGODB_HOST }}
+          MONGO_PORT: ${{ secrets.MONGODB_PORT }}
+
       - name: Upload Test Logs
         uses: actions/upload-artifact@v4
         if: always()
@@ -129,12 +168,17 @@ jobs:
             summary-tests-results-${{ matrix.node-version }}.log
             summary-tests-errors-${{ matrix.node-version }}.log
 
-
-
   docker-build:
     name: Build Docker Container
     runs-on: 'ubuntu-latest'
     needs: [ 'run-lint', 'run-tests' ]
+
+    env:
+      MONGO_DB: ${{ secrets.MONGODB_DB }}
+      MONGO_HOST: ${{ secrets.MONGODB_HOST }}
+      MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+      MONGO_PORT: ${{ secrets.MONGO_PORT }}
+      MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
     steps:
       - name: Checkout repository
@@ -147,7 +191,13 @@ jobs:
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
           
-          docker build -t my-app-image:${{ github.sha }} . >"$LOG_FILE" 2>&1
+          docker build \
+            --build-arg MONGO_DB=${{ env.MONGO_DB }} \
+            --build-arg MONGO_HOST=${{ env.MONGO_HOST }} \
+            --build-arg MONGO_USERNAME=${{ env.MONGO_USERNAME }} \
+            --build-arg MONGO_PASSWORD=${{ env.MONGO_PASSWORD }} \
+            --build-arg MONGO_PORT=${{ env.MONGO_PORT }} \
+            -t my-app-image:${{ github.sha }} . >"$LOG_FILE" 2>&1     
           BUILD_STATUS=$?
           
           if [ $BUILD_STATUS -eq 0 ]; then

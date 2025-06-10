@@ -22,6 +22,17 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG MONGO_USERNAME
+ARG MONGO_PASSWORD
+ARG MONGO_DB
+ARG MONGO_HOST
+ARG MONGO_PORT
+
+ENV MONGO_USERNAME=$MONGO_USERNAME
+ENV MONGO_PASSWORD=$MONGO_PASSWORD
+ENV MONGO_DB=$MONGO_DB
+ENV MONGO_HOST=$MONGO_HOST
+ENV MONGO_PORT=$MONGO_PORT
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
