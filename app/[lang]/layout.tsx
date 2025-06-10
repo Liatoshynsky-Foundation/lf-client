@@ -61,6 +61,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 height: '100vh',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(12, 1fr)',
+                gridTemplateRows: 'auto 1fr auto',
                 gap: '40px',
                 maxWidth: '1920px !important',
                 paddingLeft: '72px',
@@ -84,8 +85,18 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 <Header />
               </Box>
               <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
+              <Box
+                sx={{
+                  gridColumn: '1 / -1',
+                  gridRow: 3,
+                  marginLeft: '-32px',
+                  marginRight: '-32px',
+                  marginBottom: '-20px'
+                }}
+              >
+                <Footer />
+              </Box>
             </Container>
-            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
