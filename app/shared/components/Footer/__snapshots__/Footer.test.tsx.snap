@@ -355,7 +355,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
           © 2025 My Company
         </p>
         <ul
-          class="MuiBox-root css-rrw7ld"
+          class="MuiBox-root css-1xdkrgc"
         >
           <li>
             <a
