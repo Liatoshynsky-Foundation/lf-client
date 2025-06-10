@@ -3,11 +3,11 @@ export const styles = {
     width: '100%',
     maxWidth: '1300px',
     display: 'flex',
-    flexDirection: { xs: 'column-reverse', md: 'row' },
+    flexDirection: 'column-reverse',
     justifyContent: { xs: 'center', md: 'space-between' },
-    alignItems: { xs: 'flex-start', md: 'center' },
-    gap: { xs: '24px', md: '60px', lg: '120px' },
-    fontFamily: 'Mulish, sans-serif',
+    alignItems: { xs: 'center', md: 'flex-start' },
+    gap: '10px',
+    fontFamily: 'Mulish, sans-serif'
   },
   text: {
     fontSize: '16px',
@@ -15,11 +15,11 @@ export const styles = {
     fontWeight: 400,
     textAlign: { xs: 'left', md: 'left' },
     maxWidth: '408px',
-    width: '100%',
+    width: '100%'
   },
   linkList: {
     display: 'flex',
-    alignItems: { xs: 'start', md: 'center' },
+    alignItems: { xs: 'center', md: 'start' },
     justifyContent: { xs: 'flex-start', md: 'center' },
     listStyle: 'none',
     padding: 0,
@@ -30,7 +30,7 @@ export const styles = {
     color: '#5F0E0F',
     fontWeight: 400,
     width: { xs: '100%', md: 'auto' },
-    marginLeft: { xs: 0, md: 'auto' },
+    marginLeft: '0',
     flexDirection: { xs: 'column', md: 'row' },
     '& li': {
       display: 'flex',
@@ -44,20 +44,20 @@ export const styles = {
         height: '16px',
         margin: '0 16px',
         verticalAlign: 'middle',
-        backgroundImage: 'url(/Bullet-icon.svg)',
+        backgroundImage: 'url(/icons/bullet-icon.svg)',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'contain',
-      },
-    },
+        backgroundSize: 'contain'
+      }
+    }
   },
   link: {
     textDecoration: 'none',
     color: '#5F0E0F',
     '&:hover': {
       textDecoration: 'underline',
-      color: '#000',
+      color: '#000'
     },
     fontSize: { xs: '14px', md: '16px' },
-    lineHeight: '150%',
-  },
+    lineHeight: '150%'
+  }
 };

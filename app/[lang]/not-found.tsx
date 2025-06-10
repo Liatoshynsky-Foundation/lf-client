@@ -1,5 +1,6 @@
-import { Link } from '~/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
+
+import { Link } from '~/i18n/navigation';
 
 export default async function CustomNotFoundPage() {
   const t = await getTranslations('common');

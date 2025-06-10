@@ -1,5 +1,5 @@
-import { lengths, regex } from '~/constants/validation';
 import { errors } from '~/constants/errors';
+import { lengths, regex } from '~/constants/validation';
 
 export type ContactFormData = {
   name: unknown;
@@ -11,11 +11,7 @@ export function validateContactData(data: ContactFormData): string[] {
   const { name, email, message } = data;
   const errorsMessages: string[] = [];
 
-  if (
-    typeof name !== 'string' ||
-    name.length < lengths.NAME_MIN_LENGTH ||
-    name.length > lengths.NAME_MAX_LENGTH
-  ) {
+  if (typeof name !== 'string' || name.length < lengths.NAME_MIN_LENGTH || name.length > lengths.NAME_MAX_LENGTH) {
     errorsMessages.push(errors.NAME_ERROR);
   }
 

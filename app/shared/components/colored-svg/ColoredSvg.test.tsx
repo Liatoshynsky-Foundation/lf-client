@@ -1,5 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+
 import { Svg } from './ColoredSvg';
 import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
 

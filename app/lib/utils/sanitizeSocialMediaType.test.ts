@@ -1,5 +1,5 @@
-import { SocialMediaTypes } from '~/types/enums/common.enums';
 import { sanitizeSocialMediaType } from './sanitizeSocialMediaType';
+import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 describe('sanitizeImageType', () => {
   it('should turn a string into a social media type', () => {

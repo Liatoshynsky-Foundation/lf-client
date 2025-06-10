@@ -1,7 +1,9 @@
 import { Box } from '@mui/material';
+
 import { styles } from './FooterSocialMedia.styles';
-import { SocialMediaTypes } from '~/types/enums/common.enums';
 import SocialMediaIcon from './social-media-icon/SocialMediaIcon';
+import { SocialMediaTypes } from '~/types/enums/common.enums';
+
 import { sanitizeSocialMediaType } from '~/lib/utils/sanitizeSocialMediaType';
 type LinkIcon = {
   icon: string | SocialMediaTypes;

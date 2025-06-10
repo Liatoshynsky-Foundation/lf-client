@@ -1,8 +1,9 @@
-import dynamic from 'next/dynamic';
-import { styles } from './ColoredSvg.styles';
 import { Box } from '@mui/material';
-import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
+import dynamic from 'next/dynamic';
 import React from 'react';
+
+import { styles } from './ColoredSvg.styles';
+import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
 
 interface SvgProps {
   src: string;

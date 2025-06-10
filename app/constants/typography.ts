@@ -48,7 +48,7 @@ export const AppTypography: TypographyVariantsOptions = {
     fontWeight: 700,
     fontSize: '116px',
     lineHeight: '100%',
-    letterSpacing: '-2px',
+    letterSpacing: '-2px'
   },
   oswald64Semibold: {
     fontFamily: 'Oswald',
@@ -56,7 +56,7 @@ export const AppTypography: TypographyVariantsOptions = {
     fontSize: '64px',
     lineHeight: '100%',
     letterSpacing: '-2%',
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   oswald64Regular: {
     fontFamily: 'Oswald',
@@ -64,92 +64,92 @@ export const AppTypography: TypographyVariantsOptions = {
     fontSize: '64px',
     lineHeight: '100%',
     letterSpacing: '2%',
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   oswald28Bold: {
     fontFamily: 'Oswald',
     fontWeight: 700,
     fontSize: '28px',
     lineHeight: '160%',
-    textTransform: 'uppercase',
+    textTransform: 'uppercase'
   },
 
   mulish24Bold: {
     fontFamily: 'Mulish',
     fontWeight: 700,
     fontSize: '24px',
-    lineHeight: '140%',
+    lineHeight: '140%'
   },
   mulish24Regular: {
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: '24px',
-    lineHeight: '160%',
+    lineHeight: '160%'
   },
   mulish20Regular: {
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: '20px',
-    lineHeight: '160%',
+    lineHeight: '160%'
   },
   mulish20Semibold: {
     fontFamily: 'Mulish',
     fontWeight: 600,
     fontSize: '20px',
-    lineHeight: '160%',
+    lineHeight: '160%'
   },
   mulish20Bold: {
     fontFamily: 'Mulish',
     fontWeight: 700,
     fontSize: '20px',
-    lineHeight: '140%',
+    lineHeight: '140%'
   },
   mulish18Regular: {
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: '18px',
-    lineHeight: '160%',
+    lineHeight: '160%'
   },
   mulish18Italic: {
     fontFamily: 'Mulish',
     fontSize: '18px',
     fontStyle: 'italic',
-    lineHeight: '160%',
+    lineHeight: '160%'
   },
   mulish18Medium: {
     fontFamily: 'Mulish',
     fontWeight: 500,
     fontSize: '18px',
-    lineHeight: '150%',
+    lineHeight: '150%'
   },
   mulish16Regular: {
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: '16px',
-    lineHeight: '150%',
+    lineHeight: '150%'
   },
   mulish16Medium: {
     fontFamily: 'Mulish',
     fontWeight: 500,
     fontSize: '16px',
-    lineHeight: '150%',
+    lineHeight: '150%'
   },
   mulish16Italic: {
     fontFamily: 'Mulish',
     fontSize: '16px',
     fontStyle: 'italic',
-    lineHeight: 'auto',
+    lineHeight: 'auto'
   },
   mulish16Caption: {
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: '16px',
-    lineHeight: '140%',
+    lineHeight: '140%'
   },
   mulish14Italic: {
     fontFamily: 'Mulish',
     fontSize: '14px',
     fontStyle: 'italic',
-    lineHeight: '140%',
-  },
+    lineHeight: '140%'
+  }
 };

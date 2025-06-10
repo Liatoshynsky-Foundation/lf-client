@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+
 import AudioPlayer, { AudioPlayerProps } from './AudioPlayer';
 
 describe('AudioPlayer', () => {
@@ -6,7 +7,7 @@ describe('AudioPlayer', () => {
     src: 'test-audio.mp3',
     trackName: 'Test Track',
     onPlay: jest.fn(),
-    onPause: jest.fn(),
+    onPause: jest.fn()
   };
 
   let props: Partial<AudioPlayerProps>;
@@ -26,9 +27,7 @@ describe('AudioPlayer', () => {
   });
 
   test('should render AudioPlayer component', () => {
-    expect(
-      screen.getByRole('button', { name: /toggle audio player/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
   test('should render audio element with given src', () => {
@@ -38,9 +37,7 @@ describe('AudioPlayer', () => {
   });
 
   test('should open popover when button is clicked', () => {
-    fireEvent.click(
-      screen.getByRole('button', { name: /toggle audio player/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(screen.getByText(defaultProps.trackName)).toBeInTheDocument();
   });
 
@@ -51,11 +48,11 @@ describe('AudioPlayer', () => {
       if (audio) {
         Object.defineProperty(audio, 'currentTime', {
           value: 5,
-          writable: true,
+          writable: true
         });
         Object.defineProperty(audio, 'duration', {
           value: 10,
-          writable: true,
+          writable: true
         });
         audio.dispatchEvent(new Event('timeupdate'));
       }
@@ -71,7 +68,7 @@ describe('AudioPlayer', () => {
       if (audio) {
         Object.defineProperty(audio, 'duration', {
           value: 20,
-          writable: true,
+          writable: true
         });
         audio.dispatchEvent(new Event('loadedmetadata'));
       }
@@ -111,7 +108,7 @@ describe('AudioPlayer', () => {
     if (audio) {
       Object.defineProperty(audio, 'duration', {
         value: 100,
-        writable: true,
+        writable: true
       });
 
       act(() => {
@@ -129,14 +126,12 @@ describe('AudioPlayer', () => {
     act(() => {
       Object.defineProperty(audio!, 'paused', {
         value: false,
-        configurable: true,
+        configurable: true
       });
       audio?.dispatchEvent(new Event('play'));
     });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /toggle audio player/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
 
     const animatedBars = screen.getAllByRole('presentation');
     expect(animatedBars.length).toBeGreaterThan(0);
@@ -144,7 +139,7 @@ describe('AudioPlayer', () => {
     act(() => {
       Object.defineProperty(audio!, 'paused', {
         value: true,
-        configurable: true,
+        configurable: true
       });
       audio?.dispatchEvent(new Event('pause'));
     });

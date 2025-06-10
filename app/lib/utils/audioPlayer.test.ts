@@ -1,4 +1,4 @@
-import { formatTime, calculateProgress } from './audioPlayer';
+import { calculateProgress, formatTime } from './audioPlayer';
 
 describe('formatTime', () => {
   it('should format seconds into MM:SS format', () => {
@@ -13,13 +13,13 @@ describe('formatTime', () => {
 describe('calculateProgress', () => {
   const mockRef = {
     current: {
-      getBoundingClientRect: () => ({ left: 100, width: 200 }),
-    },
+      getBoundingClientRect: () => ({ left: 100, width: 200 })
+    }
   } as React.RefObject<HTMLDivElement>;
 
   it('should return 0 when ref is null', () => {
     const result = calculateProgress({ clientX: 150 } as MouseEvent, {
-      current: null,
+      current: null
     });
     expect(result).toBe(0);
   });

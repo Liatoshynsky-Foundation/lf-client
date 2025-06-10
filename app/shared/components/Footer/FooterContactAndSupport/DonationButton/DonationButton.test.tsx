@@ -1,5 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+
 import DonationButton from './DonationButton';
 
 jest.mock('@public/icons/donation-button.svg', () => ({

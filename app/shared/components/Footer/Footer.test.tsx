@@ -1,10 +1,6 @@
-import Footer from '~/components/Footer/Footer';
 import { render, screen } from '@testing-library/react';
 
-jest.mock('@public/icons/donation-button.svg', () => ({
-  __esModule: true,
-  default: () => <svg data-testid="donation-icon" />
-}));
+import Footer from '~/components/Footer/Footer';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {
@@ -17,12 +13,32 @@ jest.mock('next-intl/server', () => ({
     return translations[key];
   })
 }));
+
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
+
+jest.mock('~/components/design-system/all-components/language-switcher/LanguageSwitcher', () => ({
+  __esModule: true,
+  default: jest.fn(() => <div>LanguageSwitcher Mock</div>)
+}));
+
+jest.mock('~/public/icons/donation-button.svg', () => ({
+  __esModule: true,
+  default: (props: React.SVGProps<SVGSVGElement>) => {
+    return <svg aria-label="Donation Button" data-testid="donation-icon-svg" {...props} />;
+  }
+}));
+
+jest.mock('~/public/images/logo.svg', () => ({
+  __esModule: true,
+  default: (props: React.SVGProps<SVGSVGElement>) => <svg aria-label="Company logo" data-testid="icon-svg" {...props} />
+}));
+
 describe('Footer component', () => {
   it('should render Footer component correctly', async () => {
-    render(await Footer());
+    const { container } = render(await Footer());
     expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
   });
 });

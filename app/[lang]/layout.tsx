@@ -1,15 +1,18 @@
+import '../globals.css';
+import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
-import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header/Header';
-import { Container } from '@mui/material';
-import '../globals.css';
-import { ReactNode } from 'react';
-import { NextIntlClientProvider, Locale, hasLocale } from 'next-intl';
-import { routing } from '~/i18n/routing';
 import { notFound } from 'next/navigation';
-import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
-import ThemeProvider from '~/shared/components/design-system/all-components/theme/ThemeProvider';
+import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
+import { ReactNode } from 'react';
+
+import Footer from '~/components/Footer/Footer';
+import Header from '~/components/Header/Header';
+import { theme } from '~/ds-components/theme/Theme';
+import ThemeProvider from '~/ds-components/theme/ThemeProvider';
+
+import { routing } from '~/i18n/routing';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']
@@ -54,11 +57,10 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
           <ThemeProvider>
             <Container
               sx={{
-                border: '1px solid #ccc',
                 padding: '20px',
                 height: '100vh',
                 display: 'grid',
-                gridTemplateColumns: 'repeat(12, auto)',
+                gridTemplateColumns: 'repeat(12, 1fr)',
                 gap: '40px',
                 maxWidth: '1920px !important',
                 paddingLeft: '72px',
@@ -67,20 +69,23 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 marginRight: 'auto',
                 width: '100%',
                 [theme.breakpoints.down('sm')]: {
-                  gridTemplateColumns: 'repeat(8, auto)'
-                },
-                [theme.breakpoints.down('xs')]: {
-                  gridTemplateColumns: 'repeat(4, auto)',
+                  gridTemplateColumns: 'repeat(8, 1fr)',
                   paddingLeft: '24px',
                   paddingRight: '24px',
+                  gap: '20px'
+                },
+                [theme.breakpoints.down('xs')]: {
+                  gridTemplateColumns: 'repeat(4, 1fr)',
                   gap: '16px'
                 }
               }}
             >
-              <Header />
-              {children}
-              <Footer />
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <Header />
+              </Box>
+              <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
             </Container>
+            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

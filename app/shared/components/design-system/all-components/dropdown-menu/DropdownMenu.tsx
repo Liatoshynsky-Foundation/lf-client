@@ -1,7 +1,8 @@
 'use client';
 import Menu, { type MenuProps } from '@mui/material/Menu';
-import { styles } from './DropdownMenu.style';
 import { ReactNode } from 'react';
+
+import { styles } from './DropdownMenu.style';
 import { PositionEnum } from '~/types/enums/common.enums';
 
 interface DropdownMenuProps extends MenuProps {
@@ -15,11 +16,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   sx,
   anchorOrigin = {
     vertical: PositionEnum.Bottom,
-    horizontal: PositionEnum.Center,
+    horizontal: PositionEnum.Center
   },
   transformOrigin = {
     vertical: PositionEnum.Top,
-    horizontal: PositionEnum.Center,
+    horizontal: PositionEnum.Center
   },
   ...props
 }) => {
@@ -27,8 +28,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     <Menu
       PaperProps={{
         style: {
-          maxHeight,
-        },
+          maxHeight
+        }
       }}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}

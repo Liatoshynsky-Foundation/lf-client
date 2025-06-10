@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 import SectionTitle from './SectionTitle';
+
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints');
 
