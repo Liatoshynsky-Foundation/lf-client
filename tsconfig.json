@@ -25,7 +25,8 @@
       "~/ds-components/*": ["app/shared/components/design-system/all-components/*"],
       "~/components/*": ["app/shared/components/*"],
       "~/hooks/*": ["app/shared/hooks/*"],
-      "~/i18n/*": ["i18n/*"]
+      "~/i18n/*": ["i18n/*"],
+      "~/public/*": ["public/*"]
     },
     "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
     "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
