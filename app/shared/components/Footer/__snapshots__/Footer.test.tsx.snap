@@ -236,7 +236,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
                 decoding="async"
                 height="24"
                 loading="lazy"
-                src="icons/mail-icon.svg"
+                src="/icons/mail-icon.svg"
                 style="color: transparent;"
                 width="24"
               />
@@ -259,7 +259,7 @@ exports[`Footer component should render Footer component correctly 1`] = `
                 decoding="async"
                 height="24"
                 loading="lazy"
-                src="icons/donation-button.svg"
+                src="/icons/donation-button.svg"
                 style="color: transparent;"
                 width="24"
               />

@@ -1,8 +1,8 @@
 import { Box, BoxProps } from '@mui/material';
 
-import LogoImage from '~/../public/images/logo.svg';
 import { logoSizes } from '~/constants';
 import { Link } from '~/i18n/navigation';
+import LogoImage from '~/public/images/logo.svg';
 
 type LogoVariant = keyof typeof logoSizes;
 
