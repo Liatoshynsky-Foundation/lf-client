@@ -7,8 +7,8 @@ import Logo from '~/components/design-system/all-components/logo/Logo';
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
+import OpenTechLogo from '~/ds-components/open-tech-logo/OpenTechLogo';
 
-import OpenTechLogo from '../design-system/all-components/open-tech-logo/OpenTechLogo';
 import { contacts, sections, SocialMedia } from './Footer.consts';
 import { styles } from './Footer.styles';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
