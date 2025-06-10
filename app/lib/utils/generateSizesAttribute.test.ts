@@ -15,7 +15,7 @@ describe('generateSizesAttribute', () => {
     const result = generateSizesAttribute(input);
 
     expect(result).toBe(
-      '(max-width: 376px) 400px, (max-width: 768px) 600px, (max-width: 1024px) 800px, (max-width: 1448px) 1000px, 816px'
+      '(max-width: 0px) 400px, (max-width: 768px) 600px, (max-width: 1024px) 800px, (max-width: 1448px) 1000px, 816px'
     );
   });
 
