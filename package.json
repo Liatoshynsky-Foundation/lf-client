@@ -20,6 +20,7 @@
     "mongoose": "^8.15.0",
     "next": "15.3.1",
     "next-intl": "^4.1.0",
+    "next-router-mock": "^1.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "winston": "^3.17.0",
