@@ -13,7 +13,7 @@ interface SvgProps {
 }
 
 export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
-  const IconComponent = dynamic(() => import(`@public/${src}.svg`));
+  const IconComponent = dynamic(() => import(`~/public/${src}.svg`));
 
   if (!validateSvgColor(color)) {
     throw new Error(`Invalid color value: ${color}`);
