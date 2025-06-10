@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import LanguageSwitcher from './LanguageSwitcher';
-import { usePathname, useRouter } from '../../../../../../i18n/navigation';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useLocale } from 'next-intl';
+
+import { usePathname, useRouter } from '../../../../../../i18n/navigation';
+import LanguageSwitcher from './LanguageSwitcher';
 
 jest.mock('~/../i18n/navigation', () => ({
   useRouter: jest.fn(),

@@ -1,6 +1,8 @@
+import { InputAdornment, SxProps, TextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
 import * as React from 'react';
-import { TextField, InputAdornment, SxProps, TextFieldProps as MuiTextFieldProps } from '@mui/material';
+
 import { outlinedStyles, standardStyles } from './CustomTextField.styles';
+
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 type CustomBaseProps = {

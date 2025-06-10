@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Box, IconButton, Popover, Typography, Button } from '@mui/material';
-import { styles } from './AudioPlayerPopover.styles';
-import { formatTime, calculateProgress } from '~/utils/audioPlayer';
+import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { styles } from './AudioPlayerPopover.styles';
+import { calculateProgress, formatTime } from '~/utils/audioPlayer';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
@@ -100,7 +101,7 @@ const AudioPlayerPopover = ({
                 sx={styles.playPauseButton}
               >
                 <Image
-                  src={isPlaying ? './icons/pause-icon.svg' : './icons/play-icon.svg'}
+                  src={isPlaying ? '/icons/pause-icon.svg' : '/icons/play-icon.svg'}
                   alt={isPlaying ? 'Pause' : 'Play'}
                   width={24}
                   height={24}

@@ -25,23 +25,20 @@ describe('validateRequestData', () => {
 
     expect(result).toEqual({
       valid: false,
-      errors: ['Name is required'],
+      errors: ['Name is required']
     });
     expect(mockValidationFn).toHaveBeenCalledWith(data);
   });
 
   it('should handle multiple validation errors', () => {
     const data = { name: '', email: 'invalid-email' };
-    mockValidationFn.mockReturnValue([
-      'Name is required',
-      'Email format is invalid',
-    ]);
+    mockValidationFn.mockReturnValue(['Name is required', 'Email format is invalid']);
 
     const result = validateRequestData(data, mockValidationFn);
 
     expect(result).toEqual({
       valid: false,
-      errors: ['Name is required', 'Email format is invalid'],
+      errors: ['Name is required', 'Email format is invalid']
     });
     expect(mockValidationFn).toHaveBeenCalledWith(data);
   });

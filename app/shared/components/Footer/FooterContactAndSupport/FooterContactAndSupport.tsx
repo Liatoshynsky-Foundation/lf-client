@@ -1,7 +1,8 @@
-import React from 'react';
-import DonationButton from './DonationButton/DonationButton';
-import ContactUsButton from './ContactUsButton/ContactUsButton';
 import { Box } from '@mui/material';
+import React from 'react';
+
+import ContactUsButton from './ContactUsButton/ContactUsButton';
+import DonationButton from './DonationButton/DonationButton';
 import { styles } from './FooterContactAndSupport.styles';
 import { ButtonData } from './types';
 

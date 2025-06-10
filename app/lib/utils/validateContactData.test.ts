@@ -1,6 +1,6 @@
-import { validateContactData } from '~/utils/validateContactData';
 import { errors } from '~/constants/errors';
 import { lengths } from '~/constants/validation';
+import { validateContactData } from '~/utils/validateContactData';
 
 describe('validateContactData', () => {
   it('should return no errors for valid input', () => {

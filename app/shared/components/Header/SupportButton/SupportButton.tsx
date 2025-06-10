@@ -1,6 +1,7 @@
 import React from 'react';
-import Button from '~/shared/components/design-system/all-components/button/Button';
+
 import { Link } from '~/i18n/navigation';
+import Button from '~/shared/components/design-system/all-components/button/Button';
 
 type SupportButtonData = {
   text: string;

@@ -1,7 +1,9 @@
 'use client';
+import { Box, Link, Typography } from '@mui/material';
 import React, { FC } from 'react';
-import { Box, Typography, Link } from '@mui/material';
+
 import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
+
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {

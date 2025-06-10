@@ -9,54 +9,54 @@ export const standardStyles = {
     width: '385px',
     height: '46px',
     '&:before': {
-      borderBottom: '1px solid rgba(13, 3, 61, 0.25)',
+      borderBottom: '1px solid rgba(13, 3, 61, 0.25)'
     },
     '&:hover:not(.Mui-disabled):before': {
-      borderBottom: '1px solid rgba(13, 3, 61, 0.5)',
+      borderBottom: '1px solid rgba(13, 3, 61, 0.5)'
     },
     '&.Mui-focused:after': {
-      borderBottom: `2px solid ${black}`,
+      borderBottom: `2px solid ${black}`
     },
     '&.Mui-error:before': {
-      borderBottom: `2px solid ${error}`,
+      borderBottom: `2px solid ${error}`
     },
     '&.Mui-error:after': {
-      borderBottom: `2px solid ${error}`,
+      borderBottom: `2px solid ${error}`
     },
     '&.Mui-error:hover:before': {
-      borderBottom: `2px solid ${error}`,
+      borderBottom: `2px solid ${error}`
     },
     '&.Mui-disabled:before': {
-      borderBottom: `1px solid ${blue600}`,
+      borderBottom: `1px solid ${blue600}`
     },
     '&:not(.Mui-focused):not(.Mui-error):after': {
-      borderBottom: `1px solid ${black}`,
-    },
+      borderBottom: `1px solid ${black}`
+    }
   },
 
   '& .MuiInputLabel-root': {
-    color: black,
+    color: black
   },
 
   '& .MuiInputBase-input': {
     color: blue800,
-    WebkitTextFillColor: blue800,
+    WebkitTextFillColor: blue800
   },
 
   '& .Mui-disabled .MuiInputBase-input': {
     color: blue600,
-    WebkitTextFillColor: blue600,
+    WebkitTextFillColor: blue600
   },
 
   '& .Mui-focused .MuiInputBase-input': {
     color: black,
-    WebkitTextFillColor: black,
+    WebkitTextFillColor: black
   },
 
   '& .Mui-error .MuiInputBase-input': {
     color: black,
-    WebkitTextFillColor: black,
-  },
+    WebkitTextFillColor: black
+  }
 };
 
 export const outlinedStyles = {
@@ -66,43 +66,43 @@ export const outlinedStyles = {
     borderRadius: '8px',
     padding: '0 16px',
     '& fieldset': {
-      border: '1px solid rgba(13, 3, 61, 0.25)',
+      border: '1px solid rgba(13, 3, 61, 0.25)'
     },
     '&:hover fieldset': {
-      border: '1px solid rgba(13, 3, 61, 0.5)',
+      border: '1px solid rgba(13, 3, 61, 0.5)'
     },
     '&.Mui-focused fieldset': {
-      border: `1px solid ${black}`,
+      border: `1px solid ${black}`
     },
     '&.Mui-disabled fieldset': {
-      border: `1px solid ${blue700}`,
+      border: `1px solid ${blue700}`
     },
     '&.Mui-error fieldset': {
-      border: `1px solid ${error}`,
-    },
+      border: `1px solid ${error}`
+    }
   },
   '& .MuiInputLabel-root': {
     color: blue800,
     WebkitTextFillColor: blue800,
     '&:not(.Mui-disabled):hover': {
       color: blue700,
-      WebkitTextFillColor: blue700,
+      WebkitTextFillColor: blue700
     },
     '&.Mui-focused': {
       color: black,
-      WebkitTextFillColor: black,
+      WebkitTextFillColor: black
     },
     '&.Mui-disabled': {
       color: blue700,
-      WebkitTextFillColor: blue700,
+      WebkitTextFillColor: blue700
     },
     '&.Mui-error': {
       color: error,
-      WebkitTextFillColor: error,
-    },
+      WebkitTextFillColor: error
+    }
   },
   '& .MuiOutlinedInput-input.Mui-disabled': {
     color: blue700,
-    WebkitTextFillColor: blue700,
-  },
+    WebkitTextFillColor: blue700
+  }
 };
