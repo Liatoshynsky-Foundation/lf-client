@@ -54,19 +54,6 @@ export const styles = (theme: Theme) => ({
       gridRow: '2'
     }
   },
-  yellowBlock: {
-    gridColumn: '2/5',
-    backgroundColor: '#FFE099',
-    height: '72px',
-    zIndex: -1,
-    position: 'relative',
-    marginBottom: '-34px',
-    marginLeft: '-40px',
-    marginRight: '-40px',
-    [theme.breakpoints.down('sm')]: {
-      gridColumn: '2/ span 3'
-    }
-  },
   ImageCaption: {
     [theme.breakpoints.down('lg')]: { marginRight: '350px' },
     [theme.breakpoints.down('md')]: { display: 'none' }
