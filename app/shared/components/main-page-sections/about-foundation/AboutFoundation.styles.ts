@@ -55,7 +55,6 @@ export const styles = (theme: Theme) => ({
     }
   },
   ImageCaption: {
-    [theme.breakpoints.down('lg')]: { marginRight: '350px' },
     [theme.breakpoints.down('md')]: { display: 'none' }
   },
   imageFirst: {

@@ -42,7 +42,6 @@ const AboutFoundation = async () => {
             caption={images[0].alt}
             sizes={{ height: { xs: 315 }, width: { xs: 800, sm: 900 } }}
             captionSx={sectionStyles.ImageCaption}
-            imageSx={{ maxWidth: '100%', height: 'auto' }}
             border={{ sizes: { height: { xs: 50 }, width: { xs: 250 } }, top: { xs: 20 }, left: { xs: 25 } }}
           />
         </Box>
