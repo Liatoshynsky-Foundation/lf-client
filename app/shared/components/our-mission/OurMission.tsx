@@ -31,7 +31,7 @@ const OurMission = async () => {
           }}
         />
         <ImageWithCaption
-          src="/images/our-mission/tetiana-homon-main.jpg"
+          src="/images/our-mission/tetiana-homon-big.jpg"
           alt="Tetiana Homon"
           caption={t('imageCaption')}
           sizes={{
