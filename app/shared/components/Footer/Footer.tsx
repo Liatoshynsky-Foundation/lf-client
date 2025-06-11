@@ -7,6 +7,7 @@ import Logo from '~/components/design-system/all-components/logo/Logo';
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
+import OpenTechLogo from '~/ds-components/open-tech-logo/OpenTechLogo';
 
 import { contacts, sections, SocialMedia } from './Footer.consts';
 import { styles } from './Footer.styles';
@@ -17,7 +18,6 @@ import FooterNavigation from './FooterNavigation/FooterNavigation';
 export default async function Footer() {
   const t = await getTranslations('footer');
   const svgImagePath = '/images/footer-img.svg';
-  const svgImageSA = '/images/softserve-academy.svg';
 
   const footerData = {
     text: t('copyright'),
@@ -59,7 +59,7 @@ export default async function Footer() {
         <FooterCopyrights text={footerData.text} links={footerData.links} />
       </Box>
       <Box sx={styles.copyrightWrapper}>
-        <SvgImage src={svgImageSA} alt="SoftServe Academy" width={270} height={40} />
+        <OpenTechLogo label={t('opentechLabel')} />
       </Box>
       <Box sx={styles.svgContainer}>
         <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
