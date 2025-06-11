@@ -20,6 +20,15 @@
       "office": "OfFicE",
       "name": "LIaTosHynSKy",
       "goToOfficeButton": "Go to the office"
+    },
+    "ourMission": {
+      "title": "Our Mission",
+      "list": {
+        "item1": "To understand the legacy of Borys Lyatoshynsky and other Ukrainian composers;",
+        "item2": "To promote the inclusion of Ukrainian music in the global context;",
+        "item3": "To support contemporary artists and create space for new meanings in music."
+      },
+      "imageCaption": "Tetiana Homon and the Lyatoshynsky Foundation team"
     }
   },
   "foundation": {
