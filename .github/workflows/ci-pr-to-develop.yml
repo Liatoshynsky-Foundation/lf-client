@@ -137,8 +137,8 @@ jobs:
     needs: [ 'run-lint', 'run-tests' ]
 
     env:
-      MONGO_DB: ${{ secrets.MONGODB_DB }}
-      MONGO_HOST: ${{ secrets.MONGODB_HOST }}
+      MONGO_DB: ${{ secrets.MONGO_DB }}
+      MONGO_HOST: ${{ secrets.MONGO_HOST }}
       MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
       MONGO_PORT: ${{ secrets.MONGO_PORT }}
       MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
