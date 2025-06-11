@@ -29,6 +29,15 @@
         "item3": "To support contemporary artists and create space for new meanings in music."
       },
       "imageCaption": "Tetiana Homon and the Lyatoshynsky Foundation team"
+    },
+    "aboutFoundation": {
+      "aboutFoundationTitle": "ABouT FoundAtioN",
+      "organisationText": {
+        "boldText": "Liatoshynsky foundation",
+        "text": "— is a public organization created with the aim of making Ukrainian classical music of the XX–XXI centuries recognizable in the world."
+      },
+      "mainText": "We are named after Borys Lyatoshynskyi, one of the most influential composers in the history of Ukrainian music, a teacher, innovator, and one of the founders of the modern Ukrainian compositional school.",
+      "textImage": "We know that Ukrainian academic music sounds loud and proud, on a par with other European and world cultures."
     }
   },
   "foundation": {

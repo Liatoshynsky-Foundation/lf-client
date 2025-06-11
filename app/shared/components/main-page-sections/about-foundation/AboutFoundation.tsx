@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 import { theme } from '../../design-system/all-components/theme/Theme';
 import ImageWithCaption from '../../image-with-caption/ImageWithCaption';
@@ -7,19 +8,38 @@ import QuoteBlock from '../../Quote/Quote';
 import { SvgImage } from '../../svg-image/SvgImage';
 import { styles } from './AboutFoundation.styles';
 
-const AboutFoundation = () => {
+const AboutFoundation = async () => {
   const sectionStyles = styles(theme);
+  const t = await getTranslations('home.aboutFoundation');
+  const quote = await getTranslations('quote');
 
+  const title = t('aboutFoundationTitle');
+  const images = [
+    { src: '/images/foundation-main.png', alt: 'Тетяна Гомон та команда Фонду Лятошинського' },
+    { src: '/images/liatoshynsky-main-photo.png', alt: 'Борис Лятошинський' }
+  ];
+  const organisationText = {
+    boldText: t('organisationText.boldText'),
+    mainText: t('organisationText.text')
+  };
+  const mainText = t('mainText');
+  const textImage = t('textImage');
+  const quoteInfo = {
+    mainText: quote('mainText'),
+    sourceTitle: quote('sourceText.tittle'),
+    sourceData: quote('sourceText.data'),
+    sourcePlace: quote('sourceText.place')
+  };
   return (
     <Box sx={sectionStyles.conatiner}>
-      <Typography sx={sectionStyles.title}>ПРо ФундАціЮ</Typography>
+      <Typography sx={sectionStyles.title}>{title}</Typography>
       <Box sx={sectionStyles.photoContainer}>
         <Box sx={sectionStyles.yellowBlock} />
         <Box sx={sectionStyles.imageFirst}>
           <ImageWithCaption
-            src="/images/foundation-main.png"
-            alt="Тетяна Гомон та команда Фонду Лятошинського"
-            caption="Тетяна Гомон та команда Фонду Лятошинського"
+            src={images[0].src}
+            alt={images[0].alt}
+            caption={images[0].alt}
             sizes={{ height: { xs: 315 }, width: { xs: 800, sm: 900 } }}
             captionSx={sectionStyles.ImageCaption}
             containerSx={{ maxWidth: '100%', height: 'auto' }}
@@ -28,42 +48,35 @@ const AboutFoundation = () => {
       </Box>
       <Box sx={sectionStyles.quote}>
         <QuoteBlock
-          quoteText="Буде, звісно, дуже багато цікавого, але всього не почуєш, тому що в один вечір у різних театрах і залах проходитимуть по два концерти або опери."
+          quoteText={quoteInfo.mainText}
           quoteIconColor="burgundy"
           mainTextColor="burgundy"
           alignRight={false}
           sourceText={{
-            title: 'Лист Бориса Лятошинського Маргариті Царевич',
-            data: '29 вересня 1957',
-            place: 'Берлін'
+            title: quoteInfo.sourceTitle,
+            data: quoteInfo.sourceData,
+            place: quoteInfo.sourcePlace
           }}
         />
       </Box>
       <Box sx={sectionStyles.organisationSection}>
         <Typography sx={sectionStyles.explanationText}>
           <Box component="span" sx={sectionStyles.organisationText}>
-            Фундація Лятошинського{' '}
+            {organisationText.boldText}{' '}
           </Box>{' '}
-          — це громадська організація, створена з метою зробити українську класичну музику ХХ–ХХІ століть впізнаваною у
-          світі.
+          {organisationText.mainText}
         </Typography>
       </Box>
       <Box sx={sectionStyles.bulletIcon}>
         <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
       </Box>
       <Box sx={sectionStyles.explanationSection}>
-        <Typography sx={sectionStyles.textSection}>
-          Ми названі на честь Бориса Лятошинського — одного з <b>найвпливовіших</b> композиторів в історії української
-          музики, педагога, новатора, одного із засновників сучасної української композиторської школи.
-        </Typography>
+        <Typography sx={sectionStyles.textSection}>{mainText}</Typography>
       </Box>
       <Box sx={sectionStyles.textImageSection}>
-        <Typography sx={sectionStyles.textImage}>
-          Ми знаємо, що українська академічна музика звучить гучно й гордо, на рівні з іншими європейськими та світовими
-          культурами.
-        </Typography>
+        <Typography sx={sectionStyles.textImage}>{textImage}</Typography>
         <Box sx={sectionStyles.bodyImage}>
-          <Image src="/images/liatoshynsky-main-photo.png" alt="Борис Лятошинський" width={350} height={400} />
+          <Image src={images[1].src} alt={images[1].alt} width={350} height={400} />
         </Box>
       </Box>
     </Box>
