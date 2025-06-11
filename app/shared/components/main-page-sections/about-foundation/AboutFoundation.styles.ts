@@ -20,8 +20,7 @@ const mainText = {
 };
 export const styles = (theme: Theme) => ({
   conatiner: {
-    display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    ...conatinerHelper,
     gridColumn: '1 / -1',
     gridTemplateRows: 'repeat(6, auto)',
     columnGap: '40px',
@@ -69,7 +68,6 @@ export const styles = (theme: Theme) => ({
     }
   },
   ImageCaption: {
-    marginRight: '200px',
     [theme.breakpoints.down('lg')]: { marginRight: '350px' },
     [theme.breakpoints.down('md')]: { display: 'none' }
   },
@@ -95,7 +93,7 @@ export const styles = (theme: Theme) => ({
     textAlign: 'justify',
     marginTop: '75px',
     marginBottom: '96px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       gridColumn: '2/4'
     }
   },
@@ -167,6 +165,9 @@ export const styles = (theme: Theme) => ({
       width: '230px',
       height: '300px',
       maxWidth: '100%'
+    },
+    '@media (max-width:376px)': {
+      gridRow: '7'
     }
   }
 });
