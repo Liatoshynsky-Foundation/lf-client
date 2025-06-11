@@ -92,8 +92,6 @@ jobs:
           mongodb-db: ${{ secrets.MONGO_DB }}
           mongodb-username: ${{ secrets.MONGO_USERNAME }}
           mongodb-password: ${{ secrets.MONGO_PASSWORD }}
-          mongodb-port: ${{ secrets.MONGO_PORT }}
-          mongodb-host: ${{ secrets.MONGO_HOST }}
 
       - name: Install MongoDB shell
         run: |
