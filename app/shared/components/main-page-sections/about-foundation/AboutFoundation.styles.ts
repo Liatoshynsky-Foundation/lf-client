@@ -21,16 +21,13 @@ const mainText = {
 export const styles = (theme: Theme) => ({
   conatiner: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridTemplateColumns: 'subgrid',
+    gridColumn: '1 / -1',
     gridTemplateRows: 'repeat(6, auto)',
     columnGap: '40px',
     position: 'relative',
     marginBottom: '180px',
     [theme.breakpoints.down('sm')]: {
-      gridTemplateColumns: 'repeat(8, 1fr)'
-    },
-    [theme.breakpoints.down('xs')]: {
-      gridTemplateColumns: 'repeat(4, 1fr)',
       columnGap: '16px',
       marginBottom: '90px'
     }
@@ -53,7 +50,7 @@ export const styles = (theme: Theme) => ({
     gridColumn: '5/12',
     gridRow: '1/ span 2',
     justifySelf: 'end',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: '1 / span 4',
       gridRow: '2'
     }
@@ -67,7 +64,7 @@ export const styles = (theme: Theme) => ({
     marginBottom: '-34px',
     marginLeft: '-40px',
     marginRight: '-40px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: '2/ span 3'
     }
   },
@@ -79,7 +76,7 @@ export const styles = (theme: Theme) => ({
   imageFirst: {
     gridColumn: '3/9',
     marginLeft: '-40px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: '2/ span 4'
     }
   },
@@ -88,7 +85,7 @@ export const styles = (theme: Theme) => ({
     gridColumn: '1/4',
     alignSelf: 'center',
     position: 'relative',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridRow: '3'
     }
   },
@@ -98,7 +95,7 @@ export const styles = (theme: Theme) => ({
     textAlign: 'justify',
     marginTop: '75px',
     marginBottom: '96px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: '2/4'
     }
   },
@@ -118,7 +115,7 @@ export const styles = (theme: Theme) => ({
     gridRow: '5',
     gridColumn: 'span 12',
     marginBottom: '70px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: 'span 4'
     }
   },
@@ -139,7 +136,7 @@ export const styles = (theme: Theme) => ({
     gridRow: '5',
     justifySelf: 'end',
     position: 'absolute',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       gridColumn: '1',
       gridRow: '3'
     }
@@ -155,16 +152,12 @@ export const styles = (theme: Theme) => ({
     gridColumn: '1/9',
     [theme.breakpoints.down('sm')]: {
       gridColumn: '1/8'
-    },
-    [theme.breakpoints.down('xs')]: {
-      gridColumn: '1/4'
     }
   },
   textImage: {
     ...mainText,
     gridColumn: '1/6',
-    [theme.breakpoints.down('sm')]: { gridColumn: '1/3' },
-    [theme.breakpoints.down('xs')]: { gridColumn: '1/ span 4' }
+    [theme.breakpoints.down('sm')]: { gridColumn: '1/3' }
   },
   bodyImage: {
     gridColumn: '6/9',
@@ -174,9 +167,6 @@ export const styles = (theme: Theme) => ({
       width: '230px',
       height: '300px',
       maxWidth: '100%'
-    },
-    [theme.breakpoints.down('xs')]: {
-      gridColumn: '2/span 3'
     }
   }
 });

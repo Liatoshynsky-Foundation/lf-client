@@ -16,8 +16,8 @@ const AboutFoundation = async () => {
 
   const title = t('aboutFoundationTitle');
   const images = [
-    { src: '/images/foundation-main.png', alt: 'Тетяна Гомон та команда Фонду Лятошинського' },
-    { src: '/images/liatoshynsky-main-photo.png', alt: 'Борис Лятошинський' }
+    { src: '/images/about-foundation/foundation-first.png', alt: 'Тетяна Гомон та команда Фонду Лятошинського' },
+    { src: '/images/about-foundation/foundation-second.png', alt: 'Борис Лятошинський' }
   ];
   const organisationText = {
     boldText: t('organisationText.boldText'),
