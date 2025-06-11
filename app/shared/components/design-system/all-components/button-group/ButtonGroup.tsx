@@ -94,7 +94,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       />
       {buttons.map((button, idx) => (
         <Box
-          key={idx}
+          key={(button?.toString?.() ?? 'button') + idx}
           ref={(el: HTMLDivElement | null) => {
             buttonRefs.current[idx] = el;
           }}

@@ -9,7 +9,8 @@
     "linkTerms": "Terms of Use",
     "linkMedia": "Information for Media / Partners",
     "donationButton": "Support the Foundation",
-    "contactUsButton": "Contact us"
+    "contactUsButton": "Contact us",
+    "opentechLabel": "Developed by"
   },
   "header": {
     "supportButton": "Support"
@@ -19,11 +20,30 @@
       "office": "OfFicE",
       "name": "LIaTosHynSKy",
       "goToOfficeButton": "Go to the office"
+    },
+    "ourMission": {
+      "title": "Our Mission",
+      "list": {
+        "item1": "To understand the legacy of Borys Lyatoshynsky and other Ukrainian composers;",
+        "item2": "To promote the inclusion of Ukrainian music in the global context;",
+        "item3": "To support contemporary artists and create space for new meanings in music."
+      },
+      "imageCaption": "Tetiana Homon and the Lyatoshynsky Foundation team"
+    },
+    "aboutFoundation": {
+      "aboutFoundationTitle": "ABouT FoundAtioN",
+      "organisationText": {
+        "boldText": "Liatoshynsky foundation",
+        "text": "— is a public organization created with the aim of making Ukrainian classical music of the XX–XXI centuries recognizable in the world."
+      },
+      "mainText": "We are named after Borys Lyatoshynskyi, one of the most influential composers in the history of Ukrainian music, a teacher, innovator, and one of the founders of the modern Ukrainian compositional school.",
+      "textImage": "We know that Ukrainian academic music sounds loud and proud, on a par with other European and world cultures."
     }
   },
   "foundation": {
     "foundationWasCreated": "The Lyatoshynsky Foundation, established",
-    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects."
+    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects.",
+    "foundationTeam": "The Lyatoshynsky Foundation Team"
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",

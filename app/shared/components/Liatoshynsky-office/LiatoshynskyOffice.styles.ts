@@ -1,5 +1,6 @@
 export const styles = {
   mainContainer: {
+    gridColumn: '1 / -1',
     maxWidth: '1582px',
     width: { xs: '100vw', sm: '100%' },
     display: 'flex',

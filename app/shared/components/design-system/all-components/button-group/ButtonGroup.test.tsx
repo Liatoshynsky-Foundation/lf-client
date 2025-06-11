@@ -5,25 +5,14 @@ import React from 'react';
 import ButtonGroup from './ButtonGroup';
 import { defaultButtonGroupColorScheme } from './ButtonGroup.styles';
 
-// Remove global spys on offsets
 beforeEach(() => {
   jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
-    let dataLeft: string | undefined;
-    let dataWidth: string | undefined;
-
-    // Try to extract data from the first child if it's an element
-    if (this.firstChild instanceof HTMLElement) {
-      dataLeft = this.firstChild.dataset.offsetLeft;
-      dataWidth = this.firstChild.dataset.offsetWidth;
-    }
-
-    // Fallback to this element’s dataset if needed
-    if (!dataLeft) {
-      dataLeft = this.dataset.offsetLeft;
-    }
-    if (!dataWidth) {
-      dataWidth = this.dataset.offsetWidth;
-    }
+    const dataLeft: string | undefined =
+      (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetLeft : undefined) ??
+      this.dataset.offsetLeft;
+    const dataWidth: string | undefined =
+      (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetWidth : undefined) ??
+      this.dataset.offsetWidth;
 
     const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
     const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
