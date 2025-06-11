@@ -20,27 +20,27 @@ const team: Teammate[] = [
     name: 'Тетяна Гомон',
     description:
       'Спадкоємиця композитора, співзасновниця і голова Фундації, піаністка-камералістка і музикознавиця, кандидатка мистецтвознавства',
-    photo: '/images/foundation-team/tetyana-homon.png'
+    photo: '/images/foundation-team/Tetyana-Homon.png'
   },
   {
     name: 'Ірина Тукова',
     description: 'Співзасновниця Фундації, музикознавиця, лекторка і викладачка, докторка мистецтвознавства',
-    photo: '/images/foundation-team/iryna-tykova.png'
+    photo: '/images/foundation-team/Iryna-Tykova.png'
   },
   {
     name: 'Марія Гурська',
     description: 'Менеджерка цифрових проєктів, курує розробку сайту, інформаційну структуру й редакційні процеси',
-    photo: '/images/foundation-team/maria_hurska.png'
+    photo: '/images/foundation-team/Maria-Hurska.png'
   },
   {
     name: 'Олександра Спасиченко',
     description: 'Альтистка ансамблю “Київські солісти” та струнного квартету «Black Tie»',
-    photo: '/images/foundation-team/maria_hurska.png'
+    photo: '/images/foundation-team/Maria-Hurska.png'
   },
   {
     name: 'Таїсія Білянська',
     description: 'Музикознавиця, викладачка, бакалавриня музичного мистецтва',
-    photo: '/images/foundation-team/maria_hurska.png'
+    photo: '/images/foundation-team/Maria-Hurska.png'
   }
 ];
 
