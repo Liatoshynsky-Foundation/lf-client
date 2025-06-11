@@ -150,6 +150,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: "Debug: Check if secrets are accessible"
+        run: |
+          if [ -z "${{ secrets.MONGO_PASSWORD }}" ]; then
+            echo "::error::Secret MONGO_PASSWORD is empty or not accessible."
+            echo "This usually happens on pull requests from forks."
+          else
+            echo "✅ Secret MONGO_PASSWORD is accessible (value is masked)."
+          fi
+
       - name: Build Docker image
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
