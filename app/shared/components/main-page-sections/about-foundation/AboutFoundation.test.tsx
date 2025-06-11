@@ -4,7 +4,7 @@ import AboutFoundation from './AboutFoundation';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockImplementation(async (namespace) => {
-    const translations: Record<string, string> = {
+    const AboutFoundationtranslations: Record<string, string> = {
       'home.aboutFoundation.aboutFoundationTitle': 'Про Фундацію',
       'home.aboutFoundation.organisationText.boldText': 'Організація',
       'home.aboutFoundation.organisationText.text': '- це',
@@ -15,14 +15,14 @@ jest.mock('next-intl/server', () => ({
       'quote.sourceText.data': 'Тестова дата',
       'quote.sourceText.place': 'Тестове місце'
     };
-    return (key: string) => translations[`${namespace}.${key}`] || key;
+    return (key: string) => AboutFoundationtranslations[`${namespace}.${key}`] || key;
   })
 }));
 
 jest.mock('~/shared/components/Quote/Quote', () => {
-  const MockQuote = () => <div data-testid="quote" />;
-  MockQuote.displayName = 'MockQuote';
-  return MockQuote;
+  const AboutFoundationMockQuote = () => <div data-testid="quote" />;
+  AboutFoundationMockQuote.displayName = 'AboutFoundationMockQuote';
+  return AboutFoundationMockQuote;
 });
 
 describe('About foundation', () => {
