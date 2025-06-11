@@ -6,12 +6,12 @@ import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
-import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
 import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
+import Footer from '~/components/Footer/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
