@@ -25,22 +25,22 @@ const team: Teammate[] = [
   {
     name: 'Ірина Тукова',
     description: 'Співзасновниця Фундації, музикознавиця, лекторка і викладачка, докторка мистецтвознавства',
-    photo: '/images/foundation-team/iryna-tykova.jpg'
+    photo: '/images/foundation-team/iryna-tykova.png'
   },
   {
     name: 'Марія Гурська',
     description: 'Менеджерка цифрових проєктів, курує розробку сайту, інформаційну структуру й редакційні процеси',
-    photo: '/images/foundation-team/maria_hurska.jpg'
+    photo: '/images/foundation-team/maria_hurska.png'
   },
   {
     name: 'Олександра Спасиченко',
     description: 'Альтистка ансамблю “Київські солісти” та струнного квартету «Black Tie»',
-    photo: '/images/foundation-team/maria_hurska.jpg'
+    photo: '/images/foundation-team/maria_hurska.png'
   },
   {
     name: 'Таїсія Білянська',
     description: 'Музикознавиця, викладачка, бакалавриня музичного мистецтва',
-    photo: '/images/foundation-team/maria_hurska.jpg'
+    photo: '/images/foundation-team/maria_hurska.png'
   }
 ];
 
