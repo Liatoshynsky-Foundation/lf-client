@@ -1,5 +1,5 @@
 'use client';
-import { Box, BoxProps, ButtonGroup as MUIButtonGroup } from '@mui/material';
+import { Box, BoxProps, ButtonGroup as MUIButtonGroup, SxProps, Theme } from '@mui/material';
 import React, { useLayoutEffect } from 'react';
 
 import { defaultButtonGroupColorScheme, styles } from './ButtonGroup.styles';
@@ -66,18 +66,23 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
     };
   }, [activeButton, buttons, padding]);
 
+  const { color: _, ...restProps } = props;
+
   return (
     <MUIButtonGroup
+      component="div"
       ref={containerRef}
-      sx={{
-        ...styles.defaultButtonGroup,
-        ...sx,
-        backgroundColor: groupBackgroundColor,
-        color: buttonTextColor,
-        position: 'relative'
-      }}
+      sx={
+        {
+          ...styles.defaultButtonGroup,
+          ...sx,
+          backgroundColor: groupBackgroundColor,
+          color: buttonTextColor,
+          position: 'relative'
+        } as SxProps<Theme>
+      }
       aria-label="Button Group"
-      {...props}
+      {...restProps}
     >
       <Box
         sx={{
