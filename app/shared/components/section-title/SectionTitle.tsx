@@ -1,11 +1,9 @@
-'use client';
-
 import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
 
 import { imageSizes, styles } from './SectionTitle.styles';
 
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 
 interface SectionTitleProps {
   icon?: boolean;
@@ -14,11 +12,15 @@ interface SectionTitleProps {
 }
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title }) => {
-  const { isLaptopAndAbove } = useBreakpoints();
+  const sizesAttribute = generateSizesAttribute(imageSizes);
 
   return (
     <Box sx={styles.container(mb)}>
-      {icon && <SvgImage src="/icons/ellipse.svg" alt="ellipse" {...imageSizes(isLaptopAndAbove)} />}
+      {icon && (
+        <Box sx={styles.image} data-testid="title-icon">
+          <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />
+        </Box>
+      )}
       <Typography sx={styles.title} component="h2">
         {title}
       </Typography>

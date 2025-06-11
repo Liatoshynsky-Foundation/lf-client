@@ -1,5 +1,6 @@
 export const styles = {
   container: {
+    gridColumn: '1 / -1',
     position: 'relative',
     left: '50%',
     right: '50%',
