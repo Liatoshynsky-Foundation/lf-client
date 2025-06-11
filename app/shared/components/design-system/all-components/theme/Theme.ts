@@ -20,7 +20,7 @@ export const theme = createTheme({
       lg: 1280,
       md: 1024,
       sm: 768,
-      xs: 376
+      xs: 0
     }
   }
 });

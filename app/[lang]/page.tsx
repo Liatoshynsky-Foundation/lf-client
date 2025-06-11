@@ -9,7 +9,10 @@ export default async function Home() {
   return (
     <>
       <AboutFoundation />
+<<<<<<< HEAD
       <OurMission />
+=======
+>>>>>>> 5a87d16 (fix: updated from comments)
       <LiatoshynskyOffice />
       <FoundationFounders />
     </>
