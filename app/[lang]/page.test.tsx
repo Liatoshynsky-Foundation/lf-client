@@ -20,6 +20,12 @@ jest.mock('~/components/our-mission/OurMission', () => {
   return MockOurMission;
 });
 
+jest.mock('~/components/main-page-sections/about-foundation/AboutFoundation', () => {
+  const MockAboutFoundation = () => <div>About foundation</div>;
+  MockAboutFoundation.displayName = 'MockAboutFoundation';
+  return MockAboutFoundation;
+});
+
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
     render(await Home());
@@ -27,5 +33,6 @@ describe('Home component', () => {
     expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
     expect(screen.getByText(/Foundation founders/i)).toBeInTheDocument();
+    expect(screen.getByText(/About foundation/i)).toBeInTheDocument();
   });
 });
