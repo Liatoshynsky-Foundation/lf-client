@@ -60,6 +60,9 @@ export const styles = (theme: Theme) => ({
   imageFirst: {
     gridColumn: '3/9',
     marginLeft: '-40px',
+    [theme.breakpoints.down('md')]: {
+      gridColumn: '6/ span 4'
+    },
     [theme.breakpoints.down('sm')]: {
       gridColumn: '2/ span 4'
     }
@@ -78,10 +81,7 @@ export const styles = (theme: Theme) => ({
     gridColumn: '5/13',
     textAlign: 'justify',
     marginTop: '75px',
-    marginBottom: '96px',
-    [theme.breakpoints.down('md')]: {
-      gridColumn: '2/4'
-    }
+    marginBottom: '96px'
   },
   organisationText: {
     fontFamily: 'Mulish',

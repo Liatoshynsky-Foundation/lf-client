@@ -40,8 +40,9 @@ const AboutFoundation = async () => {
             src={images[0].src}
             alt={images[0].alt}
             caption={images[0].alt}
-            sizes={{ height: { xs: 315 }, width: { xs: 800, sm: 900 } }}
+            sizes={{ height: { xs: 315 }, width: { xs: 800, md: 900 } }}
             captionSx={sectionStyles.ImageCaption}
+            imageSx={{ [theme.breakpoints.down('md')]: { height: '250px', right: '-200px' } }}
             border={{ sizes: { height: { xs: 50 }, width: { xs: 250 } }, top: { xs: 20 }, left: { xs: 25 } }}
           />
         </Box>
