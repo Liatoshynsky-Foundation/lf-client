@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-import { SvgImage } from '../../svg-image/SvgImage';
-import { styles } from './FoundationWasCreated.styles';
+import { styles } from '~/components/FoundationFounders/FoundationWasCreated/FoundationWasCreated.styles';
+import { SvgImage } from '~/components/svg-image/SvgImage';
 
 interface FoundationWasCreatedProps {
   title: string;

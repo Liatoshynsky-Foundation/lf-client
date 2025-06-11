@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-import PersonCard from '../../design-system/all-components/person-card/PersonCard';
-import { SvgImage } from '../../svg-image/SvgImage';
-import { styles } from './FoundationTeam.styles';
+import { styles } from '~/components/FoundationFounders/FoundationTeam/FoundationTeam.styles';
+import { SvgImage } from '~/components/svg-image/SvgImage';
+import PersonCard from '~/ds-components/person-card/PersonCard';
 
 interface FoundationTeamProps {
   title: string;

@@ -2,9 +2,9 @@ import { Box } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
-import { styles } from './FoundationFounders.styles';
-import FoundationTeam from './FoundationTeam/FoundationTeam';
-import FoundationWasCreated from './FoundationWasCreated/FoundationWasCreated';
+import { styles } from '~/components/FoundationFounders/FoundationFounders.styles';
+import FoundationTeam from '~/components/FoundationFounders/FoundationTeam/FoundationTeam';
+import FoundationWasCreated from '~/components/FoundationFounders/FoundationWasCreated/FoundationWasCreated';
 
 const FoundationFounders = async () => {
   const t = await getTranslations('foundation');
