@@ -36,6 +36,16 @@ jest.mock('~/shared/components/svg-image/SvgImage', () => ({
   SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />
 }));
 
+jest.mock('~/shared/components/list-item/ListItem', () => ({
+  __esModule: true,
+  default: ({ text }: { text: string }) => (
+    <div>
+      <img src="/mock-image" alt="mock-alt" />
+      <p>{text}</p>
+    </div>
+  )
+}));
+
 describe('OurMission component', () => {
   beforeEach(async () => {
     render(await OurMission());
@@ -61,7 +71,7 @@ describe('OurMission component', () => {
   });
 
   it('should render bullet icons', () => {
-    const bullets = screen.getAllByAltText('bullet');
+    const bullets = screen.getAllByAltText('mock-alt');
     expect(bullets.length).toBe(3);
   });
 });

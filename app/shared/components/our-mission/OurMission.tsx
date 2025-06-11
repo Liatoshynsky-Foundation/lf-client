@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
 
 import { styles } from './OurMission.styles';
 
 import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCaption';
+import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 const OurMission = async () => {
   const t = await getTranslations('home.ourMission');
@@ -14,30 +14,9 @@ const OurMission = async () => {
     <Box sx={styles.mainContainer}>
       <SectionTitle title={t('title')} />
       <Box sx={styles.list}>
-        <Box sx={styles.listItem}>
-          <Box sx={styles.bulletIcon}>
-            <SvgImage src="/icons/bullet-small.svg" alt="bullet" width={16} height={16} />
-          </Box>
-          <Typography sx={styles.typography} component="p">
-            {t('list.item1')}
-          </Typography>
-        </Box>
-        <Box sx={styles.listItem}>
-          <Box sx={styles.bulletIcon}>
-            <SvgImage src="/icons/bullet-small.svg" alt="bullet" width={16} height={16} />
-          </Box>
-          <Typography sx={styles.typography} component="p">
-            {t('list.item2')}
-          </Typography>
-        </Box>
-        <Box sx={styles.listItem}>
-          <Box sx={styles.bulletIcon}>
-            <SvgImage src="/icons/bullet-small.svg" alt="bullet" width={16} height={16} />
-          </Box>
-          <Typography sx={styles.typography} component="p">
-            {t('list.item3')}
-          </Typography>
-        </Box>
+        <ListItem text={t('list.item1')} />
+        <ListItem text={t('list.item2')} />
+        <ListItem text={t('list.item3')} />
       </Box>
       <Box sx={styles.imagesContainer}>
         <ImageWithCaption
