@@ -30,17 +30,17 @@ const team: Teammate[] = [
   {
     name: 'Марія Гурська',
     description: 'Менеджерка цифрових проєктів, курує розробку сайту, інформаційну структуру й редакційні процеси',
-    photo: '/images/foundation-team/Maria-Hurska.png'
+    photo: '/images/foundation-team/Taisia-Bilyanska.png'
   },
   {
     name: 'Олександра Спасиченко',
     description: 'Альтистка ансамблю “Київські солісти” та струнного квартету «Black Tie»',
-    photo: '/images/foundation-team/Maria-Hurska.png'
+    photo: '/images/foundation-team/Taisia-Bilyanska.png'
   },
   {
     name: 'Таїсія Білянська',
     description: 'Музикознавиця, викладачка, бакалавриня музичного мистецтва',
-    photo: '/images/foundation-team/Maria-Hurska.png'
+    photo: '/images/foundation-team/Taisia-Bilyanska.png'
   }
 ];
 
