@@ -143,35 +143,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: "Debug: Validate ALL secrets before build"
-        run: |
-          echo "--- Checking ALL secrets needed for the build ---"
-          EXIT_CODE=0
-
-          if [ -z "${{ secrets.MONGO_DB }}" ]; then echo "::error::Secret MONGO_DB is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_DB is set."; fi
-          if [ -z "${{ secrets.MONGO_HOST }}" ]; then echo "::error::Secret MONGO_HOST is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_HOST is set."; fi
-          if [ -z "${{ secrets.MONGO_USERNAME }}" ]; then echo "::error::Secret MONGO_USERNAME is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_USERNAME is set."; fi
-          if [ -z "${{ secrets.MONGO_PASSWORD }}" ]; then echo "::error::Secret MONGO_PASSWORD is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_PASSWORD is set."; fi
-          if [ -z "${{ secrets.MONGO_PORT }}" ]; then echo "::error::Secret MONGO_PORT is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_PORT is set."; fi
-
-          echo "-------------------------------------------------"
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            echo "::error::One or more required secrets are empty. Please check repository/organization secrets."
-            exit 1
-          fi
-
       - name: Build Docker image
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
           
-          docker build \
+          docker buildx build \
             --build-arg MONGO_DB=${{ secrets.MONGO_DB }} \
             --build-arg MONGO_HOST=${{ secrets.MONGO_HOST }} \
             --build-arg MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
             --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             --build-arg MONGO_PORT=${{ secrets.MONGO_PORT }} \
-            -t my-app-image:${{ github.sha }} . >"$LOG_FILE" 2>&1     
+            -t my-app-image:${{ github.sha }} --load . >"$LOG_FILE" 2>&1
           BUILD_STATUS=$?
+          
           
           if [ $BUILD_STATUS -eq 0 ]; then
             docker image inspect my-app-image:${{ github.sha }} > /dev/null 2>&1
