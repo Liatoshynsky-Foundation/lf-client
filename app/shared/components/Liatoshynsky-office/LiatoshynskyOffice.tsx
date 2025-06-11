@@ -18,9 +18,9 @@ const LiatoshynskyOffice = async () => {
   const quoteT = await getTranslations('quote');
 
   const images: ImageData[] = [
-    { src: '/images/lf-office-2.png', alt: 'Фото 1', styleKey: 'photo1' },
-    { src: '/images/lf-office-1.png', alt: 'Фото 2', styleKey: 'photo2' },
-    { src: '/images/lf-office-3.png', alt: 'Фото 3', styleKey: 'photo3' }
+    { src: '/images/office-media/lf-office1.png', alt: 'Фото 1', styleKey: 'photo1' },
+    { src: '/images/office-media/lf-office2.png', alt: 'Фото 2', styleKey: 'photo2' },
+    { src: '/images/office-media/lf-office3.png', alt: 'Фото 3', styleKey: 'photo3' }
   ];
 
   const liatoshynskyOfficeInfo = {
