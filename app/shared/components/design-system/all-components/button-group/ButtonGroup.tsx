@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useLayoutEffect, useRef } from 'react';
-import { Box, BoxProps } from '@mui/material';
-import { styles, defaultButtonGroupColorScheme } from './ButtonGroup.styles';
+import { Box, BoxProps, ButtonGroup as MUIButtonGroup } from '@mui/material';
+import React, { useLayoutEffect } from 'react';
+
+import { defaultButtonGroupColorScheme, styles } from './ButtonGroup.styles';
 
 interface ButtonGroupColorSettings {
   selectedButtonColor: string;
@@ -17,13 +18,14 @@ interface ButtonGroupProps extends BoxProps {
 }
 
 const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props }: ButtonGroupProps) => {
-  const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
-  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
+  const [activeButton, setActiveButton] = React.useState<number | null>(defaultActiveButton ?? null);
+  const [indicatorStyle, setIndicatorStyle] = React.useState<{ left: number; width: number }>({
     left: 0,
     width: 0
   });
 
-  const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const buttonRefs = React.useRef<Array<HTMLDivElement | null>>([]);
 
   const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
     colorSettings ?? defaultButtonGroupColorScheme;
@@ -31,7 +33,6 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
   let padding = 4;
   if (sx && typeof sx === 'object' && !Array.isArray(sx) && 'padding' in sx) {
     const paddingVal = (sx as { padding?: number | string }).padding ?? 4;
-
     if (typeof paddingVal === 'number') {
       padding = paddingVal;
     } else if (typeof paddingVal === 'string') {
@@ -39,37 +40,41 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       if (!/^\d{1,5}(\.\d{1,3})?$/.test(paddingMatch)) {
         throw new Error(`Invalid padding value: ${paddingVal}, must be a number or a string ending with 'px'.`);
       }
-
       padding = parseFloat(paddingMatch);
     }
   }
-  const rightMargin = padding / 2;
 
   useLayoutEffect(() => {
-    if (activeButton === null || !buttons[activeButton]) {
-      setIndicatorStyle({ left: 0, width: 0 });
-      return;
-    }
-
-    const currentButton = buttonRefs.current[activeButton];
-    if (currentButton?.parentElement) {
+    const updateIndicator = () => {
+      if (activeButton === null || !buttonRefs.current[activeButton] || !containerRef.current) {
+        setIndicatorStyle({ left: 0, width: 0 });
+        return;
+      }
+      const currentButton = buttonRefs.current[activeButton]!;
+      const containerRect = containerRef.current.getBoundingClientRect();
       const buttonRect = currentButton.getBoundingClientRect();
-      const containerRect = currentButton.parentElement.getBoundingClientRect();
+      const left = buttonRect.left - containerRect.left;
+      const width = buttonRect.width;
 
-      setIndicatorStyle({
-        left: buttonRect.left - containerRect.left - (padding - 2),
-        width: buttonRect.width + 2 * (padding - 2)
-      });
-    }
-  }, [activeButton, buttons]);
+      setIndicatorStyle({ left, width });
+    };
+
+    updateIndicator();
+    window.addEventListener('resize', updateIndicator);
+    return () => {
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [activeButton, buttons, padding]);
 
   return (
-    <Box
+    <MUIButtonGroup
+      ref={containerRef}
       sx={{
         ...styles.defaultButtonGroup,
         ...sx,
         backgroundColor: groupBackgroundColor,
-        color: buttonTextColor
+        color: buttonTextColor,
+        position: 'relative'
       }}
       aria-label="Button Group"
       {...props}
@@ -77,6 +82,8 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       <Box
         sx={{
           ...styles.selectedButton,
+          height: `calc(100% - ${2 * padding}px)`,
+          top: `${padding}px`,
           backgroundColor: selectedButtonColor,
           color: selectedButtonTextColor,
           left: indicatorStyle.left,
@@ -87,21 +94,20 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       />
       {buttons.map((button, idx) => (
         <Box
-          key={(button as React.ReactElement).key}
+          key={idx}
           ref={(el: HTMLDivElement | null) => {
             buttonRefs.current[idx] = el;
           }}
+          onClick={() => setActiveButton(idx)}
           sx={{
-            marginRight: idx < buttons.length - 1 ? `${rightMargin}px` : 0,
+            ...styles.defaultButton,
             color: idx === activeButton ? selectedButtonTextColor : buttonTextColor
           }}
-          onClick={() => setActiveButton(idx)}
         >
           {button}
         </Box>
       ))}
-    </Box>
+    </MUIButtonGroup>
   );
 };
-
 export default ButtonGroup;

@@ -8,8 +8,6 @@ export const defaultButtonGroupColorScheme = {
 export const styles = {
   selectedButton: {
     position: 'absolute',
-    top: 2,
-    height: 'calc(100% - 4px)',
     borderRadius: '9999px',
     transition: 'all 0.3s ease',
     zIndex: 0
@@ -24,7 +22,9 @@ export const styles = {
     fontFamily: 'Mulish, sans-serif',
     position: 'relative',
     overflow: 'hidden',
-    width: 'fit-content'
+    width: 'fit-content',
+    border: 'none',
+    lineHeight: '150%'
   },
   defaultButton: {
     display: 'inline-block',
@@ -37,8 +37,34 @@ export const styles = {
     marginRight: '4px',
     padding: '1px 16px',
     textTransform: 'none',
+    lineHeight: '150%',
+    border: 'none',
+    backgroundColor: 'transparent',
     '&:last-child': {
       marginRight: 0
+    },
+    '&>button': {
+      backgroundColor: 'transparent',
+      color: 'inherit',
+      textDecoration: 'none',
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      fontWeight: 'inherit',
+      lineHeight: 'inherit',
+      cursor: 'inherit',
+      border: 'none',
+      padding: 0,
+      margin: 0,
+      display: 'inline-block',
+      height: '100%',
+      '&:hover': {
+        textDecoration: 'none',
+        color: 'inherit',
+        backgroundColor: 'inherit'
+      },
+      '& *:not(.lf-btn-label)': {
+        display: 'none'
+      }
     }
   }
 };

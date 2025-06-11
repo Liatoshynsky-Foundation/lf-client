@@ -1,4 +1,3 @@
-'use client';
 import { Box } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';

@@ -1,8 +1,54 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
+
 import ButtonGroup from './ButtonGroup';
 import { defaultButtonGroupColorScheme } from './ButtonGroup.styles';
+
+// Remove global spys on offsets
+beforeEach(() => {
+  jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+    let dataLeft: string | undefined;
+    let dataWidth: string | undefined;
+
+    // Try to extract data from the first child if it's an element
+    if (this.firstChild instanceof HTMLElement) {
+      dataLeft = this.firstChild.dataset.offsetLeft;
+      dataWidth = this.firstChild.dataset.offsetWidth;
+    }
+
+    // Fallback to this element’s dataset if needed
+    if (!dataLeft) {
+      dataLeft = this.dataset.offsetLeft;
+    }
+    if (!dataWidth) {
+      dataWidth = this.dataset.offsetWidth;
+    }
+
+    const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
+    const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
+
+    const params = {
+      x: customLeft,
+      y: 0,
+      left: customLeft,
+      top: 0,
+      right: customLeft + customWidth,
+      bottom: customWidth,
+      width: customWidth,
+      height: 50
+    };
+
+    return {
+      ...params,
+      toJSON: () => params
+    } as DOMRect;
+  });
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 const buttonClickHandlers = {
   button1Click: jest.fn(),
@@ -11,13 +57,13 @@ const buttonClickHandlers = {
 };
 
 const mockButtons = [
-  <button key="1" onClick={buttonClickHandlers.button1Click}>
+  <button key="1" onClick={buttonClickHandlers.button1Click} data-offset-left="10" data-offset-width="100">
     Button 1
   </button>,
-  <button key="2" onClick={buttonClickHandlers.button2Click}>
+  <button key="2" onClick={buttonClickHandlers.button2Click} data-offset-left="120" data-offset-width="80">
     Button 2
   </button>,
-  <button key="3" onClick={buttonClickHandlers.button3Click}>
+  <button key="3" onClick={buttonClickHandlers.button3Click} data-offset-left="210" data-offset-width="90">
     Button 3
   </button>
 ];
@@ -81,17 +127,20 @@ describe('Button Group', () => {
 
     it('should place the indicator on the default active button if provided', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} />);
-      const button2 = screen.getByText('Button 2').parentElement as HTMLElement;
+      const button2 = screen.getByText('Button 2');
       const indicator = screen.getByRole('presentation', { hidden: true });
 
-      expect(indicator).toHaveStyle(`left: ${button2.offsetLeft - 2}px`);
-      expect(indicator).toHaveStyle(`width: ${button2.offsetWidth + 4}px`);
-      expect(button2).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
+      const computedIndicatorStyle = window.getComputedStyle(indicator);
+
+      expect(computedIndicatorStyle.left).toBe(button2.dataset.offsetLeft + 'px');
+      expect(computedIndicatorStyle.width).toBe(button2.dataset.offsetWidth + 'px');
+      expect(button2.parentElement).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
     });
 
     it('should apply custom styles from colorSettings', () => {
       render(<ButtonGroup buttons={mockButtons} colorSettings={mockColorSettings} />);
       const buttonGroup = screen.getByLabelText('Button Group');
+
       expect(buttonGroup).toHaveStyle(`background-color: ${mockColorSettings.groupBackgroundColor}`);
       expect(buttonGroup).toHaveStyle(`color: ${mockColorSettings.buttonTextColor}`);
     });
@@ -104,26 +153,35 @@ describe('Button Group', () => {
 
     it('should compute indicator style based on custom string padding', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} sx={{ padding: '12px' }} />);
-
+      const button = screen.getByText('Button 2');
       const indicator = screen.getByRole('presentation', { hidden: true });
-      expect(indicator).toHaveStyle('left: -10px');
-      expect(indicator).toHaveStyle('width: 20px');
+
+      const computedIndicatorStyle = window.getComputedStyle(indicator);
+
+      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
+      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
     });
 
     it('should compute indicator style based on custom number padding', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: 12 }} />);
-
+      const button = screen.getByText('Button 1');
       const indicator = screen.getByRole('presentation', { hidden: true });
-      expect(indicator).toHaveStyle('left: -10px');
-      expect(indicator).toHaveStyle('width: 20px');
+
+      const computedIndicatorStyle = window.getComputedStyle(indicator);
+
+      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
+      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
     });
 
-    it('should throw error if provided padding is not a number or string', () => {
+    it('should apply default value if provided padding is not a number or string', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: undefined }} />);
-
+      const button = screen.getByText('Button 1');
       const indicator = screen.getByRole('presentation', { hidden: true });
-      expect(indicator).toHaveStyle('left: -2px');
-      expect(indicator).toHaveStyle('width: 4px');
+
+      const computedIndicatorStyle = window.getComputedStyle(indicator);
+
+      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
+      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
     });
 
     it('should throw error if provided padding string is invalid', () => {
@@ -135,8 +193,13 @@ describe('Button Group', () => {
     it('should set indicator style to zero when activeButton is out of range', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={5} />);
       const indicator = screen.getByRole('presentation', { hidden: true });
-      expect(indicator).toHaveStyle('left: 0px');
-      expect(indicator).toHaveStyle('width: 0px');
+
+      const computedIndicatorStyle = window.getComputedStyle(indicator);
+      const computedLeft = parseFloat(computedIndicatorStyle.left);
+      const computedWidth = parseFloat(computedIndicatorStyle.width);
+
+      expect(computedLeft).toBe(0);
+      expect(computedWidth).toBe(0);
     });
   });
 });
