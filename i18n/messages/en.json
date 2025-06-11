@@ -24,7 +24,8 @@
   },
   "foundation": {
     "foundationWasCreated": "The Lyatoshynsky Foundation, established",
-    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects."
+    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects.",
+    "foundationTeam": "The Lyatoshynsky Foundation Team"
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",
