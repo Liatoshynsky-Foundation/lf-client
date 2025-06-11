@@ -6,12 +6,16 @@ import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
+import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
 import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
+<<<<<<< HEAD
 import Footer from '~/components/Footer/Footer';
+=======
+>>>>>>> d53a8ad (fix: reviewed footer)
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -56,6 +60,9 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
         <NextIntlClientProvider>
           <ThemeProvider>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d53a8ad (fix: reviewed footer)
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Container
                 sx={{
@@ -71,13 +78,21 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   marginRight: 'auto',
                   width: '100%',
                   flex: '1',
+<<<<<<< HEAD
                   [theme.breakpoints.down('md')]: {
+=======
+                  [theme.breakpoints.down('sm')]: {
+>>>>>>> d53a8ad (fix: reviewed footer)
                     gridTemplateColumns: 'repeat(8, 1fr)',
                     paddingLeft: '24px',
                     paddingRight: '24px',
                     gap: '20px'
                   },
+<<<<<<< HEAD
                   [theme.breakpoints.down('sm')]: {
+=======
+                  [theme.breakpoints.down('xs')]: {
+>>>>>>> d53a8ad (fix: reviewed footer)
                     gridTemplateColumns: 'repeat(4, 1fr)',
                     gap: '16px'
                   }
@@ -86,6 +101,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 <Box sx={{ gridColumn: '1 / -1' }}>
                   <Header />
                 </Box>
+<<<<<<< HEAD
                 <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
               </Container>
               <Footer />
@@ -123,6 +139,12 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             </Container>
             <Footer />
 >>>>>>> f16104d (feat: added translations and tests)
+=======
+                <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
+              </Container>
+              <Footer />
+            </Box>
+>>>>>>> d53a8ad (fix: reviewed footer)
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
