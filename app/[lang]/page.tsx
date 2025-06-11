@@ -1,9 +1,8 @@
 import React from 'react';
 
+import FoundationFounders from '~/components/FoundationFounders/FoundationFounders';
 import LiatoshynskyOffice from '~/components/Liatoshynsky-office/LiatoshynskyOffice';
-
-import FoundationFounders from '~/shared/components/FoundationFounders/FoundationFounders';
-import OurMission from '~/shared/components/our-mission/OurMission';
+import OurMission from '~/components/our-mission/OurMission';
 
 export default async function Home() {
   return (

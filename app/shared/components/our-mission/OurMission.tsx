@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
 
-import { styles } from './OurMission.styles';
+import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
+import ListItem from '~/components/list-item/ListItem';
+import SectionTitle from '~/components/section-title/SectionTitle';
 
-import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCaption';
-import ListItem from '~/shared/components/list-item/ListItem';
-import SectionTitle from '~/shared/components/section-title/SectionTitle';
+import { styles } from './OurMission.styles';
 
 const OurMission = async () => {
   const t = await getTranslations('home.ourMission');
