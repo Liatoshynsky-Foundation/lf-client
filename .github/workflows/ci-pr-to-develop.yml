@@ -147,13 +147,13 @@ jobs:
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
           
-          docker buildx build \
+          bash -c "docker buildx build \
             --build-arg MONGO_DB=${{ secrets.MONGO_DB }} \
             --build-arg MONGO_HOST=${{ secrets.MONGO_HOST }} \
             --build-arg MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
             --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             --build-arg MONGO_PORT=${{ secrets.MONGO_PORT }} \
-            -t my-app-image:${{ github.sha }} --load . >"$LOG_FILE" 2>&1
+            -t my-app-image:${{ github.sha }} --load . >"$LOG_FILE" 2>&1"
           BUILD_STATUS=$?
           
           
