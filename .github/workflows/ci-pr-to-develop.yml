@@ -147,15 +147,14 @@ jobs:
         run: |
           LOG_FILE=docker-build-${{ github.sha }}.log
           
-          bash -c "docker buildx build \
-            --build-arg MONGO_DB=${{ secrets.MONGO_DB }} \
-            --build-arg MONGO_HOST=${{ secrets.MONGO_HOST }} \
-            --build-arg MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
-            --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-            --build-arg MONGO_PORT=${{ secrets.MONGO_PORT }} \
-            -t my-app-image:${{ github.sha }} --load . >"$LOG_FILE" 2>&1"
+          docker buildx build \
+            --build-arg MONGO_DB="${{ secrets.MONGO_DB }}" \
+            --build-arg MONGO_HOST="${{ secrets.MONGO_HOST }}" \
+            --build-arg MONGO_USERNAME="${{ secrets.MONGO_USERNAME }}" \
+            --build-arg MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
+            --build-arg MONGO_PORT="${{ secrets.MONGO_PORT }}" \
+            -t "my-app-image:${{ github.sha }}" --load . >"$LOG_FILE" 2>&1
           BUILD_STATUS=$?
-          
           
           if [ $BUILD_STATUS -eq 0 ]; then
             docker image inspect my-app-image:${{ github.sha }} > /dev/null 2>&1
