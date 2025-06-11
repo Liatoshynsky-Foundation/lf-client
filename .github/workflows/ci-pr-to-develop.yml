@@ -143,13 +143,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: "Debug: Check if secrets are accessible"
+      - name: "Debug: Validate ALL secrets before build"
         run: |
-          if [ -z "${{ secrets.MONGO_PASSWORD }}" ]; then
-            echo "::error::Secret MONGO_PASSWORD is empty or not accessible."
-            echo "This usually happens on pull requests from forks."
-          else
-            echo "✅ Secret MONGO_PASSWORD is accessible (value is masked)."
+          echo "--- Checking ALL secrets needed for the build ---"
+          EXIT_CODE=0
+
+          if [ -z "${{ secrets.MONGO_DB }}" ]; then echo "::error::Secret MONGO_DB is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_DB is set."; fi
+          if [ -z "${{ secrets.MONGO_HOST }}" ]; then echo "::error::Secret MONGO_HOST is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_HOST is set."; fi
+          if [ -z "${{ secrets.MONGO_USERNAME }}" ]; then echo "::error::Secret MONGO_USERNAME is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_USERNAME is set."; fi
+          if [ -z "${{ secrets.MONGO_PASSWORD }}" ]; then echo "::error::Secret MONGO_PASSWORD is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_PASSWORD is set."; fi
+          if [ -z "${{ secrets.MONGO_PORT }}" ]; then echo "::error::Secret MONGO_PORT is NOT SET!"; EXIT_CODE=1; else echo "✅ MONGO_PORT is set."; fi
+
+          echo "-------------------------------------------------"
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "::error::One or more required secrets are empty. Please check repository/organization secrets."
+            exit 1
           fi
 
       - name: Build Docker image
