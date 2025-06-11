@@ -3,10 +3,9 @@ import { ElementSizes } from '~/types/types/common.types';
 
 export const styles = {
   container: {
-    display: 'grid',
-    gridTemplateColumns: 'subgrid',
     position: 'relative',
-    gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' },
+    zIndex: 1,
+    gridColumn: '1 / -1',
     alignSelf: 'start'
   },
   border: (border: BorderProps) => ({
@@ -37,14 +36,14 @@ export const styles = {
   image: {
     objectFit: 'cover'
   },
-  caption: (sizes: ElementSizes) => ({
+  caption: (sizes: ElementSizes, align: 'left' | 'right') => ({
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontSize: { xs: '12px', sm: '14px', md: '16px' },
     lineHeight: { xs: '130%', sm: '140%' },
     fontStyle: 'italic',
     letterSpacing: '0%',
-    textAlign: 'right',
+    textAlign: align,
     color: '#63666E',
     mt: { xs: '8px', md: '16px' },
     maxWidth: { ...sizes.width },
