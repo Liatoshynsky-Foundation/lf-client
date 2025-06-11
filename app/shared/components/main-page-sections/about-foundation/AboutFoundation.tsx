@@ -2,7 +2,8 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
-import { theme } from '../../design-system/all-components/theme/Theme';
+import { theme } from '~/ds-components/theme/Theme';
+
 import ImageWithCaption from '../../image-with-caption/ImageWithCaption';
 import QuoteBlock from '../../Quote/Quote';
 import { SvgImage } from '../../svg-image/SvgImage';

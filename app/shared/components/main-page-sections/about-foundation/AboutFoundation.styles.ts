@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material';
 
-import { theme } from '../../design-system/all-components/theme/Theme';
+import { theme } from '~/ds-components/theme/Theme';
 
 import { AppTypography } from '~/constants';
 

@@ -12,10 +12,6 @@ import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
-<<<<<<< HEAD
-import Footer from '~/components/Footer/Footer';
-=======
->>>>>>> d53a8ad (fix: reviewed footer)
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -59,10 +55,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
         <NextIntlClientProvider>
           <ThemeProvider>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d53a8ad (fix: reviewed footer)
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Container
                 sx={{
@@ -78,21 +70,13 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   marginRight: 'auto',
                   width: '100%',
                   flex: '1',
-<<<<<<< HEAD
                   [theme.breakpoints.down('md')]: {
-=======
-                  [theme.breakpoints.down('sm')]: {
->>>>>>> d53a8ad (fix: reviewed footer)
                     gridTemplateColumns: 'repeat(8, 1fr)',
                     paddingLeft: '24px',
                     paddingRight: '24px',
                     gap: '20px'
                   },
-<<<<<<< HEAD
                   [theme.breakpoints.down('sm')]: {
-=======
-                  [theme.breakpoints.down('xs')]: {
->>>>>>> d53a8ad (fix: reviewed footer)
                     gridTemplateColumns: 'repeat(4, 1fr)',
                     gap: '16px'
                   }
@@ -101,50 +85,10 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 <Box sx={{ gridColumn: '1 / -1' }}>
                   <Header />
                 </Box>
-<<<<<<< HEAD
                 <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
               </Container>
               <Footer />
             </Box>
-=======
-            <Container
-              sx={{
-                padding: '20px',
-                height: '100vh',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(12, 1fr)',
-                gap: '40px',
-                maxWidth: '1920px !important',
-                paddingLeft: '72px !important',
-                paddingRight: '72px !important',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                width: '100%',
-                [theme.breakpoints.down('sm')]: {
-                  gridTemplateColumns: 'repeat(8, 1fr)',
-                  paddingLeft: '24px !important',
-                  paddingRight: '24px !important',
-                  gap: '20px'
-                },
-                [theme.breakpoints.down('xs')]: {
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: '16px'
-                }
-              }}
-            >
-              <Box sx={{ gridColumn: '1 / -1' }}>
-                <Header />
-              </Box>
-              <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
-            </Container>
-            <Footer />
->>>>>>> f16104d (feat: added translations and tests)
-=======
-                <Box sx={{ gridColumn: '1 / -1' }}>{children}</Box>
-              </Container>
-              <Footer />
-            </Box>
->>>>>>> d53a8ad (fix: reviewed footer)
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
