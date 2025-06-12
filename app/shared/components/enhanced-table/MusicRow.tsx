@@ -1,24 +1,14 @@
 import { Box, Button, TableCell, TableRow } from '@mui/material';
 
-type User = {
-  id: number;
-  name: string;
-  year: number;
-};
-
-type Props = {
-  user: User;
-};
-
-export function UserRow({ user }: Props) {
+export function MusicRow({ music }) {
   return (
     <TableRow>
       <TableCell />
-      <TableCell>{user.name}</TableCell>
-      <TableCell>{user.year}</TableCell>
+      <TableCell>{music.name}</TableCell>
+      <TableCell>{music.year}</TableCell>
       <TableCell>
         <Box display="flex" alignItems="center" gap={1}>
-          <Button variant="outlined" size="small" onClick={() => alert(`User ID: ${user.id}`)}>
+          <Button variant="outlined" size="small" onClick={() => alert(`User ID: ${music.id}`)}>
             Переглянути ноти
           </Button>
         </Box>

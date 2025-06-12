@@ -4,90 +4,66 @@ import { Box, Pagination, Paper, Table, TableBody, TableContainer } from '@mui/m
 import { useState } from 'react';
 
 import { CollapsibleRow } from './CollapsibleRow';
-import { UserRow } from './MusicRow';
+import { MusicRow } from './MusicRow';
 import { TableHeader } from './TableHeader';
 
-type User = {
+type Music = {
   id: number;
   name: string;
   year: number;
+  opus?: string;
 };
 
-const allUsers: User[] = [
-  {
-    id: 1,
-    name: '«Після бою», сл. І. Буніна, укр. пер. М. Стріхи',
-    year: 1997
-  },
-  {
-    id: 2,
-    name: 'Довше ім’я, що складається з кількох частин і має додаткові уточнення (ред.)',
-    year: 1997
-  },
-  {
-    id: 3,
-    name: 'Коротке ім’я',
-    year: 1997
-  },
-  {
-    id: 4,
-    name: 'Твір із надзвичайно довгою назвою, яка використовується для тестування меж колонки',
-    year: 1997
-  },
-  {
-    id: 5,
-    name: 'Пісня',
-    year: 1997
-  },
-  {
-    id: 6,
-    name: 'Композиція для голосу і фортепіано',
-    year: 1997
-  },
-  {
-    id: 7,
-    name: 'Інструментальна п’єса',
-    year: 1997
-  },
-  {
-    id: 8,
-    name: 'Романтична балада',
-    year: 1997
-  },
-  {
-    id: 9,
-    name: 'Симфонічний твір',
-    year: 1997
-  },
-  {
-    id: 10,
-    name: 'Етюд',
-    year: 1997
-  },
-  {
-    id: 11,
-    name: 'Ода невідомому герою з далеких часів',
-    year: 1997
-  },
-  {
-    id: 12,
-    name: 'Мелодія',
-    year: 1998
-  }
+type FlattenedItem = { type: 'group'; label: string; items: Music[] } | { type: 'music'; music: Music };
+
+const music: Music[] = [
+  { id: 1, name: '«Після бою», сл. І. Буніна, укр. пер. М. Стріхи', year: 1997, opus: 'op.1' },
+  { id: 2, name: 'Довше ім’я...', year: 1997, opus: 'op.1' },
+  { id: 3, name: 'Коротке ім’я', year: 1997, opus: 'op.1' },
+  { id: 4, name: 'Твір із надзвичайно довгою назвою...', year: 1997, opus: 'op.2' },
+  { id: 5, name: 'Пісня', year: 1997, opus: 'op.2' },
+  { id: 6, name: 'Композиція для голосу і фортепіано', year: 1997, opus: 'op.2' },
+  { id: 7, name: 'Інструментальна п’єса', year: 1997 },
+  { id: 8, name: 'Романтична балада', year: 1997 },
+  { id: 9, name: 'Симфонічний твір', year: 1997 },
+  { id: 10, name: 'Етюд', year: 1997 },
+  { id: 11, name: 'Ода невідомому герою...', year: 1997 },
+  { id: 12, name: 'Мелодія', year: 1998 }
 ];
 
-const ITEMS_PER_PAGE = 10;
-const HIDDEN_USER_COUNT = 3;
+const ITEMS_PER_PAGE = 5;
 
 export default function UserTable() {
   const [page, setPage] = useState(1);
-  const [collapsed, setCollapsed] = useState(false);
-  const [users] = useState<User[]>(allUsers);
+  const [collapsedMap, setCollapsedMap] = useState<Record<string, boolean>>({});
 
-  const hiddenUsers = users.slice(0, HIDDEN_USER_COUNT);
-  const visibleUsers = users.slice(HIDDEN_USER_COUNT);
-  const paginatedUsers = visibleUsers.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(visibleUsers.length / ITEMS_PER_PAGE);
+  const toggleGroup = (label: string) => {
+    setCollapsedMap((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
+
+  const groupedMap = new Map<string, Music[]>();
+  const ungrouped: Music[] = [];
+
+  for (const m of music) {
+    if (m.opus) {
+      if (!groupedMap.has(m.opus)) groupedMap.set(m.opus, []);
+      groupedMap.get(m.opus)!.push(m);
+    } else {
+      ungrouped.push(m);
+    }
+  }
+
+  const flattened: FlattenedItem[] = [
+    ...Array.from(groupedMap.entries()).map(([label, items]) => ({
+      type: 'group',
+      label,
+      items
+    })),
+    ...ungrouped.map((m) => ({ type: 'music', music: m }))
+  ];
+
+  const totalPages = Math.ceil(flattened.length / ITEMS_PER_PAGE);
+  const paginated = flattened.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
     <Box p={2}>
@@ -95,10 +71,19 @@ export default function UserTable() {
         <Table>
           <TableHeader />
           <TableBody>
-            <CollapsibleRow users={hiddenUsers} collapsed={collapsed} onToggle={() => setCollapsed((prev) => !prev)} />
-            {paginatedUsers.map((user) => (
-              <UserRow key={user.id} user={user} />
-            ))}
+            {paginated.map((item) =>
+              item.type === 'group' ? (
+                <CollapsibleRow
+                  key={`group-${item.label}`}
+                  musics={item.items}
+                  groupLabel={item.label}
+                  collapsed={collapsedMap[item.label] ?? false}
+                  onToggle={() => toggleGroup(item.label)}
+                />
+              ) : (
+                <MusicRow key={item.music.id} music={item.music} />
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
