@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { rgbButtonColors } from '~/ds-components/theme/colors';
+
 import Button from './Button';
-import { colors } from './Button.styles';
 
 describe('Button Component', () => {
   const startIcon = <span data-testid="start-icon">▲</span>;
@@ -23,8 +24,8 @@ describe('Button Component', () => {
     render(<Button color="tertiary">Tertiary Button</Button>);
 
     expect(screen.getByRole('button')).toHaveStyle({
-      backgroundColor: colors.yellow[500],
-      color: colors.black
+      backgroundColor: rgbButtonColors.tertiaryNormalBackground,
+      color: rgbButtonColors.tertiaryNormalTextColor
     });
   });
 
