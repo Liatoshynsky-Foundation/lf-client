@@ -1,4 +1,4 @@
-const mainHexPallete = {
+export const mainHexPallete = {
   blue: {
     50: '#F9FAFB',
     100: '#F0F2FB',
@@ -62,7 +62,7 @@ const mainHexPallete = {
   white: ''
 };
 
-const rgbButtonColors = {
+export const rgbButtonColors = {
   primaryFilledNormalBackground: ' rgb(25,13,3)',
   primaryFilledHoveredBackground: 'rgb(52,41,33)',
   primaryFilledPressedBackground: 'rgb(94,85,78)',
@@ -107,9 +107,3 @@ const rgbButtonColors = {
   tertiaryNormalTextColor: 'rgb(25,13,3)',
   tertiaryHoveredTextColor: 'rgb(252,252,252)'
 };
-const colors = {
-  mainHexPallete,
-  rgbButtonColors
-};
-
-export default colors;

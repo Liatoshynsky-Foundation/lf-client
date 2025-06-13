@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
-import colors from './colors';
+import { mainHexPallete } from './colors';
 
 export const oswald = Oswald({ subsets: ['latin'] });
 export const mulish = Mulish({ subsets: ['latin'] });
@@ -20,29 +20,29 @@ declare module '@mui/material/styles' {
 export const theme = createTheme({
   palette: {
     primary: {
-      main: colors.mainHexPallete.black,
-      contrastText: colors.mainHexPallete.white
+      main: mainHexPallete.black,
+      contrastText: mainHexPallete.white
     },
     secondary: {
-      main: colors.mainHexPallete.blue[800],
-      contrastText: colors.mainHexPallete.white
+      main: mainHexPallete.blue[800],
+      contrastText: mainHexPallete.white
     },
     error: {
-      main: colors.mainHexPallete.red[600]
+      main: mainHexPallete.red[600]
     },
     warning: {
-      main: colors.mainHexPallete.yellow[500],
-      dark: colors.mainHexPallete.burgundy[700]
+      main: mainHexPallete.yellow[500],
+      dark: mainHexPallete.burgundy[700]
     },
     text: {
-      primary: colors.mainHexPallete.black,
-      secondary: colors.mainHexPallete.blue[800],
-      disabled: colors.mainHexPallete.blue[200]
+      primary: mainHexPallete.black,
+      secondary: mainHexPallete.blue[800],
+      disabled: mainHexPallete.blue[200]
     },
     background: {
-      default: colors.mainHexPallete.white
+      default: mainHexPallete.white
     },
-    ...colors.mainHexPallete
+    ...mainHexPallete
   },
   breakpoints: {
     values: {
