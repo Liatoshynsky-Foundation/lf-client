@@ -1,0 +1,115 @@
+const mainHexPallete = {
+  blue: {
+    50: '#F9FAFB',
+    100: '#F0F2FB',
+    200: '#D9DCE8',
+    300: '#C6C8D3',
+    400: '#B2B3BE',
+    500: '#9D9FA9',
+    600: '#898C95',
+    700: '#63666E',
+    800: '#52545A',
+    900: '#3F444A'
+  },
+  red: {
+    50: '#FCF0ED',
+    100: '#FAE2DC',
+    200: '#F7C3B6',
+    300: '#F4A593',
+    400: '#F7856A',
+    500: '#EB6343',
+    600: '#D13712',
+    700: '#A32B0E',
+    800: '#7F210B',
+    900: '#611908'
+  },
+  yellow: {
+    100: '#FFF8E9',
+    200: '#FFEABA',
+    300: '#FFE099',
+    400: '#FFD26A',
+    500: '#FCBD28',
+    600: '#E0A01F',
+    700: '#BF7D13',
+    800: '#8A570C',
+    900: '#673E0F'
+  },
+  brown: {
+    50: '#F7F5F1',
+    100: '#EDE8DF',
+    200: '#D3CAC0',
+    300: '#B8AEA2',
+    400: '#9F9185',
+    500: '#87756B',
+    600: '#6E5A51',
+    700: '#574139',
+    800: '#412B21',
+    900: '#2D1611'
+  },
+  burgundy: {
+    50: '#F9F3F3',
+    100: '#E6D4D3',
+    200: '#D4B8B4',
+    300: '#C19C96',
+    400: '#AE7F79',
+    500: '#9B655E',
+    600: '#874943',
+    700: '#732E28',
+    800: '#600E0F',
+    900: '#3D0607'
+  },
+  black: '#190d03',
+  white: ''
+};
+
+const rgbButtonColors = {
+  primaryFilledNormalBackground: ' rgb(25,13,3)',
+  primaryFilledHoveredBackground: 'rgb(52,41,33)',
+  primaryFilledPressedBackground: 'rgb(94,85,78)',
+  primaryFilledDisabledBackground: 'rgb(198,200,211)',
+  primaryOutlinedDiasbledTextColor: 'rgb(102,105,113)',
+  primaryFilledTextColor: 'rgb(252,252,252)',
+  primaryOutlinedNormalBackground: 'rgb(252,252,252)',
+  primaryOutlinedHoveredBackground: 'rgb(243,243,242)',
+  primaryOutlinedPressedBackground: 'rgb(209,207,205)',
+  primaryOutlinedBorderColor: 'rgb(35,23,14)',
+  primaryOutlinedDisabledBackground: 'rgb(252,252,252)',
+  primaryOutlinedDisabledBorderColor: 'rgb(102,105,113)',
+  primaryOutlinedTextColor: 'rgb(35,23,14)',
+  primaryOutlinedDisabledTextColor: 'rgb(102,105,113)',
+  primaryTextNormal: 'transeparent',
+  primaryTextHovered: 'rgb(243,243,242)',
+  primaryTextPressed: 'rgb(209,207,205)',
+  primaryTextDisabled: 'transeparent',
+  primaryTextColor: 'rgb(35,23,14)',
+  primaryTextDisabledTextColor: 'rgb(102,105,113)',
+  secondaryFilledNormalBackground: 'rgb(252,252,252)',
+  secondaryFilledHoveredBackground: 'rgb(239,237,234)',
+  secondaryFilledPressedBackground: 'rgb(211,205,198)',
+  secondaryFilledDisabledBackground: 'rgb(198,200,211)',
+  secondaryFilledTextColor: 'rgb(35,23,14)',
+  secondaryFilledisabledTextColor: 'rgb(102,105,113)',
+  secondaryOutlinedNormalBackground: 'rgb(25,13,3)',
+  secondaryOutlinedHoveredBackground: 'rgb(52,41,33)',
+  secondaryOutlinedPressedBackground: 'rgb(94,85,78)',
+  secondaryOutlinedDisabledBackground: 'rgb(25,13,3)',
+  secondaryOutlinedBorderColor: 'rgb(252,252,252)',
+  secondaryOutlinedTextColor: 'rgb(252,252,252)',
+  secondaryTextNormal: 'transeprent',
+  secondaryTextHovered: 'rgb(52,41,33)',
+  secondaryTextPressed: 'rgb(94,85,78)',
+  secondaryTextDisabledTextColor: 'rgb(102,105,113)',
+  secondaryTextColor: 'rgb(252,252,252)',
+  tertiaryNormalBackground: 'rgb(252,189,40)',
+  tertiaryHoveredBackground: 'rgb(25,13,3)',
+  tertiaryPressedBackground: 'rgb(94,85,78)',
+  tertiaryDisabledBackground: 'rgb(198,200,211)',
+  tertiaryNormalTextColor: 'rgb(25,13,3)',
+  tertiaryHoveredTextColor: 'rgb(252,252,252)'
+};
+const colors = {
+  mainHexPallete,
+  rgbButtonColors
+};
+
+export default colors;
