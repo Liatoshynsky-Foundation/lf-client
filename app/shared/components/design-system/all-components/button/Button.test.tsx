@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
@@ -21,7 +22,16 @@ describe('Button Component', () => {
   });
 
   test('applies tertiary color styles', () => {
-    render(<Button color="tertiary">Tertiary Button</Button>);
+    render(
+      <Button
+        size="large"
+        color="tertiary"
+        variant="contained"
+        label={<Typography variant="customButtonLarge">Tertiary Button</Typography>}
+      >
+        Tertiary Button
+      </Button>
+    );
 
     expect(screen.getByRole('button')).toHaveStyle({
       backgroundColor: rgbButtonColors.tertiaryNormalBackground,

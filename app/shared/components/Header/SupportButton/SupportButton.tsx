@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 
 import { Link } from '~/i18n/navigation';
@@ -15,7 +16,12 @@ type SupportButtonProps = {
 const SupportButton: React.FC<SupportButtonProps> = ({ data }) => {
   return (
     <Link href={data.link}>
-      <Button size="medium" variant="filled" color="tertiary" label={data.text} />
+      <Button
+        size="medium"
+        variant="contained"
+        color="tertiary"
+        label={<Typography variant="customButtonMedium">{data.text}</Typography>}
+      ></Button>
     </Link>
   );
 };

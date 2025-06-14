@@ -13,6 +13,9 @@
     "isolatedModules": true, // Ensure each file is treated as an isolated module
     "incremental": true, // Enable incremental compilation for faster builds
     "jsx": "preserve",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "plugins": [
       {
         "name": "next"
@@ -26,8 +29,7 @@
       "~/ds-components/*": ["app/shared/components/design-system/all-components/*"],
       "~/components/*": ["app/shared/components/*"],
       "~/hooks/*": ["app/shared/hooks/*"],
-      "~/i18n/*": ["i18n/*"],
-      "~/public/*": ["public/*"]
+      "~/i18n/*": ["i18n/*"]
     },
     "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
     "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements

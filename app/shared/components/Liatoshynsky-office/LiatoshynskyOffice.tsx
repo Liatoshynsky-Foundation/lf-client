@@ -66,7 +66,11 @@ const LiatoshynskyOffice = async () => {
         </Box>
         <Box sx={styles.buttonBlock}>
           <Link href={buttonInfo.link} passHref>
-            <Button size="large" color="primary" label={buttonInfo.text} />
+            <Button
+              size="large"
+              color="primary"
+              label={<Typography variant="customButtonLarge">{buttonInfo.text}</Typography>}
+            />
           </Link>
         </Box>
       </Box>

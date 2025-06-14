@@ -72,7 +72,7 @@ export const rgbButtonColors = {
   primaryOutlinedNormalBackground: '#FCFCFC',
   primaryOutlinedHoveredBackground: 'rgb(243,243,242)',
   primaryOutlinedPressedBackground: '#D1CFCD',
-  primaryOutlinedBorderColor: '#23170E',
+  primaryOutlinedBorderColor: '#190D03',
   primaryOutlinedDisabledBackground: '#FCFCFC',
   primaryOutlinedDisabledBorderColor: '#666971',
   primaryOutlinedTextColor: '#23170E',
