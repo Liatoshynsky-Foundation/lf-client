@@ -34,7 +34,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         endIcon={!loading ? endIcon : undefined}
         {...props}
       >
-        {loading ? <CircularProgress color="inherit" size={25} /> : (label ?? children)}
+        {loading ? <CircularProgress color="inherit" size={25} data-testid="loader" /> : (label ?? children)}
       </CustomButton>
     );
   }
