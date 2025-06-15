@@ -180,7 +180,7 @@ jobs:
 
       - name: Run MongoDB container
         run: |
-          docker run -d --name mongodb --network app-network -p 27017:27017 \
+          docker run -d --name mongodb -p 27017:27017 \
             -e MONGO_INITDB_DATABASE=${{ secrets.MONGODB_DB }} \
             -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGODB_USER }} \
             -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGODB_PASS }} \
@@ -188,7 +188,7 @@ jobs:
 
       - name: Run be-app container
         run: |
-          docker run -d --name be-app --network app-network -p 3000:3000 \
+          docker run -d --name be-app -p 3000:3000 \
             -e MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e MONGO_DB=${{ secrets.MONGO_DB }} \
