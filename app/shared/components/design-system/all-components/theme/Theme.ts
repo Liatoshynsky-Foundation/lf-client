@@ -31,9 +31,6 @@ declare module '@mui/material' {
     customItalic16: true;
     customItalic14: true;
     customSemiBold18: true;
-    customButtonLarge: true;
-    customButtonMedium: true;
-    customButtonSmall: true;
   }
 }
 declare module '@mui/material/styles' {
@@ -47,9 +44,6 @@ declare module '@mui/material/styles' {
     customCaption?: React.CSSProperties;
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
-    customButtonLarge?: React.CSSProperties;
-    customButtonMedium?: React.CSSProperties;
-    customButtonSmall?: React.CSSProperties;
   }
   interface TypographyVariants {
     customSemiBold20: React.CSSProperties;
@@ -61,9 +55,6 @@ declare module '@mui/material/styles' {
     customCaption: React.CSSProperties;
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
-    customButtonLarge: React.CSSProperties;
-    customButtonMedium: React.CSSProperties;
-    customButtonSmall: React.CSSProperties;
   }
 
   interface TypographyVariantsOptions {
@@ -76,9 +67,6 @@ declare module '@mui/material/styles' {
     customCaption?: React.CSSProperties;
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
-    customButtonLarge?: React.CSSProperties;
-    customButtonMedium?: React.CSSProperties;
-    customButtonSmall?: React.CSSProperties;
   }
 }
 
@@ -107,21 +95,33 @@ declare module '@mui/material/Button' {
 export const buttonSizeStyles = {
   small: {
     height: '32px',
-    minWidth: '100px',
-    width: 'fit-content',
-    padding: '4px 12px 4px 12px'
+    width: '100px',
+    gap: '4px',
+    padding: '4px 12px 4px 12px',
+    fontWeight: 400,
+    fontSize: '14px',
+    lineHeight: '140%',
+    letterSpacing: '0px'
   },
   medium: {
     height: '40px',
-    minWidth: '137px',
-    width: 'fit-content',
-    padding: '8px 24px 8px 24px'
+    width: '137px',
+    gap: '4px',
+    padding: '8px 24px 8px 24px',
+    fontWeight: 500,
+    fontSize: '16px',
+    lineHeight: '150%',
+    letterSpacing: '0%'
   },
   large: {
     height: '56px',
-    minWidth: '163px',
-    width: 'fit-content',
-    padding: '14px 32px 14px 32px'
+    width: '163px',
+    gap: '8px',
+    padding: '14px 32px 14px 32px',
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '155%',
+    letterSpacing: '0px'
   }
 };
 
@@ -298,24 +298,6 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
-    },
-    customButtonLarge: {
-      fontWeight: 500,
-      fontSize: '18px',
-      lineHeight: '155%',
-      letterSpacing: '0px'
-    },
-    customButtonMedium: {
-      fontWeight: 500,
-      fontSize: '16px',
-      lineHeight: '150%',
-      letterSpacing: '0%'
-    },
-    customButtonSmall: {
-      fontWeight: 400,
-      fontSize: '14px',
-      lineHeight: '140%',
-      letterSpacing: '0px'
     }
   },
   components: {
@@ -336,99 +318,103 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: '28px'
+          borderRadius: '28px',
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: 'none'
+          },
+          whiteSpace: 'nowrap',
+          fontFamily: mulish.style.fontFamily
         }
       },
       variants: [
         {
           props: { variant: 'contained', color: 'primary' },
           style: {
-            backgroundColor: rgbButtonColors.primaryFilledNormalBackground,
-            color: rgbButtonColors.primaryFilledTextColor,
+            backgroundColor: mainHexPallete.black,
+            color: mainHexPallete.white,
             '&:hover': {
               backgroundColor: rgbButtonColors.primaryFilledHoveredBackground
             },
             '&:focus-visible': {
-              backgroundColor: rgbButtonColors.primaryFilledHoveredBackground
+              backgroundColor: mainHexPallete.black
             },
             '&:active': {
-              backgroundColor: rgbButtonColors.primaryFilledPressedBackground
+              backgroundColor: mainHexPallete.black
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.primaryFilledDisabledBackground,
-              color: rgbButtonColors.primaryOutlinedDisabledTextColor
+              backgroundColor: mainHexPallete.blue[300],
+              color: mainHexPallete.blue[700]
             }
           }
         },
         {
           props: { variant: 'outlined', color: 'primary' },
           style: {
-            backgroundColor: rgbButtonColors.primaryOutlinedNormalBackground,
-            border: `1px solid ${rgbButtonColors.primaryOutlinedBorderColor}`,
-            color: rgbButtonColors.primaryOutlinedTextColor,
+            backgroundColor: rgbButtonColors.transparent,
+            border: `1px solid ${mainHexPallete.black}`,
+            color: mainHexPallete.black,
             '&:hover': {
               backgroundColor: rgbButtonColors.primaryOutlinedHoveredBackground
             },
             '&:focus-visible': {
-              backgroundColor: rgbButtonColors.primaryOutlinedNormalBackground
+              backgroundColor: rgbButtonColors.primaryOutlinedHoveredBackground
             },
             '&:active': {
               backgroundColor: rgbButtonColors.primaryOutlinedPressedBackground
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.primaryOutlinedDisabledBackground,
-              border: `1px solid ${rgbButtonColors.primaryOutlinedDisabledBorderColor}`,
-              color: rgbButtonColors.primaryOutlinedDisabledTextColor
+              border: `1px solid ${mainHexPallete.blue[700]}`,
+              color: mainHexPallete.blue[700]
             }
           }
         },
         {
           props: { variant: 'text', color: 'primary' },
           style: {
-            backgroundColor: rgbButtonColors.primaryTextNormal,
-            color: rgbButtonColors.primaryTextColor,
+            backgroundColor: rgbButtonColors.transparent,
+            color: mainHexPallete.black,
             '&:hover': {
-              backgroundColor: rgbButtonColors.primaryTextHovered
+              backgroundColor: rgbButtonColors.primaryOutlinedHoveredBackground
             },
             '&:focus-visible': {
-              backgroundColor: rgbButtonColors.primaryTextPressed
+              backgroundColor: rgbButtonColors.primaryOutlinedHoveredBackground
             },
             '&:active': {
-              backgroundColor: rgbButtonColors.primaryOutlinedNormalBackground
+              backgroundColor: mainHexPallete.white
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.primaryTextDisabled,
-              color: rgbButtonColors.primaryTextDisabledTextColor
+              backgroundColor: mainHexPallete.blue[300],
+              color: mainHexPallete.blue[700]
             }
           }
         },
-
         {
           props: { variant: 'contained', color: 'secondary' },
           style: {
-            backgroundColor: rgbButtonColors.secondaryFilledNormalBackground,
-            color: rgbButtonColors.secondaryFilledTextColor,
+            backgroundColor: mainHexPallete.white,
+            color: mainHexPallete.black,
             '&:hover': {
-              backgroundColor: rgbButtonColors.secondaryFilledHoveredBackground
+              backgroundColor: mainHexPallete.brown[100]
             },
             '&:focus-visible': {
-              backgroundColor: rgbButtonColors.secondaryFilledPressedBackground
+              backgroundColor: mainHexPallete.brown[200]
             },
             '&:active': {
-              backgroundColor: rgbButtonColors.secondaryFilledPressedBackground
+              backgroundColor: mainHexPallete.brown[200]
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.secondaryFilledDisabledBackground,
-              color: rgbButtonColors.secondaryFilledisabledTextColor
+              backgroundColor: mainHexPallete.blue[300],
+              color: mainHexPallete.blue[700]
             }
           }
         },
         {
           props: { variant: 'outlined', color: 'secondary' },
           style: {
-            backgroundColor: rgbButtonColors.secondaryOutlinedNormalBackground,
-            border: `1px solid ${rgbButtonColors.secondaryOutlinedBorderColor}`,
-            color: rgbButtonColors.secondaryOutlinedTextColor,
+            backgroundColor: rgbButtonColors.transparent,
+            border: `1px solid ${mainHexPallete.white}`,
+            color: mainHexPallete.white,
             '&:hover': {
               backgroundColor: rgbButtonColors.secondaryOutlinedHoveredBackground
             },
@@ -439,17 +425,16 @@ export const theme = createTheme({
               backgroundColor: rgbButtonColors.secondaryOutlinedPressedBackground
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.secondaryOutlinedDisabledBackground,
-              border: `1px solid ${rgbButtonColors.primaryOutlinedDisabledTextColor}`,
-              color: rgbButtonColors.primaryOutlinedDisabledTextColor
+              border: `1px solid ${mainHexPallete.blue[700]}`,
+              color: mainHexPallete.blue[700]
             }
           }
         },
         {
           props: { variant: 'text', color: 'secondary' },
           style: {
-            backgroundColor: rgbButtonColors.secondaryTextNormal,
-            color: rgbButtonColors.secondaryTextColor,
+            backgroundColor: rgbButtonColors.transparent,
+            color: mainHexPallete.white,
             '&:hover': {
               backgroundColor: rgbButtonColors.secondaryTextHovered
             },
@@ -460,46 +445,32 @@ export const theme = createTheme({
               backgroundColor: rgbButtonColors.secondaryTextPressed
             },
             '&:disabled': {
-              backgroundColor: 'transparent',
-              color: rgbButtonColors.secondaryTextDisabledTextColor
+              color: mainHexPallete.blue[700]
             }
           }
         },
-
         {
           props: { variant: 'contained', color: 'tertiary' },
           style: {
-            backgroundColor: rgbButtonColors.tertiaryNormalBackground,
-            color: rgbButtonColors.tertiaryNormalTextColor,
+            backgroundColor: mainHexPallete.yellow[500],
+            color: mainHexPallete.black,
             '&:hover': {
-              backgroundColor: rgbButtonColors.tertiaryHoveredBackground,
-              color: rgbButtonColors.tertiaryHoveredTextColor
+              backgroundColor: mainHexPallete.black,
+              color: mainHexPallete.white
             },
             '&:focus-visible': {
-              backgroundColor: rgbButtonColors.tertiaryHoveredBackground,
-              color: rgbButtonColors.tertiaryHoveredTextColor
+              backgroundColor: mainHexPallete.black,
+              color: mainHexPallete.white
             },
             '&:active': {
-              backgroundColor: rgbButtonColors.tertiaryPressedBackground,
-              color: rgbButtonColors.tertiaryHoveredTextColor
+              backgroundColor: mainHexPallete.black,
+              color: mainHexPallete.white
             },
             '&:disabled': {
-              backgroundColor: rgbButtonColors.tertiaryDisabledBackground,
-              color: rgbButtonColors.primaryOutlinedDisabledTextColor
+              backgroundColor: mainHexPallete.blue[300],
+              color: mainHexPallete.blue[700]
             }
           }
-        },
-        {
-          props: { size: 'small' },
-          style: buttonSizeStyles.small
-        },
-        {
-          props: { size: 'medium' },
-          style: buttonSizeStyles.medium
-        },
-        {
-          props: { size: 'large' },
-          style: buttonSizeStyles.large
         }
       ]
     }

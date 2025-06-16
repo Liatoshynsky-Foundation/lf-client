@@ -8,18 +8,23 @@ const CustomButton = styled(MuiButton)({});
 
 type Size = 'large' | 'medium' | 'small';
 type Variant = 'contained' | 'outlined' | 'text';
-type Color = 'primary' | 'secondary' | 'tertiary';
 
 type BaseButtonProps = {
   size?: Size;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   loading?: boolean;
-  label?: string | React.ReactElement;
-  variant?: Variant;
-  color?: Color;
-};
-
+  label?: string;
+} & (
+  | {
+      color?: 'primary' | 'secondary';
+      variant?: Variant;
+    }
+  | {
+      color: 'tertiary';
+      variant?: 'contained';
+    }
+);
 export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(

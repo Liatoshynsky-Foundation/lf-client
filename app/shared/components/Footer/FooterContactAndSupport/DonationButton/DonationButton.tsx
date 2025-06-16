@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
 
@@ -18,7 +17,7 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
         size="medium"
         variant="outlined"
         color="primary"
-        label={<Typography variant="customButtonMedium">{data.text}</Typography>}
+        label={data.text}
         startIcon={<SvgImage src="/icons/donation-button.svg" alt="Donation Button" width={24} height={24} />}
       />
     </Link>

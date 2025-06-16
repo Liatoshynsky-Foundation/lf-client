@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
@@ -9,7 +8,7 @@ describe('Button Component', () => {
   const endIcon = <span data-testid="end-icon">▼</span>;
 
   it('should display icons when provided', () => {
-    render(<Button startIcon={startIcon} endIcon={endIcon} label={<Typography>Icons</Typography>}></Button>);
+    render(<Button startIcon={startIcon} endIcon={endIcon} label="Icons"></Button>);
     expect(screen.getByTestId('start-icon')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
   });
