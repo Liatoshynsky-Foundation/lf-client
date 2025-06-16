@@ -7,7 +7,8 @@ export const errors = {
   EMAIL_ERROR: 'Invalid email address.',
   MESSAGE_ERROR: `Message must be a string between ${lengths.MESSAGE_MIN_LENGTH} and ${lengths.MESSAGE_MAX_LENGTH} characters.`,
   MISSING_MONGO_URL: '❌ mongoUrl is not defined or is empty',
-  FAILED_TO_CONNECT_DB: '❌ Failed to connect to the database'
+  FAILED_TO_CONNECT_DB: '❌ Failed to connect to the database',
+  UNKNOWN_ERROR_DURING_DB_CONNECTION: 'An unknown error occurred during DB connection check'
 };
 
 export const envErrors = {
