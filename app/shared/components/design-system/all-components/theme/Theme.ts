@@ -95,7 +95,6 @@ declare module '@mui/material/Button' {
 export const buttonSizeStyles = {
   small: {
     height: '32px',
-    width: '100px',
     gap: '4px',
     padding: '4px 12px 4px 12px',
     fontWeight: 400,
@@ -105,7 +104,6 @@ export const buttonSizeStyles = {
   },
   medium: {
     height: '40px',
-    width: '137px',
     gap: '4px',
     padding: '8px 24px 8px 24px',
     fontWeight: 500,
@@ -115,7 +113,6 @@ export const buttonSizeStyles = {
   },
   large: {
     height: '56px',
-    width: '163px',
     gap: '8px',
     padding: '14px 32px 14px 32px',
     fontWeight: 500,
@@ -471,6 +468,18 @@ export const theme = createTheme({
               color: mainHexPallete.blue[700]
             }
           }
+        },
+        {
+          props: { size: 'small' },
+          style: buttonSizeStyles.small
+        },
+        {
+          props: { size: 'medium' },
+          style: buttonSizeStyles.medium
+        },
+        {
+          props: { size: 'large' },
+          style: buttonSizeStyles.large
         }
       ]
     }
