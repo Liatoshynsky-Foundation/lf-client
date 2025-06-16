@@ -7,6 +7,8 @@ export const defaultButtonGroupColorScheme = {
 
 export const styles = {
   selectedButton: {
+    height: 'calc(100% - 4px)',
+    top: 2,
     position: 'absolute',
     borderRadius: '9999px',
     transition: 'all 0.3s ease',
@@ -18,7 +20,7 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '9999px',
-    padding: '4px',
+    padding: '2px',
     fontFamily: 'Mulish, sans-serif',
     position: 'relative',
     overflow: 'hidden',
@@ -35,13 +37,16 @@ export const styles = {
     position: 'relative',
     zIndex: 1,
     marginRight: '4px',
-    padding: '1px 16px',
+    padding: '4px 22px',
     textTransform: 'none',
     lineHeight: '150%',
     border: 'none',
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent ',
     '&:last-child': {
       marginRight: 0
+    },
+    '&:hover': {
+      backgroundColor: 'transparent !important'
     },
     '&>button': {
       backgroundColor: 'transparent',
@@ -57,6 +62,7 @@ export const styles = {
       margin: 0,
       display: 'inline-block',
       height: '100%',
+      transition: 'none',
       '&:hover': {
         textDecoration: 'none',
         color: 'inherit',

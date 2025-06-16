@@ -31,3 +31,8 @@ export enum SocialMediaTypes {
   Whatsapp = 'whatsapp',
   AnotherMedia = 'anotherMedia'
 }
+
+export enum ButtonGroupSize {
+  Small = 'small',
+  Big = 'big'
+}

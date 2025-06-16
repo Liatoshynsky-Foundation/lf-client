@@ -133,51 +133,6 @@ describe('Button Group', () => {
       expect(buttonGroup).toHaveStyle(`background-color: ${mockColorSettings.groupBackgroundColor}`);
       expect(buttonGroup).toHaveStyle(`color: ${mockColorSettings.buttonTextColor}`);
     });
-  });
-
-  describe('Padding modifications', () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('should compute indicator style based on custom string padding', () => {
-      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} sx={{ padding: '12px' }} />);
-      const button = screen.getByText('Button 2');
-      const indicator = screen.getByRole('presentation', { hidden: true });
-
-      const computedIndicatorStyle = window.getComputedStyle(indicator);
-
-      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
-      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
-    });
-
-    it('should compute indicator style based on custom number padding', () => {
-      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: 12 }} />);
-      const button = screen.getByText('Button 1');
-      const indicator = screen.getByRole('presentation', { hidden: true });
-
-      const computedIndicatorStyle = window.getComputedStyle(indicator);
-
-      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
-      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
-    });
-
-    it('should apply default value if provided padding is not a number or string', () => {
-      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={0} sx={{ padding: undefined }} />);
-      const button = screen.getByText('Button 1');
-      const indicator = screen.getByRole('presentation', { hidden: true });
-
-      const computedIndicatorStyle = window.getComputedStyle(indicator);
-
-      expect(computedIndicatorStyle.left).toBe(button.dataset.offsetLeft + 'px');
-      expect(computedIndicatorStyle.width).toBe(button.dataset.offsetWidth + 'px');
-    });
-
-    it('should throw error if provided padding string is invalid', () => {
-      expect(() => render(<ButtonGroup buttons={mockButtons} sx={{ padding: '12em' }} />)).toThrow(
-        /Invalid padding value: 12em/
-      );
-    });
 
     it('should set indicator style to zero when activeButton is out of range', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={5} />);

@@ -1,8 +1,9 @@
 'use client';
-import { Box, BoxProps, ButtonGroup as MUIButtonGroup, SxProps, Theme } from '@mui/material';
+import { alpha, Box, BoxProps, ButtonGroup as MUIButtonGroup, SxProps, Theme } from '@mui/material';
 import React, { useLayoutEffect } from 'react';
 
 import { defaultButtonGroupColorScheme, styles } from './ButtonGroup.styles';
+import { ButtonGroupSize } from '~/types/enums/common.enums';
 
 interface ButtonGroupColorSettings {
   selectedButtonColor: string;
@@ -15,9 +16,10 @@ interface ButtonGroupProps extends BoxProps {
   buttons: React.ReactNode[];
   defaultActiveButton?: number;
   colorSettings?: ButtonGroupColorSettings;
+  variant?: ButtonGroupSize;
 }
 
-const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props }: ButtonGroupProps) => {
+const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, variant, ...props }: ButtonGroupProps) => {
   const [activeButton, setActiveButton] = React.useState<number | null>(defaultActiveButton ?? null);
   const [indicatorStyle, setIndicatorStyle] = React.useState<{ left: number; width: number }>({
     left: 0,
@@ -30,19 +32,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
   const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
     colorSettings ?? defaultButtonGroupColorScheme;
 
-  let padding = 4;
-  if (sx && typeof sx === 'object' && !Array.isArray(sx) && 'padding' in sx) {
-    const paddingVal = (sx as { padding?: number | string }).padding ?? 4;
-    if (typeof paddingVal === 'number') {
-      padding = paddingVal;
-    } else if (typeof paddingVal === 'string') {
-      const paddingMatch = paddingVal.replace(/px$/, '');
-      if (!/^\d{1,5}(\.\d{1,3})?$/.test(paddingMatch)) {
-        throw new Error(`Invalid padding value: ${paddingVal}, must be a number or a string ending with 'px'.`);
-      }
-      padding = parseFloat(paddingMatch);
-    }
-  }
+  const paddingSize = variant && variant === ButtonGroupSize.Big ? '8px 22px' : '2px 16px';
 
   useLayoutEffect(() => {
     const updateIndicator = () => {
@@ -64,7 +54,7 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
     return () => {
       window.removeEventListener('resize', updateIndicator);
     };
-  }, [activeButton, buttons, padding]);
+  }, [activeButton, buttons]);
 
   const { color: _, ...restProps } = props;
 
@@ -87,8 +77,6 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
       <Box
         sx={{
           ...styles.selectedButton,
-          height: `calc(100% - ${2 * padding}px)`,
-          top: `${padding}px`,
           backgroundColor: selectedButtonColor,
           color: selectedButtonTextColor,
           left: indicatorStyle.left,
@@ -106,7 +94,14 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, ...props
           onClick={() => setActiveButton(idx)}
           sx={{
             ...styles.defaultButton,
-            color: idx === activeButton ? selectedButtonTextColor : buttonTextColor
+            padding: paddingSize,
+            color: idx === activeButton ? selectedButtonTextColor : buttonTextColor,
+            '&:hover': {
+              backgroundColor: alpha(selectedButtonColor, 0.1)
+            },
+            '&:active': {
+              backgroundColor: alpha(selectedButtonColor, 0.2)
+            }
           }}
         >
           {button}
