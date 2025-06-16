@@ -15,7 +15,7 @@ type SupportButtonProps = {
 const SupportButton: React.FC<SupportButtonProps> = ({ data }) => {
   return (
     <Link href={data.link}>
-      <Button size="medium" variant="filled" color="tertiary" label={data.text} />
+      <Button size="medium" variant="contained" color="tertiary" label={data.text}></Button>
     </Link>
   );
 };
