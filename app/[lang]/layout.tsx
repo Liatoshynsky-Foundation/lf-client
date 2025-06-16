@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
 
 import Footer from '~/components/Footer/Footer';
@@ -48,10 +49,17 @@ interface RootLayoutParams {
 }
 
 export default async function RootLayout({ children, params }: RootLayoutParams) {
+  const t = await getTranslations('header');
   const { lang } = await params;
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
+
+  const supportButtonData = {
+    text: t('supportButton'),
+    link: '/support'
+  };
+
   return (
     <html lang={lang}>
       <head>
@@ -90,7 +98,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   }}
                 >
                   <Box sx={{ gridColumn: '1 / -1' }}>
-                    <Header />
+                    <Header supportButtonData={supportButtonData} />
                   </Box>
                   <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
                   <Box sx={{ gridColumn: '1 / -1' }}>

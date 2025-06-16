@@ -2,8 +2,11 @@ import { Box } from '@mui/material';
 import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
-import AudioPlayer from './AudioPlayer/AudioPlayer';
-import SupportButton from './SupportButton/SupportButton';
+import Logo from '~/ds-components/logo/Logo';
+
+import { styles } from './Header.styles';
+import MiddleContent from './MiddleContent/MiddleContent';
+import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { createRequestContainer } from '~/di/container';
 
@@ -14,14 +17,11 @@ export default async function Header() {
   const { supportButtonLink } = await createRequestContainer().resolve('headerService').getHeaderData(locale);
 
   return (
-    <Box component="header">
-      <AudioPlayer
-        src="/music/sample-music.mp3"
-        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
-        autoplay={false}
-      />
-      <SupportButton
-        data={{
+    <Box component="header" sx={styles.mainContainer}>
+      <Logo />
+      <MiddleContent />
+      <RightActionsPanel
+        supportButtonData={{
           text: t('supportButton'),
           link: supportButtonLink
         }}
