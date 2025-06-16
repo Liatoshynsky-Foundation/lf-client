@@ -226,46 +226,48 @@ exports[`Footer component should render Footer component correctly 1`] = `
             href="/contact-us"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-rl35mr-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1jr4aqg-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="button"
             >
-              <img
-                alt="Contact Us Button"
-                data-nimg="1"
-                decoding="async"
-                height="24"
-                loading="lazy"
-                src="/icons/mail-icon.svg"
-                style="color: transparent;"
-                width="24"
-              />
               <span
-                class="lf-btn-label"
-              />
+                class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium css-1sh91j5-MuiButton-startIcon"
+              >
+                <img
+                  alt="Contact Us Button"
+                  data-nimg="1"
+                  decoding="async"
+                  height="24"
+                  loading="lazy"
+                  src="/icons/mail-icon.svg"
+                  style="color: transparent;"
+                  width="24"
+                />
+              </span>
             </button>
           </a>
           <a
             href="/donate"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-yhjurc-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-13rlmfj-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="button"
             >
-              <img
-                alt="Donation Button"
-                data-nimg="1"
-                decoding="async"
-                height="24"
-                loading="lazy"
-                src="/icons/donation-button.svg"
-                style="color: transparent;"
-                width="24"
-              />
               <span
-                class="lf-btn-label"
-              />
+                class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium css-1sh91j5-MuiButton-startIcon"
+              >
+                <img
+                  alt="Donation Button"
+                  data-nimg="1"
+                  decoding="async"
+                  height="24"
+                  loading="lazy"
+                  src="/icons/donation-button.svg"
+                  style="color: transparent;"
+                  width="24"
+                />
+              </span>
             </button>
           </a>
         </div>

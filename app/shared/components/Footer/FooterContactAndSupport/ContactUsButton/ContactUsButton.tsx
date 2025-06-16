@@ -15,7 +15,7 @@ const ContactUsButton: React.FC<ContactUsDataProps> = ({ data }) => {
     <Link href={data.link} passHref>
       <Button
         size="medium"
-        variant="filled"
+        variant="contained"
         color="primary"
         label={data.text}
         startIcon={<SvgImage alt="Contact Us Button" src="/icons/mail-icon.svg" width={24} height={24} />}

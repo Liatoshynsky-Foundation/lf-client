@@ -2,23 +2,26 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true, // Allow JavaScript files alongside TypeScript files
-    "skipLibCheck": true, // Skip checking library types for faster builds
-    "strict": true, // Enable strict type-checking options
-    "noEmit": true, // Do not emit output files (used for type-checking only)
-    "esModuleInterop": true, // Enables compatibility between CommonJS and ES Modules
-    "module": "esnext", // Use ESNext module resolution
-    "moduleResolution": "node", // Use Node module resolution strategy
-    "resolveJsonModule": true, // Allow importing JSON modules
-    "isolatedModules": true, // Ensure each file is treated as an isolated module
-    "incremental": true, // Enable incremental compilation for faster builds
+    "allowJs": true, 
+    "skipLibCheck": true, 
+    "strict": true, 
+    "noEmit": true, 
+    "esModuleInterop": true, 
+    "module": "esnext", 
+    "moduleResolution": "node", 
+    "resolveJsonModule": true, 
+    "isolatedModules": true, 
+    "incremental": true, 
     "jsx": "preserve",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": ".", // Base URL for module resolution
+    "baseUrl": ".", 
     "paths": {
       "~/*": ["./app/*"],
       "~/public/*": ["./public/*"],
@@ -26,20 +29,19 @@
       "~/ds-components/*": ["app/shared/components/design-system/all-components/*"],
       "~/components/*": ["app/shared/components/*"],
       "~/hooks/*": ["app/shared/hooks/*"],
-      "~/i18n/*": ["i18n/*"],
-      "~/public/*": ["public/*"]
+      "~/i18n/*": ["i18n/*"]
     },
-    "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
-    "noFallthroughCasesInSwitch": true, // Prevent fallthrough cases in switch statements
-    "skipDefaultLibCheck": true, // Skip checking default library types for faster builds
-    "allowSyntheticDefaultImports": true // Allow synthetic default imports for compatibility
+    "forceConsistentCasingInFileNames": true, 
+    "noFallthroughCasesInSwitch": true, 
+    "skipDefaultLibCheck": true, 
+    "allowSyntheticDefaultImports": true 
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest.config.ts" // Include Jest config file for TypeScript support
+    "jest.config.ts" 
   ],
-  "exclude": ["node_modules"] // Exclude node_modules from compilation
+  "exclude": ["node_modules"] 
 }
