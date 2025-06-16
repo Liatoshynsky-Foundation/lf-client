@@ -11,7 +11,7 @@ import SupportButton from '../SupportButton/SupportButton';
 import { styles } from './RightActionsPanel.styles';
 import { SupportButtonDataProps } from '~/types/types/header.type';
 
-export default function RightActionsPanel({ supportButtonData }: SupportButtonDataProps) {
+export default function RightActionsPanel({ supportButtonData }: Readonly<SupportButtonDataProps>) {
   const { isMobile } = useBreakpoints();
 
   return (
