@@ -1,21 +1,20 @@
 import { render, screen } from '@testing-library/react';
 
 import RightActionsPanel from './RightActionsPanel';
-import { SupportButtonDataProps } from '~/types/types/header.type';
 
 jest.mock('../AudioPlayer/AudioPlayer', () => {
   const AudioPlayer = () => <div data-testid="audio-player" />;
-  AudioPlayer.displayName = 'Logo';
+  AudioPlayer.displayName = 'AudioPlayer';
   return AudioPlayer;
 });
-jest.mock('../SupportButton/SupportButton', () => ({ supportButtonData }: SupportButtonDataProps) => {
-  const SupportButton = () => <div data-testid="support-button">{supportButtonData.text}</div>;
-  SupportButton.displayName = 'Logo';
-  return SupportButton;
-});
+jest.mock('../SupportButton/SupportButton', () => ({
+  __esModule: true,
+  default: ({ data }: { data: { text: string; link: string } }) => <div data-testid="support-button">{data.text}</div>
+}));
+
 jest.mock('~/ds-components/language-switcher/LanguageSwitcher', () => {
   const LanguageSwitcher = () => <div data-testid="language-switcher" />;
-  LanguageSwitcher.displayName = 'Logo';
+  LanguageSwitcher.displayName = 'LanguageSwitcher';
   return LanguageSwitcher;
 });
 

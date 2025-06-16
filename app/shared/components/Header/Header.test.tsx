@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
 import Header from './Header';
-import { SupportButtonDataProps } from '~/types/types/header.type';
 
 jest.mock('~/ds-components/logo/Logo', () => {
   const Logo = () => <div data-testid="logo" />;
@@ -10,14 +9,21 @@ jest.mock('~/ds-components/logo/Logo', () => {
 });
 jest.mock('./MiddleContent/MiddleContent', () => {
   const MiddleContent = () => <div data-testid="middle-content" />;
-  MiddleContent.displayName = 'Logo';
+  MiddleContent.displayName = 'MiddleContent';
   return MiddleContent;
 });
-jest.mock('./RightActionsPanel/RightActionsPanel', () => ({ supportButtonData }: SupportButtonDataProps) => {
-  const RightActionsPanel = () => <div data-testid="right-actions">{supportButtonData.text}</div>;
-  RightActionsPanel.displayName = 'Logo';
+jest.mock('./RightActionsPanel/RightActionsPanel', () => {
+  const RightActionsPanel = () => <div data-testid="right-actions" />;
+  RightActionsPanel.displayName = 'RightActionsPanel';
   return RightActionsPanel;
 });
+
+jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
+  __esModule: true,
+  default: ({ supportButtonData }: { supportButtonData: { text: string; link: string } }) => (
+    <div data-testid="right-actions">{supportButtonData.text}</div>
+  )
+}));
 
 const mockedSupportButtonData = {
   text: 'Support Us',
