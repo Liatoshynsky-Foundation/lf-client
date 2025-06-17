@@ -1,162 +1,135 @@
-// 'use client';
+'use client';
 
-// import {
-//   Box,
-//   Button,
-//   Collapse,
-//   FormControl,
-//   IconButton,
-//   MenuItem,
-//   Paper,
-//   Pagination,
-//   Select,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow
-// } from '@mui/material';
-// import Image from 'next/image';
-// import { useState } from 'react';
-// import ArrowDownIcon from '~/public/icons/arrow-down-right.svg';
-// import ArrowUpIcon from '~/public/icons/arrow-left-to-line.svg';
+import { Box, Pagination, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 
-// type User = {
-//   id: number;
-//   name: string;
-//   email: string;
-//   status: 'Active' | 'Inactive';
-// };
+import { usePagination } from '~/hooks/use-pagination/usePagination';
 
-// const allUsers: User[] = Array.from({ length: 42 }, (_, i) => ({
-//   id: i + 1,
-//   name: `User ${i + 1}`,
-//   email: `user${i + 1}@example.com`,
-//   status: i % 2 === 0 ? 'Active' : 'Inactive'
-// }));
+import Button from '../design-system/all-components/button/Button';
+import { CollapsibleRow } from './CollapsibleRow';
+import { enhancedTableStyles as styles } from './EnhancedTable.styles';
+import TableHeader from './EnhancedTableHeader';
+import EnhancedTableRow from './EnhancedTableRow';
 
-// const ITEMS_PER_PAGE = 10;
-// const HIDDEN_USER_COUNT = 3;
+type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
-// export default function UserTablePureMUI() {
-//   const [page, setPage] = useState(1);
-//   const [collapsed, setCollapsed] = useState(false);
-//   const [users, setUsers] = useState<User[]>(allUsers);
+type EnhancedTableProps<T extends { id: number }> = {
+  data: T[];
+  columns: ColumnDef<T>[];
+  columnWidths?: Record<string, string>;
+  groupByKey?: keyof T;
+  itemsPerPage?: number;
+};
 
-//   const hiddenUsers = users.slice(0, HIDDEN_USER_COUNT);
-//   const visibleUsers = users.slice(HIDDEN_USER_COUNT);
-//   const paginatedUsers = visibleUsers.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-//   const totalPages = Math.ceil(visibleUsers.length / ITEMS_PER_PAGE);
+export default function EnhancedTable<T extends { id: number }>({
+  data,
+  columns,
+  columnWidths = {},
+  groupByKey,
+  itemsPerPage = 10
+}: EnhancedTableProps<T>) {
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
 
-//   const handleStatusChange = (id: number, status: User['status']) => {
-//     setUsers((prev) => prev.map((user) => (user.id === id ? { ...user, status } : user)));
-//   };
+  const toggleGroupCollapse = (groupLabel: string) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [groupLabel]: !prev[groupLabel]
+    }));
+  };
 
-//   return (
-//     <Box p={2}>
-//       <TableContainer component={Paper}>
-//         <Table>
-//           <TableHead>
-//             <TableRow>
-//               <TableCell>Ім’я</TableCell>
-//               <TableCell>Email</TableCell>
-//               <TableCell>Дії</TableCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             <TableRow>
-//               <TableCell colSpan={3}>
-//                 <Box display="flex" justifyContent="space-between" alignItems="center">
-//                   <strong>Приховані юзери</strong>
-//                   <IconButton onClick={() => setCollapsed((prev) => !prev)}>
-//                     <Image src={collapsed ? ArrowUpIcon : ArrowDownIcon} alt="toggle" width={20} height={20} />
-//                   </IconButton>
-//                 </Box>
-//               </TableCell>
-//             </TableRow>
+  const { groupedItems, flatItems } = useMemo(() => {
+    const grouped = new Map<string, T[]>();
+    const ungrouped: T[] = [];
 
-//             {hiddenUsers.map((user) => (
-//               <TableRow
-//                 key={user.id}
-//                 sx={{
-//                   height: collapsed ? 'auto' : 0,
-//                   overflow: 'hidden',
-//                   transition: 'height 400ms ease',
-//                 }}
-//               >
-//                 <TableCell sx={{ p: 0 }}>
-//                   <Collapse in={collapsed} timeout={400} unmountOnExit>
-//                     <Box p={2}>{user.name}</Box>
-//                   </Collapse>
-//                 </TableCell>
-//                 <TableCell sx={{ p: 0 }}>
-//                   <Collapse in={collapsed} timeout={400} unmountOnExit>
-//                     <Box p={2}>{user.email}</Box>
-//                   </Collapse>
-//                 </TableCell>
-//                 <TableCell sx={{ p: 0 }}>
-//                   <Collapse in={collapsed} timeout={400} unmountOnExit>
-//                     <Box display="flex" alignItems="center" gap={1} p={2}>
-//                       <Button variant="outlined" size="small" onClick={() => alert(`User ID: ${user.id}`)}>
-//                         Деталі
-//                       </Button>
-//                       <FormControl size="small" sx={{ minWidth: 100 }}>
-//                         <Select
-//                           value={user.status}
-//                           onChange={(e) =>
-//                             setUsers((prev) =>
-//                               prev.map((u) =>
-//                                 u.id === user.id ? { ...u, status: e.target.value as User['status'] } : u
-//                               )
-//                             )
-//                           }
-//                         >
-//                           <MenuItem value="Active">Активний</MenuItem>
-//                           <MenuItem value="Inactive">Неактивний</MenuItem>
-//                         </Select>
-//                       </FormControl>
-//                     </Box>
-//                   </Collapse>
-//                 </TableCell>
-//               </TableRow>
-//             ))}
+    for (const item of data) {
+      const groupKey = groupByKey ? String(item[groupByKey] ?? '') : undefined;
 
-//             {paginatedUsers.map((user) => (
-//               <TableRow key={user.id}>
-//                 <TableCell>{user.name}</TableCell>
-//                 <TableCell>{user.email}</TableCell>
-//                 <TableCell>
-//                   <Box display="flex" alignItems="center" gap={1}>
-//                     <Button variant="outlined" size="small" onClick={() => alert(`User ID: ${user.id}`)}>
-//                       Деталі
-//                     </Button>
-//                     <FormControl size="small" sx={{ minWidth: 100 }}>
-//                       <Select
-//                         value={user.status}
-//                         onChange={(e) =>
-//                           setUsers((prev) =>
-//                             prev.map((u) =>
-//                               u.id === user.id ? { ...u, status: e.target.value as User['status'] } : u
-//                             )
-//                           )
-//                         }
-//                       >
-//                         <MenuItem value="Active">Активний</MenuItem>
-//                         <MenuItem value="Inactive">Неактивний</MenuItem>
-//                       </Select>
-//                     </FormControl>
-//                   </Box>
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
+      if (groupKey) {
+        grouped.set(groupKey, [...(grouped.get(groupKey) ?? []), item]);
+      } else {
+        ungrouped.push(item);
+      }
+    }
 
-//       <Box display="flex" justifyContent="center" mt={2}>
-//         <Pagination count={totalPages} page={page} onChange={(_, val) => setPage(val)} color="primary" />
-//       </Box>
-//     </Box>
-//   );
-// }
+    return { groupedItems: grouped, flatItems: ungrouped };
+  }, [data, groupByKey]);
+
+  const allRows: ItemOrGroup<T>[] = useMemo(
+    () => [
+      ...Array.from(groupedItems.entries()).map(([label, items]) => ({
+        type: 'group' as const,
+        label,
+        items
+      })),
+      ...flatItems.map((item) => ({
+        type: 'single' as const,
+        item
+      }))
+    ],
+    [groupedItems, flatItems]
+  );
+
+  const {
+    hasMore,
+    paginatedData: rowsToRender,
+    currentPage,
+    totalPages,
+    handleLoadMore,
+    handlePageChange
+  } = usePagination({
+    data: allRows,
+    itemsPerPage
+  });
+
+  const headerTable = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel()
+  });
+
+  return (
+    <Box sx={styles.root}>
+      <Typography variant="h6" sx={styles.title}>
+        Усі композиції
+      </Typography>
+
+      <TableContainer component={Paper} sx={styles.container}>
+        <Table>
+          <TableHeader table={headerTable} columnWidths={columnWidths} />
+          <TableBody>
+            {rowsToRender.map((entry) =>
+              entry.type === 'group' ? (
+                <CollapsibleRow
+                  key={`group-${entry.label}`}
+                  data={entry.items}
+                  groupLabel={entry.label}
+                  collapsed={collapsedGroups[entry.label] ?? false}
+                  onToggle={() => toggleGroupCollapse(entry.label)}
+                  columns={columns}
+                />
+              ) : (
+                <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
+              )
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Box sx={styles.paginationWrapper}>
+        {hasMore && (
+          <Button color="primary" size="large" onClick={handleLoadMore}>
+            Переглянути більше
+          </Button>
+        )}
+
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(_, page) => handlePageChange(page)}
+          color="primary"
+        />
+      </Box>
+    </Box>
+  );
+}
