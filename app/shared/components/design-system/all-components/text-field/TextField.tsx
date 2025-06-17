@@ -1,9 +1,10 @@
-import { InputAdornment, SxProps, TextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
+import { InputAdornment, SxProps, TextField as MuiTextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import * as React from 'react';
 
-import { outlinedStyles, standardStyles } from './CustomTextField.styles';
-
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+
+const CustomTextField = styled(MuiTextField)({});
 
 type CustomBaseProps = {
   variant?: 'standard' | 'outlined';
@@ -20,16 +21,15 @@ type CustomBaseProps = {
 
 type CustomTextFieldProps = CustomBaseProps & Omit<MuiTextFieldProps, keyof CustomBaseProps>;
 
-const CustomTextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>(
+const TextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>(
   (
     { variant = 'standard', disabled, value, label, startIcon, endIcon, placeholder, onChange, error, sx, ...props },
     ref
   ) => {
-    const variantStyles = variant === 'outlined' ? outlinedStyles : standardStyles;
     const effectiveStartIcon = variant === 'standard' ? (startIcon ?? 'icons/search-icon.svg') : startIcon;
 
     return (
-      <TextField
+      <CustomTextField
         id={label ?? 'custom-text-field'}
         variant={variant}
         disabled={disabled}
@@ -38,7 +38,7 @@ const CustomTextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>
         placeholder={placeholder}
         onChange={onChange}
         error={error}
-        sx={{ ...variantStyles, ...sx }}
+        sx={sx}
         inputRef={ref}
         slotProps={{
           input: {
@@ -60,6 +60,6 @@ const CustomTextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>
   }
 );
 
-CustomTextField.displayName = 'CustomTextField';
+TextField.displayName = 'TextField';
 
-export default CustomTextField;
+export default TextField;
