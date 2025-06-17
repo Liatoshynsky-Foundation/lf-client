@@ -199,16 +199,16 @@ export const theme = createTheme({
     tertiary: createColor(mainHexPallete.yellow[500]),
     buttonGroup: {
       primary: {
-        selectedButtonColor: '#190D03',
-        selectedButtonTextColor: '#FCFCFC',
+        selectedButtonColor: mainHexPallete.black,
+        selectedButtonTextColor: mainHexPallete.white,
         groupBackgroundColor: '#f0f0f0',
-        buttonTextColor: '#190D03'
+        buttonTextColor: mainHexPallete.black
       },
       secondary: {
-        selectedButtonColor: '#FCFCFC',
-        selectedButtonTextColor: '#190D03',
-        groupBackgroundColor: '#FCBD28',
-        buttonTextColor: '#190D03'
+        selectedButtonColor: mainHexPallete.white,
+        selectedButtonTextColor: mainHexPallete.black,
+        groupBackgroundColor: mainHexPallete.yellow[500],
+        buttonTextColor: mainHexPallete.black
       }
     },
     ...mainHexPallete

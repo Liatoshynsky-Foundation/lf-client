@@ -1,39 +1,18 @@
 'use client';
-import { alpha, Box, BoxProps, ButtonGroup as MUIButtonGroup, SxProps, Theme } from '@mui/material';
+import { BoxProps } from '@mui/material';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { styles } from './ButtonGroup.styles';
-import { ButtonGroupSize, PaletteOptions } from '~/types/enums/common.enums';
-
-const primaryPallette = {
-  selectedButtonColor: '#190D03',
-  selectedButtonTextColor: '#FCFCFC',
-  groupBackgroundColor: '#f0f0f0',
-  buttonTextColor: '#190D03'
-};
-
-const secondaryPallette = {
-  selectedButtonColor: '#FCFCFC',
-  selectedButtonTextColor: '#190D03',
-  groupBackgroundColor: '#FCBD28',
-  buttonTextColor: '#190D03'
-};
+import { StyledButtonGroup, StyledButtonItem, StyledIndicator } from './ButtonGroup.styles';
+import { ButtonGroupPaletteOptions, ButtonGroupSizeOptions } from '~/types/types/common.types';
 
 interface ButtonGroupProps extends BoxProps {
   buttons: React.ReactNode[];
   defaultActiveButton?: number;
-  size?: ButtonGroupSize;
-  palette?: PaletteOptions;
+  size?: ButtonGroupSizeOptions;
+  palette?: ButtonGroupPaletteOptions;
 }
 
-const ButtonGroup = ({
-  buttons,
-  defaultActiveButton,
-  size = ButtonGroupSize.Small,
-  palette = PaletteOptions.Primary,
-  sx,
-  ...props
-}: ButtonGroupProps) => {
+const ButtonGroup = ({ buttons, defaultActiveButton, size = 'small', palette = 'primary', sx }: ButtonGroupProps) => {
   const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
     left: 0,
@@ -42,11 +21,6 @@ const ButtonGroup = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
-
-  const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
-    palette === PaletteOptions.Primary ? primaryPallette : secondaryPallette;
-
-  const paddingSize = size && size === ButtonGroupSize.Big ? '8px 22px' : '2px 16px';
 
   useLayoutEffect(() => {
     const updateIndicator = () => {
@@ -70,57 +44,38 @@ const ButtonGroup = ({
     };
   }, [activeButton, buttons]);
 
-  const { color: _, ...restProps } = props;
+  // const { color: _, ...restProps } = props;
 
   return (
-    <MUIButtonGroup
-      component="div"
+    <StyledButtonGroup
+      sx={sx}
       ref={containerRef}
-      sx={
-        {
-          ...sx,
-          backgroundColor: groupBackgroundColor,
-          color: buttonTextColor,
-          position: 'relative'
-        } as SxProps<Theme>
-      }
       aria-label="Button Group"
-      {...restProps}
+      palette={palette}
+      // {...props}
     >
-      <Box
-        sx={{
-          ...styles.selectedButton,
-          backgroundColor: selectedButtonColor,
-          color: selectedButtonTextColor,
-          left: indicatorStyle.left,
-          width: indicatorStyle.width
-        }}
+      <StyledIndicator
+        palette={palette}
+        left={indicatorStyle.left}
+        width={indicatorStyle.width}
         role="presentation"
         aria-hidden="true"
       />
       {buttons.map((button, idx) => (
-        <Box
+        <StyledButtonItem
           key={(button?.toString?.() ?? 'button') + idx}
           ref={(el: HTMLDivElement | null) => {
             buttonRefs.current[idx] = el;
           }}
           onClick={() => setActiveButton(idx)}
-          sx={{
-            ...styles.defaultButton,
-            padding: paddingSize,
-            color: idx === activeButton ? selectedButtonTextColor : buttonTextColor,
-            '&:hover': {
-              backgroundColor: alpha(selectedButtonColor, 0.1)
-            },
-            '&:active': {
-              backgroundColor: alpha(selectedButtonColor, 0.2)
-            }
-          }}
+          palette={palette}
+          size={size}
+          active={idx === activeButton}
         >
           {button}
-        </Box>
+        </StyledButtonItem>
       ))}
-    </MUIButtonGroup>
+    </StyledButtonGroup>
   );
 };
 export default ButtonGroup;

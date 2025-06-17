@@ -1,38 +1,86 @@
-export const defaultButtonGroupColorScheme = {
-  selectedButtonColor: '#190D03',
-  selectedButtonTextColor: '#FCFCFC',
-  groupBackgroundColor: '#f0f0f0',
-  buttonTextColor: '#190D03'
-};
+import { Box, ButtonGroup as MUIButtonGroup } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-export const styles = {
-  selectedButton: {
+export const StyledButtonGroup = styled(MUIButtonGroup, {
+  shouldForwardProp: (prop) => prop !== 'palette'
+})<{ palette: 'primary' | 'secondary' }>(({ palette }) => {
+  const paletteValues =
+    palette === 'primary'
+      ? { groupBackgroundColor: '#f0f0f0', buttonTextColor: '#190D03' }
+      : { groupBackgroundColor: '#FCBD28', buttonTextColor: '#190D03' };
+
+  return {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '9999px',
+    padding: '2px',
+    fontFamily: 'Mulish, sans-serif',
+    position: 'relative',
+    overflow: 'hidden',
+    width: 'fit-content',
+    border: 'none',
+    lineHeight: '150%',
+    backgroundColor: paletteValues.groupBackgroundColor,
+    color: paletteValues.buttonTextColor
+  };
+});
+
+export const StyledIndicator = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette'
+})<{
+  left: number;
+  width: number;
+  palette: 'primary' | 'secondary';
+}>(({ left, width, palette }) => {
+  const paletteValues =
+    palette === 'primary'
+      ? { selectedButtonColor: '#190D03', selectedButtonTextColor: '#FCFCFC' }
+      : { selectedButtonColor: '#FCFCFC', selectedButtonTextColor: '#190D03' };
+
+  return {
     height: 'calc(100% - 4px)',
     top: 2,
     position: 'absolute',
     borderRadius: '9999px',
     transition: 'all 0.3s ease',
-    zIndex: 0
-  },
-  defaultButton: {
+    zIndex: 0,
+    backgroundColor: paletteValues.selectedButtonColor,
+    color: paletteValues.selectedButtonTextColor,
+    left,
+    width
+  };
+});
+
+export const StyledButtonItem = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'active' && prop !== 'palette' && prop !== 'size'
+})<{
+  active: boolean;
+  palette: 'primary' | 'secondary';
+  size: 'small' | 'big';
+}>(({ active, palette, size }) => {
+  const paletteValues =
+    palette === 'primary'
+      ? { buttonTextColor: '#190D03', selectedButtonTextColor: '#FCFCFC' }
+      : { buttonTextColor: '#190D03', selectedButtonTextColor: '#190D03' };
+
+  return {
     display: 'inline-block',
     borderRadius: '9999px',
-    color: 'inherit',
+    color: active ? paletteValues.selectedButtonTextColor : paletteValues.buttonTextColor,
     fontFamily: 'inherit',
     cursor: 'pointer',
     position: 'relative',
     zIndex: 1,
     marginRight: '4px',
-    padding: '4px 22px',
+    padding: size === 'big' ? '8px 22px' : '2px 16px',
     textTransform: 'none',
     lineHeight: '150%',
     border: 'none',
-    backgroundColor: 'transparent ',
+    backgroundColor: 'transparent',
     '&:last-child': {
       marginRight: 0
-    },
-    '&:hover': {
-      backgroundColor: 'transparent !important'
     },
     '&>button': {
       backgroundColor: 'transparent',
@@ -58,5 +106,5 @@ export const styles = {
         display: 'none'
       }
     }
-  }
-};
+  };
+});
