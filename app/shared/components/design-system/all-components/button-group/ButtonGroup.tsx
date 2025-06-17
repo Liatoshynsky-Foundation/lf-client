@@ -1,38 +1,52 @@
 'use client';
 import { alpha, Box, BoxProps, ButtonGroup as MUIButtonGroup, SxProps, Theme } from '@mui/material';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { defaultButtonGroupColorScheme, styles } from './ButtonGroup.styles';
-import { ButtonGroupSize } from '~/types/enums/common.enums';
+import { styles } from './ButtonGroup.styles';
+import { ButtonGroupSize, PaletteOptions } from '~/types/enums/common.enums';
 
-interface ButtonGroupColorSettings {
-  selectedButtonColor: string;
-  selectedButtonTextColor: string;
-  groupBackgroundColor: string;
-  buttonTextColor: string;
-}
+const primaryPallette = {
+  selectedButtonColor: '#190D03',
+  selectedButtonTextColor: '#FCFCFC',
+  groupBackgroundColor: '#f0f0f0',
+  buttonTextColor: '#190D03'
+};
+
+const secondaryPallette = {
+  selectedButtonColor: '#FCFCFC',
+  selectedButtonTextColor: '#190D03',
+  groupBackgroundColor: '#FCBD28',
+  buttonTextColor: '#190D03'
+};
 
 interface ButtonGroupProps extends BoxProps {
   buttons: React.ReactNode[];
   defaultActiveButton?: number;
-  colorSettings?: ButtonGroupColorSettings;
-  variant?: ButtonGroupSize;
+  size?: ButtonGroupSize;
+  palette?: PaletteOptions;
 }
 
-const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, variant, ...props }: ButtonGroupProps) => {
-  const [activeButton, setActiveButton] = React.useState<number | null>(defaultActiveButton ?? null);
-  const [indicatorStyle, setIndicatorStyle] = React.useState<{ left: number; width: number }>({
+const ButtonGroup = ({
+  buttons,
+  defaultActiveButton,
+  size = ButtonGroupSize.Small,
+  palette = PaletteOptions.Primary,
+  sx,
+  ...props
+}: ButtonGroupProps) => {
+  const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
     left: 0,
     width: 0
   });
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const buttonRefs = React.useRef<Array<HTMLDivElement | null>>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const { selectedButtonColor, selectedButtonTextColor, groupBackgroundColor, buttonTextColor } =
-    colorSettings ?? defaultButtonGroupColorScheme;
+    palette === PaletteOptions.Primary ? primaryPallette : secondaryPallette;
 
-  const paddingSize = variant && variant === ButtonGroupSize.Big ? '8px 22px' : '2px 16px';
+  const paddingSize = size && size === ButtonGroupSize.Big ? '8px 22px' : '2px 16px';
 
   useLayoutEffect(() => {
     const updateIndicator = () => {
@@ -64,7 +78,6 @@ const ButtonGroup = ({ buttons, sx, defaultActiveButton, colorSettings, variant,
       ref={containerRef}
       sx={
         {
-          ...styles.defaultButtonGroup,
           ...sx,
           backgroundColor: groupBackgroundColor,
           color: buttonTextColor,

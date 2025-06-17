@@ -14,20 +14,6 @@ export const styles = {
     transition: 'all 0.3s ease',
     zIndex: 0
   },
-  defaultButtonGroup: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '9999px',
-    padding: '2px',
-    fontFamily: 'Mulish, sans-serif',
-    position: 'relative',
-    overflow: 'hidden',
-    width: 'fit-content',
-    border: 'none',
-    lineHeight: '150%'
-  },
   defaultButton: {
     display: 'inline-block',
     borderRadius: '9999px',

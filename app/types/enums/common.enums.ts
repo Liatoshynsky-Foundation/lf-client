@@ -36,3 +36,8 @@ export enum ButtonGroupSize {
   Small = 'small',
   Big = 'big'
 }
+
+export enum PaletteOptions {
+  Primary = 'primary',
+  Secondary = 'secondary'
+}
