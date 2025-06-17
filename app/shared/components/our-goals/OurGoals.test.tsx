@@ -2,21 +2,25 @@ import { render, screen } from '@testing-library/react';
 
 import OurGoals from './OurGoals';
 
+const TRANSLATIONS: Record<string, string> = {
+  'home.ourGoals.maintitle': 'Наші цілі',
+  'home.ourGoals.titles.title1': 'Тест заголовок 1',
+  'home.ourGoals.titles.title2': 'Тест заголовок 2',
+  'home.ourGoals.titles.title3': 'Тест заголовок 3',
+  'home.ourGoals.titles.title4': 'Тест заголовок 4',
+  'home.ourGoals.descriptions.descr1': 'Тестовий опис 1',
+  'home.ourGoals.descriptions.descr2': 'Тестовий опис 2',
+  'home.ourGoals.descriptions.descr3': 'Тестовий опис 3',
+  'home.ourGoals.descriptions.descr4': 'Тестовий опис 4'
+};
+
+const EXPECTED_TITLES = Object.values(TRANSLATIONS).filter((value) => value.includes('заголовок'));
+
+const EXPECTED_DESCRIPTIONS = Object.values(TRANSLATIONS).filter((value) => value.includes('опис'));
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockImplementation(async (namespace) => {
-    const translations: Record<string, string> = {
-      'home.ourGoals.maintitle': 'Наші цілі',
-      'home.ourGoals.titles.title1': 'Тест заголовок 1',
-      'home.ourGoals.titles.title2': 'Тест заголовок 2',
-      'home.ourGoals.titles.title3': 'Тест заголовок 3',
-      'home.ourGoals.titles.title4': 'Тест заголовок 4',
-      'home.ourGoals.descriptions.descr1': 'Тестовий опис 1',
-      'home.ourGoals.descriptions.descr2': 'Тестовий опис 2',
-      'home.ourGoals.descriptions.descr3': 'Тестовий опис 3',
-      'home.ourGoals.descriptions.descr4': 'Тестовий опис 4'
-    };
-
-    return (key: string) => translations[`${namespace}.${key}`] || key;
+    return (key: string) => TRANSLATIONS[`${namespace}.${key}`] || key;
   })
 }));
 
@@ -49,17 +53,15 @@ describe('OurGoals component', () => {
   });
 
   it('should render all goal titles', () => {
-    expect(screen.getByText('Тест заголовок 1')).toBeInTheDocument();
-    expect(screen.getByText('Тест заголовок 2')).toBeInTheDocument();
-    expect(screen.getByText('Тест заголовок 3')).toBeInTheDocument();
-    expect(screen.getByText('Тест заголовок 4')).toBeInTheDocument();
+    EXPECTED_TITLES.forEach((title) => {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    });
   });
 
   it('should render all goal descriptions', () => {
-    expect(screen.getByText('Тестовий опис 1')).toBeInTheDocument();
-    expect(screen.getByText('Тестовий опис 2')).toBeInTheDocument();
-    expect(screen.getByText('Тестовий опис 3')).toBeInTheDocument();
-    expect(screen.getByText('Тестовий опис 4')).toBeInTheDocument();
+    EXPECTED_DESCRIPTIONS.forEach((description) => {
+      expect(screen.getByText(description)).toBeInTheDocument();
+    });
   });
 
   it('should render bullet icons', () => {
