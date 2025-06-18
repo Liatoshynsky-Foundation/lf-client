@@ -10,7 +10,7 @@ const FoundationFounders = async () => {
   const t = await getTranslations('foundation');
 
   return (
-    <Box sx={styles.container}>
+    <Box id="foundation-founders" sx={styles.container}>
       <Box sx={styles.contentContainer}>
         <FoundationWasCreated title={t('foundationWasCreated')} description={t('foundationWasCreatedDescription')} />
         <FoundationTeam title={t('foundationTeam')} />
