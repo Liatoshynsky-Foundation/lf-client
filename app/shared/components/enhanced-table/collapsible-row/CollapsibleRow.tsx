@@ -9,19 +9,7 @@ import { SvgImage } from '../../svg-image/SvgImage';
 import { CollapsibleDataRow } from './CollapsibleDataRow';
 import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
-
-interface CollapsibleGroupColumnMeta<T> {
-  isGroupLabelColumn?: boolean;
-  groupLabelContent?: React.ReactNode;
-  groupLabelContentFactory?: (groupItems: T[]) => React.ReactNode;
-  groupCellRenderer?: () => React.ReactNode;
-}
-
-interface RowData {
-  id: number;
-  [key: string]: unknown;
-}
-
+import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;

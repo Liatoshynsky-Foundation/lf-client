@@ -13,17 +13,17 @@ import TableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 
-interface RowData {
+type RowData = {
   id: number;
   [key: string]: unknown;
-}
+};
 
-interface CollapsibleGroupColumnMeta<T extends RowData> {
+type CollapsibleGroupColumnMeta<T extends RowData> = {
   isGroupLabelColumn?: boolean;
   groupLabelContent?: React.ReactNode;
   groupLabelContentFactory?: (groupItems: T[]) => React.ReactNode;
   groupCellRenderer?: () => React.ReactNode;
-}
+};
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 

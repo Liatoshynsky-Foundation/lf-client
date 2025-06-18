@@ -3,9 +3,7 @@ import { flexRender, Header, Table } from '@tanstack/react-table';
 import React from 'react';
 
 import { enhancedTableHeaderStyles as styles } from './EnhancedTableHeader.styles';
-
-type ColumnWidths = Record<string, string | number>;
-
+import type { ColumnWidths } from '~/types/types/enhancedTable';
 interface TableHeaderProps<T> {
   table: Table<T>;
   columnWidths?: ColumnWidths;

@@ -5,12 +5,7 @@ import { flexRender, Row } from '@tanstack/react-table';
 import React from 'react';
 
 import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
-
-interface RowData {
-  id: number;
-  [key: string]: unknown;
-}
-
+import { RowData } from '~/types/types/enhancedTable';
 interface CollapsibleDataRowProps<T extends RowData> {
   row: Row<T>;
   collapsed: boolean;
