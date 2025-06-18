@@ -528,7 +528,6 @@ export const theme = createTheme({
     MuiInputBase: {
       defaultProps: {
         sx: {
-          width: '385px',
           height: '46px',
           color: mainHexPallete.blue[800],
           WebkitTextFillColor: mainHexPallete.blue[800],
@@ -608,7 +607,6 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       defaultProps: {
         sx: {
-          width: '280px',
           height: '48px',
           borderRadius: '8px',
           padding: '0 16px',
