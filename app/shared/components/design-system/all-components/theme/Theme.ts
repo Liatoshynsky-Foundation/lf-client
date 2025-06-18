@@ -1,7 +1,7 @@
 import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
-import { mainHexPallete, rgbaTextFieldColors, rgbButtonColors } from '~/ds-components/theme/colors';
+import { mainHexPallete, rgbaSwitchColors, rgbaTextFieldColors, rgbButtonColors } from '~/ds-components/theme/colors';
 const { palette } = createTheme();
 const { augmentColor } = palette;
 const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
@@ -625,6 +625,34 @@ export const theme = createTheme({
             0px 4px 8px rgba(0, 0, 0, 0.06),
             0px 0px 4px rgba(0, 0, 0, 0.04)
           `
+        }
+      }
+    },
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          color: mainHexPallete.white,
+          '&.Mui-checked': {
+            color: mainHexPallete.yellow[500],
+            '& + .MuiSwitch-track': {
+              backgroundColor: mainHexPallete.yellow[500]
+            },
+            '&:hover': {
+              backgroundColor: rgbaSwitchColors.hoverCheckedBackground
+            },
+            '&.Mui-focusVisible': {
+              backgroundColor: rgbaSwitchColors.focusCheckedBackground
+            }
+          },
+          '&:hover': {
+            backgroundColor: rgbaSwitchColors.hoverBackground
+          },
+          '&.Mui-focusVisible': {
+            backgroundColor: rgbaSwitchColors.focusBackground
+          },
+          '&.Mui-disabled + .MuiSwitch-track': {
+            backgroundColor: rgbaSwitchColors.disabledTrackBackground
+          }
         }
       }
     }
