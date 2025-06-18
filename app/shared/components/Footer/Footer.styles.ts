@@ -1,19 +1,13 @@
 export const styles = {
   footerContainer: {
-    position: 'relative',
+    position: 'absolute',
     width: '100%',
     backgroundColor: '#FCBD28',
     overflow: 'hidden',
-    paddingTop: '75px'
-  },
-  skewedTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '55px',
-    backgroundColor: '#FFF',
-    clipPath: 'polygon(0 0, 100% 0, 100% 1%, 0 70%)'
+    paddingTop: '105px',
+    marginTop: '-70px',
+    zIndex: '-1',
+    left: 0
   },
   footerContent: {
     padding: { xs: '80px 24px', md: '40px 24px' },
