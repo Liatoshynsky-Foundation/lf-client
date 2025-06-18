@@ -3,10 +3,10 @@
 exports[`Footer component should render Footer component correctly 1`] = `
 <div>
   <footer
-    class="MuiBox-root css-lfeye8"
+    class="MuiBox-root css-x6e1oj"
   >
     <div
-      class="MuiBox-root css-7htj0b"
+      class="MuiBox-root css-obvlc2"
     />
     <div
       class="MuiBox-root css-otkta4"
