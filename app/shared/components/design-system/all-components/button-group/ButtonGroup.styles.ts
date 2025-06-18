@@ -1,31 +1,5 @@
-import { Box, ButtonGroup as MUIButtonGroup } from '@mui/material';
+import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-export const StyledButtonGroup = styled(MUIButtonGroup, {
-  shouldForwardProp: (prop) => prop !== 'palette'
-})<{ palette: 'primary' | 'secondary' }>(({ palette }) => {
-  const paletteValues =
-    palette === 'primary'
-      ? { groupBackgroundColor: '#f0f0f0', buttonTextColor: '#190D03' }
-      : { groupBackgroundColor: '#FCBD28', buttonTextColor: '#190D03' };
-
-  return {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '9999px',
-    padding: '2px',
-    fontFamily: 'Mulish, sans-serif',
-    position: 'relative',
-    overflow: 'hidden',
-    width: 'fit-content',
-    border: 'none',
-    lineHeight: '150%',
-    backgroundColor: paletteValues.groupBackgroundColor,
-    color: paletteValues.buttonTextColor
-  };
-});
 
 export const StyledIndicator = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette'

@@ -1,8 +1,8 @@
 'use client';
-import { BoxProps } from '@mui/material';
+import { BoxProps, ButtonGroup as MUIButtonGroup } from '@mui/material';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { StyledButtonGroup, StyledButtonItem, StyledIndicator } from './ButtonGroup.styles';
+import { StyledButtonItem, StyledIndicator } from './ButtonGroup.styles';
 import { ButtonGroupPaletteOptions, ButtonGroupSizeOptions } from '~/types/types/common.types';
 
 interface ButtonGroupProps extends BoxProps {
@@ -12,7 +12,14 @@ interface ButtonGroupProps extends BoxProps {
   palette?: ButtonGroupPaletteOptions;
 }
 
-const ButtonGroup = ({ buttons, defaultActiveButton, size = 'small', palette = 'primary', sx }: ButtonGroupProps) => {
+const ButtonGroup = ({
+  buttons,
+  defaultActiveButton,
+  size = 'small',
+  palette = 'primary',
+  sx,
+  ...props
+}: ButtonGroupProps) => {
   const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
     left: 0,
@@ -44,16 +51,10 @@ const ButtonGroup = ({ buttons, defaultActiveButton, size = 'small', palette = '
     };
   }, [activeButton, buttons]);
 
-  // const { color: _, ...restProps } = props;
+  const { color: _, ...restProps } = props;
 
   return (
-    <StyledButtonGroup
-      sx={sx}
-      ref={containerRef}
-      aria-label="Button Group"
-      palette={palette}
-      // {...props}
-    >
+    <MUIButtonGroup component="div" sx={sx} ref={containerRef} aria-label="Button Group" {...restProps}>
       <StyledIndicator
         palette={palette}
         left={indicatorStyle.left}
@@ -75,7 +76,7 @@ const ButtonGroup = ({ buttons, defaultActiveButton, size = 'small', palette = '
           {button}
         </StyledButtonItem>
       ))}
-    </StyledButtonGroup>
+    </MUIButtonGroup>
   );
 };
 export default ButtonGroup;

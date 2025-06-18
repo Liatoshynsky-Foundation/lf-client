@@ -8,10 +8,10 @@ import AudioPlayer from './AudioPlayer/AudioPlayer';
 import SupportButton from './SupportButton/SupportButton';
 
 const buttons = [
-  <Button key={'1'}>Button 1</Button>,
-  <Button key={'2'}>Button 2</Button>,
-  <Button key={'3'}>Button 3</Button>,
-  <Button key={'4'}>Button 4</Button>
+  <Button key="1">Button 1</Button>,
+  <Button key="2">Button 2</Button>,
+  <Button key="3">Button 3</Button>,
+  <Button key="4">Button 4</Button>
 ];
 
 export default async function Header() {

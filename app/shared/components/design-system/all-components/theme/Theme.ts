@@ -201,7 +201,7 @@ export const theme = createTheme({
       primary: {
         selectedButtonColor: mainHexPallete.black,
         selectedButtonTextColor: mainHexPallete.white,
-        groupBackgroundColor: '#f0f0f0',
+        groupBackgroundColor: mainHexPallete.blue[50],
         buttonTextColor: mainHexPallete.black
       },
       secondary: {
