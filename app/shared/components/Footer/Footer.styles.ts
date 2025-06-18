@@ -2,12 +2,21 @@ export const styles = {
   footerContainer: {
     position: 'absolute',
     width: '100%',
-    backgroundColor: '#FCBD28',
     overflow: 'hidden',
     paddingTop: '105px',
-    marginTop: '-70px',
-    zIndex: '-1',
+    marginTop: { md: '-100px', xs: '-150px' },
+    zIndex: '2',
     left: 0
+  },
+  backgroundBox: {
+    position: 'absolute',
+    left: '-50px',
+    width: '150%',
+    height: '150%',
+    backgroundColor: '#FCBD28',
+    transform: 'rotate(-2deg)',
+    transformOrigin: 'top left',
+    zIndex: 0
   },
   footerContent: {
     padding: { xs: '80px 24px', md: '40px 24px' },

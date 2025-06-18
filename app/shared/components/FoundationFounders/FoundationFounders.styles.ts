@@ -7,8 +7,7 @@ export const styles = {
     marginLeft: '-50vw',
     marginRight: '-50vw',
     width: '100vw',
-    backgroundColor: '#EDE8DF',
-    clipPath: { xs: 'polygon( 0% 1%, 100% 0%, 100% 99%, 0% 100%)', sm: 'polygon( 0% 2%, 100% 0%, 100% 98%, 0% 100%)' }
+    backgroundColor: '#EDE8DF'
   },
   contentContainer: {
     maxWidth: '1920px',
