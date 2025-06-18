@@ -1,5 +1,7 @@
 import { SxProps, Theme } from '@mui/material';
 
+import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+
 export const collapsibleRowStyles = {
   row: (collapsed: boolean): SxProps<Theme> => ({
     height: collapsed ? 'auto' : 0,
@@ -9,10 +11,10 @@ export const collapsibleRowStyles = {
   cell: {
     py: 2,
     px: 0,
-    borderBottom: '2px solid rgba(217, 220, 232, 0.4)',
     borderLeft: 'none',
     borderRight: 'none',
-    borderTop: 'none'
+    borderTop: 'none',
+    borderBottom: `2px solid ${mainHexPallete.blue[200]}`
   },
   cellInner: {
     display: 'flex',
@@ -27,13 +29,9 @@ export const collapsibleRowStyles = {
   collapsedCell: (collapsed: boolean): SxProps<Theme> => ({
     py: collapsed ? 2 : 0,
     px: 0,
-    borderBottom: 'none',
+    borderBottom: collapsed ? `2px solid ${mainHexPallete.blue[200]}` : 'none',
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none'
-  }),
-  collapsedContent: {
-    px: 0,
-    py: 1
-  }
+  })
 };

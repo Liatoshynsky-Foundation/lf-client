@@ -2,34 +2,50 @@
 
 import { Box, Pagination, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import Button from '../design-system/all-components/button/Button';
-import { CollapsibleRow } from './CollapsibleRow';
+import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
+import TableHeader from './enhanced-table-header/EnhancedTableHeader';
+import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
-import TableHeader from './EnhancedTableHeader';
-import EnhancedTableRow from './EnhancedTableRow';
+
+interface RowData {
+  id: number;
+  [key: string]: unknown;
+}
+
+interface CollapsibleGroupColumnMeta<T extends RowData> {
+  isGroupLabelColumn?: boolean;
+  groupLabelContent?: React.ReactNode;
+  groupLabelContentFactory?: (groupItems: T[]) => React.ReactNode;
+  groupCellRenderer?: () => React.ReactNode;
+}
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
-type EnhancedTableProps<T extends { id: number }> = {
+interface EnhancedTableProps<T extends RowData> {
   data: T[];
   columns: ColumnDef<T>[];
   columnWidths?: Record<string, string>;
   groupByKey?: keyof T;
   itemsPerPage?: number;
-};
+  tableName: string;
+}
 
-export default function EnhancedTable<T extends { id: number }>({
+export default function EnhancedTable<T extends RowData>({
   data,
   columns,
   columnWidths = {},
   groupByKey,
-  itemsPerPage = 10
+  itemsPerPage = 10,
+  tableName
 }: EnhancedTableProps<T>) {
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const t = useTranslations('common');
 
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
@@ -37,6 +53,19 @@ export default function EnhancedTable<T extends { id: number }>({
       [groupLabel]: !prev[groupLabel]
     }));
   };
+
+  const getGroupColumns = <T extends RowData>(columns: ColumnDef<T>[], groupItems: T[]): ColumnDef<T>[] =>
+    columns.map((col) => {
+      const meta = col.meta as CollapsibleGroupColumnMeta<T> | undefined;
+
+      return {
+        ...col,
+        meta: {
+          ...meta,
+          groupLabelContent: meta?.groupLabelContentFactory?.(groupItems)
+        }
+      };
+    });
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -90,8 +119,8 @@ export default function EnhancedTable<T extends { id: number }>({
 
   return (
     <Box sx={styles.root}>
-      <Typography variant="h6" sx={styles.title}>
-        Усі композиції
+      <Typography variant="customBold32" sx={styles.title}>
+        {tableName}
       </Typography>
 
       <TableContainer component={Paper} sx={styles.container}>
@@ -103,10 +132,9 @@ export default function EnhancedTable<T extends { id: number }>({
                 <CollapsibleRow
                   key={`group-${entry.label}`}
                   data={entry.items}
-                  groupLabel={entry.label}
                   collapsed={collapsedGroups[entry.label] ?? false}
                   onToggle={() => toggleGroupCollapse(entry.label)}
-                  columns={columns}
+                  columns={getGroupColumns(columns, entry.items)}
                 />
               ) : (
                 <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
@@ -118,8 +146,8 @@ export default function EnhancedTable<T extends { id: number }>({
 
       <Box sx={styles.paginationWrapper}>
         {hasMore && (
-          <Button color="primary" size="large" onClick={handleLoadMore}>
-            Переглянути більше
+          <Button variant="contained" size="large" onClick={handleLoadMore}>
+            {t('viewMore')}
           </Button>
         )}
 

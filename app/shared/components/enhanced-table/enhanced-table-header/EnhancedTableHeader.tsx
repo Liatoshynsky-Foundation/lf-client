@@ -6,14 +6,14 @@ import { enhancedTableHeaderStyles as styles } from './EnhancedTableHeader.style
 
 type ColumnWidths = Record<string, string | number>;
 
-type TableHeaderProps<T> = {
+interface TableHeaderProps<T> {
   table: Table<T>;
   columnWidths?: ColumnWidths;
-};
+}
 
 export default function EnhancedTableHeader<T>({ table, columnWidths = {} }: TableHeaderProps<T>) {
   return (
-    <TableHead sx={styles.head}>
+    <TableHead>
       {table.getHeaderGroups().map((headerGroup) => (
         <TableRow key={headerGroup.id} sx={styles.row}>
           {headerGroup.headers.map((header: Header<T, unknown>) => (

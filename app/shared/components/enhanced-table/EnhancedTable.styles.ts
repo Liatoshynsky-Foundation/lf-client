@@ -1,5 +1,9 @@
+import { mainHexPallete } from '../design-system/all-components/theme/colors';
+
 export const enhancedTableStyles = {
   root: {
+    display: 'flex',
+    flexDirection: 'column',
     py: 20,
     mx: -3,
     gap: 3
@@ -12,17 +16,15 @@ export const enhancedTableStyles = {
   paginationWrapper: {
     display: 'flex',
     justifyContent: 'center',
-    mt: 3,
     flexDirection: 'column',
     gap: 3,
     alignItems: 'center'
   },
   tableCell: {
     border: 'none',
-    borderBottom: '2px solid rgba(217, 220, 232, 0.4)'
+    borderBottom: `2px solid ${mainHexPallete.blue[200]}`
   },
   title: {
-    mb: 2,
-    fontWeight: 'bold'
+    pl: 9
   }
 };

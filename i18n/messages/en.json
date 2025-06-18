@@ -80,7 +80,8 @@
   "common": {
     "languageNotFound": "The page is not yet available in this language",
     "pageNotFound": "404 Page not found",
-    "goHome": "return to home"
+    "goHome": "return to home",
+    "viewMore": "View More"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
