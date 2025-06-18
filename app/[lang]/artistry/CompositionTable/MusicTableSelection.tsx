@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, TableCell, Typography } from '@mui/material';
 import { ColumnDef } from '@tanstack/react-table';
 
 import Button from '../../../shared/components/design-system/all-components/button/Button';
@@ -9,6 +9,7 @@ import { mainHexPallete } from '../../../shared/components/design-system/all-com
 import { SvgImage } from '../../../shared/components/svg-image/SvgImage';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
+import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 type Music = {
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function MusicTableSection({ data }: Props) {
+  const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const columns: ColumnDef<Music>[] = [
     { id: 'expander', header: '', cell: () => null },
     {
@@ -74,9 +76,11 @@ export default function MusicTableSection({ data }: Props) {
       cell: (info) => <Typography variant="customMedium16">{info.getValue<string>()}</Typography>,
       meta: {
         groupLabelContentFactory: (items: Music[]) => (
-          <Typography variant="customBold16" fontWeight={600}>
-            {items[0].opusTitle}
-          </Typography>
+          <TableCell colSpan={3} sx={{ px: 0, py: 2, borderBottom: `2px solid ${borderWithOpacity}` }}>
+            <Typography variant="customBold16" fontWeight={600}>
+              {items[0].opusTitle}
+            </Typography>
+          </TableCell>
         )
       }
     },

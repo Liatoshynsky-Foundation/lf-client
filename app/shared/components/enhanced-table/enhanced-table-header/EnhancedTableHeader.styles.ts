@@ -1,8 +1,12 @@
 import { mainHexPallete } from '../../design-system/all-components/theme/colors';
 
+import { hexToRGBA } from '~/lib/utils/hexToRGBA';
+
+const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+
 export const enhancedTableHeaderStyles = {
   row: {
-    borderBottom: `2px solid ${mainHexPallete.blue[200]}`
+    borderBottom: `2px solid ${borderWithOpacity}`
   },
   cell: {
     py: 3,

@@ -29,6 +29,11 @@ export function CollapsibleRow<T extends RowData>({ data, collapsed, onToggle, c
       <TableRow sx={styles.row(collapsed)}>
         {columns.map((col) => {
           const meta = col.meta as CollapsibleGroupColumnMeta<T>;
+          const labelContent = meta?.groupLabelContent;
+
+          if (React.isValidElement(labelContent) && labelContent.type === TableCell) {
+            return React.cloneElement(labelContent, { key: col.id });
+          }
 
           return (
             <TableCell key={col.id} sx={styles.cell}>
@@ -44,7 +49,7 @@ export function CollapsibleRow<T extends RowData>({ data, collapsed, onToggle, c
                   </IconButton>
                 ) : (
                   <>
-                    <Box sx={styles.labelBox}>{meta?.groupLabelContent}</Box>
+                    <Box sx={styles.labelBox}>{labelContent}</Box>
                     {meta?.groupCellRenderer?.()}
                   </>
                 )}

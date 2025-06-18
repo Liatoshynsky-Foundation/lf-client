@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { ColumnDef } from '@tanstack/react-table';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import EnhancedTable from './EnhancedTable';
@@ -12,23 +13,30 @@ jest.mock('next-intl', () => ({
   }
 }));
 
-const mockData = [
+type TestRow = {
+  id: number;
+  name: string;
+  year: number;
+  group?: string;
+};
+
+const mockData: TestRow[] = [
   { id: 1, name: 'Item 1', year: 2020, group: 'A' },
   { id: 2, name: 'Item 2', year: 2020, group: 'A' },
   { id: 3, name: 'Item 3', year: 2021, group: 'B' },
   { id: 4, name: 'Item 4', year: 2022 }
 ];
 
-const columns = [
+const columns: ColumnDef<TestRow>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
-    cell: (info: any) => info.getValue()
+    cell: (info) => info.getValue()
   },
   {
     accessorKey: 'year',
     header: 'Year',
-    cell: (info: any) => info.getValue()
+    cell: (info) => info.getValue()
   }
 ];
 

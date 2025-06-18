@@ -3,7 +3,7 @@ import React from 'react';
 
 import MusicTableSection from './CompositionTable/MusicTableSelection';
 
-export default async function Home() {
+export default async function Artistry() {
   const musicData = [
     {
       id: 1,

@@ -1,5 +1,9 @@
 import { mainHexPallete } from '../design-system/all-components/theme/colors';
 
+import { hexToRGBA } from '~/lib/utils/hexToRGBA';
+
+const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+
 export const enhancedTableStyles = {
   root: {
     display: 'flex',
@@ -22,7 +26,7 @@ export const enhancedTableStyles = {
   },
   tableCell: {
     border: 'none',
-    borderBottom: `2px solid ${mainHexPallete.blue[200]}`
+    borderBottom: `2px solid ${borderWithOpacity}`
   },
   title: {
     pl: 9

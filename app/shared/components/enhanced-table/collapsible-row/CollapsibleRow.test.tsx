@@ -1,34 +1,36 @@
+import { TableCell } from '@mui/material';
 import { ColumnDef } from '@tanstack/react-table';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 
 import { CollapsibleRow } from './CollapsibleRow';
-
-jest.mock('./CollapsibleDataRow', () => ({
-  CollapsibleDataRow: () => (
-    <tr data-testid="collapsible-data-row">
-      <td>Row</td>
-    </tr>
-  )
-}));
-
-jest.mock('../../design-system/all-components/icon-button/IconButton', () => ({
-  IconButton: ({ children, onClick }: any) => (
-    <button onClick={onClick} data-testid="icon-button">
-      {children}
-    </button>
-  )
-}));
-
-jest.mock('../../svg-image/SvgImage', () => ({
-  SvgImage: ({ alt }: { alt: string }) => <img alt={alt} data-testid="svg-image" />
-}));
 
 type MockRow = {
   id: number;
   name: string;
   group: string;
 };
+
+jest.mock('./CollapsibleDataRow', () => ({
+  CollapsibleDataRow: ({ row }: { row: { original: MockRow } }) => (
+    <tr data-testid="collapsible-data-row">
+      <td>{row.original.name}</td>
+    </tr>
+  )
+}));
+
+jest.mock('../../design-system/all-components/icon-button/IconButton', () => ({
+  IconButton: ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
+    <button onClick={onClick} data-testid="icon-button">
+      {children}
+    </button>
+  )
+}));
+
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ alt }: { alt: string }) => <img alt={alt} data-testid="svg-image" />
+}));
 
 const mockData: MockRow[] = [
   { id: 1, name: 'Test 1', group: 'A' },
@@ -46,14 +48,18 @@ const columns: ColumnDef<MockRow>[] = [
     header: 'Name',
     cell: (info) => info.getValue(),
     meta: {
-      groupLabelContent: <span data-testid="group-label">Group Label</span>,
+      groupLabelContent: (
+        <TableCell colSpan={2} data-testid="group-label-cell">
+          <span data-testid="group-label">Group Label</span>
+        </TableCell>
+      ),
       groupCellRenderer: () => <span data-testid="group-renderer">Extra</span>
     }
   }
 ];
 
 describe('CollapsibleRow', () => {
-  it('renders group row with label and icon', () => {
+  it('should render group row with custom TableCell label and icon', () => {
     render(
       <table>
         <tbody>
@@ -63,11 +69,11 @@ describe('CollapsibleRow', () => {
     );
 
     expect(screen.getByTestId('group-label')).toBeInTheDocument();
-    expect(screen.getByTestId('group-renderer')).toBeInTheDocument();
+    expect(screen.getByTestId('group-label-cell')).toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toBeInTheDocument();
   });
 
-  it('calls onToggle when icon button is clicked', () => {
+  it('should call onToggle when icon button is clicked', () => {
     const onToggle = jest.fn();
 
     render(
@@ -82,7 +88,7 @@ describe('CollapsibleRow', () => {
     expect(onToggle).toHaveBeenCalled();
   });
 
-  it('renders all internal rows through CollapsibleDataRow', () => {
+  it('should render all internal rows through CollapsibleDataRow', () => {
     render(
       <table>
         <tbody>
@@ -91,6 +97,9 @@ describe('CollapsibleRow', () => {
       </table>
     );
 
-    expect(screen.getAllByTestId('collapsible-data-row')).toHaveLength(2);
+    const rows = screen.getAllByTestId('collapsible-data-row');
+    expect(rows).toHaveLength(2);
+    expect(within(rows[0]).getByText('Test 1')).toBeInTheDocument();
+    expect(within(rows[1]).getByText('Test 2')).toBeInTheDocument();
   });
 });
