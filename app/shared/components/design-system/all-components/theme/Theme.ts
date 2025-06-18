@@ -1,7 +1,13 @@
 import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
-import { mainHexPallete, rgbaSwitchColors, rgbaTextFieldColors, rgbButtonColors } from '~/ds-components/theme/colors';
+import {
+  mainHexPallete,
+  rgbaSwitchColors,
+  rgbaMenuItemColors,
+  rgbaTextFieldColors,
+  rgbButtonColors
+} from '~/ds-components/theme/colors';
 const { palette } = createTheme();
 const { augmentColor } = palette;
 const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
@@ -652,6 +658,35 @@ export const theme = createTheme({
           },
           '&.Mui-disabled + .MuiSwitch-track': {
             backgroundColor: rgbaSwitchColors.disabledTrackBackground
+          }
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: '16px',
+          fontFamily: mulish.style.fontFamily,
+          fontWeight: 500,
+          gap: '4px',
+
+          '&.Mui-disabled': {
+            color: mainHexPallete.blue[700],
+            backgroundColor: 'transparent',
+            pointerEvents: 'none'
+          },
+
+          '&:hover': {
+            backgroundColor: rgbaMenuItemColors.hoverBg
+          },
+          '&:active': {
+            backgroundColor: rgbaMenuItemColors.activeBg
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: rgbaMenuItemColors.selectedHoverBg
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'transparent'
           }
         }
       }
