@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import { hexButtonGroupColors } from '~/ds-components/theme/colors';
+
 import ButtonGroup from './ButtonGroup';
-import { defaultButtonGroupColorScheme } from './ButtonGroup.styles';
 
 beforeEach(() => {
   jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
@@ -57,13 +58,6 @@ const mockButtons = [
   </button>
 ];
 
-const mockColorSettings = {
-  selectedButtonColor: '#FF0000',
-  selectedButtonTextColor: '#00FF00',
-  groupBackgroundColor: '#0000FF',
-  buttonTextColor: '#333333'
-};
-
 describe('Button Group', () => {
   describe('Default settings', () => {
     beforeEach(() => {
@@ -79,7 +73,7 @@ describe('Button Group', () => {
 
     it('should have default color styles applied', () => {
       const button1 = screen.getByText('Button 1').parentElement as HTMLElement;
-      expect(button1).toHaveStyle(`color: ${defaultButtonGroupColorScheme.buttonTextColor}`);
+      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
     });
 
     it('should change active button style on click', async () => {
@@ -88,12 +82,12 @@ describe('Button Group', () => {
       const button2 = screen.getByText('Button 2').parentElement as HTMLElement;
 
       await user.click(button1);
-      expect(button1).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
-      expect(button2).toHaveStyle(`color: ${defaultButtonGroupColorScheme.buttonTextColor}`);
+      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
 
       await user.click(button2);
-      expect(button2).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
-      expect(button1).toHaveStyle(`color: ${defaultButtonGroupColorScheme.buttonTextColor}`);
+      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
     });
 
     it('should call the corresponding onClick handler when a button is clicked', async () => {
@@ -123,15 +117,7 @@ describe('Button Group', () => {
 
       expect(computedIndicatorStyle.left).toBe(button2.dataset.offsetLeft + 'px');
       expect(computedIndicatorStyle.width).toBe(button2.dataset.offsetWidth + 'px');
-      expect(button2.parentElement).toHaveStyle(`color: ${defaultButtonGroupColorScheme.selectedButtonTextColor}`);
-    });
-
-    it('should apply custom styles from colorSettings', () => {
-      render(<ButtonGroup buttons={mockButtons} colorSettings={mockColorSettings} />);
-      const buttonGroup = screen.getByLabelText('Button Group');
-
-      expect(buttonGroup).toHaveStyle(`background-color: ${mockColorSettings.groupBackgroundColor}`);
-      expect(buttonGroup).toHaveStyle(`color: ${mockColorSettings.buttonTextColor}`);
+      expect(button2.parentElement).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
     });
 
     it('should set indicator style to zero when activeButton is out of range', () => {

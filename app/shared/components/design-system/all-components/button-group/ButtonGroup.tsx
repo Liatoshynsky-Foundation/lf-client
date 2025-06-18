@@ -5,7 +5,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { StyledButtonItem, StyledIndicator } from './ButtonGroup.styles';
 import { ButtonGroupPaletteOptions, ButtonGroupSizeOptions } from '~/types/types/common.types';
 
-interface ButtonGroupProps extends BoxProps {
+interface ButtonGroupProps extends Omit<BoxProps, 'color' | 'size'> {
   buttons: React.ReactNode[];
   defaultActiveButton?: number;
   size?: ButtonGroupSizeOptions;
@@ -51,10 +51,8 @@ const ButtonGroup = ({
     };
   }, [activeButton, buttons]);
 
-  const { color: _, ...restProps } = props;
-
   return (
-    <MUIButtonGroup component="div" sx={sx} ref={containerRef} aria-label="Button Group" {...restProps}>
+    <MUIButtonGroup component="div" sx={sx} ref={containerRef} aria-label="Button Group" color={palette} {...props}>
       <StyledIndicator
         palette={palette}
         left={indicatorStyle.left}

@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import { hexButtonGroupColors } from '~/ds-components/theme/colors';
+
 export const StyledIndicator = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette'
 })<{
@@ -8,10 +10,7 @@ export const StyledIndicator = styled(Box, {
   width: number;
   palette: 'primary' | 'secondary';
 }>(({ left, width, palette }) => {
-  const paletteValues =
-    palette === 'primary'
-      ? { selectedButtonColor: '#190D03', selectedButtonTextColor: '#FCFCFC' }
-      : { selectedButtonColor: '#FCFCFC', selectedButtonTextColor: '#190D03' };
+  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
     height: 'calc(100% - 4px)',
@@ -34,10 +33,7 @@ export const StyledButtonItem = styled(Box, {
   palette: 'primary' | 'secondary';
   size: 'small' | 'big';
 }>(({ active, palette, size }) => {
-  const paletteValues =
-    palette === 'primary'
-      ? { buttonTextColor: '#190D03', selectedButtonTextColor: '#FCFCFC' }
-      : { buttonTextColor: '#190D03', selectedButtonTextColor: '#190D03' };
+  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
     display: 'inline-block',

@@ -1,9 +1,13 @@
 import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
-import { mainHexPallete, rgbaTextFieldColors, rgbButtonColors } from '~/ds-components/theme/colors';
+import {
+  hexButtonGroupColors,
+  mainHexPallete,
+  rgbaTextFieldColors,
+  rgbButtonColors
+} from '~/ds-components/theme/colors';
 
-import { buttonGroupTheme } from './component-themes/ButtonGroup.theme';
 const { palette } = createTheme();
 const { augmentColor } = palette;
 const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
@@ -75,38 +79,10 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/styles' {
   interface Palette {
     tertiary: Palette['primary'];
-    buttonGroup: {
-      primary: {
-        selectedButtonColor: string;
-        selectedButtonTextColor: string;
-        groupBackgroundColor: string;
-        buttonTextColor: string;
-      };
-      secondary: {
-        selectedButtonColor: string;
-        selectedButtonTextColor: string;
-        groupBackgroundColor: string;
-        buttonTextColor: string;
-      };
-    };
   }
 
   interface PaletteOptions {
     tertiary?: PaletteOptions['primary'];
-    buttonGroup?: {
-      primary?: {
-        selectedButtonColor?: string;
-        selectedButtonTextColor?: string;
-        groupBackgroundColor?: string;
-        buttonTextColor?: string;
-      };
-      secondary?: {
-        selectedButtonColor?: string;
-        selectedButtonTextColor?: string;
-        groupBackgroundColor?: string;
-        buttonTextColor?: string;
-      };
-    };
   }
 }
 
@@ -197,20 +173,6 @@ export const theme = createTheme({
       default: mainHexPallete.white
     },
     tertiary: createColor(mainHexPallete.yellow[500]),
-    buttonGroup: {
-      primary: {
-        selectedButtonColor: mainHexPallete.black,
-        selectedButtonTextColor: mainHexPallete.white,
-        groupBackgroundColor: mainHexPallete.blue[50],
-        buttonTextColor: mainHexPallete.black
-      },
-      secondary: {
-        selectedButtonColor: mainHexPallete.white,
-        selectedButtonTextColor: mainHexPallete.black,
-        groupBackgroundColor: mainHexPallete.yellow[500],
-        buttonTextColor: mainHexPallete.black
-      }
-    },
     ...mainHexPallete
   },
   breakpoints: {
@@ -660,6 +622,39 @@ export const theme = createTheme({
         }
       }
     },
-    ...buttonGroupTheme
+    MuiButtonGroup: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '9999px',
+          padding: '2px',
+          fontFamily: mulish.style.fontFamily,
+          position: 'relative',
+          overflow: 'hidden',
+          width: 'fit-content',
+          border: 'none',
+          lineHeight: '150%'
+        }
+      },
+      variants: [
+        {
+          props: { color: 'primary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.primary.groupBackgroundColor,
+            color: hexButtonGroupColors.primary.buttonTextColor
+          }
+        },
+        {
+          props: { color: 'secondary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.secondary.groupBackgroundColor,
+            color: hexButtonGroupColors.secondary.buttonTextColor
+          }
+        }
+      ]
+    }
   }
 });
