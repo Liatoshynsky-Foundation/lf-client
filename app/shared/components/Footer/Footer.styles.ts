@@ -47,7 +47,8 @@ export const styles = {
   logoWrapper: {
     display: 'flex',
     justifyContent: 'flex-start',
-    width: '100%'
+    width: '100%',
+    zIndex: '2'
   },
   switcherWrapper: {
     display: 'flex',
