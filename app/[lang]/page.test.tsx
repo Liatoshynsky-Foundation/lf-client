@@ -26,6 +26,12 @@ jest.mock('~/components/main-page-sections/about-foundation/AboutFoundation', ()
   return MockAboutFoundation;
 });
 
+jest.mock('~/components/our-goals/OurGoals', () => {
+  const MockOurGoals = () => <div>Our goals</div>;
+  MockOurGoals.displayName = 'MockOurGoals';
+  return MockOurGoals;
+});
+
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
     render(await Home());
@@ -34,5 +40,6 @@ describe('Home component', () => {
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
     expect(screen.getByText(/Foundation founders/i)).toBeInTheDocument();
     expect(screen.getByText(/About foundation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Our goals/i)).toBeInTheDocument();
   });
 });

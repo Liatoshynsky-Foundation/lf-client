@@ -38,6 +38,21 @@
       },
       "mainText": "We are named after Borys Lyatoshynskyi, one of the most influential composers in the history of Ukrainian music, a teacher, innovator, and one of the founders of the modern Ukrainian compositional school.",
       "textImage": "We know that Ukrainian academic music sounds loud and proud, on a par with other European and world cultures."
+    },
+    "ourGoals": {
+      "maintitle": "Our Goals",
+      "titles": {
+        "title1": "Comprehend and Reconceptualize:",
+        "title2": "Preserve Heritage:",
+        "title3": "Promote:",
+        "title4": "Support:"
+      },
+      "descriptions": {
+        "descr1": "We work with archives, scores, documents, and recordings to restore and organize cultural memory.",
+        "descr2": "We help contemporary composers, performers, and researchers realize their projects, find partners, audiences, and listeners.",
+        "descr3": "The Foundation not only preserves but also reconceptualizes — through contemporary performance practice, academic research, and dialogues between generations of musicians.",
+        "descr4": "We strive to share knowledge: for this purpose, we create educational products, lectures, and publications that reveal the richness of Ukrainian music to academic and general audiences."
+      }
     }
   },
   "foundation": {
