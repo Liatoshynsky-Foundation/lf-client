@@ -19,7 +19,7 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
         variant="outlined"
         color="primary"
         label={data.text}
-        startIcon={<SvgImage alt="Donation Button" src="/icons/donation-button.svg" width={24} height={24} />}
+        startIcon={<SvgImage src="/icons/donation-button.svg" alt="Donation Button" width={24} height={24} />}
       />
     </Link>
   );

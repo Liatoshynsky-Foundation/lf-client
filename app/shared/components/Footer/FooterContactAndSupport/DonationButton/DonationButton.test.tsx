@@ -4,6 +4,11 @@ import React from 'react';
 import { ButtonData } from '../types';
 import DonationButton from './DonationButton';
 
+jest.mock('@public/icons/donation-button.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="donation-icon" />
+}));
+
 const mockData: ButtonData = {
   text: 'Donate Now',
   link: '/donate'

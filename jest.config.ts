@@ -32,6 +32,7 @@ const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
+    '^~/public/(.*)$': '<rootDir>/public/$1',
     '^~/i18n/(.*)$': '<rootDir>/i18n/$1',
     '^~/utils/(.*)$': '<rootDir>/app/lib/utils/$1',
     '^~/ds-components/(.*)$': '<rootDir>/app/shared/components/design-system/all-components/$1',

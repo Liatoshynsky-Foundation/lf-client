@@ -7,6 +7,7 @@ import Logo from '~/components/design-system/all-components/logo/Logo';
 import FooterContactInfo from '~/components/Footer/FooterContactInfo/FooterContactInfo';
 import FooterCopyrights from '~/components/Footer/FooterCopyrights/FooterCopyrights';
 import { SvgImage } from '~/components/svg-image/SvgImage';
+import OpenTechLogo from '~/ds-components/open-tech-logo/OpenTechLogo';
 
 import { styles } from './Footer.styles';
 import FooterSocialMedia from './footer-social-media/FooterSocialMedia';
@@ -20,7 +21,6 @@ export default async function Footer() {
   const locale = await getLocale();
 
   const svgImagePath = '/images/footer-img.svg';
-  const svgImageSA = '/images/softserve-academy.svg';
 
   const { contacts, socialLinks, supportButtonLink, publicInfo, navigation } = await createRequestContainer()
     .resolve('footerService')
@@ -28,7 +28,7 @@ export default async function Footer() {
 
   return (
     <Box component="footer" sx={styles.footerContainer}>
-      <Box sx={styles.skewedTop}></Box>
+      <Box sx={styles.backgroundBox} />
       <Box sx={styles.footerContent}>
         <Box sx={styles.switcherWrapper}>
           <LanguageSwitcher variant="toggle" />
@@ -53,7 +53,7 @@ export default async function Footer() {
         <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
       </Box>
       <Box sx={styles.copyrightWrapper}>
-        <SvgImage src={svgImageSA} alt="SoftServe Academy" width={270} height={40} />
+        <OpenTechLogo label={t('opentechLabel')} />
       </Box>
       <Box sx={styles.svgContainer}>
         <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />

@@ -18,7 +18,9 @@ interface ImageWithCaptionProps {
   caption: string;
   sizes: ElementSizes;
   border?: BorderProps;
+  align?: 'left' | 'right';
   containerSx?: BoxProps['sx'];
+  imageSx?: BoxProps['sx'];
   captionSx?: TypographyProps['sx'];
 }
 
@@ -28,18 +30,20 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   sizes,
   caption,
   border,
+  align = 'right',
   containerSx = {},
+  imageSx = {},
   captionSx = {}
 }) => {
   const sizesAttribute = generateSizesAttribute(sizes);
 
   return (
     <Box sx={{ ...containerSx, ...styles.container } as BoxProps['sx']}>
-      {border && <Box sx={styles.border(border)} data-testid="img-border" />}
-      <Box sx={styles.imageContainer(sizes)}>
+      <Box sx={{ ...imageSx, ...styles.imageContainer(sizes) } as BoxProps['sx']}>
+        {border && <Box sx={styles.border(border)} data-testid="img-border" />}
         <Image style={styles.image as React.CSSProperties} src={src} fill alt={alt} sizes={sizesAttribute} />
       </Box>
-      <Typography sx={{ ...captionSx, ...styles.caption(sizes) } as TypographyProps['sx']}>{caption}</Typography>
+      <Typography sx={{ ...captionSx, ...styles.caption(sizes, align) } as TypographyProps['sx']}>{caption}</Typography>
     </Box>
   );
 };
