@@ -2,12 +2,25 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { ActionsButtons, HoverPlayIcon, TableCellWithTypography, TypographyCell } from './MusicTableCells';
+import {
+  renderActionsCell,
+  renderGenreCell,
+  renderGenreHeader,
+  renderNameCell,
+  renderNameHeader,
+  renderOpusGroupLabel,
+  renderOpusHeader,
+  renderOpusTitleGroupLabel,
+  renderPlayCell,
+  renderYearCell,
+  renderYearHeader
+} from './MusicTableCells';
 
+import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
-type Music = {
+export type Music = {
   id: number;
   name: string;
   year: number;
@@ -15,53 +28,50 @@ type Music = {
   opusTitle?: string;
   genre?: string;
 };
-
 type Props = {
   data: Music[];
 };
 
 export default function MusicTableSection({ data }: Readonly<Props>) {
+  const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+
   const columns: ColumnDef<Music>[] = [
     { id: 'expander', header: '', cell: () => null },
     {
       id: 'opus',
-      header: () => <TypographyCell value="Опус" variant="customBold16" color={mainHexPallete.blue[800]} />,
+      header: renderOpusHeader,
       cell: () => null,
       meta: {
-        groupLabelContentFactory: (items: Music[]) => (
-          <TypographyCell value={items[0]?.opus} variant="customItalic16" color={mainHexPallete.blue[800]} />
-        )
+        groupLabelContentFactory: renderOpusGroupLabel
       }
     },
     {
       id: 'play',
       header: '',
-      cell: () => <HoverPlayIcon />
+      cell: renderPlayCell
     },
     {
       accessorKey: 'name',
-      header: () => <TypographyCell value="Назва" variant="customBold16" color={mainHexPallete.blue[800]} />,
-      cell: (info) => <TypographyCell value={info.getValue<string>()} />,
+      header: renderNameHeader,
+      cell: renderNameCell,
       meta: {
-        groupLabelContentFactory: (items: Music[]) => (
-          <TableCellWithTypography value={items[0]?.opusTitle} colSpan={3} />
-        )
+        groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
       }
     },
     {
       accessorKey: 'year',
-      header: () => <TypographyCell value="Рік" variant="customBold16" color={mainHexPallete.blue[800]} />,
-      cell: (info) => <TypographyCell value={info.getValue<string>()} />
+      header: renderYearHeader,
+      cell: renderYearCell
     },
     {
       accessorKey: 'genre',
-      header: () => <TypographyCell value="Жанр" variant="customBold16" color={mainHexPallete.blue[800]} />,
-      cell: (info) => <TypographyCell value={info.getValue<string>()} />
+      header: renderGenreHeader,
+      cell: renderGenreCell
     },
     {
       id: 'actions',
       header: '',
-      cell: () => <ActionsButtons />
+      cell: renderActionsCell
     }
   ];
 
