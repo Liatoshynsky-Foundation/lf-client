@@ -122,10 +122,8 @@ export default async function Artistry() {
   ];
 
   return (
-    <>
-      <Box sx={{ gridColumn: '1 / -1' }}>
-        <MusicTableSection data={musicData} />
-      </Box>
-    </>
+    <Box sx={{ gridColumn: '1 / -1' }}>
+      <MusicTableSection data={musicData} />
+    </Box>
   );
 }

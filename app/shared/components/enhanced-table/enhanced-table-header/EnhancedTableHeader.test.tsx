@@ -22,7 +22,7 @@ const data: Row[] = [
   { name: 'Твір 2', year: 2021 }
 ];
 
-function TableHeaderTestWrapper({ columnWidths }: { columnWidths?: Record<string, string | number> }) {
+function TableHeaderTestWrapper({ columnWidths }: Readonly<{ columnWidths?: Record<string, string | number> }>) {
   const table = useReactTable({
     data,
     columns,

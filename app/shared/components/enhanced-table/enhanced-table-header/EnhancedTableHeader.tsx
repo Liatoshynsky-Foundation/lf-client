@@ -9,7 +9,7 @@ interface TableHeaderProps<T> {
   columnWidths?: ColumnWidths;
 }
 
-export default function EnhancedTableHeader<T>({ table, columnWidths = {} }: TableHeaderProps<T>) {
+export default function EnhancedTableHeader<T>({ table, columnWidths = {} }: Readonly<TableHeaderProps<T>>) {
   return (
     <TableHead>
       {table.getHeaderGroups().map((headerGroup) => (

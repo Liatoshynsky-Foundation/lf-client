@@ -11,7 +11,7 @@ interface CollapsibleDataRowProps<T extends RowData> {
   collapsed: boolean;
 }
 
-function CollapsibleDataRowComponent<T extends RowData>({ row, collapsed }: CollapsibleDataRowProps<T>) {
+function CollapsibleDataRowComponent<T extends RowData>({ row, collapsed }: Readonly<CollapsibleDataRowProps<T>>) {
   return (
     <TableRow key={row.id}>
       {row.getVisibleCells().map((cell) => (

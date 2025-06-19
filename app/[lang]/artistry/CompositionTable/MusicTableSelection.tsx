@@ -1,15 +1,10 @@
 'use client';
 
-import { Box, TableCell, Typography } from '@mui/material';
 import { ColumnDef } from '@tanstack/react-table';
 
-import Button from '../../../shared/components/design-system/all-components/button/Button';
-import { IconButton } from '../../../shared/components/design-system/all-components/icon-button/IconButton';
-import { mainHexPallete } from '../../../shared/components/design-system/all-components/theme/colors';
-import { SvgImage } from '../../../shared/components/svg-image/SvgImage';
-import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
+import { ActionsButtons, HoverPlayIcon, TableCellWithTypography, TypographyCell } from './MusicTableCells';
 
-import { hexToRGBA } from '~/lib/utils/hexToRGBA';
+import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 type Music = {
@@ -25,94 +20,48 @@ type Props = {
   data: Music[];
 };
 
-export default function MusicTableSection({ data }: Props) {
-  const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+export default function MusicTableSection({ data }: Readonly<Props>) {
   const columns: ColumnDef<Music>[] = [
     { id: 'expander', header: '', cell: () => null },
     {
       id: 'opus',
-      header: () => (
-        <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
-          Опус
-        </Typography>
-      ),
+      header: () => <TypographyCell value="Опус" variant="customBold16" color={mainHexPallete.blue[800]} />,
       cell: () => null,
       meta: {
         groupLabelContentFactory: (items: Music[]) => (
-          <Typography variant="customItalic16" color={mainHexPallete.blue[800]}>
-            {items[0].opus}
-          </Typography>
+          <TypographyCell value={items[0]?.opus} variant="customItalic16" color={mainHexPallete.blue[800]} />
         )
       }
     },
     {
       id: 'play',
       header: '',
-      cell: () => (
-        <Box
-          sx={{
-            visibility: 'hidden',
-            opacity: 0,
-            transition: 'opacity 0.2s ease',
-            '.MuiTableRow-root:hover &': {
-              visibility: 'visible',
-              opacity: 1
-            }
-          }}
-        >
-          <IconButton size="small" type={IconButtonVariant.icon}>
-            <SvgImage src="/icons/play.svg" alt="play" width={24} height={24} />
-          </IconButton>
-        </Box>
-      )
+      cell: () => <HoverPlayIcon />
     },
     {
       accessorKey: 'name',
-      header: () => (
-        <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
-          Назва
-        </Typography>
-      ),
-      cell: (info) => <Typography variant="customMedium16">{info.getValue<string>()}</Typography>,
+      header: () => <TypographyCell value="Назва" variant="customBold16" color={mainHexPallete.blue[800]} />,
+      cell: (info) => <TypographyCell value={info.getValue<string>()} />,
       meta: {
         groupLabelContentFactory: (items: Music[]) => (
-          <TableCell colSpan={3} sx={{ px: 0, py: 2, borderBottom: `2px solid ${borderWithOpacity}` }}>
-            <Typography variant="customBold16" fontWeight={600}>
-              {items[0].opusTitle}
-            </Typography>
-          </TableCell>
+          <TableCellWithTypography value={items[0]?.opusTitle} colSpan={3} />
         )
       }
     },
     {
       accessorKey: 'year',
-      header: () => (
-        <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
-          Рік
-        </Typography>
-      ),
-      cell: (info) => <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
+      header: () => <TypographyCell value="Рік" variant="customBold16" color={mainHexPallete.blue[800]} />,
+      cell: (info) => <TypographyCell value={info.getValue<string>()} />
     },
     {
       accessorKey: 'genre',
-      header: () => (
-        <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
-          Жанр
-        </Typography>
-      ),
-      cell: (info) => <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
+      header: () => <TypographyCell value="Жанр" variant="customBold16" color={mainHexPallete.blue[800]} />,
+      cell: (info) => <TypographyCell value={info.getValue<string>()} />
     },
     {
       id: 'actions',
       header: '',
-      cell: () => (
-        <Box display="flex" justifyContent="flex-end" gap={2} pr={5}>
-          <Button variant="outlined">Переглянути ноти</Button>
-          <IconButton size="small" variant={IconButtonColorVariant.Secondary}>
-            <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
-          </IconButton>
-        </Box>
-      )
+      cell: () => <ActionsButtons />
     }
   ];
 

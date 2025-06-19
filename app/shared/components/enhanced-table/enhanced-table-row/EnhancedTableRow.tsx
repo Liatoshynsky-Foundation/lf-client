@@ -8,7 +8,10 @@ interface EnhancedTableRowProps<T extends { id: number }> {
   table: Table<T>;
 }
 
-export default function EnhancedTableRow<T extends { id: number }>({ data, table }: EnhancedTableRowProps<T>) {
+export default function EnhancedTableRow<T extends { id: number }>({
+  data,
+  table
+}: Readonly<EnhancedTableRowProps<T>>) {
   const row = table.getRowModel().rows.find((row) => row.original.id === data.id);
   if (!row) return null;
 

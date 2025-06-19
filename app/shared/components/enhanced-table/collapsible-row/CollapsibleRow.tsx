@@ -17,7 +17,12 @@ interface CollapsibleRowProps<T extends RowData> {
   columns: ColumnDef<T>[];
 }
 
-export function CollapsibleRow<T extends RowData>({ data, collapsed, onToggle, columns }: CollapsibleRowProps<T>) {
+export function CollapsibleRow<T extends RowData>({
+  data,
+  collapsed,
+  onToggle,
+  columns
+}: Readonly<CollapsibleRowProps<T>>) {
   const table = useReactTable({
     data,
     columns,

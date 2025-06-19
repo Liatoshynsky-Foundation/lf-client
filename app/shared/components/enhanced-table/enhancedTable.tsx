@@ -12,18 +12,7 @@ import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
 import TableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
-
-type RowData = {
-  id: number;
-  [key: string]: unknown;
-};
-
-type CollapsibleGroupColumnMeta<T extends RowData> = {
-  isGroupLabelColumn?: boolean;
-  groupLabelContent?: React.ReactNode;
-  groupLabelContentFactory?: (groupItems: T[]) => React.ReactNode;
-  groupCellRenderer?: () => React.ReactNode;
-};
+import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
@@ -43,7 +32,7 @@ export default function EnhancedTable<T extends RowData>({
   groupByKey,
   itemsPerPage = 10,
   tableName
-}: EnhancedTableProps<T>) {
+}: Readonly<EnhancedTableProps<T>>) {
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
 

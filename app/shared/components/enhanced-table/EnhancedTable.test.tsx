@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
-import EnhancedTable from './EnhancedTable';
+import EnhancedTable from '~/components/enhanced-table/EnhancedTable';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
