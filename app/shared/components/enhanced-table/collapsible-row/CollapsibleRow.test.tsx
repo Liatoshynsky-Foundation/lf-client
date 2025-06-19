@@ -29,7 +29,7 @@ jest.mock('../../design-system/all-components/icon-button/IconButton', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ alt }: { alt: string }) => <img alt={alt} data-testid="svg-image" />
+  default: ({ alt }: { alt: string }) => <span data-testid="svg-image" aria-label={alt} />
 }));
 
 const mockData: MockRow[] = [
