@@ -111,7 +111,7 @@ describe('Button Group', () => {
     it('should place the indicator on the default active button if provided', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} />);
       const button2 = screen.getByText('Button 2');
-      const indicator = screen.getByRole('presentation', { hidden: true });
+      const indicator = screen.getByLabelText('indicator');
 
       const computedIndicatorStyle = window.getComputedStyle(indicator);
 
@@ -122,7 +122,7 @@ describe('Button Group', () => {
 
     it('should set indicator style to zero when activeButton is out of range', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={5} />);
-      const indicator = screen.getByRole('presentation', { hidden: true });
+      const indicator = screen.getByLabelText('indicator');
 
       const computedIndicatorStyle = window.getComputedStyle(indicator);
       const computedLeft = parseFloat(computedIndicatorStyle.left);

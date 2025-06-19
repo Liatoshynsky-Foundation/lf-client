@@ -57,7 +57,7 @@ const ButtonGroup = ({
         palette={palette}
         left={indicatorStyle.left}
         width={indicatorStyle.width}
-        role="presentation"
+        aria-label="indicator"
         aria-hidden="true"
       />
       {buttons.map((button, idx) => (
