@@ -3,8 +3,8 @@ import { Mulish, Oswald } from 'next/font/google';
 
 import {
   mainHexPallete,
-  rgbaSwitchColors,
   rgbaMenuItemColors,
+  rgbaSwitchColors,
   rgbaTextFieldColors,
   rgbButtonColors
 } from '~/ds-components/theme/colors';
