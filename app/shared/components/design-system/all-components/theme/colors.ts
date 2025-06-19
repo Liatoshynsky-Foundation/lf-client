@@ -88,3 +88,9 @@ export const rgbaSwitchColors = {
   focusBackground: '#190d0314',
   disabledTrackBackground: '#190d031f'
 };
+
+export const rgbaMenuItemColors = {
+  hoverBg: 'rgba(25, 13, 3, 0.06)',
+  activeBg: 'rgba(25, 13, 3, 0.12)',
+  selectedHoverBg: 'rgba(25, 13, 3, 0.06)'
+};
