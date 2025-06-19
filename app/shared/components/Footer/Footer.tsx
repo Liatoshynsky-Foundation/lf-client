@@ -40,7 +40,7 @@ export default async function Footer() {
 
   return (
     <Box component="footer" sx={styles.footerContainer}>
-      <Box sx={styles.skewedTop}></Box>
+      <Box sx={styles.backgroundBox} />
       <Box sx={styles.footerContent}>
         <Box sx={styles.switcherWrapper}>
           <LanguageSwitcher variant="toggle" />

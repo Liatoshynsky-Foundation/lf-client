@@ -4,6 +4,8 @@ import { Mulish, Oswald } from 'next/font/google';
 import {
   hexButtonGroupColors,
   mainHexPallete,
+  rgbaMenuItemColors,
+  rgbaSwitchColors,
   rgbaTextFieldColors,
   rgbButtonColors
 } from '~/ds-components/theme/colors';
@@ -655,6 +657,75 @@ export const theme = createTheme({
           }
         }
       ]
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          marginTop: '4px',
+          borderRadius: '8px',
+          boxShadow: `
+            0px 4px 8px rgba(0, 0, 0, 0.06),
+            0px 0px 4px rgba(0, 0, 0, 0.04)
+          `
+        }
+      }
+    },
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          color: mainHexPallete.white,
+          '&.Mui-checked': {
+            color: mainHexPallete.yellow[500],
+            '& + .MuiSwitch-track': {
+              backgroundColor: mainHexPallete.yellow[500]
+            },
+            '&:hover': {
+              backgroundColor: rgbaSwitchColors.hoverCheckedBackground
+            },
+            '&.Mui-focusVisible': {
+              backgroundColor: rgbaSwitchColors.focusCheckedBackground
+            }
+          },
+          '&:hover': {
+            backgroundColor: rgbaSwitchColors.hoverBackground
+          },
+          '&.Mui-focusVisible': {
+            backgroundColor: rgbaSwitchColors.focusBackground
+          },
+          '&.Mui-disabled + .MuiSwitch-track': {
+            backgroundColor: rgbaSwitchColors.disabledTrackBackground
+          }
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: '16px',
+          fontFamily: mulish.style.fontFamily,
+          fontWeight: 500,
+          gap: '4px',
+
+          '&.Mui-disabled': {
+            color: mainHexPallete.blue[700],
+            backgroundColor: 'transparent',
+            pointerEvents: 'none'
+          },
+
+          '&:hover': {
+            backgroundColor: rgbaMenuItemColors.hoverBg
+          },
+          '&:active': {
+            backgroundColor: rgbaMenuItemColors.activeBg
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: rgbaMenuItemColors.selectedHoverBg
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'transparent'
+          }
+        }
+      }
     }
   }
 });
