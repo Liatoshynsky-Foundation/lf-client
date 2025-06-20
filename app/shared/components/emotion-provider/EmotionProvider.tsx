@@ -10,7 +10,7 @@ interface EmotionProviderProps {
 }
 
 export default function EmotionProvider({ children }: Readonly<EmotionProviderProps>) {
-  const [{ cache, flush }] = useState(() => {
+  const [emotionState] = useState(() => {
     const cache = createCache({ key: 'css', prepend: true });
     cache.compat = true;
     const prevInsert = cache.insert;
@@ -32,6 +32,8 @@ export default function EmotionProvider({ children }: Readonly<EmotionProviderPr
 
     return { cache, flush };
   });
+
+  const { cache, flush } = emotionState;
 
   useServerInsertedHTML(() => {
     const names = flush();
