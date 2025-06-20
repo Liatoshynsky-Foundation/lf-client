@@ -9,7 +9,7 @@ interface EmotionProviderProps {
   children: React.ReactNode;
 }
 
-export default function EmotionProvider({ children }: EmotionProviderProps) {
+export default function EmotionProvider({ children }: Readonly<EmotionProviderProps>) {
   const [{ cache, flush }] = useState(() => {
     const cache = createCache({ key: 'css', prepend: true });
     cache.compat = true;
