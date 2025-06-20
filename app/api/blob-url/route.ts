@@ -22,5 +22,14 @@ export async function GET(request: Request) {
 
   const { blobName, folderName } = validationResult.value;
   const url = azureStorageService.getBlobUrl(folderName, blobName);
-  return NextResponse.json({ url });
+  const response = await fetch(url);
+  const contentType = response.headers.get('content-type') ?? 'image/jpg';
+  const buffer = await response.arrayBuffer();
+
+  return new NextResponse(Buffer.from(buffer), {
+    headers: {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, max-age=31536000'
+    }
+  });
 }

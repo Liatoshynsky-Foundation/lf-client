@@ -5,8 +5,6 @@ import { styles } from '~/components/FoundationFounders/FoundationTeam/Foundatio
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import PersonCard from '~/ds-components/person-card/PersonCard';
 
-import { azureStorageService } from '~/services/upload';
-
 interface FoundationTeamProps {
   title: string;
 }
@@ -16,7 +14,6 @@ interface Teammate {
   description: string;
   photo: string;
 }
-const iryna = azureStorageService.getBlobUrl('compositions', 'Iryna-Tykova');
 
 const team: Teammate[] = [
   {
@@ -28,7 +25,7 @@ const team: Teammate[] = [
   {
     name: 'Ірина Тукова',
     description: 'Співзасновниця Фундації, музикознавиця, лекторка і викладачка, докторка мистецтвознавства',
-    photo: iryna
+    photo: '/api/blob-url?folderName=compositions&blobName=Iryna-Tykova'
   },
   {
     name: 'Марія Гурська',
