@@ -12,7 +12,7 @@ import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
-import ThemeRegistry from '~/shared/components/emotion-provider/ThemeRegistry';
+import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -57,7 +57,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
         <meta name="emotion-insertion-point" content="" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
-        <ThemeRegistry>
+        <EmotionProvider>
           <NextIntlClientProvider>
             <ThemeProvider>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -98,7 +98,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
               </Box>
             </ThemeProvider>
           </NextIntlClientProvider>
-        </ThemeRegistry>
+        </EmotionProvider>
       </body>
     </html>
   );

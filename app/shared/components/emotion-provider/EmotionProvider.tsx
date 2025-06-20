@@ -1,17 +1,60 @@
 'use client';
 
+import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import createEmotionCache from '~/lib/utils/createEmotionCache';
+import { useServerInsertedHTML } from 'next/navigation';
 import { useState } from 'react';
 
 interface EmotionProviderProps {
   children: React.ReactNode;
 }
 
-const EmotionProvider: React.FC<EmotionProviderProps> = ({ children }) => {
-  const [emotionCache] = useState(() => createEmotionCache());
+export default function EmotionProvider({ children }: EmotionProviderProps) {
+  const [{ cache, flush }] = useState(() => {
+    const cache = createCache({ key: 'css', prepend: true });
+    cache.compat = true;
+    const prevInsert = cache.insert;
+    let inserted: string[] = [];
 
-  return <CacheProvider value={emotionCache}>{children}</CacheProvider>;
-};
+    cache.insert = (...args) => {
+      const serialized = args[1];
+      if (cache.inserted[serialized.name] === undefined) {
+        inserted.push(serialized.name);
+      }
+      return prevInsert(...args);
+    };
 
-export default EmotionProvider;
+    const flush = () => {
+      const prevInserted = inserted;
+      inserted = [];
+      return prevInserted;
+    };
+
+    return { cache, flush };
+  });
+
+  useServerInsertedHTML(() => {
+    const names = flush();
+    let styles = '';
+
+    if (names.length === 0) {
+      return null;
+    }
+
+    for (const name of names) {
+      styles += cache.inserted[name];
+    }
+
+    return (
+      <style
+        key={cache.key}
+        data-emotion={`${cache.key} ${names.join(' ')}`}
+        dangerouslySetInnerHTML={{
+          __html: styles
+        }}
+      />
+    );
+  });
+
+  return <CacheProvider value={cache}>{children}</CacheProvider>;
+}
