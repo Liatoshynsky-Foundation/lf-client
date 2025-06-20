@@ -35,6 +35,7 @@ const ButtonGroup = ({
         setIndicatorStyle({ left: 0, width: 0 });
         return;
       }
+
       const currentButton = buttonRefs.current[activeButton]!;
       const containerRect = containerRef.current.getBoundingClientRect();
       const buttonRect = currentButton.getBoundingClientRect();
@@ -45,9 +46,17 @@ const ButtonGroup = ({
     };
 
     updateIndicator();
-    window.addEventListener('resize', updateIndicator);
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateIndicator();
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     return () => {
-      window.removeEventListener('resize', updateIndicator);
+      resizeObserver.disconnect();
     };
   }, [activeButton, buttons]);
 

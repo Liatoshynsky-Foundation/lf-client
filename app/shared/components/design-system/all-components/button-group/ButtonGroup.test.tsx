@@ -6,40 +6,6 @@ import { hexButtonGroupColors } from '~/ds-components/theme/colors';
 
 import ButtonGroup from './ButtonGroup';
 
-beforeEach(() => {
-  jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
-    const dataLeft: string | undefined =
-      (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetLeft : undefined) ??
-      this.dataset.offsetLeft;
-    const dataWidth: string | undefined =
-      (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetWidth : undefined) ??
-      this.dataset.offsetWidth;
-
-    const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
-    const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
-
-    const params = {
-      x: customLeft,
-      y: 0,
-      left: customLeft,
-      top: 0,
-      right: customLeft + customWidth,
-      bottom: customWidth,
-      width: customWidth,
-      height: 50
-    };
-
-    return {
-      ...params,
-      toJSON: () => params
-    } as DOMRect;
-  });
-});
-
-afterEach(() => {
-  jest.restoreAllMocks();
-});
-
 const buttonClickHandlers = {
   button1Click: jest.fn(),
   button2Click: jest.fn(),
@@ -59,6 +25,59 @@ const mockButtons = [
 ];
 
 describe('Button Group', () => {
+  beforeAll(() => {
+    class MockResizeObserver {
+      callback: ResizeObserverCallback;
+      constructor(callback: ResizeObserverCallback) {
+        this.callback = callback;
+      }
+      observe(_target: Element) {
+        this.callback([], this);
+      }
+      unobserve(_target: Element) {
+        // no-op
+      }
+      disconnect() {
+        // no-op
+      }
+    }
+    global.ResizeObserver = MockResizeObserver;
+  });
+
+  beforeEach(() => {
+    jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+      const dataLeft: string | undefined =
+        (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetLeft : undefined) ??
+        this.dataset.offsetLeft;
+      const dataWidth: string | undefined =
+        (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetWidth : undefined) ??
+        this.dataset.offsetWidth;
+
+      const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
+      const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
+
+      const params = {
+        x: customLeft,
+        y: 0,
+        left: customLeft,
+        top: 0,
+        right: customLeft + customWidth,
+        bottom: customWidth,
+        width: customWidth,
+        height: 50
+      };
+
+      return {
+        ...params,
+        toJSON: () => params
+      } as DOMRect;
+    });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('Default settings', () => {
     beforeEach(() => {
       jest.clearAllMocks();
