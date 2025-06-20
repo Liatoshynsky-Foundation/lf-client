@@ -32,6 +32,12 @@ jest.mock('~/components/our-goals/OurGoals', () => {
   return MockOurGoals;
 });
 
+jest.mock('~/components/what-we-do/WhatWeDo', () => {
+  const MockWhatWeDo = () => <div>What we do</div>;
+  MockWhatWeDo.displayName = 'MockWhatWeDo';
+  return MockWhatWeDo;
+});
+
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
     render(await Home());
@@ -41,5 +47,6 @@ describe('Home component', () => {
     expect(screen.getByText(/Foundation founders/i)).toBeInTheDocument();
     expect(screen.getByText(/About foundation/i)).toBeInTheDocument();
     expect(screen.getByText(/Our goals/i)).toBeInTheDocument();
+    expect(screen.getByText(/What we do/i)).toBeInTheDocument();
   });
 });
