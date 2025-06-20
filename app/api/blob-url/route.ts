@@ -1,0 +1,26 @@
+import { NextResponse } from 'next/server';
+
+import { errorResponse } from '~/utils/apiResponse';
+import { validateWithZod } from '~/utils/validateRequestData';
+
+import { azureStorageService } from '~/services/upload';
+import { blobQuerySchema } from '~/validators/blob.schema';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const validationResult = validateWithZod(
+    {
+      blobName: searchParams.get('blobName'),
+      folderName: searchParams.get('folderName')
+    },
+    blobQuerySchema
+  );
+
+  if (!validationResult.valid) {
+    return errorResponse(validationResult.errors);
+  }
+
+  const { blobName, folderName } = validationResult.value;
+  const url = azureStorageService.getBlobUrl(folderName, blobName);
+  return NextResponse.json({ url });
+}

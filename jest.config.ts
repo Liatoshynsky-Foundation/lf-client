@@ -47,7 +47,9 @@ const config: Config = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest'
   },
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(lodash-es|@azure/(storage-blob|core-rest-pipeline|core-auth|core-http))/)'
+  ],
   setupFilesAfterEnv: ['@testing-library/jest-dom']
 };
 

@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 
 import FoundationTeam from './FoundationTeam';
 
+jest.mock('~/services/upload', () => ({
+  azureStorageService: {
+    getBlobUrl: jest.fn(() => 'https://example.com/fake.jpg')
+  }
+}));
+
 describe('FoundationTeam', () => {
   beforeEach(() => {
     render(<FoundationTeam title="The Lyatoshynsky Foundation Team" />);
