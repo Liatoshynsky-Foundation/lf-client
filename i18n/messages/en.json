@@ -89,5 +89,16 @@
       "data": "29 September 1957",
       "place": "Berlin"
     }
+  },
+  "research": {
+    "title-with-quote": {
+      "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": {
+        "title": "Letter from Borys Lyatoshynsky to Margarita Tsarevych,",
+        "data": "May 4, 1916.",
+        "place": "Saratov"
+      }
+    }
   }
 }
