@@ -21,7 +21,12 @@ const eslintConfig = [
   },
   {
     rules: {
-      'prettier/prettier': ['error'],
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto'
+        }
+      ],
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       indent: ['error', 2],
