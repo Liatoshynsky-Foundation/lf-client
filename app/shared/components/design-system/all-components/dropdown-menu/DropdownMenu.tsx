@@ -2,7 +2,6 @@
 import Menu, { type MenuProps } from '@mui/material/Menu';
 import { ReactNode } from 'react';
 
-import { styles } from './DropdownMenu.style';
 import { PositionEnum } from '~/types/enums/common.enums';
 
 interface DropdownMenuProps extends MenuProps {
@@ -33,7 +32,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       }}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
-      sx={{ ...styles.menu, ...sx }}
+      sx={{ ...sx }}
       {...props}
     >
       {menuList}

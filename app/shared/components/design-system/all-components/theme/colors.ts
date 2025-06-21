@@ -74,3 +74,23 @@ export const rgbButtonColors = {
   secondaryTextHovered: 'rgb(52,41,33)',
   secondaryTextPressed: '#5E554E'
 };
+
+export const rgbaTextFieldColors = {
+  defaultBorderBottom: 'rgba(13, 3, 61, 0.25)',
+  hoveredBorderBottom: 'rgba(13, 3, 61, 0.5)',
+  errorBorderBottom: 'rgba(230, 60, 20, 1)'
+};
+
+export const rgbaSwitchColors = {
+  hoverCheckedBackground: '#fcbd280a',
+  focusCheckedBackground: '#fcbd284d',
+  hoverBackground: '#190d030a',
+  focusBackground: '#190d0314',
+  disabledTrackBackground: '#190d031f'
+};
+
+export const rgbaMenuItemColors = {
+  hoverBg: 'rgba(25, 13, 3, 0.06)',
+  activeBg: 'rgba(25, 13, 3, 0.12)',
+  selectedHoverBg: 'rgba(25, 13, 3, 0.06)'
+};

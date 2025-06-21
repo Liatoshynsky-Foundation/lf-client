@@ -38,6 +38,38 @@
       },
       "mainText": "We are named after Borys Lyatoshynskyi, one of the most influential composers in the history of Ukrainian music, a teacher, innovator, and one of the founders of the modern Ukrainian compositional school.",
       "textImage": "We know that Ukrainian academic music sounds loud and proud, on a par with other European and world cultures."
+    },
+    "ourGoals": {
+      "maintitle": "Our Goals",
+      "titles": {
+        "title1": "Comprehend and Reconceptualize:",
+        "title2": "Preserve Heritage:",
+        "title3": "Promote:",
+        "title4": "Support:"
+      },
+      "descriptions": {
+        "descr1": "We work with archives, scores, documents, and recordings to restore and organize cultural memory.",
+        "descr2": "We help contemporary composers, performers, and researchers realize their projects, find partners, audiences, and listeners.",
+        "descr3": "The Foundation not only preserves but also reconceptualizes — through contemporary performance practice, academic research, and dialogues between generations of musicians.",
+        "descr4": "We strive to share knowledge: for this purpose, we create educational products, lectures, and publications that reveal the richness of Ukrainian music to academic and general audiences."
+      }
+    },
+    "whatAreWeDoing": {
+      "mainTitle": "What are we doing?:",
+      "titlesList": {
+        "title1": "Concerts, festivals, events",
+        "title2": "Educational projects",
+        "title3": "Publishing scores",
+        "title4": "Museum space",
+        "title5": "Collaboration"
+      },
+      "descriptionsList": {
+        "descr1": "We organize concerts, festivals, and events that present the works of Borys Lyatoshynsky and other Ukrainian composers to a wide audience.",
+        "descr2": "We create educational projects that help understand the context of Ukrainian music and its significance in the world.",
+        "descr3": "We publish scores of Ukrainian composers, making them accessible to performers and researchers.",
+        "descr4": "We develop a museum space that preserves the memory of Borys Lyatoshynsky and showcases the history of Ukrainian music.",
+        "descr5": "We collaborate with musicians, researchers, and cultural institutions to promote Ukrainian music on a global scale."
+      }
     }
   },
   "foundation": {

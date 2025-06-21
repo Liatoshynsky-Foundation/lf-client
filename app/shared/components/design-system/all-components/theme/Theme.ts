@@ -1,7 +1,13 @@
 import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
-import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
+import {
+  mainHexPallete,
+  rgbaMenuItemColors,
+  rgbaSwitchColors,
+  rgbaTextFieldColors,
+  rgbButtonColors
+} from '~/ds-components/theme/colors';
 const { palette } = createTheme();
 const { augmentColor } = palette;
 const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
@@ -120,6 +126,14 @@ export const buttonSizeStyles = {
     lineHeight: '155%',
     letterSpacing: '0px'
   }
+};
+
+const textFieldFontStyles = {
+  fontSize: '16px',
+  fontWeight: 500,
+  lineHeight: '150%',
+  letterSpacing: '0px',
+  fontFamily: mulish.style.fontFamily
 };
 
 declare module '@mui/material/styles' {
@@ -482,6 +496,200 @@ export const theme = createTheme({
           style: buttonSizeStyles.large
         }
       ]
+    },
+    MuiInputBase: {
+      defaultProps: {
+        sx: {
+          width: '385px',
+          height: '46px',
+          color: mainHexPallete.blue[800],
+          WebkitTextFillColor: mainHexPallete.blue[800],
+          ...textFieldFontStyles,
+
+          '&:before': {
+            borderBottom: `1px solid ${rgbaTextFieldColors.defaultBorderBottom}`
+          },
+          '&:hover:not(.Mui-disabled):before': {
+            borderBottom: `1px solid ${rgbaTextFieldColors.hoveredBorderBottom}`
+          },
+          '&.Mui-focused:after': {
+            borderBottom: `2px solid ${mainHexPallete.black}`
+          },
+          '&.Mui-error:before': {
+            borderBottom: `2px solid ${rgbaTextFieldColors.errorBorderBottom}`
+          },
+          '&.Mui-error:after': {
+            borderBottom: `2px solid ${rgbaTextFieldColors.errorBorderBottom}`
+          },
+          '&.Mui-error:hover:before': {
+            borderBottom: `2px solid ${rgbaTextFieldColors.errorBorderBottom}`
+          },
+          '&.Mui-disabled:before': {
+            borderBottom: `1px solid ${mainHexPallete.blue[600]}`
+          },
+          '&:not(.Mui-focused):not(.Mui-error):after': {
+            borderBottom: `1px solid ${mainHexPallete.black}`
+          },
+          '&.Mui-disabled .MuiInputBase-input': {
+            color: mainHexPallete.blue[600],
+            WebkitTextFillColor: mainHexPallete.blue[600]
+          },
+          '&.Mui-error .MuiInputBase-input': {
+            color: mainHexPallete.black,
+            WebkitTextFillColor: mainHexPallete.black
+          },
+          '&.Mui-focused .MuiInputBase-input': {
+            color: mainHexPallete.black,
+            WebkitTextFillColor: mainHexPallete.black
+          },
+          '& .MuiInputBase-input': {
+            '&:-webkit-autofill': {
+              WebkitBoxShadow: 'transparent',
+              WebkitTextFillColor: mainHexPallete.black,
+              caretColor: mainHexPallete.black,
+              transition: 'background-color 5000s ease-in-out 0s'
+            }
+          }
+        }
+      }
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        sx: {
+          ...textFieldFontStyles,
+
+          '&:not(.Mui-disabled):hover': {
+            color: mainHexPallete.blue[700],
+            WebkitTextFillColor: mainHexPallete.blue[700]
+          },
+          '&.Mui-focused': {
+            color: mainHexPallete.black,
+            WebkitTextFillColor: mainHexPallete.black
+          },
+          '&.Mui-disabled': {
+            color: mainHexPallete.blue[700],
+            WebkitTextFillColor: mainHexPallete.blue[700]
+          },
+          '&.Mui-error': {
+            color: rgbaTextFieldColors.errorBorderBottom,
+            WebkitTextFillColor: rgbaTextFieldColors.errorBorderBottom
+          }
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      defaultProps: {
+        sx: {
+          width: '280px',
+          height: '48px',
+          borderRadius: '8px',
+          padding: '0 16px',
+          color: mainHexPallete.black,
+          WebkitTextFillColor: mainHexPallete.black,
+          ...textFieldFontStyles,
+
+          '&.MuiOutlinedInput-root': {
+            '& fieldset': {
+              border: `1px solid ${rgbaTextFieldColors.defaultBorderBottom}`
+            },
+            '&:hover fieldset': {
+              border: `1px solid ${rgbaTextFieldColors.hoveredBorderBottom}`
+            },
+            '&.Mui-focused fieldset': {
+              border: `1px solid ${mainHexPallete.black}`
+            },
+            '&.Mui-disabled fieldset': {
+              border: `1px solid ${mainHexPallete.blue[700]}`
+            },
+            '&.Mui-error fieldset': {
+              border: `1px solid ${rgbaTextFieldColors.errorBorderBottom}`
+            }
+          },
+
+          '& .MuiOutlinedInput-input.Mui-disabled': {
+            color: mainHexPallete.blue[700],
+            WebkitTextFillColor: mainHexPallete.blue[700]
+          },
+
+          '& .MuiOutlinedInput-input': {
+            '&:-webkit-autofill': {
+              WebkitBoxShadow: 'transparent',
+              WebkitTextFillColor: mainHexPallete.black,
+              caretColor: mainHexPallete.black,
+              transition: 'background-color 5000s ease-in-out 0s'
+            }
+          }
+        }
+      }
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          marginTop: '4px',
+          borderRadius: '8px',
+          boxShadow: `
+            0px 4px 8px rgba(0, 0, 0, 0.06),
+            0px 0px 4px rgba(0, 0, 0, 0.04)
+          `
+        }
+      }
+    },
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          color: mainHexPallete.white,
+          '&.Mui-checked': {
+            color: mainHexPallete.yellow[500],
+            '& + .MuiSwitch-track': {
+              backgroundColor: mainHexPallete.yellow[500]
+            },
+            '&:hover': {
+              backgroundColor: rgbaSwitchColors.hoverCheckedBackground
+            },
+            '&.Mui-focusVisible': {
+              backgroundColor: rgbaSwitchColors.focusCheckedBackground
+            }
+          },
+          '&:hover': {
+            backgroundColor: rgbaSwitchColors.hoverBackground
+          },
+          '&.Mui-focusVisible': {
+            backgroundColor: rgbaSwitchColors.focusBackground
+          },
+          '&.Mui-disabled + .MuiSwitch-track': {
+            backgroundColor: rgbaSwitchColors.disabledTrackBackground
+          }
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: '16px',
+          fontFamily: mulish.style.fontFamily,
+          fontWeight: 500,
+          gap: '4px',
+
+          '&.Mui-disabled': {
+            color: mainHexPallete.blue[700],
+            backgroundColor: 'transparent',
+            pointerEvents: 'none'
+          },
+
+          '&:hover': {
+            backgroundColor: rgbaMenuItemColors.hoverBg
+          },
+          '&:active': {
+            backgroundColor: rgbaMenuItemColors.activeBg
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: rgbaMenuItemColors.selectedHoverBg
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'transparent'
+          }
+        }
+      }
     }
   }
 });
