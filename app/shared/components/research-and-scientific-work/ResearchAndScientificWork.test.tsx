@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
+import { TitleWithQuoteProps } from '~/components/title-with-quote/TitleWithQuote';
+
 import ResearchAndScientificWork from './ResearchAndScientificWork';
 
 jest.mock('next-intl/server', () => ({
@@ -16,7 +18,7 @@ jest.mock('next-intl/server', () => ({
 }));
 
 jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
-  const MockTitleWithQuote = ({ title, quoteText, sourceText, color }: any) => (
+  const MockTitleWithQuote = ({ title, quoteText, sourceText, color }: TitleWithQuoteProps) => (
     <div data-testid="title-with-quote">
       <div data-testid="title">{title}</div>
       <div data-testid="quote-text">{quoteText}</div>

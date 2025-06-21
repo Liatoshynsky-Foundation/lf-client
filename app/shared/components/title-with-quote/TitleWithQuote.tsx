@@ -5,7 +5,7 @@ import QuoteBlock from '~/components/Quote/Quote';
 import { getStyles } from './TitleWithQuote.styles';
 import { SourceTextItem } from '~/types/types/quoteComponent';
 
-interface TitleWithQuoteProps {
+export interface TitleWithQuoteProps {
   title: string;
   quoteText: string;
   sourceText: SourceTextItem;
