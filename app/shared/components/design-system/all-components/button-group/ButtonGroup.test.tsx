@@ -36,39 +36,39 @@ const mockButtons = [
   </button>
 ];
 
+const mockGetBoundingClientRect = function (this: HTMLElement) {
+  const dataLeft: string | undefined =
+    (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetLeft : undefined) ??
+    this.dataset.offsetLeft;
+  const dataWidth: string | undefined =
+    (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetWidth : undefined) ??
+    this.dataset.offsetWidth;
+
+  const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
+  const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
+
+  const params = {
+    x: customLeft,
+    y: 0,
+    left: customLeft,
+    top: 0,
+    right: customLeft + customWidth,
+    bottom: customWidth,
+    width: customWidth,
+    height: 50
+  };
+
+  return {
+    ...params,
+    toJSON: () => params
+  } as DOMRect;
+};
+
 describe('Button Group', () => {
-  beforeAll(() => {
-    global.ResizeObserver = MockResizeObserver;
-  });
-
   beforeEach(() => {
-    jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
-      const dataLeft: string | undefined =
-        (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetLeft : undefined) ??
-        this.dataset.offsetLeft;
-      const dataWidth: string | undefined =
-        (this.firstChild instanceof HTMLElement ? this.firstChild.dataset.offsetWidth : undefined) ??
-        this.dataset.offsetWidth;
+    global.ResizeObserver = MockResizeObserver;
 
-      const customLeft = dataLeft ? parseFloat(dataLeft) : 0;
-      const customWidth = dataWidth ? parseFloat(dataWidth) : 0;
-
-      const params = {
-        x: customLeft,
-        y: 0,
-        left: customLeft,
-        top: 0,
-        right: customLeft + customWidth,
-        bottom: customWidth,
-        width: customWidth,
-        height: 50
-      };
-
-      return {
-        ...params,
-        toJSON: () => params
-      } as DOMRect;
-    });
+    jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(mockGetBoundingClientRect);
   });
 
   afterEach(() => {
