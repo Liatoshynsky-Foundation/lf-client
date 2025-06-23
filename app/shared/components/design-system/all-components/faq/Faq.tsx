@@ -35,6 +35,7 @@ export const Faq: React.FC<FaqProps> = ({ title, content }) => {
       <AccordionSummary
         expandIcon={
           <div
+            role="button"
             onMouseEnter={handleIconHover(true)}
             onMouseLeave={handleIconHover(false)}
             style={{ display: 'flex', alignItems: 'center' }}

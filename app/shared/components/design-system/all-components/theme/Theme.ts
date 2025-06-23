@@ -754,7 +754,8 @@ export const theme = createTheme({
         root: {
           borderRadius: '24px',
           '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.accordion.expanded
+            backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+            color: accordionColorsRgb.accordion.expanded.color
           }
         }
       }
@@ -772,10 +773,10 @@ export const theme = createTheme({
           paddingBottom: '16px',
           paddingLeft: '24px',
           borderRadius: '24px',
-          backgroundColor: mainHexPallete.brown[100],
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
+          color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor,
-            color: accordionColorsRgb.summary.expanded.color
+            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
           }
         }
       }
@@ -786,7 +787,8 @@ export const theme = createTheme({
           marginLeft: '16px',
           justifyContent: 'space-between',
           paddingRight: '16px',
-          paddingLeft: '24px'
+          paddingLeft: '24px',
+          borderRadius: '24px'
         }
       }
     }

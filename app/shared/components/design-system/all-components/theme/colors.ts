@@ -120,15 +120,16 @@ export const hexCheckboxColors = {
 };
 export const accordionColorsRgb = {
   summary: {
-    backgroundColor: 'rgba(188, 171, 160, 1)',
+    backgroundColor: 'rgba(237, 232, 223, 1)',
+    color: mainHexPallete.black,
     expanded: {
-      backgroundColor: 'rgba(247, 245, 241, 1)',
-      color: 'rgba(110, 90, 81, 1)'
+      backgroundColor: 'rgba(247, 245, 241, 1)'
     }
   },
   accordion: {
     expanded: {
-      backgroundColor: 'rgba(247, 245, 241, 1)'
+      backgroundColor: 'rgba(247, 245, 241, 1)',
+      color: 'rgba(110, 90, 81, 1)'
     }
   }
 };
