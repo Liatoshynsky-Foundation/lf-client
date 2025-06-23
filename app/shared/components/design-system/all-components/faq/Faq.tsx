@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-export interface FAQProps {
+export interface FaqProps {
   title: string;
   content: string;
 }
 
-export const FAQ: React.FC<FAQProps> = ({ title, content }) => {
+export const Faq: React.FC<FaqProps> = ({ title, content }) => {
   const [expanded, setExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -42,8 +42,8 @@ export const FAQ: React.FC<FAQProps> = ({ title, content }) => {
             <SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />
           </div>
         }
-        aria-controls="faq-content"
-        id="faq-header"
+        aria-controls="Faq-content"
+        id="Faq-header"
       >
         <Typography variant="customSemiBold18">{title}</Typography>
       </AccordionSummary>
