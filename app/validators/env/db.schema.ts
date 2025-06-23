@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { envErrors } from '~/constants/errors';
 
-export const envSchema = z
+export const dbSchema = z
   .object({
     MONGO_DB: z
       .string({
@@ -38,21 +38,7 @@ export const envSchema = z
         required_error: envErrors.MONGO_PASSWORD.REQUIRED,
         invalid_type_error: envErrors.MONGO_PASSWORD.INVALID
       })
-      .nonempty(envErrors.MONGO_PASSWORD.EMPTY),
-
-    STORAGE_ACCOUNT: z
-      .string({
-        required_error: envErrors.STORAGE_ACCOUNT.REQUIRED,
-        invalid_type_error: envErrors.STORAGE_ACCOUNT.INVALID
-      })
-      .nonempty(envErrors.STORAGE_ACCOUNT.EMPTY),
-
-    SAS_TOKEN: z
-      .string({
-        required_error: envErrors.SAS_TOKEN.EMPTY,
-        invalid_type_error: envErrors.SAS_TOKEN.EMPTY
-      })
-      .nonempty(envErrors.SAS_TOKEN.EMPTY)
+      .nonempty(envErrors.MONGO_PASSWORD.EMPTY)
   })
   .superRefine((env, ctx) => {
     if (env.MONGO_HOST === 'localhost') return;
@@ -64,14 +50,6 @@ export const envSchema = z
         path: []
       });
     }
-
-    if (!env.STORAGE_ACCOUNT && !env.SAS_TOKEN) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: envErrors.AZURE_CREDENTIALS_REQUIRED,
-        path: []
-      });
-    }
   });
 
-export const env = envSchema.parse(process.env);
+export const env = dbSchema.parse(process.env);

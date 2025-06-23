@@ -25,7 +25,7 @@ const team: Teammate[] = [
   {
     name: 'Ірина Тукова',
     description: 'Співзасновниця Фундації, музикознавиця, лекторка і викладачка, докторка мистецтвознавства',
-    photo: '/api/blob-url?folderName=compositions&blobName=Iryna-Tykova'
+    photo: '/images/foundation-team/Iryna-Tykova.png'
   },
   {
     name: 'Марія Гурська',
