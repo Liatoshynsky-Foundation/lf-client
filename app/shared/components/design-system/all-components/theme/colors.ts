@@ -117,3 +117,17 @@ export const hexCheckboxColors = {
   focusVisibleBg: '#F9F6F3',
   disabledColor: mainHexPallete.blue[200]
 };
+export const accordionColorsRgb = {
+  summary: {
+    backgroundColor: 'rgba(188, 171, 160, 1)',
+    expanded: {
+      backgroundColor: 'rgba(247, 245, 241, 1)',
+      color: 'rgba(110, 90, 81, 1)'
+    }
+  },
+  accordion: {
+    expanded: {
+      backgroundColor: 'rgba(247, 245, 241, 1)'
+    }
+  }
+};
