@@ -2,12 +2,14 @@ import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
 import {
+  hexButtonGroupColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
   rgbaTextFieldColors,
   rgbButtonColors
 } from '~/ds-components/theme/colors';
+
 const { palette } = createTheme();
 const { augmentColor } = palette;
 const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
@@ -621,6 +623,40 @@ export const theme = createTheme({
           }
         }
       }
+    },
+    MuiButtonGroup: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '9999px',
+          padding: '2px',
+          fontFamily: mulish.style.fontFamily,
+          position: 'relative',
+          overflow: 'hidden',
+          width: 'fit-content',
+          border: 'none',
+          lineHeight: '150%'
+        }
+      },
+      variants: [
+        {
+          props: { color: 'primary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.primary.groupBackgroundColor,
+            color: hexButtonGroupColors.primary.buttonTextColor
+          }
+        },
+        {
+          props: { color: 'secondary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.secondary.groupBackgroundColor,
+            color: hexButtonGroupColors.secondary.buttonTextColor
+          }
+        }
+      ]
     },
     MuiMenu: {
       styleOverrides: {

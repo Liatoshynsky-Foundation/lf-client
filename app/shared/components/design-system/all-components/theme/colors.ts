@@ -81,6 +81,21 @@ export const rgbaTextFieldColors = {
   errorBorderBottom: 'rgba(230, 60, 20, 1)'
 };
 
+export const hexButtonGroupColors = {
+  primary: {
+    selectedButtonColor: mainHexPallete.black,
+    selectedButtonTextColor: mainHexPallete.white,
+    groupBackgroundColor: mainHexPallete.blue[50],
+    buttonTextColor: mainHexPallete.black
+  },
+  secondary: {
+    selectedButtonColor: mainHexPallete.white,
+    selectedButtonTextColor: mainHexPallete.black,
+    groupBackgroundColor: mainHexPallete.yellow[500],
+    buttonTextColor: mainHexPallete.black
+  }
+};
+
 export const rgbaSwitchColors = {
   hoverCheckedBackground: '#fcbd280a',
   focusCheckedBackground: '#fcbd284d',
