@@ -1,3 +1,5 @@
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 export const styles = {
   mainContainer: {
     gridColumn: '1 / -1',
@@ -13,7 +15,7 @@ export const styles = {
     marginRight: { xs: '-50vw', sm: 'auto' }
   },
   trapezoid: {
-    background: '#FCBD28',
+    background: mainHexPallete.yellow['500'],
     clipPath: 'polygon( 0% 6%, 100% 0%, 100% 94%, 0% 100%)',
     position: 'absolute',
     width: '100%',
