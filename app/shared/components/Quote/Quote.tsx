@@ -22,8 +22,8 @@ const QuoteBlock = ({
 
   return (
     <Box sx={styles.mainContainer(alignKey)}>
-      <Box>
-        <QuoteImage style={styles.image(quoteIconColor, alignKey)} />
+      <Box sx={styles.image(quoteIconColor, alignKey)}>
+        <QuoteImage />
       </Box>
       <Box sx={styles.textContainer(alignKey)}>
         <Typography sx={styles.mainText(mainTextColor, alignKey)}>{quoteText}</Typography>

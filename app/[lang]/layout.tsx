@@ -79,11 +79,11 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                       gridTemplateColumns: 'repeat(8, 1fr)',
                       paddingLeft: '24px',
                       paddingRight: '24px',
-                      gap: '20px'
+                      columnGap: '20px'
                     },
                     [theme.breakpoints.down('sm')]: {
                       gridTemplateColumns: 'repeat(4, 1fr)',
-                      gap: '16px'
+                      columnGap: '16px'
                     }
                   }}
                 >
