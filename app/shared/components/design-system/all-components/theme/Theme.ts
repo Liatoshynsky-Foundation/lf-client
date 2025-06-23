@@ -2,6 +2,7 @@ import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
 import {
+  accordionColorsRgb,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
@@ -688,6 +689,47 @@ export const theme = createTheme({
           '&.Mui-selected': {
             backgroundColor: 'transparent'
           }
+        }
+      }
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: '24px',
+          '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.accordion.expanded
+          }
+        }
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          width: '742px',
+          height: '60px',
+          marginTop: '16px',
+          marginLeft: '16px',
+          justifyContent: 'space-between',
+          paddingTop: '16px',
+          paddingRight: '16px',
+          paddingBottom: '16px',
+          paddingLeft: '24px',
+          borderRadius: '24px',
+          backgroundColor: mainHexPallete.brown[100],
+          '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor,
+            color: accordionColorsRgb.summary.expanded.color
+          }
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          marginLeft: '16px',
+          justifyContent: 'space-between',
+          paddingRight: '16px',
+          paddingLeft: '24px'
         }
       }
     }
