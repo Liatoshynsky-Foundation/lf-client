@@ -35,7 +35,7 @@ describe('ResearchAndScientificWork', () => {
     jest.clearAllMocks();
   });
 
-  it('renders TitleWithQuote with correct translations', async () => {
+  it('should render TitleWithQuote with correct translations', async () => {
     const component = await ResearchAndScientificWork();
     render(component);
 
@@ -45,7 +45,7 @@ describe('ResearchAndScientificWork', () => {
     expect(screen.getByTestId('source-title')).toHaveTextContent('Лист Бориса Лятошинського');
   });
 
-  it('passes brown color to TitleWithQuote', async () => {
+  it('should pass brown color to TitleWithQuote', async () => {
     const component = await ResearchAndScientificWork();
     render(component);
 

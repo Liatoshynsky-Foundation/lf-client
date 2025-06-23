@@ -23,19 +23,19 @@ const defaultProps = {
 };
 
 describe('TitleWithQuote', () => {
-  it('renders title', () => {
+  it('should render title', () => {
     render(<TitleWithQuote {...defaultProps} />);
 
     expect(screen.getByText('Тестовий заголовок')).toBeInTheDocument();
   });
 
-  it('renders QuoteBlock component', () => {
+  it('should render QuoteBlock component', () => {
     render(<TitleWithQuote {...defaultProps} />);
 
     expect(screen.getByTestId('quote')).toBeInTheDocument();
   });
 
-  it('applies correct color for black', () => {
+  it('should apply correct color for black', () => {
     render(<TitleWithQuote {...defaultProps} color="black" />);
 
     const title = screen.getByText('Тестовий заголовок');
