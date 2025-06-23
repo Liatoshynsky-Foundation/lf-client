@@ -109,6 +109,7 @@ export const rgbaMenuItemColors = {
   activeBg: 'rgba(25, 13, 3, 0.12)',
   selectedHoverBg: 'rgba(25, 13, 3, 0.06)'
 };
+
 export const hexCheckboxColors = {
   iconColor: mainHexPallete.blue[500],
   iconCheckedBg: mainHexPallete.yellow[500],

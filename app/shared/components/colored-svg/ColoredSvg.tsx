@@ -14,7 +14,7 @@ interface SvgProps {
   sx?: SxProps<Theme>;
 }
 
-export const Svg = ({ src, color, alt, width, height, sx }: SvgProps) => {
+export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
   const IconComponent = dynamic(() => import(`~/public/${src}.svg`));
 
   if (!validateSvgColor(color)) {
@@ -29,8 +29,7 @@ export const Svg = ({ src, color, alt, width, height, sx }: SvgProps) => {
     color: color,
     '& svg': {
       width: width ?? '24px',
-      height: height ?? '24px',
-      ...sx
+      height: height ?? '24px'
     }
   };
 
