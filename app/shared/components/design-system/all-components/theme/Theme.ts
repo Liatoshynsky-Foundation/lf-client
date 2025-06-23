@@ -2,8 +2,8 @@ import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
 import {
-  hexCheckboxColors,
   hexButtonGroupColors,
+  hexCheckboxColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
