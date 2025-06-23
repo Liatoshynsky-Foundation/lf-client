@@ -1,5 +1,5 @@
 'use client';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, ButtonBase, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -34,14 +34,17 @@ export const Faq: React.FC<FaqProps> = ({ title, content }) => {
     <Accordion expanded={expanded} onChange={handleToggle} square elevation={0} disableGutters>
       <AccordionSummary
         expandIcon={
-          <div
-            role="button"
+          <ButtonBase
+            disableTouchRipple
+            sx={{
+              all: 'unset',
+              cursor: 'pointer'
+            }}
             onMouseEnter={handleIconHover(true)}
             onMouseLeave={handleIconHover(false)}
-            style={{ display: 'flex', alignItems: 'center' }}
           >
             <SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />
-          </div>
+          </ButtonBase>
         }
         aria-controls="Faq-content"
         id="Faq-header"
