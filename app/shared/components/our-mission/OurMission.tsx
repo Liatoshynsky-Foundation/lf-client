@@ -20,7 +20,7 @@ const OurMission = async () => {
       </Box>
       <Box sx={styles.imagesContainer}>
         <ImageWithCaption
-          src="/api/blob-url?folderName=photos&blobName=our-mission-1"
+          src="/images/our-mission/tetiana-homon-small.jpg"
           alt="Tetiana Homon"
           caption={t('imageCaption')}
           align="left"
@@ -31,7 +31,7 @@ const OurMission = async () => {
           }}
         />
         <ImageWithCaption
-          src="/api/blob-url?folderName=photos&blobName=our-mission-2"
+          src="/images/our-mission/tetiana-homon-big.jpg"
           alt="Tetiana Homon"
           caption={t('imageCaption')}
           sizes={{

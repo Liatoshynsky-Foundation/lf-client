@@ -13,4 +13,3 @@ export const logoSizes = {
 
 export const stateNames = ['DISCONNECTED', 'CONNECTED', 'CONNECTING', 'DISCONNECTING'];
 export const CONTAINER_NAME = 'materials';
-export const AZURE_BLOB_NET = 'blob.core.windows.net';

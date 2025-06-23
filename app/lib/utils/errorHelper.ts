@@ -4,8 +4,12 @@ export const createEnvErrors = (field: string) => ({
   EMPTY: `${field} cannot be empty`
 });
 
-export function createCredentialsErrors(serviceName: string, ...fields: string[]): string {
+export const createBlobErrors = (field: string) => {
+  return `Error during ${field} blob file`;
+};
+
+export const createCredentialsErrors = (serviceName: string, ...fields: string[]): string => {
   const readableFields = fields.length === 1 ? fields[0] : fields.slice(0, -1).join(', ') + ' and ' + fields.at(-1);
 
   return `${readableFields} are required for ${serviceName} connections`;
-}
+};

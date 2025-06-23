@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   }
 
   const { blobName, folderName } = validationResult.value;
-  const url = azureStorageService.getBlobUrl(folderName, blobName);
+  const url = await azureStorageService.getBlobUrl(folderName, blobName);
   const response = await fetch(url);
   const contentType = response.headers.get('content-type') ?? 'image/jpg';
   const buffer = await response.arrayBuffer();

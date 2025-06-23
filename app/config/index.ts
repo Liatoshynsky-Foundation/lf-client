@@ -1,5 +1,4 @@
-import { AZURE_BLOB_NET } from '~/constants';
-import { env } from '~/validators/env.schema';
+import { env } from '~/validators/env/db.schema';
 
 export const getMongoUrl = (): string => {
   const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB, MONGO_HOST, MONGO_PORT } = process.env;
@@ -12,10 +11,3 @@ export const getMongoUrl = (): string => {
 };
 
 export const mongoUrl = getMongoUrl();
-
-export const getAzureBlobStorageUrl = (): string => {
-  const { STORAGE_ACCOUNT, SAS_TOKEN } = env;
-  return `https://${STORAGE_ACCOUNT}.${AZURE_BLOB_NET}/?${SAS_TOKEN}`;
-};
-
-export const azureBlobStorageUrl = getAzureBlobStorageUrl();
