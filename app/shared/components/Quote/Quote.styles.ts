@@ -3,7 +3,7 @@ import type { Align } from '~/types/types/quoteComponent';
 export const quoteSizes = {
   height: { xs: '279px', sm: '293px', md: '315px', lg: '266px', xl: '266px' },
   width: { xs: '240px', sm: '320px', md: '370px', lg: '430px', xl: '456px' },
-  icon: { xs: '50px', sm: '60px' },
+  icon: { xs: '33px', sm: '48px', md: '60px' },
   textGap: { xs: '16px', md: '24px' }
 };
 
@@ -48,11 +48,11 @@ export const styles = {
     alignItems: alignments[align].alignItems,
     width: quoteSizes.width,
     height: quoteSizes.height,
-    gap: '40px'
+    gap: { xs: '32px', md: '40px' }
   }),
   image: (color: keyof typeof quoteColors, align: Align) => ({
     width: quoteSizes.icon,
-    height: '50px',
+    height: 'auto',
     color: quoteColors[color],
     transform: alignments[align].iconTransform
   }),
