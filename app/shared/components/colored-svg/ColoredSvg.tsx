@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, SxProps, Theme } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -11,9 +11,10 @@ interface SvgProps {
   alt: string;
   width?: string;
   height?: string;
+  sx?: SxProps<Theme>;
 }
 
-export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
+export const Svg = ({ src, color, alt, width, height, sx }: SvgProps) => {
   const IconComponent = dynamic(() => import(`~/public/${src}.svg`));
 
   if (!validateSvgColor(color)) {
@@ -28,7 +29,8 @@ export const Svg = ({ src, color, alt, width, height }: SvgProps) => {
     color: color,
     '& svg': {
       width: width ?? '24px',
-      height: height ?? '24px'
+      height: height ?? '24px',
+      ...sx
     }
   };
 
