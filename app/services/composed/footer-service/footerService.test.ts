@@ -1,8 +1,8 @@
 import { Locale } from 'next-intl';
 
-import { createFooterService } from '~/services/footerService';
+import { createFooterService } from '~/services/composed/footer-service/footerService';
 
-describe('footerService with navigationRepository', () => {
+describe('footerService (composed)', () => {
   const mockContactInfo = {
     email: 'test@example.com',
     phone: '+380123456789',
@@ -46,23 +46,21 @@ describe('footerService with navigationRepository', () => {
     }
   ];
 
-  const foundationInfoRepositoryMock = {
+  const foundationInfoServiceMock = {
     getContactInfo: jest.fn().mockResolvedValue(mockContactInfo),
     getBrandingInfo: jest.fn().mockResolvedValue(mockFoundationNameData),
     getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData),
     getPublicInfo: jest.fn().mockResolvedValue(mockPublicInfo)
   };
 
-  const navigationRepositoryMock = {
+  const navigationServiceMock = {
     getNavigation: jest.fn().mockResolvedValue(mockNavigationData)
   };
 
-  const mockDeps = {
-    foundationInfoRepository: foundationInfoRepositoryMock,
-    navigationRepository: navigationRepositoryMock
-  };
-
-  const footerService = createFooterService(mockDeps);
+  const footerService = createFooterService({
+    foundationInfoService: foundationInfoServiceMock,
+    navigationService: navigationServiceMock
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -85,10 +83,16 @@ describe('footerService with navigationRepository', () => {
       },
       navigation: mockNavigationData
     });
+
+    expect(foundationInfoServiceMock.getContactInfo).toHaveBeenCalled();
+    expect(foundationInfoServiceMock.getBrandingInfo).toHaveBeenCalledWith('en');
+    expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
+    expect(foundationInfoServiceMock.getPublicInfo).toHaveBeenCalledWith('en');
+    expect(navigationServiceMock.getNavigation).toHaveBeenCalledWith('en');
   });
 
   it('should return empty socialLinks if not provided', async () => {
-    foundationInfoRepositoryMock.getContactInfo.mockResolvedValueOnce({
+    foundationInfoServiceMock.getContactInfo.mockResolvedValueOnce({
       ...mockContactInfo,
       socialLinks: undefined
     });

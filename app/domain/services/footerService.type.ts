@@ -1,7 +1,7 @@
-import { FoundationInfoRepository } from '../repositories/foundationInfo.repository';
-import { NavigationRepository } from '../repositories/navigation.repository';
+import type { FoundationInfoService } from '~/services/core/foundationInfoService';
+import type { NavigationService } from '~/services/core/navigationService';
 
 export type FooterServiceDeps = {
-  foundationInfoRepository: FoundationInfoRepository;
-  navigationRepository: NavigationRepository;
+  foundationInfoService: FoundationInfoService;
+  navigationService: Pick<NavigationService, 'getNavigation'>;
 };

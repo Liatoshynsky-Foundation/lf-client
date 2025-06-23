@@ -2,14 +2,14 @@ import { Locale } from 'next-intl';
 
 import type { FooterServiceDeps } from '~/domain/services/footerService.type';
 
-export const createFooterService = ({ foundationInfoRepository, navigationRepository }: FooterServiceDeps) => ({
+export const createFooterService = ({ foundationInfoService, navigationService }: FooterServiceDeps) => ({
   async getFooterData(locale: Locale) {
     const [contactInfo, foundationNameData, supportButtonData, publicInfo, navigationData] = await Promise.all([
-      foundationInfoRepository.getContactInfo(),
-      foundationInfoRepository.getBrandingInfo(locale),
-      foundationInfoRepository.getSupportButtonLink(),
-      foundationInfoRepository.getPublicInfo(locale),
-      navigationRepository.getNavigation(locale)
+      foundationInfoService.getContactInfo(),
+      foundationInfoService.getBrandingInfo(locale),
+      foundationInfoService.getSupportButtonLink(),
+      foundationInfoService.getPublicInfo(locale),
+      navigationService.getNavigation(locale)
     ]);
 
     return {

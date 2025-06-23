@@ -1,14 +1,16 @@
 import { type AwilixContainer, createContainer } from 'awilix';
 
+import { registerComposedServices } from './modules/composedServices.module';
+import { registerCoreServices } from './modules/coreService.module';
 import { registerRepositories } from './modules/repositories.module';
-import { registerServices } from './modules/services.module';
 
 let container: AwilixContainer | null = null;
 
 export function createRequestContainer() {
   container ??= createContainer().register({
     ...registerRepositories(),
-    ...registerServices()
+    ...registerCoreServices(),
+    ...registerComposedServices()
   });
 
   return container;

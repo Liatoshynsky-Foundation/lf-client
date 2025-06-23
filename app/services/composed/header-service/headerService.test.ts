@@ -1,8 +1,8 @@
 import { Locale } from 'next-intl';
 
-import { createHeaderService } from '~/services/headerService';
+import { createHeaderService } from '~/services/composed/header-service/headerService';
 
-describe('headerService', () => {
+describe('headerService (composed)', () => {
   const mockNavigationData = [
     {
       title: 'Main',
@@ -17,17 +17,17 @@ describe('headerService', () => {
     supportButtonLink: 'https://donate.com'
   };
 
-  const foundationInfoRepositoryMock = {
+  const foundationInfoServiceMock = {
     getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData)
   };
 
-  const navigationRepositoryMock = {
+  const navigationServiceMock = {
     getNavigation: jest.fn().mockResolvedValue(mockNavigationData)
   };
 
   const headerService = createHeaderService({
-    foundationInfoRepository: foundationInfoRepositoryMock,
-    navigationRepository: navigationRepositoryMock
+    foundationInfoService: foundationInfoServiceMock,
+    navigationService: navigationServiceMock
   });
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('headerService', () => {
       supportButtonLink: mockSupportButtonData.supportButtonLink
     });
 
-    expect(foundationInfoRepositoryMock.getSupportButtonLink).toHaveBeenCalled();
-    expect(navigationRepositoryMock.getNavigation).toHaveBeenCalledWith('en');
+    expect(navigationServiceMock.getNavigation).toHaveBeenCalledWith('en');
+    expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
   });
 });

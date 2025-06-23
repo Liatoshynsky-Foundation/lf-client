@@ -1,7 +1,7 @@
-import { FoundationInfoRepository } from '../repositories/foundationInfo.repository';
-import { NavigationRepository } from '../repositories/navigation.repository';
+import type { FoundationInfoService } from '~/services/core/foundationInfoService';
+import type { NavigationService } from '~/services/core/navigationService';
 
 export type HeaderServiceDeps = {
-  foundationInfoRepository: Pick<FoundationInfoRepository, 'getSupportButtonLink'>;
-  navigationRepository: NavigationRepository;
+  foundationInfoService: Pick<FoundationInfoService, 'getSupportButtonLink'>;
+  navigationService: Pick<NavigationService, 'getNavigation'>;
 };
