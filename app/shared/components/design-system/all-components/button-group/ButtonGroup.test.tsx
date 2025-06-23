@@ -64,10 +64,19 @@ const mockGetBoundingClientRect = function (this: HTMLElement) {
   } as DOMRect;
 };
 
-describe('Button Group', () => {
-  beforeEach(() => {
-    global.ResizeObserver = MockResizeObserver;
+let tempResizeObserver: typeof global.ResizeObserver;
 
+describe('Button Group', () => {
+  beforeAll(() => {
+    tempResizeObserver = global.ResizeObserver;
+    global.ResizeObserver = MockResizeObserver;
+  });
+
+  afterAll(() => {
+    global.ResizeObserver = tempResizeObserver;
+  });
+
+  beforeEach(() => {
     jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(mockGetBoundingClientRect);
   });
 
