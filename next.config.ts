@@ -1,15 +1,14 @@
 import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-import { AZURE_BLOB_NET } from '~/constants';
-const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
+const AZURE_SAS_URL = process.env.AZURE_SAS_URL;
 
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: `${STORAGE_ACCOUNT}.${AZURE_BLOB_NET}`,
+        hostname: `${AZURE_SAS_URL}`,
         port: '',
         pathname: '/**'
       }
