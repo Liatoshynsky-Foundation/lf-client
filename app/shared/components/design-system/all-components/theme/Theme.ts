@@ -4,6 +4,7 @@ import { Mulish, Oswald } from 'next/font/google';
 import {
   accordionColorsRgb,
   hexButtonGroupColors,
+  hexCheckboxColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
@@ -766,6 +767,25 @@ export const theme = createTheme({
           justifyContent: 'space-between',
           paddingRight: '16px',
           paddingLeft: '24px'
+        }
+      }
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: hexCheckboxColors.iconColor,
+          '&.Mui-checked': {
+            color: hexCheckboxColors.iconCheckedBg
+          },
+          '&:hover': {
+            backgroundColor: hexCheckboxColors.hoverBg
+          },
+          '&.Mui-focusVisible': {
+            color: hexCheckboxColors.focusVisibleColor,
+            backgroundColor: hexCheckboxColors.focusVisibleBg
+          },
+          '&.Mui-disabled': {
+            color: hexCheckboxColors.disabledColor
+          }
         }
       }
     }
