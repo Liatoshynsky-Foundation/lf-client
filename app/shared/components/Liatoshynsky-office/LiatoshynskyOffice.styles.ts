@@ -1,7 +1,6 @@
 export const styles = {
   mainContainer: {
     gridColumn: '1 / -1',
-    maxWidth: '1582px',
     width: { xs: '100vw', sm: '100%' },
     display: 'flex',
     justifyContent: 'center',
@@ -9,13 +8,13 @@ export const styles = {
     position: 'relative',
     overflow: 'hidden',
     left: { xs: '50%', sm: '0' },
-    right: { xs: '50%', sm: 'auto' },
+    right: { xs: '50%', sm: '0' },
     marginLeft: { xs: '-50vw', sm: 'auto' },
     marginRight: { xs: '-50vw', sm: 'auto' }
   },
   trapezoid: {
     background: '#FCBD28',
-    clipPath: 'polygon( 0% 2%, 100% 0%, 100% 98%, 0% 100%)',
+    clipPath: 'polygon( 0% 6%, 100% 0%, 100% 94%, 0% 100%)',
     position: 'absolute',
     width: '100%',
     height: '100%'
@@ -34,12 +33,12 @@ export const styles = {
     position: { xs: 'relative', sm: 'absolute' },
     top: { md: '50px' },
     alignSelf: 'flex-end',
-    right: { xs: '30px', sm: '50px', md: '65px', lg: '80px' },
+    right: { xs: '30px', sm: '50px', md: '65px', lg: '80px', xxl: '110px', ultra: '140px' },
     zIndex: 2
   },
   textBlock: {
     position: 'relative',
-    paddingLeft: { xs: '30px', md: '40px', lg: '80px', xl: '130' },
+    paddingLeft: { xs: '30px', md: '40px', lg: '80px', xl: '130px', ultra: '140px' },
     paddingTop: { xs: 0, sm: '260px', md: '200px', lg: '165px' },
     textAlign: 'left'
   },
@@ -64,7 +63,7 @@ export const styles = {
   media: {
     position: { xs: 'relative', sm: 'absolute' },
     bottom: { xs: '45px', sm: '120px', md: '105px', lg: '145px', xl: '130px', xxl: '105px' },
-    right: { xs: 'auto', sm: '30px', md: '50px', lg: '80px', xxl: '175px' },
+    right: { xs: 'auto', sm: '30px', md: '50px', lg: '80px', xxl: '160px', ultra: '340px' },
     alignSelf: 'center'
   }
 };
