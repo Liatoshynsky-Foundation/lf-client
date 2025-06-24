@@ -3,6 +3,7 @@ import { Mulish, Oswald } from 'next/font/google';
 
 import {
   hexButtonGroupColors,
+  hexCheckboxColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
@@ -723,6 +724,26 @@ export const theme = createTheme({
           },
           '&.Mui-selected': {
             backgroundColor: 'transparent'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: hexCheckboxColors.iconColor,
+          '&.Mui-checked': {
+            color: hexCheckboxColors.iconCheckedBg
+          },
+          '&:hover': {
+            backgroundColor: hexCheckboxColors.hoverBg
+          },
+          '&.Mui-focusVisible': {
+            color: hexCheckboxColors.focusVisibleColor,
+            backgroundColor: hexCheckboxColors.focusVisibleBg
+          },
+          '&.Mui-disabled': {
+            color: hexCheckboxColors.disabledColor
           }
         }
       }
