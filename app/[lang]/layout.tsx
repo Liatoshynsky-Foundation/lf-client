@@ -65,15 +65,12 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                 <ColumnGuides />
                 <Box
                   sx={{
-                    paddingTop: '20px',
-                    paddingBottom: '20px',
+                    padding: '20px 72px',
                     height: '100vh',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(12, 1fr)',
                     columnGap: '40px',
                     maxWidth: '1920px ',
-                    paddingLeft: '72px ',
-                    paddingRight: '72px ',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%',
