@@ -1,5 +1,5 @@
 import '../globals.css';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -12,6 +12,7 @@ import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
+import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 
 const geistSans = Geist({
@@ -60,29 +61,30 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
         <EmotionProvider>
           <NextIntlClientProvider>
             <ThemeProvider>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Container
+              <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <ColumnGuides />
+                <Box
                   sx={{
-                    padding: '20px',
+                    padding: '20px 72px',
                     height: '100vh',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(12, 1fr)',
                     columnGap: '40px',
-                    maxWidth: '1920px !important',
-                    paddingLeft: '72px',
-                    paddingRight: '72px',
+                    maxWidth: '1920px ',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%',
                     flex: '1',
                     [theme.breakpoints.down('md')]: {
                       gridTemplateColumns: 'repeat(8, 1fr)',
-                      paddingLeft: '24px',
-                      paddingRight: '24px',
+                      paddingLeft: '56px',
+                      paddingRight: '56px',
                       columnGap: '20px'
                     },
                     [theme.breakpoints.down('sm')]: {
                       gridTemplateColumns: 'repeat(4, 1fr)',
+                      paddingLeft: '24px',
+                      paddingRight: '24px',
                       columnGap: '16px'
                     }
                   }}
@@ -94,7 +96,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   <Box sx={{ gridColumn: '1 / -1' }}>
                     <Footer />
                   </Box>
-                </Container>
+                </Box>
               </Box>
             </ThemeProvider>
           </NextIntlClientProvider>
