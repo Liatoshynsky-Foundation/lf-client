@@ -1,5 +1,5 @@
 'use client';
-import { Accordion, AccordionDetails, AccordionSummary, ButtonBase, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -10,17 +10,20 @@ export interface FaqProps {
 }
 
 export const Faq: React.FC<FaqProps> = ({ title, content }) => {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   const [expanded, setExpanded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleToggle = () => {
     setExpanded((prev: boolean) => !prev);
-  };
-
-  const handleIconHover = (hovering: boolean) => () => {
-    if (!expanded) {
-      setIsHovered(hovering);
-    }
   };
 
   const getIconSrc = () => {
@@ -31,29 +34,21 @@ export const Faq: React.FC<FaqProps> = ({ title, content }) => {
     }
   };
   return (
-    <Accordion expanded={expanded} onChange={handleToggle} square elevation={0} disableGutters>
-      <AccordionSummary
-        expandIcon={
-          <ButtonBase
-            disableTouchRipple
-            sx={{
-              all: 'unset',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={handleIconHover(true)}
-            onMouseLeave={handleIconHover(false)}
-          >
-            <SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />
-          </ButtonBase>
-        }
-        aria-controls="Faq-content"
-        id="Faq-header"
-      >
-        <Typography variant="customSemiBold18">{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography variant="customMedium18">{content}</Typography>
-      </AccordionDetails>
-    </Accordion>
+    <div style={{ width: 800 }}>
+      <Accordion expanded={expanded} onChange={handleToggle} square elevation={0} disableGutters>
+        <AccordionSummary
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          expandIcon={<SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />}
+          aria-controls="Faq-content"
+          id="Faq-header"
+        >
+          <Typography variant="customSemiBold18">{title}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="customMedium18">{content}</Typography>
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 };

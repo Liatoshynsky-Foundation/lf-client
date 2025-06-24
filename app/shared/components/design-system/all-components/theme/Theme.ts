@@ -753,42 +753,50 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '24px',
+          width: '100%',
+          maxWidth: '742px',
+          marginTop: '16px',
+          marginLeft: '16px',
+          boxShadow: 'none',
+          transition: 'all 0.3s ease',
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
+          color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
             backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
             color: accordionColorsRgb.accordion.expanded.color
           }
         }
+      },
+      defaultProps: {
+        square: true,
+        disableGutters: true,
+        elevation: 0
       }
     },
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          width: '742px',
-          height: '60px',
-          marginTop: '16px',
-          marginLeft: '16px',
-          justifyContent: 'space-between',
-          paddingTop: '16px',
-          paddingRight: '16px',
-          paddingBottom: '16px',
-          paddingLeft: '24px',
+          minHeight: '60px',
           borderRadius: '24px',
+          padding: '16px 16px 16px 24px',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
             backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
           }
+        },
+        content: {
+          margin: 0
         }
       }
     },
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          marginLeft: '16px',
-          justifyContent: 'space-between',
-          paddingRight: '16px',
-          paddingLeft: '24px',
-          borderRadius: '24px'
+          padding: '16px 16px 16px 24px',
+          borderRadius: '0 0 24px 24px',
+          backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+          color: accordionColorsRgb.accordion.expanded.color
         }
       }
     }
