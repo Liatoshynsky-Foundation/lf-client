@@ -2,7 +2,11 @@ import { render, screen } from '@testing-library/react';
 
 import Work from './page';
 
-jest.mock('~/components/liatoshynsky-work/LiatoshynskyWork', () => {
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key)
+}));
+
+jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
   const MockLiatoshynskyWork = () => <div>Liatoshynksy work</div>;
   MockLiatoshynskyWork.displayName = 'MockLiatoshynskyWork';
   return MockLiatoshynskyWork;
