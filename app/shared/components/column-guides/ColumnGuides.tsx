@@ -13,9 +13,23 @@ export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGui
   const isSm = useMediaQuery(theme.breakpoints.down('sm'));
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
 
-  const layout = isSm ? 4 : isMd ? 8 : 12;
-  const gap = isSm ? 16 : isMd ? 20 : 40;
-  const paddingX = isSm ? 24 : isMd ? 56 : 72;
+  let layout;
+  let gap;
+  let paddingX;
+
+  if (isSm) {
+    layout = 4;
+    gap = 16;
+    paddingX = 24;
+  } else if (isMd) {
+    layout = 8;
+    gap = 20;
+    paddingX = 56;
+  } else {
+    layout = 12;
+    gap = 40;
+    paddingX = 72;
+  }
 
   const columnsMap: Record<number, { col: number; align: 'start' | 'end' }[]> = {
     12: [
