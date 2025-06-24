@@ -64,7 +64,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
               <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
                 <ColumnGuides />
                 <Box
-                  id="column-guides-container"
                   sx={{
                     paddingTop: '20px',
                     paddingBottom: '20px',

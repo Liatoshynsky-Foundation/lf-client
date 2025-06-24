@@ -12,7 +12,7 @@ const FoundationFounders = async () => {
   const t = await getTranslations('foundation');
 
   return (
-    <Box id="foundation-founders" sx={styles.container}>
+    <Box sx={styles.container}>
       <ColumnGuides lineColor="rgba(252, 252, 252, 1)" />
       <Box sx={styles.contentContainer}>
         <FoundationWasCreated title={t('foundationWasCreated')} description={t('foundationWasCreatedDescription')} />
