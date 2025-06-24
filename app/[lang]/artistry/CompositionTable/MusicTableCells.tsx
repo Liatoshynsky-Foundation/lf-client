@@ -1,5 +1,3 @@
-'use client';
-
 import { Box, TableCell, Typography } from '@mui/material';
 import type { CellContext } from '@tanstack/react-table';
 

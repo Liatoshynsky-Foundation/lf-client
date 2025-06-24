@@ -1,6 +1,6 @@
 import { SxProps, Theme } from '@mui/material';
 
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 

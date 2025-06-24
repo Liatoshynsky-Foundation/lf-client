@@ -5,9 +5,9 @@ import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
+import Button from '~/ds-components/button/Button';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
-import Button from '../design-system/all-components/button/Button';
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
 import TableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';

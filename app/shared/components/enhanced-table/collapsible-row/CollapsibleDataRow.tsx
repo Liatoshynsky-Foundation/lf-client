@@ -1,5 +1,3 @@
-'use client';
-
 import { Box, Collapse, TableCell, TableRow } from '@mui/material';
 import { flexRender, Row } from '@tanstack/react-table';
 import React from 'react';

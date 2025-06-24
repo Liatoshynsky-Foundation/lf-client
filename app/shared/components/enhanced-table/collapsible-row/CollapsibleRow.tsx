@@ -4,12 +4,14 @@ import { Box, TableCell, TableRow } from '@mui/material';
 import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import React from 'react';
 
-import { IconButton } from '../../design-system/all-components/icon-button/IconButton';
-import { SvgImage } from '../../svg-image/SvgImage';
+import { IconButton } from '~/ds-components/icon-button/IconButton';
+
 import { CollapsibleDataRow } from './CollapsibleDataRow';
 import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
+
+import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
