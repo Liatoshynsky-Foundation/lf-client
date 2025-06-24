@@ -1,17 +1,14 @@
 'use client';
 
 import { Box, useMediaQuery, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
 
-import { containerSx, dynamicLineBaseSx, lineSx } from './ColumnGuides.style';
+import { lineStyle } from './ColumnGuides.style';
 
-interface SectionColor {
-  startY: number;
-  endY: number;
-  color: string;
+interface ColumnGuidesProps {
+  lineColor?: string;
 }
 
-export const ColumnGuides = () => {
+export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGuidesProps) => {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down('sm'));
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -47,93 +44,52 @@ export const ColumnGuides = () => {
 
   const columns = columnsMap[layout];
 
-  const [dynamicSections, setDynamicSections] = useState<SectionColor[]>([]);
-
-  useEffect(() => {
-    const el = document.getElementById('foundation-founders');
-    const container = document.getElementById('column-guides-container');
-
-    if (!el || !container) {
-      setDynamicSections([]);
-      return;
-    }
-
-    const relativeTop = el.offsetTop - container.offsetTop;
-
-    setDynamicSections([
-      {
-        startY: relativeTop,
-        endY: relativeTop + el.offsetHeight,
-        color: 'rgba(252, 252, 252, 1)'
-      }
-    ]);
-  }, [layout, isMd, isSm]);
-
-  const allSections = [...dynamicSections];
-
   const grouped: Record<number, ('start' | 'end')[]> = {};
   columns.forEach(({ col, align }) => {
-    if (!grouped[col]) {
-      grouped[col] = [];
-    }
-
-    if (!grouped[col].includes(align)) {
-      grouped[col].push(align);
-    }
+    if (!grouped[col]) grouped[col] = [];
+    if (!grouped[col].includes(align)) grouped[col].push(align);
   });
 
   return (
     <Box
-      id="column-guides-container"
+      aria-hidden
       sx={{
-        ...containerSx,
-        left: `${paddingX}px`,
-        right: `${paddingX}px`,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: paddingX,
+        right: paddingX,
+        display: 'grid',
         gridTemplateColumns: `repeat(${layout}, 1fr)`,
-        gap: `${gap}px`
+        gap: `${gap}px`,
+        pointerEvents: 'none',
+        height: '100%',
+        zIndex: -2
       }}
     >
       {Object.entries(grouped).map(([colStr, aligns]) => {
         const col = Number(colStr);
         return (
-          <Box
-            key={`col-${col}`}
-            sx={{
-              gridColumn: col,
-              position: 'relative'
-            }}
-          >
+          <Box key={`col-${col}`} sx={{ gridColumn: col, position: 'relative' }}>
             {aligns.includes('start') && (
               <Box
                 sx={{
-                  ...lineSx,
-                  left: 0
+                  ...lineStyle,
+                  left: 0,
+                  backgroundColor: lineColor,
+                  border: `1px solid ${lineColor}`
                 }}
               />
             )}
-
             {aligns.includes('end') && (
               <Box
                 sx={{
-                  ...lineSx,
-                  right: 0
+                  ...lineStyle,
+                  right: 0,
+                  backgroundColor: lineColor,
+                  border: `1px solid ${lineColor}`
                 }}
               />
-            )}
-
-            {allSections.map((section, i) =>
-              aligns.map((align) => (
-                <Box
-                  key={`${i}-${align}`}
-                  sx={{
-                    ...dynamicLineBaseSx,
-                    [align === 'start' ? 'left' : 'right']: 0,
-                    top: section.startY,
-                    height: section.endY - section.startY,
-                    backgroundColor: section.color
-                  }}
-                />
-              ))
             )}
           </Box>
         );

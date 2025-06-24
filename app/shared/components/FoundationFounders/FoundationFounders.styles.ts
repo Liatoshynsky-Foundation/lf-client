@@ -5,7 +5,7 @@ export const styles = {
     left: '50%',
     right: '50%',
     marginLeft: '-50vw',
-    zIndex: -1,
+    zIndex: -2,
     marginRight: '-50vw',
     width: '100vw',
     backgroundColor: '#EDE8DF'
