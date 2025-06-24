@@ -70,7 +70,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                     height: '100vh',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(12, 1fr)',
-                    gap: '40px',
+                    columnGap: '40px',
                     maxWidth: '1920px ',
                     paddingLeft: '72px ',
                     paddingRight: '72px ',
