@@ -45,7 +45,7 @@ export const compositionSort = (compositions: Composition[], reverse: boolean = 
   const direction = reverse ? -1 : 1;
 
   const customCompositionSortFunc = (a: Composition, b: Composition): number => {
-    if (!a.opus || !b.opus) {
+    if ((!a.opus || !b.opus) && (a.opus || b.opus)) {
       return (!a.opus ? 1 : -1) * direction;
     }
 

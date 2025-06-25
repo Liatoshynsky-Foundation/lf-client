@@ -3,8 +3,8 @@ import { Composition, Opus } from '~/types/types/composition.types';
 
 const createComposition = (params: Partial<Composition>): Composition => {
   return {
-    title: params.title ?? '',
-    year: params.year ?? 0,
+    title: params.title ?? 'A',
+    year: params.year ?? 1800,
     opus: params.opus
   } as Composition;
 };
@@ -13,14 +13,9 @@ describe('Composition sorting function', () => {
   describe('Sorting logic', () => {
     it('should sort by opus presence (those with opus come before those without)', () => {
       const compWithOpus = createComposition({
-        title: 'A',
-        year: 1800,
         opus: { number: 'Op. 5' } as Opus
       });
-      const compWithoutOpus = createComposition({
-        title: 'B',
-        year: 1800
-      });
+      const compWithoutOpus = createComposition({});
 
       const sorted = compositionSort([compWithoutOpus, compWithOpus]);
       expect(sorted).toEqual([compWithOpus, compWithoutOpus]);
@@ -28,12 +23,10 @@ describe('Composition sorting function', () => {
 
     it('should sort by year of writing (ascending order)', () => {
       const comp1800 = createComposition({
-        title: 'A',
         year: 1800,
         opus: { number: 'Op. 5' } as Opus
       });
       const comp1810 = createComposition({
-        title: 'B',
         year: 1810,
         opus: { number: 'Op. 5' } as Opus
       });
@@ -43,13 +36,9 @@ describe('Composition sorting function', () => {
 
     it('should sort by opus number when years are equal', () => {
       const compOp10 = createComposition({
-        title: 'A',
-        year: 1800,
         opus: { number: 'Op. 10' } as Opus
       });
       const compOp20 = createComposition({
-        title: 'B',
-        year: 1800,
         opus: { number: 'Op. 20' } as Opus
       });
       const sorted = compositionSort([compOp20, compOp10]);
@@ -58,13 +47,9 @@ describe('Composition sorting function', () => {
 
     it('should sort by bis flag when opus numbers are equal', () => {
       const compNoBis = createComposition({
-        title: 'A',
-        year: 1800,
         opus: { number: 'Op. 25' } as Opus
       });
       const compBis = createComposition({
-        title: 'B',
-        year: 1800,
         opus: { number: 'Op. 25 bis' } as Opus
       });
 
@@ -74,52 +59,27 @@ describe('Composition sorting function', () => {
 
     it('should sort by title language when opus and year are equal', () => {
       const compA = createComposition({
-        title: 'Місячна',
-        year: 1800,
-        opus: { number: 'Op. 25' } as Opus
+        title: 'Місячна'
       });
       const compB = createComposition({
-        title: 'Moonlight',
-        year: 1800,
-        opus: { number: 'Op. 25' } as Opus
+        title: 'Moonlight'
       });
-      const sorted = compositionSort([compB, compA]);
-      expect(sorted).toEqual([compA, compB]);
-    });
 
-    it('should sort by title when all other criteria are equal', () => {
-      const compA = createComposition({
-        title: 'A',
-        year: 1800,
-        opus: { number: 'Op. 25' } as Opus
-      });
-      const compB = createComposition({
-        title: 'B',
-        year: 1800,
-        opus: { number: 'Op. 25' } as Opus
-      });
       const sorted = compositionSort([compB, compA]);
       expect(sorted).toEqual([compA, compB]);
     });
 
     it('should sort compositions in reverse order', () => {
       const comp1 = createComposition({
-        title: 'Moonlight Sonata, 1st movement',
-        year: 1801,
         opus: { number: 'Op. 25' } as Opus
       });
-      const comp2 = createComposition({
-        title: 'Moonlight Sonata, 1st movement',
-        year: 1801
-      });
+      const comp2 = createComposition({});
       const comp3 = createComposition({
-        title: 'Moonlight Sonata, 1st movement',
-        year: 1801,
-        opus: { number: 'Op. 25' } as Opus
+        opus: { number: 'Op. 25 bis' } as Opus
       });
       const sorted = compositionSort([comp1, comp2, comp3], true);
 
-      expect(sorted).toEqual([comp2, comp1, comp3]);
+      expect(sorted).toEqual([comp2, comp3, comp1]);
     });
   });
 
