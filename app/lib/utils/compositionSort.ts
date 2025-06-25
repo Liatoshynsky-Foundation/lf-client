@@ -11,17 +11,14 @@ export const compositionSort = (compositions: Composition[], reverse: boolean = 
   const direction = reverse ? -1 : 1;
 
   const customCompositionSortFunc = (a: Composition, b: Composition): number => {
-    // presence of an opus
     if (!a.opus || !b.opus) {
       return (!a.opus ? 1 : -1) * direction;
     }
 
-    // year of writing
     if (a.year !== b.year) {
       return (a.year - b.year) * direction;
     }
 
-    // opus number
     if (a.opus && b.opus) {
       const opusA = parseOpus(a.opus.number);
       const opusB = parseOpus(b.opus.number);
@@ -36,27 +33,23 @@ export const compositionSort = (compositions: Composition[], reverse: boolean = 
         console.log(`Opus A: ${/bis$/.test(a.opus.number)}, Opus B: ${/bis$/.test(b.opus.number)}`);
 
         if (/bis$/.test(a.opus.number)) {
-          // If a is "bis", it comes after b
           return direction;
         }
         if (/bis$/.test(b.opus.number)) {
-          // If b is "bis", it comes after a
           return -direction;
         }
-        return 0; // If both are equal and neither is "bis"
+        return 0;
       }
 
       return (opusA - opusB) * direction;
     }
 
-    // title language
     const aIsLatin = isLatin(a.title);
     const bIsLatin = isLatin(b.title);
     if (aIsLatin !== bIsLatin) {
       return (aIsLatin ? 1 : -1) * direction;
     }
 
-    // alphabetical order
     return a.title.localeCompare(b.title) * direction;
   };
 
