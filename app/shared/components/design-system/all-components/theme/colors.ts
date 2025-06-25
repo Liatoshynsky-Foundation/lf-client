@@ -1,6 +1,7 @@
 export const mainHexPallete = {
   blue: {
     50: '#F9FAFB',
+    75: '#F7F8FC',
     100: '#F0F2FB',
     200: '#D9DCE8',
     300: '#C6C8D3',
