@@ -83,63 +83,61 @@ describe('Composition sorting function', () => {
     });
   });
 
-  describe('Helper functions for sorting', () => {
-    describe('compareOpus', () => {
-      it('should return a negative number when first opus is less than second', () => {
-        expect(compareOpus('Op. 10', 'Op. 20')).toBeLessThan(0);
-      });
-
-      it('should return a positive number when first opus is greater than second', () => {
-        expect(compareOpus('Op. 30', 'Op. 20')).toBeGreaterThan(0);
-      });
-
-      it('should return 0 when opus numbers match exactly', () => {
-        expect(compareOpus('Op. 25', 'Op. 25')).toBe(0);
-      });
-
-      it('should consider the "bis" flag so that an opus with "bis" comes later', () => {
-        expect(compareOpus('Op. 25 bis', 'Op. 25')).toBeGreaterThan(0);
-        expect(compareOpus('Op. 25', 'Op. 25 bis')).toBeLessThan(0);
-      });
-
-      it('should throw an error for invalid opus numbers', () => {
-        expect(() => compareOpus('Op. not a number', 'Op. 25')).toThrow();
-        expect(() => compareOpus('Op. 25', 'Op. not a number')).toThrow();
-      });
+  describe('compareOpus', () => {
+    it('should return a negative number when first opus is less than second', () => {
+      expect(compareOpus('Op. 10', 'Op. 20')).toBeLessThan(0);
     });
 
-    describe('compareLang', () => {
-      it('should return 1 when first string is Latin and second is not', () => {
-        expect(compareLang('Moonlight', 'Місячна')).toBeGreaterThan(0);
-      });
-
-      it('should return -1 when first string is not Latin and second is Latin', () => {
-        expect(compareLang('Місячна', 'Moonlight')).toBeLessThan(0);
-      });
-
-      it('should use localeCompare when both strings are of the same alphabet type', () => {
-        const result = 'Apple'.localeCompare('Banana');
-        expect(compareLang('Apple', 'Banana')).toBe(result);
-      });
+    it('should return a positive number when first opus is greater than second', () => {
+      expect(compareOpus('Op. 30', 'Op. 20')).toBeGreaterThan(0);
     });
 
-    describe('parseOpus', () => {
-      it('should parse opus correctly', () => {
-        expect(parseOpus('Op. 25')).toBe(25);
-        expect(parseOpus('Op. 10')).toBe(10);
-        expect(parseOpus('Op. 100 bis')).toBe(100);
-        expect(parseOpus('Op. not a number')).toBeNull();
-      });
+    it('should return 0 when opus numbers match exactly', () => {
+      expect(compareOpus('Op. 25', 'Op. 25')).toBe(0);
     });
 
-    describe('isLatin', () => {
-      it('should identify Latin text correctly', () => {
-        expect(isLatin('Місячна')).toBe(false);
-        expect(isLatin('Місячна Соната, 1-ший рух')).toBe(false);
-        expect(isLatin('Moonlight')).toBe(true);
-        expect(isLatin('')).toBe(false);
-        expect(isLatin('12345')).toBe(false);
-      });
+    it('should consider the "bis" flag so that an opus with "bis" comes later', () => {
+      expect(compareOpus('Op. 25 bis', 'Op. 25')).toBeGreaterThan(0);
+      expect(compareOpus('Op. 25', 'Op. 25 bis')).toBeLessThan(0);
+    });
+
+    it('should throw an error for invalid opus numbers', () => {
+      expect(() => compareOpus('Op. not a number', 'Op. 25')).toThrow();
+      expect(() => compareOpus('Op. 25', 'Op. not a number')).toThrow();
+    });
+  });
+
+  describe('compareLang', () => {
+    it('should return 1 when first string is Latin and second is not', () => {
+      expect(compareLang('Moonlight', 'Місячна')).toBeGreaterThan(0);
+    });
+
+    it('should return -1 when first string is not Latin and second is Latin', () => {
+      expect(compareLang('Місячна', 'Moonlight')).toBeLessThan(0);
+    });
+
+    it('should use localeCompare when both strings are of the same alphabet type', () => {
+      const result = 'Apple'.localeCompare('Banana');
+      expect(compareLang('Apple', 'Banana')).toBe(result);
+    });
+  });
+
+  describe('parseOpus', () => {
+    it('should parse opus correctly', () => {
+      expect(parseOpus('Op. 25')).toBe(25);
+      expect(parseOpus('Op. 10')).toBe(10);
+      expect(parseOpus('Op. 100 bis')).toBe(100);
+      expect(parseOpus('Op. not a number')).toBeNull();
+    });
+  });
+
+  describe('isLatin', () => {
+    it('should identify Latin text correctly', () => {
+      expect(isLatin('Місячна')).toBe(false);
+      expect(isLatin('Місячна Соната, 1-ший рух')).toBe(false);
+      expect(isLatin('Moonlight')).toBe(true);
+      expect(isLatin('')).toBe(false);
+      expect(isLatin('12345')).toBe(false);
     });
   });
 });
