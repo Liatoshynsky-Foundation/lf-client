@@ -3,8 +3,42 @@ import { Composition } from '~/types/types/composition.types';
 export const isLatin = (text: string): boolean => /[A-Za-z]/.test(text);
 
 export const parseOpus = (opus: string): number | null => {
-  const match = /Op\.\s?(\d+)\s?(bis)?/i.exec(opus);
+  const match = /Op\.\s?(\d+)/i.exec(opus);
   return match ? parseInt(match[1], 10) : null;
+};
+
+export const compareOpus = (a: string, b: string): number => {
+  if (a === b) {
+    return 0;
+  }
+
+  const opusA = parseOpus(a);
+  const opusB = parseOpus(b);
+
+  if (opusA === null || opusB === null) {
+    throw new Error(`Invalid opus number: ${a} or ${b}`);
+  }
+
+  if (opusA === opusB) {
+    if (a.endsWith('bis')) {
+      return 1;
+    }
+    if (b.endsWith('bis')) {
+      return -1;
+    }
+  }
+
+  return opusA - opusB;
+};
+
+export const compareLang = (a: string, b: string): number => {
+  const aIsLatin = isLatin(a);
+  const bIsLatin = isLatin(b);
+  if (aIsLatin !== bIsLatin) {
+    return aIsLatin ? 1 : -1;
+  }
+
+  return a.localeCompare(b);
 };
 
 export const compositionSort = (compositions: Composition[], reverse: boolean = false): Composition[] => {
@@ -20,37 +54,13 @@ export const compositionSort = (compositions: Composition[], reverse: boolean = 
     }
 
     if (a.opus && b.opus) {
-      const opusA = parseOpus(a.opus.number);
-      const opusB = parseOpus(b.opus.number);
-
-      if (opusA === null || opusB === null) {
-        throw new Error(`Invalid opus number: ${a.opus.number} or ${b.opus.number}`);
+      const opusComp = compareOpus(a.opus.number, b.opus.number);
+      if (opusComp !== 0) {
+        return opusComp * direction;
       }
-
-      if (opusA === opusB) {
-        console.log(`Opus numbers are equal: ${opusA} for both compositions.`);
-        console.log(`Comparing opus bis status for: ${a.opus.number} and ${b.opus.number}`);
-        console.log(`Opus A: ${/bis$/.test(a.opus.number)}, Opus B: ${/bis$/.test(b.opus.number)}`);
-
-        if (/bis$/.test(a.opus.number)) {
-          return direction;
-        }
-        if (/bis$/.test(b.opus.number)) {
-          return -direction;
-        }
-        return 0;
-      }
-
-      return (opusA - opusB) * direction;
     }
 
-    const aIsLatin = isLatin(a.title);
-    const bIsLatin = isLatin(b.title);
-    if (aIsLatin !== bIsLatin) {
-      return (aIsLatin ? 1 : -1) * direction;
-    }
-
-    return a.title.localeCompare(b.title) * direction;
+    return compareLang(a.title, b.title) * direction;
   };
 
   return compositions.sort(customCompositionSortFunc);
