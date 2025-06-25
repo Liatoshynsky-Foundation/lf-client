@@ -1,11 +1,12 @@
 'use client';
 
-import { Box, Pagination, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
+import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
@@ -93,6 +94,7 @@ export default function EnhancedTable<T extends RowData>({
     paginatedData: rowsToRender,
     currentPage,
     totalPages,
+    visiblePages,
     handleLoadMore,
     handlePageChange
   } = usePagination({
@@ -143,8 +145,8 @@ export default function EnhancedTable<T extends RowData>({
         <Pagination
           count={totalPages}
           page={currentPage}
+          visiblePages={visiblePages}
           onChange={(_, page) => handlePageChange(page)}
-          color="primary"
         />
       </Box>
     </Box>
