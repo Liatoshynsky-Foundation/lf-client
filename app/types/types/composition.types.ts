@@ -46,6 +46,6 @@ export type Composition = {
   };
   createdAt: string;
   updatedAt: string;
-  opus: Opus;
+  opus?: Opus;
   genres: Genre[];
 };
