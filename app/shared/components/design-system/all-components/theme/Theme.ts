@@ -638,6 +638,8 @@ export const theme = createTheme({
           },
 
           '& .MuiOutlinedInput-input': {
+            padding: 0,
+
             '&:-webkit-autofill': {
               WebkitBoxShadow: 'transparent',
               WebkitTextFillColor: mainHexPallete.black,
@@ -819,6 +821,17 @@ export const theme = createTheme({
           borderRadius: '0 0 24px 24px',
           backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: '2px 0 0',
+          fontSize: '12px',
+          '&.Mui-error': {
+            color: rgbaTextFieldColors.errorBorderBottom
+          }
         }
       }
     }

@@ -112,5 +112,17 @@
         "place": "Saratov"
       }
     }
+  },
+  "filtering": {
+    "year": {
+      "from": "From",
+      "to": "To",
+      "clearFilter": "Clear filter"
+    },
+    "errors": {
+      "minLength": "Year cannot be earlier than {min}",
+      "maxLength": "Year cannot be later than {max}",
+      "minDistance": "The end year cannot be earlier than the start year"
+    }
   }
 }

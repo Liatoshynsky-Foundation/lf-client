@@ -1,5 +1,7 @@
 export const styles = {
-  display: 'inline-block',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   stroke: 'currentColor',
   fill: 'currentColor'
 };
