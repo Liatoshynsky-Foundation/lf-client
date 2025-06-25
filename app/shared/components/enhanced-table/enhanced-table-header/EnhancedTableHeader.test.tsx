@@ -33,13 +33,13 @@ function TableHeaderTestWrapper({ columnWidths }: Readonly<{ columnWidths?: Reco
 }
 
 describe('EnhancedTableHeader', () => {
-  it('renders header row with correct column headers', () => {
+  it('should render header row with correct column headers', () => {
     render(<TableHeaderTestWrapper />);
     expect(screen.getByText('Назва')).toBeInTheDocument();
     expect(screen.getByText('Рік')).toBeInTheDocument();
   });
 
-  it('applies column widths if provided', () => {
+  it('should apply column widths if provided', () => {
     render(<TableHeaderTestWrapper columnWidths={{ name: '120px', year: '80px' }} />);
     const nameCell = screen.getByText('Назва').closest('th');
     const yearCell = screen.getByText('Рік').closest('th');

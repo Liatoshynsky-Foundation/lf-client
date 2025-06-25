@@ -1,18 +1,18 @@
 import { hexToRGBA } from './hexToRGBA';
 
 describe('hexToRGBA', () => {
-  it('converts 6-digit hex color to rgba correctly', () => {
+  it('should convert 6-digit hex color to rgba correctly', () => {
     expect(hexToRGBA('#D9E8FF', 0.4)).toBe('rgba(217, 232, 255, 0.4)');
     expect(hexToRGBA('#000000', 1)).toBe('rgba(0, 0, 0, 1)');
     expect(hexToRGBA('#FFFFFF', 0.5)).toBe('rgba(255, 255, 255, 0.5)');
     expect(hexToRGBA('#FF0000', 0.8)).toBe('rgba(255, 0, 0, 0.8)');
   });
 
-  it('works without # prefix', () => {
+  it('should work without # prefix', () => {
     expect(hexToRGBA('D9E8FF', 0.4)).toBe('rgba(217, 232, 255, 0.4)');
   });
 
-  it('handles edge case of lowercase hex', () => {
+  it('should handle edge case of lowercase hex', () => {
     expect(hexToRGBA('#d9e8ff', 0.4)).toBe('rgba(217, 232, 255, 0.4)');
   });
 });

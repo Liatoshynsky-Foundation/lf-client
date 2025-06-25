@@ -41,7 +41,7 @@ const columns: ColumnDef<TestRow>[] = [
 ];
 
 describe('EnhancedTable', () => {
-  it('renders table with title and visible rows', () => {
+  it('should render table with title and visible rows', () => {
     render(
       <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={1} />
     );
@@ -53,7 +53,7 @@ describe('EnhancedTable', () => {
     expect(rows.length).toBeGreaterThan(0);
   });
 
-  it('loads more items when "Переглянути більше" is clicked', () => {
+  it('should load more items when "Переглянути більше" is clicked', () => {
     render(
       <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={1} />
     );
@@ -67,7 +67,7 @@ describe('EnhancedTable', () => {
     expect(afterRows).toBeGreaterThan(beforeRows);
   });
 
-  it('changes page using pagination', async () => {
+  it('should change page when clicking pagination controls', async () => {
     render(
       <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={2} />
     );
