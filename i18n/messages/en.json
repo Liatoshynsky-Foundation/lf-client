@@ -95,7 +95,18 @@
       "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
       "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
       "sourceText": {
-        "title": "Letter from Borys Lyatoshynsky to Margarita Tsarevych,",
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
+        "data": "May 4, 1916.",
+        "place": "Saratov"
+      }
+    }
+  },
+  "liatoshynskyWork": {
+    "title-with-quote": {
+      "title": "LIaTosHynSKy's WoRK",
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": {
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
         "data": "May 4, 1916.",
         "place": "Saratov"
       }
