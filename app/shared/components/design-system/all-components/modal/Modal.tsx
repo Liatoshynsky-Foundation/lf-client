@@ -14,7 +14,7 @@ interface ModalProps {
   open: boolean;
   handleClose: () => void;
   width?: number;
-  height?: number | undefined;
+  height?: number;
   isBackdrop?: boolean;
   children?: React.ReactNode;
   title: string;
@@ -29,7 +29,7 @@ export const Modal: React.FC<ModalProps> = ({
   open,
   handleClose,
   width = 1080,
-  height,
+  height = undefined,
   isBackdrop = false,
   title,
   subtitle,

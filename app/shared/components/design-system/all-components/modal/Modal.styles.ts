@@ -4,19 +4,25 @@ import { PositionEnum } from '~/types/enums/common.enums';
 
 const titleColor = (backgroundColor: Color) => (backgroundColor === 'white' ? 'black' : 'white');
 
-const verticalPositionStyles = (verticalAlignment: VerticalAlignment) =>
-  verticalAlignment === PositionEnum.Top
-    ? { top: 0, marginTop: '20px' }
-    : verticalAlignment === PositionEnum.Bottom
-      ? { top: 'revert-layer', marginBottom: '20px' }
-      : { top: '35%', my: '0' };
+const verticalPositionStyles = (verticalAlignment: VerticalAlignment) => {
+  if (verticalAlignment === PositionEnum.Top) {
+    return { top: 0, marginTop: '20px' };
+  } else if (verticalAlignment === PositionEnum.Bottom) {
+    return { top: 'revert-layer', marginBottom: '20px' };
+  } else {
+    return { top: '35%', my: '0' };
+  }
+};
 
-const horizontalPositionStyles = (horizontalAlignment: HorizontalAlignment) =>
-  horizontalAlignment === PositionEnum.Left
-    ? { left: 0 }
-    : horizontalAlignment === PositionEnum.Right
-      ? { right: 0 }
-      : { left: '50%', marginLeft: '0', transform: 'translateX(-50%)' };
+const horizontalPositionStyles = (horizontalAlignment: HorizontalAlignment) => {
+  if (horizontalAlignment === PositionEnum.Left) {
+    return { left: 0 };
+  } else if (horizontalAlignment === PositionEnum.Right) {
+    return { right: 0 };
+  } else {
+    return { left: '50%', marginLeft: '0', transform: 'translateX(-50%)' };
+  }
+};
 
 export const style = {
   modal: (
@@ -27,7 +33,7 @@ export const style = {
     horizontalAlignment: HorizontalAlignment
   ) => ({
     width: width,
-    height: height ? height : 'fit-content',
+    height: height ?? 'fit-content',
     backgroundColor: backgroundColor === 'white' ? backgroundColor : mainHexPallete.burgundy[900],
     margin: '50px',
     borderRadius: '32px',
