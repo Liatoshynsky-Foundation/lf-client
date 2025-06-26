@@ -45,6 +45,7 @@ export const Modal: React.FC<ModalProps> = ({
     <MuiModal
       open={open}
       onClose={handleClose}
+      data-testid="modal"
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       hideBackdrop={!isBackdrop}
@@ -53,7 +54,7 @@ export const Modal: React.FC<ModalProps> = ({
       <Box sx={style.content}>
         <Box sx={style.topSection}>
           <Box>
-            <Typography variant={isBigModal ? 'h3' : 'h4'} sx={style.title(backgroundColor)}>
+            <Typography id="modal-modal-title" variant={isBigModal ? 'h3' : 'h4'} sx={style.title(backgroundColor)}>
               {title}
             </Typography>
             {subtitle && (
@@ -77,7 +78,7 @@ export const Modal: React.FC<ModalProps> = ({
             </div>
           </IconButton>
         </Box>
-        {topLine && <Box sx={style.topLine(width)} />}
+        {topLine && <Box data-testid="modal-topline" sx={style.topLine(width)} />}
         <Box sx={style.children}>{children}</Box>
       </Box>
     </MuiModal>

@@ -4,6 +4,20 @@ import { PositionEnum } from '~/types/enums/common.enums';
 
 const titleColor = (backgroundColor: Color) => (backgroundColor === 'white' ? 'black' : 'white');
 
+const verticalPositionStyles = (verticalAlignment: VerticalAlignment) =>
+  verticalAlignment === PositionEnum.Top
+    ? { top: 0, marginTop: '20px' }
+    : verticalAlignment === PositionEnum.Bottom
+      ? { top: 'revert-layer', marginBottom: '20px' }
+      : { top: '35%', my: '0' };
+
+const horizontalPositionStyles = (horizontalAlignment: HorizontalAlignment) =>
+  horizontalAlignment === PositionEnum.Left
+    ? { left: 0 }
+    : horizontalAlignment === PositionEnum.Right
+      ? { right: 0 }
+      : { left: '50%', marginLeft: '0', transform: 'translateX(-50%)' };
+
 export const style = {
   modal: (
     width: number,
@@ -21,16 +35,8 @@ export const style = {
     boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
     '&:focus': { outline: 'none' },
     padding: width > 1000 ? '40px 110px' : '24px 32px',
-    ...(verticalAlignment === PositionEnum.Top
-      ? { top: 0, marginTop: '20px' }
-      : verticalAlignment === PositionEnum.Bottom
-        ? { top: 'revert-layer', marginBottom: '20px' }
-        : { top: '35%', my: '0' }),
-    ...(horizontalAlignment === PositionEnum.Left
-      ? { left: 0 }
-      : horizontalAlignment === PositionEnum.Right
-        ? { right: 0 }
-        : { left: '50%', marginLeft: '0', transform: 'translateX(-50%)' })
+    ...verticalPositionStyles(verticalAlignment),
+    ...horizontalPositionStyles(horizontalAlignment)
   }),
   content: {
     outline: 'none',
