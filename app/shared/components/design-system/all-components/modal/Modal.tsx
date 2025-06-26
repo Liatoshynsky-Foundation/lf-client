@@ -16,6 +16,7 @@ interface ModalProps {
   width?: number;
   height?: number;
   isBackdrop?: boolean;
+  disableScrollLock?: boolean;
   children?: React.ReactNode;
   title: string;
   subtitle?: string;
@@ -31,6 +32,7 @@ export const Modal: React.FC<ModalProps> = ({
   width = 1080,
   height = undefined,
   isBackdrop = false,
+  disableScrollLock = true,
   title,
   subtitle,
   backgroundColor = 'white',
@@ -49,6 +51,7 @@ export const Modal: React.FC<ModalProps> = ({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       hideBackdrop={!isBackdrop}
+      disableScrollLock={disableScrollLock}
       sx={style.modal(width, height, backgroundColor, verticalAlignment, horizontalAlignment)}
     >
       <Box sx={style.content}>
