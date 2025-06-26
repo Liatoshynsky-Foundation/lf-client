@@ -13,7 +13,7 @@ describe('Modal', () => {
     expect(screen.getByText(expectedTitle)).toBeInTheDocument();
   });
 
-  it('should not render', () => {
+  it('should not render if not opened', () => {
     render(<Modal open={false} handleClose={() => {}} title="testModal" />);
     const titleElement = document.getElementById('modal-modal-title');
     expect(titleElement).not.toBeInTheDocument();
@@ -50,26 +50,26 @@ describe('Modal', () => {
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should render title correctly', () => {
+  it('should render title correctly for bigger modals', () => {
     render(<Modal open={true} handleClose={() => {}} title="testModal" />);
     const title = screen.getByRole('heading', { name: /testModal/i });
     expect(title.tagName).toBe('H3');
   });
 
-  it('should render title correctly', () => {
+  it('should render title correctly for smaller modals', () => {
     render(<Modal open={true} handleClose={() => {}} title="testModal" width={500} />);
     const title = screen.getByRole('heading', { name: /testModal/i });
     expect(title.tagName).toBe('H4');
   });
 
-  it('should correct filter based on backgroundColor for burgundy', () => {
+  it('should use correct filter based on backgroundColor for burgundy', () => {
     render(<Modal open={true} handleClose={() => {}} title="testModal" backgroundColor="burgundy" />);
 
     const iconWrapper = screen.getByAltText(/closing modal/i).parentElement;
     expect(iconWrapper).toHaveStyle('filter: brightness(0) invert(1)');
   });
 
-  it('should correct filter based on backgroundColor for white', () => {
+  it('should use correct filter based on backgroundColor for white', () => {
     render(<Modal open={true} handleClose={() => {}} title="testModal" backgroundColor="white" />);
 
     const iconWrapper = screen.getByAltText(/closing modal/i).parentElement;

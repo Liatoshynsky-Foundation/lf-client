@@ -21,13 +21,13 @@ const horizontalPositionStyles = (horizontalAlignment: HorizontalAlignment) =>
 export const style = {
   modal: (
     width: number,
-    height: number,
+    height: number | undefined,
     backgroundColor: Color,
     verticalAlignment: VerticalAlignment,
     horizontalAlignment: HorizontalAlignment
   ) => ({
     width: width,
-    height: height,
+    height: height ? height : 'fit-content',
     backgroundColor: backgroundColor === 'white' ? backgroundColor : mainHexPallete.burgundy[900],
     margin: '50px',
     borderRadius: '32px',

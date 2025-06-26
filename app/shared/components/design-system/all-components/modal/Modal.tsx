@@ -14,7 +14,7 @@ interface ModalProps {
   open: boolean;
   handleClose: () => void;
   width?: number;
-  height?: number;
+  height?: number | undefined;
   isBackdrop?: boolean;
   children?: React.ReactNode;
   title: string;
@@ -29,11 +29,11 @@ export const Modal: React.FC<ModalProps> = ({
   open,
   handleClose,
   width = 1080,
-  height = 400,
+  height,
   isBackdrop = false,
   title,
   subtitle,
-  backgroundColor = 'burgundy',
+  backgroundColor = 'white',
   topLine = false,
   verticalAlignment,
   horizontalAlignment,
