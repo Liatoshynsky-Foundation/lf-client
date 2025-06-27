@@ -3,7 +3,6 @@ export const styles = {
     position: 'relative',
     width: '296px',
     height: '351px',
-    cursor: 'pointer',
     overflow: 'hidden'
   },
   background: {
