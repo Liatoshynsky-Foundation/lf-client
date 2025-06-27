@@ -10,6 +10,7 @@ interface TextCardProps {
 const TextCard: React.FC<TextCardProps> = ({ title, description }) => {
   return (
     <Box sx={styles.card}>
+      <Box sx={styles.background} />
       <Box sx={styles.content}>
         <Typography sx={styles.description}>{description}</Typography>
 

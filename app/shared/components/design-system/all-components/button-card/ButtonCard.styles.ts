@@ -21,9 +21,9 @@ export const styles = {
   },
   content: {
     position: 'relative',
-    margin: '40px 50px',
-    width: '216px',
-    height: '251px',
+    padding: '48px 40px',
+    width: '296px',
+    height: '351px',
     display: 'flex',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',

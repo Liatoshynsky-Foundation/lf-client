@@ -1,20 +1,28 @@
 export const styles = {
   card: {
+    position: 'relative',
     width: '296px',
     height: '351px',
+    cursor: 'pointer',
+    overflow: 'hidden'
+  },
+  background: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: '402px',
+    height: '337px',
     background: 'rgba(237, 232, 223, 1)',
-    transform: 'skewY(-3deg)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    transform: 'translate(-50%, -50%) rotate(-2deg)'
   },
   content: {
-    transform: 'skewY(3deg)',
+    position: 'relative',
     padding: '48px 40px',
     width: '100%',
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    background: 'transparent'
   },
   description: {
     fontFamily: 'Mulish, sans-serif',
