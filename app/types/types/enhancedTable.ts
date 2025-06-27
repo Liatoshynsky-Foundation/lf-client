@@ -8,6 +8,18 @@ export type CollapsibleGroupColumnMeta<T> = {
 };
 
 export type RowData = {
-  id: number;
+  id: string;
   [key: string]: unknown;
+};
+
+export type Music = {
+  id: string;
+  name: string;
+  year: number;
+  opus?: string;
+  opusTitle?: string;
+  genre?: string[];
+  audioAvailable: boolean;
+  sheetAvailable: boolean;
+  songBlobUrl: string;
 };

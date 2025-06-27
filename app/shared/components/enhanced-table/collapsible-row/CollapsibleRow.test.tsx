@@ -6,7 +6,7 @@ import React from 'react';
 import { CollapsibleRow } from './CollapsibleRow';
 
 type MockRow = {
-  id: number;
+  id: string;
   name: string;
   group: string;
 };
@@ -33,8 +33,8 @@ jest.mock('next/image', () => ({
 }));
 
 const mockData: MockRow[] = [
-  { id: 1, name: 'Test 1', group: 'A' },
-  { id: 2, name: 'Test 2', group: 'A' }
+  { id: '1', name: 'Test 1', group: 'A' },
+  { id: '2', name: 'Test 2', group: 'A' }
 ];
 
 const columns: ColumnDef<MockRow>[] = [
@@ -63,7 +63,7 @@ describe('CollapsibleRow', () => {
     render(
       <table>
         <tbody>
-          <CollapsibleRow data={mockData} collapsed={false} onToggle={jest.fn()} columns={columns} />
+          <CollapsibleRow data={mockData} collapsed={false} action={jest.fn()} columns={columns} />
         </tbody>
       </table>
     );
@@ -79,7 +79,7 @@ describe('CollapsibleRow', () => {
     render(
       <table>
         <tbody>
-          <CollapsibleRow data={mockData} collapsed={false} onToggle={onToggle} columns={columns} />
+          <CollapsibleRow data={mockData} collapsed={false} action={onToggle} columns={columns} />
         </tbody>
       </table>
     );
@@ -92,7 +92,7 @@ describe('CollapsibleRow', () => {
     render(
       <table>
         <tbody>
-          <CollapsibleRow data={mockData} collapsed={true} onToggle={jest.fn()} columns={columns} />
+          <CollapsibleRow data={mockData} collapsed={true} action={jest.fn()} columns={columns} />
         </tbody>
       </table>
     );

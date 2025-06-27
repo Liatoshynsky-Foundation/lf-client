@@ -1,14 +1,16 @@
 import { Box } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
+import { getLocale } from 'next-intl/server';
 import React from 'react';
-
-import { musicData } from './CompositionTable/MusicTable.constant';
 import MusicTableSection from './CompositionTable/MusicTableSelection';
-
-import TitleWithQuote from '~/shared/components/title-with-quote/TitleWithQuote';
+import { compositionService } from '~/middleware/composition.service';
+import TitleWithQuote from "~/components/title-with-quote/TitleWithQuote";
 
 export default async function Artistry() {
-  const t = await getTranslations('liatoshynskyArtistry');
+  const locale = await getLocale();
+    const t = await getTranslations('liatoshynskyArtistry');
+
+    const musicData = await compositionService.getDataForArtistryTable(locale);
 
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>

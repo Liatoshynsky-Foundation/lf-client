@@ -124,7 +124,7 @@ export default function EnhancedTable<T extends RowData>({
                   key={`group-${entry.label}`}
                   data={entry.items}
                   collapsed={collapsedGroups[entry.label] ?? false}
-                  onToggle={() => toggleGroupCollapse(entry.label)}
+                  action={() => toggleGroupCollapse(entry.label)}
                   columns={getGroupColumns(columns, entry.items)}
                 />
               ) : (

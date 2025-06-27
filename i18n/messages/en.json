@@ -108,5 +108,16 @@
         "place": "Saratov"
       }
     }
+  },
+  "table": {
+    "columns": {
+      "opus": "Opus",
+      "name": "Name",
+      "year": "Year",
+      "genre": "Genre"
+    },
+    "name": {
+      "composition": "All compositions"
+    }
   }
 }
