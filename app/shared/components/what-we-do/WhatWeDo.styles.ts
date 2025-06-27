@@ -20,12 +20,13 @@ export const styles = {
 
   grid: {
     display: 'grid',
-    gridColumn: { xs: '2 / 4', sm: '4/7', md: '6 / 10', lg: '3 / 11' },
+    gridColumn: { xs: '2 / 4', sm: '4/7', md: '6 / 10', lg: '3 / 12' },
     gridTemplateColumns: {
       xs: '1fr',
       lg: '1fr 1fr 1fr'
     },
-    gap: {
+    gap: '40px',
+    rowGap: {
       xs: '48px',
       md: '56px'
     },
