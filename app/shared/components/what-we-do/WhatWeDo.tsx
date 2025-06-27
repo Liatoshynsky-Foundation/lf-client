@@ -37,7 +37,13 @@ const WhatWeDo = async () => {
       <SectionTitle title={t('mainTitle')} mb={0} />
       <Box sx={styles.grid}>
         {columns.map((columnItems, colIndex) => (
-          <Box key={`${colIndex}-${columnItems}`} sx={styles.column}>
+          <Box
+            key={`${colIndex}-${columnItems}`}
+            sx={{
+              ...styles.column,
+              ...(colIndex === 0 && { alignItems: { lg: 'end' } })
+            }}
+          >
             {columnItems.map((item, itemIndex) => renderWhatWeDo(item, `${colIndex}-${itemIndex}`))}
           </Box>
         ))}
