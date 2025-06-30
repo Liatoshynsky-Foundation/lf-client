@@ -8,9 +8,45 @@ jest.mock('~/components/Liatoshynsky-office/LiatoshynskyOffice', () => {
   return MockLiatoshynskyOffice;
 });
 
+jest.mock('~/components/FoundationFounders/FoundationFounders', () => {
+  const MockFoundationFounders = () => <div>Foundation founders</div>;
+  MockFoundationFounders.displayName = 'MockFoundationFounders';
+  return MockFoundationFounders;
+});
+
+jest.mock('~/components/our-mission/OurMission', () => {
+  const MockOurMission = () => <div>Our mission</div>;
+  MockOurMission.displayName = 'MockOurMission';
+  return MockOurMission;
+});
+
+jest.mock('~/components/main-page-sections/about-foundation/AboutFoundation', () => {
+  const MockAboutFoundation = () => <div>About foundation</div>;
+  MockAboutFoundation.displayName = 'MockAboutFoundation';
+  return MockAboutFoundation;
+});
+
+jest.mock('~/components/our-goals/OurGoals', () => {
+  const MockOurGoals = () => <div>Our goals</div>;
+  MockOurGoals.displayName = 'MockOurGoals';
+  return MockOurGoals;
+});
+
+jest.mock('~/components/what-we-do/WhatWeDo', () => {
+  const MockWhatWeDo = () => <div>What we do</div>;
+  MockWhatWeDo.displayName = 'MockWhatWeDo';
+  return MockWhatWeDo;
+});
+
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
     render(await Home());
+
+    expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
+    expect(screen.getByText(/Foundation founders/i)).toBeInTheDocument();
+    expect(screen.getByText(/About foundation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Our goals/i)).toBeInTheDocument();
+    expect(screen.getByText(/What we do/i)).toBeInTheDocument();
   });
 });

@@ -13,9 +13,9 @@ jest.mock('~/shared/components/design-system/all-components/logo/Logo', () => ({
 }));
 
 const mockImages: OfficeMediaProps['images'] = [
-  { src: '/images/lf-office-2.png', alt: 'Фото 1', styleKey: 'photo1' },
-  { src: '/images/lf-office-1.png', alt: 'Фото 2', styleKey: 'photo2' },
-  { src: '/images/lf-office-3.png', alt: 'Фото 3', styleKey: 'photo3' }
+  { src: '/images/lf-office2.png', alt: 'Фото 1', styleKey: 'photo1' },
+  { src: '/images/lf-office1.png', alt: 'Фото 2', styleKey: 'photo2' },
+  { src: '/images/lf-office3.png', alt: 'Фото 3', styleKey: 'photo3' }
 ];
 
 describe('OfficeMedia component', () => {

@@ -1,7 +1,14 @@
 import { AppTypography } from '~/constants';
 
-export const imageSizes = (isLaptopAndAbove: boolean) => {
-  return isLaptopAndAbove ? { width: 32, height: 30 } : { width: 22, height: 20 };
+export const imageSizes = {
+  width: {
+    xs: 22,
+    md: 32
+  },
+  height: {
+    xs: 20,
+    md: 30
+  }
 };
 
 export const styles = {
@@ -12,6 +19,17 @@ export const styles = {
     alignItems: 'center',
     mb: `${mb ?? 72}px`
   }),
+  image: {
+    position: 'relative',
+    width: {
+      xs: '22px',
+      md: '32px'
+    },
+    height: {
+      xs: '20px',
+      md: '30px'
+    }
+  },
   title: {
     ...AppTypography.oswald28Bold,
     fontSize: { xs: '20px', md: '28px' },

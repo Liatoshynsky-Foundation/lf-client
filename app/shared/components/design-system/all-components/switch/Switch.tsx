@@ -1,8 +1,6 @@
 import { Switch, SwitchProps } from '@mui/material';
 import React from 'react';
 
-import { switchStyles } from './Switch.styles';
-
 interface CustomSwitchProps extends Omit<SwitchProps, 'onChange'> {
   checked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,7 +15,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
   size = 'medium',
   ...props
 }) => {
-  return <Switch sx={switchStyles} checked={checked} onChange={onChange} disabled={disabled} size={size} {...props} />;
+  return <Switch checked={checked} onChange={onChange} disabled={disabled} size={size} {...props} />;
 };
 
 export default CustomSwitch;
