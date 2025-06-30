@@ -168,7 +168,7 @@ jobs:
   docker-build:
     name: Build Docker Container
     runs-on: 'ubuntu-latest'
-    # needs: [ 'run-lint', 'run-tests' ]
+    needs: [ 'run-lint', 'run-tests' ]
 
     steps:
       - name: Checkout repository
