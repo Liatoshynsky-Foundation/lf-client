@@ -104,6 +104,7 @@ const DesktopNav = () => {
 
       {currentDropdown && (
         <DropdownMenu
+          disableScrollLock
           style={styles.dropdownMenu}
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}

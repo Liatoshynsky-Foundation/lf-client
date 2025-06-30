@@ -81,6 +81,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
       </IconButton>
 
       <DropdownMenu
+        disableScrollLock
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
