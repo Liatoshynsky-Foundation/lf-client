@@ -49,6 +49,23 @@
         "descr3": "The Foundation not only preserves but also reconceptualizes — through contemporary performance practice, academic research, and dialogues between generations of musicians.",
         "descr4": "We strive to share knowledge: for this purpose, we create educational products, lectures, and publications that reveal the richness of Ukrainian music to academic and general audiences."
       }
+    },
+    "whatAreWeDoing": {
+      "mainTitle": "What are we doing?:",
+      "titlesList": {
+        "title1": "Concerts, festivals, events",
+        "title2": "Educational projects",
+        "title3": "Publishing scores",
+        "title4": "Museum space",
+        "title5": "Collaboration"
+      },
+      "descriptionsList": {
+        "descr1": "We organize concerts, festivals, and events that present the works of Borys Lyatoshynsky and other Ukrainian composers to a wide audience.",
+        "descr2": "We create educational projects that help understand the context of Ukrainian music and its significance in the world.",
+        "descr3": "We publish scores of Ukrainian composers, making them accessible to performers and researchers.",
+        "descr4": "We develop a museum space that preserves the memory of Borys Lyatoshynsky and showcases the history of Ukrainian music.",
+        "descr5": "We collaborate with musicians, researchers, and cultural institutions to promote Ukrainian music on a global scale."
+      }
     }
   },
   "foundation": {
@@ -59,7 +76,8 @@
   "common": {
     "languageNotFound": "The page is not yet available in this language",
     "pageNotFound": "404 Page not found",
-    "goHome": "return to home"
+    "goHome": "return to home",
+    "viewMore": "View More"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -67,6 +85,28 @@
       "tittle": "Letter from Boris Lyatoshynsky to Margarita Tsarevich",
       "data": "29 September 1957",
       "place": "Berlin"
+    }
+  },
+  "research": {
+    "title-with-quote": {
+      "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": {
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
+        "data": "May 4, 1916.",
+        "place": "Saratov"
+      }
+    }
+  },
+  "liatoshynskyWork": {
+    "title-with-quote": {
+      "title": "LIaTosHynSKy's WoRK",
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": {
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
+        "data": "May 4, 1916.",
+        "place": "Saratov"
+      }
     }
   }
 }
