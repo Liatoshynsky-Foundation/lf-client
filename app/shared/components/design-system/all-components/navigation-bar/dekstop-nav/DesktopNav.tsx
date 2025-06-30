@@ -82,7 +82,7 @@ const DesktopNav = () => {
         />
       </IconButton>
     ) : (
-      <Button key={index} sx={styles.iconButtonSx}>
+      <Button key={`${index}-${item.href}`} sx={styles.iconButtonSx}>
         <Link href={item.href}>{item.label}</Link>
       </Button>
     )
@@ -91,7 +91,7 @@ const DesktopNav = () => {
   const activeButton = activeIndex !== -1 ? activeIndex : undefined;
 
   const menuItems = currentDropdown?.items.map((item, index) => (
-    <Link href={item.href} key={index} passHref>
+    <Link href={item.href} key={`${index}-${item.href}`} passHref>
       <CustomMenuItem sx={styles.menuItem} onClick={closeDropdown}>
         {item.label}
       </CustomMenuItem>

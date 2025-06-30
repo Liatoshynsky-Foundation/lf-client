@@ -16,13 +16,19 @@ interface SvgImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
-  SvgImage: (props: SvgImageProps) => <img {...props} />
+  SvgImage: (props: SvgImageProps) => <img {...props} alt="img" />
 }));
 
 class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe() {
+    return;
+  }
+  unobserve() {
+    return;
+  }
+  disconnect() {
+    return;
+  }
 }
 global.ResizeObserver = ResizeObserver;
 
