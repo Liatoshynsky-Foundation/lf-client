@@ -2,7 +2,6 @@ import type { Locale } from 'next-intl';
 
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
-import { navigationSchema } from '~/validators/navigation.schema';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -25,36 +24,29 @@ describe('navigationRepository', () => {
       {
         title: { uk: 'Головна', en: 'Main' },
         links: [
-          {
-            label: { uk: 'Дім', en: 'Home' },
-            href: '/',
-            visibility: true
-          },
-          {
-            label: { uk: 'Про нас', en: 'About' },
-            href: '/about',
-            visibility: true
-          }
-        ]
+          { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+          { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: false }
+        ],
+        order: 1
       }
     ];
 
     (Navigation.find as jest.Mock).mockReturnValue({
-      lean: jest.fn().mockResolvedValue(mockDocs)
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue(mockDocs)
+      })
     });
 
     const locale: Locale = 'en';
 
     const result = await navigationRepository.getNavigation(locale);
 
-    mockDocs.forEach((doc) => navigationSchema.parse(doc));
-
     expect(result).toEqual([
       {
         title: 'Main',
         links: [
           { label: 'Home', href: '/', visibility: true },
-          { label: 'About', href: '/about', visibility: true }
+          { label: 'About', href: '/about', visibility: false }
         ]
       }
     ]);
@@ -65,23 +57,20 @@ describe('navigationRepository', () => {
   it('should throw if data does not match schema', async () => {
     const invalidDocs = [
       {
-        title: { uk: 'Головна' },
-        links: [
-          {
-            label: { uk: 'Дім', en: 'Home' },
-            href: '/',
-            visibility: true
-          }
-        ]
+        title: { uk: 'Головна' }, // missing "en"
+        links: [{ label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true }],
+        order: 1
       }
     ];
 
     (Navigation.find as jest.Mock).mockReturnValue({
-      lean: jest.fn().mockResolvedValue(invalidDocs)
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue(invalidDocs)
+      })
     });
 
-    const locale: Locale = 'uk';
+    const locale: Locale = 'en';
 
-    await expect(navigationRepository.getNavigation(locale)).rejects.toThrow();
+    await expect(navigationRepository.getNavigation(locale)).rejects.toThrowError();
   });
 });

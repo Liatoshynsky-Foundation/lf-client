@@ -9,7 +9,7 @@ export const navigationRepository: NavigationRepository = {
   async getNavigation(locale: Locale) {
     await dbConnect();
 
-    const navigations = await Navigation.find().lean();
+    const navigations = await Navigation.find().sort({ order: 1 }).lean();
 
     return navigations.map((navigation) => {
       const validated = navigationSchema.parse(navigation);

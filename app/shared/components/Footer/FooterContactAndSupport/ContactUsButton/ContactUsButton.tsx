@@ -11,8 +11,7 @@ const ContactUsButton: React.FC<ContactUsDataProps> = ({ contactLabel }) => {
   return (
     <Button
       size="medium"
-      variant="filled"
-      color="primary"
+      variant="contained"
       label={contactLabel}
       startIcon={<SvgImage alt="Contact Us Button" src="icons/mail-icon.svg" width={24} height={24} />}
     />
