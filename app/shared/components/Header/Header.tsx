@@ -4,8 +4,8 @@ import React from 'react';
 
 import Logo from '~/ds-components/logo/Logo';
 
+import NavigationBar from '../design-system/all-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
-import MiddleContent from './MiddleContent/MiddleContent';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { createRequestContainer } from '~/di/container';
@@ -19,7 +19,7 @@ export default async function Header() {
   return (
     <Box component="header" sx={styles.mainContainer}>
       <Logo />
-      <MiddleContent />
+      <NavigationBar />
       <RightActionsPanel
         supportButtonData={{
           text: t('supportButton'),

@@ -7,10 +7,10 @@ jest.mock('~/ds-components/logo/Logo', () => {
   Logo.displayName = 'Logo';
   return Logo;
 });
-jest.mock('./MiddleContent/MiddleContent', () => {
-  const MiddleContent = () => <div data-testid="middle-content" />;
-  MiddleContent.displayName = 'MiddleContent';
-  return MiddleContent;
+jest.mock('~/ds-components/navigation-bar/NavigationBar', () => {
+  const NavigationBar = () => <div data-testid="navigation-bar" />;
+  NavigationBar.displayName = 'NavigationBar';
+  return NavigationBar;
 });
 jest.mock('./RightActionsPanel/RightActionsPanel', () => {
   const RightActionsPanel = () => <div data-testid="right-actions" />;
@@ -35,7 +35,7 @@ describe('Header', () => {
     render(<Header supportButtonData={mockedSupportButtonData} />);
 
     const logo = screen.getByTestId('logo');
-    const middleContent = screen.getByTestId('middle-content');
+    const middleContent = screen.getByTestId('navigation-bar');
     const rightPanel = screen.getByTestId('right-actions');
 
     expect(logo).toBeInTheDocument();
