@@ -14,6 +14,7 @@ export default async function Home() {
       <AboutFoundation />
       <OurMission />
       <OurGoals />
+      <Compositions />
       <LiatoshynskyOffice />
       <WhatWeDo />
       <FoundationFounders />

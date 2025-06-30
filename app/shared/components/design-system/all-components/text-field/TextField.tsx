@@ -1,8 +1,8 @@
-import { InputAdornment, SxProps, TextField as MuiTextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
+import { SxProps, TextField as MuiTextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
 
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { renderAdornmentIcon } from './render-icon';
 
 const CustomTextField = styled(MuiTextField)({});
 
@@ -11,15 +11,15 @@ type CustomBaseProps = {
   disabled?: boolean;
   value?: string;
   label?: string;
-  startIcon?: string;
-  endIcon?: string;
+  startIcon?: string | React.ReactNode;
+  endIcon?: string | React.ReactNode;
   placeholder?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   sx?: SxProps;
 };
 
-type CustomTextFieldProps = CustomBaseProps & Omit<MuiTextFieldProps, keyof CustomBaseProps>;
+export type CustomTextFieldProps = CustomBaseProps & Omit<MuiTextFieldProps, keyof CustomBaseProps>;
 
 const TextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>(
   (
@@ -42,16 +42,8 @@ const TextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>(
         inputRef={ref}
         slotProps={{
           input: {
-            startAdornment: effectiveStartIcon && (
-              <InputAdornment position="start">
-                <SvgImage src={effectiveStartIcon} alt="start icon" width={24} height={24} />
-              </InputAdornment>
-            ),
-            endAdornment: endIcon && (
-              <InputAdornment position="end">
-                <SvgImage src={endIcon} alt="end icon" width={24} height={24} />
-              </InputAdornment>
-            )
+            startAdornment: renderAdornmentIcon(effectiveStartIcon, 'start'),
+            endAdornment: renderAdornmentIcon(endIcon, 'end')
           }
         }}
         {...props}
