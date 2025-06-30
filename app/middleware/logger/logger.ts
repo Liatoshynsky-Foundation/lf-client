@@ -34,7 +34,7 @@ const logger = createLogger({
 
     new MongoDB({
       level: 'error',
-      db: mongoUrl,
+      db: mongoUrl(),
       collection: 'logger',
       expireAfterSeconds: SEVEN_DAYS_IN_SECONDS,
       format: combine(errors({ stack: true }), timestamp(), json())

@@ -17,7 +17,7 @@ const mockMongoose = (connectImpl = jest.fn()) => {
 
 const mockConfig = (url: string | undefined) => {
   jest.doMock(require.resolve('~/config'), () => ({
-    mongoUrl: url
+    mongoUrl: jest.fn(() => url)
   }));
 };
 
@@ -51,7 +51,7 @@ describe('dbConnect', () => {
 
     const conn = await dbConnect();
 
-    expect(connect).toHaveBeenCalledWith(mongoUrl, { bufferCommands: false });
+    expect(connect).toHaveBeenCalledWith(mongoUrl(), { bufferCommands: false });
     expect(loggerMock.info).toHaveBeenCalledWith('✅ Connected to db');
     expect(conn).toStrictEqual(mockConnection);
 
@@ -98,7 +98,7 @@ describe('dbConnect', () => {
 
     const conn = await dbConnect();
 
-    expect(connect).toHaveBeenCalledWith(mongoUrl, { bufferCommands: false });
+    expect(connect).toHaveBeenCalledWith(mongoUrl(), { bufferCommands: false });
     expect(loggerMock.info).toHaveBeenCalledWith('✅ Connected to db');
     expect(conn).toStrictEqual(fakeMongoose);
 
