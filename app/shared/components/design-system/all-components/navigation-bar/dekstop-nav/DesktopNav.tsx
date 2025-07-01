@@ -94,8 +94,8 @@ const DesktopNav = () => {
     return item.dropdown ? (
       <IconButton
         disableRipple
-        key={`dropdown-${index}`}
-        onClick={(e) => handleDropdownOpen(e, item.label, item.dropdown!, index)}
+        key={`${item.label}-${index}`}
+        onClick={(e) => handleDropdownOpen(e, item.label, item.dropdown, index)}
         sx={styles.iconButtonSx}
         style={styles.iconButtonInline}
       >
@@ -111,14 +111,14 @@ const DesktopNav = () => {
         />
       </IconButton>
     ) : (
-      <Button disableRipple key={`link-${index}`} sx={styles.iconButtonSx}>
+      <Button disableRipple key={`${item.href}-${index}`} sx={styles.iconButtonSx}>
         <Link href={item.href}>{item.label}</Link>
       </Button>
     );
   });
 
   const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
-    <Link href={item.href} key={`menu-item-${index}`} passHref>
+    <Link href={item.href} key={`${item.href}-${index}`} passHref>
       <CustomMenuItem sx={styles.menuItem} onClick={handleDropdownClose}>
         {item.label}
       </CustomMenuItem>
