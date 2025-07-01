@@ -177,6 +177,11 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -f Dockerfile -t be-app .
+          -e MONGO_DB=dummy \
+          -e MONGO_USERNAME=dummy \
+          -e MONGO_PASSWORD=dummy \
+          -e MONGO_HOST=dummy \
+          -e MONGO_PORT=27017
 
       - name: Run MongoDB container
         run: |
@@ -194,6 +199,7 @@ jobs:
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e MONGO_HOST=mongodb \
             -e MONGO_PORT=27017 \
+
             be-app
 
       # - name: API Health Check and Report
