@@ -9,8 +9,9 @@ import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { createRequestContainer } from '~/di/container';
+import { NavLabels } from '~/types/types/navLabels';
 
-export default async function Header() {
+export default async function Header({ navLabels }: { navLabels: NavLabels }) {
   const t = await getTranslations('header');
   const locale = await getLocale();
 
@@ -23,7 +24,7 @@ export default async function Header() {
       </Box>
 
       <Box sx={styles.navigationContainer}>
-        <NavigationBar />
+        <NavigationBar navLabels={navLabels} />
       </Box>
 
       <RightActionsPanel

@@ -30,9 +30,22 @@ const mockedSupportButtonData = {
   link: 'link'
 };
 
+const mockedNavLabels = {
+  liatoshynsky: 'Борис Лятошинський',
+  biography: 'Життєпис',
+  artistry: 'Творчість',
+  research: 'Дослідження та наукові роботи',
+  foundation: 'Фундація',
+  about: 'Про Фундацію',
+  news: 'Новини',
+  media: 'Медіа про нас',
+  archive: 'Кабінет-Архів',
+  collaboration: 'Співпраця'
+};
+
 describe('Header', () => {
   it('should render header with logo', async () => {
-    render(<Header supportButtonData={mockedSupportButtonData} />);
+    render(<Header supportButtonData={mockedSupportButtonData} navLabels={mockedNavLabels} />);
 
     const logo = screen.getByTestId('logo');
     const middleContent = screen.getByTestId('navigation-bar');

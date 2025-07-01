@@ -60,6 +60,19 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
     link: '/support'
   };
 
+  const navLabels = {
+    liatoshynsky: t('navLabels.liatoshynsky'),
+    biography: t('navLabels.biography'),
+    artistry: t('navLabels.artistry'),
+    research: t('navLabels.research'),
+    foundation: t('navLabels.foundation'),
+    about: t('navLabels.foundationHome'),
+    news: t('navLabels.news'),
+    media: t('navLabels.mediaAboutUs'),
+    archive: t('navLabels.archive'),
+    collaboration: t('navLabels.collaboration')
+  };
+
   return (
     <html lang={lang}>
       <head>
@@ -98,7 +111,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   }}
                 >
                   <Box sx={{ gridColumn: '1 / -1' }}>
-                    <Header supportButtonData={supportButtonData} />
+                    <Header supportButtonData={supportButtonData} navLabels={navLabels} />
                   </Box>
                   <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
                   <Box sx={{ gridColumn: '1 / -1' }}>

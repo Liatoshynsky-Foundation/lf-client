@@ -9,6 +9,7 @@ import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 import { IconButton } from '../../icon-button/IconButton';
 import { styles } from './DesktopNav.styles';
 import { ROUTES } from '~/constants/routes';
+import { NavLabels } from '~/types/types/navLabels';
 
 import { usePathname } from '~/i18n/navigation';
 import ChevronDown from '~/public/icons/chevron-down.svg';
@@ -20,28 +21,28 @@ export interface DropdownItem {
   href: string;
 }
 
-const NAV_ITEMS = [
-  {
-    label: 'Борис Лятошинський',
-    dropdown: [
-      { label: 'Життєпис', href: ROUTES.BIOGRAPHY },
-      { label: 'Творчість', href: ROUTES.ARTISTRY },
-      { label: 'Дослідження та наукові роботи', href: ROUTES.RESEARCH }
-    ]
-  },
-  {
-    label: 'Фундація',
-    dropdown: [
-      { label: 'Про фундацію', href: ROUTES.FOUNDATION_HOME },
-      { label: 'Новини', href: ROUTES.NEWS },
-      { label: 'ЗМІ про нас', href: ROUTES.MEDIA_ABOUT_US }
-    ]
-  },
-  { label: 'Кабінет-Архів', href: ROUTES.ARCHIVE },
-  { label: 'Співпраця', href: ROUTES.COLLABORATION }
-];
+const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
+  const NAV_ITEMS = [
+    {
+      label: navLabels.liatoshynsky,
+      dropdown: [
+        { label: navLabels.biography, href: ROUTES.BIOGRAPHY },
+        { label: navLabels.artistry, href: ROUTES.ARTISTRY },
+        { label: navLabels.research, href: ROUTES.RESEARCH }
+      ]
+    },
+    {
+      label: navLabels.foundation,
+      dropdown: [
+        { label: navLabels.about, href: ROUTES.FOUNDATION_HOME },
+        { label: navLabels.news, href: ROUTES.NEWS },
+        { label: navLabels.media, href: ROUTES.MEDIA_ABOUT_US }
+      ]
+    },
+    { label: navLabels.archive, href: ROUTES.ARCHIVE },
+    { label: navLabels.collaboration, href: ROUTES.COLLABORATION }
+  ];
 
-const DesktopNav = () => {
   const pathname = usePathname();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
