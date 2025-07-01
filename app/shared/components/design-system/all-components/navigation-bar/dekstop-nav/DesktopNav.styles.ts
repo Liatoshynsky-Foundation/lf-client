@@ -1,7 +1,10 @@
 export const styles = {
   iconButtonSx: {
-    ':hover': {
-      background: 'none'
+    background: 'none',
+    boxShadow: 'none',
+    ':hover, :focus, :active': {
+      background: 'none',
+      boxShadow: 'none'
     }
   },
   menuItem: {
@@ -11,10 +14,13 @@ export const styles = {
   },
   iconButtonInline: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center'
   },
   dropdownMenu: {
     marginTop: '8px'
+  },
+  buttonGroup: {
+    maxHeight: '40px',
+    minWidth: '615px'
   }
 };

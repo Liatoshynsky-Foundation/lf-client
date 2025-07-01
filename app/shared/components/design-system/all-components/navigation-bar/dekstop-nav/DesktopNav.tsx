@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -11,14 +11,16 @@ import { styles } from './DesktopNav.styles';
 import { ROUTES } from '~/constants/routes';
 
 import { usePathname } from '~/i18n/navigation';
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import ChevronDown from '~/public/icons/chevron-down.svg';
+import ChevronUp from '~/public/icons/chevron-up.svg';
+import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 
 export interface DropdownItem {
   label: string;
   href: string;
 }
 
-const navItems = [
+const NAV_ITEMS = [
   {
     label: 'Борис Лятошинський',
     dropdown: [
@@ -35,64 +37,89 @@ const navItems = [
       { label: 'ЗМІ про нас', href: ROUTES.MEDIA_ABOUT_US }
     ]
   },
-  { label: 'Кабінет-Архів', href: ROUTES.RESEARCH },
+  { label: 'Кабінет-Архів', href: ROUTES.ARCHIVE },
   { label: 'Співпраця', href: ROUTES.COLLABORATION }
 ];
 
 const DesktopNav = () => {
   const pathname = usePathname();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentDropdown, setCurrentDropdown] = useState<{ label: string; items: DropdownItem[] } | null>(null);
 
-  const activeIndex = navItems.findIndex((item) => {
-    if (item.href) {
-      return item.href === pathname;
-    }
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [temporaryActiveIndex, setTemporaryActiveIndex] = useState<number | null>(null);
+  const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
 
-    if (item.dropdown) {
-      return item.dropdown.some((dropdownItem) => dropdownItem.href === pathname);
-    }
-    return false;
-  });
+  useEffect(() => {
+    setTemporaryActiveIndex(null);
+  }, [pathname]);
 
-  const openDropdown = (event: React.MouseEvent<HTMLElement>, label: string, items: DropdownItem[]) => {
+  const getActiveIndex = () =>
+    NAV_ITEMS.findIndex((item) => {
+      if (item.href) {
+        return item.href === pathname;
+      }
+
+      if (item.dropdown) {
+        return item.dropdown.some((dropdownItem) => dropdownItem.href === pathname);
+      }
+      return false;
+    });
+
+  const handleDropdownOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    label: string,
+    items: DropdownItem[],
+    index: number
+  ) => {
     setAnchorEl(event.currentTarget);
-    setCurrentDropdown({ label, items });
+    setOpenDropdownState({ label, items });
+    setTemporaryActiveIndex(index);
   };
 
-  const closeDropdown = () => {
+  const handleDropdownClose = () => {
     setAnchorEl(null);
-    setCurrentDropdown(null);
+    setOpenDropdownState(null);
   };
 
-  const navButtons = navItems.map((item, index) =>
-    item.dropdown ? (
+  const staticActiveIndex = getActiveIndex();
+  const activeButton = staticActiveIndex !== -1 ? staticActiveIndex : undefined;
+  const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
+
+  const renderedNavButtons = NAV_ITEMS.map((item, index) => {
+    const isOpen = openDropdownState?.label === item.label && Boolean(anchorEl);
+    const isActive = index === effectiveActiveIndex;
+
+    const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
+    const iconColor = isActive ? '#fff' : '#000';
+
+    return item.dropdown ? (
       <IconButton
-        key={`${index}-${item.label}`}
-        onClick={(e) => openDropdown(e, item.label, item.dropdown)}
+        disableRipple
+        key={`dropdown-${index}`}
+        onClick={(e) => handleDropdownOpen(e, item.label, item.dropdown!, index)}
         sx={styles.iconButtonSx}
         style={styles.iconButtonInline}
       >
         {item.label}
-        <SvgImage
-          src={currentDropdown?.label === item.label ? '/icons/chevron-up-white.svg' : '/icons/chevron-down-white.svg'}
-          alt="Chevron"
-          width={20}
-          height={22}
+
+        <Svg
+          Component={ChevronIcon}
+          alt="chevron"
+          color={iconColor}
+          width="20px"
+          height="22px"
+          sx={{ display: 'flex' }}
         />
       </IconButton>
     ) : (
-      <Button key={`${index}-${item.href}`} sx={styles.iconButtonSx}>
+      <Button disableRipple key={`link-${index}`} sx={styles.iconButtonSx}>
         <Link href={item.href}>{item.label}</Link>
       </Button>
-    )
-  );
+    );
+  });
 
-  const activeButton = activeIndex !== -1 ? activeIndex : undefined;
-
-  const menuItems = currentDropdown?.items.map((item, index) => (
-    <Link href={item.href} key={`${index}-${item.href}`} passHref>
-      <CustomMenuItem sx={styles.menuItem} onClick={closeDropdown}>
+  const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
+    <Link href={item.href} key={`menu-item-${index}`} passHref>
+      <CustomMenuItem sx={styles.menuItem} onClick={handleDropdownClose}>
         {item.label}
       </CustomMenuItem>
     </Link>
@@ -100,16 +127,16 @@ const DesktopNav = () => {
 
   return (
     <>
-      <ButtonGroup defaultActiveButton={activeButton} buttons={navButtons} size="big" />
+      <ButtonGroup sx={styles.buttonGroup} defaultActiveButton={activeButton} buttons={renderedNavButtons} size="big" />
 
-      {currentDropdown && (
+      {openDropdownState && (
         <DropdownMenu
           disableScrollLock
           style={styles.dropdownMenu}
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
-          onClose={closeDropdown}
-          menuList={menuItems}
+          onClose={handleDropdownClose}
+          menuList={renderedDropdownItems}
         />
       )}
     </>

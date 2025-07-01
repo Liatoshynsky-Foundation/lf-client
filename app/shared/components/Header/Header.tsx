@@ -18,8 +18,14 @@ export default async function Header() {
 
   return (
     <Box component="header" sx={styles.mainContainer}>
-      <Logo />
-      <NavigationBar />
+      <Box sx={styles.logoContainer}>
+        <Logo />
+      </Box>
+
+      <Box sx={styles.navigationContainer}>
+        <NavigationBar />
+      </Box>
+
       <RightActionsPanel
         supportButtonData={{
           text: t('supportButton'),
