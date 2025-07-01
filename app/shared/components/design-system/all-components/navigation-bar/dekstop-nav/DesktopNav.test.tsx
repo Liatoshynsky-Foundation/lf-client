@@ -62,7 +62,7 @@ describe('DesktopNav', () => {
     render(<DesktopNav />);
 
     const link = screen.getByText('Кабінет-Архів').closest('a');
-    expect(link).toHaveAttribute('href', ROUTES.RESEARCH);
+    expect(link).toHaveAttribute('href', ROUTES.ARCHIVE);
 
     fireEvent.click(screen.getByText('Фундація'));
 
