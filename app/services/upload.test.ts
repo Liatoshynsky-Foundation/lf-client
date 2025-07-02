@@ -9,6 +9,9 @@ const mockUploadData = jest.fn();
 const mockDeleteIfExists = jest.fn();
 const mockExists = jest.fn();
 
+const MOCK_AZURE_SAS_URL = 'url-test';
+process.env.AZURE_SAS_URL = MOCK_AZURE_SAS_URL;
+
 jest.mock('@azure/storage-blob', () => {
   return {
     BlobServiceClient: jest.fn().mockImplementation(() => ({
