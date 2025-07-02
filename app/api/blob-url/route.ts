@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 
+import { errors } from '~/constants/errors';
 import { errorResponse } from '~/utils/apiResponse';
 import { validateWithZod } from '~/utils/validateRequestData';
 
 import { azureStorageService } from '~/services/upload';
-import { blobQuerySchema } from '~/validators/blob.schema';
+import { zBlobQuerySchema } from '~/validators/blob.schema';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
       blobName: searchParams.get('blobName'),
       folderName: searchParams.get('folderName')
     },
-    blobQuerySchema
+    zBlobQuerySchema
   );
 
   if (!validationResult.valid) {
@@ -22,13 +23,17 @@ export async function GET(request: Request) {
 
   const { blobName, folderName } = validationResult.value;
   const url = await azureStorageService.getBlobUrl(folderName, blobName);
-  const response = await fetch(url);
-  const contentType = response.headers.get('content-type') ?? 'image/jpg';
-  const buffer = await response.arrayBuffer();
+  console.log(url);
+  if (!url) return errorResponse([errors.BLOB_DOES_NOT_EXIST], 404);
 
-  return new NextResponse(Buffer.from(buffer), {
+  const azureResponse = await fetch(url);
+  const stream = azureResponse.body;
+  const contentType = azureResponse.headers.get('content-type') ?? 'application/octet-stream';
+
+  return new NextResponse(stream, {
     headers: {
       'Content-Type': contentType,
+      'Content-Length': azureResponse.headers.get('content-length') || '',
       'Cache-Control': 'public, max-age=31536000'
     }
   });

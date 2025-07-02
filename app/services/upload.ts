@@ -1,14 +1,16 @@
 import { BlobServiceClient, BlockBlobClient, ContainerClient } from '@azure/storage-blob';
+import { createHash } from 'crypto';
 
 import { errors } from '~/constants/errors';
 
 import { CONTAINER_NAME } from '~/constants';
 import logger from '~/middleware/logger/logger';
 import { zContentTypeSchema, zFolderNameSchema } from '~/validators/blob.schema';
-import { env } from '~/validators/env/azure.schema';
 
 export const azureStorageService = (() => {
-  const blobServiceClient = new BlobServiceClient(env.AZURE_SAS_URL);
+  const { AZURE_SAS_URL } = process.env;
+
+  const blobServiceClient = new BlobServiceClient(AZURE_SAS_URL!);
 
   const getContainerClient = (): ContainerClient => {
     return blobServiceClient.getContainerClient(CONTAINER_NAME);
@@ -27,8 +29,9 @@ export const azureStorageService = (() => {
       try {
         zFolderNameSchema.parse(folderName);
         zContentTypeSchema.parse(contentType);
+        const blobNameHash = createHash('sha256').update(blobName).digest('hex');
         const containerClient = getContainerClient();
-        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobName);
+        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);
         await blockBlobClient.uploadData(buffer, {
           blobHTTPHeaders: { blobContentType: contentType }
         });
@@ -40,8 +43,9 @@ export const azureStorageService = (() => {
     deleteFile: async (folderName: string, blobName: string): Promise<void> => {
       try {
         zFolderNameSchema.parse(folderName);
+        const blobNameHash = createHash('sha256').update(blobName).digest('hex');
         const containerClient = getContainerClient();
-        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobName);
+        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);
         await blockBlobClient.deleteIfExists();
       } catch (error) {
         logger.error(errors.FAILED_TO_DELETE_BLOB, error);
@@ -51,8 +55,9 @@ export const azureStorageService = (() => {
     checkBlobExists: async (folderName: string, blobName: string): Promise<boolean> => {
       try {
         zFolderNameSchema.parse(folderName);
+        const blobNameHash = createHash('sha256').update(blobName).digest('hex');
         const containerClient = getContainerClient();
-        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobName);
+        const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);
         return await blockBlobClient.exists();
       } catch (error) {
         logger.warning(errors.BLOB_DOES_NOT_EXIST, error);
@@ -63,8 +68,10 @@ export const azureStorageService = (() => {
       const exist = await azureStorageService.checkBlobExists(folderName, blobName);
       if (exist) {
         zFolderNameSchema.parse(folderName);
+        const blobNameHash = createHash('sha256').update(blobName).digest('hex');
+        console.log(blobNameHash);
         const containerClient = getContainerClient();
-        return getFullPathToBlob(containerClient, folderName, blobName).url;
+        return getFullPathToBlob(containerClient, folderName, blobNameHash).url;
       }
       return '';
     }

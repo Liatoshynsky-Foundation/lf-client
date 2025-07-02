@@ -1,5 +1,3 @@
-import { env } from '~/validators/env/db.schema';
-
 export const getMongoUrl = (): string => {
   const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB, MONGO_HOST, MONGO_PORT } = process.env;
 
