@@ -1,9 +1,10 @@
+import { createHash } from 'crypto';
+
 import { errors } from '~/constants/errors';
 
 import { CONTAINER_NAME } from '~/constants';
 import logger from '~/middleware/logger/logger';
 import { azureStorageService } from '~/services/upload';
-
 const mockUploadData = jest.fn();
 const mockDeleteIfExists = jest.fn();
 const mockExists = jest.fn();
@@ -23,12 +24,6 @@ jest.mock('@azure/storage-blob', () => {
   };
 });
 
-jest.mock('~/validators/env/azure.schema', () => ({
-  env: {
-    AZURE_SAS_URL: 'https://mock.blob.core.windows.net/?SAS'
-  }
-}));
-
 jest.mock('~/validators/blob.schema', () => ({
   zFolderNameSchema: { parse: jest.fn() },
   zContentTypeSchema: { parse: jest.fn() }
@@ -44,7 +39,7 @@ describe('azureStorageService', () => {
   const blobName = 'image.jpg';
   const buffer = Buffer.from('mock buffer');
   const contentType = 'image/jpeg';
-  const fullPath = `${folderName}/${blobName}`;
+  const fullPath = `${folderName}/${createHash('sha256').update(blobName).digest('hex')}`;
   const expectedUrl = `https://mockstorage.blob.core.windows.net/${CONTAINER_NAME}/${fullPath}`;
 
   beforeEach(() => {
