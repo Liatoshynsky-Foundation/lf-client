@@ -87,7 +87,7 @@ const AboutFoundation = async () => {
       </Box>
       <Typography sx={sectionStyles.textImage}>{textImage}</Typography>
       <Box sx={sectionStyles.bodyImage}>
-        <Image src={images[1].src} alt={images[1].alt} fill style={{ objectFit: 'contain' }} />
+        <Image src={images[1].src} alt={images[1].alt} fill style={{ objectFit: 'contain', objectPosition: 'top' }} />
       </Box>
     </Box>
   );

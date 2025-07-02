@@ -39,9 +39,11 @@ export const styles = (theme: Theme) => ({
     alignSelf: 'center',
     marginTop: '75px',
     marginBottom: '125px',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '40px'
+    },
     [theme.breakpoints.down('sm')]: {
       gridColumn: '1/-1',
-      fontSize: '40px',
       marginBottom: '60px'
     }
   },
