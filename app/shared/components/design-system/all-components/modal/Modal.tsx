@@ -1,4 +1,4 @@
-import { Box, Modal as MuiModal, Typography } from '@mui/material';
+import { Box, Modal as MuiModal, SxProps, Typography } from '@mui/material';
 
 import { IconButton } from '../icon-button/IconButton';
 import { style } from './Modal.styles';
@@ -24,6 +24,11 @@ interface ModalProps {
   topLine?: boolean;
   verticalAlignment?: VerticalAlignment;
   horizontalAlignment?: HorizontalAlignment;
+  titleSx?: SxProps;
+  subtitleSx?: SxProps;
+  modalSx?: SxProps;
+  contentBoxSx?: SxProps;
+  childrenBoxSx?: SxProps;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -39,6 +44,11 @@ export const Modal: React.FC<ModalProps> = ({
   topLine = false,
   verticalAlignment,
   horizontalAlignment,
+  titleSx = {},
+  subtitleSx = {},
+  modalSx = {},
+  contentBoxSx = {},
+  childrenBoxSx = {},
   children
 }) => {
   const isBigModal = width > 1000;
@@ -52,16 +62,20 @@ export const Modal: React.FC<ModalProps> = ({
       aria-describedby="modal-modal-description"
       hideBackdrop={!isBackdrop}
       disableScrollLock={disableScrollLock}
-      sx={style.modal(width, height, backgroundColor, verticalAlignment, horizontalAlignment)}
+      sx={[style.modal(width, height, backgroundColor, verticalAlignment, horizontalAlignment), modalSx] as SxProps}
     >
-      <Box sx={style.content}>
+      <Box sx={{ ...contentBoxSx, ...style.content } as SxProps}>
         <Box sx={style.topSection}>
           <Box>
-            <Typography id="modal-modal-title" variant={isBigModal ? 'h3' : 'h4'} sx={style.title(backgroundColor)}>
+            <Typography
+              id="modal-modal-title"
+              variant={isBigModal ? 'h3' : 'h4'}
+              sx={{ ...titleSx, ...style.title(backgroundColor) }}
+            >
               {title}
             </Typography>
             {subtitle && (
-              <Typography variant="body2" sx={style.title(backgroundColor)}>
+              <Typography variant="body2" sx={{ ...subtitleSx, ...style.title(backgroundColor) }}>
                 {subtitle}
               </Typography>
             )}
@@ -82,7 +96,7 @@ export const Modal: React.FC<ModalProps> = ({
           </IconButton>
         </Box>
         {topLine && <Box data-testid="modal-topline" sx={style.topLine(width)} />}
-        <Box sx={style.children}>{children}</Box>
+        <Box sx={{ ...childrenBoxSx, ...style.children }}>{children}</Box>
       </Box>
     </MuiModal>
   );
