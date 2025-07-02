@@ -90,7 +90,7 @@ jobs:
           npm run test
 
   docker-build:
-    name: Build docker container
+    name: Run docker container
     runs-on: 'ubuntu-latest'
     needs: [ 'run-lint', 'run-tests' ]
 
