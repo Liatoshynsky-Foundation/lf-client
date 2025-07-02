@@ -8,12 +8,22 @@ import logger from '~/middleware/logger/logger';
 import { zContentTypeSchema, zFolderNameSchema } from '~/validators/blob.schema';
 
 export const azureStorageService = (() => {
-  const { AZURE_SAS_URL } = process.env;
+  let blobServiceClient: BlobServiceClient | null = null;
 
-  const blobServiceClient = new BlobServiceClient(AZURE_SAS_URL!);
+  const getClient = (): BlobServiceClient => {
+    if (blobServiceClient) {
+      return blobServiceClient;
+    }
+    const { AZURE_SAS_URL } = process.env;
+    if (!AZURE_SAS_URL) {
+      throw new Error(errors.AZURE_URL_NOT_DEFINED);
+    }
+    blobServiceClient = new BlobServiceClient(AZURE_SAS_URL);
+    return blobServiceClient;
+  };
 
   const getContainerClient = (): ContainerClient => {
-    return blobServiceClient.getContainerClient(CONTAINER_NAME);
+    return getClient().getContainerClient(CONTAINER_NAME);
   };
 
   const getFullPathToBlob = (
@@ -69,7 +79,6 @@ export const azureStorageService = (() => {
       if (exist) {
         zFolderNameSchema.parse(folderName);
         const blobNameHash = createHash('sha256').update(blobName).digest('hex');
-        console.log(blobNameHash);
         const containerClient = getContainerClient();
         return getFullPathToBlob(containerClient, folderName, blobNameHash).url;
       }
