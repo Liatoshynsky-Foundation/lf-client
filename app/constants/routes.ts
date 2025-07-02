@@ -3,7 +3,7 @@ export const ROUTES = {
   ARTISTRY: '/artistry',
   RESEARCH: '/research',
   FOUNDATION_HOME: '/',
-  NEWS: '/work',
+  NEWS: '/news',
   MEDIA_ABOUT_US: '/media-about-us',
   ARCHIVE: '/archive',
   COLLABORATION: '/collaboration'
