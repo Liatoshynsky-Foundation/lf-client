@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - develop
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,54 +14,22 @@ jobs:
     name: Run ESLint
     runs-on: 'ubuntu-latest'
 
-    strategy:
-      matrix:
-        node-version: ['22']
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run ESLint
-        shell: bash
-        run: |
-          set +e
-          npm run lint > full-lint.log 2>&1
-          exit_code="${PIPESTATUS[0]}"
-          set -e
-
-          SUMMARY_FILE="summary-lint-errors.log"
-          grep -B 1 -E '\[warn\]|Error:|Warning:' full-lint.log > "$SUMMARY_FILE" || true
-
-          if [ ! -s "$SUMMARY_FILE" ]; then
-            echo "✅ No lint errors found." > "$SUMMARY_FILE"
-          fi
-
-          if [ "$exit_code" -ne 0 ]; then
-            echo "❌ ESLint errors found."
-          else
-            echo "✅ No lint errors."
-          fi
-
-          exit "$exit_code"
-
-      - name: Upload lint logs
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: lint-results
-          path: |
-            full-lint.log
-            summary-lint-errors.log
+        run:
+          npm run lint
 
   run-tests:
     name: Run Tests
@@ -79,19 +46,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Node.js ${{ matrix.node-version }}
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'npm'
 
-      - name: Install MongoDB ${{ matrix.mongodb-version }}
+      - name: Install MongoDB
         uses: supercharge/mongodb-github-action@1.12.0
         with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-db: ${{ secrets.MONGO_DB }}
-          mongodb-username: ${{ secrets.MONGO_USERNAME }}
-          mongodb-password: ${{ secrets.MONGO_PASSWORD }}
+          mongodb-version: 8
+          mongodb-container-name: mongodb
+          mongodb-port: 27017
+          mongodb-db: mongodb
+          mongodb-username: admin
+          mongodb-password: password
 
       - name: Install MongoDB shell
         run: |
@@ -115,58 +84,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Tests and generate logs
+      - name: Run Tests
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-          MONGO_DB: ${{ secrets.MONGO_DB }}
-          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          MONGO_HOST: ${{ secrets.MONGO_HOST }}
-          MONGO_PORT: ${{ secrets.MONGO_PORT }}
-        run: |
-          echo "🚀 Run Tests..."
-
-          npm run test -- --ci 2>&1 | tee "full-tests-results-${{ matrix.node-version }}.log"
-
-          exit_code="${PIPESTATUS[0]}"
-          SUMMARY_ERRORS_FILE="summary-tests-errors-${{ matrix.node-version }}.log"
-
-          grep -E "Test Suites:|Tests:|Snapshots:|Time:" "full-tests-results-${{ matrix.node-version }}.log" > \
-            summary-tests-results-${{ matrix.node-version }}.log || \
-            echo "❌ Test summary not found." > summary-tests-results-${{ matrix.node-version }}.log
-
-          > "$SUMMARY_ERRORS_FILE"
-          if [ "$exit_code" -ne 0 ]; then
-            grep -iE "(fail|error|unhandled|exception)" "full-tests-results-${{ matrix.node-version }}.log" >> "$SUMMARY_ERRORS_FILE" || true
-
-            if [ ! -s "$SUMMARY_ERRORS_FILE" ]; then
-              echo "Tests failed but no detailed error messages found in logs." >> "$SUMMARY_ERRORS_FILE"
-            fi
-
-            echo ""
-            echo "❌ Tests are failed. Please check $SUMMARY_ERRORS_FILE."
-            echo ""
-          else
-            echo "✅ All tests passed successfully." > "$SUMMARY_ERRORS_FILE"
-            echo ""
-            echo "✅ All tests are passed successfully."
-            echo ""
-          fi
-
-          exit "$exit_code"
-
-      - name: Upload Test Logs
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: tests-results-${{ matrix.node-version }}
-          path: |
-            full-tests-results-${{ matrix.node-version }}.log
-            summary-tests-results-${{ matrix.node-version }}.log
-            summary-tests-errors-${{ matrix.node-version }}.log
+          MONGO_HOST: mongodb
+          MONGO_PORT: 2017
+          MONGO_DB: mongodb
+          MONGO_USERNAME: admin
+          MONGO_PASSWORD: password
+        run:
+          npm run test
 
   docker-build:
-    name: Build Docker Container
+    name: Build docker container
     runs-on: 'ubuntu-latest'
     needs: [ 'run-lint', 'run-tests' ]
 
@@ -174,204 +104,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image
+      - name: Build docker image
         run: |
           docker build -f Dockerfile -t be-app .
 
-      - name: Run MongoDB container
-        run: |
-          docker run -d --name mongodb -p 27017:27017 \
-            -e MONGO_INITDB_DATABASE=${{ secrets.MONGO_DB }} \
-            -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }} \
-            -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-            mongo:8.0.3-noble
+      - name: Install MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: 8
+          mongodb-container-name: mongodb
+          mongodb-port: 27017
+          mongodb-db: mongodb
+          mongodb-username: admin
+          mongodb-password: password
 
       - name: Run be-app container
         run: |
           docker run -d --name be-app -p 3000:3000 \
-            -e MONGO_DB=${{ secrets.MONGO_DB }} \
-            -e MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
-            -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e MONGO_HOST=mongodb \
             -e MONGO_PORT=27017 \
+            -e MONGO_DB=mongodb \
+            -e MONGO_USERNAME=admin \
+            -e MONGO_PASSWORD=password \
             be-app
-
-      # - name: API Health Check and Report
-      #   if: success() || failure()
-      #   run: |
-      #     sleep 10
-      #     RESPONSE=$(curl --insecure --silent --request GET --url 'http://localhost:8080/users/')
-      #     EXPECTED='{"status":401,"code":"UNAUTHORIZED","message":"The requested URL requires user authorization."}'
-
-      #     if [[ "$RESPONSE" == "$EXPECTED" ]]; then
-      #       echo "✅ No containerization issues detected." | tee -a docker-results.log
-      #     else
-      #       echo "❌ Potential containerization issue detected!" | tee -a docker-results.log
-      #       echo "::error ::Potential containerization issue detected!"
-      #     fi
-
-      # - name: Upload Docker Health Check Results
-      #   uses: actions/upload-artifact@v4
-      #   if: success() || failure()
-      #   with:
-      #     name: docker-health-check
-      #     path: docker-results.log
-
-  generate-report:
-    name: Generate Test Report
-    runs-on: ubuntu-latest
-    needs: [ 'run-lint', 'run-tests', 'docker-build' ]
-    if: always()
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Determine overall status
-        id: overall_status
-        env:
-          LINT_JOB_RESULT_ENV: ${{ needs.run-lint.result }}
-          TEST_JOB_RESULT_ENV: ${{ needs.run-tests.result }}
-          # DOCKER_BUILD_JOB_RESULT_ENV: ${{ needs.docker-build.result }}
-        run: |
-          OVERALL_ICON_VAR="✅"
-
-          if [[ "$LINT_JOB_RESULT_ENV" != "success" || \
-                "$TEST_JOB_RESULT_ENV" != "success" ]]; then
-            OVERALL_ICON_VAR="❌"
-          fi
-
-          echo "OVERALL_ICON=$OVERALL_ICON_VAR" >> $GITHUB_OUTPUT
-
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: all-artifacts
-
-      - name: Generate Test Report
-        run: |
-          CI_MARKER_BASE=" CI Report"
-          OVERALL_ICON_FROM_STEP="${{ steps.overall_status.outputs.OVERALL_ICON }}"
-          CI_MARKER="# $OVERALL_ICON_FROM_STEP $CI_MARKER_BASE - $(TZ="Europe/Kyiv" date +"%H:%M %d/%m/%Y")"
-
-          {
-            echo "$CI_MARKER"
-            echo ""
-          } > report.txt
-
-          function print_section() {
-            local title=$1
-            local fallback_msg=$2
-            local file_path=$3
-
-            echo "## $title"
-            echo ""
-            if [[ -f "$file_path" ]]; then
-              echo '```'
-              cat "$file_path"
-              echo '```'
-            else
-              echo "$fallback_msg"
-            fi
-            printf "\n"
-          }
-
-          LINT_SUMMARY_PATH="${{ github.workspace }}/all-artifacts/lint-results/summary-lint-errors.log"
-          print_section "📝 Lint Report" "⚠️ Lint report not found." "$LINT_SUMMARY_PATH" >> report.txt
-
-          echo "## 🧪 Test Results" >> report.txt
-          echo "" >> report.txt
-
-          TEST_REPORTS_FOUND=false
-          for folder in $(find all-artifacts -maxdepth 1 -type d -name "tests-results-*"); do
-            TEST_REPORTS_FOUND=true
-            NODE_VERSION_FROM_FOLDER_NAME=$(basename "$folder" | sed 's/tests-results-//')
-
-            SUMMARY_RESULTS_FILE_PATH="$folder/summary-tests-results-${NODE_VERSION_FROM_FOLDER_NAME}.log"
-            ERRORS_FILE_PATH="$folder/summary-tests-errors-${NODE_VERSION_FROM_FOLDER_NAME}.log"
-
-            echo "**🔹 Node.js Version:** $NODE_VERSION_FROM_FOLDER_NAME" >> report.txt
-            echo "" >> report.txt
-
-            print_section "**Test Summary:**" "⚠️ No test summary for Node $NODE_VERSION_FROM_FOLDER_NAME." "$SUMMARY_RESULTS_FILE_PATH" >> report.txt
-            TESTS_SUCCESSFUL="✅ All tests passed successfully."
-
-            if [[ -f "$ERRORS_FILE_PATH" ]]; then
-              if [[ -s "$ERRORS_FILE_PATH" ]] && ! grep -q "$TESTS_SUCCESSFUL" "$ERRORS_FILE_PATH"; then
-                print_section "**❌ Test Errors:**" "" "$ERRORS_FILE_PATH" >> report.txt
-              elif grep -q "$TESTS_SUCCESSFUL" "$ERRORS_FILE_PATH"; then
-                echo '```' >> report.txt
-                echo "$TESTS_SUCCESSFUL for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
-                echo '```' >> report.txt
-              elif [ ! -s "$ERRORS_FILE_PATH" ]; then
-                echo "⚠️ Empty test error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
-              fi
-            else
-              echo "⚠️ No error log for Node $NODE_VERSION_FROM_FOLDER_NAME." >> report.txt
-            fi
-            printf "\n" >> report.txt
-          done
-
-          if [[ "$TEST_REPORTS_FOUND" == false ]]; then
-            echo "⚠️ No test results available." >> report.txt
-          fi
-
-          DOCKER_BUILD_JOB_RESULT="${{ needs.docker-build.result }}"
-          DOCKER_LOG_PATH="all-artifacts/docker-results/docker-build-${{ github.sha }}.log"
-
-          {
-            echo "## 🐳 Docker Build Status"
-            echo ""
-
-            if [ "$DOCKER_BUILD_JOB_RESULT" == "success" ]; then
-              echo "✅ Docker image built successfully."
-            elif [ "$DOCKER_BUILD_JOB_RESULT" == "failure" ]; then
-              echo "❌ Docker build failed."
-              if [[ -f "$DOCKER_LOG_PATH" ]]; then
-                echo '```log'
-                cat "$DOCKER_LOG_PATH"
-                echo '```'
-              else
-                echo "⚠️ Docker build log not found."
-              fi
-            else
-              echo "⚠️ Docker build status: $DOCKER_BUILD_JOB_RESULT."
-              if [[ -f "$DOCKER_LOG_PATH" ]]; then
-                echo '```log'
-                cat "$DOCKER_LOG_PATH"
-                echo '```'
-              fi
-            fi
-            printf "\n"
-          } >> report.txt
-
-      - name: Publish Report in GitHub Actions Summary
-        run: cat report.txt >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Update CI Report in PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          if [[ -z "$PR_NUMBER" ]]; then
-            echo "No PR associated, skipping update."
-            exit 0
-          fi
-
-          TARGET_COMMENT_AUTHOR="github-actions[bot]" 
-          TARGET_COMMENT_MARKER=" CI Report"
-
-          JQ_QUERY_STRING=".[] | select(.user.login==\"$TARGET_COMMENT_AUTHOR\" and (.body | contains(\"$TARGET_COMMENT_MARKER\"))) | .id"
-
-          COMMENT_ID=$(gh api "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
-            --jq "$JQ_QUERY_STRING" | head -n 1)
-
-          REPORT_CONTENT_FILE="report.txt" 
-
-          if [[ -n "$COMMENT_ID" ]]; then
-            gh api "repos/${{ github.repository }}/issues/comments/$COMMENT_ID" \
-              -X PATCH \
-              --field body="$(cat $REPORT_CONTENT_FILE)" 
-          else
-            gh pr comment "$PR_NUMBER" --body-file "$REPORT_CONTENT_FILE"
-          fi
