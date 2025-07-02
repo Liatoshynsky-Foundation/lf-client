@@ -36,12 +36,6 @@ jobs:
     runs-on: 'ubuntu-latest'
     needs: [ 'run-lint' ]
 
-    strategy:
-      matrix:
-        node-version: ['22']
-        mongodb-version: ['8.0']
-      max-parallel: 1
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
