@@ -17,14 +17,16 @@ export async function GET(request: Request) {
     zBlobQuerySchema
   );
 
-  if (!validationResult.valid) {
-    return errorResponse(validationResult.errors);
-  }
+  if (!validationResult.valid) return errorResponse(validationResult.errors);
 
   const { blobName, folderName } = validationResult.value;
-  const url = await azureStorageService.getBlobUrl(folderName, blobName);
-  console.log(url);
-  if (!url) return errorResponse([errors.BLOB_DOES_NOT_EXIST], 404);
+  let url;
+  try {
+    url = await azureStorageService.getBlobUrl(folderName, blobName);
+    if (!url) return errorResponse([errors.BLOB_DOES_NOT_EXIST], 404);
+  } catch {
+    return errorResponse([errors.AZURE_URL_NOT_DEFINED], 503);
+  }
 
   const azureResponse = await fetch(url);
   const stream = azureResponse.body;
@@ -33,7 +35,7 @@ export async function GET(request: Request) {
   return new NextResponse(stream, {
     headers: {
       'Content-Type': contentType,
-      'Content-Length': azureResponse.headers.get('content-length') || '',
+      'Content-Length': azureResponse.headers.get('content-length') ?? '',
       'Cache-Control': 'public, max-age=31536000'
     }
   });
