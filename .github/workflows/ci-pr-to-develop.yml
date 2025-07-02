@@ -101,11 +101,6 @@ jobs:
       - name: Build docker image
         run: |
           docker build -f Dockerfile -t be-app .
-          -e MONGO_DB=dummy \
-          -e MONGO_USERNAME=dummy \
-          -e MONGO_PASSWORD=dummy \
-          -e MONGO_HOST=dummy \
-          -e MONGO_PORT=27017
 
       - name: Install MongoDB
         uses: supercharge/mongodb-github-action@1.12.0
@@ -122,4 +117,7 @@ jobs:
           docker run -d --name be-app -p 3000:3000 \
             -e MONGO_HOST=mongodb \
             -e MONGO_PORT=27017 \
+            -e MONGO_DB=mongodb \
+            -e MONGO_USERNAME=admin \
+            -e MONGO_PASSWORD=password \
             be-app
