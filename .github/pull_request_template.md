@@ -1,34 +1,31 @@
-dev
+## Description
 
-## JIRA
+<!-- Briefly describe the purpose of this PR and what was changed -->
 
-- [Main JIRA ticket](https://jira.softserve.academy/secure/RapidBoard.jspa?rapidView=id)
+## Type of change
 
-## Code reviewers
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Documentation update
+- [ ] Refactoring / Tech debt
+- [ ] CI/CD improvement
+- [ ] Other: <!-- specify -->
 
-- [ ] @github_username
+## How to test
 
-### Second Level Review
+<!-- Describe steps to test this PR locally or link to CI pipeline -->
 
-- [ ] @github_username
+1. ...
+2. ...
 
-## Summary of issue
+## Checklist
 
-ToDo
+- [ ] Code compiles and runs correctly
+- [ ] Tests pass successfully
+- [ ] Linting checks are clean
+- [ ] Documentation updated (if applicable)
+- [ ] Tested on staging environment (if applicable)
+- [ ] All comments and requested changes addressed
+- [ ] Linked issue/task included
 
-## Summary of change
-
-ToDo
-
-## Testing approach
-
-ToDo
-
-## CHECK LIST
-
-- [ ] СI passed
-- [ ] Сode coverage >=95%
-- [ ] PR is reviewed manually again (to make sure you have 100% ready code)
-- [ ] All reviewers agreed to merge the PR
-- [ ] I've checked new feature as logged in and logged out user if needed
-- [ ] PR meets all conventions
+---
