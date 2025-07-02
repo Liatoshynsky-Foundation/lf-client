@@ -122,11 +122,4 @@ jobs:
           docker run -d --name be-app -p 3000:3000 \
             -e MONGO_HOST=mongodb \
             -e MONGO_PORT=27017 \
-<<<<<<< HEAD
-
-=======
-            -e MONGO_DB=mongodb \
-            -e MONGO_USERNAME=admin \
-            -e MONGO_PASSWORD=password \
->>>>>>> develop
             be-app
