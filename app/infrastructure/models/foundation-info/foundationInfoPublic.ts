@@ -2,22 +2,18 @@ import mongoose from 'mongoose';
 
 import { FoundationInfo } from './foundationInfoBase';
 
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
+
 export const PublicInfo =
   FoundationInfo.discriminators?.['public-info'] ??
   FoundationInfo.discriminator(
     'public-info',
     new mongoose.Schema(
       {
-        copyright: {
-          uk: { type: String, required: true },
-          en: { type: String, required: true }
-        },
+        copyright: translatedFieldSchema,
         links: [
           {
-            label: {
-              uk: { type: String, required: true },
-              en: { type: String, required: true }
-            },
+            label: translatedFieldSchema,
             href: { type: String, required: true }
           }
         ]

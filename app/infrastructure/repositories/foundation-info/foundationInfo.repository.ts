@@ -1,13 +1,10 @@
-import type { Locale } from 'next-intl';
-
-import type { FoundationInfoRepository } from '~/domain/repositories/foundationInfo.repository';
 import dbConnect from '~/infrastructure/db/connect';
 import { BrandingInfo } from '~/infrastructure/models/foundation-info/foundationInfoBranding';
 import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationInfoContact';
 import { PublicInfo } from '~/infrastructure/models/foundation-info/foundationInfoPublic';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 
-export const foundationInfoRepository: FoundationInfoRepository = {
+export const foundationInfoRepository = {
   async getContactInfo() {
     await dbConnect();
 
@@ -22,7 +19,7 @@ export const foundationInfoRepository: FoundationInfoRepository = {
     };
   },
 
-  async getBrandingInfo(locale: Locale) {
+  async getBrandingInfo() {
     await dbConnect();
 
     const result = await BrandingInfo.findOne({ slug: 'branding-info' }).select('foundationName').lean();
@@ -30,14 +27,14 @@ export const foundationInfoRepository: FoundationInfoRepository = {
     const parsed = brandingInfoSchema.omit({ supportButtonLink: true }).parse(result);
 
     return {
-      foundationName: parsed.foundationName[locale]
+      foundationName: parsed.foundationName
     };
   },
 
   async getSupportButtonLink() {
     await dbConnect();
 
-    const result = await BrandingInfo.findOne({ slug: 'branding-info' }).select('supportButtonLink');
+    const result = await BrandingInfo.findOne({ slug: 'branding-info' }).select('supportButtonLink').lean();
 
     const parsed = brandingInfoSchema.pick({ supportButtonLink: true }).parse(result);
 
@@ -46,7 +43,7 @@ export const foundationInfoRepository: FoundationInfoRepository = {
     };
   },
 
-  async getPublicInfo(locale: Locale) {
+  async getPublicInfo() {
     await dbConnect();
 
     const result = await PublicInfo.findOne({ slug: 'public-info' }).select('copyright links').lean();
@@ -54,12 +51,8 @@ export const foundationInfoRepository: FoundationInfoRepository = {
     const parsed = publicInfoSchema.parse(result);
 
     return {
-      copyright: parsed.copyright[locale],
-      links:
-        parsed.links?.map((link) => ({
-          label: link.label[locale],
-          href: link.href
-        })) ?? []
+      copyright: parsed.copyright,
+      links: parsed.links
     };
   }
 };

@@ -1,14 +1,14 @@
-import { Locale } from 'next-intl';
+import type { Locale } from 'next-intl';
 
 import { createHeaderService } from '~/services/composed/header-service/headerService';
 
 describe('headerService (composed)', () => {
-  const mockNavigationData = [
+  const mockNavigationRaw = [
     {
-      title: 'Main',
+      title: { uk: 'Головна', en: 'Main' },
       links: [
-        { label: 'Home', href: '/', visibility: 'true' },
-        { label: 'About', href: '/about', visibility: 'true' }
+        { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+        { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: true }
       ]
     }
   ];
@@ -22,7 +22,7 @@ describe('headerService (composed)', () => {
   };
 
   const navigationServiceMock = {
-    getNavigation: jest.fn().mockResolvedValue(mockNavigationData)
+    getNavigation: jest.fn().mockResolvedValue(mockNavigationRaw)
   };
 
   const headerService = createHeaderService({
@@ -38,11 +38,27 @@ describe('headerService (composed)', () => {
     const result = await headerService.getHeaderData('en' as Locale);
 
     expect(result).toEqual({
-      navigation: mockNavigationData,
+      navigation: [
+        {
+          title: 'Main',
+          links: [
+            { label: 'Home', href: '/', visibility: true },
+            { label: 'About', href: '/about', visibility: true }
+          ]
+        }
+      ],
       supportButtonLink: mockSupportButtonData.supportButtonLink
     });
 
-    expect(navigationServiceMock.getNavigation).toHaveBeenCalledWith('en');
+    expect(navigationServiceMock.getNavigation).toHaveBeenCalled();
     expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
+  });
+
+  it('should return empty string as supportButtonLink if undefined', async () => {
+    foundationInfoServiceMock.getSupportButtonLink.mockResolvedValueOnce({ supportButtonLink: undefined });
+
+    const result = await headerService.getHeaderData('en' as Locale);
+
+    expect(result.supportButtonLink).toBe('');
   });
 });

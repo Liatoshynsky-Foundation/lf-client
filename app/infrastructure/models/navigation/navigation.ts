@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
 
-const translatedFieldSchema = new mongoose.Schema(
-  {
-    uk: { type: String, required: true },
-    en: { type: String, required: true }
-  },
-  { _id: false }
-);
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
 
 const linkSchema = new mongoose.Schema(
   {

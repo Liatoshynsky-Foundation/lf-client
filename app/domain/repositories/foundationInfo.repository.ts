@@ -1,10 +1,8 @@
-import { Locale } from 'next-intl';
-
-import { ContactInfoData, FoundationNameData, PublicInfoData, SupportButtonLinkData } from '../dto/foundationInfo.dto';
+import type { ContactInfoDTO, FoundationNameDTO, PublicInfoDTO, SupportButtonLinkDTO } from '../dto/foundationInfo.dto';
 
 export type FoundationInfoRepository = {
-  getContactInfo(): Promise<ContactInfoData>;
-  getBrandingInfo(locale: Locale): Promise<FoundationNameData>;
-  getSupportButtonLink(): Promise<SupportButtonLinkData>;
-  getPublicInfo(locale: Locale): Promise<PublicInfoData>;
+  getContactInfo(): Promise<ContactInfoDTO>;
+  getBrandingInfo(): Promise<FoundationNameDTO>;
+  getSupportButtonLink(): Promise<SupportButtonLinkDTO>;
+  getPublicInfo(): Promise<PublicInfoDTO>;
 };

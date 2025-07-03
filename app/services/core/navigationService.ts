@@ -1,9 +1,7 @@
-import { Locale } from 'next-intl';
-
 import type { NavigationRepository } from '~/domain/repositories/navigation.repository';
 
 export const createNavigationService = (repo: NavigationRepository) => ({
-  getNavigation: (locale: Locale) => repo.getNavigation(locale)
+  getNavigation: () => repo.getNavigation()
 });
 
 export type NavigationService = ReturnType<typeof createNavigationService>;

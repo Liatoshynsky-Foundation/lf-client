@@ -1,4 +1,4 @@
-export type ContactInfoData = {
+export type ContactInfoDTO = {
   email?: string;
   phone?: string;
   socialLinks?: {
@@ -7,15 +7,15 @@ export type ContactInfoData = {
     icon: string;
   }[];
 };
-export type FoundationNameData = {
+export type FoundationNameDTO = {
   foundationName: string;
 };
 
-export type SupportButtonLinkData = {
+export type SupportButtonLinkDTO = {
   supportButtonLink?: string;
 };
 
-export type PublicInfoData = {
+export type PublicInfoDTO = {
   copyright: string;
   links: {
     label: string;

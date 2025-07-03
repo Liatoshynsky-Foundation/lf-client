@@ -1,12 +1,10 @@
-import { Locale } from 'next-intl';
-
 import type { FoundationInfoRepository } from '~/domain/repositories/foundationInfo.repository';
 
 export const createFoundationInfoService = (repo: FoundationInfoRepository) => ({
   getContactInfo: () => repo.getContactInfo(),
-  getBrandingInfo: (locale: Locale) => repo.getBrandingInfo(locale),
+  getBrandingInfo: () => repo.getBrandingInfo(),
   getSupportButtonLink: () => repo.getSupportButtonLink(),
-  getPublicInfo: (locale: Locale) => repo.getPublicInfo(locale)
+  getPublicInfo: () => repo.getPublicInfo()
 });
 
 export type FoundationInfoService = ReturnType<typeof createFoundationInfoService>;

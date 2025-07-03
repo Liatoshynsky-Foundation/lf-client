@@ -1,5 +1,3 @@
-import type { Locale } from 'next-intl';
-
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
 
@@ -19,7 +17,7 @@ describe('navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  it('should return parsed and localized navigation data', async () => {
+  it('should return parsed navigation data with raw translations', async () => {
     const mockDocs = [
       {
         title: { uk: 'Головна', en: 'Main' },
@@ -37,17 +35,12 @@ describe('navigationRepository', () => {
       })
     });
 
-    const locale: Locale = 'en';
-
-    const result = await navigationRepository.getNavigation(locale);
+    const result = await navigationRepository.getNavigation();
 
     expect(result).toEqual([
       {
-        title: 'Main',
-        links: [
-          { label: 'Home', href: '/', visibility: true },
-          { label: 'About', href: '/about', visibility: false }
-        ]
+        title: mockDocs[0].title,
+        links: mockDocs[0].links
       }
     ]);
 
@@ -57,7 +50,7 @@ describe('navigationRepository', () => {
   it('should throw if data does not match schema', async () => {
     const invalidDocs = [
       {
-        title: { uk: 'Головна' }, // missing "en"
+        title: { uk: 'Головна' },
         links: [{ label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true }],
         order: 1
       }
@@ -69,8 +62,6 @@ describe('navigationRepository', () => {
       })
     });
 
-    const locale: Locale = 'en';
-
-    await expect(navigationRepository.getNavigation(locale)).rejects.toThrowError();
+    await expect(navigationRepository.getNavigation()).rejects.toThrowError();
   });
 });

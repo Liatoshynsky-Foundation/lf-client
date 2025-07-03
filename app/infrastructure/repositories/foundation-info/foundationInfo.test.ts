@@ -33,10 +33,6 @@ const mockSelect = (value: unknown) => ({
   })
 });
 
-const mockSelectWithoutLean = (value: unknown) => ({
-  select: jest.fn().mockResolvedValue(value)
-});
-
 const mockContactData = {
   email: 'test@example.com',
   phone: '+380123456789',
@@ -93,21 +89,23 @@ describe('foundationInfoRepository', () => {
   });
 
   describe('getBrandingInfo', () => {
-    it('should return foundation name by locale', async () => {
+    it('should return foundation name as raw translations', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
         mockSelect({ foundationName: mockBrandingData.foundationName })
       );
 
-      const result = await foundationInfoRepository.getBrandingInfo('uk');
+      const result = await foundationInfoRepository.getBrandingInfo();
 
-      expect(result).toEqual({ foundationName: mockBrandingData.foundationName.uk });
+      expect(result).toEqual({
+        foundationName: mockBrandingData.foundationName
+      });
     });
   });
 
   describe('getSupportButtonLink', () => {
     it('should return optional support button link', async () => {
       (BrandingInfo.findOne as jest.Mock).mockReturnValue(
-        mockSelectWithoutLean({ supportButtonLink: mockBrandingData.supportButtonLink })
+        mockSelect({ supportButtonLink: mockBrandingData.supportButtonLink })
       );
 
       const result = await foundationInfoRepository.getSupportButtonLink();
@@ -117,17 +115,14 @@ describe('foundationInfoRepository', () => {
   });
 
   describe('getPublicInfo', () => {
-    it('should return localized copyright and links', async () => {
+    it('should return raw public info without localization', async () => {
       (PublicInfo.findOne as jest.Mock).mockReturnValue(mockSelect(mockPublicData));
 
-      const result = await foundationInfoRepository.getPublicInfo('en');
+      const result = await foundationInfoRepository.getPublicInfo();
 
       expect(result).toEqual({
-        copyright: mockPublicData.copyright.en,
-        links: [
-          { label: 'Privacy', href: '/privacy' },
-          { label: 'Terms', href: '/terms' }
-        ]
+        copyright: mockPublicData.copyright,
+        links: mockPublicData.links
       });
     });
   });

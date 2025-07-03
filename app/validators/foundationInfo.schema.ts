@@ -1,3 +1,4 @@
+import type { Locale } from 'next-intl';
 import { z } from 'zod';
 
 import { hrefSchema, translatedFieldSchema, translatedLinkSchema } from './constants';
@@ -25,3 +26,18 @@ export const publicInfoSchema = z.object({
   copyright: translatedFieldSchema,
   links: z.array(translatedLinkSchema).optional()
 });
+
+export const createLocalizedBrandingInfoSchema = (locale: Locale) =>
+  brandingInfoSchema.omit({ supportButtonLink: true }).transform((data) => ({
+    foundationName: data.foundationName[locale]
+  }));
+
+export const createLocalizedPublicInfoSchema = (locale: Locale) =>
+  publicInfoSchema.transform((data) => ({
+    copyright: data.copyright[locale],
+    links:
+      data.links?.map((link) => ({
+        label: link.label[locale],
+        href: link.href
+      })) ?? []
+  }));

@@ -1,10 +1,10 @@
-export type NavigationLinkData = {
+export type NavigationLinkDTO = {
   label: string;
   href: string;
   visibility: boolean;
 };
 
-export type NavigationData = {
+export type NavigationDTO = {
   title: string;
-  links: NavigationLinkData[];
+  links: NavigationLinkDTO[];
 };
