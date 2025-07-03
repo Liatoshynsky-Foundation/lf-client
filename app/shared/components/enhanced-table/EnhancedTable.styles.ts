@@ -10,7 +10,8 @@ export const enhancedTableStyles = {
     flexDirection: 'column',
     py: 20,
     mx: -3,
-    gap: 3
+    gap: 3,
+    gridColumn: '1 / -1'
   },
   container: {
     width: '100%',
