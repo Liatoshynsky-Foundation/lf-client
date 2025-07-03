@@ -9,15 +9,6 @@ const sheetMusicItemSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const additionalMenuItemSchema = new mongoose.Schema(
-  {
-    key: { type: String, required: true },
-    url: { type: String, required: true },
-    isAvailable: { type: Boolean, default: false }
-  },
-  { _id: false }
-);
-
 const songSchema = new mongoose.Schema(
   {
     opusId: { type: mongoose.Schema.Types.ObjectId, ref: 'Opus' },
@@ -26,14 +17,7 @@ const songSchema = new mongoose.Schema(
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
     audioAvailable: { type: Boolean, default: true },
     sheetAvailable: { type: Boolean, default: true },
-    songBlobUrl: { type: String },
-    sheetMusic: [sheetMusicItemSchema],
-    additionalMenu: {
-      listenComposition: additionalMenuItemSchema,
-      viewYoutube: additionalMenuItemSchema,
-      share: additionalMenuItemSchema,
-      viewDetails: additionalMenuItemSchema
-    }
+    sheetMusic: [sheetMusicItemSchema]
   },
   { timestamps: true }
 );

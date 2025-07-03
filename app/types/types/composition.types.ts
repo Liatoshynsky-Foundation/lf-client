@@ -10,17 +10,6 @@ interface ISheetMusicItem {
   dateUploaded: Date;
   isFree: boolean;
 }
-interface ICompositionAdditionalMenuItem {
-  key: string;
-  url: string;
-  isAvailable: boolean;
-}
-interface ICompositionAdditionalMenuObject {
-  listenComposition: ICompositionAdditionalMenuItem;
-  viewYoutube: ICompositionAdditionalMenuItem;
-  share: ICompositionAdditionalMenuItem;
-  viewDetails: ICompositionAdditionalMenuItem;
-}
 
 export interface ICompositionDocument {
   _id: string;
@@ -30,9 +19,7 @@ export interface ICompositionDocument {
   genres?: IGenreDocument[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
-  songBlobUrl?: string | null;
   sheetMusic: ISheetMusicItem[];
-  additionalMenu: ICompositionAdditionalMenuObject;
   createdAt: Date;
   updatedAt: Date;
 }

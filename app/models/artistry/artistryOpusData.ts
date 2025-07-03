@@ -5,7 +5,8 @@ import translatedFieldSchema from '~/models/translatedField';
 const opusSchema = new mongoose.Schema(
   {
     number: { type: String, required: true, unique: true },
-    title: { type: translatedFieldSchema, required: true }
+    title: { type: translatedFieldSchema, required: true },
+    releaseYear: { type: Number }
   },
   { timestamps: true }
 );
