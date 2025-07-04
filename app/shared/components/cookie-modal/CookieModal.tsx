@@ -2,9 +2,9 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import Button from '~/ds-components/button/Button';
 import { Modal } from '~/ds-components/modal/Modal';
 
-import Button from '../design-system/all-components/button/Button';
 import { styles } from './CookieModal.styles';
 import { PositionEnum } from '~/types/enums/common.enums';
 
