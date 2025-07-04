@@ -1,5 +1,6 @@
 export const styles = {
   mainContainer: {
+    maxHeight: '52px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',

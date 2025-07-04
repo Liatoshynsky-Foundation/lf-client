@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -128,7 +129,14 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
 
   return (
     <>
-      <ButtonGroup sx={styles.buttonGroup} defaultActiveButton={activeButton} buttons={renderedNavButtons} size="big" />
+      <Box sx={{ background: 'yellow', border: '7px solid rgba(247, 245, 241, 1)', borderRadius: '999px' }}>
+        <ButtonGroup
+          sx={styles.buttonGroup}
+          defaultActiveButton={activeButton}
+          buttons={renderedNavButtons}
+          size="big"
+        />
+      </Box>
 
       {openDropdownState && (
         <DropdownMenu

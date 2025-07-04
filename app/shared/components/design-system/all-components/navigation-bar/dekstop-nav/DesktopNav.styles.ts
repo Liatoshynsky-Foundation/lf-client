@@ -21,6 +21,7 @@ export const styles = {
   },
   buttonGroup: {
     maxHeight: '40px',
-    minWidth: '615px'
+    minWidth: '615px',
+    backgroundСolor: 'rgba(25, 13, 3, 0.06)'
   }
 };

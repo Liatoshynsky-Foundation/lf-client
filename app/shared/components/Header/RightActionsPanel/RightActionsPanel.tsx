@@ -12,18 +12,20 @@ import { styles } from './RightActionsPanel.styles';
 import { SupportButtonDataProps } from '~/types/types/header.type';
 
 export default function RightActionsPanel({ supportButtonData }: Readonly<SupportButtonDataProps>) {
-  const { isMobile } = useBreakpoints();
+  const { isMobile, isTablet } = useBreakpoints();
 
   return (
-    <Box sx={styles.rightContainer}>
-      <AudioPlayer
-        src="/music/sample-music.mp3"
-        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
-        autoplay={false}
-      />
-      <Box sx={styles.buttonsContainer(isMobile)}>
-        <LanguageSwitcher variant="icon" />
-        <SupportButton data={supportButtonData} />
+    <Box sx={styles.backgroundContainer(isMobile, isTablet)}>
+      <Box sx={styles.rightContainer}>
+        <AudioPlayer
+          src="/music/sample-music.mp3"
+          trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
+          autoplay={false}
+        />
+        <Box sx={styles.buttonsContainer(isMobile)}>
+          <LanguageSwitcher variant="icon" />
+          <SupportButton data={supportButtonData} />
+        </Box>
       </Box>
     </Box>
   );
