@@ -1,10 +1,9 @@
-import { ObjectId } from 'mongodb';
 import { z } from 'zod';
 
-import { translatedFieldSchema } from '~/validators/constants';
+import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
 export const opusSchema = z.object({
-  _id: z.union([z.instanceof(ObjectId).transform((id) => id.toString()), z.string()]),
+  _id: mongoObjectIdSchema,
   number: z.string(),
   title: translatedFieldSchema,
   releaseYear: z.number().optional(),

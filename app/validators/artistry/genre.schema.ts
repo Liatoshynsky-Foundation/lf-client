@@ -1,11 +1,10 @@
-import { ObjectId } from 'mongodb';
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
-import { translatedFieldSchema } from '~/validators/constants';
+import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
 export const genreSchema = z.object({
-  _id: z.union([z.instanceof(ObjectId).transform((id) => id.toString()), z.string()]),
+  _id: mongoObjectIdSchema,
   key: z.string(),
   name: translatedFieldSchema
 });

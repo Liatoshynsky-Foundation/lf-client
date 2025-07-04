@@ -1,9 +1,10 @@
-import { ObjectId } from 'mongodb';
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
 import { createLocalizedGenreSchema, genreSchema } from './genre.schema';
 import { opusSchema } from './opus.schema';
+
+import { mongoObjectIdSchema } from '~/validators/constants';
 
 const sheetMusicItemSchema = z.object({
   url: z.string(),
@@ -12,7 +13,7 @@ const sheetMusicItemSchema = z.object({
 });
 
 export const compositionSchema = z.object({
-  _id: z.union([z.instanceof(ObjectId).transform((id) => id.toString()), z.string()]),
+  _id: mongoObjectIdSchema,
   title: z.string(),
   year: z.number(),
   audioAvailable: z.boolean(),
