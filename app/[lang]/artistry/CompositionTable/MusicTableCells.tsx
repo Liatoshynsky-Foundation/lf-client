@@ -48,23 +48,28 @@ export const RenderGenreHeader = () => {
   );
 };
 
-export const renderPlayCell = () => (
-  <Box
-    sx={{
-      visibility: 'hidden',
-      opacity: 0,
-      transition: 'opacity 0.2s ease',
-      '.MuiTableRow-root:hover &': {
-        visibility: 'visible',
-        opacity: 1
-      }
-    }}
-  >
-    <IconButton size="small" type={IconButtonVariant.icon}>
-      <SvgImage src="/icons/play.svg" alt="play" width={24} height={24} />
-    </IconButton>
-  </Box>
-);
+export const renderPlayCell = (info: CellContext<Music, unknown>) => {
+  const rowData = info.row.original;
+  if (rowData.audioAvailable)
+    return (
+      <Box
+        sx={{
+          visibility: 'hidden',
+          opacity: 0,
+          transition: 'opacity 0.2s ease',
+          '.MuiTableRow-root:hover &': {
+            visibility: 'visible',
+            opacity: 1
+          }
+        }}
+      >
+        <IconButton size="small" type={IconButtonVariant.icon}>
+          <SvgImage src="/icons/play.svg" alt="play" width={24} height={24} />
+        </IconButton>
+      </Box>
+    );
+  return <Box />;
+};
 
 export const renderNameCell = (info: CellContext<Music, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
