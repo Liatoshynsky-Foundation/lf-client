@@ -11,7 +11,11 @@ import { NavLabels } from '~/types/types/navLabels';
 
 import { createRequestContainer } from '~/di/container';
 
-export default async function Header({ navLabels }: { navLabels: NavLabels }) {
+interface HeaderProps {
+  readonly navLabels: NavLabels;
+}
+
+export default async function Header({ navLabels }: HeaderProps) {
   const t = await getTranslations('header');
   const locale = await getLocale();
 
