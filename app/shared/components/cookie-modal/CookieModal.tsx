@@ -45,7 +45,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose }) => {
         </Typography>
         <Box sx={styles.buttonContainer}>
           <Button size="medium" variant="outlined" label={t('settingsButton')} />
-          <Button size="medium" variant="contained" color="tertiary" label={t('acceptButton')} />
+          <Button size="medium" variant="contained" color="tertiary" label={t('acceptButton')} onClick={onClose} />
         </Box>
       </>
     </Modal>
