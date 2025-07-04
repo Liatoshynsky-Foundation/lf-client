@@ -1,9 +1,8 @@
-import { NextResponse } from 'next/server';
-
 import { errors } from '~/constants/errors';
 import { errorResponse } from '~/utils/apiResponse';
 import { validateWithZod } from '~/utils/validateRequestData';
 
+import logger from '~/middleware/logger/logger';
 import { azureStorageService } from '~/services/upload';
 import { zBlobQuerySchema } from '~/validators/blob.schema';
 
@@ -20,23 +19,39 @@ export async function GET(request: Request) {
   if (!validationResult.valid) return errorResponse(validationResult.errors);
 
   const { blobName, folderName } = validationResult.value;
-  let url;
   try {
-    url = await azureStorageService.getBlobUrl(folderName, blobName);
-    if (!url) return errorResponse([errors.BLOB_DOES_NOT_EXIST], 404);
-  } catch {
+    const url = azureStorageService.constructBlobUrl(folderName, blobName);
+    const rangeHeader = request.headers.get('range');
+    const azureResponse = await fetch(url, {
+      method: 'GET',
+      headers: rangeHeader ? { Range: rangeHeader } : {},
+      next: { revalidate: 0 }
+    });
+
+    if (!azureResponse.ok) {
+      return new Response(azureResponse.body, {
+        status: azureResponse.status,
+        statusText: azureResponse.statusText
+      });
+    }
+
+    const headers = new Headers();
+
+    headers.set('Content-Type', azureResponse.headers.get('Content-Type') || 'application/octet-stream');
+    headers.set('Content-Length', azureResponse.headers.get('Content-Length') || '');
+    if (azureResponse.headers.has('Content-Range')) {
+      headers.set('Content-Range', azureResponse.headers.get('Content-Range')!);
+    }
+    headers.set('Accept-Ranges', 'bytes');
+    headers.set('Cache-Control', 'public, max-age=604800, immutable');
+
+    return new Response(azureResponse.body, {
+      status: azureResponse.status,
+      statusText: azureResponse.statusText,
+      headers
+    });
+  } catch (error) {
+    logger.error('Blob proxy failed:', error);
     return errorResponse([errors.AZURE_URL_NOT_DEFINED], 503);
   }
-
-  const azureResponse = await fetch(url);
-  const stream = azureResponse.body;
-  const contentType = azureResponse.headers.get('content-type') ?? 'application/octet-stream';
-
-  return new NextResponse(stream, {
-    headers: {
-      'Content-Type': contentType,
-      'Content-Length': azureResponse.headers.get('content-length') ?? '',
-      'Cache-Control': 'public, max-age=31536000'
-    }
-  });
 }

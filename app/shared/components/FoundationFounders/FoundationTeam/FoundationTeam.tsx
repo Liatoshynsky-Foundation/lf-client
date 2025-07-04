@@ -20,7 +20,7 @@ const team: Teammate[] = [
     name: 'Тетяна Гомон',
     description:
       'Спадкоємиця композитора, співзасновниця і голова Фундації, піаністка-камералістка і музикознавиця, кандидатка мистецтвознавства',
-    photo: '/images/foundation-team/Tetyana-Homon.png'
+    photo: '/api/blob-url?blobName=Tetyana-Homon&folderName=photos'
   },
   {
     name: 'Ірина Тукова',

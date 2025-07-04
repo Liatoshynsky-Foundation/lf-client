@@ -83,53 +83,11 @@ describe('azureStorageService', () => {
     });
   });
 
-  describe('checkBlobExists', () => {
-    it('should return true if blob exists', async () => {
-      mockExists.mockResolvedValue(true);
-      const result = await azureStorageService.checkBlobExists(folderName, blobName);
-      expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalled();
-      expect(logger.warning).not.toHaveBeenCalled();
-    });
-
-    it('should return false if blob does not exist', async () => {
-      mockExists.mockResolvedValue(false);
-      const result = await azureStorageService.checkBlobExists(folderName, blobName);
-      expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalled();
-      expect(logger.warning).not.toHaveBeenCalled();
-    });
-
-    it('should return false and log a warning if checking fails', async () => {
-      const checkError = new Error('SDK error');
-      mockExists.mockRejectedValue(checkError);
-      const result = await azureStorageService.checkBlobExists(folderName, blobName);
-      expect(result).toBe(false);
-      expect(logger.warning).toHaveBeenCalledWith(errors.BLOB_DOES_NOT_EXIST, checkError);
-    });
-  });
-
-  describe('getBlobUrl', () => {
-    it('should return the full URL if blob exists', async () => {
-      mockExists.mockResolvedValue(true);
-      const url = await azureStorageService.getBlobUrl(folderName, blobName);
+  describe('constructBlobUrl', () => {
+    it('should return the full, correctly formatted URL without checking for existence', () => {
+      const url = azureStorageService.constructBlobUrl(folderName, blobName);
       expect(url).toBe(expectedUrl);
-      expect(mockExists).toHaveBeenCalled();
-    });
-
-    it('should return an empty string if blob does not exist', async () => {
-      mockExists.mockResolvedValue(false);
-      const url = await azureStorageService.getBlobUrl(folderName, blobName);
-      expect(url).toBe('');
-      expect(mockExists).toHaveBeenCalled();
-    });
-
-    it('should return an empty string if checking for existence fails', async () => {
-      mockExists.mockRejectedValue(new Error('Network failure'));
-      const url = await azureStorageService.getBlobUrl(folderName, blobName);
-      expect(url).toBe('');
-      expect(mockExists).toHaveBeenCalled();
-      expect(logger.warning).toHaveBeenCalled();
+      expect(mockExists).not.toHaveBeenCalled();
     });
   });
 });

@@ -62,27 +62,17 @@ export const azureStorageService = (() => {
         throw error;
       }
     },
-    checkBlobExists: async (folderName: string, blobName: string): Promise<boolean> => {
+    constructBlobUrl: (folderName: string, blobName: string): string => {
       try {
         zFolderNameSchema.parse(folderName);
         const blobNameHash = createHash('sha256').update(blobName).digest('hex');
         const containerClient = getContainerClient();
         const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);
-        return await blockBlobClient.exists();
+        return blockBlobClient.url;
       } catch (error) {
-        logger.warning(errors.BLOB_DOES_NOT_EXIST, error);
-        return false;
+        logger.error(errors.BLOB_DOES_NOT_EXIST, error);
+        throw error;
       }
-    },
-    getBlobUrl: async (folderName: string, blobName: string): Promise<string> => {
-      const exist = await azureStorageService.checkBlobExists(folderName, blobName);
-      if (exist) {
-        zFolderNameSchema.parse(folderName);
-        const blobNameHash = createHash('sha256').update(blobName).digest('hex');
-        const containerClient = getContainerClient();
-        return getFullPathToBlob(containerClient, folderName, blobNameHash).url;
-      }
-      return '';
     }
   };
 })();
