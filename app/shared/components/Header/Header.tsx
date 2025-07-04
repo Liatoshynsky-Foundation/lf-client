@@ -7,9 +7,9 @@ import Logo from '~/ds-components/logo/Logo';
 import NavigationBar from '../design-system/all-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
+import { NavLabels } from '~/types/types/navLabels';
 
 import { createRequestContainer } from '~/di/container';
-import { NavLabels } from '~/types/types/navLabels';
 
 export default async function Header({ navLabels }: { navLabels: NavLabels }) {
   const t = await getTranslations('header');
