@@ -18,7 +18,7 @@ describe('mongoUrl', () => {
     process.env.MONGO_PASSWORD = 'fake-pass'; //NOSONAR
 
     const { mongoUrl } = await import('~/config/index');
-    expect(mongoUrl()).toBe('mongodb://localhost:27018/testdb');
+    expect(mongoUrl).toBe('mongodb://localhost:27018/testdb');
   });
 
   it('should return default port if MONGO_PORT is not set', async () => {
@@ -29,7 +29,7 @@ describe('mongoUrl', () => {
     process.env.MONGO_PASSWORD = 'fake-pass'; //NOSONAR
 
     const { mongoUrl } = await import('~/config/index');
-    expect(mongoUrl()).toBe('mongodb://localhost:27017/testdb');
+    expect(mongoUrl).toBe('mongodb://localhost:27017/testdb');
   });
 
   it('should return remote mongo url with credentials', async () => {
@@ -39,6 +39,6 @@ describe('mongoUrl', () => {
     process.env.MONGO_PASSWORD = 'fake-pass'; //NOSONAR
 
     const { mongoUrl } = await import('~/config/index');
-    expect(mongoUrl()).toBe('mongodb+srv://user:fake-pass@remotehost/testdb');
+    expect(mongoUrl).toBe('mongodb+srv://user:fake-pass@remotehost/testdb');
   });
 });

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import translatedFieldSchema from '~/models/translatedField';
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
 
 const opusSchema = new mongoose.Schema(
   {

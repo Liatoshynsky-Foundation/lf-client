@@ -21,5 +21,4 @@ export type Music = {
   genre?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
-  songBlobUrl: string;
 };

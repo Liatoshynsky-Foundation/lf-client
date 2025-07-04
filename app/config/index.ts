@@ -8,10 +8,4 @@ export const getMongoUrl = (): string => {
   return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}`;
 };
 
-let _mongoUrl: string;
-export const mongoUrl = (): string => {
-  if (!_mongoUrl) {
-    _mongoUrl = getMongoUrl();
-  }
-  return _mongoUrl;
-};
+export const mongoUrl = getMongoUrl();

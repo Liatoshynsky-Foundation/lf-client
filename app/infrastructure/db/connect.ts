@@ -17,7 +17,7 @@ const cached: MongooseGlobalCache = (global as { mongoose?: MongooseGlobalCache 
 (global as { mongoose?: MongooseGlobalCache }).mongoose = cached;
 
 async function dbConnect() {
-  if (!mongoUrl()) {
+  if (!mongoUrl) {
     throw new Error(errors.MISSING_MONGO_URL);
   }
 
