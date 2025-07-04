@@ -2,8 +2,8 @@ import { errors } from '~/constants/errors';
 import { errorResponse } from '~/utils/apiResponse';
 import { validateWithZod } from '~/utils/validateRequestData';
 
+import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
-import { azureStorageService } from '~/services/upload';
 import { zBlobQuerySchema } from '~/validators/blob.schema';
 
 export async function GET(request: Request) {
@@ -20,9 +20,10 @@ export async function GET(request: Request) {
 
   const { blobName, folderName } = validationResult.value;
   try {
-    const url = azureStorageService.constructBlobUrl(folderName, blobName);
+    const uploadService = createRequestContainer().resolve('uploadService');
+    const url = uploadService.constructBlobUrl(folderName, blobName);
     const rangeHeader = request.headers.get('range');
-    return await azureStorageService.streamBlob(url, rangeHeader);
+    return await uploadService.streamBlob(url, rangeHeader);
   } catch (error) {
     logger.error('Blob proxy failed:', error);
     return errorResponse([errors.AZURE_URL_NOT_DEFINED], 503);

@@ -7,7 +7,7 @@ import { CONTAINER_NAME } from '~/constants';
 import logger from '~/middleware/logger/logger';
 import { zContentTypeSchema, zFolderNameSchema } from '~/validators/blob.schema';
 
-export const azureStorageService = (() => {
+export const createAzureStorageService = () => {
   let blobServiceClient: BlobServiceClient | null = null;
 
   const getClient = (): BlobServiceClient => {
@@ -104,4 +104,4 @@ export const azureStorageService = (() => {
       });
     }
   };
-})();
+};

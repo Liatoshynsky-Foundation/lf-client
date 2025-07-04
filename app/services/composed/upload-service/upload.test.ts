@@ -4,7 +4,7 @@ import { errors } from '~/constants/errors';
 
 import { CONTAINER_NAME } from '~/constants';
 import logger from '~/middleware/logger/logger';
-import { azureStorageService } from '~/services/upload';
+import { createAzureStorageService } from '~/services/composed/upload-service/upload';
 
 const mockUploadData = jest.fn();
 const mockDeleteIfExists = jest.fn();
@@ -64,7 +64,9 @@ describe('azureStorageService', () => {
 
   describe('uploadFile', () => {
     it('should upload file successfully', async () => {
-      await expect(azureStorageService.uploadFile(folderName, blobName, buffer, contentType)).resolves.toBeUndefined();
+      await expect(
+        createAzureStorageService().uploadFile(folderName, blobName, buffer, contentType)
+      ).resolves.toBeUndefined();
       expect(mockUploadData).toHaveBeenCalledWith(buffer, {
         blobHTTPHeaders: { blobContentType: contentType }
       });
@@ -74,7 +76,7 @@ describe('azureStorageService', () => {
     it('should throw an error and log it if upload fails', async () => {
       const uploadError = new Error('Azure network error');
       mockUploadData.mockRejectedValue(uploadError);
-      await expect(azureStorageService.uploadFile(folderName, blobName, buffer, contentType)).rejects.toThrow(
+      await expect(createAzureStorageService().uploadFile(folderName, blobName, buffer, contentType)).rejects.toThrow(
         uploadError
       );
       expect(logger.error).toHaveBeenCalledWith(errors.FAILED_TO_UPLOAD_BLOB, uploadError);
@@ -83,7 +85,7 @@ describe('azureStorageService', () => {
 
   describe('deleteFile', () => {
     it('should delete file successfully', async () => {
-      await expect(azureStorageService.deleteFile(folderName, blobName)).resolves.toBeUndefined();
+      await expect(createAzureStorageService().deleteFile(folderName, blobName)).resolves.toBeUndefined();
       expect(mockDeleteIfExists).toHaveBeenCalled();
       expect(logger.error).not.toHaveBeenCalled();
     });
@@ -91,14 +93,14 @@ describe('azureStorageService', () => {
     it('should throw an error and log it if deletion fails', async () => {
       const deleteError = new Error('Azure permission error');
       mockDeleteIfExists.mockRejectedValue(deleteError);
-      await expect(azureStorageService.deleteFile(folderName, blobName)).rejects.toThrow(deleteError);
+      await expect(createAzureStorageService().deleteFile(folderName, blobName)).rejects.toThrow(deleteError);
       expect(logger.error).toHaveBeenCalledWith(errors.FAILED_TO_DELETE_BLOB, deleteError);
     });
   });
 
   describe('constructBlobUrl', () => {
     it('should return the full, correctly formatted URL without checking for existence', () => {
-      const url = azureStorageService.constructBlobUrl(folderName, blobName);
+      const url = createAzureStorageService().constructBlobUrl(folderName, blobName);
       expect(url).toBe(expectedUrl);
       expect(mockExists).not.toHaveBeenCalled();
     });
@@ -130,7 +132,7 @@ describe('azureStorageService', () => {
         body: fakeBody
       });
 
-      const result = await azureStorageService.streamBlob(mockUrl, null);
+      const result = await createAzureStorageService().streamBlob(mockUrl, null);
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
       expect(mockFetch).toHaveBeenCalledWith(mockUrl, {
@@ -170,7 +172,7 @@ describe('azureStorageService', () => {
 
       const rangeHeader = 'bytes=500000-';
 
-      await azureStorageService.streamBlob(mockUrl, rangeHeader);
+      await createAzureStorageService().streamBlob(mockUrl, rangeHeader);
 
       expect(mockFetch).toHaveBeenCalledWith(mockUrl, {
         method: 'GET',
@@ -199,7 +201,7 @@ describe('azureStorageService', () => {
       };
       mockFetch.mockResolvedValue(mockErrorResponseFromFetch);
 
-      await azureStorageService.streamBlob(mockUrl, null);
+      await createAzureStorageService().streamBlob(mockUrl, null);
 
       expect(mockResponse).toHaveBeenCalledTimes(1);
       expect(mockResponse).toHaveBeenCalledWith(mockErrorBody, {
@@ -211,7 +213,7 @@ describe('azureStorageService', () => {
     it('should throw an error if fetch itself fails', async () => {
       const networkError = new Error('DNS resolution failed');
       mockFetch.mockRejectedValue(networkError);
-      await expect(azureStorageService.streamBlob(mockUrl, null)).rejects.toThrow(networkError);
+      await expect(createAzureStorageService().streamBlob(mockUrl, null)).rejects.toThrow(networkError);
       expect(mockResponse).not.toHaveBeenCalled();
     });
   });
