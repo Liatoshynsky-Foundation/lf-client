@@ -55,11 +55,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
     notFound();
   }
 
-  const supportButtonData = {
-    text: t('supportButton'),
-    link: '/support'
-  };
-
   const navLabels = {
     liatoshynsky: t('navLabels.liatoshynsky'),
     biography: t('navLabels.biography'),
@@ -111,7 +106,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   }}
                 >
                   <Box sx={{ gridColumn: '1 / -1' }}>
-                    <Header supportButtonData={supportButtonData} navLabels={navLabels} />
+                    <Header navLabels={navLabels} />
                   </Box>
                   <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
                   <Box sx={{ gridColumn: '1 / -1' }}>
