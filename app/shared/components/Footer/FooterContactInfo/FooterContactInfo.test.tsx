@@ -6,7 +6,7 @@ import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
 import FooterContactInfo from './FooterContactInfo';
 
 const contacts = {
-  title: 'Test Title',
+  foundationName: 'Test Title',
   phone: '123-456-7890',
   email: 'test@example.com'
 };
@@ -44,7 +44,7 @@ describe('Contact information block inside of the Footer', () => {
     });
 
     it('renders all contact information', () => {
-      expect(screen.getByText(contacts.title)).toBeInTheDocument();
+      expect(screen.getByText(contacts.foundationName)).toBeInTheDocument();
       expect(screen.getByText(contacts.phone)).toBeInTheDocument();
       expect(screen.getByText(contacts.email)).toBeInTheDocument();
     });

@@ -7,14 +7,14 @@ import { styles } from './FooterContactAndSupport.styles';
 import { ButtonData } from './types';
 
 type FooterContactAndSupportProps = {
-  contactUs: ButtonData;
+  contactLabel: string;
   donation: ButtonData;
 };
 
-const FooterContactAndSupport: React.FC<FooterContactAndSupportProps> = ({ contactUs, donation }) => {
+const FooterContactAndSupport: React.FC<FooterContactAndSupportProps> = ({ contactLabel, donation }) => {
   return (
     <Box sx={styles.container}>
-      <ContactUsButton data={contactUs} />
+      <ContactUsButton contactLabel={contactLabel} />
       <DonationButton data={donation} />
     </Box>
   );

@@ -5,7 +5,7 @@ import { errors } from '~/constants/errors';
 import { successResponse } from '~/utils/apiResponse';
 
 import { stateNames } from '~/constants';
-import dbConnect from '~/db/connect';
+import dbConnect from '~/infrastructure/db/connect';
 
 const getMongooseConnectionState = (state: number): string => {
   return stateNames[state] || 'UNKNOWN';

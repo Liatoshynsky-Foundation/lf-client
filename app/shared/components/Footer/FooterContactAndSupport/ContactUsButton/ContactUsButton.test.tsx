@@ -3,14 +3,11 @@ import React from 'react';
 
 import ContactUsButton from './ContactUsButton';
 
-const mockData = {
-  text: 'Contact us',
-  link: '/contact-us'
-};
-
 describe('ContactUsButton', () => {
+  const label = 'Contact us';
+
   beforeEach(() => {
-    render(<ContactUsButton data={mockData} />);
+    render(<ContactUsButton contactLabel={label} />);
   });
 
   afterEach(() => {
