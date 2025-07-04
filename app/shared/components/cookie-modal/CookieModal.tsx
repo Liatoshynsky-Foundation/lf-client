@@ -6,6 +6,7 @@ import { Modal } from '~/ds-components/modal/Modal';
 
 import Button from '../design-system/all-components/button/Button';
 import { styles } from './CookieModal.styles';
+import { PositionEnum } from '~/types/enums/common.enums';
 
 import { Link } from '~/i18n/navigation';
 
@@ -33,6 +34,8 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose }) => {
       titleSx={styles.title}
       topSection={styles.topSection}
       childrenBoxSx={styles.childrenBox}
+      verticalAlignment={PositionEnum.Bottom}
+      horizontalAlignment={PositionEnum.Right}
     >
       <>
         <Typography variant="subtitle1">
