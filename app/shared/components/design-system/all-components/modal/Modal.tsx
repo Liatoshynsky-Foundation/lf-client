@@ -29,6 +29,7 @@ interface ModalProps {
   modalSx?: SxProps;
   contentBoxSx?: SxProps;
   childrenBoxSx?: SxProps;
+  topSection?: SxProps;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -49,6 +50,7 @@ export const Modal: React.FC<ModalProps> = ({
   modalSx = {},
   contentBoxSx = {},
   childrenBoxSx = {},
+  topSection = {},
   children
 }) => {
   const isBigModal = width > 1000;
@@ -65,7 +67,7 @@ export const Modal: React.FC<ModalProps> = ({
       sx={[style.modal(width, height, backgroundColor, verticalAlignment, horizontalAlignment), modalSx] as SxProps}
     >
       <Box sx={{ ...contentBoxSx, ...style.content } as SxProps}>
-        <Box sx={style.topSection}>
+        <Box sx={{ ...style.topSection, ...topSection } as SxProps}>
           <Box>
             <Typography
               id="modal-modal-title"
@@ -96,7 +98,7 @@ export const Modal: React.FC<ModalProps> = ({
           </IconButton>
         </Box>
         {topLine && <Box data-testid="modal-topline" sx={style.topLine(width)} />}
-        <Box sx={{ ...childrenBoxSx, ...style.children }}>{children}</Box>
+        <Box sx={{ ...style.children, ...childrenBoxSx }}>{children}</Box>
       </Box>
     </MuiModal>
   );

@@ -108,5 +108,13 @@
         "place": "Saratov"
       }
     }
+  },
+  "cookie": {
+    "modal": {
+      "title": "🍪 Cookies",
+      "description": "We use cookies to enable essential site functionality and for analytics. Please review our <link>privacy policy</link> to learn more.",
+      "settingsButton": "Cookie settings",
+      "acceptButton": "Accept all"
+    }
   }
 }
