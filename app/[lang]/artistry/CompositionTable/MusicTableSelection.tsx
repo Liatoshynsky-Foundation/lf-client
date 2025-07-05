@@ -18,7 +18,9 @@ import {
 } from './MusicTableCells';
 import { Music } from '~/types/types/enhancedTable';
 
+import { advancedSearchFilter } from '~/lib/utils/advancedSearchFilters';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
+import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
@@ -27,6 +29,8 @@ type Props = {
 };
 
 export default function MusicTableSection({ data }: Readonly<Props>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
 
@@ -38,6 +42,10 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       cell: () => null,
       meta: {
         groupLabelContentFactory: renderOpusGroupLabel
+      },
+      filterFn: (row, columnId, filterValue: string) => {
+        const name = row.getValue<string>(columnId);
+        return advancedSearchFilter(name, filterValue);
       }
     },
     {
@@ -52,6 +60,10 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       enableSorting: false,
       meta: {
         groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
+      },
+      filterFn: (row, columnId, filterValue: string) => {
+        const name = row.getValue<string>(columnId);
+        return advancedSearchFilter(name, filterValue);
       }
     },
     {

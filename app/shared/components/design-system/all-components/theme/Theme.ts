@@ -72,20 +72,6 @@ declare module '@mui/material/styles' {
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
   }
-
-  interface TypographyVariantsOptions {
-    customBold32?: React.CSSProperties;
-    customSemiBold20?: React.CSSProperties;
-    customBold20?: React.CSSProperties;
-    customItalic18?: React.CSSProperties;
-    customMedium18?: React.CSSProperties;
-    customBold16?: React.CSSProperties;
-    customMedium16?: React.CSSProperties;
-    customItalic16?: React.CSSProperties;
-    customCaption?: React.CSSProperties;
-    customItalic14?: React.CSSProperties;
-    customSemiBold18?: React.CSSProperties;
-  }
 }
 
 declare module '@mui/material/styles' {

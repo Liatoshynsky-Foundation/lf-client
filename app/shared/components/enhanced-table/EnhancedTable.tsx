@@ -10,7 +10,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import TableHeader from './enhanced-table-header/EnhancedTableHeader';
+import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
@@ -39,7 +39,6 @@ export default function EnhancedTable<T extends RowData>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
-
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -126,7 +125,7 @@ export default function EnhancedTable<T extends RowData>({
 
       <TableContainer component={Paper} sx={styles.container}>
         <Table>
-          <TableHeader table={headerTable} columnWidths={columnWidths} />
+          <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
           <TableBody>
             {rowsToRender.map((entry) =>
               entry.type === 'group' ? (
