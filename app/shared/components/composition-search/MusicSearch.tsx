@@ -8,7 +8,6 @@ import { mainHexPallete } from '../design-system/all-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
 
 import { musicData } from '~/[lang]/artistry/CompositionTable/MusicTable.constant';
-import { useSearch } from '~/context/SearchContext';
 export interface OptionType {
   name: string;
 }
@@ -40,7 +39,7 @@ export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
   const [options, setOptions] = useState<OptionType[]>([]);
   const [value, setValue] = useState<OptionType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { searchQuery, setSearchQuery } = useSearch();
+  const [searchQuery, setSearchQuery] = useState<string>('');
   //eslint-disable-next-line react-hooks/exhaustive-deps
   const getOptionsDelayed = useCallback(
     debounce((query: string, callback: (options: OptionType[]) => void) => {
@@ -102,11 +101,10 @@ export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
     );
   };
 
-  // const filterOptions = (options: OptionType[]): OptionType[] => options;
-
   return (
     <div>
       <Autocomplete
+        id="music-search"
         options={musicData}
         value={value}
         onChange={onChange}
