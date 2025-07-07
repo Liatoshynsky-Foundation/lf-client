@@ -3,8 +3,7 @@ export const styles = {
     maxHeight: '52px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '110px'
+    justifyContent: 'space-between'
   },
   navigationContainer: {
     marginRight: { xl: '35px', xxl: '70px' },
