@@ -14,17 +14,17 @@ jest.mock('next-intl', () => ({
 }));
 
 type TestRow = {
-  id: number;
+  id: string;
   name: string;
   year: number;
   group?: string;
 };
 
 const mockData: TestRow[] = [
-  { id: 1, name: 'Item 1', year: 2020, group: 'A' },
-  { id: 2, name: 'Item 2', year: 2020, group: 'A' },
-  { id: 3, name: 'Item 3', year: 2021, group: 'B' },
-  { id: 4, name: 'Item 4', year: 2022 }
+  { id: '1', name: 'Item 1', year: 2020, group: 'A' },
+  { id: '2', name: 'Item 2', year: 2020, group: 'A' },
+  { id: '3', name: 'Item 3', year: 2021, group: 'B' },
+  { id: '4', name: 'Item 4', year: 2022 }
 ];
 
 const columns: ColumnDef<TestRow>[] = [

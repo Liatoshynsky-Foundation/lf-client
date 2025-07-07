@@ -3,12 +3,12 @@ import { flexRender, Table } from '@tanstack/react-table';
 
 import { enhancedTableRowStyles as styles } from './EnhancedTableRow.styles';
 
-interface EnhancedTableRowProps<T extends { id: number }> {
+interface EnhancedTableRowProps<T extends { id: string }> {
   data: T;
   table: Table<T>;
 }
 
-export default function EnhancedTableRow<T extends { id: number }>({
+export default function EnhancedTableRow<T extends { id: string }>({
   data,
   table
 }: Readonly<EnhancedTableRowProps<T>>) {
