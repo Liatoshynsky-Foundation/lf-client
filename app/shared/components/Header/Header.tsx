@@ -7,19 +7,27 @@ import Logo from '~/ds-components/logo/Logo';
 import NavigationBar from '../design-system/all-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
-import { NavLabels } from '~/types/types/navLabels';
 
 import { createRequestContainer } from '~/di/container';
 
-interface HeaderProps {
-  readonly navLabels: NavLabels;
-}
-
-export default async function Header({ navLabels }: HeaderProps) {
+export default async function Header() {
   const t = await getTranslations('header');
   const locale = await getLocale();
 
   const { supportButtonLink } = await createRequestContainer().resolve('headerService').getHeaderData(locale);
+
+  const navLabels = {
+    liatoshynsky: t('navLabels.liatoshynsky'),
+    biography: t('navLabels.biography'),
+    artistry: t('navLabels.artistry'),
+    research: t('navLabels.research'),
+    foundation: t('navLabels.foundation'),
+    about: t('navLabels.foundationHome'),
+    news: t('navLabels.news'),
+    media: t('navLabels.mediaAboutUs'),
+    archive: t('navLabels.archive'),
+    collaboration: t('navLabels.collaboration')
+  };
 
   return (
     <Box component="header" sx={styles.mainContainer}>

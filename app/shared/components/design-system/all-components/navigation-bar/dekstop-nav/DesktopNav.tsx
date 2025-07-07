@@ -8,6 +8,7 @@ import DropdownMenu from '~/ds-components/dropdown-menu/DropdownMenu';
 import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 
 import { IconButton } from '../../icon-button/IconButton';
+import { mainHexPallete } from '../../theme/colors';
 import { styles } from './DesktopNav.styles';
 import { ROUTES } from '~/constants/routes';
 import { NavLabels } from '~/types/types/navLabels';
@@ -91,7 +92,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
     const isActive = index === effectiveActiveIndex;
 
     const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
-    const iconColor = isActive ? '#fff' : '#000';
+    const iconColor = isActive ? mainHexPallete.white : mainHexPallete.black;
 
     return item.dropdown ? (
       <IconButton
@@ -129,7 +130,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
 
   return (
     <>
-      <Box sx={{ background: 'yellow', border: '7px solid rgba(247, 245, 241, 1)', borderRadius: '999px' }}>
+      <Box sx={styles.buttonGroupBackground}>
         <ButtonGroup
           sx={styles.buttonGroup}
           defaultActiveButton={activeButton}

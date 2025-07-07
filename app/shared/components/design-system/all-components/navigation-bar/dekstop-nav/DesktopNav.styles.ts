@@ -23,5 +23,10 @@ export const styles = {
     maxHeight: '40px',
     minWidth: '615px',
     backgroundСolor: 'rgba(25, 13, 3, 0.06)'
+  },
+  buttonGroupBackground: {
+    background: 'yellow',
+    border: '7px solid rgba(247, 245, 241, 1)',
+    borderRadius: '999px'
   }
 };

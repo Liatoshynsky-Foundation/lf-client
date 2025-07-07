@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
 
 import Footer from '~/components/Footer/Footer';
@@ -49,24 +48,10 @@ interface RootLayoutParams {
 }
 
 export default async function RootLayout({ children, params }: RootLayoutParams) {
-  const t = await getTranslations('header');
   const { lang } = await params;
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
-
-  const navLabels = {
-    liatoshynsky: t('navLabels.liatoshynsky'),
-    biography: t('navLabels.biography'),
-    artistry: t('navLabels.artistry'),
-    research: t('navLabels.research'),
-    foundation: t('navLabels.foundation'),
-    about: t('navLabels.foundationHome'),
-    news: t('navLabels.news'),
-    media: t('navLabels.mediaAboutUs'),
-    archive: t('navLabels.archive'),
-    collaboration: t('navLabels.collaboration')
-  };
 
   return (
     <html lang={lang}>
@@ -106,7 +91,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   }}
                 >
                   <Box sx={{ gridColumn: '1 / -1' }}>
-                    <Header navLabels={navLabels} />
+                    <Header />
                   </Box>
                   <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
                   <Box sx={{ gridColumn: '1 / -1' }}>
