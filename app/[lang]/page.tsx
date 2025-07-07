@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -23,6 +24,10 @@ export default async function Home({ params }: Readonly<Language>) {
     pageService.getPageData('home', lang),
     getTranslations('home.liatoshynskyOffice')
   ]);
+
+  if (!page) {
+    return <Box />;
+  }
 
   return (
     <>
