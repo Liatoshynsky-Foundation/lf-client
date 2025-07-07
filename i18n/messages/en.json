@@ -138,6 +138,14 @@
       "description": "We use cookies to enable essential site functionality and for analytics. Please review our <link>privacy policy</link> to learn more.",
       "settingsButton": "Cookie settings",
       "acceptButton": "Accept all"
+    },
+    "preferences": {
+      "title": "Cookie Settings",
+      "description": "We respect your right to privacy. You can choose which types of cookies we may use. Adjust the settings below according to your preferences.",
+      "analytics": "Analytics",
+      "analyticsDescription": "Allows us to collect anonymous data about how you use the site — to make it more user-friendly and intuitive",
+      "selectAllButton": "Select All",
+      "saveSettingsButton": "Save Settings"
     }
   }
 }
