@@ -1,4 +1,10 @@
 export const styles = {
+  container: {
+    width: '100%',
+    maxWidth: '520px',
+    height: '100%',
+    maxHeight: '313px'
+  },
   childrenBox: {
     display: 'flex',
     justifyContent: 'space-between',
