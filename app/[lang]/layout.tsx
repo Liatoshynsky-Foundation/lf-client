@@ -52,6 +52,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
+
   return (
     <html lang={lang}>
       <head>

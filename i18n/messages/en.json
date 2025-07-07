@@ -9,7 +9,19 @@
     "opentechLabel": "Developed by"
   },
   "header": {
-    "supportButton": "Support"
+    "supportButton": "Support",
+    "navLabels": {
+      "liatoshynsky": "Borys Lyatoshynskyi",
+      "biography": "Biography",
+      "artistry": "Artistry",
+      "research": "Research and scientific works",
+      "foundation": "Foundation",
+      "foundationHome": "About the foundation",
+      "news": "News",
+      "mediaAboutUs": "Media about us",
+      "archive": "Cabinet-Archive",
+      "collaboration": "Cooperation"
+    }
   },
   "home": {
     "liatoshynskyOffice": {

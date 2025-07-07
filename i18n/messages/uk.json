@@ -9,7 +9,19 @@
     "opentechLabel": "Розроблено в"
   },
   "header": {
-    "supportButton": "Підтримати"
+    "supportButton": "Підтримати",
+    "navLabels": {
+      "liatoshynsky": "Борис Лятошинський",
+      "biography": "Життєпис",
+      "artistry": "Творчість",
+      "research": "Дослідження та наукові роботи",
+      "foundation": "Фундація",
+      "foundationHome": "Про фундацію",
+      "news": "Новини",
+      "mediaAboutUs": "ЗМІ про нас",
+      "archive": "Кабінет-Архів",
+      "collaboration": "Співпраця"
+    }
   },
   "home": {
     "liatoshynskyOffice": {

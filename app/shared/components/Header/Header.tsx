@@ -2,8 +2,11 @@ import { Box } from '@mui/material';
 import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
-import AudioPlayer from './AudioPlayer/AudioPlayer';
-import SupportButton from './SupportButton/SupportButton';
+import Logo from '~/ds-components/logo/Logo';
+import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
+
+import { styles } from './Header.styles';
+import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { createRequestContainer } from '~/di/container';
 
@@ -13,15 +16,31 @@ export default async function Header() {
 
   const { supportButtonLink } = await createRequestContainer().resolve('headerService').getHeaderData(locale);
 
+  const navLabels = {
+    liatoshynsky: t('navLabels.liatoshynsky'),
+    biography: t('navLabels.biography'),
+    artistry: t('navLabels.artistry'),
+    research: t('navLabels.research'),
+    foundation: t('navLabels.foundation'),
+    about: t('navLabels.foundationHome'),
+    news: t('navLabels.news'),
+    media: t('navLabels.mediaAboutUs'),
+    archive: t('navLabels.archive'),
+    collaboration: t('navLabels.collaboration')
+  };
+
   return (
-    <Box component="header">
-      <AudioPlayer
-        src="/music/sample-music.mp3"
-        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
-        autoplay={false}
-      />
-      <SupportButton
-        data={{
+    <Box component="header" sx={styles.mainContainer}>
+      <Box sx={styles.logoContainer}>
+        <Logo />
+      </Box>
+
+      <Box sx={styles.navigationContainer}>
+        <NavigationBar navLabels={navLabels} />
+      </Box>
+
+      <RightActionsPanel
+        supportButtonData={{
           text: t('supportButton'),
           link: supportButtonLink
         }}

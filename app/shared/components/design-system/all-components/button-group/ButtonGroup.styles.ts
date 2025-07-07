@@ -44,13 +44,16 @@ export const StyledButtonItem = styled(Box, {
     position: 'relative',
     zIndex: 1,
     marginRight: '4px',
-    padding: size === 'big' ? '8px 22px' : '2px 16px',
+    padding: size === 'big' ? '5px 16px' : '2px 16px',
     textTransform: 'none',
     lineHeight: '150%',
     border: 'none',
     backgroundColor: 'transparent',
     '&:last-child': {
       marginRight: 0
+    },
+    '&:hover': {
+      background: 'rgba(25, 13, 3, 0.12)'
     },
     '&>button': {
       backgroundColor: 'transparent',
@@ -66,15 +69,7 @@ export const StyledButtonItem = styled(Box, {
       margin: 0,
       display: 'inline-block',
       height: '100%',
-      transition: 'none',
-      '&:hover': {
-        textDecoration: 'none',
-        color: 'inherit',
-        backgroundColor: 'inherit'
-      },
-      '& *:not(.lf-btn-label)': {
-        display: 'none'
-      }
+      transition: 'none'
     }
   };
 });
