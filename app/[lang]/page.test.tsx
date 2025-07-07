@@ -2,37 +2,37 @@ import { render, screen } from '@testing-library/react';
 
 import Home from './page';
 
-jest.mock('~/components/Liatoshynsky-office/LiatoshynskyOffice', () => {
+jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => {
   const MockLiatoshynskyOffice = () => <div>Liatoshynsky office</div>;
   MockLiatoshynskyOffice.displayName = 'MockLiatoshynskyOffice';
   return MockLiatoshynskyOffice;
 });
 
-jest.mock('~/components/FoundationFounders/FoundationFounders', () => {
+jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => {
   const MockFoundationFounders = () => <div>Foundation founders</div>;
   MockFoundationFounders.displayName = 'MockFoundationFounders';
   return MockFoundationFounders;
 });
 
-jest.mock('~/components/our-mission/OurMission', () => {
+jest.mock('~/components/blocks/our-mission/OurMission', () => {
   const MockOurMission = () => <div>Our mission</div>;
   MockOurMission.displayName = 'MockOurMission';
   return MockOurMission;
 });
 
-jest.mock('~/components/main-page-sections/about-foundation/AboutFoundation', () => {
+jest.mock('~/components/blocks/about-foundation/AboutFoundation', () => {
   const MockAboutFoundation = () => <div>About foundation</div>;
   MockAboutFoundation.displayName = 'MockAboutFoundation';
   return MockAboutFoundation;
 });
 
-jest.mock('~/components/our-goals/OurGoals', () => {
+jest.mock('~/components/blocks/our-goals/OurGoals', () => {
   const MockOurGoals = () => <div>Our goals</div>;
   MockOurGoals.displayName = 'MockOurGoals';
   return MockOurGoals;
 });
 
-jest.mock('~/components/what-we-do/WhatWeDo', () => {
+jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => {
   const MockWhatWeDo = () => <div>What we do</div>;
   MockWhatWeDo.displayName = 'MockWhatWeDo';
   return MockWhatWeDo;
