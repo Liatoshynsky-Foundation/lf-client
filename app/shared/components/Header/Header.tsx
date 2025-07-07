@@ -3,8 +3,8 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
 import Logo from '~/ds-components/logo/Logo';
+import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
 
-import NavigationBar from '../design-system/all-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 

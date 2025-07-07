@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
 import DropdownMenu from '~/ds-components/dropdown-menu/DropdownMenu';
+import { IconButton } from '~/ds-components/icon-button/IconButton';
 import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
-import { IconButton } from '../../icon-button/IconButton';
-import { mainHexPallete } from '../../theme/colors';
 import { styles } from './DesktopNav.styles';
 import { ROUTES } from '~/constants/routes';
 import { NavLabels } from '~/types/types/navLabels';
