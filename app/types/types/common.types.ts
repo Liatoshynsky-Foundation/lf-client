@@ -7,3 +7,5 @@ export interface ElementSizes {
 
 export type ButtonGroupSizeOptions = 'small' | 'big';
 export type ButtonGroupPaletteOptions = 'primary' | 'secondary';
+
+export type ScrollDirection = 'up' | 'down';
