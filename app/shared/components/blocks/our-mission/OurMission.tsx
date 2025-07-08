@@ -14,8 +14,8 @@ const OurMission = ({ data }: { data: Readonly<OurMissionProps> }) => {
     <Box sx={styles.mainContainer}>
       <SectionTitle title={title} />
       <Box sx={styles.list}>
-        {listItems.map((item, index) => (
-          <ListItem key={index} text={item} />
+        {listItems.map((item) => (
+          <ListItem key={item} text={item} />
         ))}
       </Box>
       <Box sx={styles.imagesContainer}>

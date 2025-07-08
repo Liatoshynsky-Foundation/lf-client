@@ -1,15 +1,15 @@
 type TransformedImage = {
-  src: string;
-  alt: string;
-  caption?: string;
+  readonly src: string;
+  readonly alt: string;
+  readonly caption?: string;
 };
 
 export type IntroSectionProps = {
   title: string;
   image: TransformedImage | null;
   quote: {
-    mainText: string;
-    sourceTitle: string;
+    readonly mainText: string;
+    readonly sourceTitle: string;
   } | null;
 };
 
@@ -29,6 +29,7 @@ export type OurMissionProps = {
 };
 
 type GoalItem = {
+  id: string;
   title: string;
   description: string;
 };
@@ -46,6 +47,7 @@ export type LiatoshynskyOfficeProps = {
 };
 
 export type WhatWeDoItem = {
+  id: string;
   title: string;
   description: string;
 };

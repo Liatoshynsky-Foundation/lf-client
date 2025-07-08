@@ -16,8 +16,8 @@ const OurGoals = ({ data }: { data: Readonly<OurGoalsProps> }) => {
     <Box sx={styles.mainContainer}>
       <SectionTitle title={mainTitle} mb={0} />
       <Box sx={styles.goalsGrid}>
-        {goals.map((goal, index) => (
-          <Box sx={styles.cardWithIcon} key={index}>
+        {goals.map((goal) => (
+          <Box sx={styles.cardWithIcon} key={goal.id}>
             <Box sx={styles.iconWrapper}>
               <Image src="/icons/bullet-small.svg" alt="bullet icon" fill sizes={sizesAttribute} />
             </Box>

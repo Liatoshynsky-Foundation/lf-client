@@ -20,7 +20,6 @@ export default function Header() {
   useEffect(() => {
     setIsNavVisible(scrollDirection !== 'down');
   }, [scrollDirection]);
-
   const navLabels = {
     liatoshynsky: t('navLabels.liatoshynsky'),
     biography: t('navLabels.biography'),

@@ -110,6 +110,7 @@ export const transformOurGoals = (block: AnyBlock, locale: Locale): OurGoalsProp
     mainTitle: mainTitleElement?.text[locale] ?? '',
     goals:
       listElement?.items.map((item) => ({
+        id: item.title[locale],
         title: item.title[locale],
         description: item.description[locale]
       })) ?? []
@@ -127,6 +128,7 @@ export const transformWhatWeDo = (block: AnyBlock, locale: Locale): WhatWeDoProp
     mainTitle: mainTitleElement?.text[locale] ?? '',
     items:
       listElement?.items.map((item) => ({
+        id: item.title[locale],
         title: item.title[locale],
         description: item.description[locale]
       })) ?? []
