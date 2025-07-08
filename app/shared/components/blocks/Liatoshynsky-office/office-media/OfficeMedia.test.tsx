@@ -20,12 +20,12 @@ const mockImages: OfficeMediaProps['images'] = [
 
 describe('OfficeMedia component', () => {
   it('should render all photos without crashing', () => {
-    render(<OfficeMedia images={mockImages} />);
+    render(<OfficeMedia />);
     expect(screen.getAllByRole('img')).toHaveLength(mockImages.length);
   });
 
   it('should render logo with correct props', () => {
-    render(<OfficeMedia images={mockImages} />);
+    render(<OfficeMedia />);
     const logo = screen.getByTestId('logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('data-color', 'white');

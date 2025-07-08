@@ -5,14 +5,10 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import TitleWithDescription from '~/components/title-with-description/TitleWithDescription';
 
 import { iconSizes, styles } from './WhatWeDo.styles';
-import { WhatWeDoProps } from '~/types/pages/home/homePage';
+import { WhatWeDoItem, WhatWeDoProps } from '~/types/pages/home/homePage';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
-type WhatWeDoItem = {
-  title: string;
-  description: string;
-};
-const WhatWeDo = ({ data }: { data: WhatWeDoProps }) => {
+const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
   const { mainTitle, items } = data;
   const columns: WhatWeDoItem[][] = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
   const sizesAttribute = generateSizesAttribute(iconSizes);

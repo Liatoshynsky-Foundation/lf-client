@@ -2,12 +2,6 @@ import { render, screen } from '@testing-library/react';
 
 import WhatWeDo from './WhatWeDo';
 
-jest.mock('next-intl/server', () => ({
-  getTranslations: jest.fn().mockResolvedValue((key: string) => {
-    return key;
-  })
-}));
-
 const testData = {
   mainTitle: 'main Title',
   items: [

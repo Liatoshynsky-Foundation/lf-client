@@ -45,7 +45,7 @@ export type LiatoshynskyOfficeProps = {
   } | null;
 };
 
-type WhatWeDoItem = {
+export type WhatWeDoItem = {
   title: string;
   description: string;
 };

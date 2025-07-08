@@ -13,11 +13,7 @@ jest.mock('../../../../public/images/quote.svg', () => ({
 describe('QuoteBlock', () => {
   const defaultProps: QuoteBlockProps = {
     quoteText: 'Test',
-    sourceText: {
-      title: 'title',
-      data: '1 січня 2000',
-      place: 'place'
-    },
+    sourceText: 'title, 1 січня 2000, place',
     quoteIconColor: 'black',
     mainTextColor: 'burgundy',
     alignRight: true
@@ -31,11 +27,6 @@ describe('QuoteBlock', () => {
   it('should render source text combined from title, date and place', () => {
     render(<Quote {...defaultProps} />);
     expect(screen.getByText('title, 1 січня 2000, place')).toBeInTheDocument();
-  });
-
-  it('should render only existing source text fields', () => {
-    render(<Quote {...defaultProps} sourceText={{ data: '1 січня 2000', place: 'Львів' }} />);
-    expect(screen.getByText('1 січня 2000, Львів')).toBeInTheDocument();
   });
 
   it('should align text to left (alignRight = false)', () => {

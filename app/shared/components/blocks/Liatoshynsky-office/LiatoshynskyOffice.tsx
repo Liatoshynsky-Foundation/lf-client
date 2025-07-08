@@ -14,7 +14,13 @@ import { Link } from '~/i18n/navigation';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = ({ data, t }: { data: LiatoshynskyOfficeProps; t: ReturnType<typeof useTranslations> }) => {
+const LiatoshynskyOffice = ({
+  data,
+  t
+}: {
+  data: Readonly<LiatoshynskyOfficeProps>;
+  t: ReturnType<typeof useTranslations>;
+}) => {
   const { quote } = data;
   return (
     <Box sx={styles.mainContainer}>

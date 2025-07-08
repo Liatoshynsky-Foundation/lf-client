@@ -1,7 +1,7 @@
 import { asFunction } from 'awilix';
 
-import { createCompositionService } from '~/services/core/compositionService';
 import { createPagesDataService } from '~/services/composed/pages-data-service/pagesDataService';
+import { createCompositionService } from '~/services/core/compositionService';
 import { createFoundationInfoService } from '~/services/core/foundationInfoService';
 import { createNavigationService } from '~/services/core/navigationService';
 

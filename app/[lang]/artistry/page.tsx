@@ -5,11 +5,11 @@ import React from 'react';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import MusicTableSection from './CompositionTable/MusicTableSelection';
-import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
+import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
 
-export default async function Artistry({ params }: Readonly<ParamsWithLanguage>) {
+export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
   const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang);

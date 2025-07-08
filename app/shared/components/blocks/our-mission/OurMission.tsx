@@ -7,7 +7,7 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import { styles } from './OurMission.styles';
 import { OurMissionProps } from '~/types/pages/home/homePage';
 
-const OurMission = ({ data }: { data: OurMissionProps }) => {
+const OurMission = ({ data }: { data: Readonly<OurMissionProps> }) => {
   const { title, smallImage, bigImage, listItems } = data;
 
   return (

@@ -1,18 +1,8 @@
 import { render, screen } from '@testing-library/react';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import LiatoshynskyOffice from './LiatoshynskyOffice';
-
-jest.mock('next-intl/server', () => ({
-  getTranslations: jest.fn().mockImplementation(async (namespace) => {
-    const translations: Record<string, string> = {
-      'home.liatoshynskyOffice.office': 'Кабінет',
-      'home.liatoshynskyOffice.name': 'Лятушинського',
-      'home.liatoshynskyOffice.goToOfficeButton': 'Увійти до кабінету'
-    };
-    return (key: string) => translations[`${namespace}.${key}`] || key;
-  })
-}));
 
 jest.mock('~/components/Quote/Quote', () => {
   const MockQuote = () => <div data-testid="quote" />;
@@ -40,13 +30,30 @@ jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
 
+const mockTranslations: Record<string, string> = {
+  office: 'Кабінет',
+  name: 'Лятушинського',
+  goToOfficeButton: 'Увійти до кабінету'
+};
+
+const mockTWithTranslations = (key: string) => {
+  return mockTranslations[key] || key;
+};
+const mockT = mockTWithTranslations as ReturnType<typeof useTranslations>;
+const mockData = {
+  quote: {
+    text: 'Текст моєї тестової цитати',
+    author: 'Тестовий Автор'
+  }
+};
+
 describe('LiatoshynskyOffice', () => {
-  beforeEach(async () => {
-    render(await LiatoshynskyOffice());
+  beforeEach(() => {
+    render(LiatoshynskyOffice({ data: mockData, t: mockT }));
   });
 
-  it('should render the main text content from translations', async () => {
-    expect(await screen.findByText('Кабінет')).toBeInTheDocument();
+  it('should render the main text content from translations', () => {
+    expect(screen.getByText('Кабінет')).toBeInTheDocument();
     expect(screen.getByText('Лятушинського')).toBeInTheDocument();
   });
 

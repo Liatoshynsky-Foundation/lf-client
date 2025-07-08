@@ -20,10 +20,16 @@ jest.mock('~/components/blocks/our-mission/OurMission', () => {
   return MockOurMission;
 });
 
-jest.mock('~/components/blocks/about-foundation/AboutFoundation', () => {
-  const MockAboutFoundation = () => <div>About foundation</div>;
-  MockAboutFoundation.displayName = 'MockAboutFoundation';
+jest.mock('~/components/blocks/IntroSection/IntroSection', () => {
+  const MockAboutFoundation = () => <div>Intro section</div>;
+  MockAboutFoundation.displayName = 'MockIntroSection';
   return MockAboutFoundation;
+});
+
+jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => {
+  const MockOurGoals = () => <div>Foundation info</div>;
+  MockOurGoals.displayName = 'MockFoundationInfo';
+  return MockOurGoals;
 });
 
 jest.mock('~/components/blocks/our-goals/OurGoals', () => {
@@ -38,14 +44,36 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => {
   return MockWhatWeDo;
 });
 
+jest.mock('~/di/container', () => ({
+  createRequestContainer: () => ({
+    resolve: () => ({
+      getPageData: jest.fn().mockResolvedValue({
+        IntroSection: {},
+        FoundationInfo: {},
+        OurMission: {},
+        OurGoals: {},
+        LiatoshynskyOffice: {},
+        WhatWeDo: {},
+        FoundationFounders: {}
+      })
+    })
+  })
+}));
+
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn(),
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key)
+}));
+
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
-    render(await Home());
+    render(await Home({ params: Promise.resolve({ lang: 'en' }) }));
 
     expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
     expect(screen.getByText(/Foundation founders/i)).toBeInTheDocument();
-    expect(screen.getByText(/About foundation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Intro section/i)).toBeInTheDocument();
+    expect(screen.getByText(/Foundation info/i)).toBeInTheDocument();
     expect(screen.getByText(/Our goals/i)).toBeInTheDocument();
     expect(screen.getByText(/What we do/i)).toBeInTheDocument();
   });

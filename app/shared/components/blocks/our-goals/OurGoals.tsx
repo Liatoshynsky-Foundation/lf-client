@@ -8,7 +8,7 @@ import { iconSizes, styles } from './OurGoals.styles';
 import { OurGoalsProps } from '~/types/pages/home/homePage';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
-const OurGoals = ({ data }: { data: OurGoalsProps }) => {
+const OurGoals = ({ data }: { data: Readonly<OurGoalsProps> }) => {
   const { mainTitle, goals } = data;
   const sizesAttribute = generateSizesAttribute(iconSizes);
 

@@ -2,9 +2,9 @@ import { Box } from '@mui/material';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import FoundationInfo from '~/components/blocks/about-foundation/FoundationInfo/FoundationInfo';
-import IntroSection from '~/components/blocks/about-foundation/IntroSection/IntroSection';
 import FoundationFounders from '~/components/blocks/FoundationFounders/FoundationFounders';
+import FoundationInfo from '~/components/blocks/FoundationInfo/FoundationInfo';
+import IntroSection from '~/components/blocks/IntroSection/IntroSection';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
