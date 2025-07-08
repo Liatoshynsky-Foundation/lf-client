@@ -95,10 +95,10 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
             </Box>
 
             <Box sx={styles.dotsContainerStyles}>
-              {images.map((_, index) => (
+              {images.map((image, index) => (
                 <Box
-                  key={`dot-${index}`}
-                  data-testid={`carousel-dot-${index}`}
+                  key={`dot-${image.id}`}
+                  data-testid={`carousel-dot-${image.id}`}
                   data-active={index === activeIndex}
                   sx={styles.getDotStyles(index === activeIndex)}
                   onClick={() => goToSlide(index)}
