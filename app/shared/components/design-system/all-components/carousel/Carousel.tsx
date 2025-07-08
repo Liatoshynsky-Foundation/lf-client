@@ -57,8 +57,8 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
                 return (
                   <Box
                     key={image.id}
-                    aria-current={isActive ? 'true' : undefined}
-                    role="group"
+                    data-testid={`carousel-image-${index}`}
+                    data-active={isActive}
                     sx={styles.getImageContainerStyles(isActive, index, activeIndex)}
                     onClick={() => handleImageClick(index)}
                   >
@@ -97,8 +97,9 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
             <Box sx={styles.dotsContainerStyles}>
               {images.map((_, index) => (
                 <Box
-                  key={index}
-                  role="button"
+                  key={`dot-${index}`}
+                  data-testid={`carousel-dot-${index}`}
+                  data-active={index === activeIndex}
                   sx={styles.getDotStyles(index === activeIndex)}
                   onClick={() => goToSlide(index)}
                 />

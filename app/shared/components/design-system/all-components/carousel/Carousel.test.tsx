@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
 
 import Carousel from './Carousel';
@@ -59,8 +59,8 @@ describe('Carousel', () => {
 
   it('should start from given initial index', () => {
     render(<Carousel images={mockImages} initialIndex={2} />);
-    const currentSlide = screen.getByRole('group', { current: true });
-    expect(within(currentSlide).getByAltText('Image 3')).toBeInTheDocument();
+    const activeSlide = screen.getByTestId('carousel-image-2');
+    expect(activeSlide).toHaveAttribute('data-active', 'true');
   });
 
   it('should disable left arrow on first slide', () => {
@@ -87,9 +87,11 @@ describe('Carousel', () => {
 
   it('should navigate to selected slide when dot is clicked', () => {
     render(<Carousel images={mockImages} />);
-    const dots = screen.getAllByRole('button');
-    fireEvent.click(dots[2]);
-    expect(screen.getByAltText('Image 3')).toBeInTheDocument();
+    const thirdDot = screen.getByTestId('carousel-dot-2');
+    fireEvent.click(thirdDot);
+    const thirdSlide = screen.getByTestId('carousel-image-2');
+    expect(thirdSlide).toHaveAttribute('data-active', 'true');
+    expect(thirdDot).toHaveAttribute('data-active', 'true');
   });
 
   it('should navigate to the previous image', () => {

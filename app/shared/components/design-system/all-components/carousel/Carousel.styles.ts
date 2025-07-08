@@ -60,10 +60,6 @@ export const styles = {
 
     let translateY = 0;
 
-    if (isActive) {
-      translateY = 0;
-    }
-
     if (index > activeIndex) {
       const distance = Math.abs(offset);
       const multiplier = 17 * distance;
