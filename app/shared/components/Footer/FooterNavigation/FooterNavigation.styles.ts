@@ -22,9 +22,7 @@ export const styles: Record<string, SxProps> = {
     fontSize: '14px'
   },
   heading: {
-    fontWeight: 'bold',
-    marginBottom: '8px',
-    fontFamily: 'Mulish, sans-serif'
+    marginBottom: '8px'
   },
   list: {
     listStyle: 'none',

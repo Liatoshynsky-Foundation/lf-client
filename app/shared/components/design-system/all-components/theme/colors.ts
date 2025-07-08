@@ -1,6 +1,7 @@
 export const mainHexPallete = {
   blue: {
     50: '#F9FAFB',
+    75: '#F7F8FC',
     100: '#F0F2FB',
     200: '#D9DCE8',
     300: '#C6C8D3',
@@ -108,4 +109,28 @@ export const rgbaMenuItemColors = {
   hoverBg: 'rgba(25, 13, 3, 0.06)',
   activeBg: 'rgba(25, 13, 3, 0.12)',
   selectedHoverBg: 'rgba(25, 13, 3, 0.06)'
+};
+
+export const hexCheckboxColors = {
+  iconColor: mainHexPallete.blue[500],
+  iconCheckedBg: mainHexPallete.yellow[500],
+  hoverBg: '#F9F6F3',
+  focusVisibleColor: '#E1DAD3',
+  focusVisibleBg: '#F9F6F3',
+  disabledColor: mainHexPallete.blue[200]
+};
+export const accordionColorsRgb = {
+  summary: {
+    backgroundColor: 'rgba(237, 232, 223, 1)',
+    color: mainHexPallete.black,
+    expanded: {
+      backgroundColor: 'rgba(247, 245, 241, 1)'
+    }
+  },
+  accordion: {
+    expanded: {
+      backgroundColor: 'rgba(247, 245, 241, 1)',
+      color: 'rgba(110, 90, 81, 1)'
+    }
+  }
 };

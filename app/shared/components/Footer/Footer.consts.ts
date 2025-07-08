@@ -20,7 +20,7 @@ export const sections = [
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',
     links: [
       { label: 'Життєпис', href: '/biography' },
-      { label: 'Творчість', href: '/creativity' },
+      { label: 'Творчість', href: '/artistry' },
       { label: 'Дослідження та наукові роботи', href: '/research' }
     ]
   },

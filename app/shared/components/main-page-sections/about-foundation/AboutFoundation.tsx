@@ -32,20 +32,28 @@ const AboutFoundation = async () => {
     sourcePlace: quote('sourceText.place')
   };
   return (
-    <Box sx={sectionStyles.conatiner}>
+    <Box sx={{ ...sectionStyles.conatiner, marginTop: '110px' }}>
       <Typography sx={sectionStyles.title}>{title}</Typography>
       <Box sx={sectionStyles.photoContainer}>
-        <Box sx={sectionStyles.imageFirst}>
-          <ImageWithCaption
-            src={images[0].src}
-            alt={images[0].alt}
-            caption={images[0].alt}
-            sizes={{ height: { xs: 315 }, width: { xs: 800, md: 900 } }}
-            captionSx={sectionStyles.ImageCaption}
-            imageSx={{ [theme.breakpoints.down('md')]: { height: '250px', right: '-200px' } }}
-            border={{ sizes: { height: { xs: 50 }, width: { xs: 250 } }, top: { xs: 20 }, left: { xs: 25 } }}
-          />
-        </Box>
+        <ImageWithCaption
+          src={images[0].src}
+          alt={images[0].alt}
+          caption={images[0].alt}
+          sizes={{
+            width: { xs: 266, sm: 456, md: 567, lg: 717, xl: 816, xxl: 979 },
+            height: { xs: 158, sm: 264, md: 300 }
+          }}
+          border={{
+            sizes: {
+              width: { xs: 134, sm: 255, md: 269, lg: 376 },
+              height: { xs: 28, sm: 55, md: 52, lg: 72 }
+            },
+            top: { xs: 16, sm: 20, md: 36, lg: 38, xl: 34 },
+            left: { xs: 16, sm: 26, md: 41, lg: 40, xl: 40 }
+          }}
+          containerSx={sectionStyles.ImageContainer}
+          captionSx={sectionStyles.ImageCaption}
+        />
       </Box>
       <Box sx={sectionStyles.quote}>
         <QuoteBlock
@@ -60,6 +68,9 @@ const AboutFoundation = async () => {
           }}
         />
       </Box>
+      <Box sx={sectionStyles.SecondBulletIcon}>
+        <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
+      </Box>
       <Box sx={sectionStyles.organisationSection}>
         <Typography sx={sectionStyles.explanationText}>
           <Box component="span" sx={sectionStyles.organisationText}>
@@ -68,17 +79,15 @@ const AboutFoundation = async () => {
           {organisationText.mainText}
         </Typography>
       </Box>
-      <Box sx={sectionStyles.bulletIcon}>
-        <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
-      </Box>
       <Box sx={sectionStyles.explanationSection}>
         <Typography sx={sectionStyles.textSection}>{mainText}</Typography>
-      </Box>
-      <Box sx={sectionStyles.textImageSection}>
-        <Typography sx={sectionStyles.textImage}>{textImage}</Typography>
-        <Box sx={sectionStyles.bodyImage}>
-          <Image src={images[1].src} alt={images[1].alt} width={350} height={400} />
+        <Box sx={sectionStyles.FirstBulletIcon}>
+          <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
         </Box>
+      </Box>
+      <Typography sx={sectionStyles.textImage}>{textImage}</Typography>
+      <Box sx={sectionStyles.bodyImage}>
+        <Image src={images[1].src} alt={images[1].alt} fill style={{ objectFit: 'contain', objectPosition: 'top' }} />
       </Box>
     </Box>
   );

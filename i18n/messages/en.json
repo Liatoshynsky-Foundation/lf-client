@@ -4,16 +4,24 @@
     "text": "Collaborations"
   },
   "footer": {
-    "copyright": "© 2025 Liotoshynsky Foundation. All rights reserved.",
-    "linkPrivacy": "Privacy Policy",
-    "linkTerms": "Terms of Use",
-    "linkMedia": "Information for Media / Partners",
     "donationButton": "Support the Foundation",
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by"
   },
   "header": {
-    "supportButton": "Support"
+    "supportButton": "Support",
+    "navLabels": {
+      "liatoshynsky": "Borys Lyatoshynskyi",
+      "biography": "Biography",
+      "artistry": "Artistry",
+      "research": "Research and scientific works",
+      "foundation": "Foundation",
+      "foundationHome": "About the foundation",
+      "news": "News",
+      "mediaAboutUs": "Media about us",
+      "archive": "Cabinet-Archive",
+      "collaboration": "Cooperation"
+    }
   },
   "home": {
     "liatoshynskyOffice": {
@@ -80,7 +88,8 @@
   "common": {
     "languageNotFound": "The page is not yet available in this language",
     "pageNotFound": "404 Page not found",
-    "goHome": "return to home"
+    "goHome": "return to home",
+    "viewMore": "View More"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -95,10 +104,40 @@
       "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
       "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
       "sourceText": {
-        "title": "Letter from Borys Lyatoshynsky to Margarita Tsarevych,",
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
         "data": "May 4, 1916.",
         "place": "Saratov"
       }
+    }
+  },
+  "liatoshynskyArtistry": {
+    "title-with-quote": {
+      "title": "LIaTosHynSKy's ArTiStRy",
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": {
+        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
+        "data": "May 4, 1916.",
+        "place": "Saratov"
+      }
+    }
+  },
+  "table": {
+    "columns": {
+      "opus": "Opus",
+      "name": "Name",
+      "year": "Year",
+      "genre": "Genre"
+    },
+    "name": {
+      "composition": "All compositions"
+    }
+  },
+  "cookie": {
+    "modal": {
+      "title": "🍪 Cookies",
+      "description": "We use cookies to enable essential site functionality and for analytics. Please review our <link>privacy policy</link> to learn more.",
+      "settingsButton": "Cookie settings",
+      "acceptButton": "Accept all"
     }
   }
 }

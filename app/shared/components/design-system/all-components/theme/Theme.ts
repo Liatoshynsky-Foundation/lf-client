@@ -2,7 +2,9 @@ import { createTheme, PaletteColorOptions } from '@mui/material';
 import { Mulish, Oswald } from 'next/font/google';
 
 import {
+  accordionColorsRgb,
   hexButtonGroupColors,
+  hexCheckboxColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
@@ -31,10 +33,12 @@ declare module '@mui/material/styles' {
 
 declare module '@mui/material' {
   interface TypographyPropsVariantOverrides {
+    customBold32: true;
     customSemiBold20: true;
     customBold20: true;
     customItalic18: true;
     customMedium18: true;
+    customBold16: true;
     customMedium16: true;
     customItalic16: true;
     customItalic14: true;
@@ -43,10 +47,12 @@ declare module '@mui/material' {
 }
 declare module '@mui/material/styles' {
   interface TypographyVariantsOptions {
+    customBold32?: React.CSSProperties;
     customSemiBold20?: React.CSSProperties;
     customBold20?: React.CSSProperties;
     customItalic18?: React.CSSProperties;
     customMedium18?: React.CSSProperties;
+    customBold16?: React.CSSProperties;
     customMedium16?: React.CSSProperties;
     customItalic16?: React.CSSProperties;
     customCaption?: React.CSSProperties;
@@ -54,10 +60,12 @@ declare module '@mui/material/styles' {
     customSemiBold18?: React.CSSProperties;
   }
   interface TypographyVariants {
+    customBold32: React.CSSProperties;
     customSemiBold20: React.CSSProperties;
     customBold20: React.CSSProperties;
     customItalic18: React.CSSProperties;
     customMedium18: React.CSSProperties;
+    customBold16: React.CSSProperties;
     customMedium16: React.CSSProperties;
     customItalic16: React.CSSProperties;
     customCaption: React.CSSProperties;
@@ -66,10 +74,12 @@ declare module '@mui/material/styles' {
   }
 
   interface TypographyVariantsOptions {
+    customBold32?: React.CSSProperties;
     customSemiBold20?: React.CSSProperties;
     customBold20?: React.CSSProperties;
     customItalic18?: React.CSSProperties;
     customMedium18?: React.CSSProperties;
+    customBold16?: React.CSSProperties;
     customMedium16?: React.CSSProperties;
     customItalic16?: React.CSSProperties;
     customCaption?: React.CSSProperties;
@@ -253,6 +263,13 @@ export const theme = createTheme({
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
     },
+    customBold32: {
+      fontFamily: mulish.style.fontFamily,
+      fontWeight: 700,
+      fontSize: '32px',
+      lineHeight: '140%',
+      letterSpacing: '0px'
+    },
     customSemiBold18: {
       fontSize: '18px',
       fontWeight: 600,
@@ -289,6 +306,13 @@ export const theme = createTheme({
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
     },
+    customBold16: {
+      fontSize: '16px',
+      fontWeight: 700,
+      lineHeight: '100%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
     customMedium16: {
       fontSize: '16px',
       fontWeight: 500,
@@ -317,10 +341,12 @@ export const theme = createTheme({
     MuiTypography: {
       defaultProps: {
         variantMapping: {
+          customBold32: 'p',
           customSemiBold20: 'p',
           customBold20: 'p',
           customItalic18: 'p',
           customMedium18: 'p',
+          customBold16: 'p',
           customMedium16: 'p',
           customItalic16: 'p',
           customItalic14: 'p'
@@ -724,6 +750,77 @@ export const theme = createTheme({
           '&.Mui-selected': {
             backgroundColor: 'transparent'
           }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: hexCheckboxColors.iconColor,
+          '&.Mui-checked': {
+            color: hexCheckboxColors.iconCheckedBg
+          },
+          '&:hover': {
+            backgroundColor: hexCheckboxColors.hoverBg
+          },
+          '&.Mui-focusVisible': {
+            color: hexCheckboxColors.focusVisibleColor,
+            backgroundColor: hexCheckboxColors.focusVisibleBg
+          },
+          '&.Mui-disabled': {
+            color: hexCheckboxColors.disabledColor
+          }
+        }
+      }
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: '24px',
+          width: '100%',
+          maxWidth: '742px',
+          marginTop: '16px',
+          marginLeft: '16px',
+          boxShadow: 'none',
+          transition: 'all 0.3s ease',
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
+          color: accordionColorsRgb.summary.color,
+          '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+            color: accordionColorsRgb.accordion.expanded.color
+          }
+        }
+      },
+      defaultProps: {
+        square: true,
+        disableGutters: true,
+        elevation: 0
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: '60px',
+          borderRadius: '24px',
+          padding: '16px 16px 16px 24px',
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
+          color: accordionColorsRgb.summary.color,
+          '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
+          }
+        },
+        content: {
+          margin: 0
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '16px 16px 16px 24px',
+          borderRadius: '0 0 24px 24px',
+          backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+          color: accordionColorsRgb.accordion.expanded.color
         }
       }
     }

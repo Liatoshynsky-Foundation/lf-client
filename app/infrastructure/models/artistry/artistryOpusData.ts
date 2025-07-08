@@ -1,0 +1,14 @@
+import mongoose from 'mongoose';
+
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
+
+const opusSchema = new mongoose.Schema(
+  {
+    number: { type: String, required: true, unique: true },
+    title: { type: translatedFieldSchema, required: true },
+    releaseYear: { type: Number }
+  },
+  { timestamps: true }
+);
+
+export const Opus = mongoose.models.Opus ?? mongoose.model('Opus', opusSchema);
