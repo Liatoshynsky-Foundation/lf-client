@@ -1,13 +1,19 @@
 import { Box } from '@mui/material';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import { musicData } from './CompositionTable/MusicTable.constant';
+import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
+
 import MusicTableSection from './CompositionTable/MusicTableSelection';
+import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
 
-import TitleWithQuote from '~/shared/components/title-with-quote/TitleWithQuote';
+import { createRequestContainer } from '~/di/container';
 
-export default async function Artistry() {
+export default async function Artistry({ params }: Readonly<ParamsWithLanguage>) {
+  const { lang } = await params;
+  setRequestLocale(lang);
+  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang);
+
   const t = await getTranslations('liatoshynskyArtistry');
 
   return (

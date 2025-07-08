@@ -1,3 +1,4 @@
+import CheckIcon from '@public/check-icon.svg';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
@@ -9,7 +10,6 @@ jest.mock('@public/check-icon.svg', () => ({
   default: () => <svg data-testid="icon-svg" />
 }));
 
-const iconSrc = 'check-icon';
 const testColor = '#FF0000';
 const testWidth = '100px';
 const testHeight = '100px';
@@ -18,7 +18,7 @@ const testAlt = 'Test Icon';
 describe('Full Colored Svg Suite', () => {
   describe('Valid Svg (ColoredSvg component)', () => {
     beforeEach(() => {
-      render(<Svg src={iconSrc} color={testColor} alt={testAlt} width={testWidth} height={testHeight} />);
+      render(<Svg Component={CheckIcon} color={testColor} alt={testAlt} width={testWidth} height={testHeight} />);
     });
 
     it('should render the svg icon with alt', () => {
@@ -47,7 +47,7 @@ describe('Full Colored Svg Suite', () => {
 
   describe('Valid SVG with default params', () => {
     beforeEach(() => {
-      render(<Svg src={iconSrc} alt={testAlt} color={testColor} />);
+      render(<Svg Component={CheckIcon} alt={testAlt} color={testColor} />);
     });
 
     it('should render the svg icon with default width and height', () => {
@@ -66,13 +66,13 @@ describe('Full Colored Svg Suite', () => {
   describe('Invalid Svg', () => {
     it('should throw an error if an invalid color is provided', () => {
       expect(() =>
-        render(<Svg src={iconSrc} color="not-a-color" alt={testAlt} width={testWidth} height={testHeight} />)
+        render(<Svg Component={CheckIcon} color="not-a-color" alt={testAlt} width={testWidth} height={testHeight} />)
       ).toThrow('Invalid color value: not-a-color');
     });
 
     it('should throw an error if invalid width/height is provided', () => {
       expect(() =>
-        render(<Svg src={iconSrc} color={testColor} alt={testAlt} width="200pixels" height="200pixels" />)
+        render(<Svg Component={CheckIcon} color={testColor} alt={testAlt} width="200pixels" height="200pixels" />)
       ).toThrow(/Invalid size values: width=200pixels, height=200pixels/);
     });
   });

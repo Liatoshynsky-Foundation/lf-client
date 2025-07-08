@@ -9,7 +9,19 @@
     "opentechLabel": "Developed by"
   },
   "header": {
-    "supportButton": "Support"
+    "supportButton": "Support",
+    "navLabels": {
+      "liatoshynsky": "Borys Lyatoshynskyi",
+      "biography": "Biography",
+      "artistry": "Artistry",
+      "research": "Research and scientific works",
+      "foundation": "Foundation",
+      "foundationHome": "About the foundation",
+      "news": "News",
+      "mediaAboutUs": "Media about us",
+      "archive": "Cabinet-Archive",
+      "collaboration": "Cooperation"
+    }
   },
   "home": {
     "liatoshynskyOffice": {
@@ -107,6 +119,25 @@
         "data": "May 4, 1916.",
         "place": "Saratov"
       }
+    }
+  },
+  "table": {
+    "columns": {
+      "opus": "Opus",
+      "name": "Name",
+      "year": "Year",
+      "genre": "Genre"
+    },
+    "name": {
+      "composition": "All compositions"
+    }
+  },
+  "cookie": {
+    "modal": {
+      "title": "🍪 Cookies",
+      "description": "We use cookies to enable essential site functionality and for analytics. Please review our <link>privacy policy</link> to learn more.",
+      "settingsButton": "Cookie settings",
+      "acceptButton": "Accept all"
     }
   }
 }

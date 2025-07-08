@@ -77,10 +77,11 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
         size="medium"
         onClick={handleClick}
       >
-        <SvgImage src="/icons/planet.svg" alt="select language" width={40} height={40} />
+        <SvgImage src="/icons/planet.svg" alt="select language" width={24} height={24} />
       </IconButton>
 
       <DropdownMenu
+        disableScrollLock
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}

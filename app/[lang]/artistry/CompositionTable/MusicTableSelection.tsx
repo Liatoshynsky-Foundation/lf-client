@@ -1,45 +1,40 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 import {
   renderActionsCell,
   renderGenreCell,
-  renderGenreHeader,
+  RenderGenreHeader,
   renderNameCell,
-  renderNameHeader,
+  RenderNameHeader,
   renderOpusGroupLabel,
-  renderOpusHeader,
+  RenderOpusHeader,
   renderOpusTitleGroupLabel,
   renderPlayCell,
   renderYearCell,
-  renderYearHeader
+  RenderYearHeader
 } from './MusicTableCells';
+import { Music } from '~/types/types/enhancedTable';
 
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
-export type Music = {
-  id: number;
-  name: string;
-  year: number;
-  opus?: string;
-  opusTitle?: string;
-  genre?: string;
-};
 type Props = {
   data: Music[];
 };
 
 export default function MusicTableSection({ data }: Readonly<Props>) {
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+  const t = useTranslations('table.name');
 
   const columns: ColumnDef<Music>[] = [
     { id: 'expander', header: '', cell: () => null },
     {
       id: 'opus',
-      header: renderOpusHeader,
+      header: RenderOpusHeader,
       cell: () => null,
       meta: {
         groupLabelContentFactory: renderOpusGroupLabel
@@ -52,7 +47,7 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
     },
     {
       accessorKey: 'name',
-      header: renderNameHeader,
+      header: RenderNameHeader,
       cell: renderNameCell,
       meta: {
         groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
@@ -60,12 +55,12 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
     },
     {
       accessorKey: 'year',
-      header: renderYearHeader,
+      header: RenderYearHeader,
       cell: renderYearCell
     },
     {
       accessorKey: 'genre',
-      header: renderGenreHeader,
+      header: RenderGenreHeader,
       cell: renderGenreCell
     },
     {
@@ -90,7 +85,7 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
         actions: 'auto'
       }}
       itemsPerPage={10}
-      tableName="Усі Композиції"
+      tableName={t('composition')}
     />
   );
 }

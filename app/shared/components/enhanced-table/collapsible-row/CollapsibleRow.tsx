@@ -15,14 +15,14 @@ import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
-  onToggle: () => void;
+  action: () => void;
   columns: ColumnDef<T>[];
 }
 
 export function CollapsibleRow<T extends RowData>({
   data,
   collapsed,
-  onToggle,
+  action,
   columns
 }: Readonly<CollapsibleRowProps<T>>) {
   const table = useReactTable({
@@ -46,7 +46,7 @@ export function CollapsibleRow<T extends RowData>({
             <TableCell key={col.id} sx={styles.cell}>
               <Box sx={styles.cellInner}>
                 {col.id === 'expander' ? (
-                  <IconButton onClick={onToggle} variant={IconButtonColorVariant.Secondary} disableRipple>
+                  <IconButton onClick={action} variant={IconButtonColorVariant.Secondary} disableRipple>
                     <SvgImage
                       src={collapsed ? '/icons/chevron-down.svg' : '/icons/chevron-right.svg'}
                       alt="toggle"
