@@ -32,7 +32,7 @@ const AboutFoundation = async () => {
     sourcePlace: quote('sourceText.place')
   };
   return (
-    <Box sx={sectionStyles.conatiner}>
+    <Box sx={{ ...sectionStyles.conatiner, marginTop: '110px' }}>
       <Typography sx={sectionStyles.title}>{title}</Typography>
       <Box sx={sectionStyles.photoContainer}>
         <ImageWithCaption
