@@ -1,6 +1,8 @@
+'use client';
+
 import { Box } from '@mui/material';
-import { getLocale, getTranslations } from 'next-intl/server';
-import React from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import Logo from '~/ds-components/logo/Logo';
 import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
@@ -8,13 +10,16 @@ import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
-import { createRequestContainer } from '~/di/container';
+import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
-export default async function Header() {
-  const t = await getTranslations('header');
-  const locale = await getLocale();
+export default function Header() {
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const scrollDirection = useScrollDirection(100);
+  const t = useTranslations('header');
 
-  const { supportButtonLink } = await createRequestContainer().resolve('headerService').getHeaderData(locale);
+  useEffect(() => {
+    setIsNavVisible(scrollDirection !== 'down');
+  }, [scrollDirection]);
 
   const navLabels = {
     liatoshynsky: t('navLabels.liatoshynsky'),
@@ -29,13 +34,15 @@ export default async function Header() {
     collaboration: t('navLabels.collaboration')
   };
 
+  const supportButtonLink = '/support-us';
+
   return (
     <Box component="header" sx={styles.mainContainer}>
       <Box sx={styles.logoContainer}>
         <Logo />
       </Box>
 
-      <Box sx={styles.navigationContainer}>
+      <Box sx={styles.navigationContainer(isNavVisible)}>
         <NavigationBar navLabels={navLabels} />
       </Box>
 
