@@ -24,6 +24,7 @@ interface EnhancedTableProps<T extends RowData> {
   groupByKey?: keyof T;
   itemsPerPage?: number;
   tableName: string;
+  defaultSorting?: SortingState;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -32,9 +33,10 @@ export default function EnhancedTable<T extends RowData>({
   columnWidths = {},
   groupByKey,
   itemsPerPage = 10,
-  tableName
+  tableName,
+  defaultSorting = []
 }: Readonly<EnhancedTableProps<T>>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
 
