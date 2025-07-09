@@ -1,66 +1,23 @@
-'use client';
-import { Autocomplete, AutocompleteRenderInputParams, ListItem, styled, Typography } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
-import TextField from '../design-system/all-components/text-field/TextField';
 import { mainHexPallete } from '../design-system/all-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
+import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
 import { musicData } from '~/[lang]/artistry/CompositionTable/MusicTable.constant';
-export interface OptionType {
-  name: string;
-}
+import { flattenedMusicDataArrayType, flattenMusicDataArray } from '~/lib/utils/flattenMusicDataArray';
 export interface CompositionProps {
   onFilterChange: (value: string) => void;
 }
-const CustomBorderTextField = styled(TextField)(() => ({
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      border: `1px solid ${mainHexPallete.black} !important`
-    },
-    '&:hover fieldset': {
-      border: `1px solid ${mainHexPallete.black} !important`
-    },
-    '&.Mui-focused fieldset': {
-      border: `1px solid ${mainHexPallete.black} !important`
-    }
-  }
-}));
+
+const flattenedMusicDataArray = flattenMusicDataArray(musicData);
 export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
-  const getOptionsAsync = (query: string): Promise<OptionType[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(options.filter((option: OptionType) => option.name.toLowerCase().includes(query.toLowerCase())));
-      }, 1500);
-    });
-  };
-
-  const [options, setOptions] = useState<OptionType[]>([]);
-  const [value, setValue] = useState<OptionType | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [value, setValue] = useState<flattenedMusicDataArrayType | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  //eslint-disable-next-line react-hooks/exhaustive-deps
-  const getOptionsDelayed = useCallback(
-    debounce((query: string, callback: (options: OptionType[]) => void) => {
-      setOptions([]);
-      getOptionsAsync(query).then(callback);
-    }, 500),
-    []
-  );
-  useEffect(() => {
-    setIsLoading(true);
-
-    getOptionsDelayed(searchQuery, (movieOptions: OptionType[]) => {
-      setOptions(movieOptions);
-      setIsLoading(false);
-    });
-  }, [searchQuery, getOptionsDelayed]);
-
-  const onChange = (event: unknown, value: OptionType | null) => {
-    setValue(value);
-  };
-
+  const [focused, setFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const DEBOUNCE_TIME_MS = 400;
   const debouncedInputChange = useMemo(
     () =>
@@ -74,46 +31,79 @@ export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
     (event: SyntheticEvent, value: string) => {
       debouncedInputChange(value);
       onFilterChange(value);
+      setSearchQuery(value);
     },
     [debouncedInputChange, onFilterChange]
   );
-
-  const getOptionLabel = (option: OptionType): string => option.name;
-
+  const handleIconClick = () => {
+    inputRef.current?.focus();
+  };
+  const handleClear = () => {
+    setSearchQuery('');
+  };
+  const onChange = (event: unknown, value: flattenedMusicDataArrayType | null) => {
+    setValue(value);
+  };
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
-      <div ref={params.InputProps.ref}>
-        <CustomBorderTextField
-          type="text"
-          {...params}
-          variant="outlined"
-          startIcon={<SvgImage src={'/icons/search.svg'} alt={'bell'} width={24} height={24} />}
-        />
-      </div>
+      <CustomBorderTextField
+        {...params}
+        variant="outlined"
+        size="small"
+        sx={{ borderColor: `${mainHexPallete.black} !important` }}
+        inputRef={inputRef}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        slotProps={{
+          input: {
+            ...params.InputProps,
+            startAdornment: (
+              <InputAdornment position="start" sx={{ cursor: 'pointer' }}>
+                <SvgImage src={'/icons/search.svg'} alt="search" width={24} height={24} onClick={handleIconClick} />
+              </InputAdornment>
+            ),
+            style: {
+              ...MusicSearchStyles.icon,
+              width: focused ? 280 : 40,
+              borderRadius: focused ? '10px' : '60px'
+            },
+            endAdornment: (
+              <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
+                <SvgImage src={'/icons/close-icon.svg'} alt="search" width={24} height={24} onClick={handleClear} />
+              </InputAdornment>
+            )
+          }
+        }}
+      />
     );
   };
 
-  const renderOption = (props: object, option: OptionType): React.ReactNode => {
+  const renderOption = (props: object, option: flattenedMusicDataArrayType): React.ReactNode => {
     return (
-      <ListItem {...props} disableGutters key={option.name}>
-        <Typography variant="customMedium16">{option.name}</Typography>
-      </ListItem>
+      <List {...props}>
+        <ListItem disableGutters key={option.name}>
+          <Typography variant="customMedium16">{option.name}</Typography>
+        </ListItem>
+      </List>
     );
   };
-
+  const getOptionLabel = (option: flattenedMusicDataArrayType) => option.name || '';
   return (
     <div>
       <Autocomplete
         id="music-search"
-        options={musicData}
+        options={flattenedMusicDataArray}
         value={value}
         onChange={onChange}
+        inputValue={searchQuery}
         onInputChange={handleInputChange}
-        getOptionLabel={getOptionLabel}
-        renderOption={renderOption}
         renderInput={renderInput}
-        loading={isLoading}
-        blurOnSelect={true}
+        renderOption={renderOption}
+        getOptionLabel={getOptionLabel}
+        clearOnBlur={false}
+        popupIcon={null}
+        clearIcon={false}
+        noOptionsText={<Typography variant="customMedium16">Не знайдено</Typography>}
       />
     </div>
   );

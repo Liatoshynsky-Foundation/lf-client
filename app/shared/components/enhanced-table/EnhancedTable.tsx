@@ -119,10 +119,12 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <Typography variant="customBold32" sx={styles.title}>
-        {tableName}
-      </Typography>
-
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
+        <Typography variant="customBold32" sx={styles.title}>
+          {tableName}
+        </Typography>
+        {MusicSearch}
+      </Box>
       <TableContainer component={Paper} sx={styles.container}>
         <Table>
           <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
