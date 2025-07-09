@@ -69,7 +69,7 @@ export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
             },
             endAdornment: (
               <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
-                <SvgImage src={'/icons/close-icon.svg'} alt="search" width={24} height={24} onClick={handleClear} />
+                <SvgImage src={'/icons/close-icon.svg'} alt="close" width={24} height={24} onClick={handleClear} />
               </InputAdornment>
             )
           }
