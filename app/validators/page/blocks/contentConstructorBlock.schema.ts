@@ -11,3 +11,5 @@ export const contentConstructorBlockSchema = z.object({
     elements: z.array(anyElementSchema)
   })
 });
+
+export type ContentConstructorBlock = z.infer<typeof contentConstructorBlockSchema>;
