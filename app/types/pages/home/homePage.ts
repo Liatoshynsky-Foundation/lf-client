@@ -5,20 +5,20 @@ type TransformedImage = {
 };
 
 export type IntroSectionProps = {
-  title: string;
-  image: TransformedImage | null;
-  quote: {
+  readonly title: string;
+  readonly image: TransformedImage | null;
+  readonly quote: {
     readonly mainText: string;
     readonly sourceTitle: string;
   } | null;
 };
 
 export type FoundationInfoProps = {
-  organisationBoldText: string;
-  organisationMainText: string;
-  mainText: string;
-  textImage: string;
-  foundationImage: TransformedImage | null;
+  readonly organisationBoldText: string;
+  readonly organisationMainText: string;
+  readonly mainText: string;
+  readonly textImage: string;
+  readonly foundationImage: TransformedImage | null;
 };
 
 export type OurMissionProps = {

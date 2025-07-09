@@ -19,10 +19,9 @@ const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
       <Box sx={styles.grid}>
         {columns.map((columnItems, colIndex) => (
           <Box
-            key={colIndex}
+            key={columnItems[colIndex]?.id ?? `column-${colIndex}`}
             sx={{
-              ...styles.column,
-              ...(colIndex === 0 && { alignItems: { lg: 'end' } })
+              ...styles.column
             }}
           >
             {columnItems.map((item, itemIndex) => (

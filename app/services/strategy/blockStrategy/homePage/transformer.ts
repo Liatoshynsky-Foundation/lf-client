@@ -14,7 +14,6 @@ import { AnyBlock } from '~/validators/page/blocks/anyBlock.schema';
 
 export const transformIntroSection = (block: AnyBlock, locale: Locale): IntroSectionProps => {
   if (block.blockType !== 'ContentConstructorBlock') return { title: '', image: null, quote: null };
-
   const { elements } = block.content;
   const headingEl = elements.find((e) => e.elementType === 'Heading');
   const imageEl = elements.find((e) => e.elementType === 'Image');
@@ -110,7 +109,7 @@ export const transformOurGoals = (block: AnyBlock, locale: Locale): OurGoalsProp
     mainTitle: mainTitleElement?.text[locale] ?? '',
     goals:
       listElement?.items.map((item) => ({
-        id: item.title[locale],
+        id: block._id,
         title: item.title[locale],
         description: item.description[locale]
       })) ?? []
@@ -128,7 +127,7 @@ export const transformWhatWeDo = (block: AnyBlock, locale: Locale): WhatWeDoProp
     mainTitle: mainTitleElement?.text[locale] ?? '',
     items:
       listElement?.items.map((item) => ({
-        id: item.title[locale],
+        id: block._id,
         title: item.title[locale],
         description: item.description[locale]
       })) ?? []
