@@ -55,6 +55,7 @@ const eslintConfig = [
       'unused-imports': pluginUnusedImports
     },
     rules: {
+      '@next/next/no-img-element': 'off',
       'simple-import-sort/imports': [
         'error',
         {
