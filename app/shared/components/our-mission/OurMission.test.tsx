@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import Image from 'next/image';
 
 import OurMission from './OurMission';
 
@@ -20,7 +21,7 @@ jest.mock('~/shared/components/image-with-caption/ImageWithCaption', () => ({
   __esModule: true,
   default: ({ src, alt, caption }: { src: string; alt: string; caption: string }) => (
     <div data-testid="image-with-caption">
-      <img src={src} alt={alt} />
+      <Image src={src} alt={alt} />
       {caption && <p>{caption}</p>}
     </div>
   )
@@ -33,14 +34,14 @@ jest.mock('~/shared/components/section-title/SectionTitle', () => ({
 
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
   __esModule: true,
-  SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />
+  SvgImage: ({ src, alt }: { src: string; alt: string }) => <Image src={src} alt={alt} />
 }));
 
 jest.mock('~/shared/components/list-item/ListItem', () => ({
   __esModule: true,
   default: ({ text }: { text: string }) => (
     <div>
-      <img src="/mock-image" alt="mock-alt" />
+      <Image src="/mock-image" alt="mock-alt" />
       <p>{text}</p>
     </div>
   )
