@@ -1,11 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import Image from 'next/image';
 
 import ListItem from './ListItem';
 
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
   __esModule: true,
-  SvgImage: ({ src, alt }: { src: string; alt: string }) => <Image src={src} alt={alt} data-testid="svg-image" />
+  SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="svg-image" />
 }));
 
 describe('ListItem component', () => {
