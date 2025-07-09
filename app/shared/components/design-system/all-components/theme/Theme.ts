@@ -528,7 +528,6 @@ export const theme = createTheme({
     MuiInputBase: {
       defaultProps: {
         sx: {
-          width: '385px',
           height: '46px',
           color: mainHexPallete.blue[800],
           WebkitTextFillColor: mainHexPallete.blue[800],
@@ -608,7 +607,6 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       defaultProps: {
         sx: {
-          width: '280px',
           height: '48px',
           borderRadius: '8px',
           padding: '0 16px',
@@ -640,6 +638,8 @@ export const theme = createTheme({
           },
 
           '& .MuiOutlinedInput-input': {
+            padding: 0,
+
             '&:-webkit-autofill': {
               WebkitBoxShadow: 'transparent',
               WebkitTextFillColor: mainHexPallete.black,
@@ -821,6 +821,17 @@ export const theme = createTheme({
           borderRadius: '0 0 24px 24px',
           backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: '2px 0 0',
+          fontSize: '12px',
+          '&.Mui-error': {
+            color: rgbaTextFieldColors.errorBorderBottom
+          }
         }
       }
     }

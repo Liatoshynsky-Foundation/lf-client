@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.27.0",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",

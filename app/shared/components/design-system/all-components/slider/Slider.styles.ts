@@ -12,8 +12,8 @@ const commonThumbSizes = {
 };
 
 const commonTrackRailHeights = {
-  small: '4px',
-  big: '6px'
+  small: '2px',
+  big: '4px'
 };
 
 export const sliderStyles = {
@@ -38,7 +38,7 @@ export const sliderStyles = {
     padding: '2px 6px',
     borderRadius: '4px',
     '&::after': {
-      content: '',
+      content: '""',
       position: 'absolute',
       bottom: '-6px',
       left: '50%',
@@ -68,11 +68,10 @@ export const sliderStyles = {
       height: (size: 'small' | 'big') => commonTrackRailHeights[size]
     },
     '& .MuiSlider-mark': {
-      width: '5px',
-      height: '5px',
+      width: '2px',
+      height: '2px',
       borderRadius: '50%',
-      backgroundColor: commonColors.primary,
-      transform: 'translateX(-50%) translateY(-2px)'
+      backgroundColor: commonColors.primary
     },
     '& .MuiSlider-markActive': {
       backgroundColor: commonColors.secondary

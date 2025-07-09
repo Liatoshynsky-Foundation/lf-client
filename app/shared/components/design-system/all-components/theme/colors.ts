@@ -134,3 +134,7 @@ export const accordionColorsRgb = {
     }
   }
 };
+
+export const rgbaClearFilterButton = {
+  defaultTextColor: 'rgba(230, 60, 20, 1)'
+};
