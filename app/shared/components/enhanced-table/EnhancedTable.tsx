@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
-import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
@@ -24,6 +24,7 @@ interface EnhancedTableProps<T extends RowData> {
   groupByKey?: keyof T;
   itemsPerPage?: number;
   tableName: string;
+  defaultSorting?: SortingState;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -32,8 +33,10 @@ export default function EnhancedTable<T extends RowData>({
   columnWidths = {},
   groupByKey,
   itemsPerPage = 10,
-  tableName
+  tableName,
+  defaultSorting = []
 }: Readonly<EnhancedTableProps<T>>) {
+  const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
 
@@ -57,11 +60,24 @@ export default function EnhancedTable<T extends RowData>({
       };
     });
 
+  const headerTable = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel()
+  });
+
+  const sortedData = headerTable.getRowModel().rows.map((row) => row.original);
+
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
     const ungrouped: T[] = [];
 
-    for (const item of data) {
+    for (const item of sortedData) {
       const groupKey = groupByKey ? String(item[groupByKey] ?? '') : undefined;
 
       if (groupKey) {
@@ -72,7 +88,7 @@ export default function EnhancedTable<T extends RowData>({
     }
 
     return { groupedItems: grouped, flatItems: ungrouped };
-  }, [data, groupByKey]);
+  }, [sortedData, groupByKey]);
 
   const allRows: ItemOrGroup<T>[] = useMemo(
     () => [
@@ -100,12 +116,6 @@ export default function EnhancedTable<T extends RowData>({
   } = usePagination({
     data: allRows,
     itemsPerPage
-  });
-
-  const headerTable = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel()
   });
 
   return (
