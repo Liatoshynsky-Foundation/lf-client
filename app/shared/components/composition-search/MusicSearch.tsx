@@ -6,7 +6,6 @@ import { mainHexPallete } from '../design-system/all-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
-import { musicData } from '~/[lang]/artistry/CompositionTable/MusicTable.constant';
 import { flattenedMusicDataArrayType, flattenMusicDataArray } from '~/lib/utils/flattenMusicDataArray';
 export interface CompositionProps {
   onFilterChange: (value: string) => void;
