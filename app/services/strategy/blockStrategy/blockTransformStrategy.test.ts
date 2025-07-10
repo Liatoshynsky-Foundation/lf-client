@@ -34,7 +34,7 @@ describe('blockTransformers', () => {
     ];
 
     const actualKeys = Object.keys(blockTransformers);
-    expect(actualKeys.sort(compareStrings)).toEqual(expectedKeys.sort(compareStrings));
+    expect(actualKeys.toSorted(compareStrings)).toEqual(expectedKeys.toSorted(compareStrings));
     expect(actualKeys.length).toBe(expectedKeys.length);
   });
 });

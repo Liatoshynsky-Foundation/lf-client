@@ -25,7 +25,7 @@ const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
             }}
           >
             {columnItems.map((item, itemIndex) => (
-              <Box sx={styles.item} key={itemIndex}>
+              <Box sx={styles.item} key={item.id ?? `item-${itemIndex}`}>
                 <Box sx={styles.icon}>
                   <Image src="/icons/bullet-small.svg" alt="bullet icon" fill sizes={sizesAttribute} />
                 </Box>

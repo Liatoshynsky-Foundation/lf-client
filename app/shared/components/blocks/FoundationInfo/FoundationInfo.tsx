@@ -8,7 +8,7 @@ import { theme } from '~/ds-components/theme/Theme';
 import { styles } from './FoundationInfo.styles';
 import { FoundationInfoProps } from '~/types/pages/home/homePage';
 
-export default function FoundationInfo({ data }: { data: Readonly<FoundationInfoProps> }) {
+export default function FoundationInfo({ data }: { readonly data: Readonly<FoundationInfoProps> }) {
   const { textImage, foundationImage, organisationMainText, organisationBoldText, mainText } = data;
   const sectionStyles = styles(theme);
 
