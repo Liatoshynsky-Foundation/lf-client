@@ -9,6 +9,7 @@ import {
   transformOurMission,
   transformWhatWeDo
 } from '~/services/strategy/blockStrategy/homePage/transformer';
+const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
 describe('blockTransformers', () => {
   test('should map component names to the correct transformer functions', () => {
@@ -33,7 +34,7 @@ describe('blockTransformers', () => {
     ];
 
     const actualKeys = Object.keys(blockTransformers);
-    expect(actualKeys.sort()).toEqual(expectedKeys.sort());
+    expect(actualKeys.sort(compareStrings)).toEqual(expectedKeys.sort(compareStrings));
     expect(actualKeys.length).toBe(expectedKeys.length);
   });
 });
