@@ -46,15 +46,15 @@ describe('MusicSearch component', () => {
     expect(Input).toHaveAttribute('id', 'music-search');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     fireEvent.mouseDown(Input);
-    fireEvent.change(Input, { target: { value: 'Довше ім’я...' } });
-    const ListItem = await screen.getByText('Довше ім’я...');
+    fireEvent.change(Input, { target: { value: mockMusicData[0].name } });
+    const ListItem = await screen.getByText(mockMusicData[0].name);
     fireEvent.click(ListItem);
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
   it('should find clear button and clean the input after a click', async () => {
     const Input = screen.getByRole('combobox');
     expect(Input).toHaveAttribute('id', 'music-search');
-    fireEvent.change(Input, { target: { value: 'Довше ім’я...' } });
+    fireEvent.change(Input, { target: { value: mockMusicData[1].name } });
     const clearButton = screen.getByAltText('close');
     clearButton.click();
     fireEvent.click(clearButton);
