@@ -130,6 +130,9 @@
     },
     "name": {
       "composition": "Усі Композиції"
+    },
+    "buttons": {
+      "viewSheetMusic": "Переглянути ноти"
     }
   },
   "cookie": {
