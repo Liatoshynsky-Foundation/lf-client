@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { TextField } from '@mui/material';
 
-import { mainHexPallete } from '../design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const CustomBorderTextField = styled(TextField)(() => ({
   borderColor: `${mainHexPallete.black} !important`,
