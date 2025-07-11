@@ -62,9 +62,9 @@ export const styles = {
   },
   svgContainer: {
     position: 'relative',
-    width: '100%',
+    width: { xs: '100%', xxl: '1728px' },
     overflow: 'hidden',
-    marginBottom: 0,
+    margin: '0 auto',
     padding: 0,
     img: {
       width: '100%',

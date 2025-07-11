@@ -88,11 +88,13 @@ export const renderGenreCell = (info: CellContext<Music, unknown>) => {
   return <Typography variant="customMedium16">{genresString}</Typography>;
 };
 
-export const renderActionsCell = (info: CellContext<Music, unknown>) => {
+export const RenderActionsCell = (info: CellContext<Music, unknown>) => {
   const rowData = info.row.original;
+  const t = useTranslations('table.buttons');
+
   return (
     <Box display="flex" justifyContent="flex-end" gap={2} pr={5}>
-      {rowData.sheetAvailable && <Button variant="outlined">Переглянути ноти</Button>}
+      {rowData.sheetAvailable && <Button variant="outlined">{t('viewSheetMusic')}</Button>}
       <IconButton size="small" variant={IconButtonColorVariant.Secondary}>
         <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
       </IconButton>
