@@ -130,6 +130,9 @@
     },
     "name": {
       "composition": "All compositions"
+    },
+    "buttons": {
+      "viewSheetMusic": "View sheet music"
     }
   },
   "cookie": {

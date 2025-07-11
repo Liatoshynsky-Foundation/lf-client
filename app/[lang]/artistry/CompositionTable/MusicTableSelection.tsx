@@ -4,7 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 
 import {
-  renderActionsCell,
+  RenderActionsCell,
   renderGenreCell,
   RenderGenreHeader,
   renderNameCell,
@@ -49,6 +49,7 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       accessorKey: 'name',
       header: RenderNameHeader,
       cell: renderNameCell,
+      enableSorting: false,
       meta: {
         groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
       }
@@ -56,17 +57,19 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
     {
       accessorKey: 'year',
       header: RenderYearHeader,
-      cell: renderYearCell
+      cell: renderYearCell,
+      enableSorting: false
     },
     {
       accessorKey: 'genre',
       header: RenderGenreHeader,
-      cell: renderGenreCell
+      cell: renderGenreCell,
+      enableSorting: false
     },
     {
       id: 'actions',
       header: '',
-      cell: renderActionsCell
+      cell: RenderActionsCell
     }
   ];
 
