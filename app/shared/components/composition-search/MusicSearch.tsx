@@ -2,7 +2,7 @@ import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, List
 import debounce from 'lodash.debounce';
 import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
-import { mainHexPallete } from '../design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 import { Music } from '~/types/types/enhancedTable';
