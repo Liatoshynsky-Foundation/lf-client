@@ -4,7 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 
 import {
-  renderActionsCell,
+  RenderActionsCell,
   renderGenreCell,
   RenderGenreHeader,
   renderNameCell,
@@ -69,7 +69,7 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
     {
       id: 'actions',
       header: '',
-      cell: renderActionsCell
+      cell: RenderActionsCell
     }
   ];
 
