@@ -90,7 +90,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
   };
   const getOptionLabel = (option: flattenedMusicDataArrayType) => option.name || '';
   return (
-    <div>
       <Autocomplete
         id="music-search"
         options={flattenedMusicDataArray}
@@ -106,6 +105,5 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
         clearIcon={false}
         noOptionsText={<Typography variant="customMedium16">Не знайдено</Typography>}
       />
-    </div>
   );
 };
