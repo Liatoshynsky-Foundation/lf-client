@@ -3,21 +3,29 @@ import React from 'react';
 
 import Header from './Header';
 
+import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
+
 jest.mock('~/ds-components/logo/Logo', () => ({
   __esModule: true,
   default: () => <div data-testid="logo" />
 }));
+
 jest.mock('~/ds-components/navigation-bar/NavigationBar', () => ({
   __esModule: true,
   default: ({ navLabels }: { navLabels: Record<string, string> }) => (
     <div data-testid="navigation-bar">{Object.values(navLabels).join(',')}</div>
   )
 }));
+
 jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
   __esModule: true,
   default: ({ supportButtonData }: { supportButtonData: { text: string; link: string } }) => (
     <div data-testid="right-actions">{supportButtonData.text}</div>
   )
+}));
+
+jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
+  useScrollDirection: jest.fn()
 }));
 
 jest.mock('next-intl', () => ({
@@ -39,18 +47,12 @@ jest.mock('next-intl', () => ({
   }
 }));
 
-jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
-  useScrollDirection: jest.fn()
-}));
-
-import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
-
 describe('Header', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders logo, navigation-bar and right-actions', () => {
+  it('should render logo, navigation-bar and right-actions', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('up');
     render(<Header />);
     expect(screen.getByTestId('logo')).toBeInTheDocument();
@@ -58,7 +60,7 @@ describe('Header', () => {
     expect(screen.getByTestId('right-actions')).toBeInTheDocument();
   });
 
-  it('passes correct texts to navigation-bar', () => {
+  it('should pass correct texts to navigation-bar', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('up');
     render(<Header />);
     const nav = screen.getByTestId('navigation-bar');
@@ -74,23 +76,23 @@ describe('Header', () => {
     expect(nav.textContent).toContain('Collaboration');
   });
 
-  it('passes the correct text to right-actions (support button)', () => {
-    (useScrollDirection as jest.Mock).mockReturnValue('up');
-    render(<Header />);
-    expect(screen.getByTestId('right-actions').textContent).toContain('Support');
-  });
-
-  it('navigation-bar is hidden when scrollDirection = "down"', () => {
+  it('should hide navigation-bar when scrollDirection = "down"', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('down');
     render(<Header />);
     const navBox = screen.getByTestId('navigation-bar').parentElement;
     expect(navBox).toHaveStyle('transform: translateY(-150%)');
   });
 
-  it('navigation-bar visible when scrollDirection = "up"', () => {
+  it('should show navigation-bar when scrollDirection = "down"', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('up');
     render(<Header />);
     const navBox = screen.getByTestId('navigation-bar').parentElement;
     expect(navBox).toHaveStyle('transform: translateY(0)');
+  });
+
+  it('should pass the correct text to right-actions (support button)', () => {
+    (useScrollDirection as jest.Mock).mockReturnValue('up');
+    render(<Header />);
+    expect(screen.getByTestId('right-actions').textContent).toContain('Support');
   });
 });
