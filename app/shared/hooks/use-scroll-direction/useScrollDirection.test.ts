@@ -2,7 +2,6 @@ import { act, renderHook } from '@testing-library/react';
 
 import { useScrollDirection } from './useScrollDirection';
 
-// Helper to simulate scroll
 function setScrollY(value: number) {
   Object.defineProperty(window, 'scrollY', {
     writable: true,
