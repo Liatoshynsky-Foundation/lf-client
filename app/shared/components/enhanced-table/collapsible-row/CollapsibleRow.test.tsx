@@ -11,6 +11,16 @@ type MockRow = {
   group: string;
 };
 
+jest.mock('~/public/icons/chevron-down.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="svg-image" />
+}));
+
+jest.mock('~/public/icons/chevron-right.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="svg-image" />
+}));
+
 jest.mock('./CollapsibleDataRow', () => ({
   CollapsibleDataRow: ({ row }: { row: { original: MockRow } }) => (
     <tr data-testid="collapsible-data-row">
@@ -44,6 +54,7 @@ const columns: ColumnDef<MockRow>[] = [
     cell: () => null
   },
   {
+    id: 'name',
     accessorKey: 'name',
     header: 'Name',
     cell: (info) => info.getValue(),

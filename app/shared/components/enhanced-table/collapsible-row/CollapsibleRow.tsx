@@ -4,14 +4,18 @@ import { Box, TableCell, TableRow } from '@mui/material';
 import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import React from 'react';
 
+import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { CollapsibleDataRow } from './CollapsibleDataRow';
 import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
 
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import chevronDown from '~/public/icons/chevron-down.svg';
+import chevronRight from '~/public/icons/chevron-right.svg';
+
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
@@ -47,11 +51,12 @@ export function CollapsibleRow<T extends RowData>({
               <Box sx={styles.cellInner}>
                 {col.id === 'expander' ? (
                   <IconButton onClick={action} variant={IconButtonColorVariant.Secondary} disableRipple>
-                    <SvgImage
-                      src={collapsed ? '/icons/chevron-down.svg' : '/icons/chevron-right.svg'}
+                    <Svg
+                      Component={collapsed ? chevronDown : chevronRight}
+                      color={mainHexPallete.brown['700']}
                       alt="toggle"
-                      width={24}
-                      height={24}
+                      width="24px"
+                      height="24px"
                     />
                   </IconButton>
                 ) : (
