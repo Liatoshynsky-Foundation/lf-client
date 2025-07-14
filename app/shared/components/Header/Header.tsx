@@ -41,11 +41,9 @@ export default function Header() {
       <Box sx={styles.logoContainer}>
         <Logo />
       </Box>
-
       <Box sx={styles.navigationContainer(isNavVisible)}>
         <NavigationBar navLabels={navLabels} />
       </Box>
-
       <RightActionsPanel
         supportButtonData={{
           text: t('supportButton'),

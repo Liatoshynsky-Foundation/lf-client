@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
+
 import { SvgImage } from '../svg-image/SvgImage';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 import { Music } from '~/types/types/enhancedTable';
@@ -90,20 +91,20 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
   };
   const getOptionLabel = (option: flattenedMusicDataArrayType) => option.name || '';
   return (
-      <Autocomplete
-        id="music-search"
-        options={flattenedMusicDataArray}
-        value={value}
-        onChange={onChange}
-        inputValue={searchQuery}
-        onInputChange={handleInputChange}
-        renderInput={renderInput}
-        renderOption={renderOption}
-        getOptionLabel={getOptionLabel}
-        clearOnBlur={false}
-        popupIcon={null}
-        clearIcon={false}
-        noOptionsText={<Typography variant="customMedium16">Не знайдено</Typography>}
-      />
+    <Autocomplete
+      id="music-search"
+      options={flattenedMusicDataArray}
+      value={value}
+      onChange={onChange}
+      inputValue={searchQuery}
+      onInputChange={handleInputChange}
+      renderInput={renderInput}
+      renderOption={renderOption}
+      getOptionLabel={getOptionLabel}
+      clearOnBlur={false}
+      popupIcon={null}
+      clearIcon={false}
+      noOptionsText={<Typography variant="customMedium16">Не знайдено</Typography>}
+    />
   );
 };
