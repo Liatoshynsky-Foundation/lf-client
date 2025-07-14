@@ -1,4 +1,5 @@
 import { CircularProgress, IconButton as MuiIconButton, IconButtonProps as MuiIconButtonProps } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 
 import { IconButtonStyles } from './IconButton.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
@@ -16,6 +17,7 @@ interface IconButtonProps extends Omit<MuiIconButtonProps, 'type'> {
   type?: IconButtonVariant;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   children?: React.ReactNode;
+  customStyles?: SxProps<Theme>;
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({
@@ -26,6 +28,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   type = IconButtonVariant.filled,
   onClick,
   children,
+  customStyles,
   ...props
 }) => {
   const styleClasses = createIconButtonStyleClasses(variant, type);
@@ -41,7 +44,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
       size={size}
-      sx={IconButtonStyles[styleClasses as keyof typeof IconButtonStyles]}
+      sx={[IconButtonStyles[styleClasses as keyof typeof IconButtonStyles], customStyles] as SxProps<Theme>}
       {...props}
     >
       {buttonContent}

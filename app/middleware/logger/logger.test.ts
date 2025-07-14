@@ -37,7 +37,7 @@ jest.mock('winston-mongodb', () => ({
 }));
 
 jest.mock('~/config', () => ({
-  mongoUrl: 'mongodb://localhost:27017/test-db'
+  mongoUrl: jest.fn(() => 'mongodb://localhost:27017/test-db')
 }));
 
 describe('Logger', () => {

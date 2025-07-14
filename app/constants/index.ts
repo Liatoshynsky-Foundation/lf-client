@@ -10,3 +10,6 @@ export const logoSizes = {
     height: { xs: 50, sm: 70, md: 90, lg: 110 }
   }
 };
+
+export const stateNames = ['DISCONNECTED', 'CONNECTED', 'CONNECTING', 'DISCONNECTING'];
+export const CONTAINER_NAME = 'materials';

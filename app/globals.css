@@ -3,19 +3,15 @@
   --foreground: #171717;
 }
 
-html,
-body {
-  height: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 * {

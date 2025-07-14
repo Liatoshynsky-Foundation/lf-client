@@ -33,10 +33,12 @@ declare module '@mui/material/styles' {
 
 declare module '@mui/material' {
   interface TypographyPropsVariantOverrides {
+    customBold32: true;
     customSemiBold20: true;
     customBold20: true;
     customItalic18: true;
     customMedium18: true;
+    customBold16: true;
     customMedium16: true;
     customItalic16: true;
     customItalic14: true;
@@ -45,10 +47,12 @@ declare module '@mui/material' {
 }
 declare module '@mui/material/styles' {
   interface TypographyVariantsOptions {
+    customBold32?: React.CSSProperties;
     customSemiBold20?: React.CSSProperties;
     customBold20?: React.CSSProperties;
     customItalic18?: React.CSSProperties;
     customMedium18?: React.CSSProperties;
+    customBold16?: React.CSSProperties;
     customMedium16?: React.CSSProperties;
     customItalic16?: React.CSSProperties;
     customCaption?: React.CSSProperties;
@@ -56,10 +60,12 @@ declare module '@mui/material/styles' {
     customSemiBold18?: React.CSSProperties;
   }
   interface TypographyVariants {
+    customBold32: React.CSSProperties;
     customSemiBold20: React.CSSProperties;
     customBold20: React.CSSProperties;
     customItalic18: React.CSSProperties;
     customMedium18: React.CSSProperties;
+    customBold16: React.CSSProperties;
     customMedium16: React.CSSProperties;
     customItalic16: React.CSSProperties;
     customCaption: React.CSSProperties;
@@ -68,10 +74,12 @@ declare module '@mui/material/styles' {
   }
 
   interface TypographyVariantsOptions {
+    customBold32?: React.CSSProperties;
     customSemiBold20?: React.CSSProperties;
     customBold20?: React.CSSProperties;
     customItalic18?: React.CSSProperties;
     customMedium18?: React.CSSProperties;
+    customBold16?: React.CSSProperties;
     customMedium16?: React.CSSProperties;
     customItalic16?: React.CSSProperties;
     customCaption?: React.CSSProperties;
@@ -255,6 +263,13 @@ export const theme = createTheme({
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
     },
+    customBold32: {
+      fontFamily: mulish.style.fontFamily,
+      fontWeight: 700,
+      fontSize: '32px',
+      lineHeight: '140%',
+      letterSpacing: '0px'
+    },
     customSemiBold18: {
       fontSize: '18px',
       fontWeight: 600,
@@ -291,6 +306,13 @@ export const theme = createTheme({
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
     },
+    customBold16: {
+      fontSize: '16px',
+      fontWeight: 700,
+      lineHeight: '100%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
     customMedium16: {
       fontSize: '16px',
       fontWeight: 500,
@@ -319,10 +341,12 @@ export const theme = createTheme({
     MuiTypography: {
       defaultProps: {
         variantMapping: {
+          customBold32: 'p',
           customSemiBold20: 'p',
           customBold20: 'p',
           customItalic18: 'p',
           customMedium18: 'p',
+          customBold16: 'p',
           customMedium16: 'p',
           customItalic16: 'p',
           customItalic14: 'p'
@@ -504,7 +528,6 @@ export const theme = createTheme({
     MuiInputBase: {
       defaultProps: {
         sx: {
-          width: '385px',
           height: '46px',
           color: mainHexPallete.blue[800],
           WebkitTextFillColor: mainHexPallete.blue[800],
@@ -584,7 +607,6 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       defaultProps: {
         sx: {
-          width: '280px',
           height: '48px',
           borderRadius: '8px',
           padding: '0 16px',
@@ -616,6 +638,8 @@ export const theme = createTheme({
           },
 
           '& .MuiOutlinedInput-input': {
+            padding: 0,
+
             '&:-webkit-autofill': {
               WebkitBoxShadow: 'transparent',
               WebkitTextFillColor: mainHexPallete.black,
@@ -797,6 +821,17 @@ export const theme = createTheme({
           borderRadius: '0 0 24px 24px',
           backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: '2px 0 0',
+          fontSize: '12px',
+          '&.Mui-error': {
+            color: rgbaTextFieldColors.errorBorderBottom
+          }
         }
       }
     }

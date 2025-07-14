@@ -1,0 +1,105 @@
+import { Box, Modal as MuiModal, SxProps, Typography } from '@mui/material';
+
+import { IconButton } from '../icon-button/IconButton';
+import { style } from './Modal.styles';
+import { IconButtonVariant, PositionEnum } from '~/types/enums/common.enums';
+
+import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+
+export type Color = 'white' | 'burgundy';
+export type VerticalAlignment = PositionEnum.Top | PositionEnum.Bottom | undefined;
+export type HorizontalAlignment = PositionEnum.Left | PositionEnum.Right | undefined;
+
+interface ModalProps {
+  open: boolean;
+  handleClose: () => void;
+  width?: number;
+  height?: number;
+  isBackdrop?: boolean;
+  disableScrollLock?: boolean;
+  children?: React.ReactNode;
+  title: string;
+  subtitle?: string;
+  backgroundColor?: Color;
+  topLine?: boolean;
+  verticalAlignment?: VerticalAlignment;
+  horizontalAlignment?: HorizontalAlignment;
+  titleSx?: SxProps;
+  subtitleSx?: SxProps;
+  modalSx?: SxProps;
+  contentBoxSx?: SxProps;
+  childrenBoxSx?: SxProps;
+  topSection?: SxProps;
+}
+
+export const Modal: React.FC<ModalProps> = ({
+  open,
+  handleClose,
+  width = 1080,
+  height = undefined,
+  isBackdrop = false,
+  disableScrollLock = true,
+  title,
+  subtitle,
+  backgroundColor = 'white',
+  topLine = false,
+  verticalAlignment,
+  horizontalAlignment,
+  titleSx = {},
+  subtitleSx = {},
+  modalSx = {},
+  contentBoxSx = {},
+  childrenBoxSx = {},
+  topSection = {},
+  children
+}) => {
+  const isBigModal = width > 1000;
+
+  return (
+    <MuiModal
+      open={open}
+      onClose={handleClose}
+      data-testid="modal"
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      hideBackdrop={!isBackdrop}
+      disableScrollLock={disableScrollLock}
+      sx={[style.modal(width, height, backgroundColor, verticalAlignment, horizontalAlignment), modalSx] as SxProps}
+    >
+      <Box sx={{ ...contentBoxSx, ...style.content } as SxProps}>
+        <Box sx={{ ...style.topSection, ...topSection } as SxProps}>
+          <Box>
+            <Typography
+              id="modal-modal-title"
+              variant={isBigModal ? 'h3' : 'h4'}
+              sx={{ ...titleSx, ...style.title(backgroundColor) }}
+            >
+              {title}
+            </Typography>
+            {subtitle && (
+              <Typography variant="body2" sx={{ ...subtitleSx, ...style.title(backgroundColor) }}>
+                {subtitle}
+              </Typography>
+            )}
+          </Box>
+          <IconButton type={IconButtonVariant.icon} size="small" onClick={handleClose}>
+            <div
+              style={{
+                filter: backgroundColor === 'burgundy' ? 'brightness(0) invert(1)' : 'brightness(0) saturate(100%)'
+              }}
+            >
+              <SvgImage
+                src="/icons/x.svg"
+                alt="closing modal"
+                width={isBigModal ? 40 : 24}
+                height={isBigModal ? 40 : 24}
+              />
+            </div>
+          </IconButton>
+        </Box>
+        {topLine && <Box data-testid="modal-topline" sx={style.topLine(width)} />}
+        <Box sx={{ ...style.children, ...childrenBoxSx }}>{children}</Box>
+      </Box>
+    </MuiModal>
+  );
+};

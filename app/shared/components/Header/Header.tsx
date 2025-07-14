@@ -1,26 +1,57 @@
+'use client';
+
 import { Box } from '@mui/material';
-import { getTranslations } from 'next-intl/server';
-import React from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
-import AudioPlayer from './AudioPlayer/AudioPlayer';
-import SupportButton from './SupportButton/SupportButton';
+import Logo from '~/ds-components/logo/Logo';
+import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
 
-export default async function Header() {
-  const t = await getTranslations('header');
+import { styles } from './Header.styles';
+import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
-  const supportButtonData = {
-    text: t('supportButton'),
-    link: '/support'
+import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
+
+export default function Header() {
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const scrollDirection = useScrollDirection(100);
+  const t = useTranslations('header');
+
+  useEffect(() => {
+    setIsNavVisible(scrollDirection !== 'down');
+  }, [scrollDirection]);
+
+  const navLabels = {
+    liatoshynsky: t('navLabels.liatoshynsky'),
+    biography: t('navLabels.biography'),
+    artistry: t('navLabels.artistry'),
+    research: t('navLabels.research'),
+    foundation: t('navLabels.foundation'),
+    about: t('navLabels.foundationHome'),
+    news: t('navLabels.news'),
+    media: t('navLabels.mediaAboutUs'),
+    archive: t('navLabels.archive'),
+    collaboration: t('navLabels.collaboration')
   };
 
+  const supportButtonLink = '/support-us';
+
   return (
-    <Box component="header">
-      <AudioPlayer
-        src="/music/sample-music.mp3"
-        trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
-        autoplay={false}
+    <Box component="header" sx={styles.mainContainer}>
+      <Box sx={styles.logoContainer}>
+        <Logo />
+      </Box>
+
+      <Box sx={styles.navigationContainer(isNavVisible)}>
+        <NavigationBar navLabels={navLabels} />
+      </Box>
+
+      <RightActionsPanel
+        supportButtonData={{
+          text: t('supportButton'),
+          link: supportButtonLink
+        }}
       />
-      <SupportButton data={supportButtonData} />
     </Box>
   );
 }

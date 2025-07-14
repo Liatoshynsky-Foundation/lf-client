@@ -6,14 +6,14 @@ import FooterNavigation from './FooterNavigation';
 describe('FooterNavigation', () => {
   const mockSections = [
     {
-      title: 'Section 1',
+      title: 'SECTION 1',
       links: [
         { label: 'Link 1.1', href: '/link-1-1' },
         { label: 'Link 1.2', href: '/link-1-2' }
       ]
     },
     {
-      title: 'Section 2',
+      title: 'SECTION 2',
       links: [
         { label: 'Link 2.1', href: '/link-2-1' },
         { label: 'Link 2.2', href: '/link-2-2' }
