@@ -27,11 +27,60 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const barRefs = useRef<any>([]);
+  const animationRef = useRef<number | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const dataArrayRef = useRef<Uint8Array | null>(null);
+
+  const setupAudioAnalyzer = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || audioContextRef.current) return;
+
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 64;
+
+    const source = audioContext.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    audioContextRef.current = audioContext;
+    analyserRef.current = analyser;
+    dataArrayRef.current = dataArray;
+  }, []);
+
+  const animateBars = useCallback(() => {
+    const analyser = analyserRef.current;
+    const dataArray = dataArrayRef.current;
+    if (!analyser || !dataArray) return;
+
+    analyser.getByteFrequencyData(dataArray);
+
+    const bandSize = Math.floor(dataArray.length / stickHeights.length);
+
+    stickHeights.forEach((_, i) => {
+      const start = i * bandSize;
+      const end = start + bandSize;
+      const avg = dataArray.slice(start, end).reduce((sum, val) => sum + val, 0) / bandSize;
+
+      const bar = barRefs.current[i];
+      if (bar) {
+        const percent = Math.max(5, (avg / 255) * 100);
+        bar.style.height = `${percent}%`;
+      }
+    });
+
+    animationRef.current = requestAnimationFrame(animateBars);
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -70,25 +119,38 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
     }
 
     if (autoplay) {
-      audio.play().catch(() => {
-        setError('Playback failed');
-      });
+      audio
+        .play()
+        .then(() => {
+          setupAudioAnalyzer();
+          animateBars();
+        })
+        .catch(() => {
+          setError('Playback failed');
+        });
     }
 
     return () => {
       controller.abort();
     };
-  }, [autoplay, src]);
+  }, [autoplay, src, setupAudioAnalyzer, animateBars]);
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
     if (audio.paused) {
       audio.play();
+      animateBars();
     } else {
       audio.pause();
+
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
     }
-  }, []);
+  }, [animateBars]);
 
   const togglePopoverAndPlay = useCallback(() => {
     const audio = audioRef.current;
@@ -97,10 +159,19 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
     if (!isPlaying) {
       audio.play();
       setAnchorEl(buttonRef.current);
+
+      if (!audioContextRef.current) {
+        setupAudioAnalyzer();
+      }
+
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      animateBars();
     } else {
       setAnchorEl((prev) => (prev ? null : buttonRef.current));
     }
-  }, [isPlaying]);
+  }, [isPlaying, animateBars, setupAudioAnalyzer]);
 
   const onSeek = useCallback((newProgress: number) => {
     const audio = audioRef.current;
@@ -121,16 +192,15 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
           aria-label="Toggle audio player"
           ref={buttonRef}
         >
-          <Box display="flex" alignItems="center" gap={0.5}>
+          <Box display="flex" alignItems="center" gap={0.5} height={30}>
             {stickHeights.map(({ id, height }, i) => (
               <Box
                 key={id}
-                sx={{
-                  ...styles.icon,
-                  ...(isPlaying ? styles.iconAnimated : styles.iconStatic),
-                  animationDelay: isPlaying ? `${i * 0.1}s` : undefined,
-                  height
+                sx={styles.icon}
+                ref={(el) => {
+                  if (el) barRefs.current[i] = el;
                 }}
+                style={{ height: `${height}px` }}
               />
             ))}
           </Box>
