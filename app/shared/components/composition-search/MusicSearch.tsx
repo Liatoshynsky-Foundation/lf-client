@@ -1,5 +1,6 @@
 import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
+import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
@@ -21,6 +22,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const DEBOUNCE_TIME_MS = 400;
+  const t = useTranslations('search');
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
@@ -104,7 +106,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
       clearOnBlur={false}
       popupIcon={null}
       clearIcon={false}
-      noOptionsText={<Typography variant="customMedium16">Не знайдено</Typography>}
+      noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
     />
   );
 };
