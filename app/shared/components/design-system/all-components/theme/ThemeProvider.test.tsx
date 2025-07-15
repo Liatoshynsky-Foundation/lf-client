@@ -10,7 +10,7 @@ const ThemeConsumer = () => {
   return <Typography data-testid="color" style={{ color: theme.palette.error.main }}></Typography>;
 };
 describe('Theme Provider', () => {
-  it('renders children without crashing', () => {
+  it('should render children without crashing', () => {
     render(
       <ThemeProvider>
         <div>Test children</div>
@@ -18,7 +18,7 @@ describe('Theme Provider', () => {
     );
     expect(screen.getByText('Test children')).toBeInTheDocument();
   });
-  it('provides access to theme inside children components', () => {
+  it('should provide access to theme inside children components', () => {
     render(
       <ThemeProvider>
         <ThemeConsumer />
@@ -28,7 +28,7 @@ describe('Theme Provider', () => {
     const style = getComputedStyle(element);
     expect(style.color).toBe(hexToRGBA('#D13712'));
   });
-  it('applies custom theme overrides (if any)', () => {
+  it('should apply custom theme overrides (if any)', () => {
     render(
       <ThemeProvider>
         <Button variant="contained" color="primary">
