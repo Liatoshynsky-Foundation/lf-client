@@ -55,8 +55,6 @@ export function CollapsibleRow<T extends RowData>({
                       Component={collapsed ? chevronDown : chevronRight}
                       color={mainHexPallete.brown['700']}
                       alt="toggle"
-                      width="24px"
-                      height="24px"
                     />
                   </IconButton>
                 ) : (
