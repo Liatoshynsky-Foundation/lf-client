@@ -47,3 +47,10 @@ export const createLocalizedCompositionSchema = (locale: Locale) =>
 
 export const createLocalizedCompositionsArraySchema = (locale: Locale) =>
   z.array(createLocalizedCompositionSchema(locale));
+
+export const compositinNamesSchema = z.object({
+  _id: mongoObjectIdSchema,
+  title: z.string()
+});
+
+export const compositionNamesArraySchema = z.array(compositinNamesSchema);
