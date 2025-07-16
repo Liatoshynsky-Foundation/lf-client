@@ -33,7 +33,7 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const barRefs = useRef<any>([]);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -43,7 +43,8 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
     const audio = audioRef.current;
     if (!audio || audioContextRef.current) return;
 
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const audioContext = new AudioCtx();
     const analyser = audioContext.createAnalyser();
     analyser.fftSize = 64;
 
@@ -197,8 +198,8 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
               <Box
                 key={id}
                 sx={styles.icon}
-                ref={(el) => {
-                  if (el) barRefs.current[i] = el;
+                ref={(el: HTMLDivElement) => {
+                  barRefs.current[i] = el;
                 }}
                 style={{ height: `${height}px` }}
               />
