@@ -1,7 +1,8 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import {
   RenderActionsCell,
@@ -90,6 +91,8 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       data={data}
       columns={columns}
       groupByKey="opus"
+      columnFilters={columnFilters}
+      onColumnFiltersChange={setColumnFilters}
       columnWidths={{
         expander: '3%',
         opus: '3%',
@@ -101,6 +104,14 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       }}
       itemsPerPage={10}
       tableName={t('composition')}
+      MusicSearch={
+        <MusicSearch
+          data={data}
+          onFilterChange={(names: string) =>
+            setColumnFilters((prev) => [...prev.filter((f) => f.id !== 'name'), { id: 'name', value: names }])
+          }
+        />
+      }
     />
   );
 }

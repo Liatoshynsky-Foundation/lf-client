@@ -50,7 +50,14 @@ export function CollapsibleRow<T extends RowData>({
             <TableCell key={col.id} sx={styles.cell}>
               <Box sx={styles.cellInner}>
                 {col.id === 'expander' ? (
-                  <IconButton onClick={action} variant={IconButtonColorVariant.Secondary} disableRipple>
+                  <IconButton
+                    onClick={(event) => {
+                      event.preventDefault();
+                      action();
+                    }}
+                    variant={IconButtonColorVariant.Secondary}
+                    disableRipple
+                  >
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
                       color={mainHexPallete.brown['700']}

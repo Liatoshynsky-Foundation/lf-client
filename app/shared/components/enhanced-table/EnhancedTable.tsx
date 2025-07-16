@@ -1,7 +1,16 @@
 'use client';
 
 import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
-import { ColumnDef, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  OnChangeFn,
+  SortingState,
+  useReactTable
+} from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
@@ -25,6 +34,10 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
+  MusicSearch: React.ReactNode;
+  columnFilters?: ColumnFiltersState;
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
+  enableClientSorting?: boolean;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -34,6 +47,9 @@ export default function EnhancedTable<T extends RowData>({
   groupByKey,
   itemsPerPage = 10,
   tableName,
+  MusicSearch,
+  columnFilters,
+  onColumnFiltersChange,
   defaultSorting = []
 }: Readonly<EnhancedTableProps<T>>) {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
@@ -63,20 +79,25 @@ export default function EnhancedTable<T extends RowData>({
     data,
     columns,
     state: {
-      sorting
+      sorting,
+      columnFilters
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange,
+    getFilteredRowModel: getFilteredRowModel()
   });
 
-  const sortedData = headerTable.getRowModel().rows.map((row) => row.original);
+  const filteredAndSortedRows = useMemo(() => {
+    return headerTable.getRowModel().rows.map((row) => row.original);
+  }, [headerTable]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
     const ungrouped: T[] = [];
 
-    for (const item of sortedData) {
+    for (const item of filteredAndSortedRows) {
       const groupKey = groupByKey ? String(item[groupByKey] ?? '') : undefined;
 
       if (groupKey) {
@@ -87,7 +108,7 @@ export default function EnhancedTable<T extends RowData>({
     }
 
     return { groupedItems: grouped, flatItems: ungrouped };
-  }, [sortedData, groupByKey]);
+  }, [filteredAndSortedRows, groupByKey]);
 
   const allRows: ItemOrGroup<T>[] = useMemo(
     () => [

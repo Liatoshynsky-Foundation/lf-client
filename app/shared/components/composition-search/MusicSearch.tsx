@@ -5,15 +5,17 @@ import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'r
 import { mainHexPallete } from '../design-system/all-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
+import { Music } from '~/types/types/enhancedTable';
 
 import { flattenedMusicDataArrayType, flattenMusicDataArray } from '~/lib/utils/flattenMusicDataArray';
-export interface CompositionProps {
+export interface MusicSearchProps {
   onFilterChange: (value: string) => void;
+  data: Music[];
 }
 
-const flattenedMusicDataArray = flattenMusicDataArray(musicData);
-export const MusicSearch: React.FC<CompositionProps> = ({ onFilterChange }) => {
+export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }) => {
   const [value, setValue] = useState<flattenedMusicDataArrayType | null>(null);
+  const flattenedMusicDataArray = flattenMusicDataArray(data);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
