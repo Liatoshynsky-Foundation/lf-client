@@ -1,7 +1,16 @@
 'use client';
 
 import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
-import { ColumnDef, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  OnChangeFn,
+  SortingState,
+  useReactTable
+} from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
@@ -10,7 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import TableHeader from './enhanced-table-header/EnhancedTableHeader';
+import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
@@ -25,6 +34,10 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
+  MusicSearch?: React.ReactNode;
+  columnFilters?: ColumnFiltersState;
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
+  enableClientSorting?: boolean;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -34,12 +47,14 @@ export default function EnhancedTable<T extends RowData>({
   groupByKey,
   itemsPerPage = 10,
   tableName,
+  MusicSearch,
+  columnFilters,
+  onColumnFiltersChange,
   defaultSorting = []
 }: Readonly<EnhancedTableProps<T>>) {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
-
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -64,20 +79,25 @@ export default function EnhancedTable<T extends RowData>({
     data,
     columns,
     state: {
-      sorting
+      sorting,
+      columnFilters
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange,
+    getFilteredRowModel: getFilteredRowModel()
   });
 
-  const sortedData = headerTable.getRowModel().rows.map((row) => row.original);
+  const filteredAndSortedRows = useMemo(() => {
+    return headerTable.getRowModel().rows.map((row) => row.original);
+  }, [headerTable]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
     const ungrouped: T[] = [];
 
-    for (const item of sortedData) {
+    for (const item of filteredAndSortedRows) {
       const groupKey = groupByKey ? String(item[groupByKey] ?? '') : undefined;
 
       if (groupKey) {
@@ -88,7 +108,7 @@ export default function EnhancedTable<T extends RowData>({
     }
 
     return { groupedItems: grouped, flatItems: ungrouped };
-  }, [sortedData, groupByKey]);
+  }, [filteredAndSortedRows, groupByKey]);
 
   const allRows: ItemOrGroup<T>[] = useMemo(
     () => [
@@ -120,13 +140,15 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <Typography variant="customBold32" sx={styles.title}>
-        {tableName}
-      </Typography>
-
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
+        <Typography variant="customBold32" sx={styles.title}>
+          {tableName}
+        </Typography>
+        {MusicSearch}
+      </Box>
       <TableContainer component={Paper} sx={styles.container}>
         <Table>
-          <TableHeader table={headerTable} columnWidths={columnWidths} />
+          <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
           <TableBody>
             {rowsToRender.map((entry) =>
               entry.type === 'group' ? (

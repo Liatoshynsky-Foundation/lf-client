@@ -14,12 +14,12 @@ type CustomBaseProps = {
   startIcon?: string;
   endIcon?: string;
   placeholder?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   sx?: SxProps;
 };
 
-type CustomTextFieldProps = CustomBaseProps & Omit<MuiTextFieldProps, keyof CustomBaseProps>;
+export type CustomTextFieldProps = CustomBaseProps & Omit<MuiTextFieldProps, keyof CustomBaseProps>;
 
 const TextField = React.forwardRef<HTMLInputElement, CustomTextFieldProps>(
   (
