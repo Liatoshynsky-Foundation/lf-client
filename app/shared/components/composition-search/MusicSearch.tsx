@@ -10,7 +10,7 @@ import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 import { Music } from '~/types/types/enhancedTable';
 
 import { flattenedMusicDataArrayType, flattenMusicDataArray } from '~/lib/utils/flattenMusicDataArray';
-export interface MusicSearchProps {
+interface MusicSearchProps {
   onFilterChange: (value: string) => void;
   data: Music[];
 }

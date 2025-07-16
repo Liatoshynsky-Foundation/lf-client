@@ -34,7 +34,7 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
-  MusicSearch: React.ReactNode;
+  MusicSearch?: React.ReactNode;
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;

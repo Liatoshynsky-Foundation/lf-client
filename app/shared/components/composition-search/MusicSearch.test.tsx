@@ -1,9 +1,17 @@
-import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import { MusicSearch } from './MusicSearch';
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => {
+    const translations: Record<string, string> = {
+      notFound: 'Не знайдено'
+    };
+
+    return (key: string) => translations[key] || key;
+  }
+}));
 describe('MusicSearch component', () => {
   const handleChange = jest.fn();
   const mockMusicData = [
