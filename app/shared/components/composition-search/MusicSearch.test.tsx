@@ -1,9 +1,8 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { MusicSearch } from './MusicSearch';
-
-jest.useFakeTimers();
 
 jest.mock('next-intl', () => ({
   useTranslations: () => {
@@ -54,35 +53,33 @@ describe('MusicSearch component', () => {
     expect(screen.getByAltText('search')).toBeInTheDocument();
   });
 
-  it('should render the Autocomplete and check list opening and closing', async () => {
-    const Input = screen.getByRole('combobox');
-    expect(Input).toHaveAttribute('id', 'music-search');
+  it('should render the Autocomplete and check list opening and closing', () => {
+    const input = screen.getByRole('combobox');
+    expect(input).toHaveAttribute('id', 'music-search');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    fireEvent.mouseDown(Input);
-    fireEvent.change(Input, { target: { value: mockMusicData[0].name } });
-    const ListItem = screen.getByText(mockMusicData[0].name);
-    fireEvent.click(ListItem);
+    fireEvent.mouseDown(input);
+    fireEvent.change(input, { target: { value: mockMusicData[0].name } });
+    const listItem = screen.getByText(mockMusicData[0].name);
+    fireEvent.click(listItem);
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
   it('should find clear button and clean the input after a click', async () => {
-    const Input = screen.getByRole('combobox');
-    expect(Input).toHaveAttribute('id', 'music-search');
-    fireEvent.change(Input, { target: { value: mockMusicData[1].name } });
+    const input = screen.getByRole('combobox');
+    fireEvent.change(input, { target: { value: mockMusicData[1].name } });
     const clearButton = screen.getByAltText('close');
-    clearButton.click();
-    fireEvent.click(clearButton);
+    await userEvent.click(clearButton);
     await waitFor(() => {
-      expect(Input).toHaveValue('');
+      expect(input).toHaveValue('');
     });
   });
 
-  it('should focus input when search icon is clicked', () => {
+  it('should focus input when search icon is clicked', async () => {
     const input = screen.getByRole('combobox');
     const searchIcon = screen.getByAltText('search');
     input.blur();
     expect(document.activeElement).not.toBe(input);
-    searchIcon.click();
+    await userEvent.click(searchIcon);
     expect(document.activeElement).toBe(input);
   });
 
@@ -91,7 +88,7 @@ describe('MusicSearch component', () => {
     fireEvent.mouseDown(input);
     fireEvent.change(input, { target: { value: mockMusicData[0].name } });
     const listItem = await screen.findByText(mockMusicData[0].name);
-    fireEvent.click(listItem);
+    await userEvent.click(listItem);
     expect(input).toHaveValue(mockMusicData[0].name);
   });
 
@@ -103,16 +100,17 @@ describe('MusicSearch component', () => {
     expect(screen.getByText('Не знайдено')).toBeInTheDocument();
   });
 
-  it('should debounce onFilterChange calls', async () => {
+  it('should debounce onFilterChange calls', () => {
+    jest.useFakeTimers();
     const input = screen.getByRole('combobox');
     fireEvent.change(input, { target: { value: 'hello' } });
     expect(handleChange).toHaveBeenCalledWith('hello');
     expect(input).toHaveValue('hello');
-    expect(screen.getByRole('combobox')).toHaveValue('hello');
     act(() => {
       jest.advanceTimersByTime(400);
     });
-    expect(screen.getByRole('combobox')).toHaveValue('hello');
+    expect(input).toHaveValue('hello');
+    jest.useRealTimers();
   });
 
   it('should clear value state when clear button is clicked', async () => {
@@ -122,18 +120,18 @@ describe('MusicSearch component', () => {
     fireEvent.click(listItem);
     expect(input).toHaveValue(mockMusicData[0].name);
     const clearButton = screen.getByAltText('close');
-    fireEvent.click(clearButton);
+    await userEvent.click(clearButton);
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
   });
 
-  it('should focus input when search icon is clicked even if not focused', () => {
+  it('should focus input when search icon is clicked even if not focused', async () => {
     const input = screen.getByRole('combobox');
     input.blur();
     expect(document.activeElement).not.toBe(input);
     const searchIcon = screen.getByAltText('search');
-    fireEvent.click(searchIcon);
+    await userEvent.click(searchIcon);
     expect(document.activeElement).toBe(input);
   });
 });
