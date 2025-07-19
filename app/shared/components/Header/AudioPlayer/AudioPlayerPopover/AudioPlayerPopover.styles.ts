@@ -1,23 +1,3 @@
-const baseStyles = {
-  progressLine: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    height: '100%',
-    backgroundColor: 'white',
-    borderRadius: 2,
-    transition: 'width 0.2s linear',
-    pointerEvents: 'none'
-  },
-  progressThumb: {
-    position: 'absolute',
-    top: 3,
-    transform: 'translate(-75%, -50%)',
-    pointerEvents: 'none',
-    transition: 'left 0.2s linear'
-  }
-};
-
 export const styles = {
   popoverPaper: {
     backgroundColor: '#2b2b2b',
@@ -63,14 +43,23 @@ export const styles = {
     marginTop: 1,
     marginBottom: 1
   },
-  progressLine: (progress: number) => ({
-    ...baseStyles.progressLine,
-    width: `${progress * 100}%`
-  }),
-  progressThumbSvg: (progress: number) => ({
-    ...baseStyles.progressThumb,
-    left: `${progress * 100}%`
-  }),
+  progressLine: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    backgroundColor: 'white',
+    borderRadius: 2,
+    transition: 'width 0.2s linear',
+    pointerEvents: 'none'
+  },
+  progressThumbSvg: {
+    position: 'absolute',
+    top: 3,
+    transform: 'translate(-75%, -50%)',
+    pointerEvents: 'none',
+    transition: 'left 0.2s linear'
+  },
   controls: {
     display: 'flex',
     alignItems: 'center',
