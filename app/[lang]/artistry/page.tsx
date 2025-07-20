@@ -12,8 +12,8 @@ import { createRequestContainer } from '~/di/container';
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang);
-
+  const filter = 'Довше';
+  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, filter);
   const t = await getTranslations('liatoshynskyArtistry');
 
   return (

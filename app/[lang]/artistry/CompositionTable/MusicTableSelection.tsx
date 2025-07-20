@@ -2,7 +2,7 @@
 
 import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   RenderActionsCell,
@@ -31,60 +31,59 @@ type Props = {
 
 export default function MusicTableSection({ data }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
 
-  const columns: ColumnDef<Music>[] = [
-    { id: 'expander', header: '', cell: () => null },
-    {
-      id: 'opus',
-      header: RenderOpusHeader,
-      cell: () => null,
-      meta: {
-        groupLabelContentFactory: renderOpusGroupLabel
+  const columns = useMemo<ColumnDef<Music>[]>(
+    () => [
+      { id: 'expander', header: '', cell: () => null },
+      {
+        id: 'opus',
+        header: RenderOpusHeader,
+        cell: () => null,
+        meta: {
+          groupLabelContentFactory: renderOpusGroupLabel
+        }
       },
-      filterFn: (row, columnId, filterValue: string) => {
-        const name = row.getValue<string>(columnId);
-        return advancedSearchFilter(name, filterValue);
-      }
-    },
-    {
-      id: 'play',
-      header: '',
-      cell: renderPlayCell
-    },
-    {
-      accessorKey: 'name',
-      header: RenderNameHeader,
-      cell: renderNameCell,
-      enableSorting: false,
-      meta: {
-        groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
+      {
+        id: 'play',
+        header: '',
+        cell: renderPlayCell
       },
-      filterFn: (row, columnId, filterValue: string) => {
-        const name = row.getValue<string>(columnId);
-        return advancedSearchFilter(name, filterValue);
+      {
+        accessorKey: 'name',
+        header: RenderNameHeader,
+        cell: renderNameCell,
+        enableSorting: false,
+        meta: {
+          groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
+        },
+        filterFn: (row, columnId, filterValue: string) => {
+          const name = row.getValue<string>(columnId);
+          const result = advancedSearchFilter(name, filterValue);
+          return result;
+        }
+      },
+      {
+        accessorKey: 'year',
+        header: RenderYearHeader,
+        cell: renderYearCell,
+        enableSorting: false
+      },
+      {
+        accessorKey: 'genre',
+        header: RenderGenreHeader,
+        cell: renderGenreCell,
+        enableSorting: false
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: RenderActionsCell
       }
-    },
-    {
-      accessorKey: 'year',
-      header: RenderYearHeader,
-      cell: renderYearCell,
-      enableSorting: false
-    },
-    {
-      accessorKey: 'genre',
-      header: RenderGenreHeader,
-      cell: renderGenreCell,
-      enableSorting: false
-    },
-    {
-      id: 'actions',
-      header: '',
-      cell: RenderActionsCell
-    }
-  ];
+    ],
+    []
+  );
 
   return (
     <EnhancedTable
@@ -106,7 +105,6 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       tableName={t('composition')}
       MusicSearch={
         <MusicSearch
-          data={data}
           onFilterChange={(names: string) =>
             setColumnFilters((prev) => [...prev.filter((f) => f.id !== 'name'), { id: 'name', value: names }])
           }
