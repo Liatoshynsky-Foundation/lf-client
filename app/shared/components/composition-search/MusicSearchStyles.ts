@@ -28,5 +28,11 @@ export const MusicSearchStyles = {
   },
   list: {
     width: '280px'
+  },
+  listbox: {
+    padding: 0,
+    margin: 0,
+    overflow: 'hidden',
+    maxHeight: 'none'
   }
 };

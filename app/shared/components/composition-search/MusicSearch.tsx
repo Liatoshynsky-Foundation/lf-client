@@ -122,12 +122,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
       disableListWrap={true}
       slotProps={{
         listbox: {
-          style: {
-            padding: 0,
-            margin: 0,
-            overflow: 'hidden',
-            maxHeight: 'none'
-          },
+          style: MusicSearchStyles.list,
           component: VirtualizedListbox as unknown as React.ComponentType<React.HTMLAttributes<HTMLElement>>
         }
       }}
