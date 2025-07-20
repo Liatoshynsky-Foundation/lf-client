@@ -62,6 +62,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
     return (
       <CustomBorderTextField
         {...params}
+        data-testid="music-search"
         variant="outlined"
         size="small"
         sx={{ borderColor: `${mainHexPallete.black} !important` }}
@@ -105,7 +106,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
   const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
   return (
     <Autocomplete
-      id="music-search"
       options={options}
       loading={loading}
       value={value}
