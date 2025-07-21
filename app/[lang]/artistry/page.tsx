@@ -12,8 +12,7 @@ import { createRequestContainer } from '~/di/container';
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-  const filter = 'Довше';
-  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, filter);
+  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, '');
   const t = await getTranslations('liatoshynskyArtistry');
 
   return (
@@ -24,7 +23,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
         sourceText={t('title-with-quote.sourceText')}
         color="black"
       />
-      <MusicTableSection data={musicData} />
+      <MusicTableSection data={musicData} initialData={musicData} lang={lang} />
     </Box>
   );
 }

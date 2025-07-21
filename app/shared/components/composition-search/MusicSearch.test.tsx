@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-=======
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
->>>>>>> dcb062c (removed all tests)
 import React from 'react';
+
 import { MusicSearch } from './MusicSearch';
 
 // Mocking translations
@@ -17,152 +14,41 @@ jest.mock('next-intl', () => ({
   }
 }));
 
-<<<<<<< HEAD
 describe('MusicSearch component', () => {
   const handleChange = jest.fn();
-  const mockMusicData = [
-    {
-      id: '6866df63724297c970de7741',
-      name: 'Елегія',
-      year: 1998,
-      audioAvailable: false,
-      sheetAvailable: true,
-      sheetMusic: [{ fileName: 'elegy.pdf', url: '/sheets/elegy.pdf' }],
-      createdAt: new Date('2025-07-03T19:52:03.274Z'),
-      updatedAt: new Date('2025-07-03T19:52:03.274Z'),
-      opus: 'op.2',
-      opusTitle: 'Симфонія No. 1 B-moll',
-      genre: ['Романс', 'Мистецька пісня']
-    },
-    {
-      id: '6866df63724297c970de7742',
-      name: 'Ноктюрн',
-      year: 1998,
-      audioAvailable: false,
-      sheetAvailable: true,
-      sheetMusic: [{ fileName: 'nocturne.pdf', url: '/sheets/nocturne.pdf' }],
-      createdAt: new Date('2025-07-03T19:52:03.274Z'),
-      updatedAt: new Date('2025-07-03T19:52:03.274Z'),
-      opus: 'op.2',
-      opusTitle: 'Симфонія No. 1 B-moll',
-      genre: ['Романс', 'Мистецька пісня']
-    }
-  ];
 
   beforeEach(() => {
-    render(<MusicSearch onFilterChange={handleChange} data={mockMusicData} />);
-=======
-// Mock global fetch
-beforeAll(() => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      json: () =>
-        Promise.resolve([
-          { name: 'Song A' },
-          { name: 'Song B' }
-        ])
-    })
-  ) as jest.Mock;
-});
-
-describe('MusicSearch component', () => {
-  const handleChange = jest.fn();
-
-  beforeEach(async () => {
-    await act(async () => {
-      render(<MusicSearch onFilterChange={handleChange} />);
-    });
->>>>>>> dcb062c (removed all tests)
+    render(<MusicSearch onFilterChange={handleChange} />);
   });
-
+  beforeAll(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve([{ name: 'Song A' }, { name: 'Song B' }])
+      })
+    ) as jest.Mock;
+  });
   it('should render the MusicSearch icon', () => {
     expect(screen.getByAltText('search')).toBeInTheDocument();
   });
 
-<<<<<<< HEAD
   it('should render the Autocomplete and check list opening and closing', () => {
     const input = screen.getByRole('combobox');
     expect(input).toHaveAttribute('id', 'music-search');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     fireEvent.mouseDown(input);
-    fireEvent.change(input, { target: { value: mockMusicData[0].name } });
-    const listItem = screen.getByText(mockMusicData[0].name);
+    fireEvent.change(input, { target: { value: 'Song A' } });
+    const listItem = screen.getByText('Song A');
     fireEvent.click(listItem);
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
   it('should find clear button and clean the input after a click', async () => {
     const input = screen.getByRole('combobox');
-    fireEvent.change(input, { target: { value: mockMusicData[1].name } });
+    fireEvent.change(input, { target: { value: 'Song A' } });
     const clearButton = screen.getByAltText('close');
     await userEvent.click(clearButton);
     await waitFor(() => {
       expect(input).toHaveValue('');
-=======
-  it('should render Autocomplete and check list opening and closing', async () => {
-    const input = screen.getByRole('combobox');
-
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 'Song' } });
-    });
-
-    // Wait for one of the list items to appear
-    await waitFor(() => {
-      expect(screen.getByText('Song A')).toBeInTheDocument();
-    });
-
-    const listItem = screen.getByText('Song A');
-    await act(async () => {
-      fireEvent.click(listItem);
-    });
-
-    // Wait for list to close
-    await waitFor(() => {
-      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    });
-  });
-
-  it('should clear input when clear button is clicked', async () => {
-    const input = screen.getByTestId('music-search') as HTMLInputElement;
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 'Song B' } });
-    });
-
-    const clearButton = screen.getByAltText('close');
-
-    await act(async () => {
-      fireEvent.click(clearButton);
-    });
-
-    await waitFor(() => {
-      expect(input.value).toBe('');
-    });
-  });
-
-  it('should display "Не знайдено" if no results found', async () => {
-    // Override fetch to return an empty list
-    (global.fetch as jest.Mock).mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve([])
-      })
-    );
-
-    await act(async () => {
-      render(<MusicSearch onFilterChange={handleChange} />);
-    });
-
-    const input = screen.getByRole('combobox');
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 'Unknown Song' } });
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('Не знайдено')).toBeInTheDocument();
->>>>>>> dcb062c (removed all tests)
     });
   });
 
@@ -178,15 +64,15 @@ describe('MusicSearch component', () => {
   it('should update value when option is selected', async () => {
     const input = screen.getByRole('combobox');
     fireEvent.mouseDown(input);
-    fireEvent.change(input, { target: { value: mockMusicData[0].name } });
-    const listItem = await screen.findByText(mockMusicData[0].name);
+    fireEvent.change(input, { target: { value: 'Song A' } });
+    const listItem = await screen.findByText('Song A');
     await userEvent.click(listItem);
-    expect(input).toHaveValue(mockMusicData[0].name);
+    expect(input).toHaveValue('Song A');
   });
 
   it('should render no options text when no data is provided', () => {
     cleanup();
-    render(<MusicSearch onFilterChange={handleChange} data={[]} />);
+    render(<MusicSearch onFilterChange={handleChange} />);
     const input = screen.getByRole('combobox');
     fireEvent.mouseDown(input);
     expect(screen.getByText('Не знайдено')).toBeInTheDocument();
@@ -207,10 +93,10 @@ describe('MusicSearch component', () => {
 
   it('should clear value state when clear button is clicked', async () => {
     const input = screen.getByRole('combobox');
-    fireEvent.change(input, { target: { value: mockMusicData[0].name } });
-    const listItem = await screen.findByText(mockMusicData[0].name);
+    fireEvent.change(input, { target: { value: 'Song A' } });
+    const listItem = await screen.findByText('Song A');
     fireEvent.click(listItem);
-    expect(input).toHaveValue(mockMusicData[0].name);
+    expect(input).toHaveValue('Song A');
     const clearButton = screen.getByAltText('close');
     await userEvent.click(clearButton);
     await waitFor(() => {

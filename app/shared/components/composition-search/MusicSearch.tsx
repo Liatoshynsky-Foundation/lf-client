@@ -9,6 +9,7 @@ import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
+import { useSearchContext } from '~/context/SearchContext';
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 interface MusicSearchProps {
   onFilterChange: (value: string) => void;
@@ -16,11 +17,11 @@ interface MusicSearchProps {
 
 export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { searchValue, setSearchValue } = useSearchContext();
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
@@ -31,29 +32,29 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
       setLoading(false);
     };
     fetchAllTitles();
-  }, [searchQuery]);
+  }, [searchValue, value]);
   const t = useTranslations('search');
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
-        setSearchQuery(value);
+        setSearchValue(value);
       }, DEBOUNCE_TIME_MS),
-    [setSearchQuery]
+    [setSearchValue]
   );
 
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
       debouncedInputChange(value);
       onFilterChange(value);
-      setSearchQuery(value);
+      setSearchValue(value);
     },
-    [debouncedInputChange, onFilterChange]
+    [debouncedInputChange, onFilterChange, setSearchValue]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
   };
   const handleClear = () => {
-    setSearchQuery('');
+    setSearchValue('');
   };
   const onChange = (event: unknown, value: CompositionTitlesDTO | null) => {
     setValue(value);
@@ -62,7 +63,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
     return (
       <CustomBorderTextField
         {...params}
-        data-testid="music-search"
         variant="outlined"
         size="small"
         sx={{ borderColor: `${mainHexPallete.black} !important` }}
@@ -106,11 +106,12 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
   const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
   return (
     <Autocomplete
+      data-testid="music-search"
       options={options}
       loading={loading}
       value={value}
       onChange={onChange}
-      inputValue={searchQuery}
+      inputValue={searchValue}
       onInputChange={handleInputChange}
       renderInput={renderInput}
       renderOption={renderOption}
@@ -122,7 +123,12 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
       disableListWrap={true}
       slotProps={{
         listbox: {
-          style: MusicSearchStyles.list,
+          style: {
+            padding: 0,
+            margin: 0,
+            overflow: 'hidden',
+            maxHeight: 'none'
+          },
           component: VirtualizedListbox as unknown as React.ComponentType<React.HTMLAttributes<HTMLElement>>
         }
       }}
