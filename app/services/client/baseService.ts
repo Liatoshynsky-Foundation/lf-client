@@ -12,15 +12,15 @@ type RequestParams = {
   timeout?: number;
 };
 
+const getJsonHeaders = (headers: Record<string, string>): HeadersInit => ({
+  'Content-Type': 'application/json',
+  ...headers
+});
+
+const getFormDataHeaders = (headers: Record<string, string>): HeadersInit => headers;
+
 const getHeaders = (headers: Record<string, string>, isFormData: boolean): HeadersInit => {
-  if (isFormData) {
-    return headers;
-  } else {
-    return {
-      'Content-Type': 'application/json',
-      ...headers
-    };
-  }
+  return isFormData ? getFormDataHeaders(headers) : getJsonHeaders(headers);
 };
 
 const getRequestBody = (method: HttpMethod, data: unknown, isFormData: boolean): BodyInit | undefined => {
