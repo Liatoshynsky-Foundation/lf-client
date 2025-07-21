@@ -25,9 +25,7 @@ export const envErrors = {
   MONGO_USERNAME: createEnvErrors('MONGO_USERNAME'),
   MONGO_PASSWORD: createEnvErrors('MONGO_PASSWORD'),
   AZURE_SAS_URL: createEnvErrors('AZURE_SAS_URL'),
-
   MONGO_PORT_INVALID: 'MONGO_PORT must be a valid number',
-
   MONGO_CREDENTIALS_REQUIRED: createCredentialsErrors('Mongo', 'MONGO_USERNAME', 'MONGO_PASSWORD'),
   AZURE_CREDENTIALS_REQUIRED: createCredentialsErrors('Azure', 'AZURE_SAS_URL')
 };

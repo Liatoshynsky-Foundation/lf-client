@@ -8,11 +8,7 @@ const ResearchAndScientificWork = async () => {
     <TitleWithQuote
       title={t('title-with-quote.title')}
       quoteText={t('title-with-quote.quoteText')}
-      sourceText={{
-        title: t('title-with-quote.sourceText.title'),
-        data: t('title-with-quote.sourceText.data'),
-        place: t('title-with-quote.sourceText.place')
-      }}
+      sourceText={t('title-with-quote.sourceText')}
       color="brown"
     />
   );

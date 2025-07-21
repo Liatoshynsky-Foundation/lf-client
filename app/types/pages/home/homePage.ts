@@ -1,0 +1,70 @@
+type TransformedImage = {
+  readonly src: string;
+  readonly alt: string;
+  readonly caption?: string;
+};
+
+export type IntroSectionProps = {
+  readonly title: string;
+  readonly image: TransformedImage | null;
+  readonly quote: {
+    readonly mainText: string;
+    readonly sourceTitle: string;
+  } | null;
+};
+
+export type FoundationInfoProps = {
+  readonly organisationBoldText: string;
+  readonly organisationMainText: string;
+  readonly mainText: string;
+  readonly textImage: string;
+  readonly foundationImage: TransformedImage | null;
+};
+
+export type OurMissionProps = {
+  title: string;
+  listItems: string[];
+  smallImage: TransformedImage | null;
+  bigImage: TransformedImage | null;
+};
+
+type GoalItem = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type OurGoalsProps = {
+  mainTitle: string;
+  goals: GoalItem[];
+};
+
+export type LiatoshynskyOfficeProps = {
+  quote: {
+    text: string;
+    author: string;
+  } | null;
+};
+
+export type WhatWeDoItem = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type WhatWeDoProps = {
+  mainTitle: string;
+  items: WhatWeDoItem[];
+};
+
+type FounderMember = {
+  name: string;
+  description: string;
+  photo: string;
+};
+
+export type FoundationFoundersProps = {
+  title: string;
+  description: string;
+  members: FounderMember[];
+};

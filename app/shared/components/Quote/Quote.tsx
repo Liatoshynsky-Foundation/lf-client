@@ -5,19 +5,7 @@ import { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 import QuoteImage from '~/public/images/quote.svg';
 
-const QuoteBlock = ({
-  quoteText,
-  sourceText = {
-    title: '',
-    data: '',
-    place: ''
-  },
-  quoteIconColor,
-  mainTextColor,
-  alignRight
-}: QuoteBlockProps) => {
-  const allSourceText = [sourceText.title, sourceText.data, sourceText.place].filter(Boolean).join(', ');
-
+const QuoteBlock = ({ quoteText, sourceText, quoteIconColor, mainTextColor, alignRight }: QuoteBlockProps) => {
   const alignKey = alignRight ? 'right' : 'left';
 
   return (
@@ -27,7 +15,7 @@ const QuoteBlock = ({
       </Box>
       <Box sx={styles.textContainer(alignKey)}>
         <Typography sx={styles.mainText(mainTextColor, alignKey)}>{quoteText}</Typography>
-        <Typography sx={styles.sourceText(alignKey)}>{allSourceText}</Typography>
+        <Typography sx={styles.sourceText(alignKey)}>{sourceText}</Typography>
       </Box>
     </Box>
   );
