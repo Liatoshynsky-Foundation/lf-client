@@ -19,13 +19,12 @@ const getJsonHeaders = (headers: Record<string, string>): HeadersInit => ({
 
 const getFormDataHeaders = (headers: Record<string, string>): HeadersInit => headers;
 
-const getHeaders = (headers: Record<string, string>, isFormData: boolean): HeadersInit => {
-  return isFormData ? getFormDataHeaders(headers) : getJsonHeaders(headers);
-};
+const getJsonBody = (data: unknown): BodyInit => JSON.stringify(data);
+const getFormDataBody = (data: FormData): BodyInit => data;
 
 const getRequestBody = (method: HttpMethod, data: unknown, isFormData: boolean): BodyInit | undefined => {
   if (method === 'GET' || !data) return undefined;
-  return isFormData ? (data as FormData) : (JSON.stringify(data) as BodyInit);
+  return isFormData ? getFormDataBody(data as FormData) : getJsonBody(data);
 };
 
 export const baseService = {
@@ -42,7 +41,8 @@ export const baseService = {
 
     const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
 
-    const fetchHeaders: HeadersInit = getHeaders(headers, isFormData);
+    const fetchHeaders: HeadersInit = isFormData ? getFormDataHeaders(headers) : getJsonHeaders(headers);
+
     const body = getRequestBody(method, data, isFormData);
 
     try {

@@ -67,11 +67,13 @@ describe('baseService.request', () => {
 
     const abortError = new DOMException('Aborted', 'AbortError');
 
-    const mockTimeoutFetch = (): Promise<Response> => {
-      return new Promise((_resolve, reject) => {
-        setTimeout(() => reject(abortError), 100);
-      });
+    const rejectLater = (_resolve: unknown, reject: (reason?: any) => void) => {
+      setTimeout(() => {
+        reject(abortError);
+      }, 100);
     };
+
+    const mockTimeoutFetch = (): Promise<Response> => new Promise(rejectLater);
 
     global.fetch = jest.fn(mockTimeoutFetch) as unknown as typeof global.fetch;
 
