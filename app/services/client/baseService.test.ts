@@ -22,7 +22,7 @@ describe('baseService.request', () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockData)
-    });
+    } as unknown as Response);
 
     const result = await baseService.request({
       method: 'GET',
@@ -37,7 +37,7 @@ describe('baseService.request', () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       blob: () => Promise.resolve(mockBlob)
-    });
+    } as unknown as Response);
 
     const result = await baseService.request({
       method: 'GET',
@@ -57,7 +57,7 @@ describe('baseService.request', () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: () => Promise.resolve(errorResponse)
-    });
+    } as unknown as Response);
 
     await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(ResponseError);
   });
@@ -72,7 +72,7 @@ describe('baseService.request', () => {
         new Promise((_resolve, reject) => {
           setTimeout(() => reject(abortError), 100);
         })
-    );
+    ) as unknown as typeof global.fetch;
 
     const promise = baseService.request({
       method: 'GET',
@@ -89,7 +89,7 @@ describe('baseService.request', () => {
 
     global.fetch = jest.fn().mockImplementation(() => {
       throw knownError;
-    });
+    }) as unknown as typeof global.fetch;
 
     await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(knownError);
   });
@@ -97,7 +97,7 @@ describe('baseService.request', () => {
   it('should throw generic error as UNKNOWN_ERROR if not a ResponseError', async () => {
     global.fetch = jest.fn().mockImplementation(() => {
       throw new Error('Unexpected');
-    });
+    }) as unknown as typeof global.fetch;
 
     await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toEqual(
       new ResponseError({
@@ -111,7 +111,7 @@ describe('baseService.request', () => {
     const mockFetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true })
-    });
+    } as unknown as Response);
 
     global.fetch = mockFetch;
 
@@ -132,14 +132,14 @@ describe('baseService.request', () => {
     );
   });
 
-  it('should set FormData body and skips Content-Type header', async () => {
+  it('should set FormData body and skip Content-Type header', async () => {
     const formData = new FormData();
     formData.append('file', new Blob(['test']));
 
     const mockFetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true })
-    });
+    } as unknown as Response);
 
     global.fetch = mockFetch;
 

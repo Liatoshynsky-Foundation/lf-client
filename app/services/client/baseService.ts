@@ -12,6 +12,22 @@ type RequestParams = {
   timeout?: number;
 };
 
+const getHeaders = (headers: Record<string, string>, isFormData: boolean): HeadersInit => {
+  if (isFormData) {
+    return headers;
+  } else {
+    return {
+      'Content-Type': 'application/json',
+      ...headers
+    };
+  }
+};
+
+const getRequestBody = (method: HttpMethod, data: unknown, isFormData: boolean): BodyInit | undefined => {
+  if (method === 'GET' || !data) return undefined;
+  return isFormData ? (data as FormData) : (JSON.stringify(data) as BodyInit);
+};
+
 export const baseService = {
   request: async <T = unknown>({
     data,
@@ -26,25 +42,8 @@ export const baseService = {
 
     const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
 
-    let fetchHeaders: HeadersInit;
-    if (isFormData) {
-      fetchHeaders = headers;
-    } else {
-      fetchHeaders = {
-        'Content-Type': 'application/json',
-        ...headers
-      };
-    }
-
-    let body: BodyInit | undefined;
-
-    if (method !== 'GET' && data) {
-      if (isFormData) {
-        body = data as FormData;
-      } else {
-        body = JSON.stringify(data);
-      }
-    }
+    const fetchHeaders: HeadersInit = getHeaders(headers, isFormData);
+    const body = getRequestBody(method, data, isFormData);
 
     try {
       const response = await fetch(url, {
@@ -59,11 +58,7 @@ export const baseService = {
         throw new ResponseError(errorData);
       }
 
-      if (responseType === 'blob') {
-        return (await response.blob()) as T;
-      }
-
-      return (await response.json()) as T;
+      return responseType === 'blob' ? ((await response.blob()) as T) : ((await response.json()) as T);
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         throw new ResponseError(errors.REQUEST_TIMEOUT);
