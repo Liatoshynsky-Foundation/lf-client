@@ -17,7 +17,7 @@ describe('baseService.request', () => {
     jest.clearAllMocks();
   });
 
-  it('returns JSON response when successful', async () => {
+  it('should return JSON response when successful', async () => {
     const mockData = { message: 'ok' };
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -32,7 +32,7 @@ describe('baseService.request', () => {
     expect(result).toEqual(mockData);
   });
 
-  it('returns blob response when responseType is blob', async () => {
+  it('should return blob response when responseType is blob', async () => {
     const mockBlob = new Blob(['data']);
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -48,7 +48,7 @@ describe('baseService.request', () => {
     expect(result).toEqual(mockBlob);
   });
 
-  it('throws ResponseError on non-ok response', async () => {
+  it('should throw ResponseError on non-ok response', async () => {
     const errorResponse = {
       code: 'SOME_ERROR',
       message: 'Something went wrong'
@@ -62,7 +62,7 @@ describe('baseService.request', () => {
     await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(ResponseError);
   });
 
-  it('throws timeout error if request takes too long', async () => {
+  it('should throw timeout error if request takes too long', async () => {
     jest.useFakeTimers();
 
     const abortError = new DOMException('Aborted', 'AbortError');
@@ -84,7 +84,7 @@ describe('baseService.request', () => {
     await expect(promise).rejects.toEqual(new ResponseError(errors.REQUEST_TIMEOUT));
   });
 
-  it('throws known ResponseError instance as is', async () => {
+  it('should throw known ResponseError instance as is', async () => {
     const knownError = new ResponseError({ code: 'TEST_CODE', message: 'Known' });
 
     global.fetch = jest.fn().mockImplementation(() => {
@@ -94,7 +94,7 @@ describe('baseService.request', () => {
     await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(knownError);
   });
 
-  it('throws generic error as UNKNOWN_ERROR if not a ResponseError', async () => {
+  it('should throw generic error as UNKNOWN_ERROR if not a ResponseError', async () => {
     global.fetch = jest.fn().mockImplementation(() => {
       throw new Error('Unexpected');
     });
@@ -107,7 +107,7 @@ describe('baseService.request', () => {
     );
   });
 
-  it('sets JSON body for non-GET requests with non-FormData data', async () => {
+  it('should set JSON body for non-GET requests with non-FormData data', async () => {
     const mockFetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -132,7 +132,7 @@ describe('baseService.request', () => {
     );
   });
 
-  it('sets FormData body and skips Content-Type header', async () => {
+  it('should set FormData body and skips Content-Type header', async () => {
     const formData = new FormData();
     formData.append('file', new Blob(['test']));
 
