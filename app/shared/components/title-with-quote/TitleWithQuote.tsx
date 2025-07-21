@@ -3,12 +3,11 @@ import { Box, Typography } from '@mui/material';
 import QuoteBlock from '~/components/Quote/Quote';
 
 import { getStyles } from './TitleWithQuote.styles';
-import { SourceTextItem } from '~/types/types/quoteComponent';
 
 export interface TitleWithQuoteProps {
   title: string;
   quoteText: string;
-  sourceText: SourceTextItem;
+  sourceText: string;
   color: 'black' | 'brown';
 }
 

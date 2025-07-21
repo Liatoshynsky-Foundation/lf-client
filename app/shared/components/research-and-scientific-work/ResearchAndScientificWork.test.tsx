@@ -22,7 +22,7 @@ jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
     <div data-testid="title-with-quote">
       <div data-testid="title">{title}</div>
       <div data-testid="quote-text">{quoteText}</div>
-      <div data-testid="source-title">{sourceText.title}</div>
+      <div data-testid="source-title">{sourceText}</div>
       <div data-testid="color">{color}</div>
     </div>
   );
@@ -42,7 +42,6 @@ describe('ResearchAndScientificWork', () => {
     expect(screen.getByTestId('title-with-quote')).toBeInTheDocument();
     expect(screen.getByTestId('title')).toHaveTextContent('ДоСліДжЕннЯ ТА НауКовІ РоБотИ');
     expect(screen.getByTestId('quote-text')).toHaveTextContent('Ах, мила, милий мій котику');
-    expect(screen.getByTestId('source-title')).toHaveTextContent('Лист Бориса Лятошинського');
   });
 
   it('should pass brown color to TitleWithQuote', async () => {

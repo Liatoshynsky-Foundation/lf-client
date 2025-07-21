@@ -5,11 +5,11 @@ import React from 'react';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import MusicTableSection from './CompositionTable/MusicTableSelection';
-import { ParamsWithLanguage } from '~/types/types/paramsWithLanguage';
+import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
 
-export default async function Artistry({ params }: Readonly<ParamsWithLanguage>) {
+export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
   const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang);
@@ -21,11 +21,7 @@ export default async function Artistry({ params }: Readonly<ParamsWithLanguage>)
       <TitleWithQuote
         title={t('title-with-quote.title')}
         quoteText={t('title-with-quote.quoteText')}
-        sourceText={{
-          title: t('title-with-quote.sourceText.title'),
-          data: t('title-with-quote.sourceText.data'),
-          place: t('title-with-quote.sourceText.place')
-        }}
+        sourceText={t('title-with-quote.sourceText')}
         color="black"
       />
       <MusicTableSection data={musicData} />

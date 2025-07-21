@@ -1,0 +1,40 @@
+import { render, screen } from '@testing-library/react';
+
+import IntroSection from '~/components/blocks/IntroSection/IntroSection';
+
+jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
+  __esModule: true,
+  default: ({ src, alt, caption }: { src: string; alt: string; caption: string }) => (
+    <div data-testid="image-with-caption">
+      <img src={src} alt={alt} />
+      {caption && <p>{caption}</p>}
+    </div>
+  )
+}));
+
+jest.mock('~/components/svg-image/SvgImage', () => ({
+  __esModule: true,
+  SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />
+}));
+
+jest.mock('~/shared/components/Quote/Quote', () => {
+  const AboutFoundationMockQuote = () => <div data-testid="quote" />;
+  AboutFoundationMockQuote.displayName = 'AboutFoundationMockQuote';
+  return AboutFoundationMockQuote;
+});
+
+const mockData = {
+  title: 'Welcome to the Lyatoshynsky Foundation',
+  quote: {
+    mainText: 'Preserving the legacy of a musical genius',
+    sourceTitle: 'Boris Lyatoshynsky'
+  },
+  image: '/images/intro-section.jpg'
+};
+
+describe('IntroSection', () => {
+  it('should render the IntroSection with text', () => {
+    render(IntroSection({ data: mockData }));
+    expect(screen.getByText('Welcome to the Lyatoshynsky Foundation')).toBeInTheDocument();
+  });
+});

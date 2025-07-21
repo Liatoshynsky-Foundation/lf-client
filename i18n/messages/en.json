@@ -28,62 +28,7 @@
       "office": "OfFicE",
       "name": "LIaTosHynSKy",
       "goToOfficeButton": "Go to the office"
-    },
-    "ourMission": {
-      "title": "Our Mission",
-      "list": {
-        "item1": "To understand the legacy of Borys Lyatoshynsky and other Ukrainian composers;",
-        "item2": "To promote the inclusion of Ukrainian music in the global context;",
-        "item3": "To support contemporary artists and create space for new meanings in music."
-      },
-      "imageCaption": "Tetiana Homon and the Lyatoshynsky Foundation team"
-    },
-    "aboutFoundation": {
-      "aboutFoundationTitle": "ABouT FoundAtioN",
-      "organisationText": {
-        "boldText": "Liatoshynsky foundation",
-        "text": "— is a public organization created with the aim of making Ukrainian classical music of the XX–XXI centuries recognizable in the world."
-      },
-      "mainText": "We are named after Borys Lyatoshynskyi, one of the most influential composers in the history of Ukrainian music, a teacher, innovator, and one of the founders of the modern Ukrainian compositional school.",
-      "textImage": "We know that Ukrainian academic music sounds loud and proud, on a par with other European and world cultures."
-    },
-    "ourGoals": {
-      "maintitle": "Our Goals",
-      "titles": {
-        "title1": "Comprehend and Reconceptualize:",
-        "title2": "Preserve Heritage:",
-        "title3": "Promote:",
-        "title4": "Support:"
-      },
-      "descriptions": {
-        "descr1": "We work with archives, scores, documents, and recordings to restore and organize cultural memory.",
-        "descr2": "We help contemporary composers, performers, and researchers realize their projects, find partners, audiences, and listeners.",
-        "descr3": "The Foundation not only preserves but also reconceptualizes — through contemporary performance practice, academic research, and dialogues between generations of musicians.",
-        "descr4": "We strive to share knowledge: for this purpose, we create educational products, lectures, and publications that reveal the richness of Ukrainian music to academic and general audiences."
-      }
-    },
-    "whatAreWeDoing": {
-      "mainTitle": "What are we doing?:",
-      "titlesList": {
-        "title1": "Concerts, festivals, events",
-        "title2": "Educational projects",
-        "title3": "Publishing scores",
-        "title4": "Museum space",
-        "title5": "Collaboration"
-      },
-      "descriptionsList": {
-        "descr1": "We organize concerts, festivals, and events that present the works of Borys Lyatoshynsky and other Ukrainian composers to a wide audience.",
-        "descr2": "We create educational projects that help understand the context of Ukrainian music and its significance in the world.",
-        "descr3": "We publish scores of Ukrainian composers, making them accessible to performers and researchers.",
-        "descr4": "We develop a museum space that preserves the memory of Borys Lyatoshynsky and showcases the history of Ukrainian music.",
-        "descr5": "We collaborate with musicians, researchers, and cultural institutions to promote Ukrainian music on a global scale."
-      }
     }
-  },
-  "foundation": {
-    "foundationWasCreated": "The Lyatoshynsky Foundation, established",
-    "foundationWasCreatedDescription": "in 2023 by Tetiana Homon, Iryna Tukova, and Pavlo Piminov, brings together professionals in the fields of musicology, performing arts, music management, and digital projects.",
-    "foundationTeam": "The Lyatoshynsky Foundation Team"
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",
@@ -93,32 +38,20 @@
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
-    "sourceText": {
-      "tittle": "Letter from Boris Lyatoshynsky to Margarita Tsarevich",
-      "data": "29 September 1957",
-      "place": "Berlin"
-    }
+    "sourceText": "Letter from Boris Lyatoshynsky to Margarita Tsarevich, 29 September 1957, Berlin"
   },
   "research": {
     "title-with-quote": {
       "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
       "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
-      "sourceText": {
-        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
-        "data": "May 4, 1916.",
-        "place": "Saratov"
-      }
+      "sourceText": "Letter from Borys Liatoshynsky to Margarita Tsarevych, May 4, 1916, Saratov"
     }
   },
   "liatoshynskyArtistry": {
     "title-with-quote": {
       "title": "LIaTosHynSKy's ArTiStRy",
       "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
-      "sourceText": {
-        "title": "Letter from Borys Liatoshynsky to Margarita Tsarevych",
-        "data": "May 4, 1916.",
-        "place": "Saratov"
-      }
+      "sourceText": "Letter from Borys Liatoshynsky to Margarita Tsarevych, May 4, 1916, Saratov"
     }
   },
   "table": {
