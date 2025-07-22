@@ -11,7 +11,6 @@ import Header from '~/components/Header/Header';
 import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
-import { SearchProvider } from '~/context/SearchContext';
 import { routing } from '~/i18n/routing';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
@@ -60,51 +59,49 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
         <meta name="emotion-insertion-point" content="" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
-        <SearchProvider>
-          <EmotionProvider>
-            <NextIntlClientProvider>
-              <ThemeProvider>
-                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                  <ColumnGuides />
-                  <Box
-                    sx={{
-                      padding: '20px 72px',
-                      height: '100vh',
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(12, 1fr)',
-                      columnGap: '40px',
-                      maxWidth: '1920px ',
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                      width: '100%',
-                      flex: '1',
-                      [theme.breakpoints.down('md')]: {
-                        gridTemplateColumns: 'repeat(8, 1fr)',
-                        paddingLeft: '56px',
-                        paddingRight: '56px',
-                        columnGap: '20px'
-                      },
-                      [theme.breakpoints.down('sm')]: {
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        paddingLeft: '24px',
-                        paddingRight: '24px',
-                        columnGap: '16px'
-                      }
-                    }}
-                  >
-                    <Box sx={{ gridColumn: '1 / -1' }}>
-                      <Header />
-                    </Box>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
-                    <Box sx={{ gridColumn: '1 / -1' }}>
-                      <Footer />
-                    </Box>
+        <EmotionProvider>
+          <NextIntlClientProvider>
+            <ThemeProvider>
+              <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <ColumnGuides />
+                <Box
+                  sx={{
+                    padding: '20px 72px',
+                    height: '100vh',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(12, 1fr)',
+                    columnGap: '40px',
+                    maxWidth: '1920px ',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: '100%',
+                    flex: '1',
+                    [theme.breakpoints.down('md')]: {
+                      gridTemplateColumns: 'repeat(8, 1fr)',
+                      paddingLeft: '56px',
+                      paddingRight: '56px',
+                      columnGap: '20px'
+                    },
+                    [theme.breakpoints.down('sm')]: {
+                      gridTemplateColumns: 'repeat(4, 1fr)',
+                      paddingLeft: '24px',
+                      paddingRight: '24px',
+                      columnGap: '16px'
+                    }
+                  }}
+                >
+                  <Box sx={{ gridColumn: '1 / -1' }}>
+                    <Header />
+                  </Box>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
+                  <Box sx={{ gridColumn: '1 / -1' }}>
+                    <Footer />
                   </Box>
                 </Box>
-              </ThemeProvider>
-            </NextIntlClientProvider>
-          </EmotionProvider>
-        </SearchProvider>
+              </Box>
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </EmotionProvider>
       </body>
     </html>
   );

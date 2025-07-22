@@ -1,7 +1,7 @@
 'use client';
 import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
-import { useRouter, useSearchParams } from 'next/navigation';
+// import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -13,19 +13,18 @@ import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 interface MusicSearchProps {
-  onFilterChange: (value: string) => void;
+  // onFilterChange: (value: string) => void;
+  setSearch: (value: string) => void;
+  search: string;
 }
 
-export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
+export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
   const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
-  const DEBOUNCE_TIME_MS = 500;
+  const DEBOUNCE_TIME_MS = 100;
   useEffect(() => {
     const fetchAllTitles = async () => {
       setLoading(true);
@@ -35,39 +34,35 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
       setLoading(false);
     };
     fetchAllTitles();
-  }, [searchValue, value]);
+  }, [search, value]);
   const t = useTranslations('search');
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
-        const params = new URLSearchParams(window.location.search);
-        if (value) {
-          setSearchValue(value);
-          params.set('search', value);
-        } else {
-          params.delete('search');
-        }
-        router.push(`?${params.toString()}`);
+        setSearch(value);
       }, DEBOUNCE_TIME_MS),
-    [setSearchValue, router]
+    [setSearch]
   );
 
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
       debouncedInputChange(value);
-      onFilterChange(value);
-      setSearchValue(value);
+      // onFilterChange(value);
+      setSearch(value);
     },
-    [debouncedInputChange, onFilterChange, setSearchValue]
+    [debouncedInputChange, setSearch]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
   };
   const handleClear = () => {
-    setSearchValue('');
+    setSearch('');
   };
   const onChange = (event: unknown, value: CompositionTitlesDTO | null) => {
     setValue(value);
+    const params = new URLSearchParams(window.location.search);
+    setSearch(value?.title as string);
+    params.set('search', value?.title as string);
   };
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
@@ -121,7 +116,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
       loading={loading}
       value={value}
       onChange={onChange}
-      inputValue={searchValue}
+      inputValue={search}
       onInputChange={handleInputChange}
       renderInput={renderInput}
       renderOption={renderOption}

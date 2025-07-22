@@ -5,6 +5,7 @@ import { Compositions } from '~/infrastructure/models/artistry/artistryTableData
 import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
 function escapeRegex(input: string) {
+  if (!input) return '';
   return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 export const compositionsRepository = {
@@ -17,17 +18,15 @@ export const compositionsRepository = {
   },
 
   async getAllCompositions(filter: string) {
-    const safeFilter = escapeRegex(filter);
+    console.log('Filter:', filter);
 
-    const query = {
-      name: { $regex: safeFilter, $options: 'i' }
-    };
+    const query = { title: { $regex: escapeRegex(filter), $options: 'i' } };
 
     const compositions = await Compositions.find(query)
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-
+    console.log(compositions);
     if (!compositions || compositions.length === 0) {
       return [];
     }

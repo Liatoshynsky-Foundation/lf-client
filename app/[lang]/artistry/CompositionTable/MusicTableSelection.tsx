@@ -1,8 +1,9 @@
 'use client';
 
 import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   RenderActionsCell,
@@ -26,13 +27,39 @@ import { mainHexPallete } from '~/shared/components/design-system/all-components
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 type Props = {
-  data: Music[];
+  lang: string;
+  initialSearch?: string;
+  initialData: Music[];
 };
 
-export default function MusicTableSection({ data }: Readonly<Props>) {
+export default function MusicTableSection({ lang, initialData }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [data, setData] = useState(initialData);
+
+  useEffect(() => {
+    const newParams = new URLSearchParams(searchParams);
+    if (search) {
+      newParams.set('search', search);
+    } else {
+      newParams.delete('search');
+    }
+    router.replace(`?${newParams.toString()}`, { scroll: false });
+  }, [search]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/compositions?lang=${lang}&search=${search}`);
+      const json = await res.json();
+      setData(json);
+    };
+
+    fetchData();
+  }, [search, lang]);
 
   const columns = useMemo<ColumnDef<Music>[]>(
     () => [
@@ -105,9 +132,11 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       tableName={t('composition')}
       MusicSearch={
         <MusicSearch
-          onFilterChange={(names: string) =>
-            setColumnFilters((prev) => [...prev.filter((f) => f.id !== 'name'), { id: 'name', value: names }])
-          }
+          search={search}
+          setSearch={setSearch}
+          // onFilterChange={(names: string) =>
+          //   setColumnFilters((prev) => [...prev.filter((f) => f.id !== 'name'), { id: 'name', value: names }])
+          // }
         />
       }
     />
