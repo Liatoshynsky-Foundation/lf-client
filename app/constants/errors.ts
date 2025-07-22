@@ -12,7 +12,11 @@ export const errors = {
   FAILED_TO_DELETE_BLOB: createBlobErrors('delete'),
   FAILED_TO_GET_BLOB: createBlobErrors('get'),
   BLOB_DOES_NOT_EXIST: 'Blob with this name does not exist',
-  AZURE_URL_NOT_DEFINED: 'AZURE_SAS_URL environment variable is not defined'
+  AZURE_URL_NOT_DEFINED: 'AZURE_SAS_URL environment variable is not defined',
+  REQUEST_TIMEOUT: {
+    code: 'REQUEST_TIMEOUT',
+    message: 'Request timed out'
+  }
 };
 
 export const envErrors = {
