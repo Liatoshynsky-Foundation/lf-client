@@ -15,12 +15,21 @@ const nextConfig: NextConfig = {
     ]
   },
   output: 'standalone',
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/i,
       use: ['@svgr/webpack']
     });
-
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...(config.resolve.fallback || {}),
+        fs: false,
+        net: false,
+        tls: false,
+        child_process: false,
+        dns: false
+      };
+    }
     return config;
   },
   turbopack: {

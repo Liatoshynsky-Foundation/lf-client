@@ -4,7 +4,9 @@ import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
 import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
-
+function escapeRegex(input: string) {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 export const compositionsRepository = {
   async getAllGenres() {
     await dbConnect();
@@ -14,14 +16,12 @@ export const compositionsRepository = {
     return genresArraySchema.parse(genres);
   },
 
-  async getAllCompositions(filter: string = '') {
-    await dbConnect();
+  async getAllCompositions(filter: string) {
+    const safeFilter = escapeRegex(filter);
 
-    const query: any = {};
-
-    if (filter) {
-      query.title = { $regex: filter, $options: 'i' };
-    }
+    const query = {
+      name: { $regex: safeFilter, $options: 'i' }
+    };
 
     const compositions = await Compositions.find(query)
       .populate('genres')

@@ -2,7 +2,7 @@
 
 import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   RenderActionsCell,
@@ -19,8 +19,6 @@ import {
 } from './MusicTableCells';
 import { Music } from '~/types/types/enhancedTable';
 
-import { useSearchContext } from '~/context/SearchContext';
-import { createRequestContainer } from '~/di/container';
 import { advancedSearchFilter } from '~/lib/utils/advancedSearchFilters';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
@@ -28,26 +26,13 @@ import { mainHexPallete } from '~/shared/components/design-system/all-components
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 type Props = {
-  initialData: Music[];
   data: Music[];
-  lang: 'uk' | 'en';
 };
 
-export default function MusicTableSection({ initialData, lang }: Readonly<Props>) {
+export default function MusicTableSection({ data }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
-  const { searchValue } = useSearchContext();
-  const [data, setData] = useState(initialData);
-
-  useEffect(() => {
-    const fetchFiltered = async () => {
-      const filtered = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, searchValue);
-      setData(filtered);
-    };
-
-    fetchFiltered();
-  }, [searchValue, lang]);
 
   const columns = useMemo<ColumnDef<Music>[]>(
     () => [
@@ -97,7 +82,7 @@ export default function MusicTableSection({ initialData, lang }: Readonly<Props>
         cell: RenderActionsCell
       }
     ],
-    [borderWithOpacity]
+    []
   );
 
   return (

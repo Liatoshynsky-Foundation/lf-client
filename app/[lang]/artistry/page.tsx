@@ -8,11 +8,17 @@ import MusicTableSection from './CompositionTable/MusicTableSelection';
 import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
+type Props = {
+  params: Readonly<ParamsWithLanguage>;
+  searchParams: { search?: string };
+};
 
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, '');
+  const searchValue = (await searchParams.search) ?? '';
+  console.log('serach params', searchValue);
+  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, searchValue);
   const t = await getTranslations('liatoshynskyArtistry');
 
   return (
@@ -23,7 +29,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
         sourceText={t('title-with-quote.sourceText')}
         color="black"
       />
-      <MusicTableSection data={musicData} initialData={musicData} lang={lang} />
+      <MusicTableSection data={musicData} />
     </Box>
   );
 }

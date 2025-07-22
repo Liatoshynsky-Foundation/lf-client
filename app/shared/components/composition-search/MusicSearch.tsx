@@ -1,5 +1,7 @@
+'use client';
 import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -9,7 +11,6 @@ import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
-import { useSearchContext } from '~/context/SearchContext';
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 interface MusicSearchProps {
   onFilterChange: (value: string) => void;
@@ -21,7 +22,9 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { searchValue, setSearchValue } = useSearchContext();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
@@ -37,9 +40,16 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange }) => {
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
-        setSearchValue(value);
+        const params = new URLSearchParams(window.location.search);
+        if (value) {
+          setSearchValue(value);
+          params.set('search', value);
+        } else {
+          params.delete('search');
+        }
+        router.push(`?${params.toString()}`);
       }, DEBOUNCE_TIME_MS),
-    [setSearchValue]
+    [setSearchValue, router]
   );
 
   const handleInputChange = useCallback(
