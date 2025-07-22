@@ -1,5 +1,6 @@
 import { asFunction } from 'awilix';
 
+import { createPagesDataService } from '~/services/composed/pages-data-service/pagesDataService';
 import { createCompositionService } from '~/services/core/compositionService';
 import { createFoundationInfoService } from '~/services/core/foundationInfoService';
 import { createNavigationService } from '~/services/core/navigationService';
@@ -13,5 +14,7 @@ export const registerCoreServices = () => ({
 
   compositionService: asFunction(({ compositionsRepository }) =>
     createCompositionService(compositionsRepository)
-  ).scoped()
+  ).scoped(),
+
+  pageService: asFunction(createPagesDataService).scoped()
 });

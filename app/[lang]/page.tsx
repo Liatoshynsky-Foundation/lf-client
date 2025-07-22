@@ -1,22 +1,43 @@
+import { Box } from '@mui/material';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import FoundationFounders from '~/components/FoundationFounders/FoundationFounders';
-import LiatoshynskyOffice from '~/components/Liatoshynsky-office/LiatoshynskyOffice';
-import OurGoals from '~/components/our-goals/OurGoals';
-import OurMission from '~/components/our-mission/OurMission';
-import WhatWeDo from '~/components/what-we-do/WhatWeDo';
+import FoundationFounders from '~/components/blocks/FoundationFounders/FoundationFounders';
+import FoundationInfo from '~/components/blocks/FoundationInfo/FoundationInfo';
+import IntroSection from '~/components/blocks/IntroSection/IntroSection';
+import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
+import OurGoals from '~/components/blocks/our-goals/OurGoals';
+import OurMission from '~/components/blocks/our-mission/OurMission';
+import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
-import AboutFoundation from '~/shared/components/main-page-sections/about-foundation/AboutFoundation';
+import { Language } from '~/types/types/language';
 
-export default async function Home() {
+import { createRequestContainer } from '~/di/container';
+
+export default async function Home({ params }: Readonly<Language>) {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const pageService = await createRequestContainer().resolve('pageService');
+
+  const [page, t] = await Promise.all([
+    pageService.getPageData('home', lang),
+    getTranslations('home.liatoshynskyOffice')
+  ]);
+
+  if (!page) {
+    return <Box />;
+  }
+
   return (
     <>
-      <AboutFoundation />
-      <OurMission />
-      <OurGoals />
-      <LiatoshynskyOffice />
-      <WhatWeDo />
-      <FoundationFounders />
+      {page.IntroSection && <IntroSection data={page.IntroSection} />}
+      {page.FoundationInfo && <FoundationInfo data={page.FoundationInfo} />}
+      {page.OurMission && <OurMission data={page.OurMission} />}
+      {page.OurGoals && <OurGoals data={page.OurGoals} />}
+      {page.LiatoshynskyOffice && <LiatoshynskyOffice data={page.LiatoshynskyOffice} t={t} />}
+      {page.WhatWeDo && <WhatWeDo data={page.WhatWeDo} />}
+      {page.FoundationFounders && <FoundationFounders data={page.FoundationFounders} />}
     </>
   );
 }

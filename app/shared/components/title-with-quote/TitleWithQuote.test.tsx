@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
 import TitleWithQuote from './TitleWithQuote';
-import { SourceTextItem } from '~/types/types/quoteComponent';
 
 jest.mock('~/shared/components/Quote/Quote', () => {
   const MockQuote = () => <div data-testid="quote" />;
@@ -9,16 +8,10 @@ jest.mock('~/shared/components/Quote/Quote', () => {
   return MockQuote;
 });
 
-const mockSourceText: SourceTextItem = {
-  title: 'Лист Бориса Лятошинського',
-  data: '4 травня 1916',
-  place: 'Саратов'
-};
-
 const defaultProps = {
   title: 'Тестовий заголовок',
   quoteText: 'Тестова цитата',
-  sourceText: mockSourceText,
+  sourceText: 'Лист Бориса Лятошинського, 4 травня 1916, Саратов',
   color: 'black' as const
 };
 
