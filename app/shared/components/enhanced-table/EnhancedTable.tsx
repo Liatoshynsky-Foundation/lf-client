@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material'; // Added CircularProgress
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -38,6 +38,9 @@ interface EnhancedTableProps<T extends RowData> {
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
+
+  // <-- NEW loading prop (optional)
+  loading?: boolean;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -50,7 +53,8 @@ export default function EnhancedTable<T extends RowData>({
   MusicSearch,
   columnFilters,
   onColumnFiltersChange,
-  defaultSorting = []
+  defaultSorting = [],
+  loading
 }: Readonly<EnhancedTableProps<T>>) {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -137,7 +141,6 @@ export default function EnhancedTable<T extends RowData>({
     data: allRows,
     itemsPerPage
   });
-
   return (
     <Box sx={styles.root}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
@@ -146,26 +149,32 @@ export default function EnhancedTable<T extends RowData>({
         </Typography>
         {MusicSearch}
       </Box>
-      <TableContainer component={Paper} sx={styles.container}>
-        <Table>
-          <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
-          <TableBody>
-            {rowsToRender.map((entry) =>
-              entry.type === 'group' ? (
-                <CollapsibleRow
-                  key={`group-${entry.label}`}
-                  data={entry.items}
-                  collapsed={collapsedGroups[entry.label] ?? false}
-                  action={() => toggleGroupCollapse(entry.label)}
-                  columns={getGroupColumns(columns, entry.items)}
-                />
-              ) : (
-                <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
-              )
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={styles.container}>
+          <Table>
+            <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
+            <TableBody>
+              {rowsToRender.map((entry) =>
+                entry.type === 'group' ? (
+                  <CollapsibleRow
+                    key={`group-${entry.label}`}
+                    data={entry.items}
+                    collapsed={collapsedGroups[entry.label] ?? false}
+                    action={() => toggleGroupCollapse(entry.label)}
+                    columns={getGroupColumns(columns, entry.items)}
+                  />
+                ) : (
+                  <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
+                )
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <Box sx={styles.paginationWrapper}>
         {hasMore && (
