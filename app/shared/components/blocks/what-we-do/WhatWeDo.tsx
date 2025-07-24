@@ -19,7 +19,7 @@ const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
       <Box sx={styles.grid}>
         {columns.map((columnItems, colIndex) => (
           <Box
-            key={columnItems[colIndex]?.id ?? `column-${colIndex}`}
+            key={columnItems[colIndex]?.description + `column-${colIndex}`}
             sx={{
               ...styles.column
             }}

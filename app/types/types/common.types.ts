@@ -9,3 +9,5 @@ export type ButtonGroupSizeOptions = 'small' | 'big';
 export type ButtonGroupPaletteOptions = 'primary' | 'secondary';
 
 export type ScrollDirection = 'up' | 'down';
+
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
