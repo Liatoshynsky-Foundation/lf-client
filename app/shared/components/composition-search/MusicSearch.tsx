@@ -1,7 +1,6 @@
 'use client';
 import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
-// import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -13,7 +12,6 @@ import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
 
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 interface MusicSearchProps {
-  // onFilterChange: (value: string) => void;
   setSearch: (value: string) => void;
   search: string;
 }
@@ -24,7 +22,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const DEBOUNCE_TIME_MS = 100;
+  const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
       setLoading(true);
@@ -47,7 +45,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
       debouncedInputChange(value);
-      // onFilterChange(value);
       setSearch(value);
     },
     [debouncedInputChange, setSearch]

@@ -6,12 +6,10 @@ import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import MusicTableSection from './CompositionTable/MusicTableSelection';
 
-import { getCompositions } from '~/actions/getCompositions';
-
 export type PageProps = {
   params: { lang: string };
 };
-export default async function Artistry({ params }: PageProps) {
+export default async function Artistry({ params }: Readonly<PageProps>) {
   const { lang } = await params;
   setRequestLocale(lang as 'en' | 'uk');
   const t = await getTranslations('liatoshynskyArtistry');

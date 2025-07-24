@@ -70,23 +70,5 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix --max-warnings=0"
     ]
-  },
-  "browser": {
-    "child_process": false,
-    "fs": false,
-    "net": false,
-    "tls": false,
-    "timers": false,
-    "path": false,
-    "crypto": false,
-    "os": false,
-    "zlib": false,
-    "stream": false,
-    "http": false,
-    "https": false,
-    "module": false,
-    "assert": false,
-    "url": false,
-    "util": false
   }
 }

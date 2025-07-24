@@ -147,7 +147,6 @@ export default function EnhancedTable<T extends RowData>({
         </Typography>
         {MusicSearch}
       </Box>
-
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="300px">
           <CircularProgress />
@@ -174,22 +173,18 @@ export default function EnhancedTable<T extends RowData>({
               </TableBody>
             </Table>
           </TableContainer>
-
           <Box sx={styles.paginationWrapper}>
             {hasMore && (
               <Button variant="contained" size="large" onClick={handleLoadMore}>
                 {t('viewMore')}
               </Button>
             )}
-
             {totalPages > 1 && (
               <Pagination
                 count={totalPages}
                 page={currentPage}
                 visiblePages={visiblePages}
                 onChange={(_, page) => handlePageChange(page)}
-                showFirstButton
-                showLastButton
               />
             )}
           </Box>
