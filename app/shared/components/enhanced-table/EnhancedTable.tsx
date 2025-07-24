@@ -11,15 +11,13 @@ import {
   SortingState,
   useReactTable
 } from '@tanstack/react-table';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
-import { MusicSearch } from '../composition-search/MusicSearch';
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
@@ -29,12 +27,14 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
 interface EnhancedTableProps<T extends RowData> {
+  data: T[];
   columns: ColumnDef<T>[];
   columnWidths?: Record<string, string>;
   groupByKey?: keyof T;
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
+  MusicSearch?: React.ReactNode;
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
@@ -42,11 +42,13 @@ interface EnhancedTableProps<T extends RowData> {
 }
 
 export default function EnhancedTable<T extends RowData>({
+  data,
   columns,
   columnWidths = {},
   groupByKey,
   itemsPerPage = 10,
   tableName,
+  MusicSearch,
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
@@ -55,36 +57,6 @@ export default function EnhancedTable<T extends RowData>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [data, setData] = useState<T[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const newParams = new URLSearchParams(searchParams);
-    if (search) {
-      newParams.set('search', search);
-      router.refresh();
-    } else {
-      newParams.delete('search');
-      router.refresh();
-    }
-    router.replace(`?${newParams.toString()}`, { scroll: false });
-  }, [router, search, searchParams, isLoading]);
-  //const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const endpoint = `/api/compositions?lang=${'uk'}&search=${encodeURIComponent(search)}`;
-      const res = await fetch(endpoint);
-      const json = await res.json();
-      setData(json);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [search]);
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -121,7 +93,7 @@ export default function EnhancedTable<T extends RowData>({
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable]);
+  }, [headerTable, data]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -154,7 +126,7 @@ export default function EnhancedTable<T extends RowData>({
     ],
     [groupedItems, flatItems]
   );
-  console.log(data);
+
   const {
     hasMore,
     paginatedData: rowsToRender,
@@ -173,7 +145,7 @@ export default function EnhancedTable<T extends RowData>({
         <Typography variant="customBold32" sx={styles.title}>
           {tableName}
         </Typography>
-        <MusicSearch search={search} setSearch={setSearch}></MusicSearch>
+        {MusicSearch}
       </Box>
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="300px">
