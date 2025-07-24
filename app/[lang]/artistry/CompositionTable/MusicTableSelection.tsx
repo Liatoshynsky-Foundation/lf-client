@@ -33,47 +33,14 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [data, setData] = useState<Music[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const newParams = new URLSearchParams(searchParams);
-    if (search) {
-      newParams.set('search', search);
-    } else {
-      newParams.delete('search');
-    }
-    router.replace(`?${newParams.toString()}`, { scroll: false });
-  }, [router, search, searchParams]);
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const endpoint = `/api/compositions?lang=${lang}&search=${encodeURIComponent(search)}`;
-        const res = await fetch(endpoint);
-        const json = await res.json();
-        setData(json);
-      } catch (error) {
-        setData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   setHasMounted(true);
+  // }, []);
 
-    fetchData();
-  }, [search, lang]);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted || !data || data.length === 0) {
-    return null;
-  }
+  // if (!hasMounted || !data || data.length === 0) {
+  //   return null;
+  // }
   const columns = [
     { id: 'expander', header: '', cell: () => null },
     {
@@ -118,8 +85,6 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
   ];
   return (
     <EnhancedTable
-      data={data}
-      loading={isLoading}
       columns={columns}
       groupByKey="opus"
       columnFilters={columnFilters}
@@ -135,7 +100,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       }}
       itemsPerPage={10}
       tableName={t('composition')}
-      MusicSearch={<MusicSearch search={search} setSearch={setSearch} />}
+      // MusicSearch={<MusicSearch search={search} setSearch={setSearch} />}
     />
   );
 }
