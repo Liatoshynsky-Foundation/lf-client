@@ -24,7 +24,6 @@ export const compositionsRepository = {
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-    console.log(compositions);
     if (!compositions || compositions.length === 0) {
       return [];
     }

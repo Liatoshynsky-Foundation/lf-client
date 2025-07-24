@@ -18,7 +18,6 @@ export const VirtualizedListbox = React.forwardRef<HTMLDivElement, VirtualizedLi
 
     const rowRenderer = useCallback(
       ({ index, key, style }: ListRowProps) => {
-        console.log(`key ${key}`);
         return (
           <Row key={key} style={style}>
             {children[index]}
