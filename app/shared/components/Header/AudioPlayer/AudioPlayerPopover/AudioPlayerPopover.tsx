@@ -88,8 +88,8 @@ const AudioPlayerPopover = ({
         ) : (
           <>
             <Box ref={progressRef} onMouseDown={handleMouseDown} sx={styles.progressBar} role="progress">
-              <Box sx={styles.progressLine(progress)} />
-              <Box sx={styles.progressThumbSvg(progress)}>
+              <Box sx={styles.progressLine} style={{ width: `${progress * 100}%` }} />
+              <Box sx={styles.progressThumbSvg} style={{ left: `${progress * 100}%` }}>
                 <Image src="/icons/audio-play-circle-icon.svg" alt="progress thumb" width={16} height={16} />
               </Box>
             </Box>
