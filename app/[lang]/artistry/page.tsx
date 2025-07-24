@@ -5,11 +5,9 @@ import React from 'react';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import MusicTableSection from './CompositionTable/MusicTableSelection';
+import { Language } from '~/types/types/language';
 
-export type PageProps = {
-  params: { lang: string };
-};
-export default async function Artistry({ params }: Readonly<PageProps>) {
+export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang as 'en' | 'uk');
   const t = await getTranslations('liatoshynskyArtistry');
