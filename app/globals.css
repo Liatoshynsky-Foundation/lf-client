@@ -26,7 +26,7 @@ a {
 }
 
 .tiptap {
-    font-family: Mulish;
+    font-family: Mulish, sans-serif;
     font-size: 20px;
     line-height: 160%;
     letter-spacing: 0;
