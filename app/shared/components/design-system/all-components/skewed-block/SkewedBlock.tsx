@@ -11,6 +11,7 @@ type SkewedBlockProps = {
 export const SkewedBlock = ({ image, backgroundSize, height, sx, children }: SkewedBlockProps) => {
   return (
     <Box
+      data-testid="skewed-block"
       sx={{
         backgroundImage: `url(${image})`,
         backgroundRepeat: 'no-repeat',
