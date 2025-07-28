@@ -43,8 +43,11 @@ export const styles = (theme: Theme) => ({
     gridColumn: '6/-1',
     gridRow: '1',
     marginTop: '159px',
+    [theme.breakpoints.down('xs')]: {
+      gridColumn: '2/-1'
+    },
     [theme.breakpoints.down('sm')]: {
-      gridColumn: '4/-1',
+      gridColumn: '2/-1',
       gridRow: '2',
       marginTop: '0'
     }
