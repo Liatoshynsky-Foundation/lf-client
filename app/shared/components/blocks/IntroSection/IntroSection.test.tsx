@@ -12,11 +12,6 @@ jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
   )
 }));
 
-jest.mock('~/components/svg-image/SvgImage', () => ({
-  __esModule: true,
-  SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />
-}));
-
 jest.mock('~/shared/components/Quote/Quote', () => {
   const AboutFoundationMockQuote = () => <div data-testid="quote" />;
   AboutFoundationMockQuote.displayName = 'AboutFoundationMockQuote';
@@ -29,7 +24,11 @@ const mockData = {
     mainText: 'Preserving the legacy of a musical genius',
     sourceTitle: 'Boris Lyatoshynsky'
   },
-  image: '/images/intro-section.jpg'
+  image: {
+    src: '/images/intro-section.jpg',
+    alt: 'Intro image',
+    caption: 'Intro caption'
+  }
 };
 
 describe('IntroSection', () => {
