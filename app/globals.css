@@ -1,26 +1,57 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  height: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
+}
+
+.tiptap {
+    font-family: Mulish, sans-serif;
+    font-size: 20px;
+    line-height: 160%;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+.tiptap strong {
+    font-weight: 700;
+}
+
+.tiptap em {
+    font-style: italic;
+}
+
+.tiptap u {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.tiptap a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+.tiptap a:hover {
+    color: #FCBD28;
 }
