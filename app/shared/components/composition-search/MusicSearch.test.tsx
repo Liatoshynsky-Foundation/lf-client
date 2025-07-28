@@ -1,98 +1,113 @@
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
-const VirtualizedListbox = ({ children, ...props }: any) => (
-  <ul data-testid="virtualized-listbox" {...props}>
-    {children}
-  </ul>
-);
+import { MusicSearch } from './MusicSearch';
 
-describe('Autocomplete Component', () => {
-  const mockOnChange = jest.fn();
-  const mockHandleInputChange = jest.fn();
-  const renderInput = (params: any) => <TextField {...params} label="Search music" />;
-  const getOptionLabel = (option: any) => option.label;
+jest.mock('next-intl', () => ({
+  useTranslations: () => {
+    const translations: Record<string, string> = {
+      notFound: 'Not found',
+      loading: 'Loading...'
+    };
 
-  const setup = (propsOverride = {}) => {
-    const options = [
-      { label: 'Song One', id: 1 },
-      { label: 'Song Two', id: 2 }
-    ];
+    return (key: string) => translations[key] || key;
+  }
+}));
+jest.mock('./LazyListItem', () => ({
+  VirtualizedListbox: ({ children }: any) => <ul>{children}</ul>
+}));
 
-    render(
-      <Autocomplete
-        data-testid="music-search"
-        options={options}
-        loading={false}
-        value={null}
-        onChange={mockOnChange}
-        inputValue=""
-        onInputChange={mockHandleInputChange}
-        renderInput={renderInput}
-        getOptionLabel={getOptionLabel}
-        clearOnBlur={false}
-        popupIcon={null}
-        clearIcon={false}
-        loadingText={<Typography variant="customMedium16">Не знайдено</Typography>}
-        noOptionsText={<Typography variant="customMedium16">No results</Typography>}
-        disableListWrap={true}
-        slotProps={{
-          listbox: {
-            style: {
-              padding: 0,
-              margin: 0,
-              overflow: 'hidden',
-              maxHeight: 'none'
-            },
-            component: VirtualizedListbox as any
-          }
-        }}
-        {...propsOverride}
-      />
-    );
-  };
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve([{ _id: '1', title: 'Test Song' }])
+  })
+) as jest.Mock;
+describe('MusicSearch', () => {
+  it('renders the input and fetches options', async () => {
+    const setSearch = jest.fn();
 
-  it('renders the Autocomplete component', () => {
-    setup();
-    expect(screen.getByTestId('music-search')).toBeInTheDocument();
-  });
+    render(<MusicSearch search="" setSearch={setSearch} />);
 
-  it('calls handleInputChange on input', async () => {
-    setup();
     const input = screen.getByRole('combobox');
-    fireEvent.change(input, { target: { value: 'Song' } });
-    expect(mockHandleInputChange).toHaveBeenCalled();
-  });
+    expect(input).toBeInTheDocument();
 
-  it('calls onChange when an option is selected', async () => {
-    setup();
-    const input = screen.getByRole('combobox');
-    fireEvent.change(input, { target: { value: 'Song One' } });
-
+    fireEvent.focus(input);
     fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
 
     await waitFor(() => {
-      expect(mockOnChange).toHaveBeenCalled();
+      expect(screen.getByText('Test Song')).toBeInTheDocument();
     });
   });
 
-  it('uses getOptionLabel correctly', () => {
-    setup();
-    expect(screen.getByRole('combobox')).toHaveValue('');
+  it('calls setSearch on input change', async () => {
+    const setSearch = jest.fn();
+
+    render(<MusicSearch search="" setSearch={setSearch} />);
+
+    const input = screen.getByRole('combobox');
+    fireEvent.change(input, { target: { value: 'Bohemian' } });
+
+    await waitFor(() => {
+      expect(setSearch).toHaveBeenCalledWith('Bohemian');
+    });
   });
 
-  it('uses VirtualizedListbox component', async () => {
-    setup();
+  it('displays no options text when no results', async () => {
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      json: () => Promise.resolve([])
+    });
+
+    render(<MusicSearch search="xyz" setSearch={jest.fn()} />);
+
     const input = screen.getByRole('combobox');
     fireEvent.focus(input);
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 
     await waitFor(() => {
-      expect(screen.getByTestId('virtualized-listbox')).toBeInTheDocument();
+      expect(screen.getByText('Not found')).toBeInTheDocument();
     });
+  });
+
+  it('displays loading text', async () => {
+    render(<MusicSearch search="" setSearch={jest.fn()} />);
+
+    const input = screen.getByRole('combobox');
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+  it('should find clear button and clean the input after a click', async () => {
+    render(<MusicSearch search="" setSearch={jest.fn()} />);
+    const input = screen.getByRole('combobox');
+    fireEvent.change(input, { target: { value: 'Bohemian' } });
+    const clearButton = screen.getByAltText('close');
+    fireEvent.click(clearButton);
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
+  });
+  it('should focus input when search icon is clicked', async () => {
+    const setSearch = jest.fn();
+
+    render(<MusicSearch search="" setSearch={setSearch} />);
+
+    const input = screen.getByRole('combobox');
+    const searchIcon = screen.getByAltText('search');
+    input.blur();
+    expect(document.activeElement).not.toBe(input);
+    fireEvent.click(searchIcon);
+    expect(document.activeElement).toBe(input);
+  });
+  it('should focus input when search icon is clicked even if not focused', async () => {
+    const setSearch = jest.fn();
+
+    render(<MusicSearch search="" setSearch={setSearch} />);
+    const input = screen.getByRole('combobox');
+    input.blur();
+    expect(document.activeElement).not.toBe(input);
+    const searchIcon = screen.getByAltText('search');
+    fireEvent.click(searchIcon);
+    expect(document.activeElement).toBe(input);
   });
 });
