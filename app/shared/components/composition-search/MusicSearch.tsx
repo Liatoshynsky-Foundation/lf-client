@@ -121,17 +121,13 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       clearOnBlur={false}
       popupIcon={null}
       clearIcon={false}
+      loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
       disableListWrap={true}
       slotProps={{
         listbox: {
-          style: {
-            padding: 0,
-            margin: 0,
-            overflow: 'hidden',
-            maxHeight: 'none'
-          },
-          component: VirtualizedListbox as unknown as React.ComponentType<React.HTMLAttributes<HTMLElement>>
+          style: MusicSearchStyles.listbox,
+          component: VirtualizedListbox
         }
       }}
     />

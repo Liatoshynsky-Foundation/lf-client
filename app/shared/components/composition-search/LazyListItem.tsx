@@ -9,7 +9,6 @@ const Row = memo(({ style, children }: { style: React.CSSProperties; children: R
   return <div style={style}>{children}</div>;
 });
 Row.displayName = 'Row';
-
 export const VirtualizedListbox = React.forwardRef<HTMLDivElement, VirtualizedListboxProps>(
   function VirtualizedListbox(props, ref) {
     const { children, ...other } = props;
