@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import QuoteBlock from '~/components/Quote/Quote';
-import { SvgImage } from '~/components/svg-image/SvgImage';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './IntroSection.styles';
@@ -49,9 +48,6 @@ export default function IntroSection({ data }: { readonly data: Readonly<IntroSe
             alignRight={false}
           />
         )}
-      </Box>
-      <Box sx={sectionStyles.SecondBulletIcon}>
-        <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
       </Box>
     </Box>
   );
