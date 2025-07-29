@@ -9,7 +9,7 @@ import { Language } from '~/types/types/language';
 
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
-  setRequestLocale(lang as 'en' | 'uk');
+  setRequestLocale(lang);
   const t = await getTranslations('liatoshynskyArtistry');
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
