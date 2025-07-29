@@ -13,7 +13,7 @@ export const styles = {
   },
   typography: {
     fontFamily: 'Mulish',
-    fontSize: '20px',
+    fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
     lineHeight: '160%',
     letterSpacing: '0px',
