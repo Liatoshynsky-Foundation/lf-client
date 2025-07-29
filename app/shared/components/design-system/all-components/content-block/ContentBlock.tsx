@@ -6,17 +6,17 @@ import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
 import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
-type Paragraph = {
+type Paragraph = Readonly<{
   id: number;
   text: string;
-};
+}>;
 
-type ContentBlockProps = {
+type ContentBlockProps = Readonly<{
   title?: string;
   description?: string | Paragraph[];
   list?: string | Paragraph[];
   additionalDescription?: string | Paragraph[];
-};
+}>;
 
 function renderTextBlock(data?: string | Paragraph[]) {
   if (!data) return null;
