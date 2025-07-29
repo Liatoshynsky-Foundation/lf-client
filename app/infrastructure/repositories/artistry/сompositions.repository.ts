@@ -2,12 +2,10 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import { escapeRegex } from '~/lib/utils/escapeRegex';
 import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
-function escapeRegex(input: string) {
-  if (!input) return '';
-  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+
 export const compositionsRepository = {
   async getAllGenres() {
     await dbConnect();
