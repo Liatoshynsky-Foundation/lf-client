@@ -6,14 +6,14 @@ import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
+import Footer from '~/components/Footer/Footer';
+import Header from '~/components/Header/Header';
 import { theme } from '~/ds-components/theme/Theme';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
-import Footer from '~/shared/components/Footer/Footer';
-import Header from '~/shared/components/Header/Header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
