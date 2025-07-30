@@ -35,7 +35,7 @@ const TermsIntro = () => {
           Дивитись далі
         </Box>
         <SkewedBlock
-          image="./images/liatoshynsky.png"
+          image="/images/liatoshynsky.png"
           backgroundSize="cover"
           height={skewedBlockHeight}
           sx={style.backgroundContainer}
