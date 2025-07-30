@@ -62,8 +62,9 @@ export const styles = {
     gridColumn: {
       xs: '1 / 13',
       sm: '1 / 9',
-      md: '1 / 8',
-      lg: '1 / 6'
+      md: '1 / 6',
+      lg: '1 / 5',
+      xl: '1 / 6'
     },
     alignSelf: { lg: 'stretch' }
   },
@@ -72,7 +73,7 @@ export const styles = {
     gridColumn: {
       xs: '1 / 13',
       sm: '1 / 9',
-      md: '1 / 8',
+      md: '1 / 6',
       lg: '1 / 7'
     },
     alignSelf: 'stretch'
@@ -107,8 +108,9 @@ export const styles = {
     gridColumn: {
       xs: '1 / 13',
       sm: '9 / 13',
-      md: '8 / 13',
-      lg: '6 / 13'
+      md: '6 / 13',
+      lg: '5 / 13',
+      xl: '6 / 13'
     },
     gridRow: {
       sm: '3 / 5',
@@ -125,11 +127,11 @@ export const styles = {
     position: 'absolute',
     right: '0',
     bottom: {
-      xs: '78px',
-      sm: '290px',
-      md: '273px',
-      lg: '194px',
-      xl: '217px'
+      xs: '34px',
+      sm: '202px',
+      md: '155px',
+      lg: '48px',
+      xl: '51px'
     }
   },
   svgContainer: {
