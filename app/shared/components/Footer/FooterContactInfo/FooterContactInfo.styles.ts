@@ -27,7 +27,7 @@ export const styles = {
     fontWeight: 700,
     fontSize: { xs: '16px', sm: '20px' },
     lineHeight: '140%',
-    marginBottom: '40px'
+    marginBottom: { xs: '32px', sm: '24px' }
   },
   text: {
     ...commonTextStyle,

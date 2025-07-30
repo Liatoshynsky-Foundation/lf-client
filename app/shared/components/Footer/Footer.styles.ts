@@ -10,7 +10,7 @@ export const styles = {
   },
   backgroundBox: {
     position: 'absolute',
-    left: '-50px',
+    left: '-60px',
     width: '150%',
     height: '150%',
     backgroundColor: '#FCBD28',
@@ -19,46 +19,118 @@ export const styles = {
     zIndex: 0
   },
   footerContent: {
-    padding: { xs: '80px 24px', md: '40px 24px' },
-    display: 'flex',
-    flexDirection: { xs: 'column', lg: 'row' },
-    alignItems: { xs: 'center', md: 'flex-start' },
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    maxWidth: '1200px',
-    margin: '0 auto'
+    padding: {
+      xs: '48px 24px 88px',
+      sm: '35px 56px 40px',
+      md: '24px 72px 40px',
+      lg: '36px 72px 48px'
+    },
+    position: 'relative',
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridTemplateRows: {
+      sm: 'auto auto auto 1fr auto auto auto',
+      lg: 'auto'
+    }
   },
-  infoAndNavigationWrapper: {
-    display: 'flex',
-    flexDirection: { xs: 'column', md: 'row' },
-    justifyContent: 'space-between',
-    alignItems: { xs: 'center', md: 'flex-start' },
-    gap: { xs: '16px', md: '24px' },
-    flexWrap: { xs: 'nowrap', md: 'nowrap' },
-    padding: '30px 0 40px 0',
-    position: 'relative'
-  },
-  contactAndSupportWrapper: {
-    padding: { xs: '0 0 25px 0', md: '0 0 70px 0' },
-    display: 'flex',
-    justifyContent: 'space-between',
-    width: '100%'
+  switcherWrapper: {
+    justifySelf: { xs: 'start', sm: 'end' },
+    marginBottom: {
+      xs: '64px',
+      sm: '0'
+    },
+    gridColumn: '1 / 13',
+    gridRow: {
+      xs: '6',
+      sm: '1'
+    }
   },
   logoWrapper: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: {
+      xs: 'center',
+      sm: 'flex-start'
+    },
     width: '100%',
-    zIndex: '2'
+    marginBottom: { xs: '35px', sm: '32px' },
+    gridColumn: '1 / 13',
+    transform: { sm: 'translate(-23px)' }
   },
-  switcherWrapper: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: '100%'
+  contactInfoWrapper: {
+    marginBottom: { xs: '32px', sm: '40px', md: '60px' },
+    gridColumn: {
+      xs: '1 / 13',
+      sm: '1 / 9',
+      md: '1 / 8',
+      lg: '1 / 6'
+    },
+    alignSelf: { lg: 'stretch' }
+  },
+  contactAndSupportWrapper: {
+    marginBottom: { xs: '64px', md: '28px', lg: 0 },
+    gridColumn: {
+      xs: '1 / 13',
+      sm: '1 / 9',
+      md: '1 / 8',
+      lg: '1 / 7'
+    },
+    alignSelf: 'stretch'
+  },
+  socialWrapper: {
+    marginBottom: {
+      xs: '64px',
+      sm: '24px',
+      md: '137px',
+      lg: '120px',
+      xl: '112px'
+    },
+    justifySelf: { md: 'end' },
+    gridColumn: {
+      xs: '1 / 13',
+      sm: '1 / 8',
+      md: '1 / 13',
+      lg: '7 / 13'
+    },
+    gridRow: {
+      lg: '4 / 5'
+    }
+  },
+  navigationWrapper: {
+    marginBottom: {
+      xs: '64px',
+      sm: '58px',
+      md: '28px',
+      lg: '32px',
+      xl: '56px'
+    },
+    gridColumn: {
+      xs: '1 / 13',
+      sm: '9 / 13',
+      md: '8 / 13',
+      lg: '6 / 13'
+    },
+    gridRow: {
+      sm: '3 / 5',
+      lg: '3 / 4'
+    }
   },
   copyrightWrapper: {
+    gridColumn: {
+      xs: '1 / 13',
+      lg: '1 / 10'
+    }
+  },
+  openTechWrapper: {
     position: 'absolute',
     right: '0',
-    bottom: { xs: '8vh', md: '21vh', lg: '28vh' }
+    bottom: {
+      xs: '78px',
+      sm: '290px',
+      md: '273px',
+      lg: '194px',
+      xl: '217px'
+    }
   },
   svgContainer: {
     position: 'relative',

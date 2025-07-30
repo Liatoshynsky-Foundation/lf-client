@@ -1,9 +1,9 @@
 export const styles = {
   container: {
     display: 'flex',
-    flexDirection: { xs: 'column', md: 'row' },
+    flexDirection: { xs: 'column', lg: 'row' },
     flexWrap: { xs: 'wrap', md: 'nowrap' },
-    alignItems: { xs: 'center', md: 'flex-start' },
+    alignItems: 'flex-start',
     gap: '16px'
   }
 };
