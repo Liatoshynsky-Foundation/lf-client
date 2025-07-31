@@ -55,6 +55,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-virtualized": "^9.22.2",
+    "@types/wicg-file-system-access": "^2023.10.6",
     "babel-jest": "^29.7.0",
     "commitlint": "^19.8.1",
     "eslint": "^9.30.1",
