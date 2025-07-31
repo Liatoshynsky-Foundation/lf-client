@@ -2,12 +2,20 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import AudioPlayer, { AudioPlayerProps } from './AudioPlayer';
 
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+
+  var webkitAudioContext: typeof AudioContext | undefined;
+}
+
 describe('AudioPlayer', () => {
-  const defaultProps = {
+  const defaultProps: AudioPlayerProps = {
     src: 'test-audio.mp3',
     trackName: 'Test Track',
-    onPlay: jest.fn(),
-    onPause: jest.fn()
+    autoplay: false,
+    loop: false
   };
 
   let props: Partial<AudioPlayerProps>;
@@ -16,6 +24,34 @@ describe('AudioPlayer', () => {
     render(<AudioPlayer {...defaultProps} {...props} {...overrideProps} />);
 
   beforeAll(() => {
+    class MockAnalyserNode implements Partial<AnalyserNode> {
+      fftSize = 64;
+      frequencyBinCount = 32;
+      connect = jest.fn();
+      getByteFrequencyData = jest.fn((array: Uint8Array) => {
+        array.set([10, 20, 30, 40, 50, 60]);
+      });
+    }
+
+    class MockAudioContext implements Partial<AudioContext> {
+      destination: AudioDestinationNode = {} as AudioDestinationNode;
+
+      createAnalyser(): AnalyserNode {
+        return new MockAnalyserNode() as unknown as AnalyserNode;
+      }
+
+      createMediaElementSource(): MediaElementAudioSourceNode {
+        return {
+          connect: jest.fn()
+        } as unknown as MediaElementAudioSourceNode;
+      }
+
+      close = jest.fn();
+    }
+
+    globalThis.AudioContext = MockAudioContext as unknown as typeof AudioContext;
+    globalThis.webkitAudioContext = MockAudioContext as unknown as typeof AudioContext;
+
     HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
     HTMLMediaElement.prototype.pause = jest.fn();
   });
@@ -133,7 +169,7 @@ describe('AudioPlayer', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
 
-    const animatedBars = screen.getAllByRole('presentation');
+    const animatedBars = document.querySelectorAll('div[style*="height"]');
     expect(animatedBars.length).toBeGreaterThan(0);
 
     act(() => {
