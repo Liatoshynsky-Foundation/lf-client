@@ -130,7 +130,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       clearIcon={false}
       loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
-      open={opened ? true : false}
+      open={!!opened}
       disableListWrap={true}
       slotProps={{
         listbox: {
