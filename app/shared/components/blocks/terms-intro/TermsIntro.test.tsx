@@ -23,6 +23,17 @@ jest.mock('../../colored-svg/ColoredSvg', () => ({
   )
 }));
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'general-provisions.title': 'General Provisions:',
+      'general-provisions.mainText': 'By using this website, you agree to...'
+    };
+
+    return translations[key] || key;
+  }
+}));
+
 describe('TermsIntro', () => {
   it('should render the main title', () => {
     render(<TermsIntro />);
