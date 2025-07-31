@@ -20,6 +20,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
   const flattenedMusicDataArray = flattenMusicDataArray(data);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [focused, setFocused] = useState(false);
+  const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const DEBOUNCE_TIME_MS = 400;
   const t = useTranslations('search');
@@ -33,11 +34,14 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
 
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
+      if (!opened) {
+        setOpened(true);
+      }
       debouncedInputChange(value);
       onFilterChange(value);
       setSearchQuery(value);
     },
-    [debouncedInputChange, onFilterChange]
+    [debouncedInputChange, onFilterChange, opened]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
@@ -57,7 +61,10 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
         sx={{ borderColor: `${mainHexPallete.black} !important` }}
         inputRef={inputRef}
         onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onBlur={() => {
+          setOpened(false);
+          setFocused(false);
+        }}
         slotProps={{
           input: {
             ...params.InputProps,
@@ -107,6 +114,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
       popupIcon={null}
       clearIcon={false}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+      open={opened ? true : false}
     />
   );
 };
