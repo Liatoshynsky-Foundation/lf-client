@@ -9,7 +9,11 @@ import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 import AudioPlayer from '../AudioPlayer/AudioPlayer';
 import SupportButton from '../SupportButton/SupportButton';
 import { styles } from './RightActionsPanel.styles';
-import { SupportButtonDataProps } from '~/types/types/header.type';
+import { type SupportButtonData } from '~/types/types/header.type';
+
+interface SupportButtonDataProps {
+  supportButtonData: SupportButtonData;
+}
 
 export default function RightActionsPanel({ supportButtonData }: Readonly<SupportButtonDataProps>) {
   const { isMobile, isTablet } = useBreakpoints();

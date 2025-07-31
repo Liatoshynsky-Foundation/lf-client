@@ -1,14 +1,16 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { SVGProps } from 'react';
 
 import DesktopNav from './DesktopNav';
-import { PageRoutes } from '~/constants/routes/page-routes';
+
+import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 
 jest.mock('~/i18n/navigation', () => ({
   usePathname: jest.fn(() => '/')
 }));
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg.tsx', () => ({
-  Svg: (props: any) => <svg data-testid="svg-icon" {...props} />
+  Svg: (props: SVGProps<SVGSVGElement>) => <svg data-testid="svg-icon" {...props} />
 }));
 
 jest.mock('~/public/icons/chevron-down.svg', () => ({
@@ -21,67 +23,88 @@ jest.mock('~/public/icons/chevron-up.svg', () => ({
   default: () => <svg data-testid="chevron-up-icon" />
 }));
 
-class ResizeObserver {
-  observe() {
-    return;
+const navLabels: NavigationDTO[] = [
+  {
+    title: 'Фундація',
+    links: [
+      { label: 'Про Фундацію', href: '/about', visibility: true },
+      { label: 'Новини', href: '/news', visibility: true },
+      { label: 'Медіа про нас', href: '/media', visibility: true }
+    ]
+  },
+  {
+    title: 'Кабінет-Архів',
+    links: [{ label: 'Кабінет-Архів', href: '/archive', visibility: true }]
+  },
+  {
+    title: 'Співпраця',
+    links: [{ label: 'Співпраця', href: '/collaboration', visibility: true }]
   }
-  unobserve() {
-    return;
-  }
-  disconnect() {
-    return;
-  }
-}
-global.ResizeObserver = ResizeObserver;
-
-const navLabels = {
-  liatoshynsky: 'Борис Лятошинський',
-  biography: 'Життєпис',
-  artistry: 'Творчість',
-  research: 'Дослідження та наукові роботи',
-  foundation: 'Фундація',
-  about: 'Про Фундацію',
-  news: 'Новини',
-  media: 'Медіа про нас',
-  archive: 'Кабінет-Архів',
-  collaboration: 'Співпраця'
-};
+];
 
 describe('DesktopNav', () => {
-  it('should render all main navigation buttons', () => {
-    render(<DesktopNav navLabels={navLabels} />);
+  let originalResizeObserver: typeof global.ResizeObserver;
 
-    expect(screen.getByText(navLabels.liatoshynsky)).toBeInTheDocument();
-    expect(screen.getByText(navLabels.foundation)).toBeInTheDocument();
-    expect(screen.getByText(navLabels.archive)).toBeInTheDocument();
-    expect(screen.getByText(navLabels.collaboration)).toBeInTheDocument();
+  beforeAll(() => {
+    originalResizeObserver = global.ResizeObserver;
+
+    class MockResizeObserver {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+
+    global.ResizeObserver = MockResizeObserver as any;
   });
 
-  it('should open and close dropdown menu on click', async () => {
+  afterAll(() => {
+    global.ResizeObserver = originalResizeObserver;
+  });
+
+  it('renders all top-level navigation labels', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
-    fireEvent.click(screen.getByText(navLabels.liatoshynsky));
+    expect(screen.getByText('Фундація')).toBeInTheDocument();
+    expect(screen.getByText('Кабінет-Архів')).toBeInTheDocument();
+    expect(screen.getByText('Співпраця')).toBeInTheDocument();
+  });
 
-    expect(screen.getByText(navLabels.biography)).toBeInTheDocument();
-    expect(screen.getByText(navLabels.artistry)).toBeInTheDocument();
-    expect(screen.getByText(navLabels.research)).toBeInTheDocument();
+  it('opens dropdown when clicking on a group with multiple links', () => {
+    render(<DesktopNav navLabels={navLabels} />);
 
-    fireEvent.click(screen.getByText(navLabels.biography));
+    fireEvent.click(screen.getByText('Фундація'));
+
+    expect(screen.getByText('Про Фундацію')).toBeInTheDocument();
+    expect(screen.getByText('Новини')).toBeInTheDocument();
+    expect(screen.getByText('Медіа про нас')).toBeInTheDocument();
+  });
+
+  it('closes dropdown when clicking on a dropdown item', async () => {
+    render(<DesktopNav navLabels={navLabels} />);
+    fireEvent.click(screen.getByText('Фундація'));
+
+    fireEvent.click(screen.getByText('Про Фундацію'));
 
     await waitFor(() => {
-      expect(screen.queryByText(navLabels.biography)).not.toBeInTheDocument();
+      expect(screen.queryByText('Про Фундацію')).not.toBeInTheDocument();
     });
   });
 
-  it('should assign correct hrefs to links and dropdowns', async () => {
+  it('assigns correct href to single-link navigation items', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
-    const link = screen.getByText(navLabels.archive).closest('a');
-    expect(link).toHaveAttribute('href', PageRoutes.ARCHIVE);
+    const archiveLink = screen.getByText('Кабінет-Архів').closest('a');
+    const collabLink = screen.getByText('Співпраця').closest('a');
 
-    fireEvent.click(screen.getByText(navLabels.foundation));
+    expect(archiveLink).toHaveAttribute('href', '/archive');
+    expect(collabLink).toHaveAttribute('href', '/collaboration');
+  });
 
-    const newsLink = screen.getByText(navLabels.news).closest('a');
-    expect(newsLink).toHaveAttribute('href', PageRoutes.NEWS);
+  it('dropdown items have correct hrefs', () => {
+    render(<DesktopNav navLabels={navLabels} />);
+    fireEvent.click(screen.getByText('Фундація'));
+
+    expect(screen.getByText('Новини').closest('a')).toHaveAttribute('href', '/news');
+    expect(screen.getByText('Медіа про нас').closest('a')).toHaveAttribute('href', '/media');
   });
 });

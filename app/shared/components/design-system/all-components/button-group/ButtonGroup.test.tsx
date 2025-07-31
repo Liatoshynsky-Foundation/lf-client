@@ -7,15 +7,9 @@ import { hexButtonGroupColors } from '~/ds-components/theme/colors';
 import ButtonGroup from './ButtonGroup';
 
 class MockResizeObserver {
-  observe() {
-    return;
-  }
-  unobserve() {
-    return;
-  }
-  disconnect() {
-    return;
-  }
+  observe() {}
+  unobserve() {}
+  disconnect() {}
 }
 
 const buttonClickHandlers = {
@@ -64,16 +58,16 @@ const mockGetBoundingClientRect = function (this: HTMLElement) {
   } as DOMRect;
 };
 
-let tempResizeObserver: typeof global.ResizeObserver;
+let originalResizeObserver: typeof global.ResizeObserver;
 
-describe('Button Group', () => {
+describe('ButtonGroup component', () => {
   beforeAll(() => {
-    tempResizeObserver = global.ResizeObserver;
+    originalResizeObserver = global.ResizeObserver;
     global.ResizeObserver = MockResizeObserver;
   });
 
   afterAll(() => {
-    global.ResizeObserver = tempResizeObserver;
+    global.ResizeObserver = originalResizeObserver;
   });
 
   beforeEach(() => {
@@ -82,11 +76,11 @@ describe('Button Group', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
-  describe('Default settings', () => {
+  describe('Uncontrolled behavior', () => {
     beforeEach(() => {
-      jest.clearAllMocks();
       render(<ButtonGroup buttons={mockButtons} />);
     });
 
@@ -96,15 +90,15 @@ describe('Button Group', () => {
       expect(screen.getByText('Button 3')).toBeInTheDocument();
     });
 
-    it('should have default color styles applied', () => {
-      const button1 = screen.getByText('Button 1').parentElement as HTMLElement;
+    it('should apply default palette color styles', () => {
+      const button1 = screen.getByText('Button 1').parentElement!;
       expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
     });
 
-    it('should change active button style on click', async () => {
+    it('should update active button styles on click', async () => {
       const user = userEvent.setup();
-      const button1 = screen.getByText('Button 1').parentElement as HTMLElement;
-      const button2 = screen.getByText('Button 2').parentElement as HTMLElement;
+      const button1 = screen.getByText('Button 1').parentElement!;
+      const button2 = screen.getByText('Button 2').parentElement!;
 
       await user.click(button1);
       expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
@@ -115,46 +109,72 @@ describe('Button Group', () => {
       expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
     });
 
-    it('should call the corresponding onClick handler when a button is clicked', async () => {
+    it('should call correct onClick handlers when buttons are clicked', async () => {
       const user = userEvent.setup();
       await user.click(screen.getByText('Button 1'));
-      expect(buttonClickHandlers.button1Click).toHaveBeenCalledTimes(1);
-
       await user.click(screen.getByText('Button 2'));
-      expect(buttonClickHandlers.button2Click).toHaveBeenCalledTimes(1);
-
       await user.click(screen.getByText('Button 3'));
+
+      expect(buttonClickHandlers.button1Click).toHaveBeenCalledTimes(1);
+      expect(buttonClickHandlers.button2Click).toHaveBeenCalledTimes(1);
       expect(buttonClickHandlers.button3Click).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('Custom settings', () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('should place the indicator on the default active button if provided', () => {
+  describe('Custom settings with defaultActiveButton', () => {
+    it('should place the indicator under the default active button', () => {
       render(<ButtonGroup buttons={mockButtons} defaultActiveButton={1} />);
       const button2 = screen.getByText('Button 2');
       const indicator = screen.getByLabelText('indicator');
+      const computedStyle = window.getComputedStyle(indicator);
 
-      const computedIndicatorStyle = window.getComputedStyle(indicator);
-
-      expect(computedIndicatorStyle.left).toBe(button2.dataset.offsetLeft + 'px');
-      expect(computedIndicatorStyle.width).toBe(button2.dataset.offsetWidth + 'px');
+      expect(computedStyle.left).toBe(button2.dataset.offsetLeft + 'px');
+      expect(computedStyle.width).toBe(button2.dataset.offsetWidth + 'px');
       expect(button2.parentElement).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
     });
 
-    it('should set indicator style to zero when activeButton is out of range', () => {
-      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={5} />);
+    it('should reset indicator position when defaultActiveButton is out of bounds', () => {
+      render(<ButtonGroup buttons={mockButtons} defaultActiveButton={10} />);
       const indicator = screen.getByLabelText('indicator');
+      const computedStyle = window.getComputedStyle(indicator);
 
-      const computedIndicatorStyle = window.getComputedStyle(indicator);
-      const computedLeft = parseFloat(computedIndicatorStyle.left);
-      const computedWidth = parseFloat(computedIndicatorStyle.width);
+      expect(parseFloat(computedStyle.left)).toBe(0);
+      expect(parseFloat(computedStyle.width)).toBe(0);
+    });
+  });
 
-      expect(computedLeft).toBe(0);
-      expect(computedWidth).toBe(0);
+  describe('Controlled behavior with activeButton prop', () => {
+    it('should highlight the button passed as activeButton', () => {
+      const { rerender } = render(<ButtonGroup buttons={mockButtons} activeButton={2} />);
+      const button3 = screen.getByText('Button 3').parentElement!;
+      const indicator = screen.getByLabelText('indicator');
+      const computedStyle = window.getComputedStyle(indicator);
+
+      expect(button3).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(computedStyle.left).toBe('210px');
+      expect(computedStyle.width).toBe('90px');
+
+      rerender(<ButtonGroup buttons={mockButtons} activeButton={1} />);
+      const button2 = screen.getByText('Button 2').parentElement!;
+      const updatedIndicator = screen.getByLabelText('indicator');
+      const updatedStyle = window.getComputedStyle(updatedIndicator);
+
+      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(updatedStyle.left).toBe('120px');
+      expect(updatedStyle.width).toBe('80px');
+    });
+
+    it('should not change active button on click when controlled', async () => {
+      const user = userEvent.setup();
+      render(<ButtonGroup buttons={mockButtons} activeButton={0} />);
+
+      await user.click(screen.getByText('Button 2'));
+
+      const button1 = screen.getByText('Button 1').parentElement!;
+      const button2 = screen.getByText('Button 2').parentElement!;
+
+      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
     });
   });
 });
