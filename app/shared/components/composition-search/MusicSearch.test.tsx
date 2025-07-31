@@ -29,11 +29,9 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="" setSearch={setSearch} />);
 
     const input = screen.getByRole('combobox');
-    expect(input).toBeInTheDocument();
-
-    fireEvent.focus(input);
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    input.focus();
+    fireEvent.change(input, { target: { value: 'T' } });
     await waitFor(() => {
       expect(screen.getByText('Test Song')).toBeInTheDocument();
     });
@@ -45,6 +43,7 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="" setSearch={setSearch} />);
 
     const input = screen.getByRole('combobox');
+    fireEvent.focus(input);
     fireEvent.change(input, { target: { value: 'Bohemian' } });
 
     await waitFor(() => {
