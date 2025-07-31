@@ -23,6 +23,16 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 describe('MusicSearch', () => {
+  it('displays loading text', async () => {
+    render(<MusicSearch search="" setSearch={jest.fn()} />);
+
+    const input = screen.getByRole('combobox');
+    input.focus();
+    fireEvent.change(input, { target: { value: 't' } });
+    await waitFor(() => {
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+    });
+  });
   it('renders the input and fetches options', async () => {
     const setSearch = jest.fn();
 
@@ -59,23 +69,13 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="xyz" setSearch={jest.fn()} />);
 
     const input = screen.getByRole('combobox');
-    fireEvent.focus(input);
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-
+    input.focus();
+    fireEvent.change(input, { target: { value: 'Bohemian' } });
     await waitFor(() => {
       expect(screen.getByText('Not found')).toBeInTheDocument();
     });
   });
 
-  it('displays loading text', async () => {
-    render(<MusicSearch search="" setSearch={jest.fn()} />);
-
-    const input = screen.getByRole('combobox');
-    fireEvent.focus(input);
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-  });
   it('should find clear button and clean the input after a click', async () => {
     render(<MusicSearch search="" setSearch={jest.fn()} />);
     const input = screen.getByRole('combobox');
