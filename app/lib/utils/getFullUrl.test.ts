@@ -1,7 +1,7 @@
 import { getFullUrl } from './getFullUrl';
 
 describe('getFullUrl', () => {
-  it('replaces dynamic parameters in pathname', () => {
+  it('should replace dynamic parameters in pathname', () => {
     const url = getFullUrl({
       pathname: '/api/user/[id]/profile',
       parameters: { id: '123' }
@@ -10,7 +10,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/user/123/profile');
   });
 
-  it('adds simple query parameters', () => {
+  it('should add simple query parameters', () => {
     const url = getFullUrl({
       pathname: '/api/data',
       searchParameters: {
@@ -22,7 +22,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/data?page=2&active=true');
   });
 
-  it('adds array query parameters', () => {
+  it('should add array query parameters', () => {
     const url = getFullUrl({
       pathname: '/api/items',
       searchParameters: {
@@ -33,7 +33,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/items?tags%5B0%5D=a&tags%5B1%5D=b');
   });
 
-  it('adds object query parameters', () => {
+  it('should add object query parameters', () => {
     const url = getFullUrl({
       pathname: '/api/filter',
       searchParameters: {
@@ -44,7 +44,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/filter?range%5Bmin%5D=5&range%5Bmax%5D=10');
   });
 
-  it('skips null and undefined values', () => {
+  it('should skip null and undefined values', () => {
     const url = getFullUrl({
       pathname: '/api/test',
       searchParameters: {
@@ -57,7 +57,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/test?present=value');
   });
 
-  it('returns pathname if no parameters or searchParameters provided', () => {
+  it('should return pathname if no parameters or searchParameters provided', () => {
     const url = getFullUrl({
       pathname: '/api/static'
     });
@@ -65,7 +65,7 @@ describe('getFullUrl', () => {
     expect(url).toBe('/api/static');
   });
 
-  it('replaces multiple dynamic segments', () => {
+  it('should replace multiple dynamic segments', () => {
     const url = getFullUrl({
       pathname: '/api/[type]/[id]',
       parameters: { type: 'user', id: '456' }

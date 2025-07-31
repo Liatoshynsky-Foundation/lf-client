@@ -61,7 +61,7 @@ describe('DesktopNav', () => {
     global.ResizeObserver = originalResizeObserver;
   });
 
-  it('renders all top-level navigation labels', () => {
+  it('should render all top-level navigation labels', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
     expect(screen.getByText('Фундація')).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe('DesktopNav', () => {
     expect(screen.getByText('Співпраця')).toBeInTheDocument();
   });
 
-  it('opens dropdown when clicking on a group with multiple links', () => {
+  it('should open dropdown when clicking on a group with multiple links', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
     fireEvent.click(screen.getByText('Фундація'));
@@ -79,7 +79,7 @@ describe('DesktopNav', () => {
     expect(screen.getByText('Медіа про нас')).toBeInTheDocument();
   });
 
-  it('closes dropdown when clicking on a dropdown item', async () => {
+  it('should close dropdown when clicking on a dropdown item', async () => {
     render(<DesktopNav navLabels={navLabels} />);
     fireEvent.click(screen.getByText('Фундація'));
 
@@ -90,7 +90,7 @@ describe('DesktopNav', () => {
     });
   });
 
-  it('assigns correct href to single-link navigation items', () => {
+  it('should assign correct href to single-link navigation items', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
     const archiveLink = screen.getByText('Кабінет-Архів').closest('a');
