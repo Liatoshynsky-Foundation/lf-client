@@ -50,8 +50,8 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
   let resultUrl: string = pathname;
 
   if (parameters) {
-    for (const [param, value] of Object.entries(parameters) as [string, string][]) {
-      resultUrl = resultUrl.replace(`[${param}]`, value);
+    for (const [param, value] of Object.entries(parameters)) {
+      resultUrl = resultUrl.replace(`[${param}]`, String(value));
     }
   }
 

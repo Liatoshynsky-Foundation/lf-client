@@ -6,12 +6,6 @@ import { hexButtonGroupColors } from '~/ds-components/theme/colors';
 
 import ButtonGroup from './ButtonGroup';
 
-class MockResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
 const buttonClickHandlers = {
   button1Click: jest.fn(),
   button2Click: jest.fn(),
@@ -63,7 +57,11 @@ let originalResizeObserver: typeof global.ResizeObserver;
 describe('ButtonGroup component', () => {
   beforeAll(() => {
     originalResizeObserver = global.ResizeObserver;
-    global.ResizeObserver = MockResizeObserver;
+    global.ResizeObserver = jest.fn(() => ({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn()
+    }));
   });
 
   afterAll(() => {

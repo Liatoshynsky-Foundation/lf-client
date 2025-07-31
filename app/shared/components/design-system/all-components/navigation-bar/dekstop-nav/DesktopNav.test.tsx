@@ -48,13 +48,11 @@ describe('DesktopNav', () => {
   beforeAll(() => {
     originalResizeObserver = global.ResizeObserver;
 
-    class MockResizeObserver {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    }
-
-    global.ResizeObserver = MockResizeObserver as any;
+    global.ResizeObserver = jest.fn(() => ({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn()
+    }));
   });
 
   afterAll(() => {

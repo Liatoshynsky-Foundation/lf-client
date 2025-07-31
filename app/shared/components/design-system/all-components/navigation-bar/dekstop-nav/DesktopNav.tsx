@@ -48,20 +48,9 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
   }, [pathname]);
 
   useEffect(() => {
-    const getActiveIndex = () =>
-      NAV_ITEMS.findIndex((item) => {
-        if (item.href) {
-          return item.href === pathname;
-        }
-
-        if (item.dropdown) {
-          return item.dropdown.some((dropdownItem) => dropdownItem.href === pathname);
-        }
-
-        return false;
-      });
-
-    const index = getActiveIndex();
+    const index = NAV_ITEMS.findIndex(
+      (item) => item.href === pathname || item.dropdown?.some((dropdownItem) => dropdownItem.href === pathname)
+    );
 
     if (index !== -1) {
       setActiveButton(index);
