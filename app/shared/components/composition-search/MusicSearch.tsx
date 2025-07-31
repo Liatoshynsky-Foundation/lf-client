@@ -51,11 +51,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       debouncedInputChange(value);
       setSearch(value);
     },
-<<<<<<< HEAD
-    [debouncedInputChange, onFilterChange, opened]
-=======
-    [debouncedInputChange, setSearch]
->>>>>>> 626b978640e44b571f638456c7816e81e3cb5675
+    [debouncedInputChange, setSearch, opened]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
@@ -134,9 +130,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       clearIcon={false}
       loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
-<<<<<<< HEAD
       open={opened ? true : false}
-=======
       disableListWrap={true}
       slotProps={{
         listbox: {
@@ -144,7 +138,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
           component: VirtualizedListbox
         }
       }}
->>>>>>> 626b978640e44b571f638456c7816e81e3cb5675
     />
   );
 };
