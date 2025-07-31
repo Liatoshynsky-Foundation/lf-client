@@ -10,7 +10,8 @@ export const quoteSizes = {
 export const quoteColors = {
   burgundy: '#600E0F',
   black: '#190D03',
-  sourceText: '#52545A'
+  sourceText: '#52545A',
+  white: '#FFF'
 };
 
 export const alignments = {
