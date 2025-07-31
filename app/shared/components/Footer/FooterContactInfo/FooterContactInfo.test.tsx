@@ -7,9 +7,17 @@ import FooterContactInfo from './FooterContactInfo';
 
 const contacts = {
   foundationName: 'Test Title',
+  address: '123 Test St, Test City, TX 12345',
   phone: '123-456-7890',
   email: 'test@example.com'
 };
+
+const labels = {
+  addressLabel: 'Address',
+  phoneLabel: 'Phone'
+};
+
+const alertMsg = 'Copied';
 
 jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
   useIsMobile: jest.fn()
@@ -36,7 +44,7 @@ describe('Contact information block inside of the Footer', () => {
     });
 
     beforeEach(() => {
-      render(<FooterContactInfo contacts={contacts} />);
+      render(<FooterContactInfo labels={labels} contacts={contacts} alertMsg={alertMsg} />);
     });
 
     afterEach(() => {
@@ -47,6 +55,9 @@ describe('Contact information block inside of the Footer', () => {
       expect(screen.getByText(contacts.foundationName)).toBeInTheDocument();
       expect(screen.getByText(contacts.phone)).toBeInTheDocument();
       expect(screen.getByText(contacts.email)).toBeInTheDocument();
+      expect(screen.getByText(contacts.address)).toBeInTheDocument();
+      expect(screen.getByText(/Address:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Phone:/i)).toBeInTheDocument();
     });
 
     it('renders mailto email link with correct href', () => {
@@ -61,7 +72,7 @@ describe('Contact information block inside of the Footer', () => {
       fireEvent.click(phoneLink);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(contacts.phone);
       expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-      expect(window.alert).toHaveBeenCalledWith('Номер телефону скопійовано до буферу обміну');
+      expect(window.alert).toHaveBeenCalledWith(alertMsg);
     });
   });
 
@@ -75,7 +86,7 @@ describe('Contact information block inside of the Footer', () => {
     });
 
     beforeEach(() => {
-      render(<FooterContactInfo contacts={contacts} />);
+      render(<FooterContactInfo contacts={contacts} labels={labels} alertMsg={alertMsg} />);
     });
 
     afterEach(() => {

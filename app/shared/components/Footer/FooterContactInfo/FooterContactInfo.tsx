@@ -7,6 +7,7 @@ import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
+  alertMsg: string;
   labels: {
     addressLabel: string;
     phoneLabel: string;
@@ -19,12 +20,12 @@ interface FooterContactInfoProps {
   };
 }
 
-const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels }) => {
+const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alertMsg }) => {
   const isMobile = useIsMobile();
 
   const copyPhoneToClipboard = () => {
     navigator.clipboard.writeText(contacts.phone);
-    alert('Номер телефону скопійовано до буферу обміну');
+    alert(alertMsg);
   };
 
   const telLinkProps = isMobile ? { href: `tel:${contacts.phone}` } : { onClick: copyPhoneToClipboard, href: '#' };

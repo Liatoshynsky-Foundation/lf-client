@@ -8,7 +8,8 @@
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "addressLabel": "Address",
-    "phoneLabel": "Phone"
+    "phoneLabel": "Phone",
+    "phoneCopiedAlert": "Phone number copied to clipboard"
   },
   "header": {
     "supportButton": "Support",
