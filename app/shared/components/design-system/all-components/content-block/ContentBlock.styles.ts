@@ -7,7 +7,7 @@ export const styles = {
     marginTop: '144px'
   },
   textContent: {
-    gridColumn: { xs: '3/ -1', sm: '5/ -1', md: '6 / -1' },
+    gridColumn: { xs: '3/ -1', sm: '6/ -1' },
     gap: '8px'
   }
 };

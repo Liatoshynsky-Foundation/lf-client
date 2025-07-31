@@ -8,10 +8,11 @@ import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 interface SectionTitleProps {
   icon?: boolean;
   mb?: number | string;
+  gridColumn?: object;
   title: string;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn }) => {
   const sizesAttribute = generateSizesAttribute(imageSizes);
 
   return (
@@ -21,7 +22,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title }) =
           <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />
         </Box>
       )}
-      <Typography sx={styles.title} component="h2">
+      <Typography sx={styles.title(gridColumn)} component="h2">
         {title}
       </Typography>
     </Box>

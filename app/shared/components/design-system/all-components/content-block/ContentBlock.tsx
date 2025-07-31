@@ -45,7 +45,7 @@ function renderList(data?: string | Paragraph[]) {
 export default function ContentBlock({ title, description, list, additionalDescription }: ContentBlockProps) {
   return (
     <Box sx={styles.container}>
-      {title && <SectionTitle icon={true} title={title} mb={0} />}
+      {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '3/ -1', sm: '6/ -1' }} />}
       {renderTextBlock(description)}
       {renderList(list)}
       {renderTextBlock(additionalDescription)}
