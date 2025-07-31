@@ -28,5 +28,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}:latest
+        tags: ghcr.io/liatoshynsky-foundation/lf-client:latest
         file: ./Dokcerfile
