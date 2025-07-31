@@ -11,6 +11,7 @@ export const brandingInfoSchema = z.object({
 export const contactInfoSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
+  address: z.string().optional(),
   socialLinks: z
     .array(
       z.object({

@@ -7,14 +7,19 @@ import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
+  labels: {
+    addressLabel: string;
+    phoneLabel: string;
+  };
   contacts: {
     foundationName: string;
+    address: string;
     phone: string;
     email: string;
   };
 }
 
-const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {
+const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels }) => {
   const isMobile = useIsMobile();
 
   const copyPhoneToClipboard = () => {
@@ -29,7 +34,11 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts }) => {
       <Typography sx={styles.title}>{contacts.foundationName}</Typography>
       <Box>
         <Box sx={styles.linkContainer}>
-          <Typography sx={styles.weakText}>Телефон: </Typography>
+          <Typography sx={styles.weakText}>{labels.addressLabel}:</Typography>
+          <Typography sx={styles.text}>{contacts.address}</Typography>
+        </Box>
+        <Box sx={styles.linkContainer}>
+          <Typography sx={styles.weakText}>{labels.phoneLabel}:</Typography>
           <Link sx={styles.link} {...telLinkProps}>
             {contacts.phone}
           </Link>

@@ -1,6 +1,7 @@
 export type ContactInfoDTO = {
   email?: string;
   phone?: string;
+  address?: string;
   socialLinks?: {
     platform: string;
     link: string;
