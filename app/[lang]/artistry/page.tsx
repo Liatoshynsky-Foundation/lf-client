@@ -7,15 +7,10 @@ import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 import MusicTableSection from './CompositionTable/MusicTableSelection';
 import { Language } from '~/types/types/language';
 
-import { createRequestContainer } from '~/di/container';
-
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-  const musicData = await createRequestContainer().resolve('artistryService').getAllCompositions(lang);
-
   const t = await getTranslations('liatoshynskyArtistry');
-
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
       <TitleWithQuote
@@ -24,7 +19,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
         sourceText={t('title-with-quote.sourceText')}
         color="black"
       />
-      <MusicTableSection data={musicData} />
+      <MusicTableSection lang={lang} />
     </Box>
   );
 }
