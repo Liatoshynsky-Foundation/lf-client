@@ -30,11 +30,11 @@ export const styles = {
       md: '30px'
     }
   },
-  title: {
+  title: (gridColumn?: object) => ({
     ...AppTypography.oswald28Bold,
     fontSize: { xs: '20px', md: '28px' },
     color: '#190D03',
     letterSpacing: '0px',
-    gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
-  }
+    gridColumn: gridColumn ?? { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
+  })
 };
