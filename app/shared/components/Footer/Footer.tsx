@@ -17,70 +17,69 @@ import FooterNavigation from './FooterNavigation/FooterNavigation';
 import { createRequestContainer } from '~/di/container';
 
 export default async function Footer() {
-    const t = await getTranslations('footer');
-    const locale = await getLocale();
+  const t = await getTranslations('footer');
+  const locale = await getLocale();
 
-    const svgImagePath = '/images/footer-img.svg';
+  const svgImagePath = '/images/footer-img.svg';
 
-    const { contacts, socialLinks, supportButtonLink, publicInfo, navigation } = await createRequestContainer()
-        .resolve('footerService')
-        .getFooterData(locale);
+  const { contacts, socialLinks, supportButtonLink, publicInfo, navigation } = await createRequestContainer()
+    .resolve('footerService')
+    .getFooterData(locale);
 
-    console.log('FooterContactInfo rendered with contacts:', contacts);
+  return (
+    <Box component="footer" sx={styles.footerContainer}>
+      <Box sx={styles.backgroundBox} />
 
-    return (
-        <Box component="footer" sx={styles.footerContainer}>
-            <Box sx={styles.backgroundBox} />
-
-            <Box sx={styles.footerContent}>
-                <Box sx={styles.switcherWrapper}>
-                    <LanguageSwitcher variant="toggle" />
-                </Box>
-
-                <Box sx={styles.logoWrapper}>
-                    <Logo variant="footer" />
-                </Box>
-                <Box sx={styles.infoAndNavigationWrapper}>
-                    <FooterContactInfo
-                        contacts={contacts}
-                        labels={{
-                            addressLabel: t('addressLabel'),
-                            phoneLabel: t('phoneLabel')
-                        }}
-                    />
-                    <FooterNavigation sections={navigation} />
-                </Box>
-
-                <Box sx={styles.contactAndSupportWrapper}>
-                    <FooterContactAndSupport
-                        contactLabel={t('contactUsButton')}
-                        donation={{
-                            text: t('donationButton'),
-                            link: supportButtonLink
-                        }}
-                    />
-                </Box>
-
-                <Box sx={styles.socialWrapper}>
-                    <FooterSocialMedia media={socialLinks} />
-                </Box>
-
-                <Box sx={styles.navigationWrapper}>
-                    <FooterNavigation sections={navigation} />
-                </Box>
-
-                <Box sx={styles.copyrightWrapper}>
-                    <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
-                </Box>
-
-                <Box sx={styles.openTechWrapper}>
-                    <OpenTechLogo label={t('opentechLabel')} />
-                </Box>
-            </Box>
-
-            <Box sx={styles.svgContainer}>
-                <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
-            </Box>
+      <Box sx={styles.footerContent}>
+        <Box sx={styles.switcherWrapper}>
+          <LanguageSwitcher variant="toggle" />
         </Box>
-    );
+
+        <Box sx={styles.logoWrapper}>
+          <Logo variant="footer" />
+        </Box>
+
+        <Box sx={styles.contactInfoWrapper}>
+          <FooterContactInfo
+            alertMsg={t('phoneCopiedAlert')}
+            contacts={contacts}
+            labels={{
+              addressLabel: t('addressLabel'),
+              phoneLabel: t('phoneLabel')
+            }}
+          />
+        </Box>
+
+        <Box sx={styles.contactAndSupportWrapper}>
+          <FooterContactAndSupport
+            contactLabel={t('contactUsButton')}
+            donation={{
+              text: t('donationButton'),
+              link: supportButtonLink
+            }}
+          />
+        </Box>
+
+        <Box sx={styles.socialWrapper}>
+          <FooterSocialMedia media={socialLinks} />
+        </Box>
+
+        <Box sx={styles.navigationWrapper}>
+          <FooterNavigation sections={navigation} />
+        </Box>
+
+        <Box sx={styles.copyrightWrapper}>
+          <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
+        </Box>
+
+        <Box sx={styles.openTechWrapper}>
+          <OpenTechLogo label={t('opentechLabel')} />
+        </Box>
+      </Box>
+
+      <Box sx={styles.svgContainer}>
+        <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
+      </Box>
+    </Box>
+  );
 }
