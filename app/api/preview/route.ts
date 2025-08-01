@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
 
+import { previewSecret } from '~/config';
 import { errorResponse } from '~/lib/utils/apiResponse';
 import { getTokenFromHeader } from '~/lib/utils/getTokenFromHeader';
 import { verifyToken } from '~/lib/utils/verifyToken';
@@ -32,7 +33,7 @@ export async function GET(request: Request) {
     return errorResponse([errors.MISSING_PARAMETERS], 400);
   }
 
-  const VALID_TOKEN = process.env.PREVIEW_SECRET;
+  const VALID_TOKEN = previewSecret;
 
   if (token !== VALID_TOKEN) {
     return errorResponse([errors.INVALID_PREVIEW_TOKEN], 401);
