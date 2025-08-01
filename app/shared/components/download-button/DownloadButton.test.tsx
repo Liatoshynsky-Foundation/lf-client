@@ -23,9 +23,8 @@ describe('DownloadButton', () => {
     fireEvent.click(button);
 
     const expectedUrl = `/api/blob-url?folderName=${testFolderName}&blobName=${testFileName}`;
-    const hardcodedFileName = 'Tetyana-Homon.jpg';
 
-    expect(handleDownload).toHaveBeenCalledWith(expectedUrl, hardcodedFileName);
+    expect(handleDownload).toHaveBeenCalledWith(expectedUrl, testFileName);
   });
 
   it('should render correctly', () => {
