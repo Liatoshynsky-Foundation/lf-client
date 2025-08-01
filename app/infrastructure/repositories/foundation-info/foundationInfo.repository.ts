@@ -12,8 +12,6 @@ export const foundationInfoRepository = {
 
     const parsed = contactInfoSchema.parse(result);
 
-    console.log('Parsed contact info:', parsed);
-
     return {
       email: parsed.email,
       phone: parsed.phone,

@@ -6,6 +6,7 @@ describe('footerService (composed)', () => {
   const mockContactInfo = {
     email: 'test@example.com',
     phone: '+380123456789',
+    address: { uk: 'Українська адреса', en: 'English address' },
     socialLinks: [
       {
         platform: 'Instagram',
@@ -73,7 +74,8 @@ describe('footerService (composed)', () => {
       contacts: {
         foundationName: 'Foundation Name',
         email: mockContactInfo.email,
-        phone: mockContactInfo.phone
+        phone: mockContactInfo.phone,
+        address: mockContactInfo.address.en
       },
       socialLinks: mockContactInfo.socialLinks,
       supportButtonLink: mockSupportButtonData.supportButtonLink,
