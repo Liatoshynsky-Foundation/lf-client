@@ -4,11 +4,13 @@ import { verifyToken } from './verifyToken';
 import { AdminTokenPayload } from '~/types/types/admin.types';
 
 jest.mock('jsonwebtoken');
+jest.mock('~/config', () => ({
+  jwtSecret: 'secret_token'
+}));
 
 const mockVerify = jest.mocked(jwt.verify);
 
 const fakeToken = 'fake.jwt.token';
-const JWT_SECRET = 'secret_token';
 const validPayload: AdminTokenPayload = {
   id: 'admin-id',
   type: 'superadmin',
@@ -17,7 +19,6 @@ const validPayload: AdminTokenPayload = {
 
 describe('verifyToken', () => {
   beforeEach(() => {
-    process.env.JWT_SECRET = JWT_SECRET;
     jest.clearAllMocks();
   });
 
@@ -25,7 +26,7 @@ describe('verifyToken', () => {
     mockVerify.mockReturnValue(validPayload as any);
 
     const result = verifyToken(fakeToken);
-    expect(jwt.verify).toHaveBeenCalledWith(fakeToken, JWT_SECRET);
+    expect(jwt.verify).toHaveBeenCalledWith(fakeToken, 'secret_token');
     expect(result).toEqual(validPayload);
   });
 
