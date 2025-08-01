@@ -29,17 +29,20 @@ export default async function Footer() {
   return (
     <Box component="footer" sx={styles.footerContainer}>
       <Box sx={styles.backgroundBox} />
+
       <Box sx={styles.footerContent}>
         <Box sx={styles.switcherWrapper}>
           <LanguageSwitcher variant="toggle" />
         </Box>
+
         <Box sx={styles.logoWrapper}>
           <Logo variant="footer" />
         </Box>
-        <Box sx={styles.infoAndNavigationWrapper}>
+
+        <Box sx={styles.contactInfoWrapper}>
           <FooterContactInfo contacts={contacts} />
-          <FooterNavigation sections={navigation} />
         </Box>
+
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport
             contactLabel={t('contactUsButton')}
@@ -48,13 +51,25 @@ export default async function Footer() {
               link: supportButtonLink
             }}
           />
+        </Box>
+
+        <Box sx={styles.socialWrapper}>
           <FooterSocialMedia media={socialLinks} />
         </Box>
-        <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
+
+        <Box sx={styles.navigationWrapper}>
+          <FooterNavigation sections={navigation} />
+        </Box>
+
+        <Box sx={styles.copyrightWrapper}>
+          <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
+        </Box>
+
+        <Box sx={styles.openTechWrapper}>
+          <OpenTechLogo label={t('opentechLabel')} />
+        </Box>
       </Box>
-      <Box sx={styles.copyrightWrapper}>
-        <OpenTechLogo label={t('opentechLabel')} />
-      </Box>
+
       <Box sx={styles.svgContainer}>
         <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
       </Box>

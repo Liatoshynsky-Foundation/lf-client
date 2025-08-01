@@ -1,4 +1,4 @@
-export type Color = 'black' | 'burgundy';
+export type Color = 'black' | 'burgundy' | 'white';
 export type Align = 'left' | 'right';
 
 export type QuoteBlockProps = {
