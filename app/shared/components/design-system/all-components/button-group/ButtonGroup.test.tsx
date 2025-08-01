@@ -54,7 +54,7 @@ const mockGetBoundingClientRect = function (this: HTMLElement) {
 
 let originalResizeObserver: typeof global.ResizeObserver;
 
-describe('ButtonGroup component', () => {
+describe('ButtonGroup', () => {
   beforeAll(() => {
     originalResizeObserver = global.ResizeObserver;
     global.ResizeObserver = jest.fn(() => ({
