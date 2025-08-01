@@ -15,12 +15,11 @@ interface DownloadButtonProps {
 
 const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
   const fileFromBlobStorageUrl = `/api/blob-url?folderName=${folderName}&blobName=${fileName}`;
-  const desiredFileName = 'Tetyana-Homon.jpg';
 
   return (
     <Box>
       <Button
-        onClick={() => handleDownload(fileFromBlobStorageUrl, desiredFileName)}
+        onClick={() => handleDownload(fileFromBlobStorageUrl, fileName)}
         size={'medium'}
         variant={'outlined'}
         endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}
