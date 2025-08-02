@@ -1,4 +1,4 @@
-import type { CellContext, ColumnDef } from '@tanstack/react-table';
+import type { CellContext } from '@tanstack/react-table';
 import { render, screen } from '@testing-library/react';
 
 import { workTableMock } from './WorkTable.constants';
@@ -7,7 +7,6 @@ import type { WorkTable } from '~/types/types/enhancedTable';
 
 interface EnhancedTableProps {
   data: WorkTable[];
-  columns: ColumnDef<WorkTable, unknown>[];
   tableName: string;
 }
 
@@ -26,8 +25,8 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
     return (
       <div data-testid="enhanced-table">
         <div data-testid="table-name">{tableName}</div>
-        {data.map((item, i) => (
-          <div key={i} data-testid="row">
+        {data.map((item) => (
+          <div key={item.id} data-testid="row">
             {item.name}
             {item.actionType === 'pdf' && <button>Preview</button>}
             {item.actionType === 'link' && item.link && <a href={item.link}>Visit</a>}
