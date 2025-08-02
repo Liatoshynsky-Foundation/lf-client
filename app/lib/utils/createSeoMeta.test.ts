@@ -3,11 +3,6 @@ import { createSeoMeta } from './createSeoMeta';
 describe('createSeoMeta', () => {
   const originalEnv = process.env;
 
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...originalEnv };
-  });
-
   afterEach(() => {
     process.env = originalEnv;
   });
