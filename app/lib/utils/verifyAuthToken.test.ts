@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { verifyToken } from './verifyAuthToken';
+import { verifyAuthToken } from './verifyAuthToken';
 import { AuthTokenPayload } from '~/types/types/admin.types';
 
 jest.mock('jsonwebtoken');
@@ -17,7 +17,7 @@ const validPayload: AuthTokenPayload = {
   refreshJti: 'refresh-token-id'
 };
 
-describe('verifyToken', () => {
+describe('verifyAuthToken', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -25,7 +25,7 @@ describe('verifyToken', () => {
   it('should return decoded payload when token is valid', () => {
     mockVerify.mockReturnValue(validPayload as any);
 
-    const result = verifyToken(fakeToken);
+    const result = verifyAuthToken(fakeToken);
     expect(jwt.verify).toHaveBeenCalledWith(fakeToken, 'secret_token');
     expect(result).toEqual(validPayload);
   });
@@ -35,7 +35,7 @@ describe('verifyToken', () => {
       throw new Error('Invalid token');
     });
 
-    const result = verifyToken(fakeToken);
+    const result = verifyAuthToken(fakeToken);
     expect(result).toBeNull();
   });
 });

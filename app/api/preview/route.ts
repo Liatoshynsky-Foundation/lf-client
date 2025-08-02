@@ -5,7 +5,7 @@ import { errors } from '~/constants/errors';
 
 import { errorResponse } from '~/lib/utils/apiResponse';
 import { getTokenFromHeader } from '~/lib/utils/getTokenFromHeader';
-import { verifyToken } from '~/lib/utils/verifyAuthToken';
+import { verifyAuthToken } from '~/lib/utils/verifyAuthToken';
 
 export async function GET(request: Request) {
   const tokenFromHeader = getTokenFromHeader(request);
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     return errorResponse([errors.MISSING_AUTH_HEADER], 401);
   }
 
-  const user = verifyToken(tokenFromHeader);
+  const user = verifyAuthToken(tokenFromHeader);
   if (!user) {
     return errorResponse([errors.INVALID_TOKEN], 401);
   }
