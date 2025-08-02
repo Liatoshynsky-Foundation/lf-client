@@ -5,7 +5,7 @@ import { errors } from '~/constants/errors';
 
 import { errorResponse } from '~/lib/utils/apiResponse';
 import { getTokenFromHeader } from '~/lib/utils/getTokenFromHeader';
-import { verifyToken } from '~/lib/utils/verifyToken';
+import { verifyToken } from '~/lib/utils/verifyAuthToken';
 
 export async function GET(request: Request) {
   const tokenFromHeader = getTokenFromHeader(request);

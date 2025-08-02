@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import { verifyToken } from './verifyToken';
-import { AdminTokenPayload } from '~/types/types/admin.types';
+import { verifyToken } from './verifyAuthToken';
+import { AuthTokenPayload } from '~/types/types/admin.types';
 
 jest.mock('jsonwebtoken');
 jest.mock('~/config', () => ({
@@ -11,7 +11,7 @@ jest.mock('~/config', () => ({
 const mockVerify = jest.mocked(jwt.verify);
 
 const fakeToken = 'fake.jwt.token';
-const validPayload: AdminTokenPayload = {
+const validPayload: AuthTokenPayload = {
   id: 'admin-id',
   type: 'superadmin',
   refreshJti: 'refresh-token-id'
