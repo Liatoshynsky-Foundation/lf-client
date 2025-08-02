@@ -75,6 +75,18 @@
     "buttons": {
       "viewSheetMusic": "View sheet music",
       "downloadMusic": "Download"
+    },
+    "work": {
+      "name": "All works",
+      "columns": {
+        "name": "Title",
+        "author": "Author",
+        "year": "Year"
+      },
+      "buttons": {
+        "view": "Preview",
+        "goto": "Visit"
+      }
     }
   },
   "cookie": {
