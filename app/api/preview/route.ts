@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
 
+import { baseUrl } from '~/config';
 import { errorResponse } from '~/lib/utils/apiResponse';
 import { verifyAuthToken } from '~/lib/utils/verifyAuthToken';
 
@@ -50,7 +51,6 @@ export async function GET(request: Request) {
   const draft = await draftMode();
   draft.enable();
 
-  const baseUrl = 'http://dev.lf.com:3001';
   const url = new URL(`/${lang}/${slug}`, baseUrl);
   if (draftId) {
     url.searchParams.set('draftId', draftId);

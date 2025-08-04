@@ -10,3 +10,5 @@ export const getMongoUrl = (): string => {
 export const mongoUrl = getMongoUrl();
 
 export const jwtSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
+
+export const baseUrl = process.env.CLIENT_BASE_URL;
