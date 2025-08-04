@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import DesktopNav from './DesktopNav';
-import { ROUTES } from '~/constants/routes';
+import { PageRoutes } from '~/constants/routes/page-routes';
 
 jest.mock('~/i18n/navigation', () => ({
   usePathname: jest.fn(() => '/')
@@ -77,11 +77,11 @@ describe('DesktopNav', () => {
     render(<DesktopNav navLabels={navLabels} />);
 
     const link = screen.getByText(navLabels.archive).closest('a');
-    expect(link).toHaveAttribute('href', ROUTES.ARCHIVE);
+    expect(link).toHaveAttribute('href', PageRoutes.ARCHIVE);
 
     fireEvent.click(screen.getByText(navLabels.foundation));
 
     const newsLink = screen.getByText(navLabels.news).closest('a');
-    expect(newsLink).toHaveAttribute('href', ROUTES.NEWS);
+    expect(newsLink).toHaveAttribute('href', PageRoutes.NEWS);
   });
 });

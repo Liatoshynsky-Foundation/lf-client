@@ -7,6 +7,7 @@ import React from 'react';
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import { handleDownload } from '~/utils/downloadFile';
 
 interface DownloadButtonProps {
@@ -16,7 +17,7 @@ interface DownloadButtonProps {
 
 const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
   const t = useTranslations('table.buttons');
-  const fileFromBlobStorageUrl = `/api/blob-url?folderName=${folderName}&blobName=${fileName}`;
+  const fileFromBlobStorageUrl = `${ApiRoutes.BLOB_URL}?folderName=${folderName}&blobName=${fileName}`;
 
   return (
     <Box>

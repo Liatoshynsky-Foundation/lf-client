@@ -10,7 +10,7 @@ import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { styles } from './DesktopNav.styles';
-import { ROUTES } from '~/constants/routes';
+import { PageRoutes } from '~/constants/routes/page-routes';
 import { NavLabels } from '~/types/types/navLabels';
 
 import { usePathname } from '~/i18n/navigation';
@@ -28,21 +28,21 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
     {
       label: navLabels.liatoshynsky,
       dropdown: [
-        { label: navLabels.biography, href: ROUTES.BIOGRAPHY },
-        { label: navLabels.artistry, href: ROUTES.ARTISTRY },
-        { label: navLabels.research, href: ROUTES.RESEARCH }
+        { label: navLabels.biography, href: PageRoutes.BIOGRAPHY },
+        { label: navLabels.artistry, href: PageRoutes.ARTISTRY },
+        { label: navLabels.research, href: PageRoutes.RESEARCH }
       ]
     },
     {
       label: navLabels.foundation,
       dropdown: [
-        { label: navLabels.about, href: ROUTES.FOUNDATION_HOME },
-        { label: navLabels.news, href: ROUTES.NEWS },
-        { label: navLabels.media, href: ROUTES.MEDIA_ABOUT_US }
+        { label: navLabels.about, href: PageRoutes.FOUNDATION_HOME },
+        { label: navLabels.news, href: PageRoutes.NEWS },
+        { label: navLabels.media, href: PageRoutes.MEDIA_ABOUT_US }
       ]
     },
-    { label: navLabels.archive, href: ROUTES.ARCHIVE },
-    { label: navLabels.collaboration, href: ROUTES.COLLABORATION }
+    { label: navLabels.archive, href: PageRoutes.ARCHIVE },
+    { label: navLabels.collaboration, href: PageRoutes.COLLABORATION }
   ];
 
   const pathname = usePathname();
