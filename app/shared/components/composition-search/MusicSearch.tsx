@@ -101,10 +101,13 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       />
     );
   };
-  function renderOptionFn(props: object, option: CompositionTitlesDTO): React.ReactNode {
+  function renderOptionFn(
+    { key, ...props }: object & { key: React.Key },
+    option: CompositionTitlesDTO
+  ): React.ReactNode {
     return (
-      <List {...props}>
-        <ListItem disableGutters key={option._id}>
+      <List {...props} key={key}>
+        <ListItem disableGutters>
           <Typography variant="customMedium16">{option.title}</Typography>
         </ListItem>
       </List>
