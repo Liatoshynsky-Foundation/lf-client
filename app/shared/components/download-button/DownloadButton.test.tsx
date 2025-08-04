@@ -8,6 +8,15 @@ jest.mock('~/utils/downloadFile', () => ({
   handleDownload: jest.fn()
 }));
 
+jest.mock('next-intl', () => ({
+  useTranslations: jest.fn().mockReturnValue((key: string) => {
+    const translations = {
+      downloadMusic: 'Download'
+    };
+    return translations[key as keyof typeof translations] ?? key;
+  })
+}));
+
 describe('DownloadButton', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -19,7 +28,7 @@ describe('DownloadButton', () => {
 
     render(<DownloadButton folderName={testFolderName} fileName={testFileName} />);
 
-    const button = screen.getByRole('button', { name: /завантажити/i });
+    const button = screen.getByRole('button', { name: /Download/i });
     fireEvent.click(button);
 
     const expectedUrl = `/api/blob-url?folderName=${testFolderName}&blobName=${testFileName}`;
@@ -29,6 +38,6 @@ describe('DownloadButton', () => {
 
   it('should render correctly', () => {
     render(<DownloadButton folderName="test" fileName="test" />);
-    expect(screen.getByRole('button', { name: /завантажити/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Download/i })).toBeInTheDocument();
   });
 });

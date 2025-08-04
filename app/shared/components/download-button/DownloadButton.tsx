@@ -1,6 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
@@ -14,6 +15,7 @@ interface DownloadButtonProps {
 }
 
 const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
+  const t = useTranslations('table.buttons');
   const fileFromBlobStorageUrl = `/api/blob-url?folderName=${folderName}&blobName=${fileName}`;
 
   return (
@@ -24,7 +26,7 @@ const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
         variant={'outlined'}
         endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}
       >
-        Завантажити
+        {t('downloadMusic')}
       </Button>
     </Box>
   );
