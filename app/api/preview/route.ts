@@ -1,25 +1,41 @@
-import { draftMode } from 'next/headers';
+import { cookies, draftMode } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
 
 import { errorResponse } from '~/lib/utils/apiResponse';
-import { getTokenFromHeader } from '~/lib/utils/getTokenFromHeader';
 import { verifyAuthToken } from '~/lib/utils/verifyAuthToken';
 
+function setCORSHeaders(origin: string, response: NextResponse) {
+  if (origin && origin !== '*') {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+  }
+  return response;
+}
+
+function corsErrorResponse(origin: string, response: NextResponse) {
+  return setCORSHeaders(origin, response);
+}
+
 export async function GET(request: Request) {
-  const tokenFromHeader = getTokenFromHeader(request);
-  if (!tokenFromHeader) {
-    return errorResponse([errors.MISSING_AUTH_HEADER], 401);
+  const origin = request.headers.get('origin') || '*';
+
+  const cookieStore = await cookies();
+  const tokenFromCookies = cookieStore.get('accessToken')?.value;
+
+  if (!tokenFromCookies) {
+    return corsErrorResponse(origin, errorResponse([errors.MISSING_AUTH_HEADER], 401));
   }
 
-  const user = verifyAuthToken(tokenFromHeader);
+  const user = verifyAuthToken(tokenFromCookies);
+
   if (!user) {
-    return errorResponse([errors.INVALID_TOKEN], 401);
+    return corsErrorResponse(origin, errorResponse([errors.INVALID_TOKEN], 401));
   }
 
   if (user.type !== 'admin' && user.type !== 'superadmin') {
-    return errorResponse([errors.ACCESS_DENIED], 403);
+    return corsErrorResponse(origin, errorResponse([errors.ACCESS_DENIED], 403));
   }
 
   const { searchParams } = new URL(request.url);
@@ -28,21 +44,22 @@ export async function GET(request: Request) {
   const draftId = searchParams.get('draftId');
 
   if (!slug || !lang) {
-    return errorResponse([errors.MISSING_PARAMETERS], 400);
+    return corsErrorResponse(origin, errorResponse([errors.MISSING_PARAMETERS], 400));
   }
 
   const draft = await draftMode();
   draft.enable();
 
-  const baseUrl = new URL(request.url).origin;
+  const baseUrl = 'http://dev.lf.com:3001';
   const url = new URL(`/${lang}/${slug}`, baseUrl);
-
   if (draftId) {
     url.searchParams.set('draftId', draftId);
   }
 
-  const response = NextResponse.redirect(url, 307);
-  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  const response = NextResponse.json({ previewUrl: url.toString() });
 
+  response.headers.set('Cache-Control', 'no-store');
+
+  setCORSHeaders(origin, response);
   return response;
 }

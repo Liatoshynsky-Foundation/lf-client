@@ -6,10 +6,10 @@ import { jwtSecret } from '~/config';
 
 export function verifyAuthToken(token: string): AuthTokenPayload | null {
   try {
-    const JWT_SECRET = jwtSecret!;
-    const decoded = jwt.verify(token, JWT_SECRET) as AuthTokenPayload;
-    return decoded;
-  } catch {
+    const decoded = jwt.verify(token, jwtSecret!);
+    return decoded as AuthTokenPayload;
+  } catch (error) {
+    console.error('JWT verify error:', error);
     return null;
   }
 }

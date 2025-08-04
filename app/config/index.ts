@@ -9,4 +9,4 @@ export const getMongoUrl = (): string => {
 
 export const mongoUrl = getMongoUrl();
 
-export const jwtSecret = process.env.JWT_SECRET;
+export const jwtSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
