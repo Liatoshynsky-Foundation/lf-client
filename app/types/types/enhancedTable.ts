@@ -1,3 +1,5 @@
+import { MusicSheet } from '~/types/types/composition.types';
+
 export type ColumnWidths = Record<string, string | number>;
 
 export type CollapsibleGroupColumnMeta<T> = {
@@ -21,4 +23,5 @@ export type Music = {
   genre?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
+  sheetMusic: MusicSheet[];
 };

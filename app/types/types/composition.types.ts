@@ -1,6 +1,6 @@
 export type MusicSheet = {
   url: string;
-  dateUploaded: string;
+  dateUploaded: Date;
   isFree: boolean;
 };
 

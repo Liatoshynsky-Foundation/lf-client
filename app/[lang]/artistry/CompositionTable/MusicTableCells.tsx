@@ -3,6 +3,9 @@
 import { Box, TableCell, Typography } from '@mui/material';
 import type { CellContext } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+
+import SheetMusicModal from '~/components/sheet-music-modal/SheetMusicModal';
 
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { Music } from '~/types/types/enhancedTable';
@@ -91,13 +94,19 @@ export const renderGenreCell = (info: CellContext<Music, unknown>) => {
 export const RenderActionsCell = (info: CellContext<Music, unknown>) => {
   const rowData = info.row.original;
   const t = useTranslations('table.buttons');
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Box display="flex" justifyContent="flex-end" gap={2} pr={5}>
-      {rowData.sheetAvailable && <Button variant="outlined">{t('viewSheetMusic')}</Button>}
+      {rowData.sheetAvailable && (
+        <Button onClick={() => setIsOpen(true)} variant="outlined">
+          {t('viewSheetMusic')}
+        </Button>
+      )}
       <IconButton size="small" variant={IconButtonColorVariant.Secondary}>
         <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
       </IconButton>
+      <SheetMusicModal open={isOpen} handleClose={() => setIsOpen(false)} data={rowData} />
     </Box>
   );
 };

@@ -10,7 +10,7 @@ export type Color = 'white' | 'burgundy';
 export type VerticalAlignment = PositionEnum.Top | PositionEnum.Bottom | undefined;
 export type HorizontalAlignment = PositionEnum.Left | PositionEnum.Right | undefined;
 
-interface ModalProps {
+export interface ModalProps {
   open: boolean;
   handleClose: () => void;
   width?: number;
