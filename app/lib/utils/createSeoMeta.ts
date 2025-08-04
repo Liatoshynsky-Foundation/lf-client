@@ -4,7 +4,6 @@ interface CreateSeoMetaProps {
   title: string;
   description: string;
   url: string;
-  keywords?: string[];
   imageUrl?: string;
   locale?: string;
 }
@@ -13,7 +12,6 @@ export function createSeoMeta({
   title,
   description,
   url,
-  keywords = [],
   imageUrl = '/images/liatoshynsky-thumbnail.jpg',
   locale = 'uk'
 }: CreateSeoMetaProps): Metadata {
@@ -27,7 +25,6 @@ export function createSeoMeta({
   return {
     title,
     description,
-    keywords,
     openGraph: {
       title,
       description,

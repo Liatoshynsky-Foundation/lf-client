@@ -14,14 +14,12 @@ describe('createSeoMeta', () => {
       title: 'Test Title',
       description: 'Test Description',
       url: '/artistry',
-      keywords: ['test', 'artistry'],
       imageUrl: '/images/test.jpg',
       locale: 'uk'
     });
 
     expect(meta.title).toBe('Test Title');
     expect(meta.description).toBe('Test Description');
-    expect(meta.keywords).toEqual(['test', 'artistry']);
     expect(meta.openGraph?.url).toBe('http://localhost:3000/uk/artistry');
     expect(meta.openGraph?.locale).toBe('uk_UA');
     expect(meta.openGraph?.alternateLocale).toBe('en_US');
@@ -71,8 +69,6 @@ describe('createSeoMeta', () => {
       description: 'Fallback Desc',
       url: '/home'
     });
-
-    expect(meta.keywords).toEqual([]);
 
     if (Array.isArray(meta.openGraph?.images)) {
       expect(meta.openGraph.images[0]).toEqual({
