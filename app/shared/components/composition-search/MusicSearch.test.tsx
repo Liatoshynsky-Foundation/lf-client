@@ -23,7 +23,7 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 describe('MusicSearch', () => {
-  it('displays loading text', async () => {
+  it('should display loading text', async () => {
     render(<MusicSearch search="" setSearch={jest.fn()} />);
 
     const input = screen.getByRole('combobox');
@@ -33,7 +33,7 @@ describe('MusicSearch', () => {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
   });
-  it('renders the input and fetches options', async () => {
+  it('should render the input and fetches options', async () => {
     const setSearch = jest.fn();
 
     render(<MusicSearch search="" setSearch={setSearch} />);
@@ -47,7 +47,7 @@ describe('MusicSearch', () => {
     });
   });
 
-  it('calls setSearch on input change', async () => {
+  it('should call setSearch on input change', async () => {
     const setSearch = jest.fn();
 
     render(<MusicSearch search="" setSearch={setSearch} />);
@@ -61,7 +61,7 @@ describe('MusicSearch', () => {
     });
   });
 
-  it('displays no options text when no results', async () => {
+  it('should display no options text when no results', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       json: () => Promise.resolve([])
     });
