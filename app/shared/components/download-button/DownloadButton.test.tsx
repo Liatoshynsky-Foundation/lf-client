@@ -2,10 +2,10 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import DownloadButton from './DownloadButton';
-import { handleDownload } from '~/utils/downloadFile';
+import { downloadWithAnchor } from '~/utils/downloadFile';
 
 jest.mock('~/utils/downloadFile', () => ({
-  handleDownload: jest.fn()
+  downloadWithAnchor: jest.fn()
 }));
 
 jest.mock('next-intl', () => ({
@@ -33,7 +33,7 @@ describe('DownloadButton', () => {
 
     const expectedUrl = `/api/blob-url?folderName=${testFolderName}&blobName=${testFileName}`;
 
-    expect(handleDownload).toHaveBeenCalledWith(expectedUrl, testFileName);
+    expect(downloadWithAnchor).toHaveBeenCalledWith(expectedUrl, testFileName);
   });
 
   it('should render correctly', () => {

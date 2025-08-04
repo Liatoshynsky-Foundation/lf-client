@@ -8,7 +8,7 @@ import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
 import { ApiRoutes } from '~/constants/routes/api-routes';
-import { handleDownload } from '~/utils/downloadFile';
+import { downloadWithAnchor } from '~/utils/downloadFile';
 
 interface DownloadButtonProps {
   folderName: string;
@@ -22,7 +22,7 @@ const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
   return (
     <Box>
       <Button
-        onClick={() => handleDownload(fileFromBlobStorageUrl, fileName)}
+        onClick={() => downloadWithAnchor(fileFromBlobStorageUrl, fileName)}
         size={'medium'}
         variant={'outlined'}
         endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}
