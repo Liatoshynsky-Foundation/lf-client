@@ -20,7 +20,6 @@ const nextConfig: NextConfig = {
       test: /\.svg$/i,
       use: ['@svgr/webpack']
     });
-
     return config;
   },
   turbopack: {

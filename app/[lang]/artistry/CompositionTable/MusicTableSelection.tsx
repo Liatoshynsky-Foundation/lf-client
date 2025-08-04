@@ -1,8 +1,9 @@
 'use client';
 
-import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
+import { ColumnFiltersState } from '@tanstack/react-table';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   RenderActionsCell,
@@ -19,23 +20,49 @@ import {
 } from './MusicTableCells';
 import { Music } from '~/types/types/enhancedTable';
 
-import { advancedSearchFilter } from '~/lib/utils/advancedSearchFilters';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 type Props = {
-  data: Music[];
+  lang: string;
 };
 
-export default function MusicTableSection({ data }: Readonly<Props>) {
+export default function MusicTableSection({ lang }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [data, setData] = useState<Music[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const columns: ColumnDef<Music>[] = [
+  useEffect(() => {
+    const newParams = new URLSearchParams(searchParams);
+    if (search) {
+      newParams.set('search', search);
+      router.refresh();
+    } else {
+      newParams.delete('search');
+      router.refresh();
+    }
+    router.replace(`?${newParams.toString()}`, { scroll: false });
+  }, [router, search, searchParams, isLoading]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const endpoint = `/api/compositions?lang=${lang}&search=${encodeURIComponent(search)}`;
+      const res = await fetch(endpoint);
+      const json = await res.json();
+      setData(json);
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [search, lang]);
+  const columns = [
     { id: 'expander', header: '', cell: () => null },
     {
       id: 'opus',
@@ -43,10 +70,6 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       cell: () => null,
       meta: {
         groupLabelContentFactory: renderOpusGroupLabel
-      },
-      filterFn: (row, columnId, filterValue: string) => {
-        const name = row.getValue<string>(columnId);
-        return advancedSearchFilter(name, filterValue);
       }
     },
     {
@@ -61,10 +84,6 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       enableSorting: false,
       meta: {
         groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
-      },
-      filterFn: (row, columnId, filterValue: string) => {
-        const name = row.getValue<string>(columnId);
-        return advancedSearchFilter(name, filterValue);
       }
     },
     {
@@ -85,10 +104,10 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       cell: RenderActionsCell
     }
   ];
-
   return (
     <EnhancedTable
       data={data}
+      loading={isLoading}
       columns={columns}
       groupByKey="opus"
       columnFilters={columnFilters}
@@ -104,14 +123,7 @@ export default function MusicTableSection({ data }: Readonly<Props>) {
       }}
       itemsPerPage={10}
       tableName={t('composition')}
-      MusicSearch={
-        <MusicSearch
-          data={data}
-          onFilterChange={(names: string) =>
-            setColumnFilters((prev) => [...prev.filter((f) => f.id !== 'name'), { id: 'name', value: names }])
-          }
-        />
-      }
+      MusicSearch={<MusicSearch search={search} setSearch={setSearch} />}
     />
   );
 }

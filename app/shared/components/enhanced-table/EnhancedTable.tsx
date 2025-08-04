@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material'; // Added CircularProgress
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -38,6 +38,7 @@ interface EnhancedTableProps<T extends RowData> {
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
+  loading?: boolean;
 }
 
 export default function EnhancedTable<T extends RowData>({
@@ -50,7 +51,8 @@ export default function EnhancedTable<T extends RowData>({
   MusicSearch,
   columnFilters,
   onColumnFiltersChange,
-  defaultSorting = []
+  defaultSorting = [],
+  loading = false
 }: Readonly<EnhancedTableProps<T>>) {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -91,7 +93,7 @@ export default function EnhancedTable<T extends RowData>({
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable]);
+  }, [headerTable, data]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -137,7 +139,6 @@ export default function EnhancedTable<T extends RowData>({
     data: allRows,
     itemsPerPage
   });
-
   return (
     <Box sx={styles.root}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
@@ -146,41 +147,49 @@ export default function EnhancedTable<T extends RowData>({
         </Typography>
         {MusicSearch}
       </Box>
-      <TableContainer component={Paper} sx={styles.container}>
-        <Table>
-          <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
-          <TableBody>
-            {rowsToRender.map((entry) =>
-              entry.type === 'group' ? (
-                <CollapsibleRow
-                  key={`group-${entry.label}`}
-                  data={entry.items}
-                  collapsed={collapsedGroups[entry.label] ?? false}
-                  action={() => toggleGroupCollapse(entry.label)}
-                  columns={getGroupColumns(columns, entry.items)}
-                />
-              ) : (
-                <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
-              )
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <TableContainer component={Paper} sx={styles.container}>
+            <Table>
+              <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
+              <TableBody>
+                {rowsToRender.map((entry) =>
+                  entry.type === 'group' ? (
+                    <CollapsibleRow
+                      key={`group-${entry.label}`}
+                      data={entry.items}
+                      collapsed={collapsedGroups[entry.label] ?? false}
+                      action={() => toggleGroupCollapse(entry.label)}
+                      columns={getGroupColumns(columns, entry.items)}
+                    />
+                  ) : (
+                    <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
+                  )
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box sx={styles.paginationWrapper}>
+            {hasMore && (
+              <Button variant="contained" size="large" onClick={handleLoadMore}>
+                {t('viewMore')}
+              </Button>
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Box sx={styles.paginationWrapper}>
-        {hasMore && (
-          <Button variant="contained" size="large" onClick={handleLoadMore}>
-            {t('viewMore')}
-          </Button>
-        )}
-
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          visiblePages={visiblePages}
-          onChange={(_, page) => handlePageChange(page)}
-        />
-      </Box>
+            {totalPages > 1 && (
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                visiblePages={visiblePages}
+                onChange={(_, page) => handlePageChange(page)}
+              />
+            )}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

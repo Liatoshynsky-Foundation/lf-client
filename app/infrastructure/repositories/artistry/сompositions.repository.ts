@@ -2,7 +2,8 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
-import { compositionsArraySchema } from '~/validators/artistry/composition.schema';
+import { escapeRegex } from '~/lib/utils/escapeRegex';
+import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
 
 export const compositionsRepository = {
@@ -14,15 +15,22 @@ export const compositionsRepository = {
     return genresArraySchema.parse(genres);
   },
 
-  async getAllCompositions() {
-    await dbConnect();
+  async getAllCompositions(filter: string) {
+    const query = { title: { $regex: escapeRegex(filter), $options: 'i' } };
 
-    const compositions = await Compositions.find().populate('genres').populate({ path: 'opusId', model: Opus }).lean();
-
+    const compositions = await Compositions.find(query)
+      .populate('genres')
+      .populate({ path: 'opusId', model: Opus })
+      .lean();
     if (!compositions || compositions.length === 0) {
       return [];
     }
 
     return compositionsArraySchema.parse(compositions);
+  },
+  async getAllTitles() {
+    await dbConnect();
+    const titles = await Compositions.find().select({ _id: 1, title: 1 }).lean();
+    return compositionNamesArraySchema.parse(titles);
   }
 };
