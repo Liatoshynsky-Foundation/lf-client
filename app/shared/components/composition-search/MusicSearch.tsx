@@ -20,6 +20,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
   const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
   const [focused, setFocused] = useState(false);
+  const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const DEBOUNCE_TIME_MS = 500;
@@ -44,10 +45,13 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
 
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
+      if (!opened) {
+        setOpened(true);
+      }
       debouncedInputChange(value);
       setSearch(value);
     },
-    [debouncedInputChange, setSearch]
+    [debouncedInputChange, setSearch, opened]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
@@ -70,7 +74,10 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
         sx={{ borderColor: `${mainHexPallete.black} !important` }}
         inputRef={inputRef}
         onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onBlur={() => {
+          setOpened(false);
+          setFocused(false);
+        }}
         slotProps={{
           input: {
             ...params.InputProps,
@@ -123,6 +130,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       clearIcon={false}
       loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+      open={!!opened}
       disableListWrap={true}
       slotProps={{
         listbox: {
