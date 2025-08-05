@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const tokenFromCookies = cookieStore.get('accessToken')?.value;
 
   if (!tokenFromCookies) {
-    return corsError(origin, errorResponse([errors.MISSING_AUTH_HEADER], 401));
+    return corsError(origin, errorResponse([errors.MISSING_AUTH_TOKEN], 401));
   }
 
   const user = verifyAuthToken(tokenFromCookies);
