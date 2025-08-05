@@ -17,7 +17,9 @@ const config: Config = {
     '!app/di/**',
     '!app/services/core/**',
     '!app/domain/**',
-    '!app/infrastructure/models/**' // Exclude test files from coverage
+    '!app/infrastructure/models/**',
+    '!app/robots.ts',
+    '!app/sitemap.ts' // Exclude test files from coverage
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
