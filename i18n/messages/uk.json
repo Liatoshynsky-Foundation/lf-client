@@ -71,7 +71,8 @@
       "composition": "Усі Композиції"
     },
     "buttons": {
-      "viewSheetMusic": "Переглянути ноти"
+      "viewSheetMusic": "Переглянути ноти",
+      "downloadMusic": "Завантажити"
     }
   },
   "cookie": {

@@ -71,7 +71,8 @@
       "composition": "All compositions"
     },
     "buttons": {
-      "viewSheetMusic": "View sheet music"
+      "viewSheetMusic": "View sheet music",
+      "downloadMusic": "Download"
     }
   },
   "cookie": {
