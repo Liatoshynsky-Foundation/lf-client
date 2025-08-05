@@ -16,7 +16,12 @@ export const errors = {
   REQUEST_TIMEOUT: {
     code: 'REQUEST_TIMEOUT',
     message: 'Request timed out'
-  }
+  },
+  MISSING_AUTH_TOKEN: 'Missing access token in cookies',
+  INVALID_TOKEN: 'Invalid token',
+  ACCESS_DENIED: 'Access denied: not admin',
+  MISSING_PARAMETERS: 'Missing required query parameters',
+  INVALID_PREVIEW_TOKEN: 'Invalid preview token'
 };
 
 export const envErrors = {
