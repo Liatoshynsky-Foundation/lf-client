@@ -4,12 +4,33 @@ import React, { useState } from 'react';
 import { CookieModal } from './modal/CookieModal';
 import { CookiePreferencesModal } from './preferances/CookiePreferencesModal';
 
-const CookieModalWrapper = ({ cookie_consent }: { cookie_consent: string }) => {
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
+function initGoogleAnalitics(trackingId: string) {
+  const script = document.createElement('script');
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${trackingId}`;
+  script.async = true;
+  document.head.appendChild(script);
+
+  script.onload = () => {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args: any[]) {
+      window.dataLayer.push(args);
+    }
+    gtag('js', new Date());
+    gtag('config', trackingId);
+  };
+}
+
+const CookieModalWrapper = ({ cookie_consent, tracking_id }: { cookie_consent: string; tracking_id: string }) => {
   const [open, setOpen] = useState(true);
   const [openPreferences, setOpenPreferences] = useState(false);
   const [collectAnalytics, setCollectAnalytics] = useState(true);
 
-  // Determine whether to render the modal based on cookie_consent
   const shouldRenderModal = !(cookie_consent && JSON.parse(cookie_consent).analytics);
 
   const setCookies = (analytics: boolean) => {
@@ -19,6 +40,9 @@ const CookieModalWrapper = ({ cookie_consent }: { cookie_consent: string }) => {
       functional: false,
       necessary: true
     };
+    if (analytics) {
+      initGoogleAnalitics(tracking_id);
+    }
     document.cookie = `cookie_consent=${JSON.stringify(cookies)}; path=/; max-age=${analytics ? 31536000 : 0}`;
   };
 
