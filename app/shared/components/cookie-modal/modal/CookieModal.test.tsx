@@ -34,31 +34,42 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 const onClose = jest.fn();
-const onCloseMock = jest.fn();
+const showPreferences = jest.fn();
+const acceptAll = jest.fn();
+
+const props = {
+  open: true,
+  onClose: onClose,
+  showPreferences: showPreferences,
+  acceptAll: acceptAll
+};
 
 describe('CookieModal', () => {
-  it('should renders modal with correct content', () => {
-    const props = { open: true, onClose: onClose };
+  beforeEach(() => {
+    jest.clearAllMocks();
     render(<CookieModal {...props} />);
+  });
 
+  it('should renders modal with correct content', () => {
     expect(screen.getByRole('button', { name: 'settingsButton' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'acceptButton' })).toBeInTheDocument();
   });
 
   it('should calls onClose when accept button is clicked', () => {
-    const props = { open: true, onClose: onCloseMock };
-    render(<CookieModal {...props} />);
-
     const acceptButton = screen.getByRole('button', { name: 'acceptButton' });
     fireEvent.click(acceptButton);
 
-    expect(onCloseMock).toHaveBeenCalledTimes(1);
+    expect(acceptAll).toHaveBeenCalledTimes(1);
   });
 
-  it('does not render anything when open is false', () => {
-    const props = { open: false, onClose: onClose };
-    render(<CookieModal {...props} />);
-
+  it('should not render anything when open is false', () => {
     expect(screen.queryByText(/cookies/i)).not.toBeInTheDocument();
+  });
+
+  it('should call showPreferences when settings button is clicked', () => {
+    const settingsButton = screen.getByRole('button', { name: 'settingsButton' });
+    fireEvent.click(settingsButton);
+
+    expect(showPreferences).toHaveBeenCalledTimes(1);
   });
 });

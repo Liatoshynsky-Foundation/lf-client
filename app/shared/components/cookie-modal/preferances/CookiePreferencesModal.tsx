@@ -9,9 +9,10 @@ import Switch from '~/ds-components/switch/Switch';
 import { styles } from './CookiePreferencesModal.styles';
 import { PositionEnum } from '~/types/enums/common.enums';
 
-interface CookiePreferencesModalProps {
+export interface CookiePreferencesModalProps {
   open: boolean;
   onClose: () => void;
+  saveSettings: () => void;
   checked: boolean;
   onChecked: (value: boolean) => void;
 }
@@ -19,6 +20,7 @@ interface CookiePreferencesModalProps {
 export const CookiePreferencesModal: React.FC<CookiePreferencesModalProps> = ({
   open,
   onClose,
+  saveSettings,
   checked = true,
   onChecked
 }) => {
@@ -51,7 +53,7 @@ export const CookiePreferencesModal: React.FC<CookiePreferencesModalProps> = ({
           <Button size="medium" variant="outlined" onClick={() => onChecked(true)}>
             {t('selectAllButton')}
           </Button>
-          <Button size="medium" variant="contained" color="tertiary" onClick={onClose}>
+          <Button size="medium" variant="contained" color="tertiary" onClick={saveSettings}>
             {t('saveSettingsButton')}
           </Button>
         </Box>

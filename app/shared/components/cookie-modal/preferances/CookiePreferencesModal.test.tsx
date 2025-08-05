@@ -21,10 +21,12 @@ jest.mock('next-intl', () => ({
 
 const onCloseMock = jest.fn();
 const onCheckedMock = jest.fn();
+const saveSettingsMock = jest.fn();
 
 const props = {
   open: true,
   onClose: onCloseMock,
+  saveSettings: saveSettingsMock,
   checked: true,
   onChecked: onCheckedMock
 };
@@ -36,37 +38,32 @@ describe('CookiePreferences Modal', () => {
     render(<CookiePreferencesModal {...props} />);
   });
 
-  it('should renders modal with title and description', () => {
+  it('should render modal with title and description', () => {
     expect(screen.getByText('Cookie Settings')).toBeInTheDocument();
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
   });
 
-  it('should renders analytics section and toggle', () => {
+  it('should render analytics section and toggle', () => {
     expect(screen.getByText('Analytics')).toBeInTheDocument();
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
   });
 
-  it('should calls onChecked when toggle is clicked', () => {
+  it('should call onChecked when toggle is clicked', () => {
     fireEvent.click(screen.getByRole('checkbox'));
     expect(props.onChecked).toHaveBeenCalled();
   });
 
-  it('should renders both buttons with correct labels', () => {
+  it('should render both buttons with correct labels', () => {
     expect(screen.getByRole('button', { name: 'Select All' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save Settings' })).toBeInTheDocument();
   });
 
-  it('should calls onClose when Save Settings button is clicked', () => {
+  it('should call saveSettings when Save Settings button is clicked', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Save Settings' }));
-    expect(props.onClose).toHaveBeenCalled();
+    expect(props.saveSettings).toHaveBeenCalled();
   });
 
-  it('should calls onClose when Save Settings button is clicked', () => {
-    fireEvent.click(screen.getByRole('button', { name: 'Save Settings' }));
-    expect(props.onClose).toHaveBeenCalled();
-  });
-
-  it('calls onChecked(true) when "Select All" button is clicked', async () => {
+  it('should call onChecked(true) when "Select All" button is clicked', async () => {
     fireEvent.click(screen.getByRole('button', { name: 'Select All' }));
     expect(onCheckedMock).toHaveBeenCalledWith(true);
   });
