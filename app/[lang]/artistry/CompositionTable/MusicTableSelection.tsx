@@ -78,6 +78,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       cell: renderPlayCell
     },
     {
+      id: 'name',
       accessorKey: 'name',
       header: RenderNameHeader,
       cell: renderNameCell,
@@ -87,12 +88,14 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       }
     },
     {
+      id: 'year',
       accessorKey: 'year',
       header: RenderYearHeader,
       cell: renderYearCell,
       enableSorting: false
     },
     {
+      id: 'genre',
       accessorKey: 'genre',
       header: RenderGenreHeader,
       cell: renderGenreCell,
