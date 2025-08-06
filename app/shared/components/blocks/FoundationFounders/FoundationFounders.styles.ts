@@ -8,7 +8,8 @@ export const styles = {
     zIndex: -2,
     marginRight: '-50vw',
     width: '100vw',
-    backgroundColor: '#EDE8DF'
+    backgroundColor: '#EDE8DF',
+    clipPath: { xs: 'polygon( 0% 1%, 100% 0%, 100% 99%, 0% 100%)', sm: 'polygon( 0% 2%, 100% 0%, 100% 99%, 0% 100%)' }
   },
   contentContainer: {
     maxWidth: '1920px',
