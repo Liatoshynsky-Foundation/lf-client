@@ -26,6 +26,13 @@ export const collapsibleRowStyles = {
     alignItems: 'center',
     gap: 1
   },
+  cellInnerCentered: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
   labelBox: {
     display: 'flex',
     alignItems: 'center',

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 import {
   RenderActionsCell,
-  renderGenreCell,
+  RenderGenreCell,
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
@@ -24,6 +24,7 @@ import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type Props = {
   lang: string;
@@ -98,7 +99,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       id: 'genre',
       accessorKey: 'genre',
       header: RenderGenreHeader,
-      cell: renderGenreCell,
+      cell: RenderGenreCell,
       enableSorting: false
     },
     {

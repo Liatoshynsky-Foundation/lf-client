@@ -12,6 +12,7 @@ import { IconButton } from '~/shared/components/design-system/all-components/ico
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export const RenderOpusHeader = () => {
   const t = useTranslations('table.columns');
@@ -100,22 +101,43 @@ export const renderYearCell = (info: CellContext<Music, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
-export const renderGenreCell = (info: CellContext<Music, unknown>) => {
+export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
   const genresArray = info.getValue<string[]>();
+  const { isLaptop } = useBreakpoints();
+
   if (!genresArray || genresArray.length === 0) {
     return null;
   }
-  const genresString = genresArray.join(', ');
-  return <Typography variant="customMedium16">{genresString}</Typography>;
+
+  if (isLaptop) {
+    return (
+      <Typography variant="customMedium16" title={genresArray.join(', ')}>
+        ...
+      </Typography>
+    );
+  }
+
+  return <Typography variant="customMedium16">{genresArray.join(', ')}</Typography>;
 };
 
 export const RenderActionsCell = (info: CellContext<Music, unknown>) => {
   const rowData = info.row.original;
   const t = useTranslations('table.buttons');
+  const { isDesktop, isLaptop } = useBreakpoints();
+
+  const shouldRender = isDesktop || isLaptop;
 
   return (
     <Box display="flex" justifyContent="flex-end" gap={2} pr={5}>
-      {rowData.sheetAvailable && <Button variant="outlined">{t('viewSheetMusic')}</Button>}
+      {rowData.sheetAvailable &&
+        shouldRender &&
+        (isDesktop ? (
+          <Button variant="outlined">{t('viewSheetMusic')}</Button>
+        ) : (
+          <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={{ border: '1px solid black' }}>
+            <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={30} height={30} />
+          </IconButton>
+        ))}
       <IconButton size="small" variant={IconButtonColorVariant.Secondary}>
         <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
       </IconButton>

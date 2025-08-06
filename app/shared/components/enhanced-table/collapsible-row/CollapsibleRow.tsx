@@ -48,7 +48,7 @@ export function CollapsibleRow<T extends RowData>({
 
           return (
             <TableCell key={col.id} sx={styles.cell}>
-              <Box sx={styles.cellInner}>
+              <Box sx={col.id === 'expander' ? styles.cellInnerCentered : styles.cellInner}>
                 {col.id === 'expander' ? (
                   <IconButton
                     onClick={(event) => {
