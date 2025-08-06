@@ -13,7 +13,6 @@ const contacts = {
 };
 
 const labels = {
-  addressLabel: 'Address',
   phoneLabel: 'Phone'
 };
 
@@ -56,7 +55,6 @@ describe('Contact information block inside of the Footer', () => {
       expect(screen.getByText(contacts.phone)).toBeInTheDocument();
       expect(screen.getByText(contacts.email)).toBeInTheDocument();
       expect(screen.getByText(contacts.address)).toBeInTheDocument();
-      expect(screen.getByText(/Address:/i)).toBeInTheDocument();
       expect(screen.getByText(/Phone:/i)).toBeInTheDocument();
     });
 

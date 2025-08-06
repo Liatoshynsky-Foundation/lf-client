@@ -9,7 +9,6 @@ import { styles } from './FooterContactInfo.styles';
 interface FooterContactInfoProps {
   alertMsg: string;
   labels: {
-    addressLabel: string;
     phoneLabel: string;
   };
   contacts: {
@@ -32,12 +31,13 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
 
   return (
     <Box sx={styles.container}>
-      <Typography sx={styles.title}>{contacts.foundationName}</Typography>
-      <Box>
+      <Box sx={styles.titleAndAddressCont}>
+        <Typography sx={styles.title}>{contacts.foundationName}</Typography>
         <Box sx={styles.linkContainer}>
-          <Typography sx={styles.weakText}>{labels.addressLabel}:</Typography>
           <Typography sx={styles.text}>{contacts.address}</Typography>
         </Box>
+      </Box>
+      <Box>
         <Box sx={styles.linkContainer}>
           <Typography sx={styles.weakText}>{labels.phoneLabel}:</Typography>
           <Link sx={styles.link} {...telLinkProps}>

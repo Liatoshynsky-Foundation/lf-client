@@ -20,14 +20,14 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    gap: { xs: '32px', md: '40px' }
   },
   title: {
     ...commonTextStyle,
     fontWeight: 700,
     fontSize: { xs: '16px', sm: '20px' },
-    lineHeight: '140%',
-    marginBottom: { xs: '32px', sm: '24px' }
+    lineHeight: '140%'
   },
   text: {
     ...commonTextStyle,
@@ -46,5 +46,10 @@ export const styles = {
   },
   linkContainer: {
     display: 'flex'
+  },
+  titleAndAddressCont: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px'
   }
 };

@@ -44,7 +44,6 @@ export default async function Footer() {
             alertMsg={t('phoneCopiedAlert')}
             contacts={contacts}
             labels={{
-              addressLabel: t('addressLabel'),
               phoneLabel: t('phoneLabel')
             }}
           />
