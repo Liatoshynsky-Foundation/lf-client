@@ -6,7 +6,6 @@ import { errors, loggerErrors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
-import { createHeaderService } from '~/services/composed/header-service/headerService';
 import { ResponseError } from '~/shared/exceptions/errors/responseError';
 
 export async function GET(req: NextRequest) {
@@ -14,10 +13,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const container = createRequestContainer();
-    const navigationService = container.resolve('navigationService');
-    const foundationInfoService = container.resolve('foundationInfoService');
-
-    const headerService = createHeaderService({ navigationService, foundationInfoService });
+    const headerService = container.resolve('headerService');
     const headerData = await headerService.getHeaderData(locale as Locale);
 
     return NextResponse.json(headerData);
