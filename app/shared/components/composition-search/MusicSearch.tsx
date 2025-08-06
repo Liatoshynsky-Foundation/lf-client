@@ -1,52 +1,69 @@
+'use client';
 import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
+import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
-import { Music } from '~/types/types/enhancedTable';
 
-import { flattenedMusicDataArrayType, flattenMusicDataArray } from '~/lib/utils/flattenMusicDataArray';
+import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 interface MusicSearchProps {
-  onFilterChange: (value: string) => void;
-  data: Music[];
+  setSearch: (value: string) => void;
+  search: string;
 }
 
-export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }) => {
-  const [value, setValue] = useState<flattenedMusicDataArrayType | null>(null);
-  const flattenedMusicDataArray = flattenMusicDataArray(data);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
+  const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
+  const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
   const [focused, setFocused] = useState(false);
+  const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const DEBOUNCE_TIME_MS = 400;
+  const [loading, setLoading] = useState<boolean>(false);
+  const DEBOUNCE_TIME_MS = 500;
+  useEffect(() => {
+    const fetchAllTitles = async () => {
+      setLoading(true);
+      const response = await fetch('/api/titles');
+      const titles = await response.json();
+      setOptions(titles);
+      setLoading(false);
+    };
+    fetchAllTitles();
+  }, [search, value]);
   const t = useTranslations('search');
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
-        setSearchQuery(value);
+        setSearch(value);
       }, DEBOUNCE_TIME_MS),
-    [setSearchQuery]
+    [setSearch]
   );
 
   const handleInputChange = useCallback(
     (event: SyntheticEvent, value: string) => {
+      if (!opened) {
+        setOpened(true);
+      }
       debouncedInputChange(value);
-      onFilterChange(value);
-      setSearchQuery(value);
+      setSearch(value);
     },
-    [debouncedInputChange, onFilterChange]
+    [debouncedInputChange, setSearch, opened]
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
   };
   const handleClear = () => {
-    setSearchQuery('');
+    setSearch('');
   };
-  const onChange = (event: unknown, value: flattenedMusicDataArrayType | null) => {
+  const onChange = (event: unknown, value: CompositionTitlesDTO | null) => {
     setValue(value);
+    const params = new URLSearchParams(window.location.search);
+    setSearch(value?.title as string);
+    params.set('search', value?.title as string);
   };
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
@@ -57,7 +74,10 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
         sx={{ borderColor: `${mainHexPallete.black} !important` }}
         inputRef={inputRef}
         onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onBlur={() => {
+          setOpened(false);
+          setFocused(false);
+        }}
         slotProps={{
           input: {
             ...params.InputProps,
@@ -81,24 +101,29 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
       />
     );
   };
-
-  const renderOption = (props: object, option: flattenedMusicDataArrayType): React.ReactNode => {
+  function renderOptionFn(
+    { key, ...props }: object & { key: React.Key },
+    option: CompositionTitlesDTO
+  ): React.ReactNode {
     return (
-      <List {...props}>
-        <ListItem disableGutters key={option.name}>
-          <Typography variant="customMedium16">{option.name}</Typography>
+      <List {...props} key={key}>
+        <ListItem disableGutters>
+          <Typography variant="customMedium16">{option.title}</Typography>
         </ListItem>
       </List>
     );
-  };
-  const getOptionLabel = (option: flattenedMusicDataArrayType) => option.name || '';
+  }
+
+  const renderOption = useMemo(() => renderOptionFn, []);
+  const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
   return (
     <Autocomplete
-      id="music-search"
-      options={flattenedMusicDataArray}
+      data-testid="music-search"
+      options={options}
+      loading={loading}
       value={value}
       onChange={onChange}
-      inputValue={searchQuery}
+      inputValue={search}
       onInputChange={handleInputChange}
       renderInput={renderInput}
       renderOption={renderOption}
@@ -106,7 +131,16 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ onFilterChange, data }
       clearOnBlur={false}
       popupIcon={null}
       clearIcon={false}
+      loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
       noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+      open={!!opened}
+      disableListWrap={true}
+      slotProps={{
+        listbox: {
+          style: MusicSearchStyles.listbox,
+          component: VirtualizedListbox
+        }
+      }}
     />
   );
 };

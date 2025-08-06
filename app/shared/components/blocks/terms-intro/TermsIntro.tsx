@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 import { Svg } from '../../colored-svg/ColoredSvg';
+import ContentBlock from '../../design-system/all-components/content-block/ContentBlock';
 import { SkewedBlock } from '../../design-system/all-components/skewed-block/SkewedBlock';
 import { styles } from '../../Quote/Quote.styles';
 import TextBlock from '../../text-block/TextBlock';
@@ -16,6 +18,8 @@ const introHtml = `
 `;
 
 const TermsIntro = () => {
+  const t = useTranslations('termsOfUse');
+
   return (
     <>
       <Box sx={style.gridContainer}>
@@ -54,6 +58,7 @@ const TermsIntro = () => {
             </Box>
           </Box>
         </SkewedBlock>
+        <ContentBlock title={t('general-provisions.title')} description={t('general-provisions.mainText')} />
       </Box>
     </>
   );

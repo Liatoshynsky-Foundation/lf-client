@@ -10,11 +10,18 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
 
     return createLocalizedGenresArraySchema(locale).parse(genres);
   },
-  async getAllCompositions(locale: Locale) {
-    const allSongs = await compositionService.getAllCompositions();
+  async getAllCompositions(locale: Locale, filter: string) {
+    const allSongs = await compositionService.getAllCompositions(filter);
 
     if (!allSongs) return [];
 
     return createLocalizedCompositionsArraySchema(locale).parse(allSongs);
+  },
+  async getAllTitles() {
+    const allTitles = await compositionService.getAllTitles();
+
+    if (!allTitles) return [];
+
+    return allTitles;
   }
 });

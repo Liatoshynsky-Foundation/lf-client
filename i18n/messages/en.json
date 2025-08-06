@@ -56,6 +56,12 @@
       "sourceText": "Letter from Borys Liatoshynsky to Margarita Tsarevych, May 4, 1916, Saratov"
     }
   },
+  "termsOfUse": {
+    "general-provisions": {
+      "title": "General Provisions:",
+      "mainText": "By using this website, you agree to the rules outlined below. They are intended to make the use of the site convenient, safe, and transparent for everyone. We may update these rules from time to time, so we recommend revisiting this section, especially if you plan to use archived materials."
+    }
+  },
   "table": {
     "columns": {
       "opus": "Opus",
@@ -67,7 +73,8 @@
       "composition": "All compositions"
     },
     "buttons": {
-      "viewSheetMusic": "View sheet music"
+      "viewSheetMusic": "View sheet music",
+      "downloadMusic": "Download"
     }
   },
   "cookie": {
@@ -100,6 +107,7 @@
     }
   },
   "search": {
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "loading": "Loading..."
   }
 }

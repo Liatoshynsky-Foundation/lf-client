@@ -1,6 +1,7 @@
-import type { CompositionDTO, GenreDTO } from '~/domain/dto/composition.dto';
+import type { CompositionDTO, CompositionTitlesDTO, GenreDTO } from '~/domain/dto/composition.dto';
 
 export type CompositionRepository = {
   getAllGenres(): Promise<GenreDTO>;
-  getAllCompositions(): Promise<CompositionDTO>;
+  getAllCompositions(filter: string): Promise<CompositionDTO>;
+  getAllTitles(): Promise<CompositionTitlesDTO>;
 };

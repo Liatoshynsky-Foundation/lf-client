@@ -1,4 +1,4 @@
-export const ROUTES = {
+export const PageRoutes = {
   BIOGRAPHY: '/biography',
   ARTISTRY: '/artistry',
   RESEARCH: '/research',
