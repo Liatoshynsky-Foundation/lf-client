@@ -1,6 +1,6 @@
-import { ApiRoutes } from '~/constants/routes/api-routes';
 import type { Locale } from 'next-intl';
 
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import type { HeaderData } from '~/types/types/header.type';
 
 import { getFullUrl } from '~/lib/utils/getFullUrl';

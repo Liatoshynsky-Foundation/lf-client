@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -23,18 +23,20 @@ export interface DropdownItem {
 }
 
 const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
-  const NAV_ITEMS = navLabels.map((group) => {
-    const dropdown = group.links.map((link) => ({
-      label: link.label,
-      href: link.href
-    }));
+  const NAV_ITEMS = useMemo(() => {
+    return navLabels.map((group) => {
+      const dropdown = group.links.map((link) => ({
+        label: link.label,
+        href: link.href
+      }));
 
-    return {
-      label: group.title,
-      dropdown: dropdown.length > 1 ? dropdown : undefined,
-      href: dropdown.length === 1 ? dropdown[0].href : undefined
-    };
-  });
+      return {
+        label: group.title,
+        dropdown: dropdown.length > 1 ? dropdown : undefined,
+        href: dropdown.length === 1 ? dropdown[0].href : undefined
+      };
+    });
+  }, [navLabels]);
 
   const pathname = usePathname();
 
