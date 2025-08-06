@@ -40,7 +40,13 @@ export default async function Footer() {
         </Box>
 
         <Box sx={styles.contactInfoWrapper}>
-          <FooterContactInfo contacts={contacts} />
+          <FooterContactInfo
+            alertMsg={t('phoneCopiedAlert')}
+            contacts={contacts}
+            labels={{
+              phoneLabel: t('phoneLabel')
+            }}
+          />
         </Box>
 
         <Box sx={styles.contactAndSupportWrapper}>

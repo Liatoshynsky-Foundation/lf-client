@@ -6,7 +6,9 @@
   "footer": {
     "donationButton": "Підтримати діяльність фундації",
     "contactUsButton": "Напишіть нам",
-    "opentechLabel": "Розроблено в"
+    "opentechLabel": "Розроблено в",
+    "phoneLabel": "Телефон",
+    "phoneCopiedAlert": "Номер телефону скопійовано до буферу обміну"
   },
   "header": {
     "supportButton": "Підтримати",

@@ -36,6 +36,7 @@ const mockSelect = (value: unknown) => ({
 const mockContactData = {
   email: 'test@example.com',
   phone: '+380123456789',
+  address: { uk: 'Ukrainian address', en: 'English address' },
   socialLinks: [
     {
       platform: 'Instagram',
@@ -75,6 +76,7 @@ describe('foundationInfoRepository', () => {
       expect(result).toEqual({
         email: mockContactData.email,
         phone: mockContactData.phone,
+        address: mockContactData.address,
         socialLinks: undefined
       });
     });

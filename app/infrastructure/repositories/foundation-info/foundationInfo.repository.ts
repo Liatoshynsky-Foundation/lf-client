@@ -8,13 +8,14 @@ export const foundationInfoRepository = {
   async getContactInfo() {
     await dbConnect();
 
-    const result = await ContactInfo.findOne({ slug: 'contact-info' }).select('email phone socialLinks').lean();
+    const result = await ContactInfo.findOne({ slug: 'contact-info' }).select('email phone address socialLinks').lean();
 
     const parsed = contactInfoSchema.parse(result);
 
     return {
       email: parsed.email,
       phone: parsed.phone,
+      address: parsed.address,
       socialLinks: parsed.socialLinks
     };
   },

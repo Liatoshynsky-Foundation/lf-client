@@ -11,6 +11,7 @@ export const brandingInfoSchema = z.object({
 export const contactInfoSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
+  address: translatedFieldSchema,
   socialLinks: z
     .array(
       z.object({
@@ -26,6 +27,11 @@ export const publicInfoSchema = z.object({
   copyright: translatedFieldSchema,
   links: z.array(translatedLinkSchema).optional()
 });
+
+export const createLocalizedContactInfoSchema = (locale: Locale) =>
+  contactInfoSchema.transform((data) => ({
+    address: data.address[locale]
+  }));
 
 export const createLocalizedBrandingInfoSchema = (locale: Locale) =>
   brandingInfoSchema.omit({ supportButtonLink: true }).transform((data) => ({

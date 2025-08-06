@@ -1,7 +1,11 @@
 import type { Locale } from 'next-intl';
 
 import type { FooterServiceDeps } from '~/domain/services/footerService.type';
-import { createLocalizedBrandingInfoSchema, createLocalizedPublicInfoSchema } from '~/validators/foundationInfo.schema';
+import {
+  createLocalizedBrandingInfoSchema,
+  createLocalizedContactInfoSchema,
+  createLocalizedPublicInfoSchema
+} from '~/validators/foundationInfo.schema';
 import { createLocalizedNavigationSchema } from '~/validators/navigation.schema';
 
 export const createFooterService = ({ navigationService, foundationInfoService }: FooterServiceDeps) => ({
@@ -14,6 +18,7 @@ export const createFooterService = ({ navigationService, foundationInfoService }
       navigationService.getNavigation()
     ]);
 
+    const addressInfo = createLocalizedContactInfoSchema(locale).parse(contactInfo);
     const brandingInfo = createLocalizedBrandingInfoSchema(locale).parse(brandingInfoRaw);
     const publicInfo = createLocalizedPublicInfoSchema(locale).parse(publicInfoRaw);
     const navigationData = navigationRaw.map((nav) => createLocalizedNavigationSchema(locale).parse(nav));
@@ -22,7 +27,8 @@ export const createFooterService = ({ navigationService, foundationInfoService }
       contacts: {
         foundationName: brandingInfo.foundationName,
         email: contactInfo.email,
-        phone: contactInfo.phone
+        phone: contactInfo.phone,
+        address: addressInfo.address
       },
       socialLinks: contactInfo.socialLinks ?? [],
       supportButtonLink: supportButtonData.supportButtonLink ?? '',
