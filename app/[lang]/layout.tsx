@@ -2,6 +2,7 @@ import '../globals.css';
 import { Box } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
@@ -13,6 +14,7 @@ import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
+import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import QueryProvider from '~/shared/providers/QueryProvider';
 
@@ -53,6 +55,9 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
+
+  const cookieList = await cookies();
+  const cookieConsent = cookieList.get('cookie_consent')?.value || '';
 
   return (
     <html lang={lang}>
@@ -101,6 +106,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                     </Box>
                   </Box>
                 </Box>
+                <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} />
               </QueryProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
