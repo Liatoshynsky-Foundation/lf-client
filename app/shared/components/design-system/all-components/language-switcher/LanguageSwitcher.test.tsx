@@ -59,10 +59,10 @@ describe('LanguageSwitcher', () => {
       (useLocale as jest.Mock).mockReturnValue('en');
 
       render(<LanguageSwitcher variant="icon" />);
-      fireEvent.click(screen.getByRole('button')); // Відкриваємо меню
+      fireEvent.click(screen.getByRole('button'));
 
       const englishOption = screen.getByText('English');
-      fireEvent.click(englishOption); // Клікаємо по вже обраній мові
+      fireEvent.click(englishOption);
 
       expect(mockPush).not.toHaveBeenCalled();
     });
