@@ -14,7 +14,7 @@ import {
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
-  renderPlayCell,
+  RenderPlayCell,
   renderYearCell,
   RenderYearHeader
 } from './MusicTableCells';
@@ -75,7 +75,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
     {
       id: 'play',
       header: '',
-      cell: renderPlayCell
+      cell: RenderPlayCell
     },
     {
       id: 'name',

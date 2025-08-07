@@ -6,13 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { styles } from './AudioPlayer.styles';
 import AudioPlayerPopover from './AudioPlayerPopover/AudioPlayerPopover';
 
-export type AudioPlayerProps = Readonly<{
-  src: string;
-  trackName: string;
-  loop?: boolean;
-  autoplay?: boolean;
-  className?: string;
-}>;
+import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 
 const stickHeights = [
   { id: 'stick-1', height: 7 },
@@ -23,11 +17,12 @@ const stickHeights = [
   { id: 'stick-6', height: 7 }
 ];
 
-export default function AudioPlayer({ src, trackName, loop = false, autoplay = false, className }: AudioPlayerProps) {
+export default function AudioPlayer() {
+  const { src, trackName, isPlaying, togglePlay } = useAudioPlayer();
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -38,19 +33,27 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   const setupAudioAnalyzer = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio || audioContextRef.current) return;
+    if (!audio) return;
+
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
 
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     const audioContext = new AudioCtx();
     const analyser = audioContext.createAnalyser();
     analyser.fftSize = 64;
 
-    const source = audioContext.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
+    if (!sourceRef.current) {
+      sourceRef.current = audioContext.createMediaElementSource(audio);
+      sourceRef.current.connect(analyser);
+      analyser.connect(audioContext.destination);
+    }
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
@@ -87,62 +90,60 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
     const audio = audioRef.current;
     if (!audio) return;
 
-    const controller = new AbortController();
-    const { signal } = controller;
-
     const updateProgress = () => setCurrentTime(audio.currentTime);
-    const updatePlayState = () => setIsPlaying(!audio.paused);
     const loadDuration = () => {
       if (!isNaN(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
       }
     };
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setAnchorEl(null);
-    };
+
+    const handleEnded = () => setAnchorEl(null);
     const handleError = () => setError('Error loading audio file.');
     const handleLoadedMetadata = () => {
       loadDuration();
       setError(null);
     };
 
-    audio.addEventListener('timeupdate', updateProgress, { signal });
-    audio.addEventListener('play', updatePlayState, { signal });
-    audio.addEventListener('pause', updatePlayState, { signal });
-    audio.addEventListener('ended', handleEnded, { signal });
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata, { signal });
-    audio.addEventListener('error', handleError, { signal });
-
-    if (audio.readyState >= 1) {
-      loadDuration();
-      setError(null);
-    }
-
-    if (autoplay) {
-      audio
-        .play()
-        .then(() => {
-          setupAudioAnalyzer();
-          animateBars();
-        })
-        .catch(() => {
-          setError('Playback failed');
-        });
-    }
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
-      controller.abort();
+      audio.removeEventListener('timeupdate', updateProgress);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
     };
-  }, [autoplay, src, setupAudioAnalyzer, animateBars]);
+  }, [src]);
 
-  const togglePlay = useCallback(() => {
+  useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !src) return;
 
-    if (audio.paused) {
-      audio.play();
-      animateBars();
+    audio.src = src;
+    audio.load();
+  }, [src]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !src) return;
+
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
+          setupAudioAnalyzer();
+        }
+        animateBars();
+        setError(null);
+      } catch {
+        setError('Playback failed');
+      }
+    };
+
+    if (isPlaying) {
+      playAudio();
     } else {
       audio.pause();
 
@@ -151,28 +152,15 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
         animationRef.current = null;
       }
     }
-  }, [animateBars]);
+  }, [isPlaying, src, setupAudioAnalyzer, animateBars]);
 
-  const togglePopoverAndPlay = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  const handlePopoverToggle = useCallback(() => {
+    setAnchorEl((prev) => (prev ? null : buttonRef.current));
 
-    if (!isPlaying) {
-      audio.play();
-      setAnchorEl(buttonRef.current);
-
-      if (!audioContextRef.current) {
-        setupAudioAnalyzer();
-      }
-
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      animateBars();
-    } else {
-      setAnchorEl((prev) => (prev ? null : buttonRef.current));
+    if (src && !isPlaying) {
+      togglePlay();
     }
-  }, [isPlaying, animateBars, setupAudioAnalyzer]);
+  }, [isPlaying, togglePlay, src]);
 
   const onSeek = useCallback((newProgress: number) => {
     const audio = audioRef.current;
@@ -180,25 +168,20 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
     audio.currentTime = newProgress * audio.duration;
   }, []);
 
-  const closePopover = useCallback((): void => {
+  const closePopover = useCallback(() => {
     setAnchorEl(null);
   }, []);
 
   return (
     <>
-      <Box sx={styles.wrapper} className={className}>
-        <IconButton
-          sx={styles.eqButton}
-          onClick={togglePopoverAndPlay}
-          aria-label="Toggle audio player"
-          ref={buttonRef}
-        >
+      <Box sx={styles.wrapper}>
+        <IconButton sx={styles.eqButton} onClick={handlePopoverToggle} aria-label="Toggle audio player" ref={buttonRef}>
           <Box display="flex" alignItems="center" gap={0.5} height={30}>
             {stickHeights.map(({ id, height }, i) => (
               <Box
                 key={id}
                 sx={styles.icon}
-                ref={(el: HTMLDivElement) => {
+                ref={(el: HTMLDivElement | null) => {
                   barRefs.current[i] = el;
                 }}
                 style={{ height: `${height}px` }}
@@ -208,7 +191,7 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
         </IconButton>
       </Box>
 
-      <audio ref={audioRef} src={src} preload="metadata" loop={loop}>
+      <audio ref={audioRef} preload="metadata">
         <track kind="captions" srcLang="en" label="English captions" />
       </audio>
 
@@ -221,7 +204,7 @@ export default function AudioPlayer({ src, trackName, loop = false, autoplay = f
         onClose={closePopover}
         onTogglePlay={togglePlay}
         onSeek={onSeek}
-        trackName={trackName}
+        trackName={trackName ?? ''}
         error={error}
       />
     </>

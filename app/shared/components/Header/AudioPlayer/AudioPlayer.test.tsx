@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import AudioPlayer, { AudioPlayerProps } from './AudioPlayer';
+import AudioPlayer from './AudioPlayer';
+
+import { AudioPlayerContext, AudioPlayerContextType } from '~/shared/context/AudioPlayerContext';
 
 declare global {
   interface Window {
@@ -11,17 +13,18 @@ declare global {
 }
 
 describe('AudioPlayer', () => {
-  const defaultProps: AudioPlayerProps = {
-    src: 'test-audio.mp3',
-    trackName: 'Test Track',
-    autoplay: false,
-    loop: false
+  let mockTogglePlay: jest.Mock;
+  let mockPlayTrack: jest.Mock;
+
+  let mockContextValue: AudioPlayerContextType;
+
+  const renderComponent = (contextOverrides = {}) => {
+    return render(
+      <AudioPlayerContext.Provider value={{ ...mockContextValue, ...contextOverrides }}>
+        <AudioPlayer />
+      </AudioPlayerContext.Provider>
+    );
   };
-
-  let props: Partial<AudioPlayerProps>;
-
-  const renderComponent = (overrideProps = {}) =>
-    render(<AudioPlayer {...defaultProps} {...props} {...overrideProps} />);
 
   beforeAll(() => {
     class MockAnalyserNode implements Partial<AnalyserNode> {
@@ -58,26 +61,39 @@ describe('AudioPlayer', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    props = {};
-    renderComponent();
+
+    mockTogglePlay = jest.fn();
+    mockPlayTrack = jest.fn();
+
+    mockContextValue = {
+      src: 'test-audio.mp3',
+      trackName: 'Test Track',
+      isPlaying: false,
+      playTrack: mockPlayTrack,
+      togglePlay: mockTogglePlay
+    };
   });
 
   test('should render AudioPlayer component', () => {
+    renderComponent();
     expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
-  test('should render audio element with given src', () => {
+  test('should render audio element with given src from context', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
     expect(audio).toBeInTheDocument();
-    expect(audio).toHaveAttribute('src', defaultProps.src);
+    expect(audio).toHaveAttribute('src', mockContextValue.src);
   });
 
   test('should open popover when button is clicked', () => {
+    renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
-    expect(screen.getByText(defaultProps.trackName)).toBeInTheDocument();
+    expect(screen.getByText(mockContextValue.trackName)).toBeInTheDocument();
   });
 
   test('should update currentTime and progress on timeupdate', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
 
     act(() => {
@@ -98,6 +114,7 @@ describe('AudioPlayer', () => {
   });
 
   test('should set duration on loadedmetadata event', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
 
     act(() => {
@@ -113,12 +130,13 @@ describe('AudioPlayer', () => {
     expect(audio?.duration).toBe(20);
   });
 
-  test('should call play when autoplay is true', () => {
-    renderComponent({ autoplay: true });
+  test('should call play when isPlaying is true', () => {
+    renderComponent({ isPlaying: true });
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
   test('should set error state on audio error event', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
 
     act(() => {
@@ -129,16 +147,18 @@ describe('AudioPlayer', () => {
   });
 
   test('should close popover on audio ended event', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
 
     act(() => {
       audio?.dispatchEvent(new Event('ended'));
     });
 
-    expect(screen.queryByText(defaultProps.trackName)).not.toBeInTheDocument();
+    expect(screen.queryByText(mockContextValue.trackName)).not.toBeInTheDocument();
   });
 
   test('should seek audio on onSeek', () => {
+    renderComponent();
     const audio = document.querySelector('audio');
 
     if (audio) {
@@ -156,28 +176,15 @@ describe('AudioPlayer', () => {
     }
   });
 
-  test('should handle play and pause events correctly', () => {
-    const audio = document.querySelector('audio');
-
-    act(() => {
-      Object.defineProperty(audio!, 'paused', {
-        value: false,
-        configurable: true
-      });
-      audio?.dispatchEvent(new Event('play'));
-    });
-
+  test('should call togglePlay when button clicked and isPlaying is false', () => {
+    renderComponent({ isPlaying: false });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
+    expect(mockTogglePlay).toHaveBeenCalled();
+  });
 
-    const animatedBars = document.querySelectorAll('div[style*="height"]');
-    expect(animatedBars.length).toBeGreaterThan(0);
-
-    act(() => {
-      Object.defineProperty(audio!, 'paused', {
-        value: true,
-        configurable: true
-      });
-      audio?.dispatchEvent(new Event('pause'));
-    });
+  test('should NOT call togglePlay when button clicked and isPlaying is true', () => {
+    renderComponent({ isPlaying: true });
+    fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
+    expect(mockTogglePlay).not.toHaveBeenCalled();
   });
 });
