@@ -34,3 +34,7 @@ export const envErrors = {
   MONGO_CREDENTIALS_REQUIRED: createCredentialsErrors('Mongo', 'MONGO_USERNAME', 'MONGO_PASSWORD'),
   AZURE_CREDENTIALS_REQUIRED: createCredentialsErrors('Azure', 'AZURE_SAS_URL')
 };
+
+export const runMigrationErrors = (direction: string, migrationPath: string) => {
+  return `Function "${direction}" not found in migration file: ${migrationPath}`;
+};
