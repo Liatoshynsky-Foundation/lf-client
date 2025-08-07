@@ -7,6 +7,14 @@ import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 import MusicTableSection from './CompositionTable/MusicTableSelection';
 import { Language } from '~/types/types/language';
 
+import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+
+export const metadata = createSeoMeta({
+  title: 'Творчість - Фундація Лятошинського',
+  description: 'Ознайомтесь з творчістю Бориса Лятошинського.',
+  url: '/artistry'
+});
+
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
