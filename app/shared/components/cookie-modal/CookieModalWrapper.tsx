@@ -52,6 +52,9 @@ const CookieModalWrapper = ({ cookie_consent, tracking_id }: { cookie_consent: s
   };
 
   if (!shouldRenderModal) {
+    if (cookie_consent && JSON.parse(cookie_consent).analytics) {
+      initGoogleAnalitics(tracking_id);
+    }
     return null;
   }
 
