@@ -30,7 +30,7 @@ jest.mock('next-intl', () => ({
 }));
 
 jest.mock('~/i18n/navigation', () => ({
-  Link: ({ children }: { children: React.ReactNode }) => <a href="#">{children}</a>
+  Link: ({ children }: { children: React.ReactNode }) => <button>{children}</button>
 }));
 
 const onClose = jest.fn();
