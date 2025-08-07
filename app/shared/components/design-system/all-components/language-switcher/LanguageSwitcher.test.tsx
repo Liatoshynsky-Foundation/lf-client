@@ -54,6 +54,18 @@ describe('LanguageSwitcher', () => {
       expect(selectedOption).toBeInTheDocument();
       expect(screen.getAllByTestId('svg-image').length).toBeGreaterThan(0);
     });
+
+    it('should not call router.push if selected locale is already active', () => {
+      (useLocale as jest.Mock).mockReturnValue('en');
+
+      render(<LanguageSwitcher variant="icon" />);
+      fireEvent.click(screen.getByRole('button')); // Відкриваємо меню
+
+      const englishOption = screen.getByText('English');
+      fireEvent.click(englishOption); // Клікаємо по вже обраній мові
+
+      expect(mockPush).not.toHaveBeenCalled();
+    });
   });
 
   describe('toggle variant', () => {
@@ -69,5 +81,13 @@ describe('LanguageSwitcher', () => {
       fireEvent.click(toggleButton);
       expect(mockPush).toHaveBeenCalledWith(mockPathname, { locale: 'uk' });
     });
+  });
+
+  it('should close menu after selecting a language', () => {
+    (useLocale as jest.Mock).mockReturnValue('uk');
+    render(<LanguageSwitcher variant="icon" />);
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('English'));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 });
