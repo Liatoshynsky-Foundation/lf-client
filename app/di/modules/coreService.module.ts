@@ -4,6 +4,7 @@ import { createPagesDataService } from '~/services/composed/pages-data-service/p
 import { createCompositionService } from '~/services/core/compositionService';
 import { createFoundationInfoService } from '~/services/core/foundationInfoService';
 import { createNavigationService } from '~/services/core/navigationService';
+import { createScientificWorksService } from '~/services/core/scientificWorksService';
 
 export const registerCoreServices = () => ({
   foundationInfoService: asFunction(({ foundationInfoRepository }) =>
@@ -14,6 +15,10 @@ export const registerCoreServices = () => ({
 
   compositionService: asFunction(({ compositionsRepository }) =>
     createCompositionService(compositionsRepository)
+  ).scoped(),
+
+  scientificWorksService: asFunction(({ scientificWorksRepository }) =>
+    createScientificWorksService(scientificWorksRepository)
   ).scoped(),
 
   pageService: asFunction(createPagesDataService).scoped()
