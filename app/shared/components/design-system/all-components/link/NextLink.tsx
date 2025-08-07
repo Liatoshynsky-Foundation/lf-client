@@ -58,6 +58,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
   }
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+    if (router.pathname === pathname) return;
     router.push(href);
   };
   return (

@@ -34,12 +34,14 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
   const handleClose = () => setAnchorEl(null);
 
   const handleLanguageChange = (newLocale: Locale) => {
+    if (newLocale === currentLocale) return;
     router.push(pathname, { locale: newLocale });
     handleClose();
   };
 
   const toggleLocale = () => {
     const newLocale = currentLocale === 'uk' ? 'en' : 'uk';
+    if (newLocale === currentLocale) return;
     router.push(pathname, { locale: newLocale });
   };
 

@@ -67,6 +67,11 @@ describe('Link', () => {
   });
 
   it('should call router.push on click (MuiLink)', () => {
+    (nextRouter.useRouter as jest.Mock).mockReturnValue({
+      pathname: '/not-test',
+      push: pushMock
+    });
+
     render(
       <Link href="/test" data-testid="mui-link-click">
         Clickable Link
@@ -75,6 +80,23 @@ describe('Link', () => {
     const link = screen.getByTestId('mui-link-click');
     fireEvent.click(link);
     expect(pushMock).toHaveBeenCalledWith('/test');
+  });
+
+  it('should handle object href with pathname', () => {
+    (nextRouter.useRouter as jest.Mock).mockReturnValue({
+      pathname: '/not-test',
+      push: pushMock
+    });
+
+    render(
+      <Link href={{ pathname: '/test' }} data-testid="mui-link-obj">
+        Mui Link
+      </Link>
+    );
+    const link = screen.getByTestId('mui-link-obj');
+    expect(link).toBeInTheDocument();
+    fireEvent.click(link);
+    expect(pushMock).toHaveBeenCalledWith(expect.objectContaining({ pathname: '/test' }));
   });
 
   it('should pass className and other props to MuiLink', () => {
@@ -106,18 +128,6 @@ describe('Link', () => {
     );
     const link = screen.getByTestId('mui-link-as');
     expect(link).toBeInTheDocument();
-  });
-
-  it('should handle object href with pathname', () => {
-    render(
-      <Link href={{ pathname: '/test' }} data-testid="mui-link-obj">
-        Mui Link
-      </Link>
-    );
-    const link = screen.getByTestId('mui-link-obj');
-    expect(link).toBeInTheDocument();
-    fireEvent.click(link);
-    expect(pushMock).toHaveBeenCalledWith({ pathname: '/test' });
   });
 
   it('should call custom onClick if provided (noLinkStyle)', () => {
