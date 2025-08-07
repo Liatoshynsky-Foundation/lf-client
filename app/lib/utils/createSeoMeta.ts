@@ -15,7 +15,7 @@ export function createSeoMeta({
   imageUrl = '/images/liatoshynsky-thumbnail.jpg',
   locale = 'uk'
 }: CreateSeoMetaProps): Metadata {
-  const baseUrl = process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000';
+  const baseUrl = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_BASE_URL : 'http://localhost:3000';
   const fullUrl = `${baseUrl}/${locale}${url}`;
 
   const locales = ['uk_UA', 'en_US'];

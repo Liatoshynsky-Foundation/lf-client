@@ -13,6 +13,13 @@ import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
+import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+
+export const metadata = createSeoMeta({
+  title: 'Фундація Лятошинського',
+  description: 'Ознайомтесь з Фундацією Лятошинського, її місією та цілями.',
+  url: '/'
+});
 
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;

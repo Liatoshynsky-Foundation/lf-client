@@ -38,7 +38,7 @@ describe('createSeoMeta', () => {
 
   it('should generate metadata for production', () => {
     const baseUrl = 'https://lf-client.com';
-    process.env = { ...originalEnv, NODE_ENV: 'production', BASE_URL: baseUrl };
+    process.env = { ...originalEnv, NODE_ENV: 'production', NEXT_PUBLIC_BASE_URL: baseUrl };
 
     const meta = createSeoMeta({
       title: 'Prod Title',
