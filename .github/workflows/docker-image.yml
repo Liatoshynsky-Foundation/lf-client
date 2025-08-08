@@ -29,4 +29,4 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/liatoshynsky-foundation/lf-client:latest
-        file: ./Dokcerfile
+        file: ./Dockerfile
