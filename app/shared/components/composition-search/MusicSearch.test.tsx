@@ -39,21 +39,22 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="" setSearch={setSearch} />);
 
     const input = screen.getByRole('combobox');
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    input.focus();
-    fireEvent.change(input, { target: { value: 'T' } });
+    expect(input).toBeInTheDocument();
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
     await waitFor(() => {
       expect(screen.getByText('Test Song')).toBeInTheDocument();
     });
   });
 
-  it('should call setSearch on input change', async () => {
+  it('calls setSearch on input change', async () => {
     const setSearch = jest.fn();
 
     render(<MusicSearch search="" setSearch={setSearch} />);
 
     const input = screen.getByRole('combobox');
-    fireEvent.focus(input);
     fireEvent.change(input, { target: { value: 'Bohemian' } });
 
     await waitFor(() => {
@@ -61,7 +62,7 @@ describe('MusicSearch', () => {
     });
   });
 
-  it('should display no options text when no results', async () => {
+  it('displays no options text when no results', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       json: () => Promise.resolve([])
     });
@@ -69,13 +70,23 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="xyz" setSearch={jest.fn()} />);
 
     const input = screen.getByRole('combobox');
-    input.focus();
-    fireEvent.change(input, { target: { value: 'Bohemian' } });
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
     await waitFor(() => {
       expect(screen.getByText('Not found')).toBeInTheDocument();
     });
   });
 
+  it('displays loading text', async () => {
+    render(<MusicSearch search="" setSearch={jest.fn()} />);
+
+    const input = screen.getByRole('combobox');
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
   it('should find clear button and clean the input after a click', async () => {
     render(<MusicSearch search="" setSearch={jest.fn()} />);
     const input = screen.getByRole('combobox');

@@ -18,11 +18,14 @@ import Button from '~/ds-components/button/Button';
 import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
+import MusicSearchMobile from '../composition-search/MusicSearchMobile';
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
+
+import { usePanel } from '~/shared/context/PanelContext';
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
@@ -57,6 +60,8 @@ export default function EnhancedTable<T extends RowData>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
+  const { isMobile, active } = usePanel();
+
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -141,11 +146,12 @@ export default function EnhancedTable<T extends RowData>({
   });
   return (
     <Box sx={styles.root}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
-        <Typography variant="customBold32" sx={styles.title}>
-          {tableName}
-        </Typography>
-        {MusicSearch}
+      <Box display="column" gap={8} pl={9}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
+          <Typography variant="customBold32">{tableName}</Typography>
+          {MusicSearch}
+        </Box>
+        {active && isMobile ? <MusicSearchMobile /> : <></>}
       </Box>
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="300px">
