@@ -92,7 +92,13 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
             ...params.InputProps,
             startAdornment: (
               <InputAdornment position="start" sx={{ cursor: 'pointer' }}>
-                <SvgImage src={'/icons/search.svg'} alt="search" width={24} height={24} onClick={handleIconClick} />
+                <SvgImage
+                  src={'/icons/search-static.svg'}
+                  alt="search"
+                  width={24}
+                  height={24}
+                  onClick={handleIconClick}
+                />
               </InputAdornment>
             ),
             style: {
