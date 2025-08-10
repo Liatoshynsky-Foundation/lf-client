@@ -14,6 +14,7 @@ import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { routing } from '~/i18n/routing';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
+import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import QueryProvider from '~/shared/providers/QueryProvider';
 
@@ -68,7 +69,8 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
           <NextIntlClientProvider>
             <ThemeProvider>
               <QueryProvider>
-                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', width: '100vw' }}>
+                  {' '}
                   <ColumnGuides />
                   <Box
                     sx={{
@@ -105,6 +107,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                     </Box>
                   </Box>
                 </Box>
+                <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} />
               </QueryProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
