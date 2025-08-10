@@ -1,5 +1,5 @@
 'use client';
-import { Box, Typography, useMediaQuery } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Svg } from '../../colored-svg/ColoredSvg';
@@ -13,7 +13,8 @@ type CompositionsControlPanelProps = {
   tableName: string;
 };
 const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsControlPanelProps) => {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'), { noSsr: true });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const [searchActive, setSearchActive] = useState(false);
   useEffect(() => {
     if (!isMobile) {

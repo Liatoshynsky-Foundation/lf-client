@@ -6,7 +6,8 @@ import {
   List,
   ListItem,
   Typography,
-  useMediaQuery
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
@@ -31,7 +32,8 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'), { noSsr: true });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
