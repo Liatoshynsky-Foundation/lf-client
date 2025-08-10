@@ -4,16 +4,16 @@ import React, { ReactNode, useState } from 'react';
 
 import { Svg } from '../../colored-svg/ColoredSvg';
 import { IconButton } from '../../design-system/all-components/icon-button/IconButton';
-import TextField from '../../design-system/all-components/text-field/TextField';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
-import Search from '~/public/icons/search-icon.svg';
+import Search from '~/public/icons/search.svg';
 type CompositionsControlPanelProps = {
   MusicSearch: ReactNode;
   tableName: string;
 };
 const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsControlPanelProps) => {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'), { noSsr: true });
+
   const [searchActive, setSearchActive] = useState(false);
   return (
     <Box display="column" gap={8} pl={9}>
@@ -21,17 +21,17 @@ const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsContro
         <Typography variant="customBold32">{tableName}</Typography>
         {isMobile ? (
           <IconButton
-            type={searchActive ? IconButtonVariant.filled : IconButtonVariant.outlined}
+            type={searchActive ? IconButtonVariant.icon : IconButtonVariant.outlined}
             variant={searchActive ? IconButtonColorVariant.Secondary : IconButtonColorVariant.Primary}
             onClick={() => setSearchActive((prev) => !prev)}
           >
-            <Svg Component={Search} alt="search" width="28" height="28" color={searchActive ? '#ffffff' : '#000000'} />
+            <Svg Component={Search} alt="search" color="#ffffff" />
           </IconButton>
         ) : (
           MusicSearch
         )}
       </Box>
-      <>{searchActive ? <TextField /> : <></>}</>
+      <>{searchActive && isMobile ? MusicSearch : <></>}</>
     </Box>
   );
 };

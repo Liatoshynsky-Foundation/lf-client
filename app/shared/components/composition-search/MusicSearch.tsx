@@ -1,5 +1,13 @@
 'use client';
-import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  InputAdornment,
+  List,
+  ListItem,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -23,6 +31,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
@@ -88,8 +97,8 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
             ),
             style: {
               ...MusicSearchStyles.icon,
-              width: focused ? 280 : 40,
-              borderRadius: focused ? '10px' : '60px'
+              width: isMobile ? 230 : focused ? 280 : 40,
+              borderRadius: isMobile ? '8px' : focused ? '10px' : '60px'
             },
             endAdornment: (
               <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
