@@ -6,16 +6,11 @@ import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useStat
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
-import { Svg } from '../colored-svg/ColoredSvg';
-import { IconButton } from '../design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
-import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
-import Search from '~/public/icons/search-icon.svg';
-import { usePanel } from '~/shared/context/PanelContext';
 interface MusicSearchProps {
   setSearch: (value: string) => void;
   search: string;
@@ -28,8 +23,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { isMobile, toggle, active } = usePanel();
-  console.log(active);
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
@@ -62,7 +55,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   );
   const handleIconClick = () => {
     inputRef.current?.focus();
-    toggle();
   };
   const handleClear = () => {
     setSearch('');
@@ -126,41 +118,31 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
   return (
     <>
-      {isMobile ? (
-        <IconButton
-          type={active ? IconButtonVariant.filled : IconButtonVariant.outlined}
-          variant={active ? IconButtonColorVariant.Secondary : IconButtonColorVariant.Primary}
-          onClick={handleIconClick}
-        >
-          <Svg Component={Search} alt="search" width="28" height="28" color={active ? '#ffffff' : '#000000'} />
-        </IconButton>
-      ) : (
-        <Autocomplete
-          data-testid="music-search"
-          options={options}
-          loading={loading}
-          value={value}
-          onChange={onChange}
-          inputValue={search}
-          onInputChange={handleInputChange}
-          renderInput={renderInput}
-          renderOption={renderOption}
-          getOptionLabel={getOptionLabel}
-          clearOnBlur={false}
-          popupIcon={null}
-          clearIcon={false}
-          loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
-          noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
-          open={!!opened}
-          disableListWrap={true}
-          slotProps={{
-            listbox: {
-              style: MusicSearchStyles.listbox,
-              component: VirtualizedListbox
-            }
-          }}
-        />
-      )}
+      <Autocomplete
+        data-testid="music-search"
+        options={options}
+        loading={loading}
+        value={value}
+        onChange={onChange}
+        inputValue={search}
+        onInputChange={handleInputChange}
+        renderInput={renderInput}
+        renderOption={renderOption}
+        getOptionLabel={getOptionLabel}
+        clearOnBlur={false}
+        popupIcon={null}
+        clearIcon={false}
+        loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
+        noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+        open={!!opened}
+        disableListWrap={true}
+        slotProps={{
+          listbox: {
+            style: MusicSearchStyles.listbox,
+            component: VirtualizedListbox
+          }
+        }}
+      />
     </>
   );
 };
