@@ -12,8 +12,25 @@ export const createHeaderService = ({ navigationService, foundationInfoService }
 
     const navigationData = navigationRaw.map((nav) => createLocalizedNavigationSchema(locale).parse(nav));
 
+    const transformedNavigation = navigationData.map((group) => {
+      if (group.links?.length === 1) {
+        const [singleLink] = group.links;
+        return {
+          ...group,
+          title: singleLink.label,
+          links: [
+            {
+              ...singleLink,
+              label: group.title
+            }
+          ]
+        };
+      }
+      return group;
+    });
+
     return {
-      navigation: navigationData,
+      navigation: transformedNavigation,
       supportButtonLink: supportButtonData.supportButtonLink ?? ''
     };
   }

@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -10,9 +10,8 @@ import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { styles } from './DesktopNav.styles';
-import { PageRoutes } from '~/constants/routes/page-routes';
-import { NavLabels } from '~/types/types/navLabels';
 
+import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { usePathname } from '~/i18n/navigation';
 import ChevronDown from '~/public/icons/chevron-down.svg';
 import ChevronUp from '~/public/icons/chevron-up.svg';
@@ -23,49 +22,48 @@ export interface DropdownItem {
   href: string;
 }
 
-const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
-  const NAV_ITEMS = [
-    {
-      label: navLabels.liatoshynsky,
-      dropdown: [
-        { label: navLabels.biography, href: PageRoutes.BIOGRAPHY },
-        { label: navLabels.artistry, href: PageRoutes.ARTISTRY },
-        { label: navLabels.research, href: PageRoutes.RESEARCH }
-      ]
-    },
-    {
-      label: navLabels.foundation,
-      dropdown: [
-        { label: navLabels.about, href: PageRoutes.FOUNDATION_HOME },
-        { label: navLabels.news, href: PageRoutes.NEWS },
-        { label: navLabels.media, href: PageRoutes.MEDIA_ABOUT_US }
-      ]
-    },
-    { label: navLabels.archive, href: PageRoutes.ARCHIVE },
-    { label: navLabels.collaboration, href: PageRoutes.COLLABORATION }
-  ];
+const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
+  const NAV_ITEMS = useMemo(() => {
+    return navLabels.map((group) => {
+      const dropdown = group.links.map((link) => ({
+        label: link.label,
+        href: link.href
+      }));
+
+      return {
+        label: group.title,
+        dropdown: dropdown.length > 1 ? dropdown : undefined,
+        href: dropdown.length === 1 ? dropdown[0].href : undefined
+      };
+    });
+  }, [navLabels]);
 
   const pathname = usePathname();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [temporaryActiveIndex, setTemporaryActiveIndex] = useState<number | null>(null);
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
+  const [activeButton, setActiveButton] = useState<number | undefined>();
 
   useEffect(() => {
     setTemporaryActiveIndex(null);
   }, [pathname]);
 
-  const getActiveIndex = () =>
-    NAV_ITEMS.findIndex((item) => {
-      if (item.href) {
-        return item.href === pathname;
-      }
+  useEffect(() => {
+    const index = NAV_ITEMS.findIndex(
+      (item) => item.href === pathname || item.dropdown?.some((dropdownItem) => dropdownItem.href === pathname)
+    );
 
-      if (item.dropdown) {
-        return item.dropdown.some((dropdownItem) => dropdownItem.href === pathname);
-      }
-      return false;
-    });
+    if (index !== -1) {
+      setActiveButton(index);
+    } else if (pathname === '/') {
+      setActiveButton(1);
+    } else {
+      setActiveButton(undefined);
+    }
+  }, [pathname, navLabels]);
+
+  const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
 
   const handleDropdownOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -83,10 +81,6 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
     setOpenDropdownState(null);
   };
 
-  const staticActiveIndex = getActiveIndex();
-  const activeButton = staticActiveIndex !== -1 ? staticActiveIndex : undefined;
-  const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
-
   const renderedNavButtons = NAV_ITEMS.map((item, index) => {
     const isOpen = openDropdownState?.label === item.label && Boolean(anchorEl);
     const isActive = index === effectiveActiveIndex;
@@ -94,30 +88,39 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
     const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
     const iconColor = isActive ? mainHexPallete.white : mainHexPallete.black;
 
-    return item.dropdown ? (
-      <IconButton
-        disableRipple
-        key={`${item.label}-${index}`}
-        onClick={(e) => handleDropdownOpen(e, item.label, item.dropdown, index)}
-        sx={styles.iconButtonSx}
-        style={styles.iconButtonInline}
-      >
-        {item.label}
+    if (item.dropdown) {
+      const dropdownItems = item.dropdown;
 
-        <Svg
-          Component={ChevronIcon}
-          alt="chevron"
-          color={iconColor}
-          width="20px"
-          height="22px"
-          sx={{ display: 'flex' }}
-        />
-      </IconButton>
-    ) : (
-      <Button disableRipple key={`${item.href}-${index}`} sx={styles.iconButtonSx}>
-        <Link href={item.href}>{item.label}</Link>
-      </Button>
-    );
+      return (
+        <IconButton
+          disableRipple
+          key={`${item.label}-${index}`}
+          onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems, index)}
+          sx={styles.iconButtonSx}
+          style={styles.iconButtonInline}
+        >
+          {item.label}
+          <Svg
+            Component={ChevronIcon}
+            alt="chevron"
+            color={iconColor}
+            width="20px"
+            height="22px"
+            sx={{ display: 'flex' }}
+          />
+        </IconButton>
+      );
+    }
+
+    if (item.href) {
+      return (
+        <Button disableRipple key={`${item.href}-${index}`} sx={styles.iconButtonSx}>
+          <Link href={item.href}>{item.label}</Link>
+        </Button>
+      );
+    }
+
+    return null;
   });
 
   const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
@@ -133,7 +136,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavLabels }) => {
       <Box sx={styles.buttonGroupBackground}>
         <ButtonGroup
           sx={styles.buttonGroup}
-          defaultActiveButton={activeButton}
+          activeButton={effectiveActiveIndex}
           buttons={renderedNavButtons}
           size="big"
         />
