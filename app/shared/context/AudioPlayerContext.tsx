@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 export type AudioPlayerContextType = {
   src: string;
@@ -29,19 +29,18 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     setIsPlaying((prev) => !prev);
   }, []);
 
-  return (
-    <AudioPlayerContext.Provider
-      value={{
-        src,
-        trackName,
-        isPlaying,
-        playTrack,
-        togglePlay
-      }}
-    >
-      {children}
-    </AudioPlayerContext.Provider>
+  const value = useMemo(
+    () => ({
+      src,
+      trackName,
+      isPlaying,
+      playTrack,
+      togglePlay
+    }),
+    [src, trackName, isPlaying, playTrack, togglePlay]
   );
+
+  return <AudioPlayerContext.Provider value={value}>{children}</AudioPlayerContext.Provider>;
 };
 
 export const useAudioPlayer = () => {
