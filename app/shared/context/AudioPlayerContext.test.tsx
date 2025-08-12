@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { AudioPlayerProvider, useAudioPlayer } from './AudioPlayerContext';
-import { API_BLOB_URL, DEFAULT_COMPOSITION_NAME } from '~/constants/audioPlayer';
+import { DEFAULT_COMPOSITION_NAME } from '~/constants/audioPlayer';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 
 const TextComponent = () => {
   const { src, trackName, isPlaying, playTrack, togglePlay } = useAudioPlayer();
@@ -31,7 +32,7 @@ describe('AudioPlayerContext', () => {
       </AudioPlayerProvider>
     );
 
-    expect(screen.getByTestId('src').textContent).toContain(API_BLOB_URL);
+    expect(screen.getByTestId('src').textContent).toContain(ApiRoutes.BLOB_URL);
     expect(screen.getByTestId('trackName').textContent).toBe(DEFAULT_COMPOSITION_NAME);
     expect(screen.getByTestId('isPlaying').textContent).toBe('false');
   });

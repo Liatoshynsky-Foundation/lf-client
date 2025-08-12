@@ -2,8 +2,9 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import { API_BLOB_URL, DEFAULT_COMPOSITION_NAME, FOLDER_NAME } from '~/constants/audioPlayer';
+import { DEFAULT_COMPOSITION_NAME, FOLDER_NAME } from '~/constants/audioPlayer';
 import { errors } from '~/constants/errors';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 
 export type AudioPlayerContextType = {
   src: string;
@@ -17,7 +18,7 @@ export const AudioPlayerContext = createContext<AudioPlayerContextType | undefin
 
 export const AudioPlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const [src, setSrc] = useState(
-    `${API_BLOB_URL}?blobName=${encodeURIComponent(DEFAULT_COMPOSITION_NAME)}&folderName=${encodeURIComponent(FOLDER_NAME)}`
+    `${ApiRoutes.BLOB_URL}?blobName=${DEFAULT_COMPOSITION_NAME}&folderName=${FOLDER_NAME}`
   );
   const [trackName, setTrackName] = useState(DEFAULT_COMPOSITION_NAME);
   const [isPlaying, setIsPlaying] = useState(false);
