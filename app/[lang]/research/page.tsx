@@ -4,6 +4,7 @@ import ResearchAndScientificWork from '~/components/research-and-scientific-work
 
 import { workTableMock } from './WorksTable/WorkTable.constants';
 import WorkTableSection from './WorksTable/WorkTableSelection';
+
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
 export const metadata = createSeoMeta({
@@ -11,7 +12,6 @@ export const metadata = createSeoMeta({
   description: 'Ознайомтесь з дослідженнями та науковими роботами Бориса Лятошинського.',
   url: '/research'
 });
-
 
 export default function Research(): ReactElement {
   return (
