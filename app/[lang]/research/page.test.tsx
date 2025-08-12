@@ -8,10 +8,17 @@ jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork',
   return MockResearchAndScientificWork;
 });
 
+jest.mock('./WorksTable/WorkTableSelection.tsx', () => {
+  const MockWorkTableSelection = () => <div>Work table</div>;
+  MockWorkTableSelection.displayName = 'MockWorkTable';
+  return MockWorkTableSelection;
+});
+
 describe('Research Page', () => {
   it('should render Research page correctly', async () => {
     render(await Research());
 
     expect(screen.getByText(/Research and scientific work/i)).toBeInTheDocument();
+    expect(screen.getByText(/Work table/i)).toBeInTheDocument();
   });
 });
