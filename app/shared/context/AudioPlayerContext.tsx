@@ -2,6 +2,9 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
+import { API_BLOB_URL, DEFAULT_COMPOSITION_NAME, FOLDER_NAME } from '~/constants/audioPlayer';
+import { errors } from '~/constants/errors';
+
 export type AudioPlayerContextType = {
   src: string;
   trackName: string;
@@ -14,9 +17,9 @@ export const AudioPlayerContext = createContext<AudioPlayerContextType | undefin
 
 export const AudioPlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const [src, setSrc] = useState(
-    '/api/blob-url?blobName=%D0%9F%D0%BE%D0%B5%D0%BC%D0%B0%20%D0%BF%D1%80%D0%BE%20%D0%BB%D1%96%D1%81&folderName=compositions'
+    `${API_BLOB_URL}?blobName=${encodeURIComponent(DEFAULT_COMPOSITION_NAME)}&folderName=${encodeURIComponent(FOLDER_NAME)}`
   );
-  const [trackName, setTrackName] = useState('Поема про ліс');
+  const [trackName, setTrackName] = useState(DEFAULT_COMPOSITION_NAME);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const playTrack = useCallback((newSrc: string, newTrackName: string) => {
@@ -45,6 +48,6 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
 
 export const useAudioPlayer = () => {
   const context = useContext(AudioPlayerContext);
-  if (!context) throw new Error('useAudioPlayer must be used within AudioPlayerProvider');
+  if (!context) throw new Error(errors.USE_AUDIO_PLAYER_OUTSIDE_PROVIDER);
   return context;
 };

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { AudioPlayerProvider, useAudioPlayer } from './AudioPlayerContext';
+import { API_BLOB_URL, DEFAULT_COMPOSITION_NAME } from '~/constants/audioPlayer';
 
 const TextComponent = () => {
   const { src, trackName, isPlaying, playTrack, togglePlay } = useAudioPlayer();
@@ -30,8 +31,8 @@ describe('AudioPlayerContext', () => {
       </AudioPlayerProvider>
     );
 
-    expect(screen.getByTestId('src').textContent).toContain('/api/blob-url');
-    expect(screen.getByTestId('trackName').textContent).toBe('Поема про ліс');
+    expect(screen.getByTestId('src').textContent).toContain(API_BLOB_URL);
+    expect(screen.getByTestId('trackName').textContent).toBe(DEFAULT_COMPOSITION_NAME);
     expect(screen.getByTestId('isPlaying').textContent).toBe('false');
   });
   it('should update state when playTrack is called', async () => {

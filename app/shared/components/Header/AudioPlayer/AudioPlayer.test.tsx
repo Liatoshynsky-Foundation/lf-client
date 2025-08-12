@@ -74,25 +74,25 @@ describe('AudioPlayer', () => {
     };
   });
 
-  test('should render AudioPlayer component', () => {
+  it('should render AudioPlayer component', () => {
     renderComponent();
     expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
-  test('should render audio element with given src from context', () => {
+  it('should render audio element with given src from context', () => {
     renderComponent();
     const audio = document.querySelector('audio');
     expect(audio).toBeInTheDocument();
     expect(audio).toHaveAttribute('src', mockContextValue.src);
   });
 
-  test('should open popover when button is clicked', () => {
+  it('should open popover when button is clicked', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(screen.getByText(mockContextValue.trackName)).toBeInTheDocument();
   });
 
-  test('should update currentTime and progress on timeupdate', () => {
+  it('should update currentTime and progress on timeupdate', () => {
     renderComponent();
     const audio = document.querySelector('audio');
 
@@ -113,7 +113,7 @@ describe('AudioPlayer', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  test('should set duration on loadedmetadata event', () => {
+  it('should set duration on loadedmetadata event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
 
@@ -130,12 +130,12 @@ describe('AudioPlayer', () => {
     expect(audio?.duration).toBe(20);
   });
 
-  test('should call play when isPlaying is true', () => {
+  it('should call play when isPlaying is true', () => {
     renderComponent({ isPlaying: true });
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
-  test('should set error state on audio error event', () => {
+  it('should set error state on audio error event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
 
@@ -146,7 +146,7 @@ describe('AudioPlayer', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  test('should close popover on audio ended event', () => {
+  it('should close popover on audio ended event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
 
@@ -157,7 +157,7 @@ describe('AudioPlayer', () => {
     expect(screen.queryByText(mockContextValue.trackName)).not.toBeInTheDocument();
   });
 
-  test('should seek audio on onSeek', () => {
+  it('should seek audio on onSeek', () => {
     renderComponent();
     const audio = document.querySelector('audio');
 
@@ -176,13 +176,13 @@ describe('AudioPlayer', () => {
     }
   });
 
-  test('should call togglePlay when button clicked and isPlaying is false', () => {
+  it('should call togglePlay when button clicked and isPlaying is false', () => {
     renderComponent({ isPlaying: false });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(mockTogglePlay).toHaveBeenCalled();
   });
 
-  test('should NOT call togglePlay when button clicked and isPlaying is true', () => {
+  it('should NOT call togglePlay when button clicked and isPlaying is true', () => {
     renderComponent({ isPlaying: true });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(mockTogglePlay).not.toHaveBeenCalled();
