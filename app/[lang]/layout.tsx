@@ -16,7 +16,7 @@ import { routing } from '~/i18n/routing';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
-import { AudioPlayerProvider } from '~/shared/context/AudioPlayerContext';
+import ConsentScript from '~/shared/components/google-tracking/ConsentScript';
 import QueryProvider from '~/shared/providers/QueryProvider';
 
 const geistSans = Geist({
@@ -64,54 +64,55 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
     <html lang={lang}>
       <head>
         <meta name="emotion-insertion-point" content="" />
+        <ConsentScript
+          trackingId={process.env.TRACKING_ID || ''}
+          gtmId={process.env.GTM_ID || ''}
+          consent_cookie={cookieConsent}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
         <EmotionProvider>
           <NextIntlClientProvider>
             <ThemeProvider>
               <QueryProvider>
-                <AudioPlayerProvider>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', width: '100vw' }}>
-                    <ColumnGuides />
-                    <Box
-                      sx={{
-                        padding: '20px 72px',
-                        height: '100vh',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(12, 1fr)',
-                        columnGap: '40px',
-                        maxWidth: '1920px ',
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        width: '100%',
-                        flex: '1',
-                        [theme.breakpoints.down('md')]: {
-                          gridTemplateColumns: 'repeat(8, 1fr)',
-                          paddingLeft: '56px',
-                          paddingRight: '56px',
-                          columnGap: '20px'
-                        },
-                        [theme.breakpoints.down('sm')]: {
-                          gridTemplateColumns: 'repeat(4, 1fr)',
-                          paddingLeft: '24px',
-                          paddingRight: '24px',
-                          columnGap: '16px'
-                        }
-                      }}
-                    >
-                      <Box sx={{ gridColumn: '1 / -1' }}>
-                        <Header />
-                      </Box>
-                      <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
-                        {children}
-                      </Box>
-                      <Box sx={{ gridColumn: '1 / -1' }}>
-                        <Footer />
-                      </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', width: '100vw' }}>
+                  <ColumnGuides />
+                  <Box
+                    sx={{
+                      padding: '20px 72px',
+                      height: '100vh',
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(12, 1fr)',
+                      columnGap: '40px',
+                      maxWidth: '1920px ',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                      width: '100%',
+                      flex: '1',
+                      [theme.breakpoints.down('md')]: {
+                        gridTemplateColumns: 'repeat(8, 1fr)',
+                        paddingLeft: '56px',
+                        paddingRight: '56px',
+                        columnGap: '20px'
+                      },
+                      [theme.breakpoints.down('sm')]: {
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        paddingLeft: '24px',
+                        paddingRight: '24px',
+                        columnGap: '16px'
+                      }
+                    }}
+                  >
+                    <Box sx={{ gridColumn: '1 / -1' }}>
+                      <Header />
+                    </Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>{children}</Box>
+                    <Box sx={{ gridColumn: '1 / -1' }}>
+                      <Footer />
                     </Box>
                   </Box>
-                </AudioPlayerProvider>
-                <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} />
+                </Box>
+                <CookieModalWrapper cookie_consent={cookieConsent} />
               </QueryProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
