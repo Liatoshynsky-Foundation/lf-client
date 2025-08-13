@@ -1,7 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import Logo from '~/ds-components/logo/Logo';
@@ -10,30 +10,29 @@ import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
+import { headerClientService } from '~/services/client/headerService';
+import useQuery from '~/shared/hooks/query/useQuery';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
 export default function Header() {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const scrollDirection = useScrollDirection(100);
   const t = useTranslations('header');
+  const locale = useLocale();
 
   useEffect(() => {
     setIsNavVisible(scrollDirection !== 'down');
   }, [scrollDirection]);
-  const navLabels = {
-    liatoshynsky: t('navLabels.liatoshynsky'),
-    biography: t('navLabels.biography'),
-    artistry: t('navLabels.artistry'),
-    research: t('navLabels.research'),
-    foundation: t('navLabels.foundation'),
-    about: t('navLabels.foundationHome'),
-    news: t('navLabels.news'),
-    media: t('navLabels.mediaAboutUs'),
-    archive: t('navLabels.archive'),
-    collaboration: t('navLabels.collaboration')
-  };
 
-  const supportButtonLink = '/support-us';
+  const { data: headerData, isLoading } = useQuery({
+    queryKey: ['header', locale],
+    queryFn: () => headerClientService.getHeaderData(locale),
+    options: {
+      staleTime: Infinity
+    }
+  });
+
+  if (isLoading || !headerData) return null;
 
   return (
     <Box component="header" sx={styles.mainContainer}>
@@ -41,12 +40,12 @@ export default function Header() {
         <Logo />
       </Box>
       <Box sx={styles.navigationContainer(isNavVisible)}>
-        <NavigationBar navLabels={navLabels} />
+        <NavigationBar navLabels={headerData.navigation} />
       </Box>
       <RightActionsPanel
         supportButtonData={{
           text: t('supportButton'),
-          link: supportButtonLink
+          link: headerData.supportButtonLink
         }}
       />
     </Box>

@@ -22,3 +22,12 @@ export type Music = {
   audioAvailable: boolean;
   sheetAvailable: boolean;
 };
+
+export type WorkTable = {
+  id: string;
+  name: string;
+  author: string;
+  year: number | string;
+  actionType?: 'pdf' | 'link';
+  link?: string;
+};

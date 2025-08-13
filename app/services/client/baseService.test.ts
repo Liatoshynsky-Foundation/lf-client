@@ -67,7 +67,7 @@ describe('baseService.request', () => {
 
     const abortError = new DOMException('Aborted', 'AbortError');
 
-    const rejectLater = (_resolve: unknown, reject: (reason?: any) => void) => {
+    const rejectLater = (_resolve: unknown, reject: (reason?: unknown) => void) => {
       setTimeout(() => {
         reject(abortError);
       }, 100);

@@ -75,6 +75,18 @@
     "buttons": {
       "viewSheetMusic": "Переглянути ноти",
       "downloadMusic": "Завантажити"
+    },
+    "work": {
+      "name": "Усі твори",
+      "columns": {
+        "name": "Назва",
+        "author": "Автор",
+        "year": "Рік"
+      },
+      "buttons": {
+        "view": "Переглянути",
+        "goto": "Перейти"
+      }
     }
   },
   "cookie": {

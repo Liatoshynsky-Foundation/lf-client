@@ -95,7 +95,7 @@ export default function EnhancedTable<T extends RowData>({
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable, data]);
+  }, [headerTable, data, sorting]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();

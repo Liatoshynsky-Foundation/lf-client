@@ -1,12 +1,9 @@
 import React from 'react';
 
+import type { SupportButtonData } from '~/types/types/header.type';
+
 import { Link } from '~/i18n/navigation';
 import Button from '~/shared/components/design-system/all-components/button/Button';
-
-type SupportButtonData = {
-  text: string;
-  link: string;
-};
 
 type SupportButtonProps = {
   data: SupportButtonData;

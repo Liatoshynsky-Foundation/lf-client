@@ -21,7 +21,17 @@ export const errors = {
   INVALID_TOKEN: 'Invalid token',
   ACCESS_DENIED: 'Access denied: not admin',
   MISSING_PARAMETERS: 'Missing required query parameters',
-  INVALID_PREVIEW_TOKEN: 'Invalid preview token'
+  INVALID_PREVIEW_TOKEN: 'Invalid preview token',
+  VALIDATION_ERROR: {
+    code: 'VALIDATION_ERROR',
+    message: 'Validation failed',
+    status: 400
+  },
+  SERVER_ERROR: {
+    code: 'SERVER_ERROR',
+    message: 'Internal server error',
+    status: 500
+  }
 };
 
 export const envErrors = {
@@ -33,4 +43,9 @@ export const envErrors = {
   MONGO_PORT_INVALID: 'MONGO_PORT must be a valid number',
   MONGO_CREDENTIALS_REQUIRED: createCredentialsErrors('Mongo', 'MONGO_USERNAME', 'MONGO_PASSWORD'),
   AZURE_CREDENTIALS_REQUIRED: createCredentialsErrors('Azure', 'AZURE_SAS_URL')
+};
+
+export const loggerErrors = {
+  ZOD_VALIDATION_ERROR: 'Zod validation error:',
+  UNEXPECTED_HEADER_ERROR: 'Unexpected error in header API:'
 };

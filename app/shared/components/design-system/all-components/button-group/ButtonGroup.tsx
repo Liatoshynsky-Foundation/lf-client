@@ -8,6 +8,7 @@ import { ButtonGroupPaletteOptions, ButtonGroupSizeOptions } from '~/types/types
 interface ButtonGroupProps extends Omit<BoxProps, 'color' | 'size'> {
   buttons: React.ReactNode[];
   defaultActiveButton?: number;
+  activeButton?: number;
   size?: ButtonGroupSizeOptions;
   palette?: ButtonGroupPaletteOptions;
 }
@@ -15,12 +16,17 @@ interface ButtonGroupProps extends Omit<BoxProps, 'color' | 'size'> {
 const ButtonGroup = ({
   buttons,
   defaultActiveButton,
+  activeButton: controlledActiveButton,
   size = 'small',
   palette = 'primary',
   sx,
   ...props
 }: ButtonGroupProps) => {
-  const [activeButton, setActiveButton] = useState<number | null>(defaultActiveButton ?? null);
+  const isControlled = controlledActiveButton !== undefined;
+
+  const [uncontrolledActive, setUncontrolledActive] = useState<number | null>(defaultActiveButton ?? null);
+  const activeButton = isControlled ? controlledActiveButton : uncontrolledActive;
+
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({
     left: 0,
     width: 0
@@ -75,7 +81,11 @@ const ButtonGroup = ({
           ref={(el: HTMLDivElement | null) => {
             buttonRefs.current[idx] = el;
           }}
-          onClick={() => setActiveButton(idx)}
+          onClick={() => {
+            if (!isControlled) {
+              setUncontrolledActive(idx);
+            }
+          }}
           palette={palette}
           size={size}
           active={idx === activeButton}
@@ -86,4 +96,5 @@ const ButtonGroup = ({
     </MUIButtonGroup>
   );
 };
+
 export default ButtonGroup;

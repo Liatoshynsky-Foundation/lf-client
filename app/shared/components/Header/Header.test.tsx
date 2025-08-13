@@ -5,6 +5,32 @@ import Header from './Header';
 
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
+jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
+  useScrollDirection: jest.fn()
+}));
+
+jest.mock('~/shared/hooks/query/useQuery', () => ({
+  __esModule: true,
+  default: () => ({
+    data: {
+      navigation: {
+        liatoshynsky: 'Liatoshynsky',
+        biography: 'Biography',
+        artistry: 'Artistry',
+        research: 'Research',
+        foundation: 'Foundation',
+        foundationHome: 'Home',
+        news: 'News',
+        mediaAboutUs: 'Media',
+        archive: 'Archive',
+        collaboration: 'Collaboration'
+      },
+      supportButtonLink: '/support'
+    },
+    isLoading: false
+  })
+}));
+
 jest.mock('~/ds-components/logo/Logo', () => ({
   __esModule: true,
   default: () => <div data-testid="logo" />
@@ -24,27 +50,12 @@ jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
   )
 }));
 
-jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
-  useScrollDirection: jest.fn()
-}));
-
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
-    const translations: Record<string, string> = {
-      'navLabels.liatoshynsky': 'Liatoshynsky',
-      'navLabels.biography': 'Biography',
-      'navLabels.artistry': 'Artistry',
-      'navLabels.research': 'Research',
-      'navLabels.foundation': 'Foundation',
-      'navLabels.foundationHome': 'Home',
-      'navLabels.news': 'News',
-      'navLabels.mediaAboutUs': 'Media',
-      'navLabels.archive': 'Archive',
-      'navLabels.collaboration': 'Collaboration',
-      supportButton: 'Support'
-    };
-    return translations[key] || key;
-  }
+    if (key === 'supportButton') return 'Support';
+    return key;
+  },
+  useLocale: () => 'en'
 }));
 
 describe('Header', () => {
@@ -83,7 +94,7 @@ describe('Header', () => {
     expect(navBox).toHaveStyle('transform: translateY(-150%)');
   });
 
-  it('should show navigation-bar when scrollDirection = "down"', () => {
+  it('should show navigation-bar when scrollDirection = "up"', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('up');
     render(<Header />);
     const navBox = screen.getByTestId('navigation-bar').parentElement;
