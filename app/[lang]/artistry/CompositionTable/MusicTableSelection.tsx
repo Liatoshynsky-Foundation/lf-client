@@ -82,7 +82,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       accessorKey: 'name',
       header: RenderNameHeader,
       cell: renderNameCell,
-      enableSorting: false,
+      enableSorting: true,
       meta: {
         groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
       }
@@ -92,14 +92,14 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       accessorKey: 'year',
       header: RenderYearHeader,
       cell: renderYearCell,
-      enableSorting: false
+      enableSorting: true
     },
     {
       id: 'genre',
       accessorKey: 'genre',
       header: RenderGenreHeader,
       cell: renderGenreCell,
-      enableSorting: false
+      enableSorting: true
     },
     {
       id: 'actions',
