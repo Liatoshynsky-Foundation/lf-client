@@ -32,7 +32,7 @@ const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsContro
               type={searchActive ? IconButtonVariant.filled : IconButtonVariant.outlined}
               variant={IconButtonColorVariant.Primary}
               onClick={() => setSearchActive((prev) => !prev)}
-              size={isExtraSmall ? 'small' : 'meduim'}
+              size={isExtraSmall ? 'small' : 'medium'}
             >
               <Svg Component={Search} alt="search" color={searchActive ? mainHexPallete.white : mainHexPallete.black} />
             </IconButton>
