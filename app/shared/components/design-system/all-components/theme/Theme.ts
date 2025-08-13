@@ -43,6 +43,7 @@ declare module '@mui/material' {
     customItalic16: true;
     customItalic14: true;
     customSemiBold18: true;
+    customBold30: true;
   }
 }
 declare module '@mui/material/styles' {
@@ -58,6 +59,7 @@ declare module '@mui/material/styles' {
     customCaption?: React.CSSProperties;
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
+    customBold30: React.CSSProperties;
   }
   interface TypographyVariants {
     customBold32: React.CSSProperties;
@@ -71,6 +73,7 @@ declare module '@mui/material/styles' {
     customCaption: React.CSSProperties;
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
+    customBold30: React.CSSProperties;
   }
 }
 
@@ -253,6 +256,13 @@ export const theme = createTheme({
       fontFamily: mulish.style.fontFamily,
       fontWeight: 700,
       fontSize: '32px',
+      lineHeight: '140%',
+      letterSpacing: '0px'
+    },
+    customBold30: {
+      fontFamily: mulish.style.fontFamily,
+      fontWeight: 700,
+      fontSize: '25px',
       lineHeight: '140%',
       letterSpacing: '0px'
     },

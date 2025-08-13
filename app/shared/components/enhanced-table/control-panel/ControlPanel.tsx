@@ -15,6 +15,7 @@ type CompositionsControlPanelProps = {
 const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsControlPanelProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+  const isExtraSmall = useMediaQuery('(max-width:400px)', { noSsr: true });
   const [searchActive, setSearchActive] = useState(false);
   useEffect(() => {
     if (!isMobile) {
@@ -22,22 +23,25 @@ const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsContro
     }
   }, [isMobile]);
   return (
-    <Box display="column" gap={8} pl={9}>
+    <Box display="column" gap={8} pl={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
-        <Typography variant="customBold32">{tableName}</Typography>
+        <Typography variant={isExtraSmall ? 'customBold30' : 'customBold32'}>{tableName}</Typography>
         {isMobile ? (
-          <IconButton
-            type={searchActive ? IconButtonVariant.filled : IconButtonVariant.outlined}
-            variant={searchActive ? IconButtonColorVariant.Primary : IconButtonColorVariant.Primary}
-            onClick={() => setSearchActive((prev) => !prev)}
-          >
-            <Svg Component={Search} alt="search" color={searchActive ? mainHexPallete.white : mainHexPallete.black} />
-          </IconButton>
+          <Box sx={{ marginRight: '30px' }}>
+            <IconButton
+              type={searchActive ? IconButtonVariant.filled : IconButtonVariant.outlined}
+              variant={IconButtonColorVariant.Primary}
+              onClick={() => setSearchActive((prev) => !prev)}
+              size={isExtraSmall ? 'small' : 'meduim'}
+            >
+              <Svg Component={Search} alt="search" color={searchActive ? mainHexPallete.white : mainHexPallete.black} />
+            </IconButton>
+          </Box>
         ) : (
           MusicSearch
         )}
       </Box>
-      <>{searchActive && isMobile ? MusicSearch : <></>}</>
+      <>{searchActive && isMobile ? <Box>{MusicSearch}</Box> : <></>}</>
     </Box>
   );
 };
