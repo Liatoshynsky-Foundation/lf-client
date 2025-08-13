@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material'; // Added CircularProgress
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
