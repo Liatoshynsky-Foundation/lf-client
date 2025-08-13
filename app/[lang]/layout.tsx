@@ -70,7 +70,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             <ThemeProvider>
               <QueryProvider>
                 <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', width: '100vw' }}>
-                  {' '}
                   <ColumnGuides />
                   <Box
                     sx={{
