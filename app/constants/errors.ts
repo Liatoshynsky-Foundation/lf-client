@@ -32,7 +32,8 @@ export const errors = {
     message: 'Internal server error',
     status: 500
   },
-  USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider'
+  USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider',
+  NOT_FOUND: 'This resource was not found'
 };
 
 export const envErrors = {

@@ -2,13 +2,13 @@ import '~/infrastructure/models/pages-data/block/blockBase';
 
 import dbConnect from '~/infrastructure/db/connect';
 import PagesData from '~/infrastructure/models/pages-data/pagesData';
-import { populatedPageSchema } from '~/validators/page/page.schema';
+import { PageSchema as PageZodSchema } from '~/validators/page2/page.schema';
 
 export const pagesDataRepository = {
   async getPageData(slug: string) {
     await dbConnect();
-    const page = await PagesData.findOne({ slug }).populate('blocks').lean().exec();
+    const page = await PagesData.findOne({ slug }).lean().exec();
     if (!page) return null;
-    return populatedPageSchema.parse(page);
+    return PageZodSchema.parse(page);
   }
 };
