@@ -73,7 +73,7 @@ declare module '@mui/material/styles' {
     customCaption: React.CSSProperties;
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
-    customBold30: React.CSSProperties;
+    customBold25: React.CSSProperties;
   }
 }
 
