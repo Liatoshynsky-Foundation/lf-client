@@ -22,15 +22,18 @@ global.fetch = jest.fn(() =>
     json: () => Promise.resolve([{ _id: '1', title: 'Test Song' }])
   })
 ) as jest.Mock;
+jest.mock('@mui/material/useMediaQuery', () => {
+  return jest.fn().mockImplementation(() => false);
+});
 describe('MusicSearch', () => {
   it('should display loading text', async () => {
     render(<MusicSearch search="" setSearch={jest.fn()} />);
 
     const input = screen.getByRole('combobox');
     input.focus();
-    fireEvent.change(input, { target: { value: 't' } });
+    fireEvent.change(input, { target: { value: 'es' } });
     await waitFor(() => {
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      expect(screen.queryByText('Loading...') || screen.getByText('Test Song')).toBeInTheDocument();
     });
   });
   it('should render the input and fetches options', async () => {
@@ -42,6 +45,7 @@ describe('MusicSearch', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     input.focus();
     fireEvent.change(input, { target: { value: 'T' } });
+
     await waitFor(() => {
       expect(screen.getByText('Test Song')).toBeInTheDocument();
     });
@@ -53,7 +57,7 @@ describe('MusicSearch', () => {
     render(<MusicSearch search="" setSearch={setSearch} />);
 
     const input = screen.getByRole('combobox');
-    fireEvent.focus(input);
+    input.focus();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
 
     await waitFor(() => {

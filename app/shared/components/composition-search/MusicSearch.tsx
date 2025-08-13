@@ -1,5 +1,14 @@
 'use client';
-import { Autocomplete, AutocompleteRenderInputParams, InputAdornment, List, ListItem, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  InputAdornment,
+  List,
+  ListItem,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +24,27 @@ interface MusicSearchProps {
   setSearch: (value: string) => void;
   search: string;
 }
+const getIconStyle = (isMobile: boolean, focused: boolean) => {
+  let width;
+  let borderRadius;
+
+  if (isMobile) {
+    width = 230;
+    borderRadius = '8px';
+  } else if (focused) {
+    width = 280;
+    borderRadius = '10px';
+  } else {
+    width = 40;
+    borderRadius = '60px';
+  }
+
+  return {
+    ...MusicSearchStyles.icon,
+    width,
+    borderRadius
+  };
+};
 
 export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
@@ -23,6 +53,8 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
   useEffect(() => {
     const fetchAllTitles = async () => {
@@ -83,14 +115,16 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
             ...params.InputProps,
             startAdornment: (
               <InputAdornment position="start" sx={{ cursor: 'pointer' }}>
-                <SvgImage src={'/icons/search.svg'} alt="search" width={24} height={24} onClick={handleIconClick} />
+                <SvgImage
+                  src={'/icons/search-static.svg'}
+                  alt="search"
+                  width={24}
+                  height={24}
+                  onClick={handleIconClick}
+                />
               </InputAdornment>
             ),
-            style: {
-              ...MusicSearchStyles.icon,
-              width: focused ? 280 : 40,
-              borderRadius: focused ? '10px' : '60px'
-            },
+            style: getIconStyle(isMobile, focused),
             endAdornment: (
               <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
                 <SvgImage src={'/icons/close-icon.svg'} alt="close" width={24} height={24} onClick={handleClear} />

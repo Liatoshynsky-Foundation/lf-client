@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, CircularProgress, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material'; // Added CircularProgress
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -19,6 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
+import CompositionsControlPanel from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
@@ -57,6 +58,7 @@ export default function EnhancedTable<T extends RowData>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
+
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -141,12 +143,7 @@ export default function EnhancedTable<T extends RowData>({
   });
   return (
     <Box sx={styles.root}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
-        <Typography variant="customBold32" sx={styles.title}>
-          {tableName}
-        </Typography>
-        {MusicSearch}
-      </Box>
+      <CompositionsControlPanel MusicSearch={MusicSearch} tableName={tableName} />
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="300px">
           <CircularProgress />
