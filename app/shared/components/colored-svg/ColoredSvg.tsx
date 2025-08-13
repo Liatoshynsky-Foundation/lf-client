@@ -70,7 +70,7 @@ export const Svg = ({ Component, alt, color, fill, stroke, width, height, sx }: 
   };
 
   return (
-    <Box sx={{ ...styles, ...sx, ...dynamicStyles }} role="img" aria-label={alt}>
+    <Box sx={{ ...styles, ...sx, ...dynamicStyles }} data-testid="img" aria-label={alt}>
       <Component />
     </Box>
   );

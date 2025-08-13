@@ -16,7 +16,7 @@ const testAlt = 'Test Icon';
 describe('ColoredSvg component', () => {
   it('renders with color prop and applies color to svg children', () => {
     render(<Svg Component={MockSvg} alt={testAlt} color="#123456" />);
-    const wrapper = screen.getByRole('img', { name: testAlt });
+    const wrapper = screen.getByTestId('img');
     expect(wrapper).toBeInTheDocument();
     const svg = screen.getByTestId('icon-svg');
     expect(svg).toHaveStyle('width: 24px');
@@ -25,7 +25,7 @@ describe('ColoredSvg component', () => {
 
   it('renders with fill and stroke props and applies them to svg children', () => {
     render(<Svg Component={MockSvg} alt={testAlt} fill="#ff0000" stroke="#00ff00" />);
-    const wrapper = screen.getByRole('img', { name: testAlt });
+    const wrapper = screen.getByTestId('img');
     expect(wrapper).toBeInTheDocument();
     const svg = screen.getByTestId('icon-svg');
     expect(svg).toHaveStyle('width: 24px');
@@ -71,13 +71,13 @@ describe('ColoredSvg component', () => {
 
   it('applies aria-label and role correctly', () => {
     render(<Svg Component={MockSvg} alt={testAlt} color="#000" />);
-    const wrapper = screen.getByRole('img', { name: testAlt });
+    const wrapper = screen.getByTestId('img');
     expect(wrapper).toHaveAttribute('aria-label', testAlt);
   });
 
   it('applies custom sx prop', () => {
     render(<Svg Component={MockSvg} alt={testAlt} color="#000" sx={{ backgroundColor: 'yellow' }} />);
-    const wrapper = screen.getByRole('img', { name: testAlt });
+    const wrapper = screen.getByTestId('img');
     expect(wrapper).toHaveStyle('background-color: yellow');
   });
 });
