@@ -24,6 +24,27 @@ interface MusicSearchProps {
   setSearch: (value: string) => void;
   search: string;
 }
+const getIconStyle = (isMobile: boolean, focused: boolean) => {
+  let width;
+  let borderRadius;
+
+  if (isMobile) {
+    width = 230;
+    borderRadius = '8px';
+  } else if (focused) {
+    width = 280;
+    borderRadius = '10px';
+  } else {
+    width = 40;
+    borderRadius = '60px';
+  }
+
+  return {
+    ...MusicSearchStyles.icon,
+    width,
+    borderRadius
+  };
+};
 
 export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
@@ -103,11 +124,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
                 />
               </InputAdornment>
             ),
-            style: {
-              ...MusicSearchStyles.icon,
-              width: isMobile ? 230 : focused ? 280 : 40,
-              borderRadius: isMobile ? '8px' : focused ? '10px' : '60px'
-            },
+            style: getIconStyle(isMobile, focused),
             endAdornment: (
               <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
                 <SvgImage src={'/icons/close-icon.svg'} alt="close" width={24} height={24} onClick={handleClear} />
@@ -134,32 +151,30 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
   const renderOption = useMemo(() => renderOptionFn, []);
   const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
   return (
-    <>
-      <Autocomplete
-        data-testid="music-search"
-        options={options}
-        loading={loading}
-        value={value}
-        onChange={onChange}
-        inputValue={search}
-        onInputChange={handleInputChange}
-        renderInput={renderInput}
-        renderOption={renderOption}
-        getOptionLabel={getOptionLabel}
-        clearOnBlur={false}
-        popupIcon={null}
-        clearIcon={false}
-        loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
-        noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
-        open={!!opened}
-        disableListWrap={true}
-        slotProps={{
-          listbox: {
-            style: MusicSearchStyles.listbox,
-            component: VirtualizedListbox
-          }
-        }}
-      />
-    </>
+    <Autocomplete
+      data-testid="music-search"
+      options={options}
+      loading={loading}
+      value={value}
+      onChange={onChange}
+      inputValue={search}
+      onInputChange={handleInputChange}
+      renderInput={renderInput}
+      renderOption={renderOption}
+      getOptionLabel={getOptionLabel}
+      clearOnBlur={false}
+      popupIcon={null}
+      clearIcon={false}
+      loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
+      noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+      open={!!opened}
+      disableListWrap={true}
+      slotProps={{
+        listbox: {
+          style: MusicSearchStyles.listbox,
+          component: VirtualizedListbox
+        }
+      }}
+    />
   );
 };
