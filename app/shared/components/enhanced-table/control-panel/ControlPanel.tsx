@@ -25,7 +25,7 @@ const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsContro
   return (
     <Box display="column" gap={8} pl={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
-        <Typography variant={isExtraSmall ? 'customBold30' : 'customBold32'}>{tableName}</Typography>
+        <Typography variant={isExtraSmall ? 'customBold25' : 'customBold32'}>{tableName}</Typography>
         {isMobile ? (
           <Box sx={{ marginRight: '30px' }}>
             <IconButton
