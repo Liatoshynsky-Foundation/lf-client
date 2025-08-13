@@ -1,4 +1,8 @@
 export const validateSvgColor = (color: string) => {
+  if (color === 'none') {
+    return true;
+  }
+
   const wslessColor = color.replace(/\s+/g, '');
 
   const rgbaPattern = /^rgba?\((\d{1,3},){2}\d{1,3}(,0?\.?\d+)?\)$/;
