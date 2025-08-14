@@ -15,6 +15,7 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 
 import chevronDown from '~/public/icons/chevron-down.svg';
 import chevronRight from '~/public/icons/chevron-right.svg';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
@@ -29,6 +30,8 @@ export function CollapsibleRow<T extends RowData>({
   action,
   columns
 }: Readonly<CollapsibleRowProps<T>>) {
+  const bp = useBreakpoints();
+  const viewKey = bp.isTablet || bp.isMobile ? 'mobile' : 'desktop';
   const table = useReactTable({
     data,
     columns,
@@ -36,7 +39,7 @@ export function CollapsibleRow<T extends RowData>({
   });
 
   return (
-    <>
+    <React.Fragment key={viewKey}>
       <TableRow sx={styles.row(collapsed)}>
         {columns.map((col) => {
           const meta = col.meta as CollapsibleGroupColumnMeta<T>;
@@ -57,6 +60,7 @@ export function CollapsibleRow<T extends RowData>({
                     }}
                     variant={IconButtonColorVariant.Secondary}
                     disableRipple
+                    sx={{ bgcolor: 'none' }}
                   >
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
@@ -79,6 +83,6 @@ export function CollapsibleRow<T extends RowData>({
       {table.getRowModel().rows.map((row) => (
         <CollapsibleDataRow key={row.id} row={row} collapsed={collapsed} />
       ))}
-    </>
+    </React.Fragment>
   );
 }

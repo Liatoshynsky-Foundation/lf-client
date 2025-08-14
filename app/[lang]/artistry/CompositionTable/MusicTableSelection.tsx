@@ -1,10 +1,12 @@
 'use client';
 
 import { ColumnFiltersState } from '@tanstack/react-table';
+import { type CellContext } from '@tanstack/react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import { getColumnWidths } from './getColumnWidth';
 import {
   RenderActionsCell,
   RenderGenreCell,
@@ -24,6 +26,7 @@ import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type Props = {
   lang: string;
@@ -39,6 +42,10 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
   const [data, setData] = useState<Music[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const bp = useBreakpoints();
+
+  const columnWidths = useMemo(() => getColumnWidths(bp), [bp]);
+
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams);
     if (search) {
@@ -50,6 +57,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
     }
     router.replace(`?${newParams.toString()}`, { scroll: false });
   }, [router, search, searchParams, isLoading]);
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -62,51 +70,60 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
 
     fetchData();
   }, [search, lang]);
-  const columns = [
-    { id: 'expander', header: '', cell: () => null },
-    {
-      id: 'opus',
-      header: RenderOpusHeader,
-      cell: () => null,
-      meta: {
-        groupLabelContentFactory: renderOpusGroupLabel
-      }
-    },
-    {
-      id: 'play',
-      header: '',
-      cell: RenderPlayCell
-    },
-    {
-      id: 'name',
-      accessorKey: 'name',
-      header: RenderNameHeader,
-      cell: renderNameCell,
-      enableSorting: false,
-      meta: {
-        groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
-      }
-    },
-    {
-      id: 'year',
-      accessorKey: 'year',
-      header: RenderYearHeader,
-      cell: renderYearCell,
-      enableSorting: false
-    },
-    {
-      id: 'genre',
-      accessorKey: 'genre',
-      header: RenderGenreHeader,
-      cell: RenderGenreCell,
-      enableSorting: false
-    },
-    {
-      id: 'actions',
-      header: '',
-      cell: RenderActionsCell
+
+  const baseColumns = useMemo(
+    () => [
+      {
+        id: 'expander',
+        header: '',
+        cell: (ctx: CellContext<Music, unknown>) => (
+          <>{(bp.isTablet || bp.isMobile) && !ctx.row.getCanExpand() && RenderPlayCell(ctx)}</>
+        )
+      },
+      {
+        id: 'opus',
+        header: RenderOpusHeader,
+        cell: () => null,
+        meta: { groupLabelContentFactory: renderOpusGroupLabel }
+      },
+      { id: 'play', header: '', cell: RenderPlayCell },
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: RenderNameHeader,
+        cell: renderNameCell,
+        enableSorting: false,
+        meta: {
+          groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
+        }
+      },
+      {
+        id: 'year',
+        accessorKey: 'year',
+        header: RenderYearHeader,
+        cell: renderYearCell,
+        enableSorting: false
+      },
+      {
+        id: 'genre',
+        accessorKey: 'genre',
+        header: RenderGenreHeader,
+        cell: RenderGenreCell,
+        enableSorting: false
+      },
+      { id: 'actions', header: '', cell: RenderActionsCell }
+    ],
+    [bp.isTablet, bp.isMobile, borderWithOpacity]
+  );
+
+  const columns = useMemo(() => {
+    if (bp.isTablet || bp.isMobile) {
+      const hide = new Set(['opus', 'year', 'genre', 'play']);
+      return baseColumns.filter((c) => !hide.has(String(c.id)));
     }
-  ];
+    return baseColumns;
+  }, [bp.isTablet, bp.isMobile, baseColumns]);
+
   return (
     <EnhancedTable
       data={data}
@@ -115,15 +132,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       groupByKey="opus"
       columnFilters={columnFilters}
       onColumnFiltersChange={setColumnFilters}
-      columnWidths={{
-        expander: '3%',
-        opus: '3%',
-        play: '3%',
-        name: '30%',
-        year: '8%',
-        genre: '28%',
-        actions: 'auto'
-      }}
+      columnWidths={columnWidths}
       itemsPerPage={10}
       tableName={t('composition')}
       MusicSearch={<MusicSearch search={search} setSearch={setSearch} />}

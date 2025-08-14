@@ -14,7 +14,7 @@ export const collapsibleRowStyles = {
     backgroundColor: collapsed ? mainHexPallete.blue[50] : 'transparent'
   }),
   cell: {
-    py: 2,
+    py: 1.5,
     px: 0,
     borderLeft: 'none',
     borderRight: 'none',
@@ -29,9 +29,14 @@ export const collapsibleRowStyles = {
   cellInnerCentered: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    pl: { xs: 1, sm: 2, md: 0 },
+    justifyContent: {
+      xs: 'flex-start',
+      sm: 'flex-start',
+      md: 'center'
+    }
   },
   labelBox: {
     display: 'flex',
@@ -39,7 +44,7 @@ export const collapsibleRowStyles = {
     gap: 1
   },
   collapsedCell: (collapsed: boolean): SxProps<Theme> => ({
-    py: collapsed ? 2 : 0,
+    py: collapsed ? 1.5 : 0,
     px: 0,
     borderBottom: collapsed ? `2px solid ${borderWithOpacity}` : 'none',
     borderLeft: 'none',
