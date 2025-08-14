@@ -14,6 +14,7 @@ import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 
 export const metadata = createSeoMeta({
   title: 'Фундація Лятошинського',
@@ -45,6 +46,10 @@ export default async function Home({ params }: Readonly<Language>) {
       {page.LiatoshynskyOffice && <LiatoshynskyOffice data={page.LiatoshynskyOffice} t={t} />}
       {page.WhatWeDo && <WhatWeDo data={page.WhatWeDo} />}
       {page.FoundationFounders && <FoundationFounders data={page.FoundationFounders} />}
+      <ContactForm
+        title="Запропонувати співпрацю"
+        subTitle="Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів"
+      />
     </>
   );
 }

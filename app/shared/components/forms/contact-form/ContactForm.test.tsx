@@ -10,14 +10,14 @@ describe('ContactForm', () => {
     subTitle: 'Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів'
   };
 
-  it('renders title and subtitle', () => {
+  it('should render title and subtitle', () => {
     render(<ContactForm {...props} />);
 
     expect(screen.getByText(props.title)).toBeInTheDocument();
     expect(screen.getByText(props.subTitle)).toBeInTheDocument();
   });
 
-  it('contains four text inputs including a multiline message field', () => {
+  it('should contain four text inputs including a multiline message field', () => {
     render(<ContactForm {...props} />);
 
     const textboxes = screen.getAllByRole('textbox');
@@ -32,7 +32,7 @@ describe('ContactForm', () => {
     expect(screen.getByPlaceholderText('Ваше повідомлення *')).toBeInTheDocument();
   });
 
-  it('renders a checkbox with privacy policy link', () => {
+  it('should render a checkbox with privacy policy link', () => {
     render(<ContactForm {...props} />);
 
     const checkbox = screen.queryByRole('checkbox');
@@ -47,7 +47,7 @@ describe('ContactForm', () => {
     expect(link).toHaveAttribute('href', '#');
   });
 
-  it('renders a submit button', () => {
+  it('should render a submit button', () => {
     render(<ContactForm {...props} />);
 
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
