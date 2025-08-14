@@ -1,36 +1,21 @@
 import { Locale } from 'next-intl';
 
 import { createPagesDataService } from './pagesDataService';
+import { transformPageForFrontend } from '~/utils/pageTransformer';
 
 import { PageServiceDeps } from '~/domain/services/pagesService.type';
-import { blockTransformers } from '~/services/strategy/blockStrategy/blockTransformStrategy';
-import { AnyBlock } from '~/validators/page/blocks/anyBlock.schema';
+import { Page as PageType } from '~/validators/page2/page.schema';
 
-jest.mock('~/services/strategy/blockStrategy/blockTransformStrategy', () => ({
-  blockTransformers: {
-    IntroSection: jest.fn(),
-    FoundationInfo: jest.fn(),
-    OurMission: jest.fn(),
-    OurGoals: jest.fn(),
-    LiatoshynskyOffice: jest.fn(),
-    WhatWeDo: jest.fn(),
-    FoundationFounders: jest.fn()
-  }
+jest.mock('~/utils/pageTransformer', () => ({
+  transformPageForFrontend: jest.fn()
 }));
 
 const mockPagesDataRepository = {
   getPageData: jest.fn()
 };
 
-const mockedBlockTransformers = blockTransformers as jest.Mocked<typeof blockTransformers>;
-const testMockBlock: AnyBlock = {
-  _id: 'test-block-id',
-  componentName: 'FoundationInfo',
-  blockType: 'ContentConstructorBlock',
-  content: {
-    elements: []
-  }
-};
+const mockedTransformPageForFrontend = transformPageForFrontend as jest.Mock;
+
 describe('createPagesDataService', () => {
   let service: ReturnType<typeof createPagesDataService>;
 
@@ -44,39 +29,88 @@ describe('createPagesDataService', () => {
   const slug = 'test';
   const locale: Locale = 'uk';
 
-  test('should return null if page data is not found', async () => {
+  it('should return null if page data is not found', async () => {
     mockPagesDataRepository.getPageData.mockResolvedValue(null);
 
     const result = await service.getPageData(slug, locale);
 
     expect(result).toBeNull();
     expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(mockedTransformPageForFrontend).not.toHaveBeenCalled();
   });
 
-  test('should return an empty object if page has no blocks', async () => {
-    mockPagesDataRepository.getPageData.mockResolvedValue({ blocks: [] });
-
-    const result = await service.getPageData(slug, locale);
-
-    expect(result).toEqual({});
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
-  });
-
-  test('should transform block and return transformed result', async () => {
-    const pageDataFromRepo = {
-      blocks: [testMockBlock]
+  it('should return transformed page data when page is found', async () => {
+    const pageDataFromRepo: PageType = {
+      _id: 'page_id',
+      slug,
+      title: { uk: 'Тест', en: 'Test' },
+      status: 'published',
+      blocks: [
+        {
+          _id: 'block_id',
+          elements: [
+            {
+              elementType: 'Paragraph',
+              content: {
+                uk: { type: 'doc', content: [{ type: 'text', text: 'Some content' }] },
+                en: { type: 'doc', content: [{ type: 'text', text: 'Some content' }] }
+              }
+            }
+          ]
+        }
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
-    const transformedIntro = { componentName: 'FoundationInfo', transformedTitle: 'Трансформований Вступ' };
+    const transformedPageData: ReturnType<typeof transformPageForFrontend> = {
+      _id: 'page_id',
+      slug,
+      title: 'Тест',
+      status: 'published',
+      blocks: [
+        {
+          _id: 'block_id',
+          elements: [
+            {
+              elementType: 'Paragraph',
+              content: { type: 'doc', content: [{ type: 'text', text: 'Some content' }] }
+            }
+          ]
+        }
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
     mockPagesDataRepository.getPageData.mockResolvedValue(pageDataFromRepo);
-    mockedBlockTransformers.FoundationInfo.mockReturnValue(transformedIntro);
+    mockedTransformPageForFrontend.mockReturnValue(transformedPageData);
 
     const result = await service.getPageData(slug, locale);
 
     expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
-    expect(mockedBlockTransformers.FoundationInfo).toHaveBeenCalledWith(testMockBlock, locale);
+    expect(mockedTransformPageForFrontend).toHaveBeenCalledWith(pageDataFromRepo, locale);
+    expect(result).toEqual(transformedPageData);
+  });
 
-    expect(result).toEqual({ FoundationInfo: transformedIntro });
+  it('should return null if transformPageForFrontend returns null', async () => {
+    const pageDataFromRepo: PageType = {
+      _id: 'page_id',
+      slug,
+      title: { uk: 'Тест', en: 'Test' },
+      status: 'published',
+      blocks: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    mockPagesDataRepository.getPageData.mockResolvedValue(pageDataFromRepo);
+    mockedTransformPageForFrontend.mockReturnValue(null);
+
+    const result = await service.getPageData(slug, locale);
+
+    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(mockedTransformPageForFrontend).toHaveBeenCalledWith(pageDataFromRepo, locale);
+    expect(result).toBeNull();
   });
 });

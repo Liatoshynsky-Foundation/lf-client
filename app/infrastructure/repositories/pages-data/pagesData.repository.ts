@@ -1,5 +1,3 @@
-import '~/infrastructure/models/pages-data/block/blockBase';
-
 import dbConnect from '~/infrastructure/db/connect';
 import PagesData from '~/infrastructure/models/pages-data/pagesData';
 import { PageSchema as PageZodSchema } from '~/validators/page2/page.schema';
