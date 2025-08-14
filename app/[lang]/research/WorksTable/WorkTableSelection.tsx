@@ -18,6 +18,7 @@ import { WorkTable } from '~/types/types/enhancedTable';
 
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 import { Search } from '~/shared/components/search/Search';
+import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
 type Props = {
   data: WorkTable[];
@@ -25,25 +26,12 @@ type Props = {
 
 export default function WorkTableSection({ data }: Readonly<Props>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [documentTitles, setDocumentTitles] = useState([]);
-  const [loadingDocuments, setLoadingDocuments] = useState(false);
+  // const { search, setSearch, titles, loadingTitles, data, loadingData } = useSearch({
+  //   titlesEndpoint: '/api/composition-titles',
+  //   dataEndpointBuilder: (search) => `/api/compositions?lang=${lang}&search=${encodeURIComponent(search)}`
+  // });
 
   const t = useTranslations('table.work');
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      setLoadingDocuments(true);
-      try {
-        const response = await fetch('/api/document-titles'); // documents endpoint
-        const data = await response.json();
-        setDocumentTitles(data);
-      } finally {
-        setLoadingDocuments(false);
-      }
-    };
-
-    fetchDocuments();
-  }, []);
   const columns: ColumnDef<WorkTable>[] = [
     {
       accessorKey: 'name',
@@ -95,7 +83,6 @@ export default function WorkTableSection({ data }: Readonly<Props>) {
         }}
         itemsPerPage={10}
         tableName={t('name')}
-        Search={<Search search={search} setSearch={setSearch} options={documentTitles} loading={loadingDocuments} />}
       />
     </Box>
   );

@@ -3,5 +3,5 @@ import type { CompositionDTO, CompositionTitlesDTO, GenreDTO } from '~/domain/dt
 export type CompositionRepository = {
   getAllGenres(): Promise<GenreDTO>;
   getAllCompositions(filter: string): Promise<CompositionDTO>;
-  getAllTitles(): Promise<CompositionTitlesDTO>;
+  getAllCompositionTitles(): Promise<CompositionTitlesDTO>;
 };

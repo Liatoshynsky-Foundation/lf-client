@@ -3,7 +3,7 @@ import type { CompositionRepository } from '~/domain/repositories/composition.re
 export const createCompositionService = (repo: CompositionRepository) => ({
   getAllGenres: () => repo.getAllGenres(),
   getAllCompositions: (filter: string) => repo.getAllCompositions(filter),
-  getAllTitles: () => repo.getAllTitles()
+  getAllCompositionTitles: () => repo.getAllTitles()
 });
 
 export type CompositionService = ReturnType<typeof createCompositionService>;

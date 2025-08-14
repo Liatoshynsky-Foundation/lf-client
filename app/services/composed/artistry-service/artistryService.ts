@@ -18,11 +18,20 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
     if (!allSongs) return [];
     return createLocalizedCompositionsArraySchema(locale).parse(allSongs);
   },
+<<<<<<< HEAD
   async getAllTitles(locale: Locale) {
     const allTitles = await compositionService.getAllTitles();
 
     if (!allTitles) return [];
 
     return createLocalizedCompositionTitlesSchemaArray(locale).parse(allTitles);
+=======
+  async getAllCompositionTitles(locale: Locale) {
+    const allTitles = await compositionService.getAllCompositionTitles();
+
+    if (!allTitles) return [];
+
+    return createLocalizedCompositionsArraySchema(locale).parse(allTitles);
+>>>>>>> fab44d0 (changed method spelling)
   }
 });
