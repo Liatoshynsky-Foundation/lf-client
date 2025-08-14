@@ -19,7 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import CompositionsControlPanel from './control-panel/ControlPanel';
+import { ControlPanel } from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
@@ -35,11 +35,15 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
+<<<<<<< HEAD
   MusicSearch?: React.ReactNode;
   Filters?: React.ReactNode;
   isFiltersActive?: boolean;
   activeFiltersCount?: number;
   onClearFilters?: () => void;
+=======
+  Search?: React.ReactNode;
+>>>>>>> 08f4ae6 (created hook for seraching)
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
@@ -53,9 +57,13 @@ export default function EnhancedTable<T extends RowData>({
   groupByKey,
   itemsPerPage = 10,
   tableName,
+<<<<<<< HEAD
   MusicSearch,
   Filters,
   activeFiltersCount,
+=======
+  Search,
+>>>>>>> 08f4ae6 (created hook for seraching)
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
@@ -102,7 +110,7 @@ export default function EnhancedTable<T extends RowData>({
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable, data, sorting]);
+  }, [data, sorting]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -151,12 +159,16 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
+<<<<<<< HEAD
       <CompositionsControlPanel
         MusicSearch={MusicSearch}
         tableName={tableName}
         Filters={Filters}
         activeFiltersCount={activeFiltersCount}
       />
+=======
+      <ControlPanel MusicSearch={Search} tableName={tableName} />
+>>>>>>> 08f4ae6 (created hook for seraching)
       {loading ? (
         <Box sx={styles.loaderBox}>
           <CircularProgress />

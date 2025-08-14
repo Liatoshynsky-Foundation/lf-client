@@ -11,18 +11,20 @@ import {
 } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
-import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
+import { CustomBorderTextField, SearchStyles } from './SearchStyles';
 
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
-interface MusicSearchProps {
+interface SearchProps {
   setSearch: (value: string) => void;
   search: string;
+  options: CompositionTitlesDTO[];
+  loading?: boolean;
 }
 const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let width;
@@ -40,32 +42,20 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   }
 
   return {
-    ...MusicSearchStyles.icon,
+    ...SearchStyles.icon,
     width,
     borderRadius
   };
 };
 
-export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
+export const Search: React.FC<SearchProps> = ({ search, setSearch, options, loading }: SearchProps) => {
   const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
-  const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
-  useEffect(() => {
-    const fetchAllTitles = async () => {
-      setLoading(true);
-      const response = await fetch('/api/titles');
-      const titles = await response.json();
-      setOptions(titles);
-      setLoading(false);
-    };
-    fetchAllTitles();
-  }, [search, value]);
   const t = useTranslations('search');
   const debouncedInputChange = useMemo(
     () =>
@@ -171,7 +161,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       disableListWrap={true}
       slotProps={{
         listbox: {
-          style: MusicSearchStyles.listbox,
+          style: SearchStyles.listbox,
           component: VirtualizedListbox
         }
       }}

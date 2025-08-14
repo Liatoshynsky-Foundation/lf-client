@@ -19,7 +19,7 @@ export const CustomBorderTextField = styled(TextField)(() => ({
   }
 }));
 
-export const MusicSearchStyles = {
+export const SearchStyles = {
   icon: {
     padding: 8,
     height: 40,

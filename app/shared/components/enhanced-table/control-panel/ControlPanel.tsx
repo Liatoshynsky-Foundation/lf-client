@@ -19,7 +19,7 @@ type CompositionsControlPanelProps = {
   activeFiltersCount?: number;
 };
 
-const CompositionsControlPanel = ({
+export const ControlPanel = ({
   MusicSearch,
   Filters,
   tableName,
@@ -98,5 +98,3 @@ const CompositionsControlPanel = ({
     </Box>
   );
 };
-
-export default CompositionsControlPanel;
