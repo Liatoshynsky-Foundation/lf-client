@@ -11,6 +11,7 @@ import Button from '~/shared/components/design-system/all-components/button/Butt
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 
 export const RenderOpusHeader = () => {
   const t = useTranslations('table.columns');
@@ -48,8 +49,13 @@ export const RenderGenreHeader = () => {
   );
 };
 
-export const renderPlayCell = (info: CellContext<Music, unknown>) => {
+export const RenderPlayCell = (info: CellContext<Music, unknown>) => {
   const rowData = info.row.original;
+  const { playTrack, togglePlay, isPlaying, src } = useAudioPlayer();
+
+  const trackUrl = `/api/blob-url?blobName=${encodeURIComponent(rowData.name)}&folderName=compositions`;
+  const isCurrentTrack = src?.startsWith(trackUrl);
+
   if (rowData.audioAvailable)
     return (
       <Box
@@ -63,8 +69,23 @@ export const renderPlayCell = (info: CellContext<Music, unknown>) => {
           }
         }}
       >
-        <IconButton size="small" type={IconButtonVariant.icon}>
-          <SvgImage src="/icons/play.svg" alt="play" width={24} height={24} />
+        <IconButton
+          size="small"
+          type={IconButtonVariant.icon}
+          onClick={() => {
+            if (isCurrentTrack) {
+              togglePlay();
+            } else {
+              playTrack(trackUrl, rowData.name);
+            }
+          }}
+        >
+          <SvgImage
+            src={isCurrentTrack && isPlaying ? '/icons/pause.svg' : '/icons/play.svg'}
+            alt="play/pause"
+            width={24}
+            height={24}
+          />
         </IconButton>
       </Box>
     );
