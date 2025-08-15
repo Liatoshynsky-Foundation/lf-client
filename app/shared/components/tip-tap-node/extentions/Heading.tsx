@@ -9,7 +9,7 @@ interface HeadingProps extends TypographyProps {
   node: HeadingNode;
 }
 
-const levelVariantMap: Record<HeadingNode['level'], TypographyProps['variant']> = {
+const levelVariantMap: Record<number, TypographyProps['variant']> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -20,7 +20,7 @@ const levelVariantMap: Record<HeadingNode['level'], TypographyProps['variant']> 
 
 export const Heading: React.FC<HeadingProps> = ({ node, ...props }) => {
   return (
-    <Typography variant={levelVariantMap[node.level]} gutterBottom {...props}>
+    <Typography variant={levelVariantMap[node.attrs.level]} gutterBottom {...props}>
       {node.content && renderTipTapNode(node.content)}
     </Typography>
   );

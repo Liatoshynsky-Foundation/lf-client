@@ -1,4 +1,5 @@
-import { Breakpoint } from '@mui/material';
+import { Breakpoint, TypographyProps } from '@mui/material';
+import { ReactNode } from 'react';
 
 import { TipTapMarkType, TipTapNodeType } from '~/types/enums/common.enums';
 
@@ -44,7 +45,7 @@ export type Mark = BoldMark | ItalicMark | UnderlineMark | LinkMark;
 
 export interface BaseNode {
   type: string;
-  attrs?: { [key: string]: never };
+  attrs?: { [key: string]: unknown };
   content?: Node[];
   marks?: Mark[];
 }
@@ -55,7 +56,9 @@ export interface DocumentNode extends BaseNode {
 
 export interface HeadingNode extends BaseNode {
   type: TipTapNodeType.heading;
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+  attrs: {
+    level: number;
+  };
 }
 
 export interface ParagraphNode extends BaseNode {
@@ -69,17 +72,16 @@ export interface TextNode extends BaseNode {
 
 export type Node = DocumentNode | HeadingNode | ParagraphNode | TextNode;
 
-export type TipTapNodeTypes = {
-  [TipTapNodeType.doc]: DocumentNode;
-  [TipTapNodeType.heading]: HeadingNode;
-  [TipTapNodeType.paragraph]: ParagraphNode;
-  [TipTapNodeType.text]: TextNode;
-};
-
 export type TipTapNodeRenderers = {
-  [T in TipTapNodeType]: (node: TipTapNodeTypes[T]) => React.ReactNode;
+  [TipTapNodeType.doc]: (node: DocumentNode, props: TypographyProps) => ReactNode;
+  [TipTapNodeType.heading]: (node: HeadingNode, props: TypographyProps) => ReactNode;
+  [TipTapNodeType.paragraph]: (node: ParagraphNode, props: TypographyProps) => ReactNode;
+  [TipTapNodeType.text]: (node: TextNode) => ReactNode;
 };
 
 export type TipTapMarkRenderers = {
-  [T in TipTapMarkType]: (children: React.ReactNode) => React.ReactNode;
+  [TipTapMarkType.bold]: (children: ReactNode, mark: BoldMark) => ReactNode;
+  [TipTapMarkType.italic]: (children: ReactNode, mark: ItalicMark) => ReactNode;
+  [TipTapMarkType.underline]: (children: ReactNode, mark: UnderlineMark) => ReactNode;
+  [TipTapMarkType.link]: (children: ReactNode, mark: LinkMark) => ReactNode;
 };

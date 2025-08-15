@@ -11,7 +11,7 @@ interface ParagraphBlockProps extends Omit<TypographyProps, 'children'> {
 
 export const Paragraph: React.FC<ParagraphBlockProps> = ({ node, ...props }) => {
   return (
-    <Typography variant="body1" component="p" {...props}>
+    <Typography variant="body2" component="p" {...props}>
       {node.content && renderTipTapNode(node.content)}
     </Typography>
   );
