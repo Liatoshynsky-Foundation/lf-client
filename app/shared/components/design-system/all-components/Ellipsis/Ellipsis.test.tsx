@@ -8,10 +8,11 @@ let roCallback: ResizeObserverCallback | null = null;
 let originalResizeObserver: typeof ResizeObserver;
 
 const createResizeObserverEntry = (target: Element): ResizeObserverEntry => {
+  const width = (target as HTMLElement).clientWidth ?? 0;
   const contentRect: DOMRectReadOnly = {
     x: 0,
     y: 0,
-    width: (target as HTMLElement).clientWidth ?? 0,
+    width,
     height: 0,
     top: 0,
     right: 0,
@@ -19,9 +20,7 @@ const createResizeObserverEntry = (target: Element): ResizeObserverEntry => {
     left: 0,
     toJSON: () => ({})
   };
-
-  const size: ResizeObserverSize = { inlineSize: contentRect.width, blockSize: contentRect.height };
-
+  const size: ResizeObserverSize = { inlineSize: width, blockSize: 0 };
   return {
     target,
     contentRect,
@@ -63,6 +62,35 @@ const setWidths = (el: HTMLElement, client: number, scroll: number) => {
   Object.defineProperty(el, 'scrollWidth', { configurable: true, value: scroll });
 };
 
+const triggerResize = async (target: HTMLElement) => {
+  const entry = createResizeObserverEntry(target);
+  await act(async () => {
+    roCallback?.([entry], {} as unknown as ResizeObserver);
+  });
+};
+
+const renderAndMeasure = async ({
+  text,
+  clientWidth,
+  scrollWidth,
+  showTooltip = true
+}: {
+  text: string;
+  clientWidth: number;
+  scrollWidth: number;
+  showTooltip?: boolean;
+}) => {
+  render(<Ellipsis text={text} showTooltip={showTooltip} />);
+  const textEl = screen.getByText(text);
+  const wrapper = textEl.parentElement as HTMLElement;
+
+  setWidths(textEl, clientWidth, scrollWidth);
+  setWidths(wrapper, clientWidth, scrollWidth);
+  await triggerResize(textEl);
+
+  return { textEl, wrapper, tooltip: screen.getByTestId('tooltip') };
+};
+
 beforeAll(() => {
   originalResizeObserver = global.ResizeObserver;
   global.ResizeObserver = function (cb: ResizeObserverCallback) {
@@ -85,65 +113,41 @@ describe('Ellipsis', () => {
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
-  it('should enable tooltip when text overflows and showTooltip is true', async () => {
-    render(<Ellipsis text="Overflowing text" />);
-    const textEl = screen.getByText('Overflowing text');
-    const wrapper = textEl.parentElement as HTMLElement;
-    setWidths(textEl, 100, 200);
-    setWidths(wrapper, 100, 200);
-
-    await act(async () => {
-      const entry = createResizeObserverEntry(textEl);
-      roCallback?.([entry], {} as unknown as ResizeObserver);
-    });
-
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute('data-disable-hover', 'false');
-    expect(tooltip).toHaveAttribute('data-disable-focus', 'false');
-    expect(tooltip).toHaveAttribute('data-disable-touch', 'false');
-    expect(tooltip).toHaveAttribute('data-title', 'Overflowing text');
-  });
-
-  it('should disable tooltip when text does not overflow', async () => {
-    render(<Ellipsis text="Short" />);
-    const textEl = screen.getByText('Short');
-    const wrapper = textEl.parentElement as HTMLElement;
-    setWidths(textEl, 200, 100);
-    setWidths(wrapper, 200, 100);
-
-    await act(async () => {
-      const entry = createResizeObserverEntry(textEl);
-      roCallback?.([entry], {} as unknown as ResizeObserver);
-    });
-
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute('data-disable-hover', 'true');
-    expect(tooltip).toHaveAttribute('data-disable-focus', 'true');
-    expect(tooltip).toHaveAttribute('data-disable-touch', 'true');
-  });
-
-  it('should disable tooltip when showTooltip is false even if overflowing', async () => {
-    render(<Ellipsis text="Overflow but disabled" showTooltip={false} />);
-    const textEl = screen.getByText('Overflow but disabled');
-    const wrapper = textEl.parentElement as HTMLElement;
-    setWidths(textEl, 100, 200);
-    setWidths(wrapper, 100, 200);
-
-    await act(async () => {
-      const entry = createResizeObserverEntry(textEl);
-      roCallback?.([entry], {} as unknown as ResizeObserver);
-    });
-
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute('data-disable-hover', 'true');
-    expect(tooltip).toHaveAttribute('data-disable-focus', 'true');
-    expect(tooltip).toHaveAttribute('data-disable-touch', 'true');
-  });
-
   it('should apply maxWidth to wrapper box', () => {
     render(<Ellipsis text="With max width" maxWidth={123} />);
-    const textEl = screen.getByText('With max width');
-    const wrapper = textEl.parentElement as HTMLElement;
+    const wrapper = screen.getByText('With max width').parentElement as HTMLElement;
     expect(wrapper).toHaveStyle({ maxWidth: '123px' });
+  });
+
+  const boolCases = [
+    { overflow: true, showTooltip: true },
+    { overflow: false, showTooltip: true },
+    { overflow: true, showTooltip: false }
+  ] as const;
+
+  const toCase = ({ overflow, showTooltip }: { overflow: boolean; showTooltip: boolean }) => ({
+    name: `${overflow ? 'overflow' : 'no overflow'} & tooltip ${showTooltip ? 'on' : 'off'}`,
+    text: overflow ? 'Overflowing text' : 'Short',
+    client: overflow ? 100 : 200,
+    scroll: overflow ? 200 : 100,
+    showTooltip,
+    expectEnabled: overflow && showTooltip
+  });
+
+  const cases = boolCases.map(toCase);
+
+  test.each(cases)('$name', async ({ text, client, scroll, showTooltip, expectEnabled }) => {
+    const { tooltip } = await renderAndMeasure({
+      text,
+      clientWidth: client,
+      scrollWidth: scroll,
+      showTooltip
+    });
+
+    const expected = String(!expectEnabled);
+    expect(tooltip).toHaveAttribute('data-disable-hover', expected);
+    expect(tooltip).toHaveAttribute('data-disable-focus', expected);
+    expect(tooltip).toHaveAttribute('data-disable-touch', expected);
+    expect(tooltip).toHaveAttribute('data-title', text);
   });
 });
