@@ -3,15 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import TooltipCustom from '../tooltip/Tooltip';
 
-type Props = {
+type EllipsisProps = Readonly<{
   text: string;
   variant?: React.ComponentProps<typeof Typography>['variant'];
   maxWidth?: number | string;
   showTooltip?: boolean;
   sx?: React.ComponentProps<typeof Box>['sx'];
-};
+}>;
 
-export function Ellipsis({ text, variant = 'body2', maxWidth, showTooltip = true, sx }: Props) {
+export function Ellipsis({ text, variant = 'body2', maxWidth, showTooltip = true, sx }: EllipsisProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLSpanElement | null>(null);
   const [overflow, setOverflow] = useState(false);

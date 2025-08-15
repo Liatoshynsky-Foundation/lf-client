@@ -8,7 +8,7 @@ interface TooltipCustomProps extends Omit<TooltipProps, 'children'> {
   text?: string;
   wrapperProps?: BoxProps;
   textProps?: TypographyProps;
-  children?: React.ReactElement;
+  children?: React.ReactElement | null;
 }
 
 const TooltipCustom: React.FC<TooltipCustomProps> = ({
@@ -37,7 +37,7 @@ const TooltipCustom: React.FC<TooltipCustomProps> = ({
         }}
         {...tooltipProps}
       >
-        {children ? children : <Typography {...textProps}>{finalTitle}</Typography>}
+        {children ?? <Typography {...textProps}>{finalTitle}</Typography>}
       </Tooltip>
     </Box>
   );

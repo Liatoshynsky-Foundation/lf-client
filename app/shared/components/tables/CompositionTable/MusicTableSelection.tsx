@@ -1,7 +1,6 @@
 'use client';
 
 import { ColumnFiltersState } from '@tanstack/react-table';
-import { type CellContext } from '@tanstack/react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -9,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getColumnWidths } from '../../../../lib/utils/getColumnWidth';
 import {
   RenderActionsCell,
+  RenderExpanderCell,
   RenderGenreCell,
   RenderGenreHeader,
   renderNameCell,
@@ -76,9 +76,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       {
         id: 'expander',
         header: '',
-        cell: (ctx: CellContext<Music, unknown>) => (
-          <>{(bp.isTablet || bp.isMobile) && !ctx.row.getCanExpand() && RenderPlayCell(ctx)}</>
-        )
+        cell: RenderExpanderCell
       },
       {
         id: 'opus',

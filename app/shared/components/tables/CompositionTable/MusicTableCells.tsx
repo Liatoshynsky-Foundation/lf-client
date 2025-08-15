@@ -37,6 +37,11 @@ export const RenderOpusHeader = () => {
   );
 };
 
+export const RenderExpanderCell = (ctx: CellContext<Music, unknown>) => {
+  const { isTablet, isMobile } = useBreakpoints();
+  return (isTablet || isMobile) && !ctx.row.getCanExpand() ? RenderPlayCell(ctx) : null;
+};
+
 export const RenderNameHeader = () => {
   const t = useTranslations('table.columns');
   return (
