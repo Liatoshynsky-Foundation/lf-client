@@ -13,7 +13,7 @@ jest.mock('react-virtualized', () => {
 });
 
 describe('VirtualizedListbox', () => {
-  test('should render children inside virtualized list', () => {
+  it('should render children inside virtualized list', () => {
     render(
       <VirtualizedListbox>
         {[
@@ -31,7 +31,7 @@ describe('VirtualizedListbox', () => {
     expect(screen.getByText('Item 2')).toBeInTheDocument();
   });
 
-  test('should forward ref to container div', () => {
+  it('should forward ref to container div', () => {
     const ref = React.createRef<HTMLDivElement>();
 
     render(<VirtualizedListbox ref={ref}>{[<div key="1">Item</div>]}</VirtualizedListbox>);
