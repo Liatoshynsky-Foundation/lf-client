@@ -4,6 +4,10 @@ import React from 'react';
 
 import ContactForm from './ContactForm';
 
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
 describe('ContactForm', () => {
   const props = {
     title: 'Запропонувати співпрацю',
