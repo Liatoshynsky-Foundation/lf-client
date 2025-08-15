@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, CircularProgress, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -141,11 +141,13 @@ export default function EnhancedTable<T extends RowData>({
     data: allRows,
     itemsPerPage
   });
+
   return (
     <Box sx={styles.root}>
       <CompositionsControlPanel MusicSearch={MusicSearch} tableName={tableName} />
+
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+        <Box sx={styles.loaderBox}>
           <CircularProgress />
         </Box>
       ) : (
@@ -170,9 +172,10 @@ export default function EnhancedTable<T extends RowData>({
               </TableBody>
             </Table>
           </TableContainer>
+
           <Box sx={styles.paginationWrapper}>
             {hasMore && (
-              <Button variant="contained" size="large" onClick={handleLoadMore} sx={{ p: '16px 48px' }}>
+              <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
                 {t('viewMore')}
               </Button>
             )}

@@ -1,3 +1,5 @@
+import type { Breakpoints } from '~/types/types/common.types';
+
 import {
   DESKTOP_COLUMN_WIDTHS,
   type FullColumnWidths,
@@ -5,15 +7,7 @@ import {
   MOBILE_COLUMN_WIDTHS,
   type PartialColumnWidths,
   TABLET_COLUMN_WIDTHS
-} from './tableColumnWidth';
-
-type Breakpoints = {
-  isDesktop: boolean;
-  isLaptopAndAbove: boolean;
-  isLaptop: boolean;
-  isTablet: boolean;
-  isMobile: boolean;
-};
+} from '~/shared/components/tables/CompositionTable/tableColumnWidth';
 
 export const getColumnWidths = (bp: Breakpoints): FullColumnWidths | PartialColumnWidths => {
   if (bp.isDesktop) return DESKTOP_COLUMN_WIDTHS;

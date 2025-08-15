@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
-import { getColumnWidths } from './getColumnWidth';
+import { getColumnWidths } from '../../../../lib/utils/getColumnWidth';
 import {
   RenderActionsCell,
   RenderGenreCell,
@@ -44,7 +44,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
 
   const bp = useBreakpoints();
 
-  const columnWidths = useMemo(() => getColumnWidths(bp), [bp]);
+  const columnWidths = getColumnWidths(bp);
 
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams);
@@ -113,7 +113,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
       },
       { id: 'actions', header: '', cell: RenderActionsCell }
     ],
-    [bp.isTablet, bp.isMobile, borderWithOpacity]
+    [bp.isTablet, bp.isMobile]
   );
 
   const columns = useMemo(() => {

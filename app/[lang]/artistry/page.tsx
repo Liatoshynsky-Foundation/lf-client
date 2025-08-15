@@ -4,10 +4,10 @@ import React from 'react';
 
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
-import MusicTableSection from './CompositionTable/MusicTableSelection';
 import { Language } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import MusicTableSection from '~/shared/components/tables/CompositionTable/MusicTableSelection';
 
 export const metadata = createSeoMeta({
   title: 'Творчість - Фундація Лятошинського',

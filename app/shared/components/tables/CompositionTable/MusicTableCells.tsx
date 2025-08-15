@@ -1,10 +1,19 @@
 'use client';
 
 import { Box, TableCell, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import type { CellContext } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 
+import {
+  actionsCellContainerSx,
+  genreEllipsisSx,
+  groupLabelCellSx,
+  groupLabelRowSx,
+  headerTypographySx,
+  iconButtonSecondaryOutlinedSx,
+  iconButtonSecondaryPlainSx,
+  PlayCellBox
+} from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { Music } from '~/types/types/enhancedTable';
 
@@ -12,6 +21,7 @@ import PlayIcon from '~/public/icons/play.svg';
 import PauseIcon from '~/public/icons/pause.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import Button from '~/shared/components/design-system/all-components/button/Button';
+import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -21,7 +31,7 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 export const RenderOpusHeader = () => {
   const t = useTranslations('table.columns');
   return (
-    <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
+    <Typography variant="customBold16" sx={headerTypographySx}>
       {t('opus')}
     </Typography>
   );
@@ -30,7 +40,7 @@ export const RenderOpusHeader = () => {
 export const RenderNameHeader = () => {
   const t = useTranslations('table.columns');
   return (
-    <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
+    <Typography variant="customBold16" sx={headerTypographySx}>
       {t('name')}
     </Typography>
   );
@@ -39,7 +49,7 @@ export const RenderNameHeader = () => {
 export const RenderYearHeader = () => {
   const t = useTranslations('table.columns');
   return (
-    <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
+    <Typography variant="customBold16" sx={headerTypographySx}>
       {t('year')}
     </Typography>
   );
@@ -48,7 +58,7 @@ export const RenderYearHeader = () => {
 export const RenderGenreHeader = () => {
   const t = useTranslations('table.columns');
   return (
-    <Typography variant="customBold16" color={mainHexPallete.blue[800]}>
+    <Typography variant="customBold16" sx={headerTypographySx}>
       {t('genre')}
     </Typography>
   );
@@ -107,13 +117,10 @@ export const renderYearCell = (info: CellContext<Music, unknown>) => (
 );
 
 export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
-  const genresArray = info.getValue<string[]>();
+  const genres = info.getValue<string[]>() || [];
+  if (!genres.length) return null;
 
-  if (!genresArray || genresArray.length === 0) {
-    return null;
-  }
-
-  return <Typography variant="customMedium16">{genresArray.join(', ')}</Typography>;
+  return <Ellipsis text={genres.join(', ')} variant="customMedium16" sx={genreEllipsisSx} />;
 };
 
 export const RenderActionsCell = (info: CellContext<Music, unknown>) => {
@@ -124,30 +131,18 @@ export const RenderActionsCell = (info: CellContext<Music, unknown>) => {
   const shouldRender = isDesktop || isLaptop;
 
   return (
-    <Box display="flex" justifyContent="flex-end" gap={2} pr={{ xs: 1, sm: 2, md: 5 }}>
+    <Box sx={actionsCellContainerSx}>
       {rowData.sheetAvailable &&
         shouldRender &&
         (isDesktop ? (
           <Button variant="outlined">{t('viewSheetMusic')}</Button>
         ) : (
-          <IconButton
-            size="small"
-            variant={IconButtonColorVariant.Secondary}
-            sx={{
-              border: '1px solid black'
-            }}
-          >
+          <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryOutlinedSx}>
             <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={30} height={30} />
           </IconButton>
         ))}
 
-      <IconButton
-        size="small"
-        variant={IconButtonColorVariant.Secondary}
-        sx={{
-          bgcolor: 'none'
-        }}
-      >
+      <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryPlainSx}>
         <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
       </IconButton>
     </Box>
@@ -161,26 +156,13 @@ export const renderOpusGroupLabel = (items: Music[]) => (
 );
 
 export const renderOpusTitleGroupLabel = (items: Music[], border: string) => (
-  <TableCell
-    colSpan={4}
-    sx={{
-      pl: 0,
-      pr: { xs: 1, sm: 2, md: 5 },
-      borderBottom: `2px solid ${border}`
-    }}
-  >
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <TableCell colSpan={4} sx={groupLabelCellSx(border)}>
+    <Box sx={groupLabelRowSx}>
       <Typography variant="customBold16" fontWeight={600}>
         {items[0]?.opusTitle}
       </Typography>
 
-      <IconButton
-        size="small"
-        variant={IconButtonColorVariant.Secondary}
-        sx={{
-          bgcolor: 'none'
-        }}
-      >
+      <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryPlainSx}>
         <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
       </IconButton>
     </Box>
