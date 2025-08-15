@@ -1,9 +1,10 @@
 'use client';
 
+import type { ColumnDef } from '@tanstack/react-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getColumnWidths } from '../../../../lib/utils/getColumnWidth';
 import {
@@ -71,56 +72,50 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
     fetchData();
   }, [search, lang]);
 
-  const baseColumns = useMemo(
-    () => [
-      {
-        id: 'expander',
-        header: '',
-        cell: RenderExpanderCell
-      },
-      {
-        id: 'opus',
-        header: RenderOpusHeader,
-        cell: () => null,
-        meta: { groupLabelContentFactory: renderOpusGroupLabel }
-      },
-      { id: 'play', header: '', cell: RenderPlayCell },
-      {
-        id: 'name',
-        accessorKey: 'name',
-        header: RenderNameHeader,
-        cell: renderNameCell,
-        enableSorting: false,
-        meta: {
-          groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
-        }
-      },
-      {
-        id: 'year',
-        accessorKey: 'year',
-        header: RenderYearHeader,
-        cell: renderYearCell,
-        enableSorting: false
-      },
-      {
-        id: 'genre',
-        accessorKey: 'genre',
-        header: RenderGenreHeader,
-        cell: RenderGenreCell,
-        enableSorting: false
-      },
-      { id: 'actions', header: '', cell: RenderActionsCell }
-    ],
-    [bp.isTablet, bp.isMobile]
-  );
+  const baseColumns: ColumnDef<Music>[] = [
+    {
+      id: 'expander',
+      header: '',
+      cell: RenderExpanderCell
+    },
+    {
+      id: 'opus',
+      header: RenderOpusHeader,
+      cell: () => null,
+      meta: { groupLabelContentFactory: renderOpusGroupLabel }
+    },
+    { id: 'play', header: '', cell: RenderPlayCell },
+    {
+      id: 'name',
+      accessorKey: 'name',
+      header: RenderNameHeader,
+      cell: renderNameCell,
+      enableSorting: false,
+      meta: {
+        groupLabelContentFactory: (items: Music[]) => renderOpusTitleGroupLabel(items, borderWithOpacity)
+      }
+    },
+    {
+      id: 'year',
+      accessorKey: 'year',
+      header: RenderYearHeader,
+      cell: renderYearCell,
+      enableSorting: false
+    },
+    {
+      id: 'genre',
+      accessorKey: 'genre',
+      header: RenderGenreHeader,
+      cell: RenderGenreCell,
+      enableSorting: false
+    },
+    { id: 'actions', header: '', cell: RenderActionsCell }
+  ];
 
-  const columns = useMemo(() => {
-    if (bp.isTablet || bp.isMobile) {
-      const hide = new Set(['opus', 'year', 'genre', 'play']);
-      return baseColumns.filter((c) => !hide.has(String(c.id)));
-    }
-    return baseColumns;
-  }, [bp.isTablet, bp.isMobile, baseColumns]);
+  const columns: ColumnDef<Music>[] =
+    bp.isTablet || bp.isMobile
+      ? baseColumns.filter((c) => !new Set(['opus', 'year', 'genre', 'play']).has(String(c.id)))
+      : baseColumns;
 
   return (
     <EnhancedTable
