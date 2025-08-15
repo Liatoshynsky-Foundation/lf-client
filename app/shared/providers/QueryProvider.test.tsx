@@ -4,7 +4,7 @@ import QueryProvider from './QueryProvider';
 
 jest.mock('@tanstack/react-query-devtools', () => ({ ReactQueryDevtools: () => <div data-testid="devtools" /> }));
 
-test('should render children and devtools', () => {
+it('should render children and devtools', () => {
   render(
     <QueryProvider>
       {' '}
