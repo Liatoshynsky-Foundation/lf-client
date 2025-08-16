@@ -1,5 +1,3 @@
-'use-client';
-
 import { Box, Checkbox, TextField, Typography } from '@mui/material';
 
 import Button from '../../design-system/all-components/button/Button';
