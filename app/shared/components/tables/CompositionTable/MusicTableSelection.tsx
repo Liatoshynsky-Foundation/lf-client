@@ -37,7 +37,7 @@ export default function MusicTableSection({ lang }: Readonly<Props>) {
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
   const { search, setSearch, titles, loadingTitles, data, loadingData } = useSearch({
-    titlesEndpoint: '/api/сompositions-titles',
+    titlesEndpoint: '/api/composition-titles',
     dataEndpointBuilder: (search) => `/api/compositions?lang=${lang}&search=${encodeURIComponent(search)}`
   });
 

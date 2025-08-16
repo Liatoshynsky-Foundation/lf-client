@@ -40,6 +40,7 @@ export function useSearch({ titlesEndpoint, dataEndpointBuilder }: UseSearchable
       try {
         const res = await fetch(titlesEndpoint);
         const json = await res.json();
+        console.log(titlesEndpoint);
         setTitles(json);
       } finally {
         setLoadingTitles(false);
@@ -47,7 +48,7 @@ export function useSearch({ titlesEndpoint, dataEndpointBuilder }: UseSearchable
     };
 
     fetchTitles();
-  }, [titlesEndpoint]);
+  }, [titlesEndpoint, search]);
 
   useEffect(() => {
     const fetchData = async () => {

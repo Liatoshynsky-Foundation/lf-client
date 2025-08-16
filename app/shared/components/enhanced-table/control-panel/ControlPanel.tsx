@@ -66,7 +66,13 @@ export const ControlPanel = ({
               onClick={() => setSearchActive((prev) => !prev)}
               size={isExtraSmall ? 'small' : 'medium'}
             >
-              <Svg Component={Search} alt="search" color={searchActive ? mainHexPallete.white : mainHexPallete.black} />
+              <Svg
+                Component={Search}
+                alt="search"
+                color={searchActive ? mainHexPallete.white : mainHexPallete.black}
+                width="28px"
+                height="28px"
+              />
             </IconButton>
           </Box>
         ) : (

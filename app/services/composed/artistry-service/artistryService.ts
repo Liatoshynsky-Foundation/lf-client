@@ -1,7 +1,10 @@
 import { Locale } from 'next-intl';
 
 import { ArtistryServiceDeps } from '~/domain/services/artistry.type';
-import { createLocalizedCompositionsArraySchema } from '~/validators/artistry/composition.schema';
+import {
+  createLocalizedCompositionsArraySchema,
+  createLocalizedСompositionTitlesArraySchema
+} from '~/validators/artistry/composition.schema';
 import { createLocalizedGenresArraySchema } from '~/validators/artistry/genre.schema';
 
 export const createArtistryService = ({ compositionService }: ArtistryServiceDeps) => ({
@@ -17,9 +20,9 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
   },
   async getAllCompositionTitles(locale: Locale) {
     const allTitles = await compositionService.getAllCompositionTitles();
-
+    console.log(allTitles);
     if (!allTitles) return [];
 
-    return createLocalizedCompositionsArraySchema(locale).parse(allTitles);
+    return createLocalizedСompositionTitlesArraySchema(locale).parse(allTitles);
   }
 });

@@ -30,12 +30,13 @@ export const compositionsRepository = {
     if (!compositions || compositions.length === 0) {
       return [];
     }
-
+    console.log(compositions);
     return compositionsArraySchema.parse(compositions);
   },
-  async getAllTitles() {
+  async getAllCompositionTitles() {
     await dbConnect();
     const titles = await Compositions.find().select({ _id: 1, title: 1 }).lean();
+    console.log('titles', titles);
     return compositionNamesArraySchema.parse(titles);
   }
 };
