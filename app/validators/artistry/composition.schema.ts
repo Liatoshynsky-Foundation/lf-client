@@ -56,9 +56,9 @@ export const compositionTitlesSchema = z.object({
 export const compositionNamesArraySchema = z.array(compositionTitlesSchema);
 
 export const createLocalizedCompositionTitlesSchema = (locale: Locale) =>
-  compositionSchema.transform((title) => ({
-    id: title._id,
-    title: title.title[locale]
+  compositionSchema.pick({ _id: true, title: true }).transform((data) => ({
+    id: data._id,
+    title: data.title[locale]
   }));
 export const createLocalizedCompositionTitlesSchemaArray = (locale: Locale) =>
   z.array(createLocalizedCompositionTitlesSchema(locale));

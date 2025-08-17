@@ -22,13 +22,7 @@ export const compositionsRepository = {
         { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
       ]
     };
-    const query = {
-      $or: [
-        { 'title.en': { $regex: escapeRegex(filter), $options: 'i' } },
-        { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
-      ]
-    };
-
+    await dbConnect();
     const compositions = await Compositions.find(query)
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
@@ -36,13 +30,11 @@ export const compositionsRepository = {
     if (!compositions || compositions.length === 0) {
       return [];
     }
-
     return compositionsArraySchema.parse(compositions);
   },
   async getAllCompositionTitles() {
     await dbConnect();
     const titles = await Compositions.find().select({ _id: 1, title: 1 }).lean();
-    console.log('titles', titles);
     return compositionNamesArraySchema.parse(titles);
   }
 };

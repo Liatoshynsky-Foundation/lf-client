@@ -12,7 +12,6 @@ const mockRawCompositions = [
   {
     _id: '63f8b3b7a8b3d6c1b3e8e4b1',
     title: { uk: 'Красива пісня', en: 'A Beautiful Song' },
-    title: { uk: 'Красива пісня', en: 'A Beautiful Song' },
     year: 2022,
     audioAvailable: true,
     sheetAvailable: false,
@@ -34,7 +33,7 @@ const mockRawCompositions = [
 const compositionServiceMock = {
   getAllGenres: jest.fn(),
   getAllCompositions: jest.fn(),
-  getAllTitles: jest.fn()
+  getAllCompositionTitles: jest.fn()
 };
 
 const artistryService = createArtistryService({
