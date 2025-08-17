@@ -16,19 +16,22 @@ export const compositionsRepository = {
   },
 
   async getAllCompositions(filter: string) {
-    const query = { title: { $regex: escapeRegex(filter), $options: 'i' } };
+    const query = {
+      $or: [
+        { 'title.en': { $regex: escapeRegex(filter), $options: 'i' } },
+        { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
+      ]
+    };
 
     const compositions = await Compositions.find(query)
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-    console.log('comp', compositions);
-    // if (!compositions || compositions.length === 0) {
-    //   return [];
-    // }
+    if (!compositions || compositions.length === 0) {
+      return [];
+    }
 
-    return compositions;
-    //compositionsArraySchema.parse(compositions);
+    return compositionsArraySchema.parse(compositions);
   },
   async getAllTitles() {
     await dbConnect();

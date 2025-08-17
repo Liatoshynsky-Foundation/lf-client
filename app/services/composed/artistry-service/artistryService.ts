@@ -17,9 +17,8 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
   async getAllCompositions(locale: Locale, filter: string) {
     const allSongs = await compositionService.getAllCompositions(filter);
     console.log(allSongs);
-    //if (!allSongs) return [];
-    return allSongs;
-    //createLocalizedCompositionsArraySchema(locale).parse(allSongs);
+    if (!allSongs) return [];
+    return createLocalizedCompositionsArraySchema(locale).parse(allSongs);
   },
   async getAllTitles(locale: Locale) {
     const allTitles = await compositionService.getAllTitles();
