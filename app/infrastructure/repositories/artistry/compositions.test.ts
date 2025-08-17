@@ -44,7 +44,7 @@ const mockGenres = [
 const mockCompositions = [
   {
     _id: '6866deda82872a835b24055d',
-    title: 'Test Title',
+    title: { uk: 'Тестовий заголовок', en: 'Test Title' },
     year: 2020,
     audioAvailable: true,
     sheetAvailable: false,
@@ -94,12 +94,12 @@ describe('compositionsRepository', () => {
     });
 
     it('should return empty array if no compositions found', async () => {
+      const searchFilter = '';
       const populateMock = jest.fn().mockReturnThis();
       const leanMock = jest.fn().mockResolvedValue([]);
-
       (Compositions.find as jest.Mock).mockReturnValue({ populate: populateMock, lean: leanMock });
 
-      const result = await compositionsRepository.getAllCompositions();
+      const result = await compositionsRepository.getAllCompositions(searchFilter);
 
       expect(result).toEqual([]);
     });
