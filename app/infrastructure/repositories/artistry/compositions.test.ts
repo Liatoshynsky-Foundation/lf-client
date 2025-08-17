@@ -83,10 +83,10 @@ describe('compositionsRepository', () => {
     it('should return parsed compositions', async () => {
       const populateMock = jest.fn().mockReturnThis();
       const leanMock = jest.fn().mockResolvedValue(mockCompositions);
-
+      const searchFilter = '';
       (Compositions.find as jest.Mock).mockReturnValue({ populate: populateMock, lean: leanMock });
 
-      const result = await compositionsRepository.getAllCompositions();
+      const result = await compositionsRepository.getAllCompositions(searchFilter);
 
       expect(Compositions.find).toHaveBeenCalled();
       expect(populateMock).toHaveBeenCalledTimes(2);
