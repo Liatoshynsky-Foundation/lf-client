@@ -30,7 +30,6 @@ async function dbConnect() {
     };
     cached.promise = mongoose.connect(mongoUrl, opts).then((mongoose) => {
       logger.info('✅ Connected to db');
-      logger.info(mongoUrl);
       return mongoose;
     });
   }
