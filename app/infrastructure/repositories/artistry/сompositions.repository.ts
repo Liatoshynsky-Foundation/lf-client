@@ -22,11 +22,13 @@ export const compositionsRepository = {
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-    if (!compositions || compositions.length === 0) {
-      return [];
-    }
+    console.log('comp', compositions);
+    // if (!compositions || compositions.length === 0) {
+    //   return [];
+    // }
 
-    return compositionsArraySchema.parse(compositions);
+    return compositions;
+    //compositionsArraySchema.parse(compositions);
   },
   async getAllTitles() {
     await dbConnect();

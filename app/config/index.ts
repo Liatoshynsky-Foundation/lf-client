@@ -4,6 +4,7 @@ export const getMongoUrl = (): string => {
   if (MONGO_HOST === 'localhost') {
     return `mongodb://${MONGO_HOST}:${MONGO_PORT ?? 27017}/${MONGO_DB}`;
   }
+  console.log(`mongodb://${MONGO_HOST}:${MONGO_PORT ?? 27017}/${MONGO_DB}`);
   return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}`;
 };
 
