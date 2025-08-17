@@ -22,26 +22,22 @@ export const compositionsRepository = {
         { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
       ]
     };
+    const query = {
+      $or: [
+        { 'title.en': { $regex: escapeRegex(filter), $options: 'i' } },
+        { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
+      ]
+    };
 
     const compositions = await Compositions.find(query)
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-<<<<<<< HEAD
     if (!compositions || compositions.length === 0) {
       return [];
     }
-    console.log(compositions);
-    return compositionsArraySchema.parse(compositions);
-=======
-    console.log('comp', compositions);
-    // if (!compositions || compositions.length === 0) {
-    //   return [];
-    // }
 
-    return compositions;
-    //compositionsArraySchema.parse(compositions);
->>>>>>> f785588 (commiting before switching to anotherworking branch)
+    return compositionsArraySchema.parse(compositions);
   },
   async getAllCompositionTitles() {
     await dbConnect();
