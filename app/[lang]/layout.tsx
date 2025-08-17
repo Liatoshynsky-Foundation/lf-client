@@ -111,7 +111,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                     </Box>
                   </Box>
                 </AudioPlayerProvider>
-                {/* <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} /> */}
+                <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} />
               </QueryProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
