@@ -55,7 +55,6 @@ export const compositionTitlesSchema = z.object({
 
 export const compositionNamesArraySchema = z.array(compositionTitlesSchema);
 
-<<<<<<< HEAD
 export const createLocalizedCompositionTitlesSchema = (locale: Locale) =>
   compositionSchema.transform((title) => ({
     id: title._id,
@@ -63,12 +62,3 @@ export const createLocalizedCompositionTitlesSchema = (locale: Locale) =>
   }));
 export const createLocalizedCompositionTitlesSchemaArray = (locale: Locale) =>
   z.array(createLocalizedCompositionTitlesSchema(locale));
-=======
-export const createLocalizedСompositionTitlesSchema = (locale: Locale) =>
-  compositionTitlesSchema.transform((title) => ({
-    id: title._id,
-    title: title.title[locale]
-  }));
-export const createLocalizedСompositionTitlesArraySchema = (locale: Locale) =>
-  z.array(createLocalizedСompositionTitlesSchema(locale));
->>>>>>> 2cc89b8 (commiting before switiching to develop)
