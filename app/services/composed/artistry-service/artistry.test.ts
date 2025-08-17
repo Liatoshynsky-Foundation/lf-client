@@ -72,7 +72,7 @@ describe('artistryService', () => {
       expect(result).toEqual([
         {
           id: mockRawCompositions[0]._id,
-          name: mockRawCompositions[0].title,
+          name: mockRawCompositions[0].title.uk,
           year: mockRawCompositions[0].year,
           audioAvailable: mockRawCompositions[0].audioAvailable,
           sheetAvailable: mockRawCompositions[0].sheetAvailable,
