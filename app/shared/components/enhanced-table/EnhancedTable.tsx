@@ -141,11 +141,13 @@ export default function EnhancedTable<T extends RowData>({
     data: allRows,
     itemsPerPage
   });
+
   return (
     <Box sx={styles.root}>
       <CompositionsControlPanel MusicSearch={MusicSearch} tableName={tableName} />
+
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+        <Box sx={styles.loaderBox}>
           <CircularProgress />
         </Box>
       ) : (
@@ -170,9 +172,10 @@ export default function EnhancedTable<T extends RowData>({
               </TableBody>
             </Table>
           </TableContainer>
+
           <Box sx={styles.paginationWrapper}>
             {hasMore && (
-              <Button variant="contained" size="large" onClick={handleLoadMore}>
+              <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
                 {t('viewMore')}
               </Button>
             )}
