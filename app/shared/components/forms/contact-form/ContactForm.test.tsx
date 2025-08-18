@@ -9,35 +9,22 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 describe('ContactForm', () => {
-  const props = {
-    title: 'Запропонувати співпрацю',
-    subTitle: 'Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів'
-  };
-
-  it('should render title and subtitle', () => {
-    render(<ContactForm {...props} />);
-
-    expect(screen.getByText(props.title)).toBeInTheDocument();
-    expect(screen.getByText(props.subTitle)).toBeInTheDocument();
-  });
-
   it('should contain four text inputs including a multiline message field', () => {
-    render(<ContactForm {...props} />);
+    render(<ContactForm />);
 
     const textboxes = screen.getAllByRole('textbox');
     if (textboxes.length !== 4) {
       throw new Error(`Expected 4 textboxes (name, email, phone, message) but found ${textboxes.length}.`);
     }
 
-    // eslint-disable-next-line quotes
-    expect(screen.getByPlaceholderText("Ім'я *")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Ім['’ʼ]я \*/)).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Електронна адреса (email) *')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Номер телефону')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Ваше повідомлення *')).toBeInTheDocument();
   });
 
   it('should render a checkbox with privacy policy link', () => {
-    render(<ContactForm {...props} />);
+    render(<ContactForm />);
 
     const checkbox = screen.queryByRole('checkbox');
     if (!checkbox) {
@@ -52,7 +39,7 @@ describe('ContactForm', () => {
   });
 
   it('should render a submit button', () => {
-    render(<ContactForm {...props} />);
+    render(<ContactForm />);
 
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
     if (!submit) {

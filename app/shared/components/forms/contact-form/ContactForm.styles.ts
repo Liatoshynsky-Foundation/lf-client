@@ -2,23 +2,9 @@ import { mainHexPallete } from '../../design-system/all-components/theme/colors'
 
 export const styles = {
   wrapper: {
-    width: '744px',
-    backgroundColor: mainHexPallete.white,
-    p: '90px 95.5px',
-    clipPath: 'polygon(0 3%, 100% 0%, 100% 97%, 0% 100%)'
-  },
-
-  formTitle: {
-    color: mainHexPallete.brown[900],
-    textTransform: 'uppercase',
-    lineHeight: '160%',
-    mb: '8px'
-  },
-
-  formSubtitle: {
-    color: mainHexPallete.brown[700],
-    textIndent: '230px',
-    mb: '24px'
+    width: '552px',
+    backfroundColor: 'white',
+    zIndex: '3'
   },
 
   formWarning: {
@@ -45,7 +31,26 @@ export const styles = {
   textFieldsContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px'
+    gap: '16px',
+    '& .MuiInputLabel-root[data-shrink="false"]': {
+      transform: 'translate(14px, 12px) scale(1)',
+      color: mainHexPallete.blue[800]
+    },
+    '& .MuiFormHelperText-root': {
+      ml: 0,
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px',
+      fontSize: '14px',
+      fontStyle: 'unset',
+      '&.Mui-error::before': {
+        content: '""',
+        display: 'inline-block',
+        width: 12,
+        height: 12,
+        background: 'no-repeat center / contain url("/icons/info-error.svg")'
+      }
+    }
   },
 
   confidentialPolicyContainer: {
