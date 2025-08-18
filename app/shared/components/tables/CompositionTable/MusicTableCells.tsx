@@ -11,7 +11,8 @@ import {
   groupLabelRowSx,
   headerTypographySx,
   iconButtonSecondaryOutlinedSx,
-  iconButtonSecondaryPlainSx
+  iconButtonSecondaryPlainSx,
+  playCellSx
 } from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { Music } from '~/types/types/enhancedTable';
@@ -75,41 +76,28 @@ export const RenderPlayCell = (info: CellContext<Music, unknown>) => {
   const trackUrl = `/api/blob-url?blobName=${encodeURIComponent(rowData.name)}&folderName=compositions`;
   const isCurrentTrack = src?.startsWith(trackUrl);
 
-  if (rowData.audioAvailable)
-    return (
-      <Box
-        sx={{
-          visibility: 'hidden',
-          opacity: 0,
-          transition: 'opacity 0.2s ease',
-          '.MuiTableRow-root:hover &': {
-            visibility: 'visible',
-            opacity: 1
-          }
+  if (!rowData.audioAvailable) return <Box />;
+
+  return (
+    <Box sx={playCellSx}>
+      <IconButton
+        size="small"
+        type={IconButtonVariant.icon}
+        onClick={() => {
+          if (isCurrentTrack) togglePlay();
+          else playTrack(trackUrl, rowData.name);
         }}
       >
-        <IconButton
-          size="small"
-          type={IconButtonVariant.icon}
-          onClick={() => {
-            if (isCurrentTrack) {
-              togglePlay();
-            } else {
-              playTrack(trackUrl, rowData.name);
-            }
-          }}
-        >
-          <Svg
-            Component={isCurrentTrack && isPlaying ? PauseIcon : PlayIcon}
-            alt="play/pause"
-            width="24px"
-            height="24px"
-            color={mainHexPallete.blue[800]}
-          />
-        </IconButton>
-      </Box>
-    );
-  return <Box />;
+        <Svg
+          Component={isCurrentTrack && isPlaying ? PauseIcon : PlayIcon}
+          alt="play/pause"
+          width="24px"
+          height="24px"
+          color={mainHexPallete.blue[800]}
+        />
+      </IconButton>
+    </Box>
+  );
 };
 
 export const renderNameCell = (info: CellContext<Music, unknown>) => (

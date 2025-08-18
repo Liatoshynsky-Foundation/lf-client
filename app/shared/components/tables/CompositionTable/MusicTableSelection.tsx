@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { getColumnWidths } from '../../../../lib/utils/getColumnWidth';
 import {
   RenderActionsCell,
   RenderExpanderCell,
@@ -23,6 +22,7 @@ import {
 } from './MusicTableCells';
 import { Music } from '~/types/types/enhancedTable';
 
+import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';

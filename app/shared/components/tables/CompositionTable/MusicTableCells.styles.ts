@@ -1,8 +1,8 @@
-import { Box, styled, SxProps, Theme } from '@mui/material';
+import { SxProps, Theme } from '@mui/material';
 
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 
-export const PlayCellBox = styled(Box)(({ theme }) => ({
+export const playCellSx: SxProps<Theme> = (theme) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -17,7 +17,7 @@ export const PlayCellBox = styled(Box)(({ theme }) => ({
     visibility: 'visible',
     opacity: 1
   }
-}));
+});
 
 export const headerTypographySx: SxProps<Theme> = {
   color: mainHexPallete.blue[800]
