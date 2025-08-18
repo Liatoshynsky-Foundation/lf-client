@@ -4,13 +4,13 @@ import { mainHexPallete } from '../theme/colors';
 
 export type PaginationItemType = 'page' | 'previous' | 'next';
 
-const commonSize: SxProps<Theme> = {
-  width: 40,
-  height: 40
+const responsiveSize: SxProps<Theme> = {
+  width: { xs: 32, md: 32, lg: 40 },
+  height: { xs: 32, md: 32, lg: 40 }
 };
 
 const arrowButtonBase: SxProps<Theme> = {
-  ...commonSize,
+  ...responsiveSize,
   border: `1px solid ${mainHexPallete.black}`,
   borderRadius: '50%'
 };
@@ -20,7 +20,7 @@ export const paginationStyles: {
 } = {
   item: {
     page: {
-      ...commonSize,
+      ...responsiveSize,
       border: 'none',
       borderRadius: '50%',
       '&.Mui-selected': {
