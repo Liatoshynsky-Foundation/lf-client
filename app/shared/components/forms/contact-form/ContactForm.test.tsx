@@ -4,6 +4,28 @@ import React from 'react';
 
 import ContactForm from './ContactForm';
 
+jest.mock('public/icons/info-error.svg', () => {
+  return function InfoErrorIcon() {
+    return <span data-testid="info-error-icon">info-error</span>;
+  };
+});
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const messages: Record<string, string> = {
+      name: 'Імя',
+      email: 'Електронна адреса (email) *',
+      phoneNumber: 'Номер телефону',
+      message: 'Ваше повідомлення *',
+      policyText: 'Я погоджуюсь з',
+      policyLink: 'Політикою конфіденційності',
+      buttonText: 'Надіслати запит',
+      requiredFields: '* – поля обов’язкові до заповнення'
+    };
+    return messages[key] || key;
+  }
+}));
+
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
@@ -17,10 +39,10 @@ describe('ContactForm', () => {
       throw new Error(`Expected 4 textboxes (name, email, phone, message) but found ${textboxes.length}.`);
     }
 
-    expect(screen.getByPlaceholderText(/Ім['’ʼ]я \*/)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Електронна адреса (email) *')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Номер телефону')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Ваше повідомлення *')).toBeInTheDocument();
+    expect(screen.getByLabelText('Імя')).toBeInTheDocument();
+    expect(screen.getByLabelText('Електронна адреса (email) *')).toBeInTheDocument();
+    expect(screen.getByLabelText('Номер телефону')).toBeInTheDocument();
+    expect(screen.getByLabelText('Ваше повідомлення *')).toBeInTheDocument();
   });
 
   it('should render a checkbox with privacy policy link', () => {
