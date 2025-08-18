@@ -1,11 +1,11 @@
 import dbConnect from '~/infrastructure/db/connect';
-import PagesData from '~/infrastructure/models/pages-data/pagesData';
-import { PageSchema as PageZodSchema } from '~/validators/page2/page.schema';
+import PageModel from '~/infrastructure/models/pages/pages';
+import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
 
 export const pagesDataRepository = {
   async getPageData(slug: string) {
     await dbConnect();
-    const page = await PagesData.findOne({ slug }).lean().exec();
+    const page = await PageModel.findOne({ slug }).lean().exec();
     if (!page) return null;
     return PageZodSchema.parse(page);
   }
