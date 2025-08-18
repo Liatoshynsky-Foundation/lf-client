@@ -157,7 +157,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({ minNumber, maxNumbe
               <Svg
                 Component={TrashIcon}
                 alt="trash"
-                color={rgbaClearFilterButton.defaultTextColor}
+                stroke={rgbaClearFilterButton.defaultTextColor}
                 width="20px"
                 height="22px"
               />
