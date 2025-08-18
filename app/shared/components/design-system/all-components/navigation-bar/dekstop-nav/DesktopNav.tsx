@@ -103,7 +103,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
           <Svg
             Component={ChevronIcon}
             alt="chevron"
-            color={iconColor}
+            stroke={iconColor}
             width="20px"
             height="22px"
             sx={{ display: 'flex' }}
