@@ -4,46 +4,26 @@ import React, { useState } from 'react';
 import { CookieModal } from './modal/CookieModal';
 import { CookiePreferencesModal } from './preferances/CookiePreferencesModal';
 
+import { consentObj } from '~/lib/utils/consent';
+
 declare global {
   interface Window {
-    dataLayer: any[];
+    gtag: (...args: any[]) => void;
   }
 }
 
-function initGoogleAnalitics(trackingId: string) {
-  const script = document.createElement('script');
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${trackingId}`;
-  script.async = true;
-  document.head.appendChild(script);
-
-  script.onload = () => {
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
-    }
-    gtag('js', new Date());
-    gtag('config', trackingId);
-  };
-}
-
-const CookieModalWrapper = ({ cookie_consent, tracking_id }: { cookie_consent: string; tracking_id: string }) => {
+const CookieModalWrapper = ({ cookie_consent }: { cookie_consent: string }) => {
   const [open, setOpen] = useState(true);
   const [openPreferences, setOpenPreferences] = useState(false);
   const [collectAnalytics, setCollectAnalytics] = useState(true);
 
-  const shouldRenderModal = !(cookie_consent && JSON.parse(cookie_consent).analytics);
+  const shouldRenderModal = !cookie_consent;
 
   const setCookies = (analytics: boolean) => {
-    const cookies = {
-      analytics,
-      marketing: false,
-      functional: false,
-      necessary: true
-    };
     if (analytics) {
-      initGoogleAnalitics(tracking_id);
+      window.gtag('consent', 'update', consentObj(true));
     }
-    document.cookie = `cookie_consent=${JSON.stringify(cookies)}; path=/; max-age=${analytics ? 31536000 : 0}`;
+    document.cookie = `cookie_consent=${analytics ? 1 : 0}; path=/; max-age=31536000`;
   };
 
   const showPreferences = () => {
@@ -52,9 +32,6 @@ const CookieModalWrapper = ({ cookie_consent, tracking_id }: { cookie_consent: s
   };
 
   if (!shouldRenderModal) {
-    if (cookie_consent && JSON.parse(cookie_consent).analytics) {
-      initGoogleAnalitics(tracking_id);
-    }
     return null;
   }
 
