@@ -4,10 +4,10 @@ import React from 'react';
 
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
-import MusicTableSection from './CompositionTable/MusicTableSelection';
 import { Language } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import MusicTableSection from '~/shared/components/tables/CompositionTable/MusicTableSelection';
 
 export const metadata = createSeoMeta({
   title: 'Творчість - Фундація Лятошинського',
@@ -20,7 +20,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
   setRequestLocale(lang);
   const t = await getTranslations('liatoshynskyArtistry');
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
+    <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1', overflow: 'visible' }}>
       <TitleWithQuote
         title={t('title-with-quote.title')}
         quoteText={t('title-with-quote.quoteText')}

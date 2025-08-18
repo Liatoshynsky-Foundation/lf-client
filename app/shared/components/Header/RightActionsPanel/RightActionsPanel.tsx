@@ -21,11 +21,7 @@ export default function RightActionsPanel({ supportButtonData }: Readonly<Suppor
   return (
     <Box sx={styles.backgroundContainer(isMobile, isTablet)}>
       <Box sx={styles.rightContainer}>
-        <AudioPlayer
-          src="/api/blob-url?blobName=Поема про ліс&folderName=compositions"
-          trackName="Symphony No. 3 In B Minor, Op. 50: Iv. Allegro Risoluto"
-          autoplay={false}
-        />
+        <AudioPlayer />
         <Box sx={styles.buttonsContainer(isMobile)}>
           <LanguageSwitcher variant="icon" />
           <SupportButton data={supportButtonData} />

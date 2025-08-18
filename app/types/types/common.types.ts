@@ -11,3 +11,11 @@ export type ButtonGroupPaletteOptions = 'primary' | 'secondary';
 export type ScrollDirection = 'up' | 'down';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+export type Breakpoints = {
+  isDesktop: boolean;
+  isLaptopAndAbove: boolean;
+  isLaptop: boolean;
+  isTablet: boolean;
+  isMobile: boolean;
+};
