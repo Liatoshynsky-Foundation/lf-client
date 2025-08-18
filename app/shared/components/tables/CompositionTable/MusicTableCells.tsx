@@ -11,14 +11,13 @@ import {
   groupLabelRowSx,
   headerTypographySx,
   iconButtonSecondaryOutlinedSx,
-  iconButtonSecondaryPlainSx,
-  PlayCellBox
+  iconButtonSecondaryPlainSx
 } from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { Music } from '~/types/types/enhancedTable';
 
-import PlayIcon from '~/public/icons/play.svg';
 import PauseIcon from '~/public/icons/pause.svg';
+import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import Button from '~/shared/components/design-system/all-components/button/Button';
 import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
@@ -103,8 +102,8 @@ export const RenderPlayCell = (info: CellContext<Music, unknown>) => {
           <Svg
             Component={isCurrentTrack && isPlaying ? PauseIcon : PlayIcon}
             alt="play/pause"
-            width="24"
-            height="24"
+            width="24px"
+            height="24px"
             color={mainHexPallete.blue[800]}
           />
         </IconButton>
