@@ -45,7 +45,7 @@ export async function GET(request: Request) {
     url.searchParams.set('draftId', draftId);
   }
 
-  const response = NextResponse.json({ previewUrl: url.toString() });
+  const response = NextResponse.redirect(url.toString());
 
   response.headers.set('Cache-Control', 'no-store');
 
