@@ -5,12 +5,11 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import TitleWithDescription from '~/components/title-with-description/TitleWithDescription';
 
 import { iconSizes, styles } from './WhatWeDo.styles';
-import { WhatWeDoItem, WhatWeDoProps } from '~/types/pages/home/homePage';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
-const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
+const WhatWeDo = ({ data }: { data: any }) => {
   const { mainTitle, items } = data;
-  const columns: WhatWeDoItem[][] = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
+  const columns = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
   const sizesAttribute = generateSizesAttribute(iconSizes);
 
   return (
@@ -24,7 +23,7 @@ const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
               ...styles.column
             }}
           >
-            {columnItems.map((item, itemIndex) => (
+            {columnItems.map((item: any, itemIndex: any) => (
               <Box sx={styles.item} key={item.id ?? `item-${itemIndex}`}>
                 <Box sx={styles.icon}>
                   <Image src="/icons/bullet-small.svg" alt="bullet icon" fill sizes={sizesAttribute} />

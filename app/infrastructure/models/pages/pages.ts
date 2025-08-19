@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-import { Page as PageType } from '~/validators/pages/index.schema';
+import { Page as PageType } from '~/validators/pagesSchemas/pages';
 
 export interface IPageDocument extends Omit<PageType, '_id'>, Document {}
 

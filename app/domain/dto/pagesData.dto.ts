@@ -1,3 +1,3 @@
-import { Page } from '~/validators/page2/page.schema';
+import { Page } from '~/validators/pagesSchemas/pages';
 
 export type PageDataDTO = Page;

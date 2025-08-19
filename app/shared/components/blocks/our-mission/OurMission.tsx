@@ -5,16 +5,15 @@ import ListItem from '~/components/list-item/ListItem';
 import SectionTitle from '~/components/section-title/SectionTitle';
 
 import { styles } from './OurMission.styles';
-import { OurMissionProps } from '~/types/pages/home/homePage';
 
-const OurMission = ({ data }: { data: Readonly<OurMissionProps> }) => {
+const OurMission = ({ data }: { data: any }) => {
   const { title, smallImage, bigImage, listItems } = data;
 
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle title={title} />
       <Box sx={styles.list}>
-        {listItems.map((item) => (
+        {listItems.map((item: any) => (
           <ListItem key={item} text={item} />
         ))}
       </Box>
