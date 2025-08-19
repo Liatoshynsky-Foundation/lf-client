@@ -11,7 +11,7 @@ const mockRawGenres = [
 const mockRawCompositions = [
   {
     _id: '63f8b3b7a8b3d6c1b3e8e4b1',
-    title: 'A Beautiful Song',
+    title: { uk: 'Красива пісня', en: 'A Beautiful Song' },
     year: 2022,
     audioAvailable: true,
     sheetAvailable: false,
@@ -32,7 +32,8 @@ const mockRawCompositions = [
 
 const compositionServiceMock = {
   getAllGenres: jest.fn(),
-  getAllCompositions: jest.fn()
+  getAllCompositions: jest.fn(),
+  getAllTitles: jest.fn()
 };
 
 const artistryService = createArtistryService({
@@ -64,13 +65,14 @@ describe('artistryService', () => {
   describe('getAllCompositions', () => {
     it('should fetch compositions, localize them and return the result', async () => {
       const locale = 'uk';
+      const searchFilter = '';
       compositionServiceMock.getAllCompositions.mockResolvedValue(mockRawCompositions);
 
-      const result = await artistryService.getAllCompositions(locale);
+      const result = await artistryService.getAllCompositions(locale, searchFilter);
       expect(result).toEqual([
         {
           id: mockRawCompositions[0]._id,
-          name: mockRawCompositions[0].title,
+          name: mockRawCompositions[0].title.uk,
           year: mockRawCompositions[0].year,
           audioAvailable: mockRawCompositions[0].audioAvailable,
           sheetAvailable: mockRawCompositions[0].sheetAvailable,
@@ -87,9 +89,10 @@ describe('artistryService', () => {
 
     it('should return an empty array if composition service returns null or undefined', async () => {
       const locale = 'uk';
+      const searchFilter = '';
       compositionServiceMock.getAllCompositions.mockResolvedValue(null);
 
-      const result = await artistryService.getAllCompositions(locale);
+      const result = await artistryService.getAllCompositions(locale, searchFilter);
 
       expect(result).toEqual([]);
       expect(compositionServiceMock.getAllCompositions).toHaveBeenCalledTimes(1);
@@ -97,9 +100,10 @@ describe('artistryService', () => {
 
     it('should return an empty array if composition service returns an empty array', async () => {
       const locale = 'uk';
+      const searchFilter = '';
       compositionServiceMock.getAllCompositions.mockResolvedValue([]);
 
-      const result = await artistryService.getAllCompositions(locale);
+      const result = await artistryService.getAllCompositions(locale, searchFilter);
 
       expect(result).toEqual([]);
       expect(compositionServiceMock.getAllCompositions).toHaveBeenCalledTimes(1);

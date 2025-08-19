@@ -16,7 +16,12 @@ export const compositionsRepository = {
   },
 
   async getAllCompositions(filter: string) {
-    const query = { title: { $regex: escapeRegex(filter), $options: 'i' } };
+    const query = {
+      $or: [
+        { 'title.en': { $regex: escapeRegex(filter), $options: 'i' } },
+        { 'title.uk': { $regex: escapeRegex(filter), $options: 'i' } }
+      ]
+    };
 
     const compositions = await Compositions.find(query)
       .populate('genres')

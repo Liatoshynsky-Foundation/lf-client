@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createLocalizedGenreSchema, genreSchema } from './genre.schema';
 import { opusSchema } from './opus.schema';
 
-import { mongoObjectIdSchema } from '~/validators/constants';
+import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
 const sheetMusicItemSchema = z.object({
   url: z.string(),
@@ -14,7 +14,7 @@ const sheetMusicItemSchema = z.object({
 
 export const compositionSchema = z.object({
   _id: mongoObjectIdSchema,
-  title: z.string(),
+  title: translatedFieldSchema,
   year: z.number(),
   audioAvailable: z.boolean(),
   sheetAvailable: z.boolean(),
@@ -30,7 +30,7 @@ export const compositionsArraySchema = z.array(compositionSchema);
 export const createLocalizedCompositionSchema = (locale: Locale) =>
   compositionSchema.transform((song) => ({
     id: song._id,
-    name: song.title,
+    name: song.title[locale],
     year: song.year,
     audioAvailable: song.audioAvailable,
     sheetAvailable: song.sheetAvailable,
@@ -50,7 +50,15 @@ export const createLocalizedCompositionsArraySchema = (locale: Locale) =>
 
 export const compositionTitlesSchema = z.object({
   _id: mongoObjectIdSchema,
-  title: z.string()
+  title: translatedFieldSchema
 });
 
 export const compositionNamesArraySchema = z.array(compositionTitlesSchema);
+
+export const createLocalizedCompositionTitlesSchema = (locale: Locale) =>
+  compositionSchema.transform((title) => ({
+    id: title._id,
+    title: title.title[locale]
+  }));
+export const createLocalizedCompositionTitlesSchemaArray = (locale: Locale) =>
+  z.array(createLocalizedCompositionTitlesSchema(locale));
