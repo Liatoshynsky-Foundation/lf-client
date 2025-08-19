@@ -1,12 +1,6 @@
 import { mainHexPallete } from '../../design-system/all-components/theme/colors';
 
 export const styles = {
-  wrapper: {
-    width: '552px',
-    backfroundColor: 'white',
-    zIndex: '3'
-  },
-
   formWarning: {
     lineHeight: '130%',
     color: mainHexPallete.brown[500],
@@ -56,9 +50,7 @@ export const styles = {
   confidentialPolicyContainer: {
     display: 'flex',
     alignItems: 'center',
-    pl: '12px',
     mt: '24px',
-
     a: {
       textDecoration: 'underline'
     }
