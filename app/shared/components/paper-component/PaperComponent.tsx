@@ -5,19 +5,20 @@ import { IconButton } from '../design-system/all-components/icon-button/IconButt
 import { SvgImage } from '../svg-image/SvgImage';
 import { styles } from './PaperComponent.styles';
 
-interface PaperComponentProps {
+type PaperComponentProps = Readonly<{
   children: ReactNode;
   isModal: boolean;
   onClose?: () => void;
   sx?: object;
-}
+}>;
 
-export default function PaperComponent({ children, isModal, onClose }: PaperComponentProps) {
+export default function PaperComponent({ children, isModal, onClose, sx }: PaperComponentProps) {
   return (
     <Paper
       sx={{
         ...styles.container,
-        ...(isModal ? styles.modal : styles.block)
+        ...(isModal ? styles.modal : styles.block),
+        ...sx
       }}
     >
       {isModal && onClose && (
