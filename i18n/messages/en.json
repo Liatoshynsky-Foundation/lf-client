@@ -121,5 +121,16 @@
   "search": {
     "notFound": "Not found",
     "loading": "Loading..."
+  },
+
+  "contactForm": {
+    "requiredFields": "* – required fields",
+    "name": "Name *",
+    "email": "Email address *",
+    "phoneNumber": "Phone number",
+    "message": "Your message *",
+    "policyText": "I agree about the processing of my personal data and agree to the",
+    "policyLink": "Privacy Policy",
+    "buttonText": "Send request"
   }
 }
