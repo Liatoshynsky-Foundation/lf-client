@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import SupportUs from './page';
 
-jest.mock('~/components/blocks/faq/Faq', () => {
+jest.mock('~/components/blocks/FAQ/FAQ', () => {
   const MockFAQ = () => <div>FAQ</div>;
   MockFAQ.displayName = 'MockFAQ';
   return MockFAQ;
