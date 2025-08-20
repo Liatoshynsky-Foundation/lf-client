@@ -8,7 +8,7 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
-import { styles } from './Faq.styles';
+import { styles } from './FAQ.styles';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';

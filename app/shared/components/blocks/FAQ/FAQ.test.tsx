@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
-import Faq from './Faq';
+import Faq from './FAQ';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
