@@ -79,7 +79,6 @@ describe('Modal', () => {
   it('should return correct verticalPositions for top and left', () => {
     const expectedStyles = {
       top: '0px',
-      marginTop: '20px',
       left: '0px'
     };
     render(
@@ -98,9 +97,8 @@ describe('Modal', () => {
 
   it('should return correct verticalPositions for bottom and right', () => {
     const expectedStyles = {
-      top: 'revert-layer',
-      marginBottom: '20px',
-      right: '0px'
+      right: '0px',
+      bottom: '0px'
     };
     render(
       <Modal

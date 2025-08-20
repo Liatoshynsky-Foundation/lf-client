@@ -1,9 +1,7 @@
 export const styles = {
   container: {
-    width: '100%',
     maxWidth: '520px',
-    height: '100%',
-    maxHeight: '313px'
+    height: '100%'
   },
   childrenBox: {
     display: 'flex',
@@ -29,6 +27,9 @@ export const styles = {
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    flexDirection: { xs: 'column', sm: 'row' },
+    gap: '8px',
+    padding: '16px 8px'
   }
 };

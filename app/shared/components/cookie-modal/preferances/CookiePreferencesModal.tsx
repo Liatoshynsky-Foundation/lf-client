@@ -37,7 +37,7 @@ export const CookiePreferencesModal: React.FC<CookiePreferencesModalProps> = ({
       topSection={styles.topSection}
       childrenBoxSx={styles.childrenBox}
       verticalAlignment={PositionEnum.Bottom}
-      horizontalAlignment={PositionEnum.Right}
+      horizontalAlignment={PositionEnum.Left}
       modalSx={styles.container}
     >
       <Box sx={styles.innerContainer}>
