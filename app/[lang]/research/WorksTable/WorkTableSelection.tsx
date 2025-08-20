@@ -19,7 +19,7 @@ import { WorkTable } from '~/types/types/enhancedTable';
 
 import { TitlesDTO } from '~/domain/dto/table.dto';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
-import Search from '~/shared/components/search/Search';
+import { Search } from '~/shared/components/search/Search';
 import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
 export default function WorkTableSection() {
