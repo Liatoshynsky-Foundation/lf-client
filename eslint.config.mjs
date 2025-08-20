@@ -29,7 +29,7 @@ const eslintConfig = [
       ],
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
-      indent: ['error', 2],
+      indent: ['error', 2, { SwitchCase: 1 }],
       'no-console': 'warn',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
