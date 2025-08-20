@@ -84,6 +84,7 @@ export default function WorkTableSection({ lang }: Readonly<Props>) {
             name: w.title,
             author: w.authors.map((a) => `${a.name || ''} ${a.surname || ''}`).join(', '),
             year: yearDisplay,
+            sortableYear: w.startYear,
             url: w.url,
             isPreview: w.isPreview
           };
@@ -144,9 +145,12 @@ export default function WorkTableSection({ lang }: Readonly<Props>) {
       sortingFn: 'alphanumeric'
     },
     {
-      accessorKey: 'year',
+      accessorKey: 'sortableYear',
       header: RenderYearHeader,
-      cell: renderYearCell,
+      cell: (info) => {
+        const originalData = info.row.original;
+        return renderYearCell(originalData.year);
+      },
       sortingFn: 'basic'
     },
     {

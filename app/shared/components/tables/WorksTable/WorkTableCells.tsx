@@ -52,9 +52,9 @@ export const renderAuthorCell = (info: CellContext<WorkTable, unknown>) => (
   </Typography>
 );
 
-export const renderYearCell = (info: CellContext<WorkTable, unknown>) => (
+export const renderYearCell = (value: string | number) => (
   <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '85px' }}>
-    {info.getValue<number>()}
+    {value}
   </Typography>
 );
 

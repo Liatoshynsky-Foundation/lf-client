@@ -12,7 +12,7 @@ jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork',
   return MockResearchAndScientificWork;
 });
 
-jest.mock('./WorksTable/WorkTableSelection.tsx', () => {
+jest.mock('~/components/tables/WorksTable/WorkTableSelection', () => {
   const MockWorkTableSelection = () => <div>Work table</div>;
   MockWorkTableSelection.displayName = 'MockWorkTable';
   return MockWorkTableSelection;

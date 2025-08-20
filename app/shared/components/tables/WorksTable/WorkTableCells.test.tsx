@@ -83,7 +83,7 @@ describe('WorkTable Components', () => {
     });
 
     it('should render year cell with correct value and max width', () => {
-      const mockInfo = createMockCellContext(2023);
+      const mockInfo = '2023';
 
       render(renderYearCell(mockInfo));
 

@@ -26,8 +26,14 @@ export const scientificWorksRepository = {
     const filter: Record<string, unknown> = {};
 
     if (years && years.length > 0) {
-      const [minYear, maxYear] = years;
-      filter.startYear = { $gte: minYear, $lte: maxYear };
+      const [minUserYear, maxUserYear] = years;
+
+      filter.$and = [
+        { startYear: { $lte: maxUserYear } },
+        {
+          $or: [{ endYear: { $gte: minUserYear } }, { $and: [{ endYear: null }, { startYear: { $gte: minUserYear } }] }]
+        }
+      ];
     }
 
     if (authorIds && authorIds.length > 0) {

@@ -28,6 +28,7 @@ export type WorkTable = {
   name: string;
   author: string;
   year: number | string;
+  sortableYear?: number;
   url: string | null;
   isPreview: boolean;
 };
