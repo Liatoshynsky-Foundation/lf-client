@@ -2,8 +2,8 @@ import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import ResearchAndScientificWork from '~/components/research-and-scientific-work/ResearchAndScientificWork';
+import WorkTableSection from '~/components/tables/WorksTable/WorkTableSelection';
 
-import WorkTableSection from './WorksTable/WorkTableSelection';
 import { Language } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';

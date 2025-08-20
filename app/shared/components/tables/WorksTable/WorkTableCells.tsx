@@ -14,7 +14,7 @@ import type { WorkTable } from '~/types/types/enhancedTable';
 export const RenderNameHeader = () => {
   const t = useTranslations('table.work.columns');
   return (
-    <Box display="flex" alignItems="center" sx={{ cursor: 'pointer' }}>
+    <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', pl: '72px' }}>
       <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
         {t('name')}
       </Typography>
@@ -41,7 +41,7 @@ export const RenderYearHeader = () => {
 };
 
 export const renderNameCell = (info: CellContext<WorkTable, unknown>) => (
-  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '738px' }}>
+  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '738px', pl: '72px' }}>
     {info.getValue<string>()}
   </Typography>
 );
