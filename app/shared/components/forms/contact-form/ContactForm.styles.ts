@@ -50,7 +50,9 @@ export const styles = {
   confidentialPolicyContainer: {
     display: 'flex',
     alignItems: 'center',
+    pl: '12px',
     mt: '24px',
+
     a: {
       textDecoration: 'underline'
     }

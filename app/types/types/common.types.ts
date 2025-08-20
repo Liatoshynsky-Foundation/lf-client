@@ -1,4 +1,4 @@
-import { Breakpoint } from '@mui/material';
+import { Breakpoint, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
@@ -81,6 +81,7 @@ export interface TipTapMarkRenderers {
   [TipTapMarkType.underline]: (children: ReactNode, mark: UnderlineMark) => ReactNode;
   [TipTapMarkType.link]: (children: ReactNode, mark: LinkMark) => ReactNode;
 }
+
 export type ButtonData = {
   text: string;
   link: string;
