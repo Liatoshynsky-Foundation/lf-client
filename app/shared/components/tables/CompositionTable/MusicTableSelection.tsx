@@ -39,9 +39,17 @@ export default function MusicTableSection() {
     titlesEndpoint: ApiRoutes.COMPOSITION_TITLES,
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
+  console.log(data);
+  const bp = useBreakpoints();
 
-  const columns = [
-    { id: 'expander', header: '', cell: () => null },
+  const columnWidths = getColumnWidths(bp);
+
+  const baseColumns: ColumnDef<Music>[] = [
+    {
+      id: 'expander',
+      header: '',
+      cell: RenderExpanderCell
+    },
     {
       id: 'opus',
       header: RenderOpusHeader,

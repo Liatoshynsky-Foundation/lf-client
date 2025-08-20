@@ -19,7 +19,7 @@ type CompositionsControlPanelProps = {
   activeFiltersCount?: number;
 };
 
-export const ControlPanel = ({
+export const CompositionsControlPanel = ({
   MusicSearch,
   Filters,
   tableName,

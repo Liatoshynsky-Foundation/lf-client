@@ -1,14 +1,12 @@
 'use server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { createRequestContainer } from '~/di/container';
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const lang = searchParams.get('lang')!;
-  const search = searchParams.get('search') || '';
+export async function GET(req: NextRequest) {
+  const locale = req.nextUrl.searchParams.get('locale') || 'uk';
+  const search = req.nextUrl.searchParams.get('search') || '';
 
-  const compositions = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, search);
-  console.log('the compositions', compositions);
+  const compositions = await createRequestContainer().resolve('artistryService').getAllCompositions(locale, search);
   return NextResponse.json(compositions);
 }
