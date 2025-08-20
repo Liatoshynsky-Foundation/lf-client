@@ -14,18 +14,23 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './WorkTableCells';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import { WorkTable } from '~/types/types/enhancedTable';
 
+import { TitlesDTO } from '~/domain/dto/table.dto';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
+import Search from '~/shared/components/search/Search';
+import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
-type Props = {
-  data: WorkTable[];
-};
-
-export default function WorkTableSection({ data }: Readonly<Props>) {
+export default function WorkTableSection() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
   const t = useTranslations('table.work');
+
+  const { search, setSearch, titles, loadingTitles, data, loadingData } = useSearch<WorkTable>({
+    titlesEndpoint: ApiRoutes.DOCUMENT_TITLES,
+    dataEndpoint: ApiRoutes.DOCUMENT_DATA
+  });
+
   const columns: ColumnDef<WorkTable>[] = [
     {
       accessorKey: 'name',
@@ -66,6 +71,7 @@ export default function WorkTableSection({ data }: Readonly<Props>) {
     >
       <EnhancedTable
         data={data}
+        loading={loadingData}
         columns={columns}
         columnFilters={columnFilters}
         onColumnFiltersChange={setColumnFilters}
@@ -77,6 +83,15 @@ export default function WorkTableSection({ data }: Readonly<Props>) {
         }}
         itemsPerPage={10}
         tableName={t('name')}
+        Search={
+          <Search<TitlesDTO>
+            search={search}
+            setSearch={setSearch}
+            options={titles}
+            loading={loadingTitles}
+            getOptionLabel={(option) => option.title}
+          />
+        }
       />
     </Box>
   );
