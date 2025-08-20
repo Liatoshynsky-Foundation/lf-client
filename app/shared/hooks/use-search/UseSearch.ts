@@ -1,25 +1,21 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { Music } from '~/types/types/enhancedTable';
-
 import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
+import { tableClientService } from '~/services/client/tableService';
+import useQuery from '~/shared/hooks/query/useQuery';
 
-interface UseSearchableTitlesOptions {
+interface UseSearchableTitlesOptions<T> {
   titlesEndpoint: string;
   dataEndpointBuilder: (search: string) => string;
   lang?: string;
 }
 
-export function useSearch({ titlesEndpoint, dataEndpointBuilder }: UseSearchableTitlesOptions) {
+export function useSearch<T = unknown>({ titlesEndpoint, dataEndpointBuilder }: UseSearchableTitlesOptions<T>) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [titles, setTitles] = useState<CompositionTitlesDTO[]>([]);
-  const [data, setData] = useState<Music[]>([]);
-  const [loadingTitles, setLoadingTitles] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams);
@@ -34,36 +30,21 @@ export function useSearch({ titlesEndpoint, dataEndpointBuilder }: UseSearchable
     router.refresh();
   }, [router, search, searchParams]);
 
-  useEffect(() => {
-    const fetchTitles = async () => {
-      setLoadingTitles(true);
-      try {
-        const res = await fetch(titlesEndpoint);
-        const json = await res.json();
-        setTitles(json);
-      } finally {
-        setLoadingTitles(false);
-      }
-    };
+  const { data: titles = [], isLoading: loadingTitles } = useQuery({
+    queryKey: ['titles', titlesEndpoint, search],
+    queryFn: () => tableClientService.getTableData<CompositionTitlesDTO>(titlesEndpoint),
+    options: {
+      staleTime: Infinity
+    }
+  });
 
-    fetchTitles();
-  }, [titlesEndpoint, search]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoadingData(true);
-      try {
-        const endpoint = dataEndpointBuilder(search);
-        const res = await fetch(endpoint);
-        const json = await res.json();
-        setData(json);
-      } finally {
-        setLoadingData(false);
-      }
-    };
-
-    fetchData();
-  }, [search]);
+  const { data = [], isLoading: loadingData } = useQuery({
+    queryKey: ['table-data', dataEndpointBuilder(search), search],
+    queryFn: () => tableClientService.getTableData<T>(dataEndpointBuilder(search)),
+    options: {
+      staleTime: Infinity
+    }
+  });
 
   return {
     search,
