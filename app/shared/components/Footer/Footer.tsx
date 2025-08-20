@@ -54,6 +54,7 @@ export default async function Footer() {
             contactLabel={t('contactUsButton')}
             donation={{
               text: t('donationButton'),
+              shortText: t('donationButtonShort'),
               link: supportButtonLink
             }}
           />
