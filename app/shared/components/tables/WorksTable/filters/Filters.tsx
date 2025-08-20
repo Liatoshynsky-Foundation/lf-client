@@ -30,7 +30,7 @@ export function WorkTableFilters({
   onYearFilterChange,
   onClearAllFilters,
   authors
-}: WorkTableFiltersProps) {
+}: Readonly<WorkTableFiltersProps>) {
   const isAuthorFilterActive = useMemo(() => authorFilter && authorFilter.length > 0, [authorFilter]);
   const isYearFilterActive = useMemo(() => {
     if (!yearFilter) {
