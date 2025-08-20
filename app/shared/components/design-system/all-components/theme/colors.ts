@@ -130,7 +130,7 @@ export const accordionColorsRgb = {
   accordion: {
     expanded: {
       backgroundColor: 'rgba(247, 245, 241, 1)',
-      color: 'rgba(110, 90, 81, 1)'
+      color: mainHexPallete.brown[800]
     }
   }
 };

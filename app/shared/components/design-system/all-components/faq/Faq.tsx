@@ -34,21 +34,19 @@ export const Faq: React.FC<FaqProps> = ({ title, content }) => {
     }
   };
   return (
-    <div style={{ width: 800 }}>
-      <Accordion expanded={expanded} onChange={handleToggle} square elevation={0} disableGutters>
-        <AccordionSummary
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          expandIcon={<SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />}
-          aria-controls="Faq-content"
-          id="Faq-header"
-        >
-          <Typography variant="customSemiBold18">{title}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="customMedium18">{content}</Typography>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+    <Accordion expanded={expanded} onChange={handleToggle} square elevation={0} disableGutters>
+      <AccordionSummary
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        expandIcon={<SvgImage src={getIconSrc()} alt="toggle icon" width={28} height={28} />}
+        aria-controls="Faq-content"
+        id="Faq-header"
+      >
+        <Typography variant="customSemiBold18">{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography variant="customMedium18">{content}</Typography>
+      </AccordionDetails>
+    </Accordion>
   );
 };

@@ -774,16 +774,16 @@ export const theme = createTheme({
         root: {
           borderRadius: '24px',
           width: '100%',
-          maxWidth: '742px',
-          marginTop: '16px',
-          marginLeft: '16px',
+          maxWidth: '744px',
           boxShadow: 'none',
           transition: 'all 0.3s ease',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
             color: accordionColorsRgb.accordion.expanded.color
+          },
+          '&:before': {
+            display: 'none'
           }
         }
       },
@@ -800,10 +800,7 @@ export const theme = createTheme({
           borderRadius: '24px',
           padding: '16px 16px 16px 24px',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
-          color: accordionColorsRgb.summary.color,
-          '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
-          }
+          color: accordionColorsRgb.summary.color
         },
         content: {
           margin: 0
@@ -813,9 +810,9 @@ export const theme = createTheme({
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          padding: '16px 16px 16px 24px',
+          padding: '8px 64px 32px 40px',
           borderRadius: '0 0 24px 24px',
-          backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
         }
       }
