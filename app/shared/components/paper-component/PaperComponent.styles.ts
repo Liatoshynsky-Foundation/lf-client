@@ -38,5 +38,9 @@ export const styles = {
     top: '24px',
     right: '24px',
     zIndex: 10
+  },
+  children: {
+    transform: 'skewY(2deg)',
+    width: '100%'
   }
 };
