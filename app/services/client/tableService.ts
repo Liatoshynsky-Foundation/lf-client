@@ -22,6 +22,7 @@ async function getTableData<T>(pathname: string, locale: Locale, search?: string
       ...(search ? { search } : {})
     }
   });
+  console.log('the url', url);
   return baseService.request<T[]>({
     method: 'GET',
     url

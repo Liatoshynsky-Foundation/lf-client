@@ -22,11 +22,13 @@ import {
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { Music } from '~/types/types/enhancedTable';
 
+import { TitlesDTO } from '~/domain/dto/table.dto';
 import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 import { Search } from '~/shared/components/search/Search';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
 export default function MusicTableSection() {
@@ -90,7 +92,15 @@ export default function MusicTableSection() {
       columnWidths={columnWidths}
       itemsPerPage={10}
       tableName={t('composition')}
-      Search={<Search search={search} setSearch={setSearch} options={titles} loading={loadingTitles} />}
+      Search={
+        <Search<TitlesDTO>
+          search={search}
+          setSearch={setSearch}
+          options={titles}
+          loading={loadingTitles}
+          getOptionLabel={(option) => option.title}
+        />
+      }
     />
   );
 }

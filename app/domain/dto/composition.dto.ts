@@ -31,7 +31,3 @@ export type CompositionDTO = {
   opus: OpusDTO;
   genres: GenreDTO;
 };
-export type CompositionTitlesDTO = {
-  _id: string;
-  title: string;
-};

@@ -9,5 +9,6 @@ export async function GET(req: Request) {
   const search = searchParams.get('search') || '';
 
   const compositions = await createRequestContainer().resolve('artistryService').getAllCompositions(lang, search);
+  console.log('the compositions', compositions);
   return NextResponse.json(compositions);
 }

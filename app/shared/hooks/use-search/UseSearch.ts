@@ -2,15 +2,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { TitlesDTO } from '~/domain/dto/table.dto';
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
 
-interface UseSearchableTitlesOptions<T> {
+interface UseSearchableTitlesOptions {
   titlesEndpoint: string;
   dataEndpoint: string;
 }
 
-export function useSearch<T = unknown>({ titlesEndpoint, dataEndpoint }: UseSearchableTitlesOptions<T>) {
+export function useSearch<T>({ titlesEndpoint, dataEndpoint }: UseSearchableTitlesOptions) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const locale = useLocale();
@@ -32,7 +33,7 @@ export function useSearch<T = unknown>({ titlesEndpoint, dataEndpoint }: UseSear
 
   const { data: titles = [], isLoading: loadingTitles } = useQuery({
     queryKey: ['titles', titlesEndpoint, locale],
-    queryFn: () => tableClientService.getTableTitles<T>(titlesEndpoint, locale),
+    queryFn: () => tableClientService.getTableTitles<TitlesDTO>(titlesEndpoint, locale),
     options: {
       staleTime: Infinity
     }

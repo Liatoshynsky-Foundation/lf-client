@@ -19,13 +19,6 @@ import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, SearchStyles } from './SearchStyles';
 
-import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
-interface SearchProps {
-  setSearch: (value: string) => void;
-  search: string;
-  options: CompositionTitlesDTO[];
-  loading?: boolean;
-}
 const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let width;
   let borderRadius;
@@ -48,8 +41,17 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   };
 };
 
-export const Search: React.FC<SearchProps> = ({ search, setSearch, options, loading }: SearchProps) => {
-  const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
+interface SearchProps<T> {
+  setSearch: (value: string) => void;
+  search: string;
+  options: T[];
+  loading?: boolean;
+  getOptionLabel: (option: T) => string;
+  renderOption?: (props: object & { key: React.Key }, option: T) => React.ReactNode;
+}
+
+export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel, renderOption }: SearchProps<T>) => {
+  const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,11 +83,9 @@ export const Search: React.FC<SearchProps> = ({ search, setSearch, options, load
   const handleClear = () => {
     setSearch('');
   };
-  const onChange = (event: unknown, value: CompositionTitlesDTO | null) => {
+  const onChange = (event: unknown, value: T | null) => {
     setValue(value);
-    const params = new URLSearchParams(window.location.search);
-    setSearch(value?.title as string);
-    params.set('search', value?.title as string);
+    setSearch(value ? getOptionLabel(value) : '');
   };
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
@@ -125,23 +125,18 @@ export const Search: React.FC<SearchProps> = ({ search, setSearch, options, load
       />
     );
   };
-  function renderOptionFn(
-    { key, ...props }: object & { key: React.Key },
-    option: CompositionTitlesDTO
-  ): React.ReactNode {
-    return (
-      <List {...props} key={key}>
-        <ListItem disableGutters>
-          <Typography variant="customMedium16">{option.title}</Typography>
-        </ListItem>
-      </List>
-    );
-  }
 
-  const renderOption = useMemo(() => renderOptionFn, []);
-  const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
+  // Default renderOption if not provided
+  const defaultRenderOption = ({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => (
+    <List {...props} key={key}>
+      <ListItem disableGutters>
+        <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
+      </ListItem>
+    </List>
+  );
+
   return (
-    <Autocomplete
+    <Autocomplete<T, false, false, false>
       data-testid="music-search"
       options={options}
       loading={loading}
@@ -150,7 +145,7 @@ export const Search: React.FC<SearchProps> = ({ search, setSearch, options, load
       inputValue={search}
       onInputChange={handleInputChange}
       renderInput={renderInput}
-      renderOption={renderOption}
+      renderOption={renderOption ?? defaultRenderOption}
       getOptionLabel={getOptionLabel}
       clearOnBlur={false}
       popupIcon={null}
