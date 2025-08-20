@@ -2,16 +2,16 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { Faq } from './Faq';
+import { FaqAccordion } from './FaqAccordion';
 
-describe('Faq component', () => {
+describe('FaqAccordion component', () => {
   const title = 'What is title';
   const content = 'title is a a sequence of words which defines overall meaning of the text';
   beforeEach(() => {
-    render(<Faq title={title} content={content} />);
+    render(<FaqAccordion title={title} content={content} />);
   });
 
-  it('should render the Faq title', () => {
+  it('should render the FaqAccordion title', () => {
     expect(screen.getByText(title)).toBeInTheDocument();
   });
 

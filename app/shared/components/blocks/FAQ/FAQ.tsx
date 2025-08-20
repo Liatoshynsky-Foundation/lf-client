@@ -5,29 +5,29 @@ import { useTranslations } from 'next-intl';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import SectionTitle from '~/components/section-title/SectionTitle';
-import { Faq } from '~/ds-components/faq/Faq';
+import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
-import { styles } from './FAQ.styles';
+import { styles } from './Faq.styles';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-type FAQItemProps = {
+type FaqItemProps = {
   title: string;
   content: string;
 };
 
-type FAQProps = {
+type FaqProps = {
   contacts: {
     phone: string;
     email: string;
   };
-  faq: FAQItemProps[];
+  faq: FaqItemProps[];
 };
 
-const FAQ = ({ data }: { readonly data: Readonly<FAQProps> }) => {
+const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
   const { contacts, faq } = data;
 
   const t = useTranslations('supportUs.faq');
@@ -41,7 +41,7 @@ const FAQ = ({ data }: { readonly data: Readonly<FAQProps> }) => {
   const telLinkProps = isMobile ? { href: `tel:${contacts.phone}` } : { onClick: copyPhoneToClipboard, href: '#' };
 
   const faqItems = faq.map((item) => {
-    return <Faq key={item.title} title={item.title} content={item.content} />;
+    return <FaqAccordion key={item.title} title={item.title} content={item.content} />;
   });
 
   return (
@@ -74,4 +74,4 @@ const FAQ = ({ data }: { readonly data: Readonly<FAQProps> }) => {
   );
 };
 
-export default FAQ;
+export default Faq;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import FAQ from '~/components/blocks/FAQ/FAQ';
-import { contacts, faqItems } from '~/components/blocks/FAQ/FAQ.consts';
+import FAQ from '~/shared/components/blocks/faq/Faq';
+import { contacts, faqItems } from '~/shared/components/blocks/faq/Faq.consts';
 
 export default function SupportUs() {
   const faqData = {

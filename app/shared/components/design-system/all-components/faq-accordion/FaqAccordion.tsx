@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-export interface FaqProps {
+export interface FaqAccordionProps {
   title: string;
   content: string;
 }
 
-export const Faq: React.FC<FaqProps> = ({ title, content }) => {
+export const FaqAccordion: React.FC<FaqAccordionProps> = ({ title, content }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const handleMouseEnter = () => {

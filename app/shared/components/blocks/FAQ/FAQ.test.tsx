@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
-import FAQ from './FAQ';
+import Faq from './Faq';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -68,21 +68,21 @@ describe('FAQ component', () => {
   });
 
   it('should render the section title and subtitles', () => {
-    render(<FAQ data={mockFaqData} />);
+    render(<Faq data={mockFaqData} />);
     expect(screen.getByText('FAQ Title')).toBeInTheDocument();
     expect(screen.getByText('Have a question?')).toBeInTheDocument();
     expect(screen.getByText('Here is the answer')).toBeInTheDocument();
   });
 
   it('should render FAQ items', () => {
-    render(<FAQ data={mockFaqData} />);
+    render(<Faq data={mockFaqData} />);
     expect(screen.getByText('Question 1')).toBeInTheDocument();
     expect(screen.getByText('Answer 1')).toBeInTheDocument();
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
   it('should copy phone to clipboard when not mobile', async () => {
-    render(<FAQ data={mockFaqData} />);
+    render(<Faq data={mockFaqData} />);
     const phoneLink = screen.getByText(mockFaqData.contacts.phone);
     fireEvent.click(phoneLink);
 
@@ -92,13 +92,13 @@ describe('FAQ component', () => {
 
   it('should use tel: link when on mobile', () => {
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
-    render(<FAQ data={mockFaqData} />);
+    render(<Faq data={mockFaqData} />);
     const phoneLink = screen.getByText(mockFaqData.contacts.phone);
     expect(phoneLink.closest('a')).toHaveAttribute('href', `tel:${mockFaqData.contacts.phone}`);
   });
 
   it('should render email link', () => {
-    render(<FAQ data={mockFaqData} />);
+    render(<Faq data={mockFaqData} />);
     const emailLink = screen.getByText(mockFaqData.contacts.email);
     expect(emailLink.closest('a')).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
   });
