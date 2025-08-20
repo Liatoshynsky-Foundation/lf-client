@@ -1,28 +1,39 @@
 'use client';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Badge, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { Svg } from '../../colored-svg/ColoredSvg';
-import { IconButton } from '../../design-system/all-components/icon-button/IconButton';
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { Svg } from '~/components/colored-svg/ColoredSvg';
+import { mainHexPallete } from '~/ds-components//theme/colors';
+import Button from '~/ds-components/button/Button';
+import { IconButton } from '~/ds-components/icon-button/IconButton';
+
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
+import Filter from '~/public/icons/filter.svg';
 import Search from '~/public/icons/search.svg';
 
 type CompositionsControlPanelProps = {
   MusicSearch: ReactNode;
+  Filters?: ReactNode;
   tableName: string;
+  activeFiltersCount?: number;
 };
 
-const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsControlPanelProps) => {
+const CompositionsControlPanel = ({
+  MusicSearch,
+  Filters,
+  tableName,
+  activeFiltersCount
+}: CompositionsControlPanelProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const isExtraSmall = useMediaQuery('(max-width:400px)', { noSsr: true });
   const [searchActive, setSearchActive] = useState(false);
-
+  const [filtersActive, setFiltersActive] = useState(false);
   useEffect(() => {
     if (!isMobile) {
       setSearchActive(false);
+      setFiltersActive(false);
     }
   }, [isMobile]);
 
@@ -56,9 +67,29 @@ const CompositionsControlPanel = ({ MusicSearch, tableName }: CompositionsContro
         ) : (
           MusicSearch
         )}
+        {Filters && (
+          <Badge
+            badgeContent={activeFiltersCount}
+            color="primary"
+            invisible={activeFiltersCount === 0}
+            sx={{
+              '& .MuiBadge-badge': { top: '5px', right: '5px', borderRadius: '50%', minWidth: '18px', height: '18px' }
+            }}
+          >
+            <Button
+              variant="outlined"
+              size="medium"
+              onClick={() => setFiltersActive((prev) => !prev)}
+              startIcon={<Filter />}
+            >
+              Фільтри
+            </Button>
+          </Badge>
+        )}
       </Box>
-
-      {searchActive && isMobile && <Box>{MusicSearch}</Box>}
+      <>{searchActive && isMobile ? <Box>{MusicSearch}</Box> : <></>}</>
+      {filtersActive && <Box sx={{ marginBottom: 2, display: 'flex', alignItems: 'center', gap: 2 }}>{Filters}</Box>}
+      <Box></Box>
     </Box>
   );
 };

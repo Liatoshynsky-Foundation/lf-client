@@ -28,6 +28,6 @@ export type WorkTable = {
   name: string;
   author: string;
   year: number | string;
-  actionType?: 'pdf' | 'link';
-  link?: string;
+  url: string | null;
+  isPreview: boolean;
 };

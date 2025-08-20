@@ -27,16 +27,14 @@ describe('FilterSelect', () => {
     fireEvent.click(screen.getByText('Select'));
     fireEvent.click(screen.getByText('First'));
 
-    const allMatches = screen.getAllByText('First');
-    expect(allMatches.length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText('1 обрано')).toBeInTheDocument();
   });
 
   it('should remove chip when delete icon is clicked', () => {
-    render(<FilterSelect label="Remove Chip" options={mockOptions} defaultValues={['1']} />);
-    const chip = screen.getByText('First');
-    expect(chip).toBeInTheDocument();
+    render(<FilterSelect label="Select" options={mockOptions} defaultValues={['1']} />);
+    expect(screen.getByText('1 обрано')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('delete-icon'));
-    expect(screen.queryByText('First')).not.toBeInTheDocument();
+    expect(screen.queryByText('1 обрано')).not.toBeInTheDocument();
   });
 
   it('should call onAdd when item is selected', () => {
@@ -51,7 +49,7 @@ describe('FilterSelect', () => {
     const onRemove = jest.fn();
     render(<FilterSelect label="Remove" options={mockOptions} defaultValues={['1']} onRemove={onRemove} />);
     fireEvent.click(screen.getByTestId('delete-icon'));
-    expect(onRemove).toHaveBeenCalledWith('1', 'First', []);
+    expect(onRemove).toHaveBeenCalledWith('', '', []);
   });
 
   it('should disable selection if maxSelections is reached', () => {

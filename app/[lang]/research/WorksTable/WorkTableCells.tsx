@@ -62,7 +62,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
   const t = useTranslations('table.work.buttons');
   const row = info.row.original;
 
-  if (row.actionType === 'pdf') {
+  if (row.isPreview) {
     return (
       <Box
         sx={{
@@ -78,7 +78,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
     );
   }
 
-  if (row.actionType === 'link' && row.link) {
+  if (row.url) {
     return (
       <Box
         sx={{
@@ -87,7 +87,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
           maxWidth: '189px'
         }}
       >
-        <Button variant="outlined" size="medium" color="primary" link={row.link} endIcon={<LogOut />}>
+        <Button variant="outlined" size="medium" color="primary" link={row.url} endIcon={<LogOut />}>
           {t('goto')}
         </Button>
       </Box>

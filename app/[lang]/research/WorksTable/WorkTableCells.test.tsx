@@ -102,9 +102,9 @@ describe('WorkTable Components', () => {
         }
       }) as any;
 
-    it('should render PDF view button when actionType is pdf', () => {
+    it('should render PDF view button when isPreview is true', () => {
       const mockInfo = createMockActionCellContext({
-        actionType: 'pdf'
+        isPreview: true
       });
 
       render(<RenderActionCell {...mockInfo} />);
@@ -114,10 +114,9 @@ describe('WorkTable Components', () => {
       expect(viewButton.closest('button')).toBeInTheDocument();
     });
 
-    it('should render link button when actionType is link and link exists', () => {
+    it('should render link button when url exists', () => {
       const mockInfo = createMockActionCellContext({
-        actionType: 'link',
-        link: 'https://example.com'
+        url: 'https://example.com'
       });
 
       render(<RenderActionCell {...mockInfo} />);
@@ -128,11 +127,8 @@ describe('WorkTable Components', () => {
       expect(screen.getByTestId('log-out-icon')).toBeInTheDocument();
     });
 
-    it('should render nothing when actionType is link but no link provided', () => {
-      const mockInfo = createMockActionCellContext({
-        actionType: 'link',
-        link: undefined
-      });
+    it('should render nothing when neither isPreview nor url provided', () => {
+      const mockInfo = createMockActionCellContext({});
 
       const { container } = render(<RenderActionCell {...mockInfo} />);
 
