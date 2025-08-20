@@ -1,19 +1,19 @@
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
 
 interface UseSearchableTitlesOptions<T> {
   titlesEndpoint: string;
-  dataEndpointBuilder: (search: string) => string;
-  lang?: string;
+  dataEndpoint: string;
 }
 
-export function useSearch<T = unknown>({ titlesEndpoint, dataEndpointBuilder }: UseSearchableTitlesOptions<T>) {
+export function useSearch<T = unknown>({ titlesEndpoint, dataEndpoint }: UseSearchableTitlesOptions<T>) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const locale = useLocale();
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
 
@@ -31,16 +31,16 @@ export function useSearch<T = unknown>({ titlesEndpoint, dataEndpointBuilder }: 
   }, [router, search, searchParams]);
 
   const { data: titles = [], isLoading: loadingTitles } = useQuery({
-    queryKey: ['titles', titlesEndpoint, search],
-    queryFn: () => tableClientService.getTableData<CompositionTitlesDTO>(titlesEndpoint),
+    queryKey: ['titles', titlesEndpoint, locale],
+    queryFn: () => tableClientService.getTableTitles<T>(titlesEndpoint, locale),
     options: {
       staleTime: Infinity
     }
   });
 
   const { data = [], isLoading: loadingData } = useQuery({
-    queryKey: ['table-data', dataEndpointBuilder(search), search],
-    queryFn: () => tableClientService.getTableData<T>(dataEndpointBuilder(search)),
+    queryKey: ['table-data', dataEndpoint, locale, search],
+    queryFn: () => tableClientService.getTableData<T>(dataEndpoint, locale, search),
     options: {
       staleTime: Infinity
     }

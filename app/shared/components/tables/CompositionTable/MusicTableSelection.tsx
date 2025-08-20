@@ -19,6 +19,7 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './MusicTableCells';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import { Music } from '~/types/types/enhancedTable';
 
 import { getColumnWidths } from '~/lib/utils/getColumnWidth';
@@ -28,17 +29,13 @@ import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 import { Search } from '~/shared/components/search/Search';
 import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
-type Props = {
-  lang: string;
-};
-
-export default function MusicTableSection({ lang }: Readonly<Props>) {
+export default function MusicTableSection() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
   const t = useTranslations('table.name');
-  const { search, setSearch, titles, loadingTitles, data, loadingData } = useSearch({
-    titlesEndpoint: '/api/composition-titles',
-    dataEndpointBuilder: (search) => `/api/compositions?lang=${lang}&search=${encodeURIComponent(search)}`
+  const { search, setSearch, titles, loadingTitles, data, loadingData } = useSearch<Music>({
+    titlesEndpoint: ApiRoutes.COMPOSITION_TITLES,
+    dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
 
   const columns = [
