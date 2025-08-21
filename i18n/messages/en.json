@@ -5,6 +5,7 @@
   },
   "footer": {
     "donationButton": "Support the Foundation",
+    "donationButtonShort": "Support",
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "phoneLabel": "Phone",
