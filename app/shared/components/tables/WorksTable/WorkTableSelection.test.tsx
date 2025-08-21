@@ -72,18 +72,18 @@ describe('WorkTableSection', () => {
       } as Response);
   });
 
-  it('renders correct number of rows', async () => {
+  it('should render correct number of rows', async () => {
     render(<WorkTableSection lang="en" />);
     const rows = await screen.findAllByTestId('row');
     expect(rows.length).toBe(workTableMock.length);
   });
 
-  it('renders pagination button', async () => {
+  it('should render pagination button', async () => {
     render(<WorkTableSection lang="en" />);
     expect(await screen.findByLabelText('Go to next page')).toBeInTheDocument();
   });
 
-  it('renders action buttons correctly', async () => {
+  it('should render action buttons correctly', async () => {
     render(<WorkTableSection lang="en" />);
 
     await waitFor(() => {
