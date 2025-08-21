@@ -7,8 +7,6 @@ import Button from '~/ds-components/button/Button';
 
 import { type ButtonData } from '~/types/types/common.types';
 
-// import { Link } from '~/i18n/navigation';
-
 type DonationDataProps = {
   data: ButtonData;
 };

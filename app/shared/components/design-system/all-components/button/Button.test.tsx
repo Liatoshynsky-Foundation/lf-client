@@ -3,6 +3,10 @@ import React from 'react';
 
 import Button from './Button';
 
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
 describe('Button Component', () => {
   const startIcon = <span data-testid="start-icon">▲</span>;
   const endIcon = <span data-testid="end-icon">▼</span>;

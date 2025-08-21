@@ -18,6 +18,8 @@ jest.mock('next-intl', () => ({
   }
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 jest.mock('~/public/icons/trash-2.svg', () => ({
   __esModule: true,
   default: () => <svg data-testid="trash-icon" />

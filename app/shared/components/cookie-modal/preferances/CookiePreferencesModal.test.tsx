@@ -19,6 +19,8 @@ jest.mock('next-intl', () => ({
   }
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 const onCloseMock = jest.fn();
 const onCheckedMock = jest.fn();
 const saveSettingsMock = jest.fn();

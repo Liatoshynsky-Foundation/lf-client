@@ -3,6 +3,8 @@ import React from 'react';
 
 import ContactUsButton from './ContactUsButton';
 
+jest.mock('~/ds-components/button/Button');
+
 describe('ContactUsButton', () => {
   const label = 'Contact us';
 
