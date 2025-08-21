@@ -6,11 +6,10 @@ import { useTranslations } from 'next-intl';
 import EyeIcon from 'public/icons/eye.svg';
 import LogOut from 'public/icons/log-out.svg';
 
-import type { WorkTable } from '~/types/types/enhancedTable';
+import Button from '~/ds-components/button/Button';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
-import { Link } from '~/i18n/navigation';
-import Button from '~/shared/components/design-system/all-components/button/Button';
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import type { WorkTable } from '~/types/types/enhancedTable';
 
 export const RenderNameHeader = () => {
   const t = useTranslations('table.work.columns');
@@ -88,11 +87,9 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
           maxWidth: '189px'
         }}
       >
-        <Link href={row.link} passHref>
-          <Button variant="outlined" size="medium" color="primary" endIcon={<LogOut />}>
-            {t('goto')}
-          </Button>
-        </Link>
+        <Button variant="outlined" size="medium" color="primary" link={row.link} endIcon={<LogOut />}>
+          {t('goto')}
+        </Button>
       </Box>
     );
   }

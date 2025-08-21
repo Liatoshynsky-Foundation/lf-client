@@ -18,7 +18,7 @@ jest.mock('next-intl', () => ({
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
 }));
-jest.mock('~/shared/components/design-system/all-components/button/Button', () => {
+jest.mock('~/ds-components/button/Button', () => {
   return function Button(
     props: React.PropsWithChildren<{
       endIcon?: React.ReactNode;

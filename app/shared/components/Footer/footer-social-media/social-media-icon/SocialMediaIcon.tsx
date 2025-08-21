@@ -1,8 +1,9 @@
 import { Link } from '@mui/material';
 
+import { IconButton } from '~/ds-components/icon-button/IconButton';
+
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
-import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 interface SocialMediaIconProps {

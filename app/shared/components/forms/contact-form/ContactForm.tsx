@@ -1,7 +1,8 @@
 import { Box, Checkbox, TextField, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import Button from '../../design-system/all-components/button/Button';
+import Button from '~/ds-components/button/Button';
+
 import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';

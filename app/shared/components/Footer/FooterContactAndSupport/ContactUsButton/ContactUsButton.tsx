@@ -1,6 +1,7 @@
 import React from 'react';
 
-import Button from '~/shared/components/design-system/all-components/button/Button';
+import Button from '~/ds-components/button/Button';
+
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 type ContactUsDataProps = {
