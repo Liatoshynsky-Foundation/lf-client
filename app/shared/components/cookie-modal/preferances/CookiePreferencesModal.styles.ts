@@ -3,8 +3,6 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 export const styles = {
   container: {
     maxWidth: '632px',
-    width: '100%',
-    maxHeight: '399px',
     height: '100%'
   },
   innerContainer: {
@@ -56,6 +54,9 @@ export const styles = {
   buttonContainer: {
     display: 'flex',
     justifyContent: 'space-between',
-    mt: '24px'
+    flexDirection: { xs: 'column', sm: 'row' },
+    mt: '24px',
+    gap: '8px',
+    padding: '16px 8px'
   }
 };
