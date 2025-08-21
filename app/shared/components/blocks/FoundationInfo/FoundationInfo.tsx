@@ -6,9 +6,8 @@ import { SvgImage } from '~/components/svg-image/SvgImage';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './FoundationInfo.styles';
-import { FoundationInfoProps } from '~/types/pages/home/homePage';
 
-export default function FoundationInfo({ data }: { readonly data: Readonly<FoundationInfoProps> }) {
+export default function FoundationInfo({ data }: { readonly data: any }) {
   const { textImage, foundationImage, organisationMainText, organisationBoldText, mainText } = data;
   const sectionStyles = styles(theme);
 

@@ -6,9 +6,8 @@ import QuoteBlock from '~/components/Quote/Quote';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './IntroSection.styles';
-import { IntroSectionProps } from '~/types/pages/home/homePage';
 
-export default function IntroSection({ data }: { readonly data: Readonly<IntroSectionProps> }) {
+export default function IntroSection({ data }: { readonly data: any }) {
   const sectionStyles = styles(theme);
   const { title, image, quote } = data;
 

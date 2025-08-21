@@ -1,59 +1,58 @@
+import { TipTapContent } from '~/validators/pagesSchemas/tiptap.schema';
+
 type TransformedImage = {
-  readonly src: string;
-  readonly alt: string;
-  readonly caption?: string;
+  src: string;
+  alt: string;
+  caption?: string;
 };
 
 export type IntroSectionProps = {
-  readonly title: string;
-  readonly image: TransformedImage | null;
-  readonly quote: {
-    readonly mainText: string;
-    readonly sourceTitle: string;
+  title: string;
+  image: TransformedImage | null;
+  quote: {
+    text: string;
+    source: string;
   } | null;
 };
 
 export type FoundationInfoProps = {
-  readonly organisationBoldText: string;
-  readonly organisationMainText: string;
-  readonly mainText: string;
-  readonly textImage: string;
-  readonly foundationImage: TransformedImage | null;
+  ourOrganisation: TipTapContent;
+  ourName: TipTapContent;
+  ourBelief: TipTapContent;
+  image: TransformedImage | null;
 };
 
 export type OurMissionProps = {
   title: string;
-  listItems: string[];
+  list: TipTapContent[];
   smallImage: TransformedImage | null;
   bigImage: TransformedImage | null;
 };
 
 type GoalItem = {
-  id: string;
   title: string;
-  description: string;
+  description: TipTapContent;
 };
 
 export type OurGoalsProps = {
-  mainTitle: string;
+  title: string;
   goals: GoalItem[];
 };
 
 export type LiatoshynskyOfficeProps = {
   quote: {
     text: string;
-    author: string;
+    source: string;
   } | null;
 };
 
 export type WhatWeDoItem = {
-  id: string;
   title: string;
-  description: string;
+  description: TipTapContent;
 };
 
 export type WhatWeDoProps = {
-  mainTitle: string;
+  title: string;
   items: WhatWeDoItem[];
 };
 
@@ -64,7 +63,7 @@ type FounderMember = {
 };
 
 export type FoundationFoundersProps = {
-  title: string;
-  description: string;
+  titleText: TipTapContent;
+  listTitle: string;
   members: FounderMember[];
 };

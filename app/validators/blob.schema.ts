@@ -12,7 +12,3 @@ export const zContentTypeSchema = z.enum([
   'audio/wav',
   'video/mp4'
 ]);
-export const zBlobQuerySchema = z.object({
-  blobName: z.string().min(1),
-  folderName: zFolderNameSchema
-});

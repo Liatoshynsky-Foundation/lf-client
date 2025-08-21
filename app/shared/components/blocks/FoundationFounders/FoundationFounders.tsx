@@ -6,9 +6,7 @@ import FoundationTeam from '~/components/blocks/FoundationFounders/FoundationTea
 import FoundationWasCreated from '~/components/blocks/FoundationFounders/FoundationWasCreated/FoundationWasCreated';
 import { ColumnGuides } from '~/components/column-guides/ColumnGuides';
 
-import { FoundationFoundersProps } from '~/types/pages/home/homePage';
-
-const FoundationFounders = ({ data }: { data: FoundationFoundersProps }) => {
+const FoundationFounders = ({ data }: { data: any }) => {
   const { title, members, description } = data;
 
   return (

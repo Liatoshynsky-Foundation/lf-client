@@ -1,5 +1,3 @@
-import { z } from 'zod';
+import { Page } from '~/validators/pagesSchemas/pages';
 
-import { populatedPageSchema } from '~/validators/page/page.schema';
-
-export type PageDataDTO = z.infer<typeof populatedPageSchema>;
+export type PageDataDTO = Page;
