@@ -126,7 +126,6 @@ export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel
     );
   };
 
-  // Default renderOption if not provided
   const defaultRenderOption = ({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => (
     <List {...props} key={key}>
       <ListItem disableGutters>
