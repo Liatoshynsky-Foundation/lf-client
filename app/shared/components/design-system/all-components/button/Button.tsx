@@ -39,28 +39,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const { isMobile } = useBreakpoints();
     label = isMobile && shortLabel ? shortLabel : label;
 
-    const Wrapping = ({ children }: { children: ReactNode }) =>
-      link ? (
-        <Link href={link} passHref>
-          {children}
-        </Link>
-      ) : (
-        <>{children}</>
-      );
-
-    return (
-      <Wrapping>
-        <CustomButton
-          ref={ref}
-          disabled={isDisabled}
-          startIcon={!loading ? startIcon : undefined}
-          endIcon={!loading ? endIcon : undefined}
-          {...props}
-        >
-          {loading ? <CircularProgress color="inherit" size={25} data-testid="loader" /> : (label ?? children)}
-        </CustomButton>
-      </Wrapping>
+    const content = (
+      <CustomButton
+        ref={ref}
+        disabled={isDisabled}
+        startIcon={!loading ? startIcon : undefined}
+        endIcon={!loading ? endIcon : undefined}
+        {...props}
+      >
+        {loading ? <CircularProgress color="inherit" size={25} data-testid="loader" /> : (label ?? children)}
+      </CustomButton>
     );
+
+    return link ? <Link href={link}>{content}</Link> : content;
   }
 );
 
