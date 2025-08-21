@@ -7,6 +7,7 @@ import { Svg } from '~/components/colored-svg/ColoredSvg';
 import SectionTitle from '~/components/section-title/SectionTitle';
 import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { styles } from './FAQ.styles';
 
@@ -53,7 +54,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
         <Box sx={styles.contactsList}>
           <Box sx={styles.contactsItem}>
             <IconButton customStyles={styles.iconButton} disabled>
-              <Svg Component={PhoneIcon} stroke="#190D03" alt="phone icon" width="20px" height="20px" />
+              <Svg Component={PhoneIcon} stroke={mainHexPallete.black} alt="phone icon" width="20px" height="20px" />
             </IconButton>
             <Link style={styles.linkItem} {...telLinkProps}>
               {contacts.phone}
@@ -61,7 +62,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
           </Box>
           <Box sx={styles.contactsItem}>
             <IconButton customStyles={styles.iconButton} disabled>
-              <Svg Component={MailIcon} stroke="#190D03" alt="mail icon" width="20px" height="20px" />
+              <Svg Component={MailIcon} stroke={mainHexPallete.black} alt="mail icon" width="20px" height="20px" />
             </IconButton>
             <Link style={styles.linkItem} href={`mailto:${contacts.email}`}>
               {contacts.email}
