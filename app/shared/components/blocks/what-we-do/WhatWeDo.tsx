@@ -9,6 +9,13 @@ import { iconSizes, styles } from './WhatWeDo.styles';
 import { IWhatWeDo } from '~/types/types/about-us.types';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
+const getParagraph = (title: string) => {
+  const Paragraph = (children: React.ReactNode) => (
+    <TitleWithDescription variant="whatWeDo" title={title} description={children} />
+  );
+  return Paragraph;
+};
+
 const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
   const { title, items } = data;
   const columns = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
@@ -20,7 +27,7 @@ const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
       <Box sx={styles.grid}>
         {columns.map((columnItems, colIndex) => (
           <Box
-            key={columnItems[colIndex]?.description + `column-${colIndex}`}
+            key={columnItems[colIndex]?.title + `column-${colIndex}`}
             sx={{
               ...styles.column
             }}
@@ -33,9 +40,7 @@ const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
                 <TipTapContent
                   data={item.description}
                   nodeRenderers={{
-                    paragraph: (children) => (
-                      <TitleWithDescription variant="whatWeDo" title={item.title} description={children} />
-                    )
+                    paragraph: getParagraph(item.title)
                   }}
                 />
               </Box>

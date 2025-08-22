@@ -8,6 +8,8 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { styles } from './OurMission.styles';
 import { IOurMission } from '~/types/types/about-us.types';
 
+const getListItem = (children: React.ReactNode) => <ListItem text={children} />;
+
 const OurMission = ({ data }: { data: IOurMission }) => {
   const { title, smallImage, bigImage, list } = data;
 
@@ -16,11 +18,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
       <SectionTitle title={title} />
       <Box sx={styles.list}>
         {list.map((item, idx) => (
-          <TipTapContent
-            key={`${item}-${idx}`}
-            data={item}
-            nodeRenderers={{ paragraph: (children) => <ListItem text={children} /> }}
-          />
+          <TipTapContent key={`${item.type}-${idx}`} data={item} nodeRenderers={{ paragraph: getListItem }} />
         ))}
       </Box>
       <Box sx={styles.imagesContainer}>

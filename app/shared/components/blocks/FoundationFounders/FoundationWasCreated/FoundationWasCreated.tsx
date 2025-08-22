@@ -7,11 +7,33 @@ import { getItalic, getLink, getUnderline } from '~/components/tip-tap-content/m
 import renderText from '~/components/tip-tap-content/renderText';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
-import { TipTapDoc } from '~/types/types/common.types';
+import { TextNode, TipTapDoc } from '~/types/types/common.types';
 
 interface FoundationWasCreatedProps {
   data: TipTapDoc;
 }
+
+const descriptionParagraph = (children: React.ReactNode) => <Typography sx={styles.description}>{children}</Typography>;
+
+const boldTitle = (children: React.ReactNode) => (
+  <Typography component="strong" sx={styles.title}>
+    {children}
+  </Typography>
+);
+
+const boldTitleWrapper = (node: TextNode) => (
+  <Typography component="span">
+    {renderText(
+      {
+        italic: getItalic,
+        underline: getUnderline,
+        link: getLink,
+        bold: boldTitle
+      },
+      node
+    )}
+  </Typography>
+);
 
 const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => {
   return (
@@ -23,24 +45,8 @@ const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => 
         <TipTapContent
           data={data}
           nodeRenderers={{
-            paragraph: (children) => <Typography sx={styles.description}>{children}</Typography>,
-            text: (node) => (
-              <Typography component="span">
-                {renderText(
-                  {
-                    italic: getItalic,
-                    underline: getUnderline,
-                    link: getLink,
-                    bold: (children) => (
-                      <Typography component="strong" sx={styles.title}>
-                        {children}
-                      </Typography>
-                    )
-                  },
-                  node
-                )}
-              </Typography>
-            )
+            paragraph: descriptionParagraph,
+            text: boldTitleWrapper
           }}
         />
       </Box>

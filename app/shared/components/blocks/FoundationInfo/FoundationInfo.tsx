@@ -13,20 +13,34 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
   const { image, ourOrganisation, ourName, ourBelief } = data;
   const sectionStyles = styles(theme);
 
+  const organisationParagraph = (children: React.ReactNode) => (
+    <Typography sx={sectionStyles.explanationText}>{children}</Typography>
+  );
+
+  const organisationBoldText = (children: React.ReactNode) => (
+    <Box component="strong" sx={sectionStyles.organisationText}>
+      {children}
+    </Box>
+  );
+
+  const nameParagraph = (children: React.ReactNode) => (
+    <Typography sx={sectionStyles.textSection}>{children}</Typography>
+  );
+
+  const beliefParagraph = (children: React.ReactNode) => (
+    <Typography sx={sectionStyles.textImage}>{children}</Typography>
+  );
+
   return (
     <Box sx={sectionStyles.container}>
       <Box sx={sectionStyles.organisationSection}>
         <TipTapContent
           data={ourOrganisation}
           markRenderers={{
-            bold: (children) => (
-              <Box component="strong" sx={sectionStyles.organisationText}>
-                {children}
-              </Box>
-            )
+            bold: organisationBoldText
           }}
           nodeRenderers={{
-            paragraph: (children) => <Typography sx={sectionStyles.explanationText}>{children}</Typography>
+            paragraph: organisationParagraph
           }}
         />
       </Box>
@@ -35,7 +49,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         <TipTapContent
           data={ourName}
           nodeRenderers={{
-            paragraph: (children) => <Typography sx={sectionStyles.textSection}>{children}</Typography>
+            paragraph: nameParagraph
           }}
         />
         <Box sx={sectionStyles.FirstBulletIcon}>
@@ -46,7 +60,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
       <TipTapContent
         data={ourBelief}
         nodeRenderers={{
-          paragraph: (children) => <Typography sx={sectionStyles.textImage}>{children}</Typography>
+          paragraph: beliefParagraph
         }}
       />
 

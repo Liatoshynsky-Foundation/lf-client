@@ -64,7 +64,7 @@ export interface IFoundationFounders {
 export interface IAboutUsPage {
   slug: string;
   title: string;
-  status: 'published' | 'draft' | string;
+  status: string;
   blocks: {
     IntroSection: IIntroSection;
     FoundationInfo: IFoundationInfo;
