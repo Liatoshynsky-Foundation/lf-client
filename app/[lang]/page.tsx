@@ -10,6 +10,7 @@ import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
+import { IAboutUsPage } from '~/types/types/about-us.types';
 import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
@@ -28,7 +29,7 @@ export default async function Home({ params }: Readonly<Language>) {
   const pageService = await createRequestContainer().resolve('pageService');
 
   const [page, t] = await Promise.all([
-    pageService.getPageData('home', lang),
+    pageService.getPageData('about-us', lang) as IAboutUsPage,
     getTranslations('home.liatoshynskyOffice')
   ]);
 
@@ -38,13 +39,13 @@ export default async function Home({ params }: Readonly<Language>) {
 
   return (
     <>
-      {page.IntroSection && <IntroSection data={page.IntroSection} />}
-      {page.FoundationInfo && <FoundationInfo data={page.FoundationInfo} />}
-      {page.OurMission && <OurMission data={page.OurMission} />}
-      {page.OurGoals && <OurGoals data={page.OurGoals} />}
-      {page.LiatoshynskyOffice && <LiatoshynskyOffice data={page.LiatoshynskyOffice} t={t} />}
-      {page.WhatWeDo && <WhatWeDo data={page.WhatWeDo} />}
-      {page.FoundationFounders && <FoundationFounders data={page.FoundationFounders} />}
+      {page.blocks.IntroSection && <IntroSection data={page.blocks.IntroSection} />}
+      {page.blocks.FoundationInfo && <FoundationInfo data={page.blocks.FoundationInfo} />}
+      {page.blocks.OurMission && <OurMission data={page.blocks.OurMission} />}
+      {page.blocks.OurGoals && <OurGoals data={page.blocks.OurGoals} />}
+      {page.blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={page.blocks.LiatoshynskyOffice} t={t} />}
+      {page.blocks.WhatWeDo && <WhatWeDo data={page.blocks.WhatWeDo} />}
+      {page.blocks.FoundationFounders && <FoundationFounders data={page.blocks.FoundationFounders} />}
     </>
   );
 }

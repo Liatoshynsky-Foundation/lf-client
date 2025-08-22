@@ -23,6 +23,7 @@ const aboutUsDetailsSchema = new Schema({
   blocks: { type: Schema.Types.Mixed, required: true }
 });
 
-export const AboutUsPageModel = PageModel.discriminator('AboutUsPage', aboutUsDetailsSchema);
+export const AboutUsPageModel =
+  mongoose.models.AboutUsPage || PageModel.discriminator('AboutUsPage', aboutUsDetailsSchema);
 
 export default PageModel;

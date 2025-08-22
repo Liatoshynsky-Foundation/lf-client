@@ -3,18 +3,24 @@ import { Box } from '@mui/material';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import ListItem from '~/components/list-item/ListItem';
 import SectionTitle from '~/components/section-title/SectionTitle';
+import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import { styles } from './OurMission.styles';
+import { IOurMission } from '~/types/types/about-us.types';
 
-const OurMission = ({ data }: { data: any }) => {
-  const { title, smallImage, bigImage, listItems } = data;
+const OurMission = ({ data }: { data: IOurMission }) => {
+  const { title, smallImage, bigImage, list } = data;
 
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle title={title} />
       <Box sx={styles.list}>
-        {listItems.map((item: any) => (
-          <ListItem key={item} text={item} />
+        {list.map((item, idx) => (
+          <TipTapContent
+            key={`${item}-${idx}`}
+            data={item}
+            nodeRenderers={{ paragraph: (children) => <ListItem text={children} /> }}
+          />
         ))}
       </Box>
       <Box sx={styles.imagesContainer}>

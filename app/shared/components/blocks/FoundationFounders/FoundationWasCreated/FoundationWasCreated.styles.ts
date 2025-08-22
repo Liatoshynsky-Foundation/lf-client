@@ -8,7 +8,7 @@ export const styles = {
     gridTemplateColumns: { xs: 'repeat(4, 1fr)', sm: 'repeat(8, 1fr)', md: 'repeat(12, 1fr)' },
     columnGap: { xs: '16px', sm: '40px' },
     width: '100%',
-    pt: '100px'
+    mt: '100px'
   },
   ellipseWrapper: {
     gridColumn: { xs: 1, sm: getSpan(1, 3), md: getSpan(1, 5) }
@@ -17,6 +17,8 @@ export const styles = {
     gridColumn: { xs: getSpan(2, 3), sm: getSpan(4, 5), md: getSpan(6, 7), xxl: getSpan(6, 6) }
   },
   title: {
+    display: 'block',
+    mb: 5,
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
     fontSize: { xs: '16px', md: '26px' },
@@ -29,7 +31,9 @@ export const styles = {
     fontSize: { xs: '16px', md: '26px' },
     color: black,
     fontWeight: 400,
-    mt: 5,
-    textIndent: '2em'
+    '& span:nth-child(2)': {
+      display: 'block',
+      textIndent: '2em'
+    }
   }
 };
