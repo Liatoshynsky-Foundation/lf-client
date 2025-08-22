@@ -5,13 +5,11 @@ import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IFoundationFounders } from '~/types/types/about-us.types';
 import { TipTapDoc } from '~/types/types/common.types';
 
-const mockComponent = (testId: string, children: React.ReactNode) => {
-  const Mock = (props: any) => <div data-testid={testId}>{children || props.title || null}</div>;
-  Mock.displayName = `Mock${testId}`;
-  return Mock;
-};
-
-jest.mock('./FoundationTeam/FoundationTeam', () => mockComponent('foundation-team', null));
+jest.mock('./FoundationTeam/FoundationTeam', () => {
+  const MockFoundationTeam = ({ title }: { title: string }) => <div data-testid="foundation-team">{title}</div>;
+  MockFoundationTeam.displayName = 'MockFoundationTeam';
+  return MockFoundationTeam;
+});
 
 jest.mock('./FoundationWasCreated/FoundationWasCreated', () => {
   const MockFoundationWasCreated = ({ data }: { data: TipTapDoc }) => {
@@ -36,12 +34,6 @@ jest.mock('./FoundationWasCreated/FoundationWasCreated', () => {
   return MockFoundationWasCreated;
 });
 
-const createPhoto = (name: string, alt: string) => ({
-  src: `/api/blob-url?folderName=photos&blobName=${name}`,
-  alt,
-  caption: null
-});
-
 const testData: IFoundationFounders = {
   titleText: {
     type: TipTapNodeTypes.doc,
@@ -52,7 +44,11 @@ const testData: IFoundationFounders = {
           {
             type: TipTapNodeTypes.text,
             text: 'The Liatoshynskyi Foundation, established',
-            marks: [{ type: TipTapMarkType.bold }]
+            marks: [
+              {
+                type: TipTapMarkType.bold
+              }
+            ]
           },
           {
             type: TipTapNodeTypes.text,
@@ -65,29 +61,38 @@ const testData: IFoundationFounders = {
   listTitle: 'Фундація Лятошинського',
   members: [
     {
-      photo: createPhoto('Tetyana-Homon', 'Tetyana Gomon'),
+      photo: {
+        src: '/api/blob-url?folderName=photos&blobName=Tetyana-Homon',
+        alt: 'Tetyana Gomon',
+        caption: null
+      },
       name: 'Tetyana Gomon',
       description: 'Heir to the composer, co-founder and head of the Foundation, chamber pianist.'
     },
     {
-      photo: createPhoto('Iryna-Tykova', 'Iryna Tukova'),
+      photo: {
+        src: '/api/blob-url?folderName=photos&blobName=Iryna-Tykova',
+        alt: 'Iryna Tukova',
+        caption: null
+      },
       name: 'Iryna Tukova',
       description: 'Co-founder of the Foundation, musicologist, lecturer and teacher, Doctor of Arts.'
     },
     {
-      photo: createPhoto('Maria-Hurska', 'Maria Hurska'),
+      photo: {
+        src: '/api/blob-url?folderName=photos&blobName=Maria-Hurska',
+        alt: 'Maria Hurska',
+        caption: null
+      },
       name: 'Maria Hurska',
       description:
         'Digital projects manager, oversees website development, information architecture, and communication.'
     }
   ]
 };
-
-const setup = () => render(<FoundationFounders data={testData} />);
-
 describe('FoundationFounders', () => {
   beforeEach(() => {
-    setup();
+    render(FoundationFounders({ data: testData }));
   });
 
   it('should render description', () => {
