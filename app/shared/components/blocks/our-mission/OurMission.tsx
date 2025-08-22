@@ -6,7 +6,7 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import { styles } from './OurMission.styles';
-import { IOurMission } from '~/types/types/about-us.types';
+import { IOurMission } from '~/types/page/about-us.types';
 
 const getListItem = (children: React.ReactNode) => <ListItem text={children} />;
 

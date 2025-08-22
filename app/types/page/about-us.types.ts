@@ -3,7 +3,7 @@ import { TipTapDoc } from '~/types/types/common.types';
 export interface IImageBlock {
   src: string;
   alt: string;
-  caption: string | null;
+  caption?: string | null;
 }
 
 export interface IQuoteBlock {
@@ -13,22 +13,22 @@ export interface IQuoteBlock {
 
 export interface IIntroSection {
   title: string;
-  image: IImageBlock;
-  quote: IQuoteBlock;
+  image: IImageBlock | null;
+  quote: IQuoteBlock | null;
 }
 
 export interface IFoundationInfo {
   ourOrganisation: TipTapDoc;
   ourName: TipTapDoc;
   ourBelief: TipTapDoc;
-  image: IImageBlock;
+  image: IImageBlock | null;
 }
 
 export interface IOurMission {
   title: string;
-  smallImage: IImageBlock;
-  bigImage: IImageBlock;
   list: TipTapDoc[];
+  smallImage: IImageBlock | null;
+  bigImage: IImageBlock | null;
 }
 
 export interface IOurGoals {
@@ -40,7 +40,7 @@ export interface IOurGoals {
 }
 
 export interface ILiatoshynskyOffice {
-  quote: IQuoteBlock;
+  quote: IQuoteBlock | null;
 }
 
 export interface IWhatWeDo {

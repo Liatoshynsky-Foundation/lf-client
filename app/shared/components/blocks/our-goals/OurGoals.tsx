@@ -6,7 +6,7 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import TitleWithDescription from '~/components/title-with-description/TitleWithDescription';
 
 import { iconSizes, styles } from './OurGoals.styles';
-import { IOurGoals } from '~/types/types/about-us.types';
+import { IOurGoals } from '~/types/page/about-us.types';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
 const getParagraph = (title: string) => {

@@ -10,7 +10,6 @@ import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
-import { IAboutUsPage } from '~/types/types/about-us.types';
 import { Language } from '~/types/types/language';
 
 import { createRequestContainer } from '~/di/container';
@@ -29,7 +28,7 @@ export default async function Home({ params }: Readonly<Language>) {
   const pageService = await createRequestContainer().resolve('pageService');
 
   const [page, t] = await Promise.all([
-    pageService.getPageData('about-us', lang) as IAboutUsPage,
+    pageService.getPageData('about-us', lang),
     getTranslations('home.liatoshynskyOffice')
   ]);
 

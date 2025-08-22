@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import FoundationInfo from '~/components/blocks/FoundationInfo/FoundationInfo';
 
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { IFoundationInfo } from '~/types/types/about-us.types';
+import { IFoundationInfo } from '~/types/page/about-us.types';
 
 jest.mock('~/components/svg-image/SvgImage', () => ({
   __esModule: true,

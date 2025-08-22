@@ -5,7 +5,7 @@ import { styles } from '~/components/blocks/FoundationFounders/FoundationTeam/Fo
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import PersonCard from '~/ds-components/person-card/PersonCard';
 
-import { IImageBlock } from '~/types/types/about-us.types';
+import { IImageBlock } from '~/types/page/about-us.types';
 
 interface FoundationTeamProps {
   title: string;

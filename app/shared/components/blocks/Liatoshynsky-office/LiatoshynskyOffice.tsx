@@ -8,7 +8,7 @@ import Quote from '~/components/Quote/Quote';
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './LiatoshynskyOffice.styles';
-import { ILiatoshynskyOffice } from '~/types/types/about-us.types';
+import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
 import { Link } from '~/i18n/navigation';
 

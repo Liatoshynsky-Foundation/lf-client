@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import FoundationFounders from './FoundationFounders';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { IFoundationFounders } from '~/types/types/about-us.types';
+import { IFoundationFounders } from '~/types/page/about-us.types';
 import { TipTapDoc } from '~/types/types/common.types';
 
 jest.mock('./FoundationTeam/FoundationTeam', () => {

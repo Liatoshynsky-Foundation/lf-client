@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import OurMission from './OurMission';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { IOurMission } from '~/types/types/about-us.types';
+import { IOurMission } from '~/types/page/about-us.types';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockImplementation(async (namespace) => {

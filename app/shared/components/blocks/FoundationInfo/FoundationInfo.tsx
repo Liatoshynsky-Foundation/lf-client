@@ -7,7 +7,7 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './FoundationInfo.styles';
-import { IFoundationInfo } from '~/types/types/about-us.types';
+import { IFoundationInfo } from '~/types/page/about-us.types';
 
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
   const { image, ourOrganisation, ourName, ourBelief } = data;
