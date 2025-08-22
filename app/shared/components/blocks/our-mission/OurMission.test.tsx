@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
 import OurMission from './OurMission';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import { IOurMission } from '~/types/types/about-us.types';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockImplementation(async (namespace) => {
@@ -46,9 +48,52 @@ jest.mock('~/components/list-item/ListItem', () => ({
   )
 }));
 
-const testData = {
+const testData: IOurMission = {
   title: 'Наша місія',
-  listItems: ['Tестовий текст один', 'Tестовий текст два', 'Tестовий текст три'],
+  list: [
+    {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [
+            {
+              type: TipTapNodeTypes.text,
+              text: 'Tестовий текст один'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [
+            {
+              type: TipTapNodeTypes.text,
+              text: 'Tестовий текст два'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [
+            {
+              type: TipTapNodeTypes.text,
+              text: 'Tестовий текст три'
+            }
+          ]
+        }
+      ]
+    }
+  ],
   smallImage: {
     src: 'test',
     alt: 'Tetiana Homon',
@@ -60,6 +105,7 @@ const testData = {
     caption: 'Tетяна Гомон'
   }
 };
+
 describe('OurMission component', () => {
   beforeEach(() => {
     render(OurMission({ data: testData }));
