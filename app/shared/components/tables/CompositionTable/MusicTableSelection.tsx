@@ -39,7 +39,6 @@ export default function MusicTableSection() {
     titlesEndpoint: ApiRoutes.COMPOSITION_TITLES,
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
-  console.log(data);
   const bp = useBreakpoints();
 
   const columnWidths = getColumnWidths(bp);
@@ -100,15 +99,7 @@ export default function MusicTableSection() {
       columnWidths={columnWidths}
       itemsPerPage={10}
       tableName={t('composition')}
-      Search={
-        <Search<TitlesDTO>
-          search={search}
-          setSearch={setSearch}
-          options={titles}
-          loading={loadingTitles}
-          getOptionLabel={(option) => option.title}
-        />
-      }
+      Search={<Search<TitlesDTO> search={search} setSearch={setSearch} options={titles} loading={loadingTitles} />}
     />
   );
 }

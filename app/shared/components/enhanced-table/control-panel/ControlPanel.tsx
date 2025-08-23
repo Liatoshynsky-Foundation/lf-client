@@ -10,21 +10,16 @@ import { IconButton } from '~/ds-components/icon-button/IconButton';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 import Filter from '~/public/icons/filter.svg';
-import Search from '~/public/icons/search.svg';
+import SearchIcon from '~/public/icons/search.svg';
 
-type CompositionsControlPanelProps = {
-  MusicSearch: ReactNode;
+type ControlPanelProps = {
+  Search: ReactNode;
   Filters?: ReactNode;
   tableName: string;
   activeFiltersCount?: number;
 };
 
-export const CompositionsControlPanel = ({
-  MusicSearch,
-  Filters,
-  tableName,
-  activeFiltersCount
-}: CompositionsControlPanelProps) => {
+export const ControlPanel = ({ Search, Filters, tableName, activeFiltersCount }: ControlPanelProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const isExtraSmall = useMediaQuery('(max-width:400px)', { noSsr: true });
@@ -67,7 +62,7 @@ export const CompositionsControlPanel = ({
               size={isExtraSmall ? 'small' : 'medium'}
             >
               <Svg
-                Component={Search}
+                Component={SearchIcon}
                 alt="search"
                 color={searchActive ? mainHexPallete.white : mainHexPallete.black}
                 width="28px"
@@ -76,7 +71,7 @@ export const CompositionsControlPanel = ({
             </IconButton>
           </Box>
         ) : (
-          MusicSearch
+          Search
         )}
         {Filters && (
           <Badge
@@ -98,7 +93,7 @@ export const CompositionsControlPanel = ({
           </Badge>
         )}
       </Box>
-      <>{searchActive && isMobile ? <Box>{MusicSearch}</Box> : <></>}</>
+      <>{searchActive && isMobile ? <Box>{Search}</Box> : <></>}</>
       {filtersActive && <Box sx={{ marginBottom: 2, display: 'flex', alignItems: 'center', gap: 2 }}>{Filters}</Box>}
       <Box></Box>
     </Box>

@@ -1,9 +1,9 @@
 'use client';
+
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
   InputAdornment,
-  List,
   ListItem,
   Typography,
   useMediaQuery,
@@ -41,16 +41,35 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   };
 };
 
+const getOptionLabel = <T extends { title?: string | { en?: string; uk?: string } }>(option: T): string => {
+  if (typeof option.title === 'string') return option.title;
+  return option.title?.en || option.title?.uk || '';
+};
+
+const renderOption = <T extends { title?: string | { en?: string; uk?: string } }>(
+  props: React.HTMLAttributes<HTMLLIElement>,
+  option: T
+): React.ReactNode => {
+  return (
+    <ListItem {...props} disableGutters>
+      <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
+    </ListItem>
+  );
+};
+
 interface SearchProps<T> {
   setSearch: (value: string) => void;
   search: string;
   options: T[];
   loading?: boolean;
-  getOptionLabel: (option: T) => string;
-  renderOption?: (props: object & { key: React.Key }, option: T) => React.ReactNode;
 }
 
-export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel, renderOption }: SearchProps<T>) => {
+export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
+  search,
+  setSearch,
+  options,
+  loading
+}: SearchProps<T>) => {
   const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -59,6 +78,7 @@ export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
   const t = useTranslations('search');
+
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
@@ -77,16 +97,15 @@ export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel
     },
     [debouncedInputChange, setSearch, opened]
   );
+
   const handleIconClick = () => {
     inputRef.current?.focus();
   };
+
   const handleClear = () => {
     setSearch('');
   };
-  const onChange = (event: unknown, value: T | null) => {
-    setValue(value);
-    setSearch(value ? getOptionLabel(value) : '');
-  };
+
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
       <CustomBorderTextField
@@ -126,25 +145,20 @@ export const Search = <T,>({ search, setSearch, options, loading, getOptionLabel
     );
   };
 
-  const defaultRenderOption = ({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => (
-    <List {...props} key={key}>
-      <ListItem disableGutters>
-        <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
-      </ListItem>
-    </List>
-  );
-
   return (
     <Autocomplete<T, false, false, false>
       data-testid="music-search"
       options={options}
       loading={loading}
       value={value}
-      onChange={onChange}
+      onChange={(event, value) => {
+        setValue(value);
+        setSearch(value ? getOptionLabel(value) : '');
+      }}
       inputValue={search}
       onInputChange={handleInputChange}
       renderInput={renderInput}
-      renderOption={renderOption ?? defaultRenderOption}
+      renderOption={renderOption}
       getOptionLabel={getOptionLabel}
       clearOnBlur={false}
       popupIcon={null}

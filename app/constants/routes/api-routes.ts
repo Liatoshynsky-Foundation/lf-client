@@ -3,6 +3,6 @@ export const ApiRoutes = {
   HEADER: '/api/header',
   COMPOSITION_TITLES: '/api/composition-titles',
   COMPOSITION_DATA: '/api/compositions',
-  DOCUMENT_TITLES: '/api/document-titles',
-  DOCUMENT_DATA: '/api/documents'
+  SCIENTIFIC_AUTHORS: '/api/scientific-authors',
+  SCIENTIFIC_WORKS: '/api/scientific-works'
 };

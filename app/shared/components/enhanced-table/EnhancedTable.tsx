@@ -19,7 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import { CompositionsControlPanel } from './control-panel/ControlPanel';
+import { ControlPanel } from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
@@ -35,7 +35,7 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
-  MusicSearch?: React.ReactNode;
+  Search?: React.ReactNode;
   Filters?: React.ReactNode;
   isFiltersActive?: boolean;
   activeFiltersCount?: number;
@@ -53,7 +53,7 @@ export default function EnhancedTable<T extends RowData>({
   groupByKey,
   itemsPerPage = 10,
   tableName,
-  MusicSearch,
+  Search,
   Filters,
   activeFiltersCount,
   columnFilters,
@@ -151,12 +151,7 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <CompositionsControlPanel
-        MusicSearch={MusicSearch}
-        tableName={tableName}
-        Filters={Filters}
-        activeFiltersCount={activeFiltersCount}
-      />
+      <ControlPanel Search={Search} tableName={tableName} Filters={Filters} activeFiltersCount={activeFiltersCount} />
       {loading ? (
         <Box sx={styles.loaderBox}>
           <CircularProgress />
