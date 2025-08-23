@@ -44,7 +44,6 @@ jest.mock('./filters/Filters', () => {
   };
 });
 
-// mock useSearch hook used in component
 jest.mock('~/shared/hooks/use-search/UseSearch', () => ({
   useSearch: jest.fn()
 }));
@@ -61,13 +60,11 @@ describe('WorkTableSection', () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
-    // first call - authors titles
     useSearchMock.mockImplementationOnce(() => ({
       data: [{ label: 'John Doe', value: '1' }],
       loadingTitles: false
     }));
 
-    // second call - works data
     useSearchMock.mockImplementationOnce(() => ({
       data: workTableMock,
       loadingData: false,
