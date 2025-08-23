@@ -27,7 +27,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
         sourceText={t('title-with-quote.sourceText')}
         color="black"
       />
-      <MusicTableSection/>
+      <MusicTableSection />
     </Box>
   );
 }
