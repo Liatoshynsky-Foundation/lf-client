@@ -118,7 +118,6 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                   </Box>
                   <CookieModalWrapper cookie_consent={cookieConsent} />
                 </AudioPlayerProvider>
-                <CookieModalWrapper cookie_consent={cookieConsent} tracking_id={process.env.TRACKING_ID || ''} />
               </QueryProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
