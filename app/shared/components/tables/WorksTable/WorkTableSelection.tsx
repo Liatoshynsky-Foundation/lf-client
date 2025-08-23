@@ -3,9 +3,8 @@
 import Box from '@mui/material/Box';
 import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import EnhancedTable from '../../enhanced-table/EnhancedTable';
 import { WorkTableFilters } from './filters/Filters';
 import {
   RenderActionCell,
@@ -16,36 +15,99 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './WorkTableCells';
-import { ApiRoutes } from '~/constants/routes/api-routes';
 import { WorkTable } from '~/types/types/enhancedTable';
 
-import { useSearch } from '~/shared/hooks/use-search/UseSearch';
+import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
+import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 
 export type AuthorFilterOption = {
   label: string;
   value: string;
 };
 
-export default function WorkTableSection() {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+type Props = {
+  lang: string;
+};
 
-  const t = useTranslations('table.work');
+const getAuthorsList = async (): Promise<AuthorFilterOption[]> => {
+  const authorsRes = await fetch('/api/scientific-authors');
+  const authors: AuthorDTO[] = await authorsRes.json();
+  return authors.map((author) => ({
+    label: `${author.name || ''} ${author.surname || ''}`,
+    value: author._id.toString()
+  }));
+};
+
+const getWorks = async (lang: string, columnFilters: ColumnFiltersState): Promise<WorkTable[]> => {
+  const params = new URLSearchParams();
 
   const currentAuthorFilter = (columnFilters.find((f) => f.id === 'author')?.value as string[]) || [];
   const currentYearFilter = (columnFilters.find((f) => f.id === 'year')?.value as [number, number]) || [];
+  const currentTitleFilter = (columnFilters.find((f) => f.id === 'name')?.value as string) || '';
 
-  const { data: authorsList = [], loadingTitles: loadingAuthors } = useSearch<AuthorFilterOption>({
-    titlesEndpoint: ApiRoutes.SCIENTIFIC_AUTHORS,
-    dataEndpoint: ApiRoutes.SCIENTIFIC_AUTHORS
-  });
+  if (currentAuthorFilter.length > 0) {
+    params.append('authorIds', currentAuthorFilter.join(','));
+  }
+  if (currentYearFilter.length === 2) {
+    params.append('years', currentYearFilter.join(','));
+  }
+  if (currentTitleFilter) {
+    params.append('title', currentTitleFilter);
+  }
 
-  const { data: works = [], loadingData: isLoading } = useSearch<WorkTable>({
-    titlesEndpoint: ApiRoutes.SCIENTIFIC_WORKS,
-    dataEndpoint: ApiRoutes.SCIENTIFIC_WORKS
-  });
+  const worksRes = await fetch(`/api/scientific-works?lang=${lang}&${params.toString()}`);
+
+  const worksJson: ScientificWorkDTO[] = await worksRes.json();
+
+  return worksJson.map(mapScientificWorkToWorkTable);
+};
+
+const mapScientificWorkToWorkTable = (w: ScientificWorkDTO): WorkTable => {
+  let yearDisplay: string | number = w.startYear;
+  if (w.endYear) {
+    yearDisplay = `${w.startYear}-${w.endYear}`;
+  }
+
+  const authorsJoined = w.authors.map((a) => `${a.name || ''} ${a.surname || ''}`).join(', ');
+
+  return {
+    id: w._id.toString(),
+    name: w.title,
+    author: authorsJoined,
+    year: yearDisplay,
+    sortableYear: w.startYear,
+    url: w.url,
+    isPreview: w.isPreview
+  };
+};
+
+export default function WorkTableSection({ lang }: Readonly<Props>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [works, setWorks] = useState<WorkTable[]>([]);
+  const [authorsList, setAuthorsList] = useState<AuthorFilterOption[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const t = useTranslations('table.work');
+
+  useEffect(() => {
+    getAuthorsList().then(setAuthorsList);
+  }, [lang]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getWorks(lang, columnFilters)
+      .then(setWorks)
+      .finally(() => setIsLoading(false));
+  }, [columnFilters, lang]);
 
   const minYear = 1900;
   const maxYear = new Date().getFullYear();
+
+  const currentAuthorFilter = (columnFilters.find((f) => f.id === 'author')?.value as string[]) || [];
+  const currentYearFilter = (columnFilters.find((f) => f.id === 'year')?.value as [number, number]) || [
+    minYear,
+    maxYear
+  ];
 
   const isFiltersActive = columnFilters.length > 0;
   const activeFiltersCount = columnFilters.length;
@@ -139,7 +201,7 @@ export default function WorkTableSection() {
         isFiltersActive={isFiltersActive}
         activeFiltersCount={activeFiltersCount}
         onClearFilters={onClearAllFilters}
-        loading={isLoading || loadingAuthors}
+        loading={isLoading}
       />
     </Box>
   );
