@@ -1,11 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
 
 import WorkTableSection from './WorkTableSelection';
-
-const workTableMock = [
-  { id: '1', name: 'Work 1', actionType: 'pdf', isPreview: true, url: null },
-  { id: '2', name: 'Work 2', actionType: 'url', isPreview: false, url: 'http://example.com/work2' }
-];
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
@@ -32,6 +28,7 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
     );
   };
 });
+
 jest.mock('./filters/Filters', () => {
   return {
     WorkTableFilters: jest.fn((props) => (
@@ -47,44 +44,51 @@ jest.mock('./filters/Filters', () => {
   };
 });
 
+// mock useSearch hook used in component
+jest.mock('~/shared/hooks/use-search/UseSearch', () => ({
+  useSearch: jest.fn()
+}));
+
+import { useSearch as mockedUseSearch } from '~/shared/hooks/use-search/UseSearch';
+const useSearchMock = mockedUseSearch as jest.MockedFunction<any>;
+
 describe('WorkTableSection', () => {
+  const workTableMock = [
+    { id: '1', name: 'Work 1', actionType: 'pdf', isPreview: true, url: null },
+    { id: '2', name: 'Work 2', actionType: 'url', isPreview: false, url: 'http://example.com/work2' }
+  ];
+
   beforeEach(() => {
     jest.resetAllMocks();
 
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => [{ _id: '1', name: 'John', surname: 'Doe' }]
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () =>
-          workTableMock.map((w) => ({
-            _id: w.id,
-            title: w.name,
-            authors: [{ name: 'John', surname: 'Doe' }],
-            startYear: 2000,
-            endYear: null,
-            url: w.url,
-            isPreview: w.isPreview
-          }))
-      } as Response);
+    // first call - authors titles
+    useSearchMock.mockImplementationOnce(() => ({
+      data: [{ label: 'John Doe', value: '1' }],
+      loadingTitles: false
+    }));
+
+    // second call - works data
+    useSearchMock.mockImplementationOnce(() => ({
+      data: workTableMock,
+      loadingData: false,
+      search: '',
+      setSearch: jest.fn()
+    }));
   });
 
   it('should render correct number of rows', async () => {
-    render(<WorkTableSection lang="en" />);
+    render(<WorkTableSection />);
     const rows = await screen.findAllByTestId('row');
     expect(rows.length).toBe(workTableMock.length);
   });
 
   it('should render pagination button', async () => {
-    render(<WorkTableSection lang="en" />);
+    render(<WorkTableSection />);
     expect(await screen.findByLabelText('Go to next page')).toBeInTheDocument();
   });
 
   it('should render action buttons correctly', async () => {
-    render(<WorkTableSection lang="en" />);
+    render(<WorkTableSection />);
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument();
