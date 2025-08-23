@@ -1,10 +1,10 @@
-
 import { Box, Paper, PaperProps, SxProps, Theme } from '@mui/material';
 
 import { styles } from './PaperComponent.styles';
+
 import { sxToArray } from '~/lib/utils/sxToArray';
 
-interface PaperComponentProps extends PaperProps {
+interface PaperComponentProps extends Readonly<PaperProps> {
   childrenSx?: SxProps<Theme>;
 }
 
