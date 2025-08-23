@@ -122,8 +122,6 @@ describe('WorkTable Components', () => {
 
       render(<RenderActionCell {...mockInfo} />);
 
-      screen.debug();
-
       const gotoButton = screen.getByText('goto');
       expect(gotoButton).toBeInTheDocument();
       expect(gotoButton.closest('a')).toHaveAttribute('href', 'https://example.com');
