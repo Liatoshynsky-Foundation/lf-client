@@ -1,4 +1,5 @@
-import { Box, Paper, SxProps, Theme, PaperProps } from '@mui/material';
+
+import { Box, Paper, PaperProps, SxProps, Theme } from '@mui/material';
 
 import { styles } from './PaperComponent.styles';
 import { sxToArray } from '~/lib/utils/sxToArray';

@@ -1,4 +1,4 @@
-import { Breakpoint, Theme } from '@mui/material';
+import { Breakpoint } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
