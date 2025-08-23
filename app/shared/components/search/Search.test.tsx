@@ -26,21 +26,17 @@ describe('Search', () => {
     { _id: '1', title: 'Test Song' },
     { _id: '2', title: 'Another Song' }
   ];
-  const getOptionLabel = (option: { title: string }) => option.title;
+
+  const renderSearch = (opts = options, initialSearch = '') => {
+    const setSearch = jest.fn();
+    render(<Search<{ _id: string; title: string }> search={initialSearch} setSearch={setSearch} options={opts} />);
+    const input = screen.getByRole('combobox');
+    const searchIcon = screen.queryByAltText('search');
+    return { setSearch, input, searchIcon };
+  };
 
   it('should render the input and fetches options', async () => {
-    const setSearch = jest.fn();
-
-    render(
-      <Search<{ _id: string; title: string }>
-        search=""
-        setSearch={setSearch}
-        options={options}
-        getOptionLabel={getOptionLabel}
-      />
-    );
-
-    const input = screen.getByRole('combobox');
+    const { input } = renderSearch();
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     input.focus();
     fireEvent.change(input, { target: { value: 'T' } });
@@ -51,18 +47,7 @@ describe('Search', () => {
   });
 
   it('should call setSearch on input change', async () => {
-    const setSearch = jest.fn();
-
-    render(
-      <Search<{ _id: string; title: string }>
-        search=""
-        setSearch={setSearch}
-        options={options}
-        getOptionLabel={getOptionLabel}
-      />
-    );
-
-    const input = screen.getByRole('combobox');
+    const { setSearch, input } = renderSearch();
     input.focus();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
 
@@ -72,16 +57,7 @@ describe('Search', () => {
   });
 
   it('should display no options text when no results', async () => {
-    render(
-      <Search<{ _id: string; title: string }>
-        search="xyz"
-        setSearch={jest.fn()}
-        options={[]}
-        getOptionLabel={getOptionLabel}
-      />
-    );
-
-    const input = screen.getByRole('combobox');
+    const { input } = renderSearch([], 'xyz');
     input.focus();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
     await waitFor(() => {
@@ -90,40 +66,19 @@ describe('Search', () => {
   });
 
   it('should focus input when search icon is clicked', async () => {
-    const setSearch = jest.fn();
-
-    render(
-      <Search<{ _id: string; title: string }>
-        search=""
-        setSearch={setSearch}
-        options={options}
-        getOptionLabel={getOptionLabel}
-      />
-    );
-
-    const input = screen.getByRole('combobox');
-    const searchIcon = screen.getByAltText('search');
+    const { input, searchIcon } = renderSearch();
     input.blur();
     expect(document.activeElement).not.toBe(input);
+    if (!searchIcon) throw new Error('search icon not found');
     fireEvent.click(searchIcon);
     expect(document.activeElement).toBe(input);
   });
 
   it('should focus input when search icon is clicked even if not focused', async () => {
-    const setSearch = jest.fn();
-
-    render(
-      <Search<{ _id: string; title: string }>
-        search=""
-        setSearch={setSearch}
-        options={options}
-        getOptionLabel={getOptionLabel}
-      />
-    );
-    const input = screen.getByRole('combobox');
+    const { input, searchIcon } = renderSearch();
     input.blur();
     expect(document.activeElement).not.toBe(input);
-    const searchIcon = screen.getByAltText('search');
+    if (!searchIcon) throw new Error('search icon not found');
     fireEvent.click(searchIcon);
     expect(document.activeElement).toBe(input);
   });
