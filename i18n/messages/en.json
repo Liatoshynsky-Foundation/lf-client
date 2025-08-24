@@ -109,6 +109,9 @@
         "view": "Preview",
         "goto": "Visit"
       }
+    },
+    "controls": {
+      "filters": "Filters"
     }
   },
   "cookie": {

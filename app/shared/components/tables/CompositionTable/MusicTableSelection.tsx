@@ -38,8 +38,8 @@ export default function MusicTableSection() {
   const [yearFilter, setYearFilter] = useState<[number, number]>(() => [1900, new Date().getFullYear()]);
 
   const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
-  const t = useTranslations('table');
-  const tFilters = useTranslations('table.work');
+  const t = useTranslations('table.composition');
+  const tFilters = useTranslations('table.composition.filters');
 
   const {
     search,
@@ -56,7 +56,6 @@ export default function MusicTableSection() {
   const bp = useBreakpoints();
   const columnWidths = getColumnWidths(bp);
 
-  // map titles -> options for opus and genres (adapt if your titles shape differs)
   const opusesOptions = useMemo(() => {
     const map = new Map<string, { label: string; value: string }>();
     (titles || []).forEach((tItem: any) => {
@@ -82,17 +81,14 @@ export default function MusicTableSection() {
 
   const handleOpusChange = useCallback((values: string[]) => {
     setOpusFilter(values);
-    // integrate with columnFilters or search query if needed
   }, []);
 
   const handleGenreChange = useCallback((values: string[]) => {
     setGenreFilter(values);
-    // integrate with columnFilters or search query if needed
   }, []);
 
   const handleYearChange = useCallback((v: [number, number]) => {
     setYearFilter(v);
-    // integrate as needed
   }, []);
 
   const clearAllFilters = useCallback(() => {
@@ -165,12 +161,12 @@ export default function MusicTableSection() {
         onColumnFiltersChange={setColumnFilters}
         columnWidths={columnWidths}
         itemsPerPage={10}
-        tableName={t('composition')}
+        tableName={t('name.composition')}
         Search={<Search<any> search={search} setSearch={setSearch} options={titles} loading={loadingTitles} />}
         Filters={
           <MusicTableFilters
-            labelOpus={tFilters('filters.author') ?? 'Opus'}
-            labelGenre={tFilters('filters.author') ?? 'Genre'}
+            labelOpus={tFilters('opus') ?? 'Opus'}
+            labelGenre={tFilters('genre') ?? 'Genre'}
             opusesOptions={opusesOptions}
             genresOptions={genresOptions}
             defaultOpuses={opusFilter}
