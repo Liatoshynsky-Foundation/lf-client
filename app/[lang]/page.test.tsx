@@ -48,13 +48,15 @@ jest.mock('~/di/container', () => ({
   createRequestContainer: () => ({
     resolve: () => ({
       getPageData: jest.fn().mockResolvedValue({
-        IntroSection: {},
-        FoundationInfo: {},
-        OurMission: {},
-        OurGoals: {},
-        LiatoshynskyOffice: {},
-        WhatWeDo: {},
-        FoundationFounders: {}
+        blocks: {
+          IntroSection: {},
+          FoundationInfo: {},
+          OurMission: {},
+          OurGoals: {},
+          LiatoshynskyOffice: {},
+          WhatWeDo: {},
+          FoundationFounders: {}
+        }
       })
     })
   })

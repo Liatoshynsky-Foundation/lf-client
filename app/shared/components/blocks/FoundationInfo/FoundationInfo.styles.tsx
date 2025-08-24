@@ -49,6 +49,7 @@ export const styles = (theme: Theme) => ({
     fontSize: '28px',
     lineHeight: '160%',
     textTransform: 'uppercase',
+    marginRight: '200px',
     [theme.breakpoints.down('md')]: {
       fontSize: '18px',
       lineHeight: '180%'
@@ -64,7 +65,6 @@ export const styles = (theme: Theme) => ({
     }
   },
   explanationText: {
-    display: 'grid',
     fontFamily: 'Mulish',
     fontWeight: 500,
     fontSize: '28px',

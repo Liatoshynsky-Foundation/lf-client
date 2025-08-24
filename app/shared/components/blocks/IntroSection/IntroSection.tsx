@@ -6,8 +6,9 @@ import QuoteBlock from '~/components/Quote/Quote';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './IntroSection.styles';
+import { IIntroSection } from '~/types/page/about-us.types';
 
-export default function IntroSection({ data }: { readonly data: any }) {
+export default function IntroSection({ data }: { readonly data: IIntroSection }) {
   const sectionStyles = styles(theme);
   const { title, image, quote } = data;
 
@@ -40,8 +41,8 @@ export default function IntroSection({ data }: { readonly data: any }) {
       <Box sx={sectionStyles.quote}>
         {quote && (
           <QuoteBlock
-            quoteText={quote.mainText}
-            sourceText={quote.sourceTitle}
+            quoteText={quote.text}
+            sourceText={quote.source}
             quoteIconColor="burgundy"
             mainTextColor="burgundy"
             alignRight={false}

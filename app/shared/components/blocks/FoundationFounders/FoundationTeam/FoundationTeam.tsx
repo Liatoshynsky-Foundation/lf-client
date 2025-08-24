@@ -5,6 +5,8 @@ import { styles } from '~/components/blocks/FoundationFounders/FoundationTeam/Fo
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import PersonCard from '~/ds-components/person-card/PersonCard';
 
+import { IImageBlock } from '~/types/page/about-us.types';
+
 interface FoundationTeamProps {
   title: string;
   team: Teammate[];
@@ -13,7 +15,7 @@ interface FoundationTeamProps {
 interface Teammate {
   name: string;
   description: string;
-  photo: string;
+  photo: IImageBlock;
 }
 
 const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
@@ -30,7 +32,7 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
                 <SvgImage src="/images/light-logo.svg" width={236} height={88} alt="logo" />
               </Box>
             )}
-            <PersonCard name={member.name} description={member.description} imgURL={member.photo} />
+            <PersonCard name={member.name} description={member.description} imgURL={member.photo.src} />
             {(index + 1) % 2 === 0 && (
               <Box sx={styles.logo}>
                 <SvgImage src="/images/light-logo.svg" width={236} height={88} alt="logo" />
