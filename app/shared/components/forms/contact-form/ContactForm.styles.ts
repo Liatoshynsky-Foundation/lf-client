@@ -1,6 +1,12 @@
 import { mainHexPallete } from '../../design-system/all-components/theme/colors';
 
 export const styles = {
+  wrapper: {
+    width: { xs: 'auto', md: '390px', lg: '552px' },
+    backfroundColor: 'white',
+    zIndex: '3'
+  },
+
   formWarning: {
     lineHeight: '130%',
     color: mainHexPallete.brown[500],
@@ -61,11 +67,11 @@ export const styles = {
   confidentialPolicyText: {
     lineHeight: '130%',
     fontStyle: 'unset',
-    mt: '15px'
+    mt: { xs: '8px', md: '15px' }
   },
 
   requestButton: {
     width: '100%',
-    mt: '27px'
+    mt: '16px'
   }
 };

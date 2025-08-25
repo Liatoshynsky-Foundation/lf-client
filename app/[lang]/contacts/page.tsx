@@ -1,8 +1,9 @@
-import { setRequestLocale } from 'next-intl/server';
+import { getLocale, setRequestLocale } from 'next-intl/server';
 
 import ContactsInfo from './ContactsInfo/ContactsInfo';
 import { Language } from '~/types/types/language';
 
+import { createRequestContainer } from '~/di/container';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
 export const metadata = createSeoMeta({
@@ -14,6 +15,9 @@ export const metadata = createSeoMeta({
 export default async function Contacts({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
+  const locale = await getLocale();
 
-  return <ContactsInfo />;
+  const { contacts, socialLinks } = await createRequestContainer().resolve('footerService').getFooterData(locale);
+
+  return <ContactsInfo contacts={contacts} socialLinks={socialLinks} />;
 }
