@@ -1,6 +1,6 @@
 import { SxProps, Theme } from '@mui/material';
 
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const playCellSx: SxProps<Theme> = (theme) => ({
   display: 'flex',

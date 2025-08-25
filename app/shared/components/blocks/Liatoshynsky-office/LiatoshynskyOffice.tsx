@@ -10,8 +10,6 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './LiatoshynskyOffice.styles';
 import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
-import { Link } from '~/i18n/navigation';
-
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
 const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnType<typeof useTranslations> }) => {
@@ -37,9 +35,7 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
           <OfficeMedia />
         </Box>
         <Box sx={styles.buttonBlock}>
-          <Link href={'/office'} passHref>
-            <Button size="large" color="primary" variant="contained" label={t('goToOfficeButton')} />
-          </Link>
+          <Button size="large" color="primary" variant="contained" link="/office" label={t('goToOfficeButton')} />
         </Box>
       </Box>
     </Box>

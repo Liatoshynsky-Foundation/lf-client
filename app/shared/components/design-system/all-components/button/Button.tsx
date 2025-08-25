@@ -4,6 +4,9 @@ import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } 
 import { styled } from '@mui/material/styles';
 import { forwardRef, ReactNode } from 'react';
 
+import { Link } from '~/i18n/navigation';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 const CustomButton = styled(MuiButton)({});
 
 type Size = 'large' | 'medium' | 'small';
@@ -15,6 +18,8 @@ type BaseButtonProps = {
   endIcon?: ReactNode;
   loading?: boolean;
   label?: string;
+  shortLabel?: string;
+  link?: string;
 } & (
   | {
       color?: 'primary' | 'secondary';
@@ -28,10 +33,13 @@ type BaseButtonProps = {
 export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ label, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
+  ({ label, shortLabel, link, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
     const isDisabled = disabled ?? loading;
 
-    return (
+    const { isMobile } = useBreakpoints();
+    label = isMobile && shortLabel ? shortLabel : label;
+
+    const content = (
       <CustomButton
         ref={ref}
         disabled={isDisabled}
@@ -42,6 +50,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {loading ? <CircularProgress color="inherit" size={25} data-testid="loader" /> : (label ?? children)}
       </CustomButton>
     );
+
+    return link ? <Link href={link}>{content}</Link> : content;
   }
 );
 

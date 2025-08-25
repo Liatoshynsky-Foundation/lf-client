@@ -17,6 +17,8 @@ jest.mock('next-intl', () => ({
   })
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 describe('DownloadButton', () => {
   afterEach(() => {
     jest.clearAllMocks();

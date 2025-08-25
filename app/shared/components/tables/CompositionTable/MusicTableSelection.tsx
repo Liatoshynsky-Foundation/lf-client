@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 import {
   RenderActionsCell,
   RenderExpanderCell,
@@ -25,7 +27,6 @@ import { Music } from '~/types/types/enhancedTable';
 import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { MusicSearch } from '~/shared/components/composition-search/MusicSearch';
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 

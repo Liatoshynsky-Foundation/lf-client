@@ -2,10 +2,11 @@ import { Box } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import React from 'react';
 
+import CustomLink from '~/ds-components/link/CustomLink';
+
 import { BreadCrumbsStyles } from './BreadCrumbs.styles';
 import BreadcrumbsClient from './BreadCrumbsClient';
 
-import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 const CustomBreadcrumbs: React.FC = () => {

@@ -4,6 +4,8 @@ import { Box, TableCell, Typography } from '@mui/material';
 import type { CellContext } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 
+import Button from '~/ds-components/button/Button';
+
 import {
   actionsCellContainerSx,
   genreEllipsisSx,
@@ -20,7 +22,6 @@ import type { Music } from '~/types/types/enhancedTable';
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
-import Button from '~/shared/components/design-system/all-components/button/Button';
 import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';

@@ -15,25 +15,8 @@ import type { WorkTable } from '~/types/types/enhancedTable';
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
-jest.mock('~/i18n/navigation', () => ({
-  Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
-}));
-jest.mock('~/shared/components/design-system/all-components/button/Button', () => {
-  return function Button(
-    props: React.PropsWithChildren<{
-      endIcon?: React.ReactNode;
-      onClick?: React.MouseEventHandler;
-      href?: string;
-    }>
-  ) {
-    return (
-      <button onClick={props.onClick} data-href={props.href}>
-        {props.children}
-        {props.endIcon}
-      </button>
-    );
-  };
-});
+
+jest.mock('~/ds-components/button/Button');
 
 jest.mock('public/icons/eye.svg', () => {
   return function EyeIcon() {

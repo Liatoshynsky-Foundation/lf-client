@@ -11,19 +11,7 @@ jest.mock('~/components/svg-image/SvgImage', () => ({
   SvgImage: ({ alt, src }: { alt: string; src: string }) => <img data-testid="donation-icon" alt={alt} src={src} />
 }));
 
-jest.mock('~/ds-components/button/Button', () => ({
-  __esModule: true,
-  default: ({ label, startIcon }: { label: string; startIcon?: React.ReactNode }) => (
-    <button type="button">
-      {startIcon}
-      {label}
-    </button>
-  )
-}));
-
-jest.mock('~/i18n/navigation', () => ({
-  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
-}));
+jest.mock('~/ds-components/button/Button');
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
   __esModule: true,

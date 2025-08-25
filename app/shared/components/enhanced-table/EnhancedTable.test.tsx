@@ -13,6 +13,8 @@ jest.mock('next-intl', () => ({
   }
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 type TestRow = {
   id: string;
   name: string;

@@ -16,18 +16,10 @@ jest.mock('~/components/blocks/Liatoshynsky-office/office-media/OfficeMedia', ()
   return MockOfficeMedia;
 });
 
-jest.mock('~/ds-components/button/Button', () => {
-  const MockButton = ({ label }: { label: string }) => <button>{label}</button>;
-  MockButton.displayName = 'MockButton';
-  return MockButton;
-});
+jest.mock('~/ds-components/button/Button');
 
 jest.mock('next/font/google', () => ({
   Oswald: () => ({ className: 'mocked-oswald' })
-}));
-
-jest.mock('~/i18n/navigation', () => ({
-  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
 
 const mockTranslations: Record<string, string> = {

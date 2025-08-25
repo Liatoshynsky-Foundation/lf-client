@@ -4,9 +4,9 @@ import { Box, Typography } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { BreadCrumbsStyles } from './BreadCrumbs.styles';
+import CustomLink from '~/ds-components/link/CustomLink';
 
-import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
+import { BreadCrumbsStyles } from './BreadCrumbs.styles';
 
 const BreadcrumbsClient: React.FC = () => {
   const pathname = usePathname();
