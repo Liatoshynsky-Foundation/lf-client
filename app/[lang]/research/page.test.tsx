@@ -18,6 +18,22 @@ jest.mock('~/components/tables/WorksTable/WorkTableSelection', () => {
   return MockWorkTableSelection;
 });
 
+jest.mock('~/di/container', () => ({
+  createRequestContainer: () => ({
+    resolve: () => ({
+      getPageData: jest.fn().mockResolvedValue({
+        blocks: {
+          HeroSection: {}
+        }
+      })
+    })
+  })
+}));
+
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn()
+}));
+
 describe('Research Page', () => {
   it('should render Research page correctly', async () => {
     render(await Research({ params: Promise.resolve({ lang: 'en' }) }));
