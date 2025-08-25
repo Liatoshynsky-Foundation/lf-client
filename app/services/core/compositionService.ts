@@ -1,9 +1,17 @@
-import type { CompositionRepository } from '~/domain/repositories/composition.repository';
+import type { CompositionDTO, CompositionTitlesDTO, GenreDTO, OpusDTO } from '~/domain/dto/composition.dto';
+import type {
+  CompositionQueryFilters,
+  CompositionRepository,
+  YearRange
+} from '~/domain/repositories/composition.repository';
 
 export const createCompositionService = (repo: CompositionRepository) => ({
-  getAllGenres: () => repo.getAllGenres(),
-  getAllCompositions: (filter: string) => repo.getAllCompositions(filter),
-  getAllCompositionTitles: () => repo.getAllCompositionTitles()
+  getAllGenres: (): Promise<GenreDTO[]> => repo.getAllGenres(),
+  getAllOpuses: (): Promise<OpusDTO[]> => repo.getAllOpuses(),
+  getAllCompositionTitles: (): Promise<CompositionTitlesDTO[]> => repo.getAllCompositionTitles(),
+  getCompositionsYearRange: (): Promise<YearRange> => repo.getCompositionsYearRange(),
+  getAllCompositions: (search?: string, filters?: CompositionQueryFilters): Promise<CompositionDTO[]> =>
+    repo.getAllCompositions(search, filters)
 });
 
 export type CompositionService = ReturnType<typeof createCompositionService>;

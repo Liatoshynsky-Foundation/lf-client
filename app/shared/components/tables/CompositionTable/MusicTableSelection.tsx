@@ -52,7 +52,6 @@ export default function MusicTableSection() {
     titlesEndpoint: ApiRoutes.COMPOSITION_TITLES,
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
-
   const bp = useBreakpoints();
   const columnWidths = getColumnWidths(bp);
 
