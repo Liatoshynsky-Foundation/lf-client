@@ -43,7 +43,13 @@ declare module '@mui/material' {
     customItalic16: true;
     customItalic14: true;
     customSemiBold18: true;
-    customBold25: true;
+    customBold24Tight: true;
+    customMedium22: true;
+    customRegular20: true;
+    customRegular18Tight: true;
+    customMedium18Tight: true;
+    customRegular16: true;
+    customRegular14: true;
   }
 }
 declare module '@mui/material/styles' {
@@ -56,10 +62,15 @@ declare module '@mui/material/styles' {
     customBold16?: React.CSSProperties;
     customMedium16?: React.CSSProperties;
     customItalic16?: React.CSSProperties;
-    customCaption?: React.CSSProperties;
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
-    customBold25: React.CSSProperties;
+    customBold24Tight?: React.CSSProperties;
+    customMedium22?: React.CSSProperties;
+    customRegular20?: React.CSSProperties;
+    customRegular18Tight?: React.CSSProperties;
+    customMedium18Tight?: React.CSSProperties;
+    customRegular16?: React.CSSProperties;
+    customRegular14?: React.CSSProperties;
   }
   interface TypographyVariants {
     customBold32: React.CSSProperties;
@@ -70,10 +81,15 @@ declare module '@mui/material/styles' {
     customBold16: React.CSSProperties;
     customMedium16: React.CSSProperties;
     customItalic16: React.CSSProperties;
-    customCaption: React.CSSProperties;
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
-    customBold25: React.CSSProperties;
+    customBold24Tight: React.CSSProperties;
+    customMedium22: React.CSSProperties;
+    customRegular20: React.CSSProperties;
+    customRegular18Tight: React.CSSProperties;
+    customMedium18Tight: React.CSSProperties;
+    customRegular16: React.CSSProperties;
+    customRegular14: React.CSSProperties;
   }
 }
 
@@ -259,13 +275,6 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px'
     },
-    customBold25: {
-      fontFamily: mulish.style.fontFamily,
-      fontWeight: 700,
-      fontSize: '25px',
-      lineHeight: '140%',
-      letterSpacing: '0px'
-    },
     customSemiBold18: {
       fontSize: '18px',
       fontWeight: 600,
@@ -331,6 +340,55 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
+    },
+    customBold24Tight: {
+      fontSize: '24px',
+      fontWeight: 700,
+      lineHeight: '120%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customMedium22: {
+      fontSize: '22px',
+      fontWeight: 500,
+      lineHeight: '135%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customRegular20: {
+      fontSize: '20px',
+      fontWeight: 400,
+      lineHeight: '140%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customRegular18Tight: {
+      fontSize: '18px',
+      fontWeight: 400,
+      lineHeight: '135%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customMedium18Tight: {
+      fontSize: '18px',
+      fontWeight: 500,
+      lineHeight: '135%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customRegular16: {
+      fontSize: '16px',
+      fontWeight: 400,
+      lineHeight: '150%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
+    },
+    customRegular14: {
+      fontSize: '14px',
+      fontWeight: 400,
+      lineHeight: '140%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
     }
   },
   components: {
@@ -345,7 +403,14 @@ export const theme = createTheme({
           customBold16: 'p',
           customMedium16: 'p',
           customItalic16: 'p',
-          customItalic14: 'p'
+          customItalic14: 'p',
+          customBold24Tight: 'p',
+          customMedium22: 'p',
+          customRegular20: 'p',
+          customRegular18Tight: 'p',
+          customMedium18Tight: 'p',
+          customRegular16: 'p',
+          customRegular14: 'p'
         }
       }
     },
@@ -774,16 +839,16 @@ export const theme = createTheme({
         root: {
           borderRadius: '24px',
           width: '100%',
-          maxWidth: '744px',
+          maxWidth: '742px',
+          marginTop: '16px',
+          marginLeft: '16px',
           boxShadow: 'none',
           transition: 'all 0.3s ease',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
             color: accordionColorsRgb.accordion.expanded.color
-          },
-          '&:before': {
-            display: 'none'
           }
         }
       },
@@ -800,7 +865,10 @@ export const theme = createTheme({
           borderRadius: '24px',
           padding: '16px 16px 16px 24px',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
-          color: accordionColorsRgb.summary.color
+          color: accordionColorsRgb.summary.color,
+          '&.Mui-expanded': {
+            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
+          }
         },
         content: {
           margin: 0
@@ -810,9 +878,9 @@ export const theme = createTheme({
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          padding: '8px 64px 32px 40px',
+          padding: '16px 16px 16px 24px',
           borderRadius: '0 0 24px 24px',
-          backgroundColor: accordionColorsRgb.summary.backgroundColor,
+          backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
         }
       }
