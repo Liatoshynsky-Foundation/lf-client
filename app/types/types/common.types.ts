@@ -81,6 +81,7 @@ export interface TipTapMarkRenderers {
   [TipTapMarkType.underline]: (children: ReactNode, mark: UnderlineMark) => ReactNode;
   [TipTapMarkType.link]: (children: ReactNode, mark: LinkMark) => ReactNode;
 }
+
 export type ButtonData = {
   text: string;
   link: string;

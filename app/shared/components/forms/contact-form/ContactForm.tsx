@@ -11,7 +11,7 @@ function ContactForm() {
   const t = useTranslations('contactForm');
 
   return (
-    <Box sx={styles.wrapper}>
+    <Box>
       <Typography variant="customItalic14" sx={styles.formWarning}>
         {t('requiredFields')}
       </Typography>
