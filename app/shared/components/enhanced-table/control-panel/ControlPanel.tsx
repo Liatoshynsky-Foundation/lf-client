@@ -52,7 +52,7 @@ const CompositionsControlPanel = ({
       }}
     >
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
-        <Typography variant={isExtraSmall ? 'customBold25' : 'customBold32'}>{tableName}</Typography>
+        <Typography variant={isExtraSmall ? 'customBold24Tight' : 'customBold32'}>{tableName}</Typography>
         {isMobile ? (
           <Box sx={{ marginRight: '30px' }}>
             <IconButton

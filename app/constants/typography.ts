@@ -151,12 +151,5 @@ export const AppTypography: TypographyVariantsOptions = {
     fontSize: '14px',
     fontStyle: 'italic',
     lineHeight: '140%'
-  },
-  customBold25: {
-    fontFamily: 'Mulish',
-    fontWeight: 700,
-    fontSize: '25px',
-    lineHeight: '140%',
-    letterSpacing: '0px'
   }
 };
