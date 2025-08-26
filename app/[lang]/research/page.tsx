@@ -21,7 +21,7 @@ export default async function Research({ params }: Readonly<Language>) {
 
   const pageService = await createRequestContainer().resolve('pageService');
 
-  const [page] = await Promise.all([pageService.getPageData('research', lang)]);
+  const page = await pageService.getPageData('research', lang);
 
   return (
     <>
