@@ -2,7 +2,7 @@
 
 import { Box, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Chip } from '../chip/Chip';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
@@ -38,6 +38,11 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(defaultValues);
   const iconRef = useRef<HTMLDivElement | null>(null);
+  const defaultValuesKey = JSON.stringify(defaultValues);
+
+  useEffect(() => {
+    setSelectedValues(defaultValues);
+  }, [defaultValuesKey]);
 
   const handleToggleMenu = () => {
     if (!disabled && iconRef.current) {
@@ -66,16 +71,12 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
     setSelectedValues(newValues);
   };
 
-  const handleChipDelete = (value: string) => {
-    const option = options.find((opt) => opt.value === value);
-    if (!option) return;
-
-    const newValues = selectedValues.filter((val) => val !== value);
-    setSelectedValues(newValues);
-    onRemove?.(value, option.label, newValues);
+  const handleChipDelete = () => {
+    setSelectedValues([]);
+    onRemove?.('', '', []);
   };
 
-  const selectedOptions = options.filter((opt) => selectedValues.includes(opt.value));
+  const selectedOptionsCount = selectedValues.length;
   const isMaxReached = maxSelections ? selectedValues.length >= maxSelections : false;
 
   const menuList = options.map((option) => {
@@ -99,21 +100,16 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
     <>
       <Box sx={filterSelectStyles.root(variant, disabled)} onClick={handleToggleMenu}>
         <Typography sx={filterSelectStyles.label(disabled)}>{label}</Typography>
-
         <Box sx={filterSelectStyles.chipContainer}>
-          <Box sx={filterSelectStyles.chipList}>
-            {selectedOptions.map((option) => (
-              <Chip
-                key={option.value}
-                label={option.label}
-                variant={variant}
-                disabled={disabled}
-                onDelete={() => handleChipDelete(option.value)}
-                size="small"
-              />
-            ))}
-          </Box>
-
+          {selectedOptionsCount > 0 && (
+            <Chip
+              label={`${selectedOptionsCount} обрано`}
+              variant={variant}
+              disabled={disabled}
+              onDelete={handleChipDelete}
+              size="small"
+            />
+          )}
           <Box ref={iconRef} sx={filterSelectStyles.dropdownIcon(disabled)}>
             <Image src="/icons/chevron-down.svg" alt="dropdown" width={16} height={16} />
           </Box>

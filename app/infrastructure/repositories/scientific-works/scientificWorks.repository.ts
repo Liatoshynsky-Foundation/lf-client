@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import dbConnect from '~/infrastructure/db/connect';
 import { ScientificWorksAuthor } from '~/infrastructure/models/scientific-works/scientificWorksAuthor';
 import { ScientificWorks } from '~/infrastructure/models/scientific-works/scientificWorksTableData';
-import { scientificWorksSchema } from '~/validators/scientific-works/scientificWorks.schema';
+import { authorsSchema, scientificWorksSchema } from '~/validators/scientific-works/scientificWorks.schema';
 
 export type GetAllScientificWorksParams = {
   years?: number[];
@@ -16,7 +16,7 @@ export const scientificWorksRepository = {
     await dbConnect();
 
     const authors = await ScientificWorksAuthor.find().lean();
-    return scientificWorksSchema.parse(authors);
+    return authorsSchema.parse(authors);
   },
 
   async getAllScientificWorks(params: GetAllScientificWorksParams = {}) {
@@ -26,14 +26,14 @@ export const scientificWorksRepository = {
     const filter: Record<string, unknown> = {};
 
     if (years && years.length > 0) {
-      filter.$or = years.map((year) => ({
-        $and: [
-          { startYear: { $lte: year } },
-          {
-            $or: [{ endYear: { $gte: year } }, { endYear: null }, { endYear: { $exists: false } }]
-          }
-        ]
-      }));
+      const [minUserYear, maxUserYear] = years;
+
+      filter.$and = [
+        { startYear: { $lte: maxUserYear } },
+        {
+          $or: [{ endYear: { $gte: minUserYear } }, { $and: [{ endYear: null }, { startYear: { $gte: minUserYear } }] }]
+        }
+      ];
     }
 
     if (authorIds && authorIds.length > 0) {

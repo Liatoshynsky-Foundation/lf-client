@@ -14,7 +14,7 @@ import type { WorkTable } from '~/types/types/enhancedTable';
 export const RenderNameHeader = () => {
   const t = useTranslations('table.work.columns');
   return (
-    <Box display="flex" alignItems="center" sx={{ cursor: 'pointer' }}>
+    <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', pl: '72px' }}>
       <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
         {t('name')}
       </Typography>
@@ -41,7 +41,7 @@ export const RenderYearHeader = () => {
 };
 
 export const renderNameCell = (info: CellContext<WorkTable, unknown>) => (
-  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '738px' }}>
+  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '738px', pl: '72px' }}>
     {info.getValue<string>()}
   </Typography>
 );
@@ -52,9 +52,9 @@ export const renderAuthorCell = (info: CellContext<WorkTable, unknown>) => (
   </Typography>
 );
 
-export const renderYearCell = (info: CellContext<WorkTable, unknown>) => (
+export const renderYearCell = (value: string | number) => (
   <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '85px' }}>
-    {info.getValue<number>()}
+    {value}
   </Typography>
 );
 
@@ -62,7 +62,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
   const t = useTranslations('table.work.buttons');
   const row = info.row.original;
 
-  if (row.actionType === 'pdf') {
+  if (row.isPreview) {
     return (
       <Box
         sx={{
@@ -78,7 +78,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
     );
   }
 
-  if (row.actionType === 'link' && row.link) {
+  if (row.url) {
     return (
       <Box
         sx={{
@@ -87,7 +87,7 @@ export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
           maxWidth: '189px'
         }}
       >
-        <Button variant="outlined" size="medium" color="primary" link={row.link} endIcon={<LogOut />}>
+        <Button variant="outlined" size="medium" color="primary" link={row.url} endIcon={<LogOut />}>
           {t('goto')}
         </Button>
       </Box>

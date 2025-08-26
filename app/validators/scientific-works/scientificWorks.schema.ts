@@ -3,6 +3,7 @@ import z from 'zod';
 import { mongoObjectIdSchema } from '../constants';
 
 export const authorSchema = z.object({
+  _id: mongoObjectIdSchema,
   name: z.string(),
   surname: z.string()
 });
@@ -12,9 +13,10 @@ export const scientificWorkSchema = z.object({
   title: z.string(),
   startYear: z.number(),
   endYear: z.number().nullable().optional(),
-  url: z.string(),
+  url: z.string().nullable().optional(),
   isPreview: z.boolean(),
   authors: z.array(authorSchema)
 });
 
 export const scientificWorksSchema = z.array(scientificWorkSchema);
+export const authorsSchema = z.array(authorSchema);

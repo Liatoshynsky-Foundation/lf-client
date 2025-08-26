@@ -36,6 +36,10 @@ interface EnhancedTableProps<T extends RowData> {
   tableName: string;
   defaultSorting?: SortingState;
   MusicSearch?: React.ReactNode;
+  Filters?: React.ReactNode;
+  isFiltersActive?: boolean;
+  activeFiltersCount?: number;
+  onClearFilters?: () => void;
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
@@ -50,6 +54,8 @@ export default function EnhancedTable<T extends RowData>({
   itemsPerPage = 10,
   tableName,
   MusicSearch,
+  Filters,
+  activeFiltersCount,
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
@@ -90,7 +96,8 @@ export default function EnhancedTable<T extends RowData>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange,
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    manualFiltering: true
   });
 
   const filteredAndSortedRows = useMemo(() => {
@@ -144,8 +151,12 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <CompositionsControlPanel MusicSearch={MusicSearch} tableName={tableName} />
-
+      <CompositionsControlPanel
+        MusicSearch={MusicSearch}
+        tableName={tableName}
+        Filters={Filters}
+        activeFiltersCount={activeFiltersCount}
+      />
       {loading ? (
         <Box sx={styles.loaderBox}>
           <CircularProgress />
