@@ -10,7 +10,19 @@ const IntroSectionBlockSchema = z.object({
   agreement: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema })
 });
 
-const CollectedDataBlockSchema = z.object({
+const DataWeCollectBlockSchema = z.object({
+  title: translatedFieldSchema,
+  description: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }),
+  sections: z.array(
+    z.object({
+      subtitle: translatedFieldSchema,
+      list: z.array(z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }))
+    })
+  ),
+  note: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema })
+});
+
+const DataUsageBlockSchema = z.object({
   title: translatedFieldSchema,
   description: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }),
   list: z.array(z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }))
@@ -64,7 +76,8 @@ const ContactUsBlockSchema = z.object({
 
 const PrivacyPolicyBlock = z.object({
   IntroSection: IntroSectionBlockSchema,
-  CollectedData: CollectedDataBlockSchema,
+  DataWeCollect: DataWeCollectBlockSchema,
+  DataUsage: DataUsageBlockSchema,
   Cookies: CookiesBlockSchema,
   GoogleAuth: GoogleAuthBlockSchema,
   SocialNetworks: SocialNetworksBlockSchema,
@@ -99,10 +112,19 @@ export const createLocalizedPrivacyPolicyPageSchema = (locale: Locale) =>
           trustAndSecurity: blocks.IntroSection.trustAndSecurity[locale],
           agreement: blocks.IntroSection.agreement[locale]
         },
-        CollectedData: {
-          title: blocks.CollectedData.title[locale],
-          description: blocks.CollectedData.description[locale],
-          list: blocks.CollectedData.list.map((item) => item[locale])
+        DataWeCollect: {
+          title: blocks.DataWeCollect.title[locale],
+          description: blocks.DataWeCollect.description[locale],
+          sections: blocks.DataWeCollect.sections.map((section) => ({
+            subtitle: section.subtitle[locale],
+            list: section.list.map((item) => item[locale])
+          })),
+          note: blocks.DataWeCollect.note[locale]
+        },
+        DataUsage: {
+          title: blocks.DataUsage.title[locale],
+          description: blocks.DataUsage.description[locale],
+          list: blocks.DataUsage.list.map((item) => item[locale])
         },
         Cookies: {
           title: blocks.Cookies.title[locale],
