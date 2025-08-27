@@ -5,6 +5,7 @@ import { styles } from './ContactsInfo.styles';
 
 import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
+import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 
 interface IContactInfoProps {
   contacts: {
@@ -39,7 +40,7 @@ export default function ContactsInfo({ contacts, socialLinks }: IContactInfoProp
             <FooterSocialMedia media={socialLinks} />
           </Box>
         </Box>
-        <Box sx={styles.formWrapper}>
+        <PaperComponent sx={styles.formWrapper}>
           <Typography sx={styles.formTitle} variant="h5">
             {t('formTitle')}
           </Typography>
@@ -47,7 +48,7 @@ export default function ContactsInfo({ contacts, socialLinks }: IContactInfoProp
             {t('formSubtitle')}
           </Typography>
           <ContactForm />
-        </Box>
+        </PaperComponent>
       </Box>
     </Box>
   );

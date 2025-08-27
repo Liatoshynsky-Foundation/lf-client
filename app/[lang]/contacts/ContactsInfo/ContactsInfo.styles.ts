@@ -57,11 +57,10 @@ export const styles = {
   },
 
   formWrapper: {
-    backgroundColor: mainHexPallete.white,
-    clipPath: { xs: 'polygon(0 1%, 100% 0%, 100% 99%, 0% 100%)', sm: 'polygon(0 3%, 100% 0%, 100% 97%, 0% 100%)' },
     padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '93.5px 95.5px' },
     margin: { xs: '0px -24px', sm: 'unset' },
-    maxWidth: { sm: '400px', md: '496px', lg: '744px' }
+    maxWidth: { sm: '400px', md: '496px', lg: '744px' },
+    width: { xs: '100vw', sm: '100%' }
   },
 
   formTitle: {
