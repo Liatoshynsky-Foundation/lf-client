@@ -11,7 +11,7 @@ import MobileNav from './mobile-nav/MobileNav';
 import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 
 const NavigationBar = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
-  const { isLaptopAndAbove } = useBreakpoints();
+  const { isDesktop } = useBreakpoints();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const NavigationBar = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
     return <CircularProgress />;
   }
 
-  return isLaptopAndAbove ? <DesktopNav navLabels={navLabels} /> : <MobileNav />;
+  return isDesktop ? <DesktopNav navLabels={navLabels} /> : <MobileNav />;
 };
 
 export default NavigationBar;

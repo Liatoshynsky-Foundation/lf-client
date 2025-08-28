@@ -20,13 +20,11 @@ export default function RightActionsPanel({ supportButtonData }: Readonly<Suppor
 
   return (
     <Box sx={styles.backgroundContainer(isMobile, isTablet)}>
-      <Box sx={styles.rightContainer}>
+      <Box sx={styles.controls(isMobile)}>
         <AudioPlayer />
-        <Box sx={styles.buttonsContainer(isMobile)}>
-          <LanguageSwitcher variant="icon" />
-          <SupportButton data={supportButtonData} />
-        </Box>
+        <LanguageSwitcher variant="icon" />
       </Box>
+      <SupportButton data={supportButtonData} isMobile={isMobile} />
     </Box>
   );
 }
