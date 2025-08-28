@@ -43,11 +43,16 @@ const CompositionsControlPanel = ({
       gap={8}
       pl={3}
       sx={{
+        [theme.breakpoints.up('xs')]: {
+          pl: '24px'
+        },
         [theme.breakpoints.up('sm')]: {
-          pr: '30px'
+          pr: '30px',
+          pl: '56px'
         },
         [theme.breakpoints.up('md')]: {
-          pr: '60px'
+          pr: '60px',
+          pl: '72px'
         }
       }}
     >
