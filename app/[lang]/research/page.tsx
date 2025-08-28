@@ -6,6 +6,7 @@ import WorkTableSection from '~/components/tables/WorksTable/WorkTableSelection'
 
 import { Language } from '~/types/types/language';
 
+import { createRequestContainer } from '~/di/container';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
 export const metadata = createSeoMeta({
@@ -17,9 +18,14 @@ export const metadata = createSeoMeta({
 export default async function Research({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
+
+  const pageService = await createRequestContainer().resolve('pageService');
+
+  const page = await pageService.getPageData('research', lang);
+
   return (
     <>
-      <ResearchAndScientificWork />
+      {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
       <WorkTableSection lang={lang} />
     </>
   );

@@ -1,16 +1,9 @@
-import { getTranslations } from 'next-intl/server';
-
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
-const ResearchAndScientificWork = async () => {
-  const t = await getTranslations('research');
-  return (
-    <TitleWithQuote
-      title={t('title-with-quote.title')}
-      quoteText={t('title-with-quote.quoteText')}
-      sourceText={t('title-with-quote.sourceText')}
-      color="brown"
-    />
-  );
-};
-export default ResearchAndScientificWork;
+import { ResearchAndScientificWorkProps } from '~/types/page/research.types';
+
+export default function ResearchAndScientificWork({ data }: { readonly data: ResearchAndScientificWorkProps }) {
+  const { title, quote } = data;
+
+  return <TitleWithQuote title={title} quoteText={quote.text} sourceText={quote.source} color="brown" />;
+}
