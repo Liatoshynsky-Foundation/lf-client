@@ -5,6 +5,10 @@ import { createPagesDataService } from './pagesDataService';
 import { PageServiceDeps } from '~/domain/services/pagesService.type';
 import { createLocalizedAboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
 
+jest.mock('~/validators/pagesSchemas/pages/privacy-policy.schema', () => ({
+  createLocalizedPrivacyPolicyPageSchema: jest.fn()
+}));
+
 jest.mock('~/validators/pagesSchemas/pages/about-us.schema', () => ({
   createLocalizedAboutUsPageSchema: jest.fn()
 }));

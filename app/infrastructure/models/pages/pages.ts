@@ -23,7 +23,12 @@ const aboutUsDetailsSchema = new Schema({
   blocks: { type: Schema.Types.Mixed, required: true }
 });
 
+const privacyPolicySchema = new Schema({ blocks: { type: Schema.Types.Mixed, required: true } });
+
 export const AboutUsPageModel =
   mongoose.models.AboutUsPage || PageModel.discriminator('AboutUsPage', aboutUsDetailsSchema);
+
+export const PrivacyPolicyModel =
+  mongoose.models.PrivacyPolicyPage || PageModel.discriminator('PrivacyPolicyPage', privacyPolicySchema);
 
 export default PageModel;
