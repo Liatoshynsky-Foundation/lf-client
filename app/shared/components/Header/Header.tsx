@@ -12,10 +12,13 @@ import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { headerClientService } from '~/services/client/headerService';
 import useQuery from '~/shared/hooks/query/useQuery';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
 export default function Header() {
   const [isNavVisible, setIsNavVisible] = useState(true);
+  const { isTablet, isLaptop } = useBreakpoints();
+
   const scrollDirection = useScrollDirection(100);
   const t = useTranslations('header');
   const locale = useLocale();
@@ -39,15 +42,31 @@ export default function Header() {
       <Box sx={styles.logoContainer}>
         <Logo />
       </Box>
-      <Box sx={styles.navigationContainer(isNavVisible)}>
-        <NavigationBar navLabels={headerData.navigation} />
-      </Box>
-      <RightActionsPanel
-        supportButtonData={{
-          text: t('supportButton'),
-          link: headerData.supportButtonLink
-        }}
-      />
+      {isTablet || isLaptop ? (
+        <Box sx={styles.desktopNavWrapper}>
+          <Box sx={styles.navigationContainer(isNavVisible)}>
+            <NavigationBar navLabels={headerData.navigation} />
+          </Box>
+          <RightActionsPanel
+            supportButtonData={{
+              text: t('supportButton'),
+              link: headerData.supportButtonLink
+            }}
+          />
+        </Box>
+      ) : (
+        <>
+          <Box sx={styles.navigationContainer(isNavVisible)}>
+            <NavigationBar navLabels={headerData.navigation} />
+          </Box>
+          <RightActionsPanel
+            supportButtonData={{
+              text: t('supportButton'),
+              link: headerData.supportButtonLink
+            }}
+          />
+        </>
+      )}
     </Box>
   );
 }
