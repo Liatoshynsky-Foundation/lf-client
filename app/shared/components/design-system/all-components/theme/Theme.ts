@@ -105,6 +105,12 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/ButtonGroup' {
+  interface ButtonGroupPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
 export const buttonSizeStyles = {
   small: {
     height: '32px',
@@ -700,6 +706,13 @@ export const theme = createTheme({
           style: {
             backgroundColor: hexButtonGroupColors.secondary.groupBackgroundColor,
             color: hexButtonGroupColors.secondary.buttonTextColor
+          }
+        },
+        {
+          props: { color: 'tertiary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.tertiary.groupBackgroundColor,
+            color: hexButtonGroupColors.tertiary.buttonTextColor
           }
         }
       ]

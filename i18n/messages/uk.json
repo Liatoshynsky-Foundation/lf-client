@@ -157,5 +157,13 @@
     "socialMedia": "Ми в соцмережах",
     "formTitle": "Форма звернення",
     "formSubtitle": "Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів"
+  },
+  "donationForm": {
+    "donationTitle": "ШВИДКО ЗАДОНАТИТИ:",
+    "subscribeTitle": "ПІДПИСАТИСЯ:",
+    "donationSwitch": "Разовий внесок",
+    "subscribeSwitch": "Підписка",
+    "donationButton": "Зробити внесок",
+    "subscribeButton": "Підписатися"
   }
 }

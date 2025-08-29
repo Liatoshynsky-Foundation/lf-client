@@ -9,7 +9,7 @@ export interface ElementSizes {
 }
 
 export type ButtonGroupSizeOptions = 'small' | 'big';
-export type ButtonGroupPaletteOptions = 'primary' | 'secondary';
+export type ButtonGroupPaletteOptions = 'primary' | 'secondary' | 'tertiary';
 
 export type ScrollDirection = 'up' | 'down';
 
@@ -87,3 +87,6 @@ export type ButtonData = {
   link: string;
   shortText?: string;
 };
+
+export type Currency = 'UAH' | 'USD' | 'EUR' | 'GBP';
+export type DonateType = 'donation' | 'subscription';
