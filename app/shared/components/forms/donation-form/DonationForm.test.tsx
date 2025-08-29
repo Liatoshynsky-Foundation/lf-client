@@ -31,9 +31,15 @@ jest.mock('next-intl', () => ({
 describe('donation form', () => {
   beforeAll(() => {
     class ResizeObserver {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
+      observe() {
+        return;
+      }
+      unobserve() {
+        return;
+      }
+      disconnect() {
+        return;
+      }
     }
     (global as any).ResizeObserver = ResizeObserver;
   });

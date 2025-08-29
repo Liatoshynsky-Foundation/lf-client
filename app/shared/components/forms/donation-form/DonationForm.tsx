@@ -28,16 +28,9 @@ function DonationForm() {
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];
-  const CustomIcon = ({ open }: { open: boolean }) => (
-    <img
-      src={open ? '/icons/chevron-up.svg' : '/icons/chevron-down.svg'}
-      alt="dropdown"
-      style={{ width: 16, height: 16 }}
-    />
-  );
   const [donationSum, setDonationSum] = useState<number | ''>(0);
   const [currency, setCurrency] = useState<Currency>('UAH');
-  const [openDropdown, setDropdown] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
     setDonationSum(0);
@@ -82,12 +75,11 @@ function DonationForm() {
         <FormControl variant="standard" sx={style.currencyInput}>
           <Select
             open={openDropdown}
-            onOpen={() => setDropdown(true)}
-            onClose={() => setDropdown(false)}
+            onOpen={() => setOpenDropdown(true)}
+            onClose={() => setOpenDropdown(false)}
             disableUnderline
             value={currency}
             onChange={handleCurrencySwitch}
-            IconComponent={() => <CustomIcon open={openDropdown} />}
           >
             {currencyItems}
           </Select>
