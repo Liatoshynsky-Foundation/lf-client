@@ -1,7 +1,6 @@
 import { alpha, SxProps, Theme } from '@mui/material';
 
 export const styles: SxProps<Theme> = {
-  zIndex: (theme) => theme.zIndex.modal,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
