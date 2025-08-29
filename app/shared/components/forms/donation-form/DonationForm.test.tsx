@@ -13,6 +13,21 @@ jest.mock('../../design-system/all-components/button/Button', () => {
     default: MockButton
   };
 });
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const messages: Record<string, string> = {
+      donationTitle: 'ШВИДКО ЗАДОНАТИТИ:',
+      subscribeTitle: 'ПІДПИСАТИСЯ:',
+      donationSwitch: 'Разовий внесок',
+      subscribeSwitch: 'Підписка',
+      donationButton: 'Зробити внесок',
+      subscribeButton: 'Підписатися'
+    };
+    return messages[key] || key;
+  }
+}));
+
 describe('donation form', () => {
   beforeAll(() => {
     class ResizeObserver {
