@@ -1,6 +1,9 @@
 export const styles = {
   container: {
     width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     transform: 'skewY(-2deg)'
   },
   children: {
