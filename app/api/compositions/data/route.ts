@@ -7,16 +7,21 @@ export async function GET(req: NextRequest) {
   try {
     const url = req.nextUrl;
     const params = url.searchParams;
-
     const locale = params.get('locale') || 'uk';
     const search = params.get('search') || '';
 
-    const opuses = params.getAll('opus');
     const genres = params.getAll('genre');
+    const yearFrom = params.get('yearFrom');
+    const yearTo = params.get('yearTo');
 
     const filters: any = {};
-    if (opuses.length) filters.opuses = opuses;
     if (genres.length) filters.genres = genres;
+
+    if (yearFrom || yearTo) {
+      const min = yearFrom ? Number(yearFrom) : 1900;
+      const max = yearTo ? Number(yearTo) : new Date().getFullYear();
+      filters.years = { min, max };
+    }
 
     const artistryService = createRequestContainer().resolve('artistryService');
     const data = await artistryService.getAllCompositions(

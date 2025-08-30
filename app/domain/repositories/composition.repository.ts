@@ -2,7 +2,6 @@ import type { CompositionDTO, CompositionTitlesDTO, GenreDTO, OpusDTO } from '~/
 
 export type YearRange = { minYear: number; maxYear: number };
 export type CompositionQueryFilters = {
-  opuses?: Array<string | number>;
   genres?: string[];
   years?: { min?: number; max?: number };
 };

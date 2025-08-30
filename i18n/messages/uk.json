@@ -82,9 +82,9 @@
     },
     "composition": {
       "filters": {
-        "opus": "Опус",
+        "category": "Категорія",
         "genre": "Жанр",
-        "yearLabel": "Рік"
+        "year": "Рік"
       },
       "name": {
         "composition": "Усі Композиції"

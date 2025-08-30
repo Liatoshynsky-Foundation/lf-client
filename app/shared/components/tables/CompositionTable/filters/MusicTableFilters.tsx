@@ -1,75 +1,73 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useTranslations } from 'next-intl';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 
+import { GenreNameDTO } from '~/domain/dto/table.dto';
 import { FilterPanel } from '~/shared/components/filters/FilterPanel';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 
-type Option = { label: string; value: string };
+interface FilterOption {
+  value: string;
+  label: string;
+}
 
 interface MusicTableFiltersProps {
-  labelOpus?: string;
   labelGenre?: string;
-  opusesOptions: Option[];
-  genresOptions: Option[];
-  defaultOpuses: string[];
-  defaultGenres: string[];
+  labelCategory?: string;
+  genresOptions: GenreNameDTO[];
+  categoriesOptions?: FilterOption[];
+  genreFilter: string[];
+  categoryFilter?: string[];
+  yearLabel?: string;
   yearFilter: [number, number];
-  onOpusesChange: (values: string[]) => void;
   onGenresChange: (values: string[]) => void;
+  onCategoriesChange?: (values: string[]) => void;
   onYearChange: (value: [number, number]) => void;
-  onClearAllFilters: () => void;
+  onClearAllFilters?: () => void;
+  isAnyFilterActive: boolean;
+  minYear?: number;
+  maxYear?: number;
 }
 
 export function MusicTableFilters({
-  labelOpus = 'Opus',
   labelGenre = 'Genre',
-  opusesOptions,
   genresOptions,
-  defaultOpuses,
-  defaultGenres,
+  categoriesOptions = [],
+  genreFilter,
+  labelCategory = 'Category',
+  categoryFilter = [],
   yearFilter,
-  onOpusesChange,
+  yearLabel = 'Year',
   onGenresChange,
+  onCategoriesChange,
   onYearChange,
-  onClearAllFilters
+  onClearAllFilters,
+  isAnyFilterActive,
+  minYear,
+  maxYear
 }: Readonly<MusicTableFiltersProps>) {
-  const t = useTranslations('table.work');
-
-  const isOpusActive = useMemo(() => defaultOpuses && defaultOpuses.length > 0, [defaultOpuses]);
-  const isGenreActive = useMemo(() => defaultGenres && defaultGenres.length > 0, [defaultGenres]);
-  const isYearActive = useMemo(() => {
-    if (!yearFilter) return false;
-    const minYear = 1900;
-    const maxYear = new Date().getFullYear();
-    return yearFilter[0] > minYear || yearFilter[1] < maxYear;
-  }, [yearFilter]);
-
-  const isAnyFilterActive = isOpusActive || isGenreActive || isYearActive;
-
   return (
     <FilterPanel isAnyFilterActive={isAnyFilterActive} onClearAllFilters={onClearAllFilters}>
       <Box sx={{ width: 'fit-content' }}>
         <FilterSelect
-          label={labelOpus}
-          options={opusesOptions}
-          defaultValues={defaultOpuses}
+          label={labelCategory}
+          options={categoriesOptions}
+          defaultValues={categoryFilter}
           variant="filled"
           maxSelections={10}
-          onAdd={(val, lab, allSelected) => onOpusesChange(allSelected)}
-          onRemove={(val, lab, allSelected) => onOpusesChange(allSelected)}
+          onAdd={(val, lab, allSelected) => onCategoriesChange?.(allSelected)}
+          onRemove={(val, lab, allSelected) => onCategoriesChange?.(allSelected)}
         />
       </Box>
 
       <Box sx={{ width: 'fit-content' }}>
         <FilterSelect
           label={labelGenre}
-          options={genresOptions}
-          defaultValues={defaultGenres}
+          options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
+          defaultValues={genreFilter}
           variant="filled"
           maxSelections={10}
           onAdd={(val, lab, allSelected) => onGenresChange(allSelected)}
@@ -78,7 +76,13 @@ export function MusicTableFilters({
       </Box>
 
       <Box sx={{ width: 'fit-content' }}>
-        <YearNumericFilter label={t('filters.yearLabel')} value={yearFilter} onChange={onYearChange} />
+        <YearNumericFilter
+          label={yearLabel ?? 'Year'}
+          value={yearFilter}
+          onChange={onYearChange}
+          minYear={minYear}
+          maxYear={maxYear}
+        />
       </Box>
     </FilterPanel>
   );

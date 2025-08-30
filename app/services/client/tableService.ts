@@ -3,7 +3,7 @@ import { Locale } from 'next-intl';
 import { getFullUrl } from '~/lib/utils/getFullUrl';
 import { baseService } from '~/services/client/baseService';
 
-async function getTableTitles<T>(pathname: string, locale: Locale): Promise<T[]> {
+async function getTableStaticData<T>(pathname: string, locale: Locale): Promise<T[]> {
   const url = getFullUrl({
     pathname,
     searchParameters: { locale }
@@ -14,12 +14,12 @@ async function getTableTitles<T>(pathname: string, locale: Locale): Promise<T[]>
   });
 }
 
-async function getTableData<T>(pathname: string, locale: Locale, search?: string): Promise<T[]> {
-  const url = getFullUrl({
+async function getTableData<T>(pathname: string, locale: Locale, params: Record<string, any>): Promise<T[]> {
+  let url = getFullUrl({
     pathname,
     searchParameters: {
       locale,
-      ...(search ? { search } : {})
+      ...params
     }
   });
   return baseService.request<T[]>({
@@ -29,6 +29,6 @@ async function getTableData<T>(pathname: string, locale: Locale, search?: string
 }
 
 export const tableClientService = {
-  getTableTitles,
+  getTableStaticData,
   getTableData
 };

@@ -1,37 +1,37 @@
-import { ColumnFiltersState } from '@tanstack/react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { TitlesDTO } from '~/domain/dto/table.dto';
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
 
 interface UseSearchableTitlesOptions {
   titlesEndpoint?: string;
   dataEndpoint: string;
-  /*
-   * Optional filters state to be included in data fetch
-   */
-  filters?: ColumnFiltersState;
-  /**
-   * Convert ColumnFiltersState into a record of query params (key -> value).
-   * If not provided, use default converter that understands `author`, `year`, `name` ids.
-   */
-  mapFiltersToParams?: (filters: ColumnFiltersState) => Record<string, string | string[]>;
 }
 
-export function useSearch<T>({
-  titlesEndpoint,
-  dataEndpoint,
-  filters,
-  mapFiltersToParams
-}: Readonly<UseSearchableTitlesOptions>) {
+export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptions>) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const locale = useLocale();
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
+
+  const [extraParams, setExtraParams] = useState<Record<string, any>>(() => {
+    const initial: Record<string, any> = {};
+    try {
+      const sp = searchParams as any;
+      if (!sp) return initial;
+      for (const key of sp.keys()) {
+        if (key === 'search') continue;
+        const values = typeof sp.getAll === 'function' ? sp.getAll(key) : [sp.get(key)];
+        initial[key] = values.length > 1 ? values : values[0];
+      }
+    } catch {
+      // ignore
+    }
+    return initial;
+  });
 
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams as any);
@@ -41,61 +41,41 @@ export function useSearch<T>({
     } else {
       newParams.delete('search');
     }
+    router.replace(`?${newParams.toString()}`, { scroll: false });
+    router.refresh();
+  }, [router, search, searchParams, setSearch]);
+
+  function setFilterParam(key: string, value: string | string[] | number | null) {
+    setExtraParams((prev) => {
+      const next = { ...prev };
+      if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        delete next[key];
+      } else {
+        next[key] = value;
+      }
+      return next;
+    });
+
+    const newParams = new URLSearchParams(searchParams as any);
+    newParams.delete(key);
+
+    if (Array.isArray(value)) {
+      value.forEach((v) => newParams.append(key, String(v)));
+    } else if (value === null || value === '') {
+    } else {
+      newParams.set(key, String(value));
+    }
 
     router.replace(`?${newParams.toString()}`, { scroll: false });
     router.refresh();
-  }, [router, search, searchParams]);
-
-  // titles query (optional)
-  const { data: titles = [], isLoading: loadingTitles } = useQuery({
-    queryKey: ['titles', titlesEndpoint, locale],
-    queryFn: () =>
-      titlesEndpoint ? tableClientService.getTableTitles<TitlesDTO>(titlesEndpoint, locale) : Promise.resolve([]),
-    options: {
-      staleTime: Infinity
-    }
-  });
-
-  // prepare filters -> params
-  const defaultMap = (f?: ColumnFiltersState) => {
-    const params: Record<string, string | string[]> = {};
-    if (!f) return params;
-    const author = (f.find((x) => x.id === 'author')?.value as string[]) || [];
-    const year = (f.find((x) => x.id === 'year')?.value as [number, number]) || [];
-    const name = (f.find((x) => x.id === 'name')?.value as string) || '';
-    if (author.length) params['authorIds'] = author;
-    if (year.length === 2) params['years'] = `${year[0]},${year[1]}`;
-    if (name) params['title'] = name;
-    return params;
-  };
-
-  const paramsRecord = mapFiltersToParams ? mapFiltersToParams(filters || []) : defaultMap(filters);
-
-  const filtersKey = JSON.stringify(paramsRecord);
+  }
 
   const { data = [], isLoading: loadingData } = useQuery({
-    queryKey: ['table-data', dataEndpoint, locale, search, filtersKey],
+    queryKey: ['table-data', dataEndpoint, locale, search, JSON.stringify(extraParams)],
     queryFn: async () => {
-      // construct url with locale, search and params
-      const params = new URLSearchParams();
-      if (locale) params.set('lang', String(locale));
-      if (search) params.set('search', search);
-
-      // append paramsRecord entries
-      Object.entries(paramsRecord || {}).forEach(([k, v]) => {
-        if (Array.isArray(v)) {
-          v.forEach((val) => params.append(k, String(val)));
-        } else {
-          params.set(k, String(v));
-        }
-      });
-
-      const url = `${dataEndpoint}?${params.toString()}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Failed to fetch ${url}`);
-      }
-      return (await res.json()) as T[];
+      const params: Record<string, any> = { ...(extraParams || {}) };
+      if (search) params.search = search;
+      return dataEndpoint ? tableClientService.getTableData<T>(dataEndpoint, locale, params) : Promise.resolve([]);
     },
     options: {
       staleTime: Infinity
@@ -105,9 +85,9 @@ export function useSearch<T>({
   return {
     search,
     setSearch,
-    titles,
-    loadingTitles,
     data,
-    loadingData
+    loadingData,
+    setFilterParam,
+    extraParams
   };
 }

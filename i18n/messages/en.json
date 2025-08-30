@@ -82,9 +82,9 @@
     },
     "composition": {
       "filters": {
-        "opus": "Opus",
+        "category": "Category",
         "genre": "Genre",
-        "yearLabel": "Year"
+        "year": "Year"
       },
       "name": {
         "composition": "All compositions"

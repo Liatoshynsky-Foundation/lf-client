@@ -51,9 +51,13 @@ const renderOption = <T extends { title?: string | { en?: string; uk?: string } 
   option: T
 ): React.ReactNode => {
   return (
-    <ListItem {...props} disableGutters>
-      <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
-    </ListItem>
+    <VirtualizedListbox>
+      {[
+        <ListItem {...props} disableGutters key="list-item">
+          <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
+        </ListItem>
+      ]}
+    </VirtualizedListbox>
   );
 };
 
@@ -61,14 +65,12 @@ interface SearchProps<T> {
   setSearch: (value: string) => void;
   search: string;
   options: T[];
-  loading?: boolean;
 }
 
 export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
   search,
   setSearch,
-  options,
-  loading
+  options
 }: SearchProps<T>) => {
   const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
@@ -104,6 +106,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
   const handleClear = () => {
     setSearch('');
+    setFocused(false);
+    setOpened(false);
   };
 
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
@@ -117,7 +121,6 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         onFocus={() => setFocused(true)}
         onBlur={() => {
           setOpened(false);
-          setFocused(false);
         }}
         slotProps={{
           input: {
@@ -149,7 +152,6 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     <Autocomplete<T, false, false, false>
       data-testid="music-search"
       options={options}
-      loading={loading}
       value={value}
       onChange={(event, value) => {
         setValue(value);

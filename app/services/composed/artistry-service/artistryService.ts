@@ -4,7 +4,6 @@ import { ArtistryServiceDeps } from '~/domain/services/artistry.type';
 import {
   createLocalizedCompositionsArraySchema,
   createLocalizedCompositionTitlesSchemaArray,
-  createLocalizedOpusesArraySchema,
   parseCompositionsYearRange
 } from '~/validators/artistry/composition.schema';
 import { createLocalizedGenresArraySchema } from '~/validators/artistry/genre.schema';
@@ -28,12 +27,6 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
     const allTitles = await compositionService.getAllCompositionTitles();
     if (!allTitles) return [];
     return createLocalizedCompositionTitlesSchemaArray(locale).parse(allTitles);
-  },
-
-  async getAllOpuses(locale: Locale) {
-    const opuses = await compositionService.getAllOpuses();
-    if (!opuses) return [];
-    return createLocalizedOpusesArraySchema(locale).parse(opuses);
   },
 
   async getCompositionsYearRange() {

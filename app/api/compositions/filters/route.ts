@@ -12,14 +12,13 @@ export async function GET(req: NextRequest) {
     const container = createRequestContainer();
     const artistryService = container.resolve('artistryService');
 
-    const [opuses, titles, yearRange, genres] = await Promise.all([
-      artistryService.getAllOpuses(locale),
+    const [titles, yearRange, genres] = await Promise.all([
       artistryService.getAllCompositionTitles(locale),
       artistryService.getCompositionsYearRange(),
       artistryService.getAllGenres(locale)
     ]);
 
-    return NextResponse.json({ opuses, titles, yearRange, genres });
+    return NextResponse.json({ titles, yearRange, genres });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message ?? 'Unexpected error' }, { status: 500 });
   }

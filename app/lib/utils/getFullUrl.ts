@@ -13,21 +13,17 @@ const getSearchParametersEntries = (searchParameters: Record<string, SearchParam
   const queryEntries: [string, string][] = [];
 
   for (const [parameterName, parameterValue] of Object.entries(searchParameters)) {
+    if (parameterValue == null) continue;
+
     if (Array.isArray(parameterValue)) {
-      parameterValue.forEach((arrayItem, index) => {
+      parameterValue.forEach((arrayItem) => {
         if (arrayItem !== null && arrayItem !== undefined) {
-          queryEntries.push([`${parameterName}[${index}]`, String(arrayItem)]);
+          queryEntries.push([parameterName, String(arrayItem)]);
         }
       });
-    } else if (typeof parameterValue === 'object' && parameterValue !== null) {
-      for (const [objectKey, objectValue] of Object.entries(parameterValue)) {
-        if (objectValue !== null && objectValue !== undefined) {
-          queryEntries.push([`${parameterName}[${objectKey}]`, String(objectValue)]);
-        }
-      }
-    } else if (parameterValue !== null && parameterValue !== undefined) {
-      queryEntries.push([parameterName, String(parameterValue)]);
+      continue;
     }
+    queryEntries.push([parameterName, String(parameterValue)]);
   }
 
   return queryEntries;
@@ -57,8 +53,7 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
 
   if (searchParameters) {
     const query = new URLSearchParams(getSearchParametersEntries(searchParameters)).toString();
-    return `${resultUrl}?${query}`;
+    return `${resultUrl}${query ? `?${query}` : ''}`;
   }
-
   return resultUrl;
 };
