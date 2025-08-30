@@ -60,6 +60,9 @@ declare module '@mui/material/styles' {
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
     customBold25: React.CSSProperties;
+    customBold236?: React.CSSProperties;
+    customBold132?: React.CSSProperties;
+    customBold114?: React.CSSProperties;
   }
   interface TypographyVariants {
     customBold32: React.CSSProperties;
@@ -74,6 +77,9 @@ declare module '@mui/material/styles' {
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
     customBold25: React.CSSProperties;
+    customBold236: React.CSSProperties;
+    customBold132: React.CSSProperties;
+    customBold114: React.CSSProperties;
   }
 }
 
@@ -331,6 +337,24 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
+    },
+    customBold236: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '236px',
+      lineHeight: '100%'
+    },
+    customBold132: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '132px',
+      lineHeight: '100%'
+    },
+    customBold114: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '114px',
+      lineHeight: '100%'
     }
   },
   components: {
