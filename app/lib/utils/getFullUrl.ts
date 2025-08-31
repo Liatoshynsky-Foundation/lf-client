@@ -14,7 +14,6 @@ const getSearchParametersEntries = (searchParameters: Record<string, SearchParam
     if (Array.isArray(parameterValue)) {
       parameterValue.forEach((v) => append(parameterName, v));
     } else if (typeof parameterValue === 'object') {
-      // Flatten objects into bracket notation
       for (const [subKey, subValue] of Object.entries(parameterValue)) {
         append(`${parameterName}[${subKey}]`, subValue);
       }
