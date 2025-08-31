@@ -61,11 +61,11 @@ export const styles = {
   confidentialPolicyText: {
     lineHeight: '130%',
     fontStyle: 'unset',
-    mt: '15px'
+    mt: { xs: '8px', md: '15px' }
   },
 
   requestButton: {
     width: '100%',
-    mt: '27px'
+    mt: '16px'
   }
 };

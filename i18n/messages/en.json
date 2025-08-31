@@ -143,5 +143,13 @@
     "policyText": "I agree about the processing of my personal data and agree to the",
     "policyLink": "Privacy Policy",
     "buttonText": "Send request"
+  },
+  "contactsInfoPage": {
+    "contacts": "Contacts",
+    "phoneNumber": "Phone number",
+    "email": "Email",
+    "socialMedia": "We are on social media",
+    "formTitle": "Contact form",
+    "formSubtitle": "Send a request and we will contact you within a few business days"
   }
 }
