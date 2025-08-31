@@ -5,14 +5,15 @@ import useQuery from '~/shared/hooks/query/useQuery';
 
 export type Selector<T> = (response: any) => T;
 
-export function useFetchStaticFilters(endpoint: string | null) {
+export function useFetchStaticFilters<T = unknown>(endpoint: string | null) {
   const locale = useLocale();
 
-  const { data } = useQuery({
+  const { data } = useQuery<T | null>({
     queryKey: ['static-filters', endpoint ?? 'none', locale],
-    queryFn: async () => {
+    queryFn: async (): Promise<T | null> => {
       if (!endpoint) return null;
-      return tableClientService.getTableStaticData(endpoint, locale);
+      const resp = await tableClientService.getTableStaticData<any>(endpoint, locale);
+      return resp as T;
     },
     options: {
       staleTime: Infinity
