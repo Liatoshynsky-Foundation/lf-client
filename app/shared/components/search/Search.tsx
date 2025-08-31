@@ -41,26 +41,6 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   };
 };
 
-const getOptionLabel = <T extends { title?: string | { en?: string; uk?: string } }>(option: T): string => {
-  if (typeof option.title === 'string') return option.title;
-  return option.title?.en || option.title?.uk || '';
-};
-
-const renderOption = <T extends { title?: string | { en?: string; uk?: string } }>(
-  props: React.HTMLAttributes<HTMLLIElement>,
-  option: T
-): React.ReactNode => {
-  return (
-    <VirtualizedListbox>
-      {[
-        <ListItem {...props} disableGutters key="list-item">
-          <Typography variant="customMedium16">{getOptionLabel(option)}</Typography>
-        </ListItem>
-      ]}
-    </VirtualizedListbox>
-  );
-};
-
 interface SearchProps<T> {
   setSearch: (value: string) => void;
   search: string;
@@ -147,7 +127,27 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       />
     );
   };
+  function renderOptionFn({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode {
+    return (
+      <div {...props} key={key}>
+        <ListItem disableGutters>
+          <Typography variant="customMedium16">
+            {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
+          </Typography>
+        </ListItem>
+      </div>
+    );
+  }
 
+  const renderOption = useMemo(() => renderOptionFn, []);
+  const getOptionLabel = (option: T) => {
+    if (typeof option.title === 'string') {
+      return option.title;
+    } else if (option.title && typeof option.title === 'object') {
+      return option.title.en || option.title.uk || '';
+    }
+    return '';
+  };
   return (
     <Autocomplete<T, false, false, false>
       data-testid="music-search"
