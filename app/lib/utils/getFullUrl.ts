@@ -1,32 +1,26 @@
-type SearchParameterValue =
-  | string
-  | string[]
-  | number
-  | number[]
-  | boolean
-  | boolean[]
-  | null
-  | undefined
-  | Record<string, string | number | boolean | null | undefined>;
+type Primitive = string | number | boolean;
+type SearchParameterValue = Primitive | Primitive[] | null | undefined | Record<string, Primitive | null | undefined>;
 
 const getSearchParametersEntries = (searchParameters: Record<string, SearchParameterValue>): [string, string][] => {
   const queryEntries: [string, string][] = [];
+
+  const append = (key: string, value: unknown) => {
+    if (value != null) queryEntries.push([key, String(value)]);
+  };
 
   for (const [parameterName, parameterValue] of Object.entries(searchParameters)) {
     if (parameterValue == null) continue;
 
     if (Array.isArray(parameterValue)) {
-      parameterValue.forEach((arrayItem) => {
-        if (arrayItem !== null && arrayItem !== undefined) {
-          queryEntries.push([parameterName, String(arrayItem)]);
-        }
-      });
-      continue;
+      parameterValue.forEach((v) => append(parameterName, v));
+    } else if (typeof parameterValue === 'object') {
+      // Flatten objects into bracket notation
+      for (const [subKey, subValue] of Object.entries(parameterValue)) {
+        append(`${parameterName}[${subKey}]`, subValue);
+      }
+    } else {
+      append(parameterName, parameterValue);
     }
-    if (typeof parameterValue === 'object') {
-      continue;
-    }
-    queryEntries.push([parameterName, String(parameterValue)]);
   }
 
   return queryEntries;
@@ -46,16 +40,12 @@ type Options<Path extends string> = {
   : { parameters: Record<ExtractDynamicParameters<Path>, string> });
 
 export const getFullUrl = <Path extends string>({ pathname, parameters, searchParameters }: Options<Path>): string => {
-  let resultUrl: string = pathname;
+  let resultUrl = pathname;
 
   if (parameters) {
     for (const [param, value] of Object.entries(parameters)) {
-      const raw = value;
-      const replacement =
-        raw !== null && typeof raw === 'object'
-          ? encodeURIComponent(JSON.stringify(raw))
-          : encodeURIComponent(String(raw));
-      resultUrl = resultUrl.replace(`[${param}]`, replacement);
+      const replacement = encodeURIComponent(String(value));
+      resultUrl = (resultUrl as string).replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
     }
   }
 
@@ -63,5 +53,6 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
     const query = new URLSearchParams(getSearchParametersEntries(searchParameters)).toString();
     return `${resultUrl}${query ? `?${query}` : ''}`;
   }
+
   return resultUrl;
 };
