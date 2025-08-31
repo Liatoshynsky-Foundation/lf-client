@@ -69,7 +69,6 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   const t = useTranslations('filtering');
   const tError = useTranslations('filtering.errors');
 
-  // schema should be based on allowed bounds (min/max), not the current selected value
   const schema = useMemo(() => getFilteringSchema(minNumber, maxNumber, tError), [minNumber, maxNumber, tError]);
 
   useEffect(() => {
@@ -102,7 +101,6 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
 
     setInputNumbers(updatedInputs);
 
-    // schema expects numbers/strings coerced to numbers; safeParse will validate/coerce
     const parsed = schema.safeParse({ from: updatedInputs[0], to: updatedInputs[1] });
 
     if (parsed.success) {
@@ -118,7 +116,6 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   };
 
   const handleClearFilter = () => {
-    // reset to allowed bounds
     setInputNumbers([String(minNumber), String(maxNumber)]);
     setErrors({});
     onChange([minNumber, maxNumber]);
