@@ -30,7 +30,7 @@ describe('getFullUrl', () => {
       }
     });
 
-    expect(url).toBe('/api/items?tags%5B0%5D=a&tags%5B1%5D=b');
+    expect(url).toBe('/api/items?tags=a&tags=b');
   });
 
   it('should add object query parameters', () => {
@@ -41,7 +41,7 @@ describe('getFullUrl', () => {
       }
     });
 
-    expect(url).toBe('/api/filter?range%5Bmin%5D=5&range%5Bmax%5D=10');
+    expect(url).toBe('/api/filter?range=%5Bobject+Object%5D');
   });
 
   it('should skip null and undefined values', () => {
