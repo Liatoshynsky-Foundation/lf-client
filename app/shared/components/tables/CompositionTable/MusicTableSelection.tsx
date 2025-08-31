@@ -27,7 +27,7 @@ import { GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
 import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { hexToRGBA } from '~/lib/utils/hexToRGBA';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
-import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
+import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import { Search } from '~/shared/components/search/Search';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';

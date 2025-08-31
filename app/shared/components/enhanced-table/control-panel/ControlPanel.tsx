@@ -16,12 +16,12 @@ import SearchIcon from '~/public/icons/search.svg';
 
 type ControlPanelProps = {
   Search: ReactNode;
-  Filters?: ReactNode;
+  Filters: ReactNode;
   tableName: string;
-  activeFiltersCount?: number;
+  activeFiltersCount: number;
 };
 
-export const ControlPanel = ({ Search, Filters, tableName, activeFiltersCount }: ControlPanelProps) => {
+export default function ControlPanel({ tableName, Search, Filters, activeFiltersCount }: ControlPanelProps) {
   const t = useTranslations('table');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
@@ -87,4 +87,4 @@ export const ControlPanel = ({ Search, Filters, tableName, activeFiltersCount }:
       </Box>
     </Box>
   );
-};
+}

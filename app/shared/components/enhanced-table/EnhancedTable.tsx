@@ -19,7 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import { ControlPanel } from './control-panel/ControlPanel';
+import ControlPanel from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
@@ -46,7 +46,7 @@ interface EnhancedTableProps<T extends RowData> {
   loading?: boolean;
 }
 
-export default function EnhancedTable<T extends RowData>({
+export const EnhancedTable = <T extends RowData>({
   data,
   columns,
   columnWidths = {},
@@ -60,7 +60,7 @@ export default function EnhancedTable<T extends RowData>({
   onColumnFiltersChange,
   defaultSorting = [],
   loading = false
-}: Readonly<EnhancedTableProps<T>>) {
+}: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
@@ -151,7 +151,12 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <ControlPanel Search={Search} tableName={tableName} Filters={Filters} activeFiltersCount={activeFiltersCount} />
+      <ControlPanel
+        Search={Search}
+        tableName={tableName}
+        Filters={Filters}
+        activeFiltersCount={activeFiltersCount ?? 0}
+      />
       {loading ? (
         <Box sx={styles.loaderBox}>
           <CircularProgress />
@@ -198,4 +203,4 @@ export default function EnhancedTable<T extends RowData>({
       )}
     </Box>
   );
-}
+};

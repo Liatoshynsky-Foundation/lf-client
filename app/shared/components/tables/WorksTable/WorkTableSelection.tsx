@@ -18,7 +18,7 @@ import {
 import { WorkTable } from '~/types/types/enhancedTable';
 
 import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
-import EnhancedTable from '~/shared/components/enhanced-table/EnhancedTable';
+import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 
 export type AuthorFilterOption = {
   label: string;
