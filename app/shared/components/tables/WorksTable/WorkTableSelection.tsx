@@ -81,7 +81,7 @@ const mapScientificWorkToWorkTable = (w: ScientificWorkDTO): WorkTable => {
   };
 };
 
-export default function WorkTableSection({ lang }: Readonly<Props>) {
+export const WorkTableSection = ({ lang }: Readonly<Props>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [works, setWorks] = useState<WorkTable[]>([]);
   const [authorsList, setAuthorsList] = useState<AuthorFilterOption[]>([]);
@@ -205,4 +205,4 @@ export default function WorkTableSection({ lang }: Readonly<Props>) {
       />
     </Box>
   );
-}
+};
