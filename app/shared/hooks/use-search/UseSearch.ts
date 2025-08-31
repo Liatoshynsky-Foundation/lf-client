@@ -19,17 +19,14 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
 
   const [extraParams, setExtraParams] = useState<Record<string, any>>(() => {
     const initial: Record<string, any> = {};
-    try {
-      const sp = searchParams as any;
-      if (!sp) return initial;
-      for (const key of sp.keys()) {
-        if (key === 'search') continue;
-        const values = typeof sp.getAll === 'function' ? sp.getAll(key) : [sp.get(key)];
-        initial[key] = values.length > 1 ? values : values[0];
-      }
-    } catch {
-      // ignore
+    const sp = searchParams as any;
+    if (!sp) return initial;
+    for (const key of sp.keys()) {
+      if (key === 'search') continue;
+      const values = typeof sp.getAll === 'function' ? sp.getAll(key) : [sp.get(key)];
+      initial[key] = values.length > 1 ? values : values[0];
     }
+
     return initial;
   });
 
@@ -61,7 +58,6 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
 
     if (Array.isArray(value)) {
       value.forEach((v) => newParams.append(key, String(v)));
-    } else if (value === null || value === '') {
     } else {
       newParams.set(key, String(value));
     }
