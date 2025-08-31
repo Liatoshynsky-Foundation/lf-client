@@ -23,6 +23,12 @@ const getSearchParametersEntries = (searchParameters: Record<string, SearchParam
       });
       continue;
     }
+
+    // remove nested object queries — skip parameter values that are plain objects
+    // (prevents generating "nested" JSON or "[object Object]" entries)
+    if (typeof parameterValue === 'object') {
+      continue;
+    }
     queryEntries.push([parameterName, String(parameterValue)]);
   }
 
@@ -47,7 +53,12 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
 
   if (parameters) {
     for (const [param, value] of Object.entries(parameters)) {
-      resultUrl = resultUrl.replace(`[${param}]`, String(value));
+      const raw: unknown = value as unknown;
+      const replacement =
+        raw !== null && typeof raw === 'object'
+          ? encodeURIComponent(JSON.stringify(raw))
+          : encodeURIComponent(String(raw));
+      resultUrl = resultUrl.replace(`[${param}]`, replacement);
     }
   }
 

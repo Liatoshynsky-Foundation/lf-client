@@ -158,38 +158,36 @@ export default function MusicTableSection() {
   const activeFiltersCount = Number(isGenreActive) + Number(isYearActive);
 
   return (
-    <>
-      <EnhancedTable
-        data={data}
-        loading={loadingData}
-        columns={columns}
-        groupByKey="opus"
-        columnFilters={columnFilters}
-        onColumnFiltersChange={setColumnFilters}
-        columnWidths={columnWidths}
-        itemsPerPage={10}
-        tableName={t('name.composition')}
-        Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
-        Filters={
-          <MusicTableFilters
-            labelCategory={tFilters('category')}
-            labelGenre={tFilters('genre')}
-            genresOptions={genresOptions}
-            genreFilter={genreFilter}
-            yearLabel={tFilters('year')}
-            yearFilter={yearFilter}
-            onGenresChange={handleGenreChange}
-            onYearChange={handleYearChange}
-            onClearAllFilters={clearAllFilters}
-            isAnyFilterActive={isAnyFilterActive}
-            minYear={minYear ?? defaultMinYear}
-            maxYear={maxYear ?? defaultMaxYear}
-          />
-        }
-        isFiltersActive={isAnyFilterActive}
-        activeFiltersCount={activeFiltersCount}
-        onClearFilters={clearAllFilters}
-      />
-    </>
+    <EnhancedTable
+      data={data}
+      loading={loadingData}
+      columns={columns}
+      groupByKey="opus"
+      columnFilters={columnFilters}
+      onColumnFiltersChange={setColumnFilters}
+      columnWidths={columnWidths}
+      itemsPerPage={10}
+      tableName={t('name.composition')}
+      Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
+      Filters={
+        <MusicTableFilters
+          labelCategory={tFilters('category')}
+          labelGenre={tFilters('genre')}
+          genresOptions={genresOptions}
+          genreFilter={genreFilter}
+          yearLabel={tFilters('year')}
+          yearFilter={yearFilter}
+          onGenresChange={handleGenreChange}
+          onYearChange={handleYearChange}
+          onClearAllFilters={clearAllFilters}
+          isAnyFilterActive={isAnyFilterActive}
+          minYear={minYear ?? defaultMinYear}
+          maxYear={maxYear ?? defaultMaxYear}
+        />
+      }
+      isFiltersActive={isAnyFilterActive}
+      activeFiltersCount={activeFiltersCount}
+      onClearFilters={clearAllFilters}
+    />
   );
 }

@@ -14,14 +14,14 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import Filter from '~/public/icons/filter.svg';
 import SearchIcon from '~/public/icons/search.svg';
 
-type ControlPanelProps = {
-  Search: ReactNode;
-  Filters: ReactNode;
-  tableName: string;
-  activeFiltersCount: number;
-};
+interface ControlPanelProps {
+  readonly Search: ReactNode;
+  readonly Filters: ReactNode;
+  readonly tableName: string;
+  readonly activeFiltersCount: number;
+}
 
-export default function ControlPanel({ tableName, Search, Filters, activeFiltersCount }: ControlPanelProps) {
+export default function ControlPanel({ tableName, Search, Filters, activeFiltersCount }: Readonly<ControlPanelProps>) {
   const t = useTranslations('table');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
