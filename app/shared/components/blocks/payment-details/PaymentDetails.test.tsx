@@ -5,6 +5,11 @@ import React from 'react';
 
 import PaymentDetails from './PaymentDetails';
 
+jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => ({
+  __esModule: true,
+  default: ({ buttons }: { buttons: React.ReactNode[] }) => <div data-testid="mock-button-group">{buttons}</div>
+}));
+
 jest.mock('../../svg-image/SvgImage', () => ({
   SvgImage: (props: React.ComponentProps<'img'>) => <img data-testid="svg-image" {...props} alt="content copy icon" />
 }));

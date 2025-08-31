@@ -1,7 +1,8 @@
 'use client';
-import { Box, IconButton, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
+import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
 import { SvgImage } from '../../svg-image/SvgImage';
 import { currencyList, currencyType, paymentDetails, paymentFields } from './constants';
 import { styles } from './PaymentDetails.styles';
@@ -10,29 +11,26 @@ function PaymentDetails() {
   const [currency, setCurrency] = useState<currencyType>('uah');
   const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
 
-  const handleChange = useCallback((_: React.MouseEvent<HTMLElement>, newCurrency: string) => {
-    setCurrency(newCurrency as currencyType);
-  }, []);
-
   const handleCopyIban = useCallback(async () => {
     await navigator.clipboard.writeText(selectedPaymentDetails.iban);
   }, [selectedPaymentDetails.iban]);
 
   return (
-    <Box mt={'100px'} mb={'100px'} sx={{ gridColumn: '1 / -1' }}>
-      <ToggleButtonGroup
-        sx={styles.buttonContainer}
-        value={currency}
-        exclusive
-        onChange={handleChange}
-        aria-label="Platform"
-      >
-        {currencyList.map((currency) => (
-          <ToggleButton sx={styles.currencyBtn} value={currency} key={currency}>
+    <Box>
+      <ButtonGroup
+        sx={styles.buttonGroup}
+        defaultActiveButton={0}
+        buttons={currencyList.map((currency) => (
+          <Button
+            sx={styles.currencyBtn}
+            value={currency}
+            key={currency}
+            onClick={() => setCurrency(currency as currencyType)}
+          >
             {currency.toUpperCase()}
-          </ToggleButton>
+          </Button>
         ))}
-      </ToggleButtonGroup>
+      />
 
       <Box sx={styles.paymentDetailsContainer}>
         {paymentFields.map(({ label, key, isIban }) => (

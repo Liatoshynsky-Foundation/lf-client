@@ -1,19 +1,21 @@
 import { mainHexPallete } from '../../design-system/all-components/theme/colors';
 
 export const styles = {
-  buttonContainer: {
-    width: '273px',
-    height: '36px',
+  buttonGroup: {
     backgroundColor: mainHexPallete.brown[50],
-    borderRadius: '28px',
     p: '4px',
 
-    '& .MuiToggleButton-root': {
-      transition: 'background-color 420ms ease, color 420ms ease'
+    div: {
+      p: '0px',
+      m: '0px'
     },
 
-    '& .MuiToggleButton-root.Mui-selected': {
-      transition: 'background-color 420ms ease, color 420ms ease'
+    button: {
+      width: '67px'
+    },
+
+    '& [aria-label="indicator"]': {
+      widht: '66px'
     }
   },
 
@@ -25,15 +27,8 @@ export const styles = {
     alignItems: 'center',
     borderRadius: '28px',
 
-    '&:hover, &.MuiToggleButtonGroup-lastButton, &.MuiToggleButtonGroup-firstButton, &.MuiToggleButtonGroup-middleButton':
-      {
-        borderRadius: '28px'
-      },
-
-    '&[aria-pressed="true"], &[aria-pressed="true"]:hover': {
-      borderRadius: '28px',
-      backgroundColor: mainHexPallete.black,
-      color: mainHexPallete.white
+    '&:hover': {
+      borderRadius: '28px'
     }
   },
 
