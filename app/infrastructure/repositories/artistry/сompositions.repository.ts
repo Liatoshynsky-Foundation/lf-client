@@ -57,9 +57,21 @@ export const compositionsRepository = {
 
       query.$and = query.$and ? [...query.$and, compositionsQuery] : [compositionsQuery];
     }
-    if (filters?.years && Array.isArray(filters.years) && filters.years.length > 0) {
-      const yearQuery = { year: { $in: filters.years } };
-      query.$and = query.$and ? [...query.$and, yearQuery] : [yearQuery];
+    if (filters?.years) {
+      const yearQuery: any = {};
+
+      if (filters.years.min !== undefined) {
+        yearQuery.$gte = filters.years.min;
+      }
+
+      if (filters.years.max !== undefined) {
+        yearQuery.$lte = filters.years.max;
+      }
+
+      if (Object.keys(yearQuery).length > 0) {
+        const condition = { year: yearQuery };
+        query.$and = query.$and ? [...query.$and, condition] : [condition];
+      }
     }
 
     const compositions = await Compositions.find(query)
