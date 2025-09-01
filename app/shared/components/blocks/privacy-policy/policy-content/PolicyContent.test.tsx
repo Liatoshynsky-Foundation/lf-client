@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { PolicyContent } from './PolicyContent';
+import { PolicyContent } from './privacy-content/PolicyContent';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc, TipTapNodeRenderers } from '~/types/types/common.types';
 

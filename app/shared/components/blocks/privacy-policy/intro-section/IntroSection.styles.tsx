@@ -1,4 +1,4 @@
-import { SxProps, Theme } from '@mui/material/styles';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 import { AppTypography } from '~/constants';
 
@@ -15,7 +15,6 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridColumnEnd: '5',
     alignSelf: 'center',
     marginTop: '75px',
-    fontSize: '64px',
     gridRow: '1',
     [theme.breakpoints.down('md')]: {
       fontSize: '40px'

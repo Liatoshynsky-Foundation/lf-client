@@ -1,4 +1,4 @@
-import { SxProps, Theme } from '@mui/material/styles';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 import { AppTypography } from '~/constants';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';

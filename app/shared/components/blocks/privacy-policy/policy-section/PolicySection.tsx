@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ListItem from '~/components/list-item/ListItem';
 import SectionTitle from '~/components/section-title/SectionTitle';
 
-import { PolicyContent } from '../PolicyContent';
+import { PolicyContent } from '../policy-content/PolicyContent';
 import { styles } from './PolicySection.styles';
 import { TipTapDoc } from '~/types/types/common.types';
 
