@@ -9,7 +9,7 @@ const makeTextNode = (text: string) => ({ type: 'text', text });
 const makeParagraph = (text: string) => ({ type: 'paragraph', content: [makeTextNode(text)] });
 const makeDoc = (text: string): TipTapDoc => ({ type: 'doc', content: [makeParagraph(text)] }) as TipTapDoc;
 
-jest.mock('../PolicyContent', () => ({
+jest.mock('../policy-content/PolicyContent', () => ({
   PolicyContent: ({
     doc,
     paragraphSx
