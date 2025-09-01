@@ -5,7 +5,7 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 
 import { PolicyContent } from '../policy-content/PolicyContent';
 import { styles } from './PolicySection.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import type { TipTapDoc } from '~/types/types/common.types';
 
 import { getDocKey } from '~/lib/utils/getDocKey';
 import { theme } from '~/shared/components/design-system/all-components/theme/Theme';

@@ -9,7 +9,7 @@ const makeTextNode = (text: string) => ({ type: 'text', text });
 const makeParagraph = (text: string) => ({ type: 'paragraph', content: [makeTextNode(text)] });
 const makeDoc = (text: string): TipTapDoc => ({ type: 'doc', content: [makeParagraph(text)] }) as TipTapDoc;
 
-jest.mock('~/shared/components/blocks/privacy-policy/PolicyContent', () => ({
+jest.mock('~/shared/components/blocks/privacy-policy/policy-content/PolicyContent', () => ({
   PolicyContent: ({ doc }: { doc: TipTapDoc }) => <div data-testid="policy-content">{JSON.stringify(doc)}</div>
 }));
 
