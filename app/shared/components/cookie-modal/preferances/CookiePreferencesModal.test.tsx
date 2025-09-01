@@ -47,11 +47,11 @@ describe('CookiePreferences Modal', () => {
 
   it('should render analytics section and toggle', () => {
     expect(screen.getByText('Analytics')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByRole('switch')).toBeInTheDocument();
   });
 
   it('should call onChecked when toggle is clicked', () => {
-    fireEvent.click(screen.getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('switch'));
     expect(props.onChecked).toHaveBeenCalled();
   });
 

@@ -47,7 +47,7 @@ export default function ContactsInfo({ contacts, socialLinks }: IContactInfoProp
           <Typography sx={styles.formSubtitle} variant="subtitle1">
             {t('formSubtitle')}
           </Typography>
-          <ContactForm />
+          <ContactForm onSubmit={() => {}} />
         </PaperComponent>
       </Box>
     </Box>

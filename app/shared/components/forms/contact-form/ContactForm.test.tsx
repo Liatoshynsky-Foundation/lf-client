@@ -43,10 +43,16 @@ const submitForm = () => {
   fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
 };
 
-describe('ContactForm', () => {
-  it('should contain four text inputs including a multiline message field', () => {
-    render(<ContactForm />);
+const onSubmit = jest.fn();
 
+describe('ContactForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<ContactForm onSubmit={onSubmit} />);
+  });
+
+  it('should contain four text inputs including a multiline message field', () => {
     const textboxes = screen.getAllByRole('textbox');
     if (textboxes.length !== 4) {
       throw new Error(`Expected 4 textboxes (name, email, phone, message) but found ${textboxes.length}.`);
@@ -59,8 +65,6 @@ describe('ContactForm', () => {
   });
 
   it('should render a checkbox with privacy policy link', () => {
-    render(<ContactForm />);
-
     const checkbox = screen.queryByRole('checkbox');
     if (!checkbox) {
       throw new Error('Expected a checkbox to be present.');
@@ -76,8 +80,6 @@ describe('ContactForm', () => {
   });
 
   it('should render a submit button', () => {
-    render(<ContactForm />);
-
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
     if (!submit) {
       throw new Error('Expected a submit button to be present.');
@@ -85,7 +87,6 @@ describe('ContactForm', () => {
   });
 
   it('should show errors when incorrect inputs', async () => {
-    render(<ContactForm />);
     fillInput('Імя', 'A');
     fillInput('Електронна адреса (email) *', 'test@');
     fillInput('Ваше повідомлення *', 'Привіт');
@@ -96,5 +97,15 @@ describe('ContactForm', () => {
       expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
     });
+  });
+
+  it('should call onSubmit callback when submit button is clicked', () => {
+    const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
+    if (!submit) {
+      throw new Error('Expected a submit button to be present.');
+    }
+
+    fireEvent.click(submit);
+    expect(onSubmit).toHaveBeenCalled();
   });
 });
