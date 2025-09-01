@@ -13,6 +13,9 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   description: {
     ...AppTypography.mulish20Regular,
     color: mainHexPallete.brown[600],
+    [theme.breakpoints.down('md')]: {
+      ...AppTypography.mulish18Regular
+    },
     [theme.breakpoints.down('sm')]: {
       ...AppTypography.mulish16Regular
     }
@@ -31,6 +34,9 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   },
   subtitle: {
     ...AppTypography.mulish20Bold,
+    [theme.breakpoints.down('md')]: {
+      ...AppTypography.mulish18Medium
+    },
     [theme.breakpoints.down('sm')]: {
       ...AppTypography.mulish16Medium
     }
@@ -41,6 +47,9 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   },
   paragraph: {
     ...AppTypography.mulish20Regular,
+    [theme.breakpoints.down('md')]: {
+      ...AppTypography.mulish18Regular
+    },
     [theme.breakpoints.down('sm')]: {
       ...AppTypography.mulish16Regular
     },
