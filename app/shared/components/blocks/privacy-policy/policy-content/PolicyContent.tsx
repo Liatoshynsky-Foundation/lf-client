@@ -5,14 +5,27 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import type { TipTapDoc } from '~/types/types/common.types';
 
-export function PolicyContent({ doc, paragraphSx }: { doc: TipTapDoc; paragraphSx?: SxProps<Theme> }) {
+const createParagraph = (paragraphSx?: SxProps<Theme>) => {
+  const ParagraphRenderer = (children: React.ReactNode) => (
+    <Typography sx={{ display: 'block', ...paragraphSx }}>{children}</Typography>
+  );
+  ParagraphRenderer.displayName = 'ParagraphRenderer';
+  return ParagraphRenderer;
+};
+
+type PolicyContentProps = {
+  doc: TipTapDoc;
+  paragraphSx?: SxProps<Theme>;
+};
+
+export function PolicyContent({ doc, paragraphSx }: Readonly<PolicyContentProps>) {
   if (!doc) return null;
 
   return (
     <TipTapContent
       data={doc}
       nodeRenderers={{
-        paragraph: (children) => <Typography sx={{ ...paragraphSx, display: 'block' }}>{children}</Typography>
+        paragraph: createParagraph(paragraphSx)
       }}
     />
   );

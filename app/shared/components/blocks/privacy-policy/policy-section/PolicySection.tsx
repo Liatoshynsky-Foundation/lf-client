@@ -37,7 +37,7 @@ export default function PolicySection({
   sx,
   contentGridColumn = { xs: '2 / 5', sm: '4 / 9', md: '6 / 13' },
   listGridColumn = { xs: '2 / 5', sm: '4 / 9', md: '6 / 13' }
-}: PolicySectionProps) {
+}: Readonly<PolicySectionProps>) {
   const hasList = Array.isArray(list) && list.length > 0;
   const hasSections = Array.isArray(sections) && sections.length > 0;
 

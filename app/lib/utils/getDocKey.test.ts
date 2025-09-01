@@ -18,16 +18,16 @@ const makeDoc = (text: string): TipTapDoc => ({
 });
 
 describe('getDocKey', () => {
-  it('returns trimmed text up to 50 chars', () => {
+  it('should return trimmed text up to 50 chars', () => {
     expect(getDocKey(makeDoc(' Hello '))).toBe('Hello');
   });
 
-  it('returns undefined for empty doc', () => {
-    expect(getDocKey(undefined)).toBeUndefined();
+  it('should return undefined for empty doc', () => {
+    expect(getDocKey()).toBeUndefined();
     expect(getDocKey({ type: TipTapNodeTypes.doc, content: [] })).toBeUndefined();
   });
 
-  it('slices long text', () => {
+  it('should slice long text', () => {
     const longText = 'x'.repeat(100);
     expect(getDocKey(makeDoc(longText))).toHaveLength(50);
   });

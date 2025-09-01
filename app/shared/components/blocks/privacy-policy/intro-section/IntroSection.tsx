@@ -13,7 +13,7 @@ type IntroSectionProps = {
   agreement?: TipTapDoc;
 };
 
-export default function IntroSection({ title, trustAndSecurity, agreement }: IntroSectionProps) {
+export default function IntroSection({ title, trustAndSecurity, agreement }: Readonly<IntroSectionProps>) {
   return (
     <>
       <Box sx={styles(theme).titleWrapper}>
