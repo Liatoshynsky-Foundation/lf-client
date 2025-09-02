@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Collapse, TableCell, TableRow } from '@mui/material';
 import { flexRender, Row } from '@tanstack/react-table';
 import React from 'react';
@@ -11,7 +13,7 @@ interface CollapsibleDataRowProps<T extends RowData> {
 
 function CollapsibleDataRowComponent<T extends RowData>({ row, collapsed }: Readonly<CollapsibleDataRowProps<T>>) {
   return (
-    <TableRow key={row.id}>
+    <TableRow>
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id} sx={styles.collapsedCell(collapsed)}>
           <Collapse in={collapsed} timeout={300} unmountOnExit>
