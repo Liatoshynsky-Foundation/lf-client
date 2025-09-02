@@ -2,7 +2,8 @@
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
-import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
+import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
+
 import { SvgImage } from '../../svg-image/SvgImage';
 import { currencyList, currencyType, paymentDetails, paymentFields } from './constants';
 import { styles } from './PaymentDetails.styles';

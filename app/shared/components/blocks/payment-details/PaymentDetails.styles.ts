@@ -1,4 +1,4 @@
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const styles = {
   buttonGroup: {
@@ -15,7 +15,7 @@ export const styles = {
     },
 
     '& [aria-label="indicator"]': {
-      widht: '66px'
+      width: '66px'
     }
   },
 
@@ -25,9 +25,8 @@ export const styles = {
     border: 'none',
     display: 'flex',
     alignItems: 'center',
-    borderRadius: '28px',
 
-    '&:hover': {
+    '&, &:hover': {
       borderRadius: '28px'
     }
   },
