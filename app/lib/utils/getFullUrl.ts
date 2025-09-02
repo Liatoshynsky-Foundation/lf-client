@@ -52,6 +52,5 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
     const query = new URLSearchParams(getSearchParametersEntries(searchParameters)).toString();
     return `${resultUrl}${query ? `?${query}` : ''}`;
   }
-  console.log(resultUrl);
   return resultUrl;
 };
