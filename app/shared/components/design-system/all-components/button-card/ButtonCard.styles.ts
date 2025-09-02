@@ -25,8 +25,13 @@ export const styles = {
     width: '296px',
     height: '351px',
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     background: 'transparent'
+  },
+  arrowDown: {
+    position: 'absolute',
+    bottom: '40px',
+    right: '40px'
   }
 };
