@@ -36,7 +36,7 @@ export const enhancedTableStyles = {
     justifyContent: 'center',
     flexDirection: 'column',
     pt: 3,
-    gap: 4,
+    gap: { xs: 3, md: 4 },
     alignItems: 'center'
   },
 
@@ -52,6 +52,8 @@ export const enhancedTableStyles = {
   },
 
   loadMoreButton: {
-    p: '16px 48px'
+    p: { xs: '12px 56.5px', sm: '12px 89.5px', md: '16px 48px' },
+    fontSize: { xs: '16px', md: '18px' },
+    fontWeight: { xs: '500', md: '600' }
   }
 } as const;
