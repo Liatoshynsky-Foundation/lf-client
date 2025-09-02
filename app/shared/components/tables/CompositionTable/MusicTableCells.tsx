@@ -26,6 +26,8 @@ import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
+type RowProp = Readonly<{ row: Row<Music> }>;
+
 export const RenderOpusHeader = () => {
   const t = useTranslations('table.columns');
   return (
@@ -76,7 +78,7 @@ export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
   return <Ellipsis text={genres.join(', ')} variant="customMedium16" />;
 };
 
-function PlayCell({ row }: { row: Row<Music> }) {
+export const PlayCell: React.FC<RowProp> = ({ row }) => {
   const rowData = row.original;
   const { playTrack, togglePlay, isPlaying, src } = useAudioPlayer();
 
@@ -105,13 +107,12 @@ function PlayCell({ row }: { row: Row<Music> }) {
       </IconButton>
     </Box>
   );
-}
+};
 
-function ActionsCell({ row }: { row: Row<Music> }) {
+export const ActionsCell: React.FC<RowProp> = ({ row }) => {
   const rowData = row.original;
   const t = useTranslations('table.buttons');
   const { isDesktop, isLaptop } = useBreakpoints();
-
   const shouldRender = isDesktop || isLaptop;
 
   return (
@@ -131,7 +132,7 @@ function ActionsCell({ row }: { row: Row<Music> }) {
       </IconButton>
     </Box>
   );
-}
+};
 
 export const RenderPlayCell = (info: CellContext<Music, unknown>) => <PlayCell row={info.row} />;
 

@@ -32,6 +32,8 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
 import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
+type TableKey = 'mobile' | 'tablet' | 'desktop';
+
 export default function MusicTableSection() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [genreFilter, setGenreFilter] = useState<string[]>([]);
@@ -107,7 +109,7 @@ export default function MusicTableSection() {
         initialYearSet.current = true;
       }
     }
-     }, [staticFilters]);
+  }, [staticFilters]);
 
   const baseColumns: ColumnDef<Music>[] = useMemo(
     () => [
@@ -163,7 +165,7 @@ export default function MusicTableSection() {
     [bp.isTablet, bp.isMobile, baseColumns, hiddenOnSmall]
   );
 
-  const tableKey = bp.isMobile ? 'mobile' : bp.isTablet ? 'tablet' : 'desktop';
+  const tableKey: TableKey = (bp.isMobile && 'mobile') || (bp.isTablet && 'tablet') || 'desktop';
 
   const minYear = yearOptions?.[0];
   const maxYear = yearOptions?.[1];
