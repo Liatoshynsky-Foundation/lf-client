@@ -35,6 +35,14 @@ jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
 
+const fillInput = (label: string, value: string) => {
+  fireEvent.change(screen.getByLabelText(label), { target: { value } });
+};
+
+const submitForm = () => {
+  fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+};
+
 describe('ContactForm', () => {
   it('should contain four text inputs including a multiline message field', () => {
     render(<ContactForm />);
@@ -58,7 +66,9 @@ describe('ContactForm', () => {
       throw new Error('Expected a checkbox to be present.');
     }
 
-    const link = screen.queryByRole('link', { name: /Політикою конфіденційності/i });
+    const link = screen.queryByRole('link', {
+      name: /Політикою конфіденційності/i
+    });
     if (!link) {
       throw new Error('Expected a privacy policy link to be present.');
     }
@@ -76,8 +86,8 @@ describe('ContactForm', () => {
 
   it('should show error if name is too short', async () => {
     render(<ContactForm />);
-    fireEvent.change(screen.getByLabelText('Імя'), { target: { value: 'A' } });
-    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+    fillInput('Імя', 'A');
+    submitForm();
 
     await waitFor(() => {
       expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
@@ -86,10 +96,8 @@ describe('ContactForm', () => {
 
   it('should show error if email is invalid', async () => {
     render(<ContactForm />);
-    fireEvent.change(screen.getByLabelText('Електронна адреса (email) *'), {
-      target: { value: 'test@' }
-    });
-    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+    fillInput('Електронна адреса (email) *', 'test@');
+    submitForm();
 
     await waitFor(() => {
       expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
@@ -98,10 +106,8 @@ describe('ContactForm', () => {
 
   it('should show error if message is too short', async () => {
     render(<ContactForm />);
-    fireEvent.change(screen.getByLabelText('Ваше повідомлення *'), {
-      target: { value: 'Привіт' }
-    });
-    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+    fillInput('Ваше повідомлення *', 'Привіт');
+    submitForm();
 
     await waitFor(() => {
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
