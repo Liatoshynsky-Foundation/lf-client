@@ -158,5 +158,13 @@
     "socialMedia": "We are on social media",
     "formTitle": "Contact form",
     "formSubtitle": "Send a request and we will contact you within a few business days"
+  },
+  "donationForm": {
+    "donationTitle": "QUICK DONATION:",
+    "subscribeTitle": "SUBSCRIBE:",
+    "donationSwitch": "Donation",
+    "subscribeSwitch": "Subscription",
+    "donationButton": "Make a donation",
+    "subscribeButton": "Subscribe"
   }
 }

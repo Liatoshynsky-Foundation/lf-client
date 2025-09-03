@@ -8,7 +8,7 @@ export const StyledIndicator = styled(Box, {
 })<{
   left: number;
   width: number;
-  palette: 'primary' | 'secondary';
+  palette: 'primary' | 'secondary' | 'tertiary';
 }>(({ left, width, palette }) => {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
@@ -30,7 +30,7 @@ export const StyledButtonItem = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'active' && prop !== 'palette' && prop !== 'size'
 })<{
   active: boolean;
-  palette: 'primary' | 'secondary';
+  palette: 'primary' | 'secondary' | 'tertiary';
   size: 'small' | 'big';
 }>(({ active, palette, size }) => {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;

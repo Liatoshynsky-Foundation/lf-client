@@ -94,6 +94,12 @@ export const hexButtonGroupColors = {
     selectedButtonTextColor: mainHexPallete.black,
     groupBackgroundColor: mainHexPallete.yellow[500],
     buttonTextColor: mainHexPallete.black
+  },
+  tertiary: {
+    selectedButtonColor: mainHexPallete.white,
+    selectedButtonTextColor: mainHexPallete.black,
+    groupBackgroundColor: mainHexPallete.brown[200],
+    buttonTextColor: mainHexPallete.black
   }
 };
 
