@@ -14,7 +14,6 @@ export const collapsibleRowStyles = {
     backgroundColor: collapsed ? mainHexPallete.blue[50] : 'transparent'
   }),
 
-  // базова клітинка + "парасолька" для внутрішніх <TableCell>, щоб не було другого бордера
   cell: {
     py: 1.5,
     px: 0,
