@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, CircularProgress, Paper, Table, TableBody, TableContainer, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,13 +18,14 @@ import Button from '~/ds-components/button/Button';
 import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
-import { theme } from '../design-system/all-components/theme/Theme';
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
 import CompositionsControlPanel from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
+
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
@@ -66,7 +67,7 @@ export default function EnhancedTable<T extends RowData>({
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const breakpoint = useBreakpoints();
 
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
@@ -196,7 +197,7 @@ export default function EnhancedTable<T extends RowData>({
             {totalPages > 1 && (
               <Pagination
                 count={totalPages}
-                siblingCount={isMobile ? 0 : 1}
+                siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
                 visiblePages={visiblePages}
                 onChange={(_, page) => handlePageChange(page)}
