@@ -14,11 +14,23 @@ jest.mock('~/components/blocks/FAQ/FAQ', () => {
   return MockFAQ;
 });
 
+jest.mock('~/shared/components/blocks/support-foundation/SupportFoundation', () => {
+  const MockSupportFoundation = () => <div>Support Foundation</div>;
+  MockSupportFoundation.displayName = 'MockSupportFoundation';
+  return MockSupportFoundation;
+});
+
 describe('SupportUs page', () => {
   it('should render support us page correctly', async () => {
     render(await SupportUs());
 
     expect(screen.getByText(/Actions Help/i)).toBeInTheDocument();
     expect(screen.getByText(/FAQ/i)).toBeInTheDocument();
+  });
+
+  it('should render the SupportFoundation component', async () => {
+    render(await SupportUs());
+
+    expect(screen.getByText(/Support Foundation/i)).toBeInTheDocument();
   });
 });
