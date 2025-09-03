@@ -67,5 +67,12 @@ export const styles = {
   requestButton: {
     width: '100%',
     mt: '16px'
+  },
+
+  checkboxError: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    fontStyle: 'unset'
   }
 };
