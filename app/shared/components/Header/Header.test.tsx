@@ -3,6 +3,7 @@ import React from 'react';
 
 import Header from './Header';
 
+import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
 jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
@@ -51,29 +52,32 @@ jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => {
-    if (key === 'supportButton') return 'Support';
-    return key;
-  },
+  useTranslations: () => (key: string) => (key === 'supportButton' ? 'Support' : key),
   useLocale: () => 'en'
 }));
+
+jest.mock('~/shared/hooks/use-hide-header/useHideHeader', () => ({
+  useHideHeader: jest.fn()
+}));
+
+const renderHeader = () => render(<Header />);
 
 describe('Header', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useScrollDirection as jest.Mock).mockReturnValue('up');
+    (useHideHeader as jest.Mock).mockReturnValue(false);
   });
 
   it('should render logo, navigation-bar and right-actions', () => {
-    (useScrollDirection as jest.Mock).mockReturnValue('up');
-    render(<Header />);
+    renderHeader();
     expect(screen.getByTestId('logo')).toBeInTheDocument();
     expect(screen.getByTestId('navigation-bar')).toBeInTheDocument();
     expect(screen.getByTestId('right-actions')).toBeInTheDocument();
   });
 
   it('should pass correct texts to navigation-bar', () => {
-    (useScrollDirection as jest.Mock).mockReturnValue('up');
-    render(<Header />);
+    renderHeader();
     const nav = screen.getByTestId('navigation-bar');
     expect(nav.textContent).toContain('Liatoshynsky');
     expect(nav.textContent).toContain('Biography');
@@ -89,21 +93,32 @@ describe('Header', () => {
 
   it('should hide navigation-bar when scrollDirection = "down"', () => {
     (useScrollDirection as jest.Mock).mockReturnValue('down');
-    render(<Header />);
-    const navBox = screen.getByTestId('navigation-bar').parentElement;
-    expect(navBox).toHaveStyle('transform: translateY(-150%)');
+    renderHeader();
+    const header = screen.getByRole('banner');
+    expect(header).toHaveStyle('transform: translateY(-200%)');
   });
 
   it('should show navigation-bar when scrollDirection = "up"', () => {
-    (useScrollDirection as jest.Mock).mockReturnValue('up');
-    render(<Header />);
-    const navBox = screen.getByTestId('navigation-bar').parentElement;
-    expect(navBox).toHaveStyle('transform: translateY(0)');
+    renderHeader();
+    const header = screen.getByRole('banner');
+    expect(header).toHaveStyle('transform: translateY(0)');
+  });
+
+  it('should hide header when footer is intersecting', () => {
+    (useHideHeader as jest.Mock).mockReturnValue(true);
+    renderHeader();
+    const header = screen.getByRole('banner');
+    expect(header).toHaveStyle('transform: translateY(-200%)');
+  });
+
+  it('should show header when footer is not intersecting', () => {
+    renderHeader();
+    const header = screen.getByRole('banner');
+    expect(header).toHaveStyle('transform: translateY(0)');
   });
 
   it('should pass the correct text to right-actions (support button)', () => {
-    (useScrollDirection as jest.Mock).mockReturnValue('up');
-    render(<Header />);
+    renderHeader();
     expect(screen.getByTestId('right-actions').textContent).toContain('Support');
   });
 });

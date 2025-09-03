@@ -27,7 +27,7 @@ export default async function Footer() {
     .getFooterData(locale);
 
   return (
-    <Box component="footer" sx={styles.footerContainer}>
+    <Box component="footer" sx={styles.footerContainer} id="footer">
       <Box sx={styles.backgroundBox} />
 
       <Box sx={styles.footerContent}>
