@@ -84,32 +84,16 @@ describe('ContactForm', () => {
     }
   });
 
-  it('should show error if name is too short', async () => {
+  it('should show errors when incorrect inputs', async () => {
     render(<ContactForm />);
     fillInput('Імя', 'A');
-    submitForm();
-
-    await waitFor(() => {
-      expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
-    });
-  });
-
-  it('should show error if email is invalid', async () => {
-    render(<ContactForm />);
     fillInput('Електронна адреса (email) *', 'test@');
-    submitForm();
-
-    await waitFor(() => {
-      expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
-    });
-  });
-
-  it('should show error if message is too short', async () => {
-    render(<ContactForm />);
     fillInput('Ваше повідомлення *', 'Привіт');
     submitForm();
 
     await waitFor(() => {
+      expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
+      expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
     });
   });
