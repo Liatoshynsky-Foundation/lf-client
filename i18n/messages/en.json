@@ -142,7 +142,14 @@
     "message": "Your message *",
     "policyText": "I agree about the processing of my personal data and agree to the",
     "policyLink": "Privacy Policy",
-    "buttonText": "Send request"
+    "buttonText": "Send request",
+    "errors": {
+      "nameMinLength": "The name must contain at least 2 characters",
+      "emailRequired": "Please enter your email address",
+      "emailInvalid": "Please enter a valid email address",
+      "messageMinLength": "Please write a few words in the message",
+      "policyRequired": "You must agree to continue"
+    }
   },
   "contactsInfoPage": {
     "contacts": "Contacts",

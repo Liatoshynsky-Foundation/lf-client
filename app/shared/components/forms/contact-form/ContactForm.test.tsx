@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import ContactForm from './ContactForm';
@@ -20,7 +20,12 @@ jest.mock('next-intl', () => ({
       policyText: 'Я погоджуюсь з',
       policyLink: 'Політикою конфіденційності',
       buttonText: 'Надіслати запит',
-      requiredFields: '* – поля обов’язкові до заповнення'
+      requiredFields: '* – поля обов’язкові до заповнення',
+      nameMinLength: 'Імʼя має містити щонайменше 2 символи',
+      emailRequired: 'Будь ласка, вкажіть вашу електронну адресу',
+      emailInvalid: 'Введіть коректну email-адресу',
+      messageMinLength: 'Напишіть кілька слів у повідомленні',
+      policyRequired: 'Щоб продовжити, потрібно дати згоду'
     };
     return messages[key] || key;
   }
@@ -67,5 +72,39 @@ describe('ContactForm', () => {
     if (!submit) {
       throw new Error('Expected a submit button to be present.');
     }
+  });
+
+  it('should show error if name is too short', async () => {
+    render(<ContactForm />);
+    fireEvent.change(screen.getByLabelText('Імя'), { target: { value: 'A' } });
+    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
+    });
+  });
+
+  it('should show error if email is invalid', async () => {
+    render(<ContactForm />);
+    fireEvent.change(screen.getByLabelText('Електронна адреса (email) *'), {
+      target: { value: 'test@' }
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
+    });
+  });
+
+  it('should show error if message is too short', async () => {
+    render(<ContactForm />);
+    fireEvent.change(screen.getByLabelText('Ваше повідомлення *'), {
+      target: { value: 'Привіт' }
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
+    });
   });
 });
