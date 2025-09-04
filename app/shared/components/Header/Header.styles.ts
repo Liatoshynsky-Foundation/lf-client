@@ -1,6 +1,8 @@
 export const styles = {
-  mainContainer: {
+  mainContainer: (hideHeader: boolean) => ({
     display: 'flex',
+    transition: 'transform 0.4s ease',
+    transform: hideHeader ? 'translateY(-200%)' : 'translateY(0)',
     position: 'fixed',
     left: 0,
     right: 0,
@@ -12,17 +14,20 @@ export const styles = {
     mx: 'auto',
     px: '24px',
     pointerEvents: 'auto'
-  },
+  }),
   logoContainer: {
     position: 'relative'
   },
-  navigationContainer: (isVisible: boolean) => ({
+  navigationContainer: {
     marginRight: { xl: '35px', xxl: '70px' },
-    fontSize: { md: '15px', lg: '16px' },
-    transition: 'transform 0.4s ease',
-    transform: isVisible ? 'translateY(0)' : 'translateY(-150%)'
-  }),
-  desktopNavWrapper: {
+    fontSize: { md: '15px', lg: '16px' }
+  },
+  rightActionsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px'
+  },
+  navWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',

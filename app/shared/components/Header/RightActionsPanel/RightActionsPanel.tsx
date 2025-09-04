@@ -16,10 +16,10 @@ interface SupportButtonDataProps {
 }
 
 export default function RightActionsPanel({ supportButtonData }: Readonly<SupportButtonDataProps>) {
-  const { isMobile, isTablet } = useBreakpoints();
+  const { isMobile } = useBreakpoints();
 
   return (
-    <Box sx={styles.backgroundContainer(isMobile, isTablet)}>
+    <Box sx={!isMobile ? styles.backgroundContainer : undefined}>
       <Box sx={styles.controls(isMobile)}>
         <AudioPlayer />
         <LanguageSwitcher variant="icon" />

@@ -63,6 +63,12 @@ export const mainHexPallete = {
   white: '#FCFCFC'
 };
 
+export const backgroundColors = {
+  white: '#FFFFFF',
+  offWhite: '#EAE9E8',
+  lightGray: '#D0CECC'
+};
+
 export const rgbButtonColors = {
   primaryFilledHoveredBackground: 'rgb(52,41,33)',
   primaryOutlinedHoveredBackground: 'rgba(25, 13, 3, 0.08)',

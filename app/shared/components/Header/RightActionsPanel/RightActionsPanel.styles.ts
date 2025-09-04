@@ -1,4 +1,4 @@
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { backgroundColors } from '~/ds-components/theme/colors';
 
 export const styles = {
   controls: (isMobile: boolean) => ({
@@ -6,13 +6,13 @@ export const styles = {
     alignItems: 'center',
     gap: '18px'
   }),
-  backgroundContainer: (isModile: boolean, isTablet: boolean) => ({
+  backgroundContainer: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: isModile || isTablet ? 'none' : mainHexPallete.white,
+    backgroundColor: backgroundColors.white,
     maxHeight: '52px',
     borderRadius: '40px',
-    border: isModile || isTablet ? 'none' : `6px solid ${mainHexPallete.white}`,
+    border: `6px solid ${backgroundColors.white}`,
     gap: '18px'
-  })
+  }
 };
