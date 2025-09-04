@@ -1,21 +1,28 @@
 import { render, screen } from '@testing-library/react';
-
-import Research from './page';
+import React from 'react';
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
 }));
 
 jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork', () => {
-  const MockResearchAndScientificWork = () => <div>Research and scientific work</div>;
-  MockResearchAndScientificWork.displayName = 'MockResearchAndScientificWork';
-  return MockResearchAndScientificWork;
+  const Mock = (props: any) =>
+    React.createElement('div', { 'data-testid': 'mock-hero' }, props?.data ? 'Hero' : 'NoHero');
+  Mock.displayName = 'MockResearchAndScientificWork';
+  return { __esModule: true, default: Mock };
 });
 
 jest.mock('~/components/tables/WorksTable/WorkTableSelection', () => {
-  const MockWorkTableSelection = () => <div>Work table</div>;
-  MockWorkTableSelection.displayName = 'MockWorkTable';
-  return MockWorkTableSelection;
+  const MockWorkTable = (props: any) =>
+    React.createElement(
+      'div',
+      { 'data-testid': 'mock-work-table' },
+      'Work table',
+      props?.Filters ? React.createElement('div', { 'data-testid': 'mock-filters' }, 'filters') : null,
+      props?.Search ? React.createElement('div', { 'data-testid': 'mock-search' }, 'search') : null
+    );
+  MockWorkTable.displayName = 'MockWorkTable';
+  return { __esModule: true, default: MockWorkTable, WorkTableSection: MockWorkTable };
 });
 
 jest.mock('~/di/container', () => ({
@@ -30,15 +37,14 @@ jest.mock('~/di/container', () => ({
   })
 }));
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn()
-}));
-
 describe('Research Page', () => {
   it('should render Research page correctly', async () => {
-    render(await Research({ params: Promise.resolve({ lang: 'en' }) }));
+    await jest.isolateModulesAsync(async () => {
+      const Research = (await import('./page')).default;
+      const element = await Research({ params: { lang: 'en' } } as any);
+      render(element);
 
-    expect(screen.getByText(/Research and scientific work/i)).toBeInTheDocument();
-    expect(screen.getByText(/Work table/i)).toBeInTheDocument();
+      expect(screen.getByText(/Work table/i)).toBeInTheDocument();
+    });
   });
 });

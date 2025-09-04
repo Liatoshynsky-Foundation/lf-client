@@ -80,15 +80,26 @@
       "year": "Year",
       "genre": "Genre"
     },
-    "name": {
-      "composition": "All compositions"
+    "composition": {
+      "filters": {
+        "category": "Category",
+        "genre": "Genre",
+        "year": "Year"
+      },
+      "name": {
+        "composition": "All compositions"
+      }
     },
     "buttons": {
       "viewSheetMusic": "View sheet music",
       "downloadMusic": "Download"
     },
     "work": {
-      "name": "All documents",
+      "name": "All works",
+      "filters": {
+        "author": "Author",
+        "yearLabel": "Year written"
+      },
       "columns": {
         "name": "Title",
         "author": "Author",
@@ -98,6 +109,9 @@
         "view": "Preview",
         "goto": "Visit"
       }
+    },
+    "controls": {
+      "filters": "Filters"
     }
   },
   "cookie": {

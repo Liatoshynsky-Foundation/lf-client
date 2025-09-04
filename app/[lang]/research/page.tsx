@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import ResearchAndScientificWork from '~/components/research-and-scientific-work/ResearchAndScientificWork';
-import WorkTableSection from '~/components/tables/WorksTable/WorkTableSelection';
+import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSelection';
 
 import { Language } from '~/types/types/language';
 
@@ -15,7 +15,7 @@ export const metadata = createSeoMeta({
   url: '/research'
 });
 
-export default async function Research({ params }: Readonly<Language>) {
+export default async function ResearchPage({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 

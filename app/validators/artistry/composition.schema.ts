@@ -56,9 +56,44 @@ export const compositionTitlesSchema = z.object({
 export const compositionNamesArraySchema = z.array(compositionTitlesSchema);
 
 export const createLocalizedCompositionTitlesSchema = (locale: Locale) =>
-  compositionSchema.transform((title) => ({
-    id: title._id,
-    title: title.title[locale]
+  compositionSchema.pick({ _id: true, title: true }).transform((data) => ({
+    id: data._id,
+    title: data.title[locale]
   }));
 export const createLocalizedCompositionTitlesSchemaArray = (locale: Locale) =>
   z.array(createLocalizedCompositionTitlesSchema(locale));
+
+export const createLocalizedOpusSchema = (locale: Locale) =>
+  opusSchema.transform((o) => ({
+    id: o._id,
+    number: o.number,
+    title: o.title ? (o.title[locale] ?? o.title.en ?? o.title.uk) : undefined
+  }));
+
+export const createLocalizedOpusesArraySchema = (locale: Locale) => z.array(createLocalizedOpusSchema(locale));
+
+export const compositionsYearRangeSchema = z.object({
+  minYear: z.number(),
+  maxYear: z.number()
+});
+
+export const createLocalizedGenreOptionSchema = (locale: Locale) =>
+  genreSchema.transform((g) => ({
+    id: g._id,
+    key: g.key,
+    name: g.name[locale] ?? g.name.en ?? g.name.uk
+  }));
+
+export const createLocalizedGenreOptionsArraySchema = (locale: Locale) =>
+  z.array(createLocalizedGenreOptionSchema(locale));
+
+export const parseLocalizedCompositions = (data: unknown, locale: Locale) =>
+  createLocalizedCompositionsArraySchema(locale).parse(data);
+
+export const parseLocalizedOpuses = (data: unknown, locale: Locale) =>
+  createLocalizedOpusesArraySchema(locale).parse(data);
+
+export const parseLocalizedCompositionTitles = (data: unknown, locale: Locale) =>
+  createLocalizedCompositionTitlesSchema(locale).parse(data);
+
+export const parseCompositionsYearRange = (data: unknown) => compositionsYearRangeSchema.parse(data);

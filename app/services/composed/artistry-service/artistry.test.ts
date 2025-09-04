@@ -33,7 +33,7 @@ const mockRawCompositions = [
 const compositionServiceMock = {
   getAllGenres: jest.fn(),
   getAllCompositions: jest.fn(),
-  getAllTitles: jest.fn()
+  getAllCompositionTitles: jest.fn()
 };
 
 const artistryService = createArtistryService({

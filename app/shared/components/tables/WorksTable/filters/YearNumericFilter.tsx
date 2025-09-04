@@ -14,14 +14,13 @@ interface YearNumericFilterProps {
   label: string;
   value: [number, number];
   onChange: (numbers: [number, number]) => void;
+  minYear?: number;
+  maxYear?: number;
 }
 
-export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({ label, value, onChange }) => {
+export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({ label, value, onChange, minYear, maxYear }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
-
-  const minYearRef = useRef(1900);
-  const maxYearRef = useRef(new Date().getFullYear());
 
   const handleToggleMenu = useCallback(() => {
     if (buttonRef.current) {
@@ -36,15 +35,10 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({ label, val
   const numericFilterElement = useMemo(
     () => (
       <Box sx={{ p: 2, minWidth: buttonRef.current?.offsetWidth }} key="numeric-filter">
-        <NumericFiltering
-          minNumber={minYearRef.current}
-          maxNumber={maxYearRef.current}
-          value={value}
-          onChange={onChange}
-        />
+        <NumericFiltering value={value} onChange={onChange} minNumber={minYear} maxNumber={maxYear} />
       </Box>
     ),
-    [value, onChange]
+    [value, onChange, minYear, maxYear]
   );
 
   return (

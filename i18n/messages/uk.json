@@ -80,15 +80,26 @@
       "year": "Рік",
       "genre": "Жанр"
     },
-    "name": {
-      "composition": "Усі Композиції"
+    "composition": {
+      "filters": {
+        "category": "Категорія",
+        "genre": "Жанр",
+        "year": "Рік"
+      },
+      "name": {
+        "composition": "Усі Композиції"
+      }
     },
     "buttons": {
       "viewSheetMusic": "Переглянути ноти",
       "downloadMusic": "Завантажити"
     },
     "work": {
-      "name": "Усі документи",
+      "name": "Усі твори",
+      "filters": {
+        "author": "Автор",
+        "yearLabel": "Рік написання"
+      },
       "columns": {
         "name": "Назва",
         "author": "Автор",
@@ -98,6 +109,9 @@
         "view": "Переглянути",
         "goto": "Перейти"
       }
+    },
+    "controls": {
+      "filters": "Фільтри"
     }
   },
   "cookie": {

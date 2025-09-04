@@ -16,10 +16,10 @@ import TrashIcon from '~/public/icons/trash-2.svg';
 import { getFilteringSchema } from '~/validators/filtering.schema';
 
 interface NumericFilteringProps {
-  minNumber: number;
-  maxNumber: number;
   value: [number, number];
   onChange: (numbers: [number, number]) => void;
+  minNumber?: number;
+  maxNumber?: number;
 }
 
 const CustomButton = styled(Button)(() => ({
@@ -57,7 +57,12 @@ const CustomButton = styled(Button)(() => ({
 
 const minDistance = 1;
 
-const NumericFiltering: React.FC<NumericFilteringProps> = ({ minNumber, maxNumber, value, onChange }) => {
+const NumericFiltering: React.FC<NumericFilteringProps> = ({
+  value,
+  onChange,
+  minNumber = 1900,
+  maxNumber = new Date().getFullYear()
+}) => {
   const [inputNumbers, setInputNumbers] = useState<string[]>([String(value[0]), String(value[1])]);
   const [errors, setErrors] = useState<{ from?: string; to?: string }>({});
 

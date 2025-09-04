@@ -19,7 +19,7 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import CompositionsControlPanel from './control-panel/ControlPanel';
+import ControlPanel from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
@@ -35,7 +35,7 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
-  MusicSearch?: React.ReactNode;
+  Search?: React.ReactNode;
   Filters?: React.ReactNode;
   isFiltersActive?: boolean;
   activeFiltersCount?: number;
@@ -46,21 +46,21 @@ interface EnhancedTableProps<T extends RowData> {
   loading?: boolean;
 }
 
-export default function EnhancedTable<T extends RowData>({
+export const EnhancedTable = <T extends RowData>({
   data,
   columns,
   columnWidths = {},
   groupByKey,
   itemsPerPage = 10,
   tableName,
-  MusicSearch,
+  Search,
   Filters,
   activeFiltersCount,
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
   loading = false
-}: Readonly<EnhancedTableProps<T>>) {
+}: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
@@ -102,7 +102,7 @@ export default function EnhancedTable<T extends RowData>({
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable, data, sorting]);
+  }, [data, sorting]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -151,11 +151,11 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <CompositionsControlPanel
-        MusicSearch={MusicSearch}
+      <ControlPanel
+        Search={Search}
         tableName={tableName}
         Filters={Filters}
-        activeFiltersCount={activeFiltersCount}
+        activeFiltersCount={activeFiltersCount ?? 0}
       />
       {loading ? (
         <Box sx={styles.loaderBox}>
@@ -203,4 +203,4 @@ export default function EnhancedTable<T extends RowData>({
       )}
     </Box>
   );
-}
+};

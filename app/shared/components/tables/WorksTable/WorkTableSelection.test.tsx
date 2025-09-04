@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import WorkTableSection from './WorkTableSelection';
+import { WorkTableSection } from './WorkTableSelection';
 
 const workTableMock = [
   { id: '1', name: 'Work 1', actionType: 'pdf', isPreview: true, url: null },
@@ -16,20 +16,26 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
-  return function EnhancedTable({ data, tableName }: any) {
-    return (
-      <div data-testid="enhanced-table">
-        <div data-testid="table-name">{tableName}</div>
-        {data.map((item: any) => (
-          <div key={item.id} data-testid="row">
-            {item.name}
-            {item.isPreview && <button>Preview</button>}
-            {item.url && <a href={item.url}>Visit</a>}
-          </div>
-        ))}
-        <button aria-label="Go to next page">Next</button>
-      </div>
-    );
+  return {
+    __esModule: true,
+    EnhancedTable: (props: any) => {
+      const { data = [], tableName, Filters } = props;
+      return (
+        <div data-testid="enhanced-table">
+          {tableName && <div data-testid="table-name">{tableName}</div>}
+          {Filters && <div data-testid="filters-prop">{Filters}</div>}
+          {Array.isArray(data) &&
+            data.map((item: any) => (
+              <div key={item._id ?? item.id} data-testid="row">
+                {item.title ?? item.name}
+                {item.isPreview && <button>Preview</button>}
+                {item.url && <a href={item.url}>Visit</a>}
+              </div>
+            ))}
+          <button aria-label="Go to next page">Next</button>
+        </div>
+      );
+    }
   };
 });
 jest.mock('./filters/Filters', () => {

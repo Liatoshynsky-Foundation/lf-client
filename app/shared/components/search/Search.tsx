@@ -1,9 +1,9 @@
 'use client';
+
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
   InputAdornment,
-  List,
   ListItem,
   Typography,
   useMediaQuery,
@@ -11,19 +11,14 @@ import {
 } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
-import { CustomBorderTextField, MusicSearchStyles } from './MusicSearchStyles';
+import { CustomBorderTextField, SearchStyles } from './SearchStyles';
 
-import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
-interface MusicSearchProps {
-  setSearch: (value: string) => void;
-  search: string;
-}
 const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let width;
   let borderRadius;
@@ -40,33 +35,32 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   }
 
   return {
-    ...MusicSearchStyles.icon,
+    ...SearchStyles.icon,
     width,
     borderRadius
   };
 };
 
-export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: MusicSearchProps) => {
-  const [value, setValue] = useState<CompositionTitlesDTO | null>(null);
-  const [options, setOptions] = useState<CompositionTitlesDTO[]>([]);
+interface SearchProps<T> {
+  setSearch: (value: string) => void;
+  search: string;
+  options: T[];
+}
+
+export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
+  search,
+  setSearch,
+  options
+}: SearchProps<T>) => {
+  const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const DEBOUNCE_TIME_MS = 500;
-  useEffect(() => {
-    const fetchAllTitles = async () => {
-      setLoading(true);
-      const response = await fetch('/api/titles');
-      const titles = await response.json();
-      setOptions(titles);
-      setLoading(false);
-    };
-    fetchAllTitles();
-  }, [search, value]);
   const t = useTranslations('search');
+
   const debouncedInputChange = useMemo(
     () =>
       debounce((value: string) => {
@@ -85,18 +79,17 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
     },
     [debouncedInputChange, setSearch, opened]
   );
+
   const handleIconClick = () => {
     inputRef.current?.focus();
   };
+
   const handleClear = () => {
     setSearch('');
+    setFocused(false);
+    setOpened(false);
   };
-  const onChange = (event: unknown, value: CompositionTitlesDTO | null) => {
-    setValue(value);
-    const params = new URLSearchParams(window.location.search);
-    setSearch(value?.title as string);
-    params.set('search', value?.title as string);
-  };
+
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
     return (
       <CustomBorderTextField
@@ -108,7 +101,6 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
         onFocus={() => setFocused(true)}
         onBlur={() => {
           setOpened(false);
-          setFocused(false);
         }}
         slotProps={{
           input: {
@@ -135,28 +127,36 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       />
     );
   };
-  function renderOptionFn(
-    { key, ...props }: object & { key: React.Key },
-    option: CompositionTitlesDTO
-  ): React.ReactNode {
+  function renderOptionFn({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode {
     return (
-      <List {...props} key={key}>
+      <div {...props} key={key}>
         <ListItem disableGutters>
-          <Typography variant="customMedium16">{option.title}</Typography>
+          <Typography variant="customMedium16">
+            {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
+          </Typography>
         </ListItem>
-      </List>
+      </div>
     );
   }
 
   const renderOption = useMemo(() => renderOptionFn, []);
-  const getOptionLabel = (option: CompositionTitlesDTO) => option.title || '';
+  const getOptionLabel = (option: T) => {
+    if (typeof option.title === 'string') {
+      return option.title;
+    } else if (option.title && typeof option.title === 'object') {
+      return option.title.en || option.title.uk || '';
+    }
+    return '';
+  };
   return (
-    <Autocomplete
+    <Autocomplete<T, false, false, false>
       data-testid="music-search"
       options={options}
-      loading={loading}
       value={value}
-      onChange={onChange}
+      onChange={(event, value) => {
+        setValue(value);
+        setSearch(value ? getOptionLabel(value) : '');
+      }}
       inputValue={search}
       onInputChange={handleInputChange}
       renderInput={renderInput}
@@ -171,7 +171,7 @@ export const MusicSearch: React.FC<MusicSearchProps> = ({ search, setSearch }: M
       disableListWrap={true}
       slotProps={{
         listbox: {
-          style: MusicSearchStyles.listbox,
+          style: SearchStyles.listbox,
           component: VirtualizedListbox
         }
       }}
