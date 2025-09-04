@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
+import React, { ComponentType } from 'react';
 
 import ButtonCard from './ButtonCard';
 
@@ -8,6 +8,20 @@ jest.mock('~/i18n/navigation', () => ({
     <a href={href} data-testid="mock-link">
       {children}
     </a>
+  )
+}));
+
+jest.mock('~/public/icons/arrow-down-right.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="arrow-down-right" />
+}));
+
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: ({ Component, alt }: { Component: ComponentType; alt?: string }) => (
+    <div data-testid="svg-wrapper">
+      <Component />
+      {alt}
+    </div>
   )
 }));
 
@@ -41,5 +55,12 @@ describe('ButtonCard', () => {
     const { container } = render(<ButtonCard {...defaultProps} />);
 
     expect(container.querySelector('.background')).toBeInTheDocument();
+  });
+
+  it('should render the arrow-down-right icon', () => {
+    render(<ButtonCard {...defaultProps} />);
+
+    expect(screen.getByTestId('svg-wrapper')).toBeInTheDocument();
+    expect(screen.getByTestId('arrow-down-right')).toBeInTheDocument();
   });
 });
