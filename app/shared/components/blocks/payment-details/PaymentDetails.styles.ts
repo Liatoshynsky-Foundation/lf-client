@@ -58,7 +58,8 @@ export const styles = {
     borderRadius: '40px',
     p: '12px 15px 12px 24px',
     backgroundColor: mainHexPallete.brown[100],
-    ml: '-24px'
+    ml: '-24px',
+    whiteSpace: 'nowrap'
   },
 
   copyIcon: {

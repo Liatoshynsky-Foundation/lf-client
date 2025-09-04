@@ -64,6 +64,10 @@
     }
   },
   "supportUs": {
+    "donation": {
+      "title": "SupPorT FoUndaTioN",
+      "subTitle": "All contributions go <b>directly</b> to the Liatoshynsky Foundation account and are used to support its mission. Choose a currency convenient for you - <b>the transfer details are below</b>:"
+    },
     "faq": {
       "title": "Frequently Asked Questions:",
       "subtitle": {
