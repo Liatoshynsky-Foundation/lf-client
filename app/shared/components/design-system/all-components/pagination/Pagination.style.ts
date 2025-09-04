@@ -29,11 +29,11 @@ export const paginationStyles: {
     },
     previous: {
       ...arrowButtonBase,
-      mr: '32px'
+      mr: { xs: '8px', sm: '41px', md: '32px' }
     },
     next: {
       ...arrowButtonBase,
-      ml: '32px'
+      ml: { xs: '8px', sm: '41px', md: '32px' }
     }
   }
 };

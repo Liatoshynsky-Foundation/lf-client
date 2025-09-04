@@ -25,6 +25,8 @@ import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
 
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
 interface EnhancedTableProps<T extends RowData> {
@@ -64,6 +66,8 @@ export const EnhancedTable = <T extends RowData>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
+
+  const breakpoint = useBreakpoints();
 
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
@@ -193,6 +197,7 @@ export const EnhancedTable = <T extends RowData>({
             {totalPages > 1 && (
               <Pagination
                 count={totalPages}
+                siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
                 visiblePages={visiblePages}
                 onChange={(_, page) => handlePageChange(page)}
