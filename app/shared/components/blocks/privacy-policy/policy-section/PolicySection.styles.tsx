@@ -8,7 +8,16 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    mb: '144px'
+    mb: '144px',
+    [theme.breakpoints.down('lg')]: {
+      mb: '128px'
+    },
+    [theme.breakpoints.down('md')]: {
+      mb: '104px'
+    },
+    [theme.breakpoints.down('sm')]: {
+      mb: '80px'
+    }
   },
   description: {
     ...AppTypography.mulish20Regular,
@@ -23,14 +32,21 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   listWrapper: {
     display: 'grid',
     gap: '32px',
-    mt: '64px'
+    mt: '64px',
+    [theme.breakpoints.down('md')]: {
+      gap: '16px',
+      mt: '40px'
+    }
   },
   sectionWrapper: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     rowGap: '16px',
-    mt: '64px'
+    mt: '64px',
+    [theme.breakpoints.down('md')]: {
+      mt: '40px'
+    }
   },
   subtitle: {
     ...AppTypography.mulish20Bold,

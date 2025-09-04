@@ -57,7 +57,11 @@ export default function PolicySection({
           sx={{
             ...styles(theme).listWrapper,
             gridColumn: listGridColumn,
-            mb: note ? '64px' : 0
+            mb: {
+              xs: note ? '40px' : 0,
+              sm: note ? '40px' : 0,
+              lg: note ? '64px' : 0
+            }
           }}
         >
           {list?.map((item, idx) => (
@@ -80,8 +84,8 @@ export default function PolicySection({
               key={sectionKey}
               sx={{
                 ...styles(theme).sectionWrapper,
-                mt: idx === 0 ? '64px' : 0,
-                mb: idx === sections.length - 1 && !note ? 0 : '64px'
+                mt: idx === 0 ? { xs: '40px', sm: '40px', md: '64px' } : 0,
+                mb: idx === sections.length - 1 && !note ? 0 : { xs: '40px', sm: '40px', md: '64px' }
               }}
             >
               {section.subtitle && (
