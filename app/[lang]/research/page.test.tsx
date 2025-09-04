@@ -40,7 +40,7 @@ jest.mock('~/di/container', () => ({
 describe('Research Page', () => {
   it('should render Research page correctly', async () => {
     await jest.isolateModulesAsync(async () => {
-      const { Research } = await import('./page');
+      const Research = (await import('./page')).default;
       const element = await Research({ params: { lang: 'en' } } as any);
       render(element);
 

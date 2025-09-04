@@ -15,7 +15,7 @@ export const metadata = createSeoMeta({
   url: '/research'
 });
 
-export const Research = async ({ params }: Readonly<Language>) => {
+export default async function ResearchPage({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
@@ -29,4 +29,4 @@ export const Research = async ({ params }: Readonly<Language>) => {
       <WorkTableSection lang={lang} />
     </>
   );
-};
+}
