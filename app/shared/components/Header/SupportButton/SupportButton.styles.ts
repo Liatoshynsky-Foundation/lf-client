@@ -1,4 +1,4 @@
-import { backgroundColors } from '../../design-system/all-components/theme/colors';
+import { backgroundColors } from '~/ds-components/theme/colors';
 
 export const styles = {
   mobileContainer: {

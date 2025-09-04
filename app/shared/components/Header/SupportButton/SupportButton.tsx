@@ -2,9 +2,9 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
 
+import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
-import { SvgImage } from '../../svg-image/SvgImage';
 import { styles } from './SupportButton.styles';
 import type { SupportButtonData } from '~/types/types/header.type';
 
