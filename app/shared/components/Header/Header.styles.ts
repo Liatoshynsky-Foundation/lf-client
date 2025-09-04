@@ -27,7 +27,7 @@ export const styles = {
     alignItems: 'center',
     gap: '20px'
   },
-  desktopNavWrapper: {
+  navWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
