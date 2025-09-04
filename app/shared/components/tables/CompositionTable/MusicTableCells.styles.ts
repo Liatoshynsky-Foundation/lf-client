@@ -23,10 +23,6 @@ export const headerTypographySx: SxProps<Theme> = {
   color: mainHexPallete.blue[800]
 };
 
-export const genreEllipsisSx: SxProps<Theme> = {
-  maxWidth: { md: 170, lg: 240 }
-};
-
 export const actionsCellContainerSx: SxProps<Theme> = {
   display: 'flex',
   justifyContent: 'flex-end',

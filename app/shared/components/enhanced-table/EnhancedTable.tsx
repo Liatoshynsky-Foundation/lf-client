@@ -164,7 +164,7 @@ export const EnhancedTable = <T extends RowData>({
       ) : (
         <>
           <TableContainer component={Paper} sx={styles.container}>
-            <Table>
+            <Table sx={{ tableLayout: 'fixed' }}>
               <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
               <TableBody>
                 {rowsToRender.map((entry) =>

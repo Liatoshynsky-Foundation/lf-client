@@ -2,7 +2,7 @@
 
 import { Box, TableCell, TableRow } from '@mui/material';
 import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
@@ -15,47 +15,57 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 
 import chevronDown from '~/public/icons/chevron-down.svg';
 import chevronRight from '~/public/icons/chevron-right.svg';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
   action: () => void;
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<T, unknown>[];
 }
 
-export function CollapsibleRow<T extends RowData>({
+const isExpanderColumn = <T extends RowData>(col: ColumnDef<T, unknown>) => String(col.id) === 'expander';
+
+const getFactoryIndexes = <T extends RowData>(columns: ColumnDef<T, unknown>[]) =>
+  columns
+    .map((c, idx) => ((c.meta as CollapsibleGroupColumnMeta<T> | undefined)?.groupLabelContentFactory ? idx : -1))
+    .filter((i) => i >= 0);
+
+const getNextFactoryIndex = (currentIdx: number, factoryIndexes: number[], columnsLength: number) => {
+  const pos = factoryIndexes.indexOf(currentIdx);
+  return pos >= 0 && pos < factoryIndexes.length - 1 ? factoryIndexes[pos + 1] : columnsLength;
+};
+
+export const CollapsibleRow = <T extends RowData>({
   data,
   collapsed,
   action,
   columns
-}: Readonly<CollapsibleRowProps<T>>) {
-  const bp = useBreakpoints();
-  const viewKey = bp.isTablet || bp.isMobile ? 'mobile' : 'desktop';
-  const table = useReactTable({
+}: Readonly<CollapsibleRowProps<T>>) => {
+  const table = useReactTable<T>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel()
   });
 
+  const factoryIndexes = useMemo(() => getFactoryIndexes(columns), [columns]);
+  let coveredUntil = -1;
+
   return (
-    <React.Fragment key={viewKey}>
+    <>
       <TableRow sx={styles.row(collapsed)}>
-        {columns.map((col) => {
-          const meta = col.meta as CollapsibleGroupColumnMeta<T>;
-          const labelContent = meta?.groupLabelContent;
+        {columns.map((col, idx) => {
+          if (idx <= coveredUntil) return null;
 
-          if (React.isValidElement(labelContent) && labelContent.type === TableCell) {
-            return React.cloneElement(labelContent, { key: col.id });
-          }
+          const cellKey = String(col.id ?? idx);
 
-          return (
-            <TableCell key={col.id} sx={styles.cell}>
-              <Box sx={col.id === 'expander' ? styles.cellInnerCentered : styles.cellInner}>
-                {col.id === 'expander' ? (
+          if (isExpanderColumn(col)) {
+            return (
+              <TableCell key={cellKey} sx={styles.cell}>
+                <Box sx={styles.cellInnerCentered}>
                   <IconButton
-                    onClick={(event) => {
-                      event.preventDefault();
+                    aria-label="toggle row"
+                    onClick={(e) => {
+                      e.preventDefault();
                       action();
                     }}
                     variant={IconButtonColorVariant.Secondary}
@@ -64,17 +74,38 @@ export function CollapsibleRow<T extends RowData>({
                   >
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
-                      color={mainHexPallete.brown['700']}
+                      stroke={mainHexPallete.brown['700']}
                       alt="toggle"
                     />
                   </IconButton>
-                ) : (
-                  <>
-                    <Box sx={styles.labelBox}>{labelContent}</Box>
-                    {meta?.groupCellRenderer?.()}
-                  </>
-                )}
-              </Box>
+                </Box>
+              </TableCell>
+            );
+          }
+
+          const meta = col.meta as CollapsibleGroupColumnMeta<T> | undefined;
+          const factory = meta?.groupLabelContentFactory;
+
+          if (factory) {
+            const nextFactoryIdx = getNextFactoryIndex(idx, factoryIndexes, columns.length);
+            const colSpan = Math.max(1, nextFactoryIdx - idx);
+            coveredUntil = idx + colSpan - 1;
+
+            const raw = factory(data);
+            const normalized = React.Children.toArray(raw);
+
+            return (
+              <TableCell key={cellKey} colSpan={colSpan} sx={styles.cell}>
+                <Box sx={styles.cellInner}>
+                  <Box sx={{ width: '100%' }}>{normalized}</Box>
+                </Box>
+              </TableCell>
+            );
+          }
+
+          return (
+            <TableCell key={cellKey} sx={styles.cell}>
+              <Box sx={styles.cellInner} />
             </TableCell>
           );
         })}
@@ -83,6 +114,6 @@ export function CollapsibleRow<T extends RowData>({
       {table.getRowModel().rows.map((row) => (
         <CollapsibleDataRow key={row.id} row={row} collapsed={collapsed} />
       ))}
-    </React.Fragment>
+    </>
   );
-}
+};
