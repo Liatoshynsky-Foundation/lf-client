@@ -1,9 +1,8 @@
 'use client';
 
-import type { ColumnDef } from '@tanstack/react-table';
-import { ColumnFiltersState } from '@tanstack/react-table';
+import { type ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MusicTableFilters } from './filters/MusicTableFilters';
 import {
