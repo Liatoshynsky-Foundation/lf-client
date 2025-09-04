@@ -5,7 +5,6 @@ import { translatedFieldSchema } from '~/validators/constants';
 import { TipTapContentSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 const IntroSectionBlockSchema = z.object({
-  title: translatedFieldSchema,
   trustAndSecurity: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }),
   agreement: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema })
 });
@@ -15,7 +14,13 @@ const DataWeCollectBlockSchema = z.object({
   description: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }),
   sections: z.array(
     z.object({
-      subtitle: translatedFieldSchema,
+      subtitle: z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }),
+      description: z
+        .object({
+          uk: TipTapContentSchema,
+          en: TipTapContentSchema
+        })
+        .optional(),
       list: z.array(z.object({ uk: TipTapContentSchema, en: TipTapContentSchema }))
     })
   ),
@@ -108,7 +113,6 @@ export const createLocalizedPrivacyPolicyPageSchema = (locale: Locale) =>
       status: page.status,
       blocks: {
         IntroSection: {
-          title: blocks.IntroSection.title[locale],
           trustAndSecurity: blocks.IntroSection.trustAndSecurity[locale],
           agreement: blocks.IntroSection.agreement[locale]
         },
@@ -117,6 +121,7 @@ export const createLocalizedPrivacyPolicyPageSchema = (locale: Locale) =>
           description: blocks.DataWeCollect.description[locale],
           sections: blocks.DataWeCollect.sections.map((section) => ({
             subtitle: section.subtitle[locale],
+            description: section.description?.[locale],
             list: section.list.map((item) => item[locale])
           })),
           note: blocks.DataWeCollect.note[locale]
@@ -161,8 +166,8 @@ export const createLocalizedPrivacyPolicyPageSchema = (locale: Locale) =>
           note: blocks.UserRights.note[locale]
         },
         ContactUs: {
-          title: blocks.DataRetention.title[locale],
-          description: blocks.DataRetention.description[locale]
+          title: blocks.ContactUs.title[locale],
+          description: blocks.ContactUs.description[locale]
         }
       }
     };
