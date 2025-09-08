@@ -74,7 +74,7 @@ const TermsContent = () => {
 
       {registerListKeys.map((key, i) => (
         <ContentBlock
-          key={`register-${i}`}
+          key={`${i}-${key}`}
           list={t(key)}
           containerSx={{
             mb: i === registerListKeys.length - 1 ? { xs: '32px' } : { xs: '24px', md: '32px' }
@@ -92,7 +92,7 @@ const TermsContent = () => {
       <Box>
         {behaviorListKeys.map((key, i) => (
           <ContentBlock
-            key={`behavior-${i}`}
+            key={`${i}-${key}`}
             list={t(key)}
             containerSx={{
               mb:
