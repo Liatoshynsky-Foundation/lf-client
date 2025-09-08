@@ -54,10 +54,10 @@ describe('TermsContent', () => {
     expect(screen.getByText('libraryAccessTitle')).toBeInTheDocument();
   });
 
-  it('should render buttons with correct text (desktop)', () => {
+  it('should render buttons with correct translation keys (desktop)', () => {
     render(<TermsContent />);
-    expect(screen.getByText('Переглянути нотну бібліотеку')).toBeInTheDocument();
-    expect(screen.getByText('Переглянути Кабінет-Архів')).toBeInTheDocument();
+    expect(screen.getByText('buttons.library.full')).toBeInTheDocument();
+    expect(screen.getByText('buttons.archive.full')).toBeInTheDocument();
   });
 
   it('should render SkewedBlock', () => {
