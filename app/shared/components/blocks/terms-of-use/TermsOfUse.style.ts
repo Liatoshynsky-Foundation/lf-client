@@ -29,16 +29,16 @@ export const style = {
       sm: '4 / -1',
       md: '6 / -1'
     },
-    textIndent: { xs: '85px', sm: '230px', md: '229px', lg: '295px', xl: '335px', xxl: '407px' },
+    textIndent: { xs: '70px', sm: '230px', md: '229px', lg: '295px', xl: '335px', xxl: '407px' },
     alignSelf: { lg: 'end' },
     paddingTop: { sm: '40px', md: '24px', lg: '140px' },
     maxWidth: '910px'
   },
   backgroundContainer: {
     my: { xs: '130px', md: '150px' },
-    backgroundSize: { xs: '140%', sm: '125%', md: '120%', xl: '125%', ultra: '115%' },
+    backgroundSize: { xs: '135%', sm: '125%', md: '120%', xl: '125%', ultra: '115%' },
     backgroundPosition: {
-      xs: '20% 30%',
+      xs: '5% 50%',
       sm: '80% 38%',
       md: '60% 45%',
       lg: '60% 40%',
@@ -75,7 +75,7 @@ export const style = {
       xs: '40px',
       md: '64px'
     },
-    width: { md: '612px' }
+    width: { md: '570px', lg: '560px' }
   },
 
   downArrowLabel: {
@@ -91,8 +91,8 @@ export const style = {
 
   quoteContainer: {
     position: 'absolute',
-    right: { xs: '50px', sm: '60px', md: '40px', xl: '0px', ultra: '200px' },
-    bottom: { xs: '-25px', md: '-10px', lg: '65px', xl: '110px', xxl: '90px', ultra: '100px' },
+    right: { xs: '0', sm: '60px', md: '40px', xl: '0px', ultra: '200px' },
+    bottom: { xs: '10px', md: '-10px', lg: '65px', xl: '110px', xxl: '90px', ultra: '100px' },
     transform: 'skewY(2deg)',
     zIndex: 1
   },
@@ -110,7 +110,8 @@ export const style = {
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
     gap: quoteSizes.textGap,
-    width: quoteSizes.width
+    width: quoteSizes.width,
+    maxWidth: { xs: '272px', sm: '300px', md: '408px', ultra: '453px' }
   }),
   image: (color: keyof typeof quoteColors, align: Align) => ({
     width: quoteSizes.icon,

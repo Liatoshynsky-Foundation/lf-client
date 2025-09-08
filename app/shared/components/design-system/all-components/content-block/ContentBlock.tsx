@@ -1,9 +1,12 @@
-import { Box, Typography } from '@mui/material';
+import { Theme } from '@emotion/react';
+import { Box, SxProps, Typography } from '@mui/material';
 
 import { styles } from './ContentBlock.styles';
+import type { TipTapDoc } from '~/types/types/common.types';
 
 import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
+import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
 import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 type Paragraph = Readonly<{
@@ -11,44 +14,93 @@ type Paragraph = Readonly<{
   text: string;
 }>;
 
+type RichContent = string | Paragraph[] | TipTapDoc;
+
 type ContentBlockProps = Readonly<{
   title?: string;
-  description?: string | Paragraph[];
-  list?: string | Paragraph[];
-  additionalDescription?: string | Paragraph[];
+  description?: RichContent;
+  list?: RichContent;
+  additionalDescription?: RichContent;
+  textSx?: SxProps<Theme>;
+  containerSx?: SxProps<Theme>;
 }>;
 
-function renderTextBlock(data?: string | Paragraph[]) {
+const createParagraph = (paragraphSx?: SxProps<Theme>) => {
+  const ParagraphRenderer = (children: React.ReactNode) => (
+    <Typography sx={{ display: 'block', ...paragraphSx }}>{children}</Typography>
+  );
+  ParagraphRenderer.displayName = 'ParagraphRenderer';
+  return ParagraphRenderer;
+};
+
+function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
-  return Array.isArray(data) ? (
-    data.map(({ id, text }) => (
-      <Typography key={id} sx={{ ...textStyles.blockDescription, ...styles.textContent }}>
+  if (typeof data === 'string') {
+    return <Typography sx={{ ...textStyles.blockDescription, ...styles.textContent, ...textSx }}>{data}</Typography>;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(({ id, text }) => (
+      <Typography key={id} sx={{ ...textStyles.blockDescription, ...styles.textContent, ...textSx }}>
         {text}
       </Typography>
-    ))
-  ) : (
-    <Typography sx={{ ...textStyles.blockDescription, ...styles.textContent }}>{data}</Typography>
+    ));
+  }
+
+  return (
+    <TipTapContent
+      data={data}
+      nodeRenderers={{
+        paragraph: createParagraph({
+          ...textStyles.blockDescription,
+          ...styles.textContent,
+          ...textSx
+        })
+      }}
+    />
   );
 }
 
-function renderList(data?: string | Paragraph[]) {
+function renderList(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
-  return Array.isArray(data) ? (
-    data.map(({ id, text }) => <ListItem key={id} sx={styles.textContent} text={text} />)
-  ) : (
-    <ListItem sx={styles.textContent} text={data} />
+  if (typeof data === 'string') {
+    return <ListItem sx={{ ...styles.textContent, ...textSx, maxWidth: '900px' }} text={data} />;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(({ id, text }) => <ListItem key={id} sx={{ ...styles.textContent, ...textSx }} text={text} />);
+  }
+
+  return (
+    <TipTapContent
+      data={data}
+      nodeRenderers={{
+        paragraph: createParagraph({
+          ...textStyles.blockDescription,
+          ...styles.textContent,
+          ...textSx
+        })
+      }}
+    />
   );
 }
 
-export default function ContentBlock({ title, description, list, additionalDescription }: ContentBlockProps) {
+export default function ContentBlock({
+  title,
+  description,
+  list,
+  additionalDescription,
+  textSx,
+  containerSx
+}: ContentBlockProps) {
   return (
-    <Box sx={styles.container}>
-      {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '3/ -1', sm: '6/ -1' }} />}
-      {renderTextBlock(description)}
-      {renderList(list)}
-      {renderTextBlock(additionalDescription)}
+    <Box sx={{ ...styles.container, ...containerSx }}>
+      {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '2/ -1', sm: '4/ -1', md: '6/-1' }} />}
+      {renderTextBlock(description, textSx)}
+      {renderList(list, textSx)}
+      {renderTextBlock(additionalDescription, textSx)}
     </Box>
   );
 }

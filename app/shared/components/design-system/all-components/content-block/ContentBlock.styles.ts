@@ -1,13 +1,13 @@
 export const styles = {
   container: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridTemplateColumns: { xs: 'repeat(4,1fr)', sm: 'repeat(8,1fr)', md: 'repeat(12, 1fr)' },
     gridColumn: '1 / -1',
-    gap: '24px',
-    marginBottom: '80px'
+    gap: { xs: '16px', sm: '20px', md: '40px' }
   },
   textContent: {
-    gridColumn: { xs: '3/ -1', sm: '6/ -1' },
-    gap: '8px'
+    gridColumn: { xs: '2/ -1', sm: '4/ -1', md: '6/-1' },
+    gap: '8px',
+    maxWidth: '906px'
   }
 };

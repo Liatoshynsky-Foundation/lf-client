@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TermsIntro from '~/shared/components/blocks/terms-intro/TermsIntro';
+import TermsOfUse from '~/shared/components/blocks/terms-of-use/TermsOfUse';
 
 export default function Terms() {
-  return <TermsIntro />;
+  return <TermsOfUse />;
 }
