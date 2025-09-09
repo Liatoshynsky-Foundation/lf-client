@@ -33,6 +33,14 @@ const createParagraph = (paragraphSx?: SxProps<Theme>) => {
   return ParagraphRenderer;
 };
 
+const createListParagraph = (paragraphSx?: SxProps<Theme>) => {
+  const ParagraphRenderer = (children: React.ReactNode) => (
+    <ListItem sx={{ ...styles.textContent, ...paragraphSx }} text={children as string} />
+  );
+  ParagraphRenderer.displayName = 'ListParagraphRenderer';
+  return ParagraphRenderer;
+};
+
 function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
@@ -77,10 +85,10 @@ function renderList(data?: RichContent, textSx?: SxProps<Theme>) {
     <TipTapContent
       data={data}
       nodeRenderers={{
-        paragraph: createParagraph({
-          ...textStyles.blockDescription,
+        paragraph: createListParagraph({
           ...styles.textContent,
-          ...textSx
+          ...textSx,
+          maxWidth: '900px'
         })
       }}
     />
