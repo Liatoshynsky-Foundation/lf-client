@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 import { introDoc, rulesDoc } from './terms.const.';
 import TermsContent from './terms-content/TermsContent';
 import { skewedBlockHeight, style } from './TermsOfUse.style';
@@ -33,8 +35,8 @@ const TermsOfUse = () => {
       </Box>
       <Box sx={{ gridColumn: '-1/1', position: 'relative' }}>
         <Box sx={style.downArrowLabel}>
-          <Svg Component={ArrowDown} color="#87756b" alt="arrow down" />
-          Дивитись далі
+          <Svg Component={ArrowDown} color={mainHexPallete.brown[500]} alt="arrow down" />
+          {t('seeMore')}
         </Box>
         <SkewedBlock
           image="/images/liatoshynsky.png"
