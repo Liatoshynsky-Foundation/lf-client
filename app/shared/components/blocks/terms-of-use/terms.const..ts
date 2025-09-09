@@ -1,6 +1,6 @@
 import { TipTapDoc } from '~/types/types/common.types';
 
-import { boldText, boldUnderlineText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { boldText, linkText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -32,7 +32,7 @@ export const introDoc: LocalizedTipTapDoc = {
 export const testDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     boldText('Цифрова нотна бібліотека'),
-    normalText(' Фундації доступна усім'),
+    normalText(' Фундації доступна усім '),
     boldText('зареєстрованим користувачам'),
     normalText(
       ' для особистого некомерційного використання. Це означає, що ви можете переглядати, завантажувати та використовувати ноти для навчання, дослідження та виконання.'
@@ -94,11 +94,11 @@ export const rightsManagementDoc: LocalizedTipTapDoc = {
 export const privacyDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText('Уся персональна інформація захищена відповідно до '),
-    boldUnderlineText('Політики конфіденційності')
+    linkText('Політики конфіденційності', '/privacy-policy')
   ]),
   en: makeDoc([
     normalText('All personal information is protected in accordance with the '),
-    boldUnderlineText('Privacy Policy')
+    linkText('Privacy Policy', '/privacy-policy')
   ])
 };
 
@@ -107,14 +107,14 @@ export const supportDoc: LocalizedTipTapDoc = {
     normalText(
       'Ми прагнемо забезпечити стабільну роботу сайту. Якщо ви помітили технічну помилку або маєте труднощі з доступом до матеріалів — '
     ),
-    boldUnderlineText('напишіть нам'),
+    linkText('напишіть нам', '/contacts'),
     normalText('.')
   ]),
   en: makeDoc([
     normalText(
       'We strive to ensure the stable operation of the site. If you notice a technical error or have difficulty accessing the materials — '
     ),
-    boldUnderlineText('contact us'),
+    linkText('contact us', '/contacts'),
     normalText('.')
   ])
 };
@@ -145,5 +145,26 @@ export const rulesDoc: LocalizedTipTapDoc = {
     normalText(
       ' outlined below. They are intended to make using the site convenient, safe, and transparent for everyone. We may update these rules from time to time, so we recommend checking this section, especially if you plan to use archival materials.'
     )
+  ])
+};
+
+export const licenseDoc: LocalizedTipTapDoc = {
+  uk: makeDoc([
+    normalText('Якщо ви є '),
+    boldText('організатором концерту'),
+    normalText(
+      ' або плануєте трансляцію творів Лятошинського — зверніться до УААСП для оформлення відповідної ліцензії за '
+    ),
+    linkText('електронною адресою', 'mailto:liatoshynsky@gmail.com'),
+    normalText('.')
+  ]),
+  en: makeDoc([
+    normalText('If you are an '),
+    boldText('organizer of a concert'),
+    normalText(
+      ' or plan to broadcast Lyatoshynsky’s works — please contact the UAASP to obtain the appropriate license via '
+    ),
+    linkText('email', 'mailto:liatoshynsky@gmail.com'),
+    normalText('.')
   ])
 };

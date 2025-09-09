@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import {
   archiveDoc,
   behaviorListKeys,
+  licenseDoc,
   meaningDoc,
   privacyDoc,
   registerDoc,
@@ -66,7 +67,7 @@ const TermsContent = () => {
       <ContentBlock description={rightsDoc[locale]} containerSx={{ marginBottom: '32px' }} />
       <ContentBlock description={rightsManagementDoc[locale]} containerSx={{ marginBottom: '32px' }} />
       <ContentBlock description={meaningDoc[locale]} containerSx={{ marginBottom: '32px' }} />
-      <ContentBlock list={t('concertLicense')} containerSx={{ marginBottom: '32px' }} />
+      <ContentBlock list={licenseDoc[locale]} containerSx={{ marginBottom: '32px' }} />
       <ContentBlock description={t('paidNotes')} containerSx={{ marginBottom: '32px' }} />
       <ContentBlock containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }} />
       <ContentBlock title={t('registerTitle')} containerSx={{ marginBottom: '16px' }} />

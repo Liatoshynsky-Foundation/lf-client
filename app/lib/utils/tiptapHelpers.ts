@@ -34,3 +34,20 @@ export const boldUnderlineText = (text: string): TipTapTextNode =>
     marks: [{ type: TipTapMarkType.bold }, { type: TipTapMarkType.underline }],
     text
   }) as TipTapTextNode;
+
+export const linkText = (text: string, href: string): TipTapTextNode => ({
+  type: TipTapNodeTypes.text,
+  text,
+  marks: [
+    {
+      type: TipTapMarkType.link,
+      attrs: { href }
+    },
+    {
+      type: TipTapMarkType.bold
+    },
+    {
+      type: TipTapMarkType.underline
+    }
+  ]
+});
