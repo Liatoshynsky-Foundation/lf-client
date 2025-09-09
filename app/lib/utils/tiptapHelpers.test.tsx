@@ -44,7 +44,7 @@ describe('tiptap.utils', () => {
         marks: [
           {
             type: TipTapMarkType.link,
-            attrs: { href: 'https://example.com', target: '_blank', rel: 'noopener noreferrer' }
+            attrs: { href: 'https://example.com' }
           },
           { type: TipTapMarkType.bold },
           { type: TipTapMarkType.underline }
