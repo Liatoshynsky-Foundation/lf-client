@@ -4,6 +4,7 @@ import React from 'react';
 import Button from '~/ds-components/button/Button';
 import Logo from '~/ds-components/logo/Logo';
 
+import { mainHexPallete } from '../../design-system/all-components/theme/colors';
 import { styles } from './NotesConfirmModal.styles';
 
 import Signature from '~/public/images/signature.svg';
@@ -17,7 +18,7 @@ type NotesConfirmModalProps = {
 const NotesConfirmModal = ({ title, subtitle, btnText }: NotesConfirmModalProps) => {
   return (
     <Box sx={styles.container}>
-      <Logo color="#EDE8DF" variant="office" />
+      <Logo color={mainHexPallete.brown[100]} variant="office" />
       <Typography sx={styles.title} variant="h2">
         {title}
       </Typography>
