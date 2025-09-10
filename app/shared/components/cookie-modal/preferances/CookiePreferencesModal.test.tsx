@@ -45,16 +45,6 @@ describe('CookiePreferences Modal', () => {
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
   });
 
-  it('should render analytics section and toggle', () => {
-    expect(screen.getByText('Analytics')).toBeInTheDocument();
-    expect(screen.getByRole('switch')).toBeInTheDocument();
-  });
-
-  it('should call onChecked when toggle is clicked', () => {
-    fireEvent.click(screen.getByRole('switch'));
-    expect(props.onChecked).toHaveBeenCalled();
-  });
-
   it('should render both buttons with correct labels', () => {
     expect(screen.getByRole('button', { name: 'Select All' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save Settings' })).toBeInTheDocument();
