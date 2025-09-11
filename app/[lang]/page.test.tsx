@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 
 import Home from './page';
 
+jest.mock('next/headers', () => ({
+  draftMode: jest.fn(() => ({ isEnabled: false }))
+}));
+
 jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => {
   const MockLiatoshynskyOffice = () => <div>Liatoshynsky office</div>;
   MockLiatoshynskyOffice.displayName = 'MockLiatoshynskyOffice';
@@ -21,15 +25,15 @@ jest.mock('~/components/blocks/our-mission/OurMission', () => {
 });
 
 jest.mock('~/components/blocks/IntroSection/IntroSection', () => {
-  const MockAboutFoundation = () => <div>Intro section</div>;
-  MockAboutFoundation.displayName = 'MockIntroSection';
-  return MockAboutFoundation;
+  const MockIntroSection = () => <div>Intro section</div>;
+  MockIntroSection.displayName = 'MockIntroSection';
+  return MockIntroSection;
 });
 
 jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => {
-  const MockOurGoals = () => <div>Foundation info</div>;
-  MockOurGoals.displayName = 'MockFoundationInfo';
-  return MockOurGoals;
+  const MockFoundationInfo = () => <div>Foundation info</div>;
+  MockFoundationInfo.displayName = 'MockFoundationInfo';
+  return MockFoundationInfo;
 });
 
 jest.mock('~/components/blocks/our-goals/OurGoals', () => {
@@ -47,7 +51,18 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => {
 jest.mock('~/di/container', () => ({
   createRequestContainer: () => ({
     resolve: () => ({
-      getPageData: jest.fn().mockResolvedValue({
+      getPublishedPageData: jest.fn().mockResolvedValue({
+        blocks: {
+          IntroSection: {},
+          FoundationInfo: {},
+          OurMission: {},
+          OurGoals: {},
+          LiatoshynskyOffice: {},
+          WhatWeDo: {},
+          FoundationFounders: {}
+        }
+      }),
+      getDraftPageData: jest.fn().mockResolvedValue({
         blocks: {
           IntroSection: {},
           FoundationInfo: {},
@@ -69,7 +84,7 @@ jest.mock('next-intl/server', () => ({
 
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
-    render(await Home({ params: Promise.resolve({ lang: 'en' }) }));
+    render(await Home({ params: Promise.resolve({ lang: 'en' }) } as any));
 
     expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
