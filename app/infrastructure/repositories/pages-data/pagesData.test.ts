@@ -91,9 +91,9 @@ describe('pagesDataRepository', () => {
 
     mockedParse.mockReturnValue(mockParsedData);
 
-    const result = await pagesDataRepository.getPageData(slug);
+    const result = await pagesDataRepository.getBySlugAndStatus(slug, 'published');
 
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
+    expect(mockedFindOne).toHaveBeenCalledWith({ slug, status: 'published' });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(mockDbData);
     expect(result).toEqual(mockParsedData);
@@ -104,10 +104,10 @@ describe('pagesDataRepository', () => {
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
     mockedFindOne.mockReturnValue({ lean: leanMock });
 
-    const result = await pagesDataRepository.getPageData(slug);
+    const result = await pagesDataRepository.getBySlugAndStatus(slug, 'published');
 
     expect(result).toBeNull();
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
+    expect(mockedFindOne).toHaveBeenCalledWith({ slug, status: 'published' });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
   });
@@ -124,9 +124,9 @@ describe('pagesDataRepository', () => {
       throw validationError;
     });
 
-    await expect(pagesDataRepository.getPageData(slug)).rejects.toThrow(validationError);
+    await expect(pagesDataRepository.getBySlugAndStatus(slug, 'published')).rejects.toThrow(validationError);
 
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
+    expect(mockedFindOne).toHaveBeenCalledWith({ slug, status: 'published' });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(invalidDbData);
   });
