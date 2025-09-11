@@ -22,16 +22,16 @@ const selectSchema = (slug: string, locale: Locale) => {
 
 export const createPagesDataService = ({ pagesDataRepository }: PageServiceDeps) => ({
   async getPublishedPageData(slug: string, locale: Locale): Promise<PageData | null> {
-    const base = await pagesDataRepository.getBySlugAndStatus(slug, 'published');
-    if (!base) return null;
+    const page = await pagesDataRepository.getBySlugAndStatus(slug, 'published');
+    if (!page) return null;
     const schema = selectSchema(slug, locale);
-    return schema ? schema.parse(base) : null;
+    return schema ? schema.parse(page) : null;
   },
 
   async getDraftPageData(slug: string, locale: Locale): Promise<PageData | null> {
-    const base = await pagesDataRepository.getBySlugAndStatus(slug, 'draft');
-    if (!base) return null;
+    const page = await pagesDataRepository.getBySlugAndStatus(slug, 'draft');
+    if (!page) return null;
     const schema = selectSchema(slug, locale);
-    return schema ? schema.parse(base) : null;
+    return schema ? schema.parse(page) : null;
   }
 });
