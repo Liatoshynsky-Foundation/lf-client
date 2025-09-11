@@ -14,7 +14,7 @@ jest.mock('~/validators/pagesSchemas/pages/about-us.schema', () => ({
 }));
 
 const mockPagesDataRepository = {
-  getPageData: jest.fn()
+  getBySlugAndStatus: jest.fn()
 };
 
 const mockedCreateLocalizedAboutUsPageSchema = createLocalizedAboutUsPageSchema as jest.Mock;
@@ -94,12 +94,12 @@ describe('createPagesDataService', () => {
   const locale: Locale = 'uk';
 
   it('should return null if page data is not found', async () => {
-    mockPagesDataRepository.getPageData.mockResolvedValue(null);
+    mockPagesDataRepository.getBySlugAndStatus.mockResolvedValue(null);
 
-    const result = await service.getPageData(slug, locale);
+    const result = await service.getPublishedPageData(slug, locale);
 
     expect(result).toBeNull();
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(mockPagesDataRepository.getBySlugAndStatus).toHaveBeenCalledWith(slug, 'published');
     expect(mockedCreateLocalizedAboutUsPageSchema).not.toHaveBeenCalled();
   });
 
@@ -153,11 +153,11 @@ describe('createPagesDataService', () => {
 
     const mockSchema = { parse: jest.fn().mockReturnValue(localizedPageData) };
     mockedCreateLocalizedAboutUsPageSchema.mockReturnValue(mockSchema);
-    mockPagesDataRepository.getPageData.mockResolvedValue(pageDataFromRepo);
+    mockPagesDataRepository.getBySlugAndStatus.mockResolvedValue(pageDataFromRepo);
 
-    const result = await service.getPageData(slug, locale);
+    const result = await service.getPublishedPageData(slug, locale);
 
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(mockPagesDataRepository.getBySlugAndStatus).toHaveBeenCalledWith(slug, 'published');
     expect(mockedCreateLocalizedAboutUsPageSchema).toHaveBeenCalledWith(locale);
     expect(mockSchema.parse).toHaveBeenCalledWith(pageDataFromRepo);
     expect(result).toEqual(localizedPageData);
@@ -171,11 +171,11 @@ describe('createPagesDataService', () => {
       })
     };
     mockedCreateLocalizedAboutUsPageSchema.mockReturnValue(mockSchema);
-    mockPagesDataRepository.getPageData.mockResolvedValue(pageDataFromRepo);
+    mockPagesDataRepository.getBySlugAndStatus.mockResolvedValue(pageDataFromRepo);
 
-    await expect(service.getPageData(slug, locale)).rejects.toThrow(validationError);
+    await expect(service.getPublishedPageData(slug, locale)).rejects.toThrow(validationError);
 
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(mockPagesDataRepository.getBySlugAndStatus).toHaveBeenCalledWith(slug, 'published');
     expect(mockedCreateLocalizedAboutUsPageSchema).toHaveBeenCalledWith(locale);
     expect(mockSchema.parse).toHaveBeenCalledWith(pageDataFromRepo);
   });
