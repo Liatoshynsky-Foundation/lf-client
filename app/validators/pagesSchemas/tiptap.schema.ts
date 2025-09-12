@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 const _BaseNodeSchema = z.object({
   type: z.string(),
-  attrs: z.record(z.any()).optional(),
-  marks: z.array(z.record(z.any())).optional()
+  attrs: z.record(z.string(), z.any()).optional(),
+  marks: z.array(z.record(z.string(), z.any())).optional()
 });
 type BaseNode = z.infer<typeof _BaseNodeSchema>;
 
@@ -15,10 +15,10 @@ export interface Node extends BaseNode {
 export const NodeSchema: z.ZodType<Node> = z.lazy(() =>
   z.object({
     type: z.string(),
-    attrs: z.record(z.any()).optional(),
+    attrs: z.record(z.string(), z.any()).optional(),
     content: z.array(NodeSchema).optional(),
     text: z.string().optional(),
-    marks: z.array(z.record(z.any())).optional()
+    marks: z.array(z.record(z.string(), z.any())).optional()
   })
 );
 

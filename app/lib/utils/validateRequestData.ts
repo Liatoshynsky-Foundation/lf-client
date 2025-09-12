@@ -18,7 +18,7 @@ export function validateWithZod<T extends ZodTypeAny>(
   if (result.success) {
     return { valid: true, value: result.data };
   } else {
-    const errors = result.error.errors.map((e) => e.message);
+    const errors = result.error.issues.map((e) => e.message);
     return { valid: false, errors };
   }
 }
