@@ -2,6 +2,7 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import { buildGenresCondition, buildSearchCondition, buildYearsCondition } from '~/lib/utils/buildFilters';
 import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
 
@@ -43,35 +44,22 @@ export const compositionsRepository = {
   ) {
     await dbConnect();
 
-    const query: any = {};
+    const conditions: any[] = [];
 
-    if (search) {
-      const regex = { $regex: search, $options: 'i' };
-      query.$or = [{ 'title.uk': regex }, { 'title.en': regex }];
-    }
+    const searchCondition = buildSearchCondition(search);
+    if (searchCondition) conditions.push(searchCondition);
 
-    if (filters?.genres && Array.isArray(filters.genres) && filters.genres.length > 0) {
-      const genres = await Genre.find({ key: { $in: filters.genres } }).select('_id');
+    const genresCondition = await buildGenresCondition(filters?.genres, Genre);
+    if (genresCondition) conditions.push(genresCondition);
 
-      const compositionsQuery = { genres: { $in: genres.map((g) => g._id) } };
+    const yearsCondition = buildYearsCondition(filters);
+    if (yearsCondition) conditions.push(yearsCondition);
 
-      query.$and = query.$and ? [...query.$and, compositionsQuery] : [compositionsQuery];
-    }
-    if (filters?.years) {
-      const yearQuery: any = {};
-
-      if (filters.years.min !== undefined) {
-        yearQuery.$gte = filters.years.min;
-      }
-
-      if (filters.years.max !== undefined) {
-        yearQuery.$lte = filters.years.max;
-      }
-
-      if (Object.keys(yearQuery).length > 0) {
-        const condition = { year: yearQuery };
-        query.$and = query.$and ? [...query.$and, condition] : [condition];
-      }
+    let query: any = {};
+    if (conditions.length === 1) {
+      query = conditions[0];
+    } else if (conditions.length > 1) {
+      query = { $and: conditions };
     }
 
     const compositions = await Compositions.find(query)

@@ -85,6 +85,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
   const handleClear = () => {
     setSearch('');
+    setValue(null);
     setOpened(false);
   };
 
