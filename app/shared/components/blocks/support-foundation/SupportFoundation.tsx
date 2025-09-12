@@ -21,7 +21,7 @@ function SupportFoundation() {
         <Box sx={styles.donationFormWrapper}>
           <DonationForm />
         </Box>
-        <Box>
+        <Box sx={styles.infoSection}>
           <Typography variant="body2" sx={styles.sectionSubtitle}>
             {t.rich('subTitle', { b: bold })}
           </Typography>
