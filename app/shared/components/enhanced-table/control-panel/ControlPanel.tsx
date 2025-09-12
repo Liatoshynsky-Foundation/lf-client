@@ -25,6 +25,8 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
   const t = useTranslations('table');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+  const [mounted, setMounted] = useState(false);
+
   const isExtraSmall = useMediaQuery('(max-width:400px)', { noSsr: true });
   const [searchActive, setSearchActive] = useState(false);
   const [filtersActive, setFiltersActive] = useState(false);
@@ -35,30 +37,33 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
     }
   }, [isMobile]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <Box sx={ControlPanelStyles.root(theme)}>
       <Box sx={ControlPanelStyles.header}>
         <Typography variant="customBold32">{tableName}</Typography>
 
         <Box sx={ControlPanelStyles.headerRight}>
-          {isMobile ? (
-            <Box sx={ControlPanelStyles.mobileSearchBox}>
-              <IconButton
-                sx={ControlPanelStyles.searchIconButton}
-                type={searchActive ? IconButtonVariant.filled : IconButtonVariant.outlined}
-                variant={IconButtonColorVariant.Primary}
-                onClick={() => setSearchActive((prev) => !prev)}
-                size={isExtraSmall ? 'small' : 'medium'}
-              >
-                <Svg
-                  Component={SearchIcon}
-                  alt="search"
-                  color={searchActive ? mainHexPallete.white : mainHexPallete.black}
-                  width="28px"
-                  height="28px"
-                />
-              </IconButton>
-            </Box>
+          {mounted && isMobile ? (
+            <IconButton
+              type={searchActive ? IconButtonVariant.icon : IconButtonVariant.outlined}
+              variant={searchActive ? IconButtonColorVariant.Secondary : IconButtonColorVariant.Primary}
+              onClick={() => setSearchActive((prev) => !prev)}
+              size={isExtraSmall ? 'small' : 'medium'}
+              customStyles={ControlPanelStyles.searchIconButton(searchActive)}
+            >
+              <Svg
+                Component={SearchIcon}
+                alt="search"
+                fill="none"
+                width="28px"
+                height="28px"
+                stroke={searchActive ? mainHexPallete.white : mainHexPallete.black}
+              />
+            </IconButton>
           ) : (
             Search
           )}
