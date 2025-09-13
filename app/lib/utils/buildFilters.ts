@@ -13,11 +13,12 @@ export const buildGenresCondition = async (
   genres?: string | string[] | null,
   genreCollection: { find: (q: any) => any } = Genre
 ) => {
-  const genreArray = Array.isArray(genres) ? genres : genres ? [genres] : [];
-  if (genreArray.length === 0) return null;
-
-  const found = await genreCollection.find({ key: { $in: genreArray } }).select('_id');
-  return { genres: { $in: found.map((g: any) => g._id) } };
+  if (Array.isArray(genres) && genres && genres.length !== 0) {
+    const found = await genreCollection.find({ key: { $in: genres } }).select('_id');
+    return { genres: { $in: found.map((g: any) => g._id) } };
+  } else {
+    return [];
+  }
 };
 
 export const buildYearsCondition = (filters?: any) => {

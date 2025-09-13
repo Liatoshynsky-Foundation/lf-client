@@ -42,7 +42,19 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
   let resultUrl = pathname;
   if (parameters) {
     for (const [param, value] of Object.entries(parameters)) {
-      const replacement = encodeURIComponent(typeof value === 'object' ? JSON.stringify(value) : String(value));
+      let replacement: string;
+
+      if (value === null || value === undefined) {
+        replacement = '';
+      } else if (typeof value === 'object') {
+        try {
+          replacement = encodeURIComponent(JSON.stringify(value));
+        } catch {
+          replacement = '';
+        }
+      } else {
+        replacement = encodeURIComponent(String(value));
+      }
       resultUrl = resultUrl.replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
     }
   }
