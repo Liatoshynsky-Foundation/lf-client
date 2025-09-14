@@ -44,9 +44,12 @@ describe('CookiePreferences Modal', () => {
     expect(screen.getByText('Cookie Settings')).toBeInTheDocument();
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
   });
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 5005ab7 (fix: removed lint error)
   it('should render analytics section and toggle', () => {
     expect(screen.getByText('Analytics')).toBeInTheDocument();
     expect(screen.getByRole('switch')).toBeInTheDocument();
