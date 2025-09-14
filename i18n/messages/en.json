@@ -26,6 +26,31 @@
       "collaboration": "Cooperation"
     }
   },
+  "contactForm": {
+    "requiredFields": "* – required fields",
+    "name": "Name *",
+    "email": "Email address *",
+    "phoneNumber": "Phone number",
+    "message": "Your message *",
+    "policyText": "I agree about the processing of my personal data and agree to the",
+    "policyLink": "Privacy Policy",
+    "buttonText": "Send request",
+    "errors": {
+      "nameMinLength": "The name must contain at least 2 characters",
+      "emailRequired": "Please enter your email address",
+      "emailInvalid": "Please enter a valid email address",
+      "messageMinLength": "Please write a few words in the message",
+      "policyRequired": "You must agree to continue"
+    }
+  },
+  "donationForm": {
+    "donationTitle": "QUICK DONATION:",
+    "subscribeTitle": "SUBSCRIBE:",
+    "donationSwitch": "Donation",
+    "subscribeSwitch": "Subscription",
+    "donationButton": "Make a donation",
+    "subscribeButton": "Subscribe"
+  },
   "home": {
     "liatoshynskyOffice": {
       "office": "OfFicE",
@@ -46,8 +71,8 @@
   "research": {
     "title-with-quote": {
       "title": "ReSeArCh AnD\nsCiEnTiFiC wOrK",
-      "quoteText": "It is quite useless for you <...> to try to persuade me that I should not attach so much weight to my troubles and failures, and to assure me of your confidence in the vitality of my works. Let us not dispute this matter: neither view can be proved. What truly matters here is my own conviction—one that, of course, brings me no comfort—that the contrary is the case. The years will pass, and we—that is, the greater part of today’s composers—will survive only in encyclopedic dictionaries, and even then, not all of us. In the end, the question will not be for us to resolve. It will be visible there, but to whom?",
-      "sourceText": "Letter from Borys Lyatoshynsky to Lev Chetvertakov, July 22, 1965, Kyiv"
+      "quoteText": "Oh, my dear, my dear darling, when will that time finally come when we will be together, in the living room, where it's so beautiful, there's a piano and lots of sheet music.",
+      "sourceText": "Letter from Borys Liatoshynsky to Margarita Tsarevych, May 4, 1916, Saratov"
     }
   },
   "liatoshynskyArtistry": {
@@ -151,24 +176,6 @@
     "notFound": "Not found",
     "loading": "Loading..."
   },
-
-  "contactForm": {
-    "requiredFields": "* – required fields",
-    "name": "Name *",
-    "email": "Email address *",
-    "phoneNumber": "Phone number",
-    "message": "Your message *",
-    "policyText": "I agree about the processing of my personal data and agree to the",
-    "policyLink": "Privacy Policy",
-    "buttonText": "Send request",
-    "errors": {
-      "nameMinLength": "The name must contain at least 2 characters",
-      "emailRequired": "Please enter your email address",
-      "emailInvalid": "Please enter a valid email address",
-      "messageMinLength": "Please write a few words in the message",
-      "policyRequired": "You must agree to continue"
-    }
-  },
   "contactsInfoPage": {
     "contacts": "Contacts",
     "phoneNumber": "Phone number",
@@ -177,12 +184,21 @@
     "formTitle": "Contact form",
     "formSubtitle": "Send a request and we will contact you within a few business days"
   },
-  "donationForm": {
-    "donationTitle": "QUICK DONATION:",
-    "subscribeTitle": "SUBSCRIBE:",
-    "donationSwitch": "Donation",
-    "subscribeSwitch": "Subscription",
-    "donationButton": "Make a donation",
-    "subscribeButton": "Subscribe"
+  "getNotes": {
+    "notesList": {
+      "title": "Notes:",
+      "subtitle": "All notes",
+      "freeNotesButton": "View",
+      "paidNotesButton": "Contact us"
+    },
+    "form": {
+      "title": "Form",
+      "subtitle": "List of all notes"
+    },
+    "confirmation": {
+      "title": "Confirmation",
+      "subtitle": "Thank you for your request for sheet music materials",
+      "btnText": "Закрити"
+    }
   }
 }

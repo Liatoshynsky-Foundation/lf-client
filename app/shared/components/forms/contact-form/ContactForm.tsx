@@ -13,7 +13,11 @@ import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
 
-function ContactForm() {
+type ContactFormProps = {
+  onSubmit: () => void;
+};
+
+function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
 
@@ -89,7 +93,7 @@ function ContactForm() {
           />
         </FormControl>
       </Box>
-      <Button size="large" variant="contained" color="tertiary" type="submit" sx={styles.requestButton}>
+      <Button onClick={onSubmit} size="large" variant="contained" color="tertiary" sx={styles.requestButton}>
         {t('buttonText')}
       </Button>
     </Box>
