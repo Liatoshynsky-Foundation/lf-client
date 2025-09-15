@@ -1,7 +1,7 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import Button from '../../design-system/all-components/button/Button';
 import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
@@ -71,6 +71,14 @@ function DonationForm() {
     setHasError(donationSum === 0 || donationSum === '');
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
+    setDonationSum(val);
+    if (touched) {
+      setHasError(val === '' || val === 0);
+    }
+  };
+
   return (
     <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square>
       <Typography variant="h4">
@@ -84,13 +92,7 @@ function DonationForm() {
           type="number"
           inputProps={{ 'aria-invalid': hasError }}
           value={donationSum}
-          onChange={(e) => {
-            const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
-            setDonationSum(val);
-            if (touched) {
-              setHasError(val === '' || val === 0);
-            }
-          }}
+          onChange={handleInputChange}
           sx={{ ...style.moneyInput, ...(hasError ? style.moneyInputError : {}) }}
         />
         <FormControl variant="standard" sx={style.currencyInput}>
