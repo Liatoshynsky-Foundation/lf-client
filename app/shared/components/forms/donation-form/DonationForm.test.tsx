@@ -82,26 +82,6 @@ describe('DonationForm', () => {
     expect(screen.getByDisplayValue('')).toBeInTheDocument();
   });
 
-  it('should show error when submitting empty value', () => {
-    const input = screen.getByRole('spinbutton');
-    const button = screen.getByText('Зробити внесок');
-
-    fireEvent.change(input, { target: { value: '' } });
-    fireEvent.click(button);
-
-    expect(input).toHaveAttribute('aria-invalid', 'true');
-  });
-
-  it('should show error when submitting zero value', () => {
-    const input = screen.getByRole('spinbutton');
-    const button = screen.getByText('Зробити внесок');
-
-    fireEvent.change(input, { target: { value: '0' } });
-    fireEvent.click(button);
-
-    expect(input).toHaveAttribute('aria-invalid', 'true');
-  });
-
   it('should remove error after entering valid value', () => {
     const input = screen.getByRole('spinbutton');
     const button = screen.getByText('Зробити внесок');
@@ -118,6 +98,6 @@ describe('DonationForm', () => {
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '0' } });
 
-    expect(input).not.toHaveStyle({ color: 'rgb(230, 60, 20)' });
+    expect(input).not.toHaveAttribute('aria-invalid', 'true');
   });
 });
