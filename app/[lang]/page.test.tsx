@@ -3,66 +3,55 @@ import { render, screen } from '@testing-library/react';
 import Home from './page';
 
 jest.mock('next/headers', () => ({
-  draftMode: jest.fn(() => ({ isEnabled: false }))
+  draftMode: jest.fn().mockResolvedValue({ isEnabled: false })
 }));
 
 jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => {
-  const MockLiatoshynskyOffice = () => <div>Liatoshynsky office</div>;
-  MockLiatoshynskyOffice.displayName = 'MockLiatoshynskyOffice';
-  return MockLiatoshynskyOffice;
+  const Mock = () => <div>Liatoshynsky office</div>;
+  Mock.displayName = 'MockLiatoshynskyOffice';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => {
-  const MockFoundationFounders = () => <div>Foundation founders</div>;
-  MockFoundationFounders.displayName = 'MockFoundationFounders';
-  return MockFoundationFounders;
+  const Mock = () => <div>Foundation founders</div>;
+  Mock.displayName = 'MockFoundationFounders';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/our-mission/OurMission', () => {
-  const MockOurMission = () => <div>Our mission</div>;
-  MockOurMission.displayName = 'MockOurMission';
-  return MockOurMission;
+  const Mock = () => <div>Our mission</div>;
+  Mock.displayName = 'MockOurMission';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/IntroSection/IntroSection', () => {
-  const MockIntroSection = () => <div>Intro section</div>;
-  MockIntroSection.displayName = 'MockIntroSection';
-  return MockIntroSection;
+  const Mock = () => <div>Intro section</div>;
+  Mock.displayName = 'MockIntroSection';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => {
-  const MockFoundationInfo = () => <div>Foundation info</div>;
-  MockFoundationInfo.displayName = 'MockFoundationInfo';
-  return MockFoundationInfo;
+  const Mock = () => <div>Foundation info</div>;
+  Mock.displayName = 'MockFoundationInfo';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/our-goals/OurGoals', () => {
-  const MockOurGoals = () => <div>Our goals</div>;
-  MockOurGoals.displayName = 'MockOurGoals';
-  return MockOurGoals;
+  const Mock = () => <div>Our goals</div>;
+  Mock.displayName = 'MockOurGoals';
+  return Mock;
 });
 
 jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => {
-  const MockWhatWeDo = () => <div>What we do</div>;
-  MockWhatWeDo.displayName = 'MockWhatWeDo';
-  return MockWhatWeDo;
+  const Mock = () => <div>What we do</div>;
+  Mock.displayName = 'MockWhatWeDo';
+  return Mock;
 });
 
 jest.mock('~/di/container', () => ({
   createRequestContainer: () => ({
     resolve: () => ({
-      getPublishedPageData: jest.fn().mockResolvedValue({
-        blocks: {
-          IntroSection: {},
-          FoundationInfo: {},
-          OurMission: {},
-          OurGoals: {},
-          LiatoshynskyOffice: {},
-          WhatWeDo: {},
-          FoundationFounders: {}
-        }
-      }),
-      getDraftPageData: jest.fn().mockResolvedValue({
+      getPageData: jest.fn().mockResolvedValue({
         blocks: {
           IntroSection: {},
           FoundationInfo: {},
@@ -84,7 +73,8 @@ jest.mock('next-intl/server', () => ({
 
 describe('Home component', () => {
   it('should render Home component correctly', async () => {
-    render(await Home({ params: Promise.resolve({ lang: 'en' }) } as any));
+    const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
+    render(ui);
 
     expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
     expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();

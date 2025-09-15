@@ -1,6 +1,8 @@
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { PageStatus } from '~/types/enums/common.enums';
+
 import { translatedFieldSchema } from '~/validators/constants';
 import {
   createLocalizedImageSchema,
@@ -80,7 +82,7 @@ export const AboutUsPageSchema = z.object({
   pageType: z.literal('AboutUsPage'),
   slug: z.string(),
   title: translatedFieldSchema,
-  status: z.enum(['draft', 'published']),
+  status: z.nativeEnum(PageStatus),
   blocks: AboutUsBlock,
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),

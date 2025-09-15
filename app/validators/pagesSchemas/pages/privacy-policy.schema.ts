@@ -1,6 +1,8 @@
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { PageStatus } from '~/types/enums/common.enums';
+
 import { translatedFieldSchema } from '~/validators/constants';
 import { TipTapContentSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
@@ -97,7 +99,7 @@ export const PrivacyPolicyPageSchema = z.object({
   pageType: z.literal('PrivacyPolicyPage'),
   slug: z.string(),
   title: translatedFieldSchema,
-  status: z.enum(['draft', 'published']),
+  status: z.nativeEnum(PageStatus),
   blocks: PrivacyPolicyBlock,
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),

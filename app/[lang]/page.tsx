@@ -27,11 +27,12 @@ export default async function Home({ params }: Readonly<Language>) {
   setRequestLocale(lang);
 
   const { isEnabled } = await draftMode();
-
-  const pageService = await createRequestContainer().resolve('pageService');
+  const container = createRequestContainer();
+  const pagesDataService = container.resolve('pagesDataService');
+  const draftPagesDataService = container.resolve('draftPagesDataService');
 
   const [page, t] = await Promise.all([
-    isEnabled ? pageService.getDraftPageData('about-us', lang) : pageService.getPublishedPageData('about-us', lang),
+    isEnabled ? draftPagesDataService.getPageData('about-us', lang) : pagesDataService.getPageData('about-us', lang),
     getTranslations('home.liatoshynskyOffice')
   ]);
 

@@ -1,14 +1,16 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
+import { PageStatus } from '~/types/enums/common.enums';
+
 import { Page as PageType } from '~/validators/pagesSchemas/pages';
 
 export interface IPageDocument extends Omit<PageType, '_id'>, Document {}
 
-const pageBaseSchema = new Schema<IPageDocument>(
+const pageBaseSchema = new Schema(
   {
-    slug: { type: String, required: true, index: true },
+    slug: { type: String, required: true, unique: true, index: true },
     title: { uk: String, en: String },
-    status: { type: String, enum: ['draft', 'published'], required: true, default: 'draft' }
+    status: { type: String, enum: [PageStatus.Published], required: true, default: PageStatus.Published }
   },
   {
     timestamps: true,
@@ -16,8 +18,6 @@ const pageBaseSchema = new Schema<IPageDocument>(
     discriminatorKey: 'pageType'
   }
 );
-
-pageBaseSchema.index({ slug: 1, status: 1 }, { unique: true, name: 'slug_1_status_1' });
 
 const PageModel: Model<IPageDocument> = mongoose.models.Page || mongoose.model<IPageDocument>('Page', pageBaseSchema);
 

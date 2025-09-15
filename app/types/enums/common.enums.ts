@@ -48,3 +48,8 @@ export enum TipTapMarkType {
   underline = 'underline',
   link = 'link'
 }
+
+export enum PageStatus {
+  Draft = 'draft',
+  Published = 'published'
+}
