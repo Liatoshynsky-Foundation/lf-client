@@ -32,7 +32,11 @@ export const style = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'end',
-    borderBottom: '1px dashed black'
+    borderBottom: '1px dashed black',
+    transition: 'border-color 0.3s ease'
+  },
+  errorBorder: {
+    borderBottom: '1px dashed #E63C14'
   },
   moneyInput: {
     verticalAlign: 'bottom',
@@ -53,6 +57,9 @@ export const style = {
       WebkitAppearance: 'none',
       margin: 0
     }
+  },
+  moneyInputError: {
+    color: '#E63C14'
   },
   currencyInput: {
     minWidth: '90px',

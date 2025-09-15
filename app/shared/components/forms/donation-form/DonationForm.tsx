@@ -19,7 +19,21 @@ const proposedSum: Record<Currency, number[]> = {
 
 function DonationForm() {
   const t = useTranslations('donationForm');
+
   const [selected, setSelected] = useState<DonateType>('donation');
+  const [donationSum, setDonationSum] = useState<number | ''>('');
+  const [currency, setCurrency] = useState<Currency>('UAH');
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [touched, setTouched] = useState(false);
+
+  const handleCurrencySwitch = (event: { target: { value: string } }) => {
+    setCurrency(event.target.value as Currency);
+    setDonationSum('');
+    setHasError(false);
+    setTouched(false);
+  };
+
   const Buttons = [
     <Button key="donation" onClick={() => setSelected('donation')}>
       <Typography variant="customSemiBold18">{t('donationSwitch')}</Typography>
@@ -28,20 +42,16 @@ function DonationForm() {
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];
-  const [donationSum, setDonationSum] = useState<number | ''>(0);
-  const [currency, setCurrency] = useState<Currency>('UAH');
-  const [openDropdown, setOpenDropdown] = useState(false);
-  const handleCurrencySwitch = (event: { target: { value: string } }) => {
-    setCurrency(event.target.value as Currency);
-    setDonationSum(0);
-  };
+
   const suggestButtons = proposedSum[currency].map((item) => (
     <Button
       key={item}
       id={item.toString()}
       variant="outlined"
       onClick={() => {
-        setDonationSum((a) => +a + item);
+        const newSum = (donationSum || 0) + item;
+        setDonationSum(newSum);
+        if (touched) setHasError(newSum === 0);
       }}
     >
       <Typography variant="customSemiBold18">+{item}</Typography>
@@ -55,22 +65,33 @@ function DonationForm() {
       <Typography variant="body1">{c.toUpperCase()}</Typography>
     </MenuItem>
   ));
+
+  const handleSubmit = () => {
+    setTouched(true);
+    setHasError(donationSum === 0 || donationSum === '');
+  };
+
   return (
     <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square>
       <Typography variant="h4">
         {selected === 'donation' && t('donationTitle')}
         {selected === 'subscription' && t('subscribeTitle')}
       </Typography>
-      <ButtonGroup defaultActiveButton={0} buttons={Buttons} palette="tertiary" sx={style.btnGroup}></ButtonGroup>
-      <Box sx={style.sumInputs}>
+      <ButtonGroup defaultActiveButton={0} buttons={Buttons} palette="tertiary" sx={style.btnGroup} />
+      <Box sx={{ ...style.sumInputs, ...(hasError ? style.errorBorder : {}) }}>
         <Input
           disableUnderline
           type="number"
+          inputProps={{ 'aria-invalid': hasError }}
           value={donationSum}
           onChange={(e) => {
-            setDonationSum(e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value));
+            const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
+            setDonationSum(val);
+            if (touched) {
+              setHasError(val === '' || val === 0);
+            }
           }}
-          sx={style.moneyInput}
+          sx={{ ...style.moneyInput, ...(hasError ? style.moneyInputError : {}) }}
         />
         <FormControl variant="standard" sx={style.currencyInput}>
           <Select
@@ -86,16 +107,11 @@ function DonationForm() {
         </FormControl>
       </Box>
       <Box sx={style.addBtns}>{suggestButtons}</Box>
-      {selected === 'donation' && (
-        <Button color="primary" variant="contained" fullWidth disabled={donationSum == 0}>
-          <Typography variant="customSemiBold18">{t('donationButton')}</Typography>
-        </Button>
-      )}
-      {selected === 'subscription' && (
-        <Button color="primary" variant="contained" fullWidth disabled={donationSum == 0}>
-          <Typography variant="customSemiBold18">{t('subscribeButton')}</Typography>
-        </Button>
-      )}
+      <Button color="primary" variant="contained" fullWidth onClick={handleSubmit}>
+        <Typography variant="customSemiBold18">
+          {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
+        </Typography>
+      </Button>
     </PaperComponent>
   );
 }
