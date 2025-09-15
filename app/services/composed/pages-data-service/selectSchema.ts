@@ -5,14 +5,16 @@ import { createLocalizedAboutUsPageSchema } from '~/validators/pagesSchemas/page
 import { createLocalizedPrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { createLocalizedResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 
-export type PageSlug = 'about-us' | 'privacy-policy' | 'research';
+export const PAGE_SLUGS = ['about-us', 'privacy-policy', 'research'] as const;
+export type PageSlug = (typeof PAGE_SLUGS)[number];
 
-export const selectSchema = (slug: string, locale: Locale) => {
-  const map = {
-    'about-us': createLocalizedAboutUsPageSchema(locale),
-    'privacy-policy': createLocalizedPrivacyPolicyPageSchema(locale),
-    research: createLocalizedResearchPageSchema(locale)
-  } as const;
-
-  return map[slug as PageSlug] as z.ZodTypeAny | undefined;
+const schemaFactories: Record<PageSlug, (locale: Locale) => z.ZodTypeAny> = {
+  'about-us': createLocalizedAboutUsPageSchema,
+  'privacy-policy': createLocalizedPrivacyPolicyPageSchema,
+  research: createLocalizedResearchPageSchema
 };
+
+const isPageSlug = (slug: string): slug is PageSlug => (PAGE_SLUGS as readonly string[]).includes(slug);
+
+export const selectSchema = (slug: string, locale: Locale): z.ZodTypeAny | undefined =>
+  isPageSlug(slug) ? schemaFactories[slug](locale) : undefined;
