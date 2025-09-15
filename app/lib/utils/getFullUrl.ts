@@ -40,28 +40,17 @@ type Options<Path extends string> = {
 
 export const getFullUrl = <Path extends string>({ pathname, parameters, searchParameters }: Options<Path>): string => {
   let resultUrl = pathname;
-  if (parameters) {
-    for (const [param, value] of Object.entries(parameters)) {
-      let replacement: string;
 
-      if (value === null || value === undefined) {
-        replacement = '';
-      } else if (typeof value === 'object') {
-        try {
-          replacement = encodeURIComponent(JSON.stringify(value));
-        } catch {
-          replacement = '';
-        }
-      } else {
-        replacement = encodeURIComponent(String(value));
-      }
-      resultUrl = resultUrl.replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
+  if (parameters) {
+    for (const [param, value] of Object.entries<string>(parameters)) {
+      const replacement = encodeURIComponent(value);
+      resultUrl = (resultUrl as string).replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
     }
   }
 
   if (searchParameters) {
     const query = new URLSearchParams(getSearchParametersEntries(searchParameters)).toString();
-    return query ? resultUrl + '?' + query : resultUrl;
+    return `${resultUrl}${query ? `?${query}` : ''}`;
   }
   return resultUrl;
 };
