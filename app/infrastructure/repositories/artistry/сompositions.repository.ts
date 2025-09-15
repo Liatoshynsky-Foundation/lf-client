@@ -2,7 +2,7 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
-import { buildGenresCondition, buildSearchCondition, buildYearsCondition } from '~/lib/utils/buildFilters';
+import { genreHelper, searchHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
 import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
 import { genresArraySchema } from '~/validators/artistry/genre.schema';
 
@@ -46,29 +46,33 @@ export const compositionsRepository = {
 
     const conditions: any[] = [];
 
-    const searchCondition = buildSearchCondition(search);
-    if (searchCondition) conditions.push(searchCondition);
+    const searchCond = searchHelper(search);
+    if (searchCond) {
+      conditions.push({ $or: searchCond });
+    }
 
-    const genresCondition = await buildGenresCondition(filters?.genres, Genre);
-    if (genresCondition) conditions.push(genresCondition);
+    const genreKeys = genreHelper(filters?.genres);
+    if (genreKeys) {
+      const found = await Genre.find({ key: { $in: genreKeys } })
+        .select('_id')
+        .lean();
+      const ids = (found || []).map((g: any) => g._id).filter(Boolean);
+      if (ids.length > 0) conditions.push({ genres: { $in: ids } });
+    }
 
-    const yearsCondition = buildYearsCondition(filters);
-    if (yearsCondition) conditions.push(yearsCondition);
+    const yearsCond = yearHelper(filters?.years);
+    if (yearsCond) conditions.push(yearsCond);
 
     let query: any = {};
-    if (conditions.length === 1) {
-      query = conditions[0];
-    } else if (conditions.length > 1) {
-      query = { $and: conditions };
-    }
+    if (conditions.length === 1) query = conditions[0];
+    else if (conditions.length > 1) query = { $and: conditions };
 
     const compositions = await Compositions.find(query)
       .populate('genres')
       .populate({ path: 'opusId', model: Opus })
       .lean();
-    if (!compositions || compositions.length === 0) {
-      return [];
-    }
+
+    if (!compositions || compositions.length === 0) return [];
 
     return compositionsArraySchema.parse(compositions);
   }
