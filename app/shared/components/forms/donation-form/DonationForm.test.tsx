@@ -30,10 +30,11 @@ jest.mock('next-intl', () => ({
 describe('DonationForm', () => {
   beforeAll(() => {
     class ResizeObserver {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
+      observe = jest.fn();
+      unobserve = jest.fn();
+      disconnect = jest.fn();
     }
+
     Object.defineProperty(global, 'ResizeObserver', {
       writable: true,
       configurable: true,
