@@ -7,10 +7,9 @@ import ErrorComponent from '~/shared/components/error-component/Error';
 
 interface ErrorProps {
   error: Error & { digest?: string };
-  reset?: () => void;
 }
 
-export default function ErrorFallback({ error }: ErrorProps) {
+export default function ErrorFallback({ error }: Readonly<ErrorProps>) {
   useEffect(() => {
     console.error(error);
   }, [error]);

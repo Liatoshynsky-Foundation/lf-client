@@ -3,16 +3,28 @@ import { render, screen } from '@testing-library/react';
 import ErrorComponent from './Error';
 
 jest.mock('next/image', () => {
-  const MockImage = (props: any) => <img {...props} />;
+  const MockImage = (props: any) => <img alt="" {...props} />;
   MockImage.displayName = 'MockImage';
   return MockImage;
 });
+
 jest.mock('~/public/images/OoPs.svg', () => {
   const MockOopsIcon = (props: any) => <svg data-testid="oops-icon" {...props} />;
   MockOopsIcon.displayName = 'MockOopsIcon';
   return MockOopsIcon;
 });
+
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => jest.fn(() => ({ isMobile: false })));
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      title: 'ЩоСь піШлО нЕ ТаК',
+      subtitle: 'Спробуйте ще раз скористатися навігацією'
+    };
+    return translations[key];
+  }
+}));
 
 describe('ErrorComponent', () => {
   beforeEach(() => {

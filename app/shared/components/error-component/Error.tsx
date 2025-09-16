@@ -9,10 +9,10 @@ import OoPs from '~/public/images/OoPs.svg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export default function ErrorComponent() {
+  const t = useTranslations('error');
+
   const breakpoints = useBreakpoints();
   const catSize = styles.carSize(breakpoints);
-
-  const t = useTranslations('error');
 
   return (
     <Box sx={styles.container}>
