@@ -9,6 +9,8 @@ import { iconSizes, styles } from './WhatWeDo.styles';
 import { IWhatWeDo } from '~/types/page/about-us.types';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
+import { splitIntoColumns } from '~/lib/utils/splitIntoColumns';
+
 const getParagraph = (title: string) => {
   const Paragraph = (children: React.ReactNode) => (
     <TitleWithDescription variant="whatWeDo" title={title} description={children} />
@@ -18,7 +20,7 @@ const getParagraph = (title: string) => {
 
 const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
   const { title, items } = data;
-  const columns = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
+  const columns = splitIntoColumns(items, 3);
   const sizesAttribute = generateSizesAttribute(iconSizes);
 
   return (
