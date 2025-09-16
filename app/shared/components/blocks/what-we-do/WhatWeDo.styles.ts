@@ -30,21 +30,18 @@ export const styles = {
       xs: '48px',
       md: '56px'
     },
-    mt: { xs: '40px', md: '72px' }
+    mt: { xs: '40px', md: '72px' },
+    direction: 'ltr',
+    '@media (min-width: 1024px)': {
+      direction: 'rtl'
+    }
   },
 
   item: {
     display: 'flex',
     gap: { xs: '16px', md: '20px' },
-    alignItems: 'flex-start'
-  },
-  column: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: {
-      xs: '48px',
-      md: '56px'
-    }
+    alignItems: 'flex-start',
+    direction: 'ltr'
   },
 
   icon: {
