@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import { styles } from './Error.styles';
 
@@ -10,6 +11,8 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 export default function ErrorComponent() {
   const breakpoints = useBreakpoints();
   const catSize = styles.carSize(breakpoints);
+
+  const t = useTranslations('error');
 
   return (
     <Box sx={styles.container}>
@@ -24,10 +27,10 @@ export default function ErrorComponent() {
         />
       </Box>
       <Typography variant="h2" sx={styles.text}>
-        ЩоСь піШлО нЕ ТаК
+        {t('title')}
       </Typography>
       <Typography variant="customMedium16" sx={styles.subtext}>
-        Спробуйте ще раз скористатися навігацією
+        {t('subtitle')}
       </Typography>
     </Box>
   );
