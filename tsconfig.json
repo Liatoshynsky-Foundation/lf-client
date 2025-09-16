@@ -37,14 +37,6 @@
     "skipDefaultLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "jest.config.ts",
-    "next-env.d.ts",
-    "build/types/**/*.ts",
-    "app/[lang]/biography/error.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "jest.config.ts", "next-env.d.ts", "build/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
