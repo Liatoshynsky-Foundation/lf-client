@@ -3,11 +3,10 @@ export const styles = {
     position: 'relative'
   },
   eqButton: {
-    color: '#5F0E0F',
-    p: 1
+    color: '#5F0E0F'
   },
   icon: {
-    width: 3,
+    width: 2,
     borderRadius: 1,
     backgroundColor: '#5F0E0F'
   },

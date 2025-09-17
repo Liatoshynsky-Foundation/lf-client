@@ -1,3 +1,12 @@
+export const containerStyle = {
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  width: '100vw',
+  height: '100vh',
+  zIndex: -2
+};
+
 export const lineStyle = {
   position: 'absolute' as const,
   top: 0,
@@ -5,17 +14,15 @@ export const lineStyle = {
 };
 
 export const gridContainerStyle = (layout: number, gap: number, paddingX: number) => ({
-  position: 'absolute' as const,
-  top: 0,
-  bottom: 0,
-  left: paddingX,
-  right: paddingX,
+  width: '100vw',
+  maxWidth: '1728px',
+  mx: 'auto',
+  px: `${paddingX}px`,
   display: 'grid',
   gridTemplateColumns: `repeat(${layout}, 1fr)`,
   gap: `${gap}px`,
   pointerEvents: 'none' as const,
-  height: '100%',
-  zIndex: -2
+  height: '100%'
 });
 
 export const columnBoxStyle = {

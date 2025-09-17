@@ -78,10 +78,10 @@ export default async function Footer() {
         <Box sx={styles.copyrightWrapper}>
           <FooterCopyrights text={publicInfo.text} links={publicInfo.links} />
         </Box>
+      </Box>
 
-        <Box sx={styles.openTechWrapper}>
-          <OpenTechLogo label={t('opentechLabel')} />
-        </Box>
+      <Box sx={styles.openTechWrapper}>
+        <OpenTechLogo label={t('opentechLabel')} />
       </Box>
 
       <Box sx={styles.svgContainer}>

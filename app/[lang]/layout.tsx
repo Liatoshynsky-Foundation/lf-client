@@ -85,9 +85,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                       <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
                         {children}
                       </Box>
-                      <Box sx={{ gridColumn: '1 / -1' }}>
-                        <Footer />
-                      </Box>
+                      <Footer />
                     </Box>
                   </Box>
                   <CookieModalWrapper cookie_consent={cookieConsent} />

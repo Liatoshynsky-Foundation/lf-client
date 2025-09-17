@@ -2,7 +2,7 @@
 
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 
-import { getLineSideStyle, gridContainerStyle } from './ColumnGuides.style';
+import { containerStyle, getLineSideStyle, gridContainerStyle } from './ColumnGuides.style';
 
 interface ColumnGuidesProps {
   lineColor?: string;
@@ -70,16 +70,18 @@ export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGui
   });
 
   return (
-    <Box aria-hidden sx={gridContainerStyle(layout, gap, paddingX)}>
-      {Object.entries(grouped).map(([colStr, aligns]) => {
-        const col = Number(colStr);
-        return (
-          <Box key={`col-${col}`} sx={{ gridColumn: col, position: 'relative' }}>
-            {aligns.includes('start') && <Box sx={getLineSideStyle('left', lineColor)} />}
-            {aligns.includes('end') && <Box sx={getLineSideStyle('right', lineColor)} />}
-          </Box>
-        );
-      })}
+    <Box sx={containerStyle}>
+      <Box aria-hidden sx={gridContainerStyle(layout, gap, paddingX)}>
+        {Object.entries(grouped).map(([colStr, aligns]) => {
+          const col = Number(colStr);
+          return (
+            <Box key={`col-${col}`} sx={{ gridColumn: col, position: 'relative' }}>
+              {aligns.includes('start') && <Box sx={getLineSideStyle('left', lineColor)} />}
+              {aligns.includes('end') && <Box sx={getLineSideStyle('right', lineColor)} />}
+            </Box>
+          );
+        })}
+      </Box>
     </Box>
   );
 };
