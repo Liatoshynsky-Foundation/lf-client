@@ -86,14 +86,14 @@ function DonationForm() {
         {selected === 'subscription' && t('subscribeTitle')}
       </Typography>
       <ButtonGroup defaultActiveButton={0} buttons={Buttons} palette="tertiary" sx={style.btnGroup} />
-      <Box sx={{ ...style.sumInputs, ...(hasError ? style.errorBorder : {}) }}>
+      <Box sx={{ ...style.sumInputs, ...(hasError && style.errorBorder) }}>
         <Input
           disableUnderline
           type="number"
           inputProps={{ 'aria-invalid': hasError }}
           value={donationSum}
           onChange={handleInputChange}
-          sx={{ ...style.moneyInput, ...(hasError ? style.moneyInputError : {}) }}
+          sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
         />
         <FormControl variant="standard" sx={style.currencyInput}>
           <Select

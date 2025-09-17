@@ -1,4 +1,4 @@
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { mainHexPallete, rgbaTextFieldColors } from '../../design-system/all-components/theme/colors';
 import { mulish } from '../../design-system/all-components/theme/Theme';
 
 export const style = {
@@ -36,7 +36,7 @@ export const style = {
     transition: 'border-color 0.3s ease'
   },
   errorBorder: {
-    borderBottom: '1px dashed #E63C14'
+    borderBottom: `1px dashed ${rgbaTextFieldColors.errorBorderBottom}`
   },
   moneyInput: {
     verticalAlign: 'bottom',
@@ -59,7 +59,7 @@ export const style = {
     }
   },
   moneyInputError: {
-    color: '#E63C14'
+    color: rgbaTextFieldColors.errorBorderBottom
   },
   currencyInput: {
     minWidth: '90px',
