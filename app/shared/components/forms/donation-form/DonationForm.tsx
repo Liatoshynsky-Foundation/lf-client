@@ -1,13 +1,16 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import Button from '../../design-system/all-components/button/Button';
 import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
 import PaperComponent from '../../paper-component/PaperComponent';
 import { style } from './DonationForm.styles';
 import { Currency, DonateType } from '~/types/types/common.types';
+import { WayforPayInvoice } from '~/types/types/wayForPay';
+
+import TurnstileWidget from '~/[lang]/support-us/TurnstileWidget';
 
 const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP'];
 const proposedSum: Record<Currency, number[]> = {
@@ -26,6 +29,10 @@ function DonationForm() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [touched, setTouched] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showCaptcha, setShowCaptcha] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
 
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
@@ -42,6 +49,85 @@ function DonationForm() {
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.Wayforpay) {
+      const script = document.createElement('script');
+      script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  const handleDonate = async (amount: number) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/create-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount
+        })
+      });
+      const invoice = await res.json();
+
+      if (res.ok) {
+        new window.Wayforpay().run(invoice as WayforPayInvoice);
+      } else {
+        alert(invoice.error || 'Failed to create invoice.');
+      }
+    } catch (error) {
+      console.error('Error during donation process.', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDonateClick = (amount: number) => {
+    setSelectedAmount(amount);
+      setTouched(true);
+      setHasError(donationSum === 0 || donationSum === '');
+    if (!captchaToken) {
+      setShowCaptcha(true);
+    }
+  };
+
+  const handleCaptchaSuccess = (token: string) => {
+    setCaptchaToken(token);
+    setShowCaptcha(false);
+  };
+
+  useEffect(() => {
+    const donateIfReady = async () => {
+      if (!selectedAmount || !captchaToken) return;
+      setIsLoading(true);
+      try {
+        const response = await fetch('/api/verify', {
+          method: 'POST',
+          body: JSON.stringify({ token: captchaToken })
+        });
+        if (!response.ok) {
+          setShowCaptcha(true);
+          setCaptchaToken(null);
+          setIsLoading(false);
+          return;
+        }
+        const data = await response.json();
+        if (data.success) {
+          await handleDonate(selectedAmount);
+          setSelectedAmount(null);
+        } else {
+          setShowCaptcha(true);
+          setCaptchaToken(null);
+        }
+      } catch {
+        setShowCaptcha(true);
+        setCaptchaToken(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    donateIfReady();
+  }, [selectedAmount, captchaToken]);
 
   const suggestButtons = proposedSum[currency].map((item) => (
     <Button
@@ -65,11 +151,6 @@ function DonationForm() {
       <Typography variant="body1">{c.toUpperCase()}</Typography>
     </MenuItem>
   ));
-
-  const handleSubmit = () => {
-    setTouched(true);
-    setHasError(donationSum === 0 || donationSum === '');
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
@@ -109,7 +190,10 @@ function DonationForm() {
         </FormControl>
       </Box>
       <Box sx={style.addBtns}>{suggestButtons}</Box>
-      <Button color="primary" variant="contained" fullWidth onClick={handleSubmit}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {showCaptcha && <TurnstileWidget language="uk" onSuccess={handleCaptchaSuccess} />}
+        </Box>
+      <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
         <Typography variant="customSemiBold18">
           {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
         </Typography>

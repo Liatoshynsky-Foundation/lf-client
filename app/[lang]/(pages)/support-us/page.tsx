@@ -1,6 +1,5 @@
 import React from 'react';
 
-import DonateButtons from '~/[lang]/support-us/Donate';
 import ActionsHelp from '~/shared/components/blocks/actions-help/ActionsHelp';
 import { actionsHelpPageData } from '~/shared/components/blocks/actions-help/ActionsHelp.consts';
 import Faq from '~/shared/components/blocks/FAQ/FAQ';
@@ -15,7 +14,6 @@ export default function SupportUs() {
 
   return (
     <>
-      <DonateButtons />
       <SupportFoundation />
       <ActionsHelp data={actionsHelpPageData} />
       <Faq data={faqData} />
