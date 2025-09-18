@@ -31,10 +31,7 @@ export const styles = {
       md: '56px'
     },
     mt: { xs: '40px', md: '72px' },
-    direction: 'ltr',
-    '@media (min-width: 1024px)': {
-      direction: 'rtl'
-    }
+    direction: { xs: 'ltr', md: 'rtl' }
   },
 
   item: {
