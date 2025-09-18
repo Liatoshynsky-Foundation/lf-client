@@ -191,9 +191,12 @@ function DonationForm() {
         </FormControl>
       </Box>
       <Box sx={style.addBtns}>{suggestButtons}</Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            {showCaptcha && <TurnstileWidget language="uk" onSuccess={handleCaptchaSuccess} />}
-        </Box>
+
+        {showCaptcha && (
+            <Box sx={style.turnstileWidget}>
+                <TurnstileWidget language="uk" onSuccess={handleCaptchaSuccess} />
+            </Box>
+        )}
       <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
         <Typography variant="customSemiBold18">
           {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
