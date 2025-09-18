@@ -12,7 +12,21 @@ export const styles = {
     boxSizing: 'border-box'
   },
   imageContainer: {
-    position: 'relative'
+    position: 'relative',
+    '& svg': {
+      width: {
+        xs: '272px',
+        sm: '546px',
+        md: '713px',
+        lg: '821px'
+      },
+      height: {
+        xs: '132px',
+        sm: '264px',
+        md: '344px',
+        lg: '396px'
+      }
+    }
   },
   carStyles: {
     position: 'absolute',
@@ -21,29 +35,6 @@ export const styles = {
   },
   text: {
     pt: { xs: '40px', lg: '56px' }
-  },
-  subtext: {},
-  oops: (breakpoints: any) => {
-    if (breakpoints.isMobile) {
-      return {
-        width: '272px',
-        height: '132px'
-      };
-    } else if (breakpoints.isTablet) {
-      return {
-        width: '546px',
-        height: '264px'
-      };
-    } else if (breakpoints.isLaptop) {
-      return {
-        width: '713px',
-        height: '344px'
-      };
-    }
-    return {
-      width: '821px',
-      height: '396px'
-    };
   },
   carSize: (breakpoints: any) => {
     if (breakpoints.isMobile) {

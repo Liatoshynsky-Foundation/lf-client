@@ -3,13 +3,19 @@ import { render, screen } from '@testing-library/react';
 import ErrorComponent from './Error';
 
 jest.mock('next/image', () => {
-  const MockImage = (props: any) => <img alt="" {...props} />;
+  const MockImage = (props: {
+    alt: string;
+    src: string;
+    width: number;
+    height: number;
+    style: React.CSSProperties;
+  }) => <img {...props} />;
   MockImage.displayName = 'MockImage';
   return MockImage;
 });
 
 jest.mock('~/public/images/OoPs.svg', () => {
-  const MockOopsIcon = (props: any) => <svg data-testid="oops-icon" {...props} />;
+  const MockOopsIcon = () => <svg data-testid="oops-icon" />;
   MockOopsIcon.displayName = 'MockOopsIcon';
   return MockOopsIcon;
 });

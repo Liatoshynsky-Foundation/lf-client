@@ -17,7 +17,7 @@ export default function ErrorComponent() {
   return (
     <Box sx={styles.container}>
       <Box sx={styles.imageContainer}>
-        <OoPs style={styles.oops(breakpoints)} />
+        <OoPs />
         <Image
           alt="kotyk"
           src="/images/kotyk.png"
@@ -29,9 +29,7 @@ export default function ErrorComponent() {
       <Typography variant="h2" sx={styles.text}>
         {t('title')}
       </Typography>
-      <Typography variant="customMedium16" sx={styles.subtext}>
-        {t('subtitle')}
-      </Typography>
+      <Typography variant="customMedium16">{t('subtitle')}</Typography>
     </Box>
   );
 }
