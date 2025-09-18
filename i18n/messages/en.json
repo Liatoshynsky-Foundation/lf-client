@@ -60,8 +60,11 @@
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",
-    "pageNotFound": "404 Page not found",
-    "goHome": "return to home",
+    "pageNotFound": {
+      "errorTitle": "OoPs!",
+      "errorMessage": "The page you are looking for does not exist, search again on the main page"
+    },
+    "goHome": "Return to home",
     "viewMore": "View More"
   },
   "quote": {
