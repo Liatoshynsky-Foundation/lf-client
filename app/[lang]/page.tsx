@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { draftMode } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -25,16 +26,19 @@ export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = await createRequestContainer().resolve('pageService');
+  const { isEnabled } = await draftMode();
+  const container = createRequestContainer();
+
+  const selectedPagesService = isEnabled
+    ? container.resolve('draftPagesDataService')
+    : container.resolve('pagesDataService');
 
   const [page, t] = await Promise.all([
-    pageService.getPageData('about-us', lang),
+    selectedPagesService.getPageData('about-us', lang),
     getTranslations('home.liatoshynskyOffice')
   ]);
 
-  if (!page) {
-    return <Box />;
-  }
+  if (!page) return <Box />;
 
   return (
     <>

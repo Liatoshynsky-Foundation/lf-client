@@ -1,9 +1,9 @@
 import { asFunction } from 'awilix';
 
-import { createPagesDataService } from '~/services/composed/pages-data-service/pagesDataService';
 import { createCompositionService } from '~/services/core/compositionService';
 import { createFoundationInfoService } from '~/services/core/foundationInfoService';
 import { createNavigationService } from '~/services/core/navigationService';
+import { createDraftPagesService, createPagesService } from '~/services/core/pagesDataService';
 import { createScientificWorksService } from '~/services/core/scientificWorksService';
 
 export const registerCoreServices = () => ({
@@ -21,5 +21,7 @@ export const registerCoreServices = () => ({
     createScientificWorksService(scientificWorksRepository)
   ).scoped(),
 
-  pageService: asFunction(createPagesDataService).scoped()
+  pagesService: asFunction(({ pagesDataRepository }) => createPagesService(pagesDataRepository)).scoped(),
+
+  draftPagesService: asFunction(({ pagesDataRepository }) => createDraftPagesService(pagesDataRepository)).scoped()
 });
