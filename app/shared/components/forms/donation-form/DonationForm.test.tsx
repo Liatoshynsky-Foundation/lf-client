@@ -24,7 +24,8 @@ jest.mock('next-intl', () => ({
       subscribeButton: 'Підписатися'
     };
     return messages[key] || key;
-  }
+  },
+  useLocale: () => 'uk'
 }));
 
 describe('DonationForm', () => {
