@@ -1,6 +1,7 @@
+import debounce from 'lodash.debounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
@@ -38,33 +39,47 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     } else {
       newParams.delete('search');
     }
-    router.replace(`?${newParams.toString()}`, { scroll: false });
-    router.refresh();
-  }, [router, search, searchParams, setSearch]);
+    const newQuery = `?${newParams.toString()}`;
 
-  function setFilterParam(key: string, value: string | string[] | number | null) {
-    setExtraParams((prev) => {
-      const next = { ...prev };
-      if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-        delete next[key];
-      } else {
-        next[key] = value;
-      }
-      return next;
-    });
-
-    const newParams = new URLSearchParams(searchParams as any);
-    newParams.delete(key);
-
-    if (Array.isArray(value)) {
-      value.forEach((v) => newParams.append(key, String(v)));
-    } else {
-      newParams.set(key, String(value));
+    if (newQuery !== window.location.search) {
+      router.replace(newQuery, { scroll: false });
+      router.refresh();
     }
+  }, [router, search, searchParams]);
 
-    router.replace(`?${newParams.toString()}`, { scroll: false });
-    router.refresh();
-  }
+  const setFilterParam = useCallback(
+    (key: string, value: string | string[] | number | null) => {
+      setExtraParams((prev) => {
+        const next = { ...prev };
+        if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+          delete next[key];
+        } else {
+          next[key] = value;
+        }
+        return next;
+      });
+
+      const newParams = new URLSearchParams(searchParams as any);
+      newParams.delete(key);
+
+      if (Array.isArray(value)) {
+        value.forEach((v) => newParams.append(key, String(v)));
+      } else {
+        newParams.set(key, String(value));
+      }
+
+      const newQuery = `?${newParams.toString()}`;
+      if (newQuery !== window.location.search) {
+        router.replace(newQuery, { scroll: false });
+        router.refresh();
+      }
+    },
+    [router, searchParams]
+  );
+
+  const debouncedSetFilterParam = useMemo(() => {
+    return debounce((key: string, value: string | string[] | number | null) => setFilterParam(key, value), 750);
+  }, [setFilterParam]);
 
   const { data = [], isLoading: loadingData } = useQuery({
     queryKey: ['table-data', dataEndpoint, locale, search, JSON.stringify(extraParams)],
@@ -83,7 +98,7 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     setSearch,
     data,
     loadingData,
-    setFilterParam,
+    setFilterParam: debouncedSetFilterParam,
     extraParams
   };
 }
