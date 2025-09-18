@@ -1,6 +1,8 @@
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { PageStatus } from '~/types/enums/common.enums';
+
 import { translatedFieldSchema } from '~/validators/constants';
 import { createLocalizedQuoteSchema, QuoteSchema } from '~/validators/pagesSchemas/pages/_common.schema';
 
@@ -17,7 +19,7 @@ export const ResearchPageSchema = z.object({
   pageType: z.literal('Research'),
   slug: z.string(),
   title: translatedFieldSchema,
-  status: z.enum(['draft', 'published']),
+  status: z.nativeEnum(PageStatus),
   blocks: ResearchBlocksSchema,
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
