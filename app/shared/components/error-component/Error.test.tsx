@@ -3,13 +3,9 @@ import { render, screen } from '@testing-library/react';
 import ErrorComponent from './Error';
 
 jest.mock('next/image', () => {
-  const MockImage = (props: {
-    alt: string;
-    src: string;
-    width: number;
-    height: number;
-    style: React.CSSProperties;
-  }) => <img {...props} />;
+  const MockImage = (props: { src: string; width: number; height: number; style: React.CSSProperties }) => (
+    <img alt="" {...props} />
+  );
   MockImage.displayName = 'MockImage';
   return MockImage;
 });
