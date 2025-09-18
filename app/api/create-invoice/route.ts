@@ -14,9 +14,7 @@ const rateLimiter = new RateLimiterMemory({
   duration: 60
 });
 
-export async function POST(request: NextRequest, { params }: { params: { lang: string } }) {
-  const { lang } = await params;
-
+export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for') || '';
   try {
     await rateLimiter.consume(ip as string);
@@ -25,7 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: { lang: s
   }
 
   const body = await request.json();
-  const { amount } = body;
+  const { amount, lang, currency } = body;
 
   if (typeof amount !== 'number' || amount < 1 || amount > 1000) {
     return NextResponse.json({ error: 'Invalid donation amount' }, { status: 400 });
@@ -40,7 +38,7 @@ export async function POST(request: NextRequest, { params }: { params: { lang: s
     orderReference,
     orderDate,
     amount,
-    currency: 'UAH',
+    currency: currency ?? 'UAH',
     productName: ['Donation'],
     productCount: [1],
     productPrice: [amount],

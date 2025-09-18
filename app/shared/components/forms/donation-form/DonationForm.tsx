@@ -1,8 +1,7 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import { ChangeEvent, useEffect, useState } from 'react';
-
+import { useLocale, useTranslations } from 'next-intl';
 import Button from '../../design-system/all-components/button/Button';
 import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
 import PaperComponent from '../../paper-component/PaperComponent';
@@ -22,7 +21,7 @@ const proposedSum: Record<Currency, number[]> = {
 
 function DonationForm() {
   const t = useTranslations('donationForm');
-
+  const lang = useLocale();
   const [selected, setSelected] = useState<DonateType>('donation');
   const [donationSum, setDonationSum] = useState<number | ''>('');
   const [currency, setCurrency] = useState<Currency>('UAH');
@@ -65,7 +64,9 @@ function DonationForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount
+          amount,
+          lang,
+          currency
         })
       });
       const invoice = await res.json();
