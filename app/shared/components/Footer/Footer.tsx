@@ -26,6 +26,10 @@ export default async function Footer() {
     .resolve('footerService')
     .getFooterData(locale);
 
+  const contactUsLink = navigation?.[1]?.links?.find(
+    (link: { label: string; href: string }) => link.label === 'Contacts'
+  )?.href;
+
   return (
     <Box component="footer" sx={styles.footerContainer} id="footer">
       <Box sx={styles.backgroundBox} />
@@ -51,7 +55,10 @@ export default async function Footer() {
 
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport
-            contactLabel={t('contactUsButton')}
+            contact={{
+              text: t('contactUsButton'),
+              link: contactUsLink
+            }}
             donation={{
               text: t('donationButton'),
               shortText: t('donationButtonShort'),

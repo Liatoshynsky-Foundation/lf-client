@@ -7,14 +7,17 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 describe('FooterContactAndSupport', () => {
-  const contactLabel = 'Contact us';
+  const contact = {
+    text: 'Contact Us',
+    link: '/contact'
+  };
   const donation = {
     text: 'Donate',
     link: 'https://example.com/donate'
   };
 
   it('renders both buttons correctly', () => {
-    render(<FooterContactAndSupport contactLabel={contactLabel} donation={donation} />);
+    render(<FooterContactAndSupport contact={contact} donation={donation} />);
 
     expect(screen.getByRole('button', { name: /contact us/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /donate/i })).toHaveAttribute('href', donation.link);
