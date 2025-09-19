@@ -1,5 +1,5 @@
-import { mainHexPallete } from '../../../shared/components/design-system/all-components/theme/colors';
-import { Typography } from '../../../shared/components/title-with-description/TitleWithDescription.styles';
+import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import { Typography } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 export const styles = {
   mainContainer: {

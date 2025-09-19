@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
+import { PageNotFound } from './page-not-found/PageNotFound';
 
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
