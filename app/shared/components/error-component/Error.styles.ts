@@ -28,34 +28,24 @@ export const styles = {
       }
     }
   },
-  carStyles: {
+  carContainer: {
     position: 'absolute',
     bottom: 0,
-    left: '53%'
+    left: '53%',
+    width: {
+      xs: '90.04px',
+      sm: '164.87px',
+      md: '220.59px',
+      lg: '260.09px'
+    },
+    height: {
+      xs: '58.25px',
+      sm: '116.49px',
+      md: '151.79px',
+      lg: '174.73px'
+    }
   },
   text: {
     pt: { xs: '40px', lg: '56px' }
-  },
-  carSize: (breakpoints: any) => {
-    if (breakpoints.isMobile) {
-      return {
-        width: 90.04,
-        height: 58.25
-      };
-    } else if (breakpoints.isTablet) {
-      return {
-        width: 164.87,
-        height: 116.49
-      };
-    } else if (breakpoints.isLaptop) {
-      return {
-        width: 220.59,
-        height: 151.79
-      };
-    }
-    return {
-      width: 260.09,
-      height: 174.73
-    };
   }
 };
