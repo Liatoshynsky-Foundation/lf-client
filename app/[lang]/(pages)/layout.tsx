@@ -1,11 +1,15 @@
 import { Box } from '@mui/material';
+import { ReactNode } from 'react';
 
 import { layoutStyles } from '../layout.styles';
-import { LayoutProps } from '~/types/types/layout';
 
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
 import Footer from '~/shared/components/Footer/Footer';
 import Header from '~/shared/components/Header/Header';
+
+interface LayoutProps {
+  readonly children: ReactNode;
+}
 
 export default function PagesLayout({ children }: LayoutProps) {
   return (
