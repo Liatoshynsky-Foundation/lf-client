@@ -148,7 +148,6 @@ export default function MusicTableSection() {
     setFilterParam('yearFrom', null);
     setFilterParam('yearTo', null);
   }, [defaultMaxYear, defaultMinYear, setFilterParam]);
-
   useEffect(() => {
     if (staticFilters) {
       setGenresOptions(staticFilters.genres ?? []);
