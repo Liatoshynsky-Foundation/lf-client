@@ -65,7 +65,6 @@ export function MusicTableFilters({
     setHasGenreSelected(genreFilter.length > 0);
   }, [genreFilter]);
 
-  // build screenSize object for helper (keeps backward compat with optional flags)
   const screenSize = {
     isLess350,
     isLess420,

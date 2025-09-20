@@ -4,11 +4,11 @@ export const filterGridHelper = (
     isLess420: boolean;
     isLess500?: boolean;
     isGreater550?: boolean;
-    isGreater700?: boolean; // added
+    isGreater700?: boolean;
   },
   selected: { hasCategorySelected: boolean; hasGenreSelected: boolean }
 ) => {
-  const { isLess350, isLess420, isLess500, isGreater550, isGreater700 } = screenSize; // destructure added
+  const { isLess350, isLess420, isLess500, isGreater550, isGreater700 } = screenSize;
   const isExtraSmall = !!isLess350;
   const { hasCategorySelected, hasGenreSelected } = selected;
 
