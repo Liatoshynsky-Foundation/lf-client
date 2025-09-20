@@ -1,12 +1,16 @@
 'use client';
 
-import { Box } from '@mui/material';
-import React from 'react';
+import { Box, useMediaQuery } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
+import { IconButton } from '~/ds-components/icon-button/IconButton';
 import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
+
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
-import { FilterPanel } from '~/shared/components/filters/FilterPanel';
+import { filterGridHelper } from '~/lib/utils/filterGridHelper';
+import Delete from '~/public/icons/trash-2.svg';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 
 interface MusicTableFiltersProps {
@@ -44,9 +48,48 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
+  const [hasCategorySelected, setHasCategorySelected] = useState<boolean>(categoryFilter.length > 0);
+  const [hasGenreSelected, setHasGenreSelected] = useState<boolean>(genreFilter.length > 0);
+  const isLess350 = useMediaQuery('(max-width:350px)');
+  const isLess420 = useMediaQuery('(max-width:419px)');
+  const isBetween420And550 = useMediaQuery('(min-width:420px) and (max-width:549px)');
+  const isGreater550 = useMediaQuery('(min-width:550px)');
+  const isGreater700 = useMediaQuery('(min-width:701px)');
+  const isGreater500 = useMediaQuery('(min-width:501px)');
+
+  useEffect(() => {
+    setHasCategorySelected(categoryFilter.length > 0);
+  }, [categoryFilter]);
+
+  useEffect(() => {
+    setHasGenreSelected(genreFilter.length > 0);
+  }, [genreFilter]);
+
+  // build screenSize object for helper (keeps backward compat with optional flags)
+  const screenSize = {
+    isLess350,
+    isLess420,
+    isGreater500,
+    isGreater700,
+    isBetween420And550,
+    isGreater550
+  };
+
+  const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected });
+
   return (
-    <FilterPanel isAnyFilterActive={isAnyFilterActive} onClearAllFilters={onClearAllFilters}>
-      <Box sx={{ width: 'fit-content' }}>
+    <Box
+      sx={{
+        width: '100%',
+        display: 'grid',
+        gap: 2,
+        gridTemplateColumns: layout.gridTemplateColumns,
+        gridTemplateRows: layout.gridTemplateRows,
+        alignContent: 'start',
+        alignItems: 'start'
+      }}
+    >
+      <Box sx={layout.containers.category}>
         <FilterSelect
           label={labelCategory}
           options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -58,7 +101,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ width: 'fit-content' }}>
+      <Box sx={layout.containers.genre}>
         <FilterSelect
           label={labelGenre}
           options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
@@ -67,10 +110,11 @@ export function MusicTableFilters({
           maxSelections={10}
           onAdd={(val, lab, allSelected) => onGenresChange(allSelected)}
           onRemove={(val, lab, allSelected) => onGenresChange(allSelected)}
+          sx={{ width: layout.containers.genre.width ?? '100%' }}
         />
       </Box>
 
-      <Box sx={{ width: 'fit-content' }}>
+      <Box sx={layout.containers.year}>
         <YearNumericFilter
           label={yearLabel ?? 'Year'}
           value={yearFilter}
@@ -79,6 +123,19 @@ export function MusicTableFilters({
           maxYear={maxYear}
         />
       </Box>
-    </FilterPanel>
+
+      <Box sx={{ ...layout.containers.clear, display: 'flex', alignItems: 'center', justifyContent: 'center' }} ml={2}>
+        {onClearAllFilters && isAnyFilterActive && (
+          <IconButton
+            type={IconButtonVariant.outlined}
+            variant={IconButtonColorVariant.Secondary}
+            size="medium"
+            onClick={onClearAllFilters}
+          >
+            <Delete />
+          </IconButton>
+        )}
+      </Box>
+    </Box>
   );
 }
