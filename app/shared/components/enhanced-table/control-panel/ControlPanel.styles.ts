@@ -6,7 +6,8 @@ export const ControlPanelStyles = {
   root: (theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
-    gap: 8,
+    // numeric values are multiplied by theme.spacing; use explicit px or theme.spacing(1)
+    gap: '8px',
     pl: 3,
     [theme.breakpoints.up('sm')]: { pr: '30px' },
     [theme.breakpoints.up('md')]: { pr: '60px' }
@@ -16,7 +17,7 @@ export const ControlPanelStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    mb: 2
+    mb: '8px'
   },
   headerRight: {
     display: 'flex',
@@ -33,7 +34,7 @@ export const ControlPanelStyles = {
     gap: 2
   },
   filtersContainer: {
-    marginBottom: 2,
+    marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
     gap: 2
