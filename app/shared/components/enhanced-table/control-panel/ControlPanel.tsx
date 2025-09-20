@@ -27,7 +27,6 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
   const isLessThan405 = useMediaQuery('(max-width:405px)', { noSsr: true });
-
   const [searchActive, setSearchActive] = useState(false);
   const [filtersActive, setFiltersActive] = useState(false);
 
