@@ -5,7 +5,7 @@ import SocialMediaIcon from './social-media-icon/SocialMediaIcon';
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 import { sanitizeSocialMediaType } from '~/lib/utils/sanitizeSocialMediaType';
-type LinkIcon = {
+export type LinkIcon = {
   icon: string | SocialMediaTypes;
   link: string;
 };

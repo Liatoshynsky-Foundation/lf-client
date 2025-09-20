@@ -19,11 +19,13 @@ import Pagination from '~/ds-components/pagination/Pagination';
 import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { CollapsibleRow } from './collapsible-row/CollapsibleRow';
-import CompositionsControlPanel from './control-panel/ControlPanel';
+import ControlPanel from './control-panel/ControlPanel';
 import EnhancedTableHeader from './enhanced-table-header/EnhancedTableHeader';
 import EnhancedTableRow from './enhanced-table-row/EnhancedTableRow';
 import { enhancedTableStyles as styles } from './EnhancedTable.styles';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
+
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
 
@@ -35,29 +37,37 @@ interface EnhancedTableProps<T extends RowData> {
   itemsPerPage?: number;
   tableName: string;
   defaultSorting?: SortingState;
-  MusicSearch?: React.ReactNode;
+  Search?: React.ReactNode;
+  Filters?: React.ReactNode;
+  isFiltersActive?: boolean;
+  activeFiltersCount?: number;
+  onClearFilters?: () => void;
   columnFilters?: ColumnFiltersState;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
   loading?: boolean;
 }
 
-export default function EnhancedTable<T extends RowData>({
+export const EnhancedTable = <T extends RowData>({
   data,
   columns,
   columnWidths = {},
   groupByKey,
   itemsPerPage = 10,
   tableName,
-  MusicSearch,
+  Search,
+  Filters,
+  activeFiltersCount,
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
   loading = false
-}: Readonly<EnhancedTableProps<T>>) {
+}: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
+
+  const breakpoint = useBreakpoints();
 
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
@@ -90,12 +100,13 @@ export default function EnhancedTable<T extends RowData>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange,
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    manualFiltering: true
   });
 
   const filteredAndSortedRows = useMemo(() => {
     return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [headerTable, data, sorting]);
+  }, [data, sorting]);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -144,8 +155,12 @@ export default function EnhancedTable<T extends RowData>({
 
   return (
     <Box sx={styles.root}>
-      <CompositionsControlPanel MusicSearch={MusicSearch} tableName={tableName} />
-
+      <ControlPanel
+        Search={Search}
+        tableName={tableName}
+        Filters={Filters}
+        activeFiltersCount={activeFiltersCount ?? 0}
+      />
       {loading ? (
         <Box sx={styles.loaderBox}>
           <CircularProgress />
@@ -153,7 +168,7 @@ export default function EnhancedTable<T extends RowData>({
       ) : (
         <>
           <TableContainer component={Paper} sx={styles.container}>
-            <Table>
+            <Table sx={{ tableLayout: 'fixed' }}>
               <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
               <TableBody>
                 {rowsToRender.map((entry) =>
@@ -182,6 +197,7 @@ export default function EnhancedTable<T extends RowData>({
             {totalPages > 1 && (
               <Pagination
                 count={totalPages}
+                siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
                 visiblePages={visiblePages}
                 onChange={(_, page) => handlePageChange(page)}
@@ -192,4 +208,4 @@ export default function EnhancedTable<T extends RowData>({
       )}
     </Box>
   );
-}
+};

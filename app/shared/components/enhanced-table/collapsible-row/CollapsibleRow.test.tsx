@@ -1,76 +1,65 @@
-import { TableCell } from '@mui/material';
 import { ColumnDef } from '@tanstack/react-table';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 
 import { CollapsibleRow } from './CollapsibleRow';
 
-type MockRow = {
-  id: string;
-  name: string;
-  group: string;
-};
-
 jest.mock('~/public/icons/chevron-down.svg', () => ({
   __esModule: true,
   default: () => <svg data-testid="svg-image" />
 }));
-
 jest.mock('~/public/icons/chevron-right.svg', () => ({
   __esModule: true,
   default: () => <svg data-testid="svg-image" />
 }));
 
+jest.mock('~/ds-components/icon-button/IconButton', () => ({
+  IconButton: ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
+    <button data-testid="icon-button" onClick={onClick}>
+      {children}
+    </button>
+  )
+}));
+
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: ({ children }: { children?: React.ReactNode }) => <svg data-testid="svg-image">{children}</svg>
+}));
+
 jest.mock('./CollapsibleDataRow', () => ({
-  CollapsibleDataRow: ({ row }: { row: { original: MockRow } }) => (
+  CollapsibleDataRow: ({ row }: { row: { original: { name: string } } }) => (
     <tr data-testid="collapsible-data-row">
       <td>{row.original.name}</td>
     </tr>
   )
 }));
 
-jest.mock('../../design-system/all-components/icon-button/IconButton', () => ({
-  IconButton: ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
-    <button onClick={onClick} data-testid="icon-button">
-      {children}
-    </button>
-  )
-}));
-
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: ({ alt }: { alt: string }) => <span data-testid="svg-image" aria-label={alt} />
-}));
-
-const mockData: MockRow[] = [
+const mockData: { id: string; name: string; group: string }[] = [
   { id: '1', name: 'Test 1', group: 'A' },
   { id: '2', name: 'Test 2', group: 'A' }
 ];
 
-const columns: ColumnDef<MockRow>[] = [
-  {
-    id: 'expander',
-    header: '',
-    cell: () => null
-  },
+const columns: ColumnDef<(typeof mockData)[number], unknown>[] = [
+  { id: 'expander', header: '', cell: () => null },
   {
     id: 'name',
     accessorKey: 'name',
     header: 'Name',
     cell: (info) => info.getValue(),
     meta: {
-      groupLabelContent: (
-        <TableCell colSpan={2} data-testid="group-label-cell">
-          <span data-testid="group-label">Group Label</span>
-        </TableCell>
-      ),
-      groupCellRenderer: () => <span data-testid="group-renderer">Extra</span>
+      groupLabelContentFactory: () => [
+        <span key="label" data-testid="group-label">
+          Group Label
+        </span>,
+        <span key="extra" data-testid="group-extra">
+          Extra
+        </span>
+      ]
     }
   }
 ];
 
 describe('CollapsibleRow', () => {
-  it('should render group row with custom TableCell label and icon', () => {
+  it('should render group header content and icon', () => {
     render(
       <table>
         <tbody>
@@ -80,11 +69,11 @@ describe('CollapsibleRow', () => {
     );
 
     expect(screen.getByTestId('group-label')).toBeInTheDocument();
-    expect(screen.getByTestId('group-label-cell')).toBeInTheDocument();
+    expect(screen.getByTestId('group-extra')).toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toBeInTheDocument();
   });
 
-  it('should call onToggle when icon button is clicked', () => {
+  it('should call action on expander click', () => {
     const onToggle = jest.fn();
 
     render(
@@ -96,14 +85,14 @@ describe('CollapsibleRow', () => {
     );
 
     fireEvent.click(screen.getByTestId('icon-button'));
-    expect(onToggle).toHaveBeenCalled();
+    expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
-  it('should render all internal rows through CollapsibleDataRow', () => {
+  it('should render internal rows via CollapsibleDataRow when collapsed=true', () => {
     render(
       <table>
         <tbody>
-          <CollapsibleRow data={mockData} collapsed={true} action={jest.fn()} columns={columns} />
+          <CollapsibleRow data={mockData} collapsed action={jest.fn()} columns={columns} />
         </tbody>
       </table>
     );

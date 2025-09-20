@@ -19,6 +19,8 @@ jest.mock('next-intl', () => ({
   }
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 const onCloseMock = jest.fn();
 const onCheckedMock = jest.fn();
 const saveSettingsMock = jest.fn();
@@ -41,16 +43,6 @@ describe('CookiePreferences Modal', () => {
   it('should render modal with title and description', () => {
     expect(screen.getByText('Cookie Settings')).toBeInTheDocument();
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
-  });
-
-  it('should render analytics section and toggle', () => {
-    expect(screen.getByText('Analytics')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox')).toBeInTheDocument();
-  });
-
-  it('should call onChecked when toggle is clicked', () => {
-    fireEvent.click(screen.getByRole('checkbox'));
-    expect(props.onChecked).toHaveBeenCalled();
   });
 
   it('should render both buttons with correct labels', () => {

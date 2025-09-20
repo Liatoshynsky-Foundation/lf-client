@@ -1,95 +1,134 @@
-import dbConnect from '~/infrastructure/db/connect';
-import PagesData from '~/infrastructure/models/pages-data/pagesData';
+import { PageStatus } from '~/types/enums/common.enums';
+
+import DraftPageModel from '~/infrastructure/models/pages/draftPages.model';
+import PageModel from '~/infrastructure/models/pages/pages';
 import { pagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repository';
-import { PopulatedPage, populatedPageSchema } from '~/validators/page/page.schema';
+import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
   default: jest.fn()
 }));
 
-jest.mock('~/infrastructure/models/pages-data/pagesData', () => ({
+jest.mock('~/infrastructure/models/pages/pages', () => ({
   __esModule: true,
-  default: {
-    findOne: jest.fn()
-  }
+  default: { findOne: jest.fn() }
 }));
 
-jest.mock('~/infrastructure/models/pages-data/block/blockBase', () => ({}));
-
-jest.mock('~/validators/page/page.schema', () => ({
-  ...jest.requireActual('~/validators/page/page.schema'),
-  populatedPageSchema: {
-    parse: jest.fn()
-  }
+jest.mock('~/infrastructure/models/pages/draftPages.model', () => ({
+  __esModule: true,
+  default: { findOne: jest.fn() }
 }));
 
-const mockedDbConnect = dbConnect as jest.Mock;
-const mockedParse = populatedPageSchema.parse as jest.Mock;
-const mockedFindOne = PagesData.findOne as jest.Mock;
+jest.mock('~/validators/pagesSchemas/pages', () => ({
+  ...jest.requireActual('~/validators/pagesSchemas/pages'),
+  PageSchema: { parse: jest.fn() }
+}));
+
+const mockedParse = PageZodSchema.parse as jest.Mock;
+const mockedFindOnePublished = (PageModel as unknown as { findOne: jest.Mock }).findOne;
+const mockedFindOneDraft = (DraftPageModel as unknown as { findOne: jest.Mock }).findOne;
 
 describe('pagesDataRepository', () => {
+  const slug = 'about-us';
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  const slug = 'test-home-page';
-
-  it('should return parsed page data when found and valid', async () => {
-    const mockDbData = { _id: 'db_id', slug, title: { uk: 'Тест' }, blocks: [] };
-    const mockParsedData: PopulatedPage = {
-      _id: 'parsed_id',
-      slug,
-      title: { uk: 'Тест', en: 'Test' },
-      blocks: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+  it('should return parsed published page when found and valid', async () => {
+    const mockDbData = { _id: 'db_id', slug, pageType: 'AboutUsPage', status: PageStatus.Published, blocks: {} };
+    const mockParsed = { ...mockDbData };
 
     const execMock = jest.fn().mockResolvedValue(mockDbData);
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
-    const populateMock = jest.fn().mockReturnValue({ lean: leanMock });
-    mockedFindOne.mockReturnValue({ populate: populateMock });
+    mockedFindOnePublished.mockReturnValue({ lean: leanMock });
 
-    mockedParse.mockReturnValue(mockParsedData);
+    mockedParse.mockReturnValue(mockParsed);
 
-    const result = await pagesDataRepository.getPageData(slug);
+    const result = await pagesDataRepository.getBySlug(slug);
 
-    expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
-    expect(populateMock).toHaveBeenCalledWith('blocks');
-    expect(result).toEqual(mockParsedData);
+    expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
+    expect(leanMock).toHaveBeenCalled();
+    expect(mockedParse).toHaveBeenCalledWith(mockDbData);
+    expect(result).toEqual(mockParsed);
   });
 
-  it('should return null if page is not found in the database', async () => {
+  it('should return null when published page is not found', async () => {
     const execMock = jest.fn().mockResolvedValue(null);
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
-    const populateMock = jest.fn().mockReturnValue({ lean: leanMock });
-    mockedFindOne.mockReturnValue({ populate: populateMock });
+    mockedFindOnePublished.mockReturnValue({ lean: leanMock });
 
-    const result = await pagesDataRepository.getPageData(slug);
+    const result = await pagesDataRepository.getBySlug(slug);
 
     expect(result).toBeNull();
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
+    expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
+    expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
   });
 
-  it('should throw an error if page data is invalid', async () => {
-    const invalidDbData = { _id: 'some_id' };
-    const validationError = new Error('Zod validation failed');
-
-    const execMock = jest.fn().mockResolvedValue(invalidDbData);
+  it('should throw when published page fails validation', async () => {
+    const invalidDb = { _id: 'x', slug, pageType: 'AboutUsPage' };
+    const execMock = jest.fn().mockResolvedValue(invalidDb);
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
-    const populateMock = jest.fn().mockReturnValue({ lean: leanMock });
-    mockedFindOne.mockReturnValue({ populate: populateMock });
+    mockedFindOnePublished.mockReturnValue({ lean: leanMock });
 
+    const err = new Error('Zod validation failed');
     mockedParse.mockImplementation(() => {
-      throw validationError;
+      throw err;
     });
 
-    await expect(pagesDataRepository.getPageData(slug)).rejects.toThrow(validationError);
+    await expect(pagesDataRepository.getBySlug(slug)).rejects.toThrow(err);
+    expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
+    expect(leanMock).toHaveBeenCalled();
+    expect(mockedParse).toHaveBeenCalledWith(invalidDb);
+  });
 
-    expect(mockedFindOne).toHaveBeenCalledWith({ slug });
-    expect(mockedParse).toHaveBeenCalledWith(invalidDbData);
+  it('should return parsed draft page when found and valid', async () => {
+    const mockDbData = { _id: 'db_id', slug, pageType: 'AboutUsPage', status: PageStatus.Draft, blocks: {} };
+    const mockParsed = { ...mockDbData };
+
+    const execMock = jest.fn().mockResolvedValue(mockDbData);
+    const leanMock = jest.fn().mockReturnValue({ exec: execMock });
+    mockedFindOneDraft.mockReturnValue({ lean: leanMock });
+
+    mockedParse.mockReturnValue(mockParsed);
+
+    const result = await pagesDataRepository.getDraftBySlug(slug);
+
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    expect(leanMock).toHaveBeenCalled();
+    expect(mockedParse).toHaveBeenCalledWith(mockDbData);
+    expect(result).toEqual(mockParsed);
+  });
+
+  it('should return null when draft page is not found', async () => {
+    const execMock = jest.fn().mockResolvedValue(null);
+    const leanMock = jest.fn().mockReturnValue({ exec: execMock });
+    mockedFindOneDraft.mockReturnValue({ lean: leanMock });
+
+    const result = await pagesDataRepository.getDraftBySlug(slug);
+
+    expect(result).toBeNull();
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    expect(leanMock).toHaveBeenCalled();
+    expect(mockedParse).not.toHaveBeenCalled();
+  });
+
+  it('should throw when draft page fails validation', async () => {
+    const invalidDb = { _id: 'x', slug, pageType: 'AboutUsPage' };
+    const execMock = jest.fn().mockResolvedValue(invalidDb);
+    const leanMock = jest.fn().mockReturnValue({ exec: execMock });
+    mockedFindOneDraft.mockReturnValue({ lean: leanMock });
+
+    const err = new Error('Zod validation failed');
+    mockedParse.mockImplementation(() => {
+      throw err;
+    });
+
+    await expect(pagesDataRepository.getDraftBySlug(slug)).rejects.toThrow(err);
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    expect(leanMock).toHaveBeenCalled();
+    expect(mockedParse).toHaveBeenCalledWith(invalidDb);
   });
 });

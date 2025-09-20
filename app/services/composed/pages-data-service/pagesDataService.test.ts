@@ -1,82 +1,85 @@
 import { Locale } from 'next-intl';
+import { z } from 'zod';
 
 import { createPagesDataService } from './pagesDataService';
+import { selectSchema } from './selectSchema';
+import type { PageData } from '~/types/page/pagesBase.type';
 
-import { PageServiceDeps } from '~/domain/services/pagesService.type';
-import { blockTransformers } from '~/services/strategy/blockStrategy/blockTransformStrategy';
-import { AnyBlock } from '~/validators/page/blocks/anyBlock.schema';
+import type { PagesService } from '~/services/core/pagesDataService';
 
-jest.mock('~/services/strategy/blockStrategy/blockTransformStrategy', () => ({
-  blockTransformers: {
-    IntroSection: jest.fn(),
-    FoundationInfo: jest.fn(),
-    OurMission: jest.fn(),
-    OurGoals: jest.fn(),
-    LiatoshynskyOffice: jest.fn(),
-    WhatWeDo: jest.fn(),
-    FoundationFounders: jest.fn()
-  }
-}));
+jest.mock('./selectSchema', () => ({ selectSchema: jest.fn() }));
 
-const mockPagesDataRepository = {
-  getPageData: jest.fn()
-};
-
-const mockedBlockTransformers = blockTransformers as jest.Mocked<typeof blockTransformers>;
-const testMockBlock: AnyBlock = {
-  _id: 'test-block-id',
-  componentName: 'FoundationInfo',
-  blockType: 'ContentConstructorBlock',
-  content: {
-    elements: []
-  }
-};
 describe('createPagesDataService', () => {
+  const get: jest.MockedFunction<PagesService['getPageData']> = jest.fn();
+  const pagesService: PagesService = { getPageData: get };
+
+  const slug = 'about-us';
+  const locale: Locale = 'uk';
+
+  type RepoReturn = Awaited<ReturnType<PagesService['getPageData']>>;
+  const repoPage = { slug } as unknown as NonNullable<RepoReturn>;
+
   let service: ReturnType<typeof createPagesDataService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = createPagesDataService({
-      pagesDataRepository: mockPagesDataRepository
-    } as PageServiceDeps);
+    service = createPagesDataService(pagesService);
   });
 
-  const slug = 'test';
-  const locale: Locale = 'uk';
+  it('should return null when page is not found', async () => {
+    get.mockResolvedValue(null);
 
-  test('should return null if page data is not found', async () => {
-    mockPagesDataRepository.getPageData.mockResolvedValue(null);
+    const res = await service.getPageData(slug, locale);
 
-    const result = await service.getPageData(slug, locale);
-
-    expect(result).toBeNull();
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    expect(res).toBeNull();
+    expect(get).toHaveBeenCalledWith(slug);
+    expect(selectSchema).not.toHaveBeenCalled();
   });
 
-  test('should return an empty object if page has no blocks', async () => {
-    mockPagesDataRepository.getPageData.mockResolvedValue({ blocks: [] });
+  it('should return localized data when schema parses successfully', async () => {
+    const localized = { slug } as unknown as PageData;
+    const schema: z.ZodTypeAny = z.any();
+    const parseSpy = jest.spyOn(schema, 'parse').mockReturnValue(localized);
 
-    const result = await service.getPageData(slug, locale);
+    (selectSchema as jest.MockedFunction<typeof selectSchema>).mockReturnValue(schema);
+    get.mockResolvedValue(repoPage);
 
-    expect(result).toEqual({});
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
+    const res = await service.getPageData(slug, locale);
+
+    expect(get).toHaveBeenCalledWith(slug);
+    expect(selectSchema).toHaveBeenCalledWith(slug, locale);
+    expect(parseSpy).toHaveBeenCalledWith(repoPage);
+    expect(res).toEqual(localized);
   });
 
-  test('should transform block and return transformed result', async () => {
-    const pageDataFromRepo = {
-      blocks: [testMockBlock]
-    };
+  it('should propagate parsing error', async () => {
+    const err = new Error('Zod validation failed');
+    const schema: z.ZodTypeAny = z.any();
+    jest.spyOn(schema, 'parse').mockImplementation(() => {
+      throw err;
+    });
 
-    const transformedIntro = { componentName: 'FoundationInfo', transformedTitle: 'Трансформований Вступ' };
+    (selectSchema as jest.MockedFunction<typeof selectSchema>).mockReturnValue(schema);
+    get.mockResolvedValue(repoPage);
 
-    mockPagesDataRepository.getPageData.mockResolvedValue(pageDataFromRepo);
-    mockedBlockTransformers.FoundationInfo.mockReturnValue(transformedIntro);
+    await expect(service.getPageData(slug, locale)).rejects.toThrow(err);
+    expect(selectSchema).toHaveBeenCalledWith(slug, locale);
+  });
 
-    const result = await service.getPageData(slug, locale);
+  it('should return null if schema is undefined', async () => {
+    (selectSchema as jest.MockedFunction<typeof selectSchema>).mockReturnValue(undefined as unknown as z.ZodTypeAny);
+    get.mockResolvedValue(repoPage);
 
-    expect(mockPagesDataRepository.getPageData).toHaveBeenCalledWith(slug);
-    expect(mockedBlockTransformers.FoundationInfo).toHaveBeenCalledWith(testMockBlock, locale);
+    const res = await service.getPageData('unknown-slug', locale);
 
-    expect(result).toEqual({ FoundationInfo: transformedIntro });
+    expect(res).toBeNull();
+  });
+
+  it('should propagate service errors', async () => {
+    const err = new Error('DB down');
+    get.mockRejectedValue(err);
+
+    await expect(service.getPageData(slug, locale)).rejects.toThrow(err);
+    expect(get).toHaveBeenCalledWith(slug);
   });
 });

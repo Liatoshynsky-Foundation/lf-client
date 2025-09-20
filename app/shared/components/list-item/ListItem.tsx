@@ -4,7 +4,7 @@ import { SvgImage } from '../svg-image/SvgImage';
 import { styles } from './ListItem.styles';
 
 interface ListItemProps {
-  text: string;
+  text: string | React.ReactNode;
   sx?: object;
 }
 

@@ -8,17 +8,20 @@ export enum PositionEnum {
   Vertical = 'vertical',
   Center = 'center'
 }
+
 export enum IconButtonColorVariant {
   Primary = 'primary',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
   Error = 'error'
 }
+
 export enum IconButtonVariant {
   filled = 'filled',
   outlined = 'outlined',
   icon = 'icon'
 }
+
 export enum SocialMediaTypes {
   Instagram = 'instagram',
   Facebook = 'facebook',
@@ -30,4 +33,23 @@ export enum SocialMediaTypes {
   Twitter = 'twitter',
   Whatsapp = 'whatsapp',
   AnotherMedia = 'anotherMedia'
+}
+
+export enum TipTapNodeTypes {
+  doc = 'doc',
+  heading = 'heading',
+  paragraph = 'paragraph',
+  text = 'text'
+}
+
+export enum TipTapMarkType {
+  bold = 'bold',
+  italic = 'italic',
+  underline = 'underline',
+  link = 'link'
+}
+
+export enum PageStatus {
+  Draft = 'draft',
+  Published = 'published'
 }

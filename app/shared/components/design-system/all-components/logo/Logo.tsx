@@ -8,7 +8,7 @@ type LogoVariant = keyof typeof logoSizes;
 
 interface LogoProps extends BoxProps {
   variant?: LogoVariant;
-  color?: 'black' | 'white';
+  color?: string;
 }
 
 const Logo: React.FC<LogoProps> = ({ color = 'black', variant = 'header', sx, ...props }) => {

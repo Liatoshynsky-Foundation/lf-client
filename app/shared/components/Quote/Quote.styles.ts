@@ -1,7 +1,7 @@
 import type { Align } from '~/types/types/quoteComponent';
 
 export const quoteSizes = {
-  height: { xs: '279px', sm: '293px', md: '315px', lg: '266px', xl: '266px' },
+  height: 'fit-content',
   width: { xs: '240px', sm: '320px', md: '370px', lg: '430px', xl: '456px' },
   icon: { xs: '33px', sm: '48px', md: '60px' },
   textGap: { xs: '16px', md: '24px' }
@@ -48,7 +48,6 @@ export const styles = {
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
     width: quoteSizes.width,
-    height: quoteSizes.height,
     gap: { xs: '32px', md: '40px' }
   }),
   image: (color: keyof typeof quoteColors, align: Align) => ({
@@ -61,8 +60,7 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
-    gap: quoteSizes.textGap,
-    width: quoteSizes.width
+    gap: quoteSizes.textGap
   }),
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,

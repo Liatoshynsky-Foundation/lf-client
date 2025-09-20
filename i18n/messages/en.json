@@ -5,6 +5,7 @@
   },
   "footer": {
     "donationButton": "Support the Foundation",
+    "donationButtonShort": "Support",
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "phoneLabel": "Phone",
@@ -24,6 +25,31 @@
       "archive": "Cabinet-Archive",
       "collaboration": "Cooperation"
     }
+  },
+  "contactForm": {
+    "requiredFields": "* – required fields",
+    "name": "Name *",
+    "email": "Email address *",
+    "phoneNumber": "Phone number",
+    "message": "Your message *",
+    "policyText": "I agree about the processing of my personal data and agree to the",
+    "policyLink": "Privacy Policy",
+    "buttonText": "Send request",
+    "errors": {
+      "nameMinLength": "The name must contain at least 2 characters",
+      "emailRequired": "Please enter your email address",
+      "emailInvalid": "Please enter a valid email address",
+      "messageMinLength": "Please write a few words in the message",
+      "policyRequired": "You must agree to continue"
+    }
+  },
+  "donationForm": {
+    "donationTitle": "QUICK DONATION:",
+    "subscribeTitle": "SUBSCRIBE:",
+    "donationSwitch": "Donation",
+    "subscribeSwitch": "Subscription",
+    "donationButton": "Make a donation",
+    "subscribeButton": "Subscribe"
   },
   "home": {
     "liatoshynskyOffice": {
@@ -57,9 +83,52 @@
     }
   },
   "termsOfUse": {
-    "general-provisions": {
-      "title": "General Provisions:",
-      "mainText": "By using this website, you agree to the rules outlined below. They are intended to make the use of the site convenient, safe, and transparent for everyone. We may update these rules from time to time, so we recommend revisiting this section, especially if you plan to use archived materials."
+    "title": "TeRms oF uSe OF ThE sItE",
+    "quote": "You can play the keys however you want. But you want something good to come out of it, right? So here are a few rules. Read them before you start improvising.",
+    "archiveUsage": "When using archival materials in scientific, public or media projects, a reference to the source with an active hyperlink to the Foundation's website is mandatory.",
+    "paidNotes": "Some of the sheet music may be paid for. In such cases, there will be a button on the page of the relevant work to request access.",
+    "copyrightRespect": "We urge you to be careful about copyright. If you use materials from this site in publications or other projects, please indicate the source with a hyperlink to the Foundation's website.",
+    "behaviorIntro": "Our site does not allow for user comments or content posting. However, we ask that you:",
+    "respectAuthorsIntro": "We sincerely thank you for your interest in Ukrainian music and the figure of Borys Lyatoshynsky. Please be careful with the works you use. Respect for copyright is not only a legal issue, but also an ethical norm.",
+    "respectAuthorsOutro": "By preserving and distributing them responsibly, we, together with you, support the culture of memory and the modern sound of Ukrainian classics.",
+    "libraryAccessTitle": "Access to the music library and archive:",
+    "generalProvisionsTitle": "General provisions:",
+    "copyrightTitle": "Copyright and the role of the UAASP:",
+    "registerTitle": "Registration and personal account:",
+    "behaviorTitle": "Behavior on the site:",
+    "supportTitle": "Technical questions and support:",
+    "respectAuthorsTitle": "Respect to the authors:",
+    "concertLicense": "If you are the organizer of a concert or are planning to broadcast Lyatoshynsky's works, contact the UAASP to obtain the appropriate license by email.",
+    "downloadNotes": "download available sheet music;",
+    "saveNotes": "save selected works",
+    "subscribeNews": "subscribe to the Foundation's newsletter (concerts, updates, events, etc.).",
+    "useResponsibly": "use the site materials responsibly;",
+    "noSharing": "not to transfer access to downloaded materials to third parties;",
+    "noPublicPosting": "not to make the received notes and/or archival documents publicly available on other resources without the consent of the Foundation.",
+    "buttons": {
+      "library": {
+        "short": "View the library",
+        "full": "View the sheet music library"
+      },
+      "archive": {
+        "short": "View the archive",
+        "full": "View the Archive Cabinet"
+      }
+    },
+    "seeMore": "See more"
+  },
+  "supportUs": {
+    "donation": {
+      "title": "SupPorT FoUndaTioN",
+      "subTitle": "All contributions go <b>directly</b> to the Liatoshynsky Foundation account and are used to support its mission. Choose a currency convenient for you - <b>the transfer details are below</b>:"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions:",
+      "subtitle": {
+        "question": "Didn't find the answer you were looking for?",
+        "answer": "Contact us in a way convenient for you:"
+      },
+      "phoneCopiedAlert": "Phone number copied to clipboard"
     }
   },
   "table": {
@@ -69,8 +138,15 @@
       "year": "Year",
       "genre": "Genre"
     },
-    "name": {
-      "composition": "All compositions"
+    "composition": {
+      "filters": {
+        "category": "Category",
+        "genre": "Genre",
+        "year": "Year"
+      },
+      "name": {
+        "composition": "All compositions"
+      }
     },
     "buttons": {
       "viewSheetMusic": "View sheet music",
@@ -78,6 +154,10 @@
     },
     "work": {
       "name": "All works",
+      "filters": {
+        "author": "Author",
+        "yearLabel": "Year written"
+      },
       "columns": {
         "name": "Title",
         "author": "Author",
@@ -87,6 +167,9 @@
         "view": "Preview",
         "goto": "Visit"
       }
+    },
+    "controls": {
+      "filters": "Filters"
     }
   },
   "cookie": {
@@ -122,15 +205,33 @@
     "notFound": "Not found",
     "loading": "Loading..."
   },
-
-  "contactForm": {
-    "requiredFields": "* – required fields",
-    "name": "Name *",
-    "email": "Email address *",
+  "contactsInfoPage": {
+    "contacts": "Contacts",
     "phoneNumber": "Phone number",
-    "message": "Your message *",
-    "policyText": "I agree about the processing of my personal data and agree to the",
-    "policyLink": "Privacy Policy",
-    "buttonText": "Send request"
+    "email": "Email",
+    "socialMedia": "We are on social media",
+    "formTitle": "Contact form",
+    "formSubtitle": "Send a request and we will contact you within a few business days"
+  },
+  "getNotes": {
+    "notesList": {
+      "title": "Notes:",
+      "subtitle": "All notes",
+      "freeNotesButton": "View",
+      "paidNotesButton": "Contact us"
+    },
+    "form": {
+      "title": "Form",
+      "subtitle": "List of all notes"
+    },
+    "confirmation": {
+      "title": "Confirmation",
+      "subtitle": "Thank you for your request for sheet music materials",
+      "btnText": "Закрити"
+    }
+  },
+  "error": {
+    "title": "SoRrY, sOmEtHinG wEnT wRoNg...",
+    "subtitle": "Try to use navigation one more time"
   }
 }

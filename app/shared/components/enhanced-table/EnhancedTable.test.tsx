@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { fireEvent, render, screen, within } from '@testing-library/react';
+import React from 'react';
 
-import EnhancedTable from '~/components/enhanced-table/EnhancedTable';
+import { FilterPanel } from '../filters/FilterPanel';
+import { Search } from '../search/Search';
+
+import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -12,6 +16,21 @@ jest.mock('next-intl', () => ({
     return translations[key] || key;
   }
 }));
+
+jest.mock('~/ds-components/button/Button');
+
+jest.mock('./control-panel/ControlPanel', () => {
+  return {
+    __esModule: true,
+    default: ({ Search, tableName, Filters }: any) => (
+      <div data-testid="mock-control-panel">
+        <div data-testid="mock-title">{tableName}</div>
+        <div data-testid="mock-search">{Search}</div>
+        <div data-testid="mock-filters">{Filters}</div>
+      </div>
+    )
+  };
+});
 
 type TestRow = {
   id: string;
@@ -41,6 +60,25 @@ const columns: ColumnDef<TestRow>[] = [
 ];
 
 describe('EnhancedTable', () => {
+  it('renders control panel title, search and filters', () => {
+    const mockSetSearch = jest.fn();
+    render(
+      <EnhancedTable
+        data={mockData}
+        columns={columns}
+        tableName="Test Table"
+        groupByKey="group"
+        itemsPerPage={2}
+        Search={<Search setSearch={mockSetSearch} search={''} options={[]} />}
+        Filters={<FilterPanel />}
+      />
+    );
+
+    expect(screen.getByTestId('mock-title')).toHaveTextContent('Test Table');
+    expect(screen.getByTestId('mock-search')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-filters')).toBeInTheDocument();
+  });
+
   it('should render table with title and visible rows', () => {
     render(
       <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={1} />
@@ -73,7 +111,7 @@ describe('EnhancedTable', () => {
     );
 
     const pagination = screen.getByRole('navigation');
-    const page2 = await within(pagination).findByRole('button', { name: /Go to page 2/i });
+    const page2 = await within(pagination).findByText('2');
 
     fireEvent.click(page2);
 

@@ -14,15 +14,25 @@ jest.mock('~/i18n/navigation', () => ({
 
 describe('SupportButton', () => {
   beforeEach(() => {
-    render(<SupportButton data={mockData} />);
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should render the button with correct label', () => {
+    render(<SupportButton data={mockData} />);
+
     const button = screen.getByRole('button', { name: /support/i });
     expect(button).toBeInTheDocument();
+
+    const icon = screen.queryByAltText(/support button/i);
+    expect(icon).not.toBeInTheDocument();
+  });
+  it('should render icon when mobile view', () => {
+    render(<SupportButton data={mockData} isMobile />);
+
+    const icon = screen.getByAltText(/support button/i);
+    expect(icon).toBeInTheDocument();
+
+    const button = screen.queryByRole('button', { name: /support/i });
+    expect(button).not.toBeInTheDocument();
   });
 });

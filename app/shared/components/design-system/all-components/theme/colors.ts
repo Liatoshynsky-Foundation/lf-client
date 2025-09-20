@@ -63,6 +63,12 @@ export const mainHexPallete = {
   white: '#FCFCFC'
 };
 
+export const backgroundColors = {
+  white: '#FFFFFF',
+  offWhite: '#EAE9E8',
+  lightGray: '#D0CECC'
+};
+
 export const rgbButtonColors = {
   primaryFilledHoveredBackground: 'rgb(52,41,33)',
   primaryOutlinedHoveredBackground: 'rgba(25, 13, 3, 0.08)',
@@ -93,6 +99,12 @@ export const hexButtonGroupColors = {
     selectedButtonColor: mainHexPallete.white,
     selectedButtonTextColor: mainHexPallete.black,
     groupBackgroundColor: mainHexPallete.yellow[500],
+    buttonTextColor: mainHexPallete.black
+  },
+  tertiary: {
+    selectedButtonColor: mainHexPallete.white,
+    selectedButtonTextColor: mainHexPallete.black,
+    groupBackgroundColor: mainHexPallete.brown[200],
     buttonTextColor: mainHexPallete.black
   }
 };
@@ -130,7 +142,7 @@ export const accordionColorsRgb = {
   accordion: {
     expanded: {
       backgroundColor: 'rgba(247, 245, 241, 1)',
-      color: 'rgba(110, 90, 81, 1)'
+      color: mainHexPallete.brown[800]
     }
   }
 };

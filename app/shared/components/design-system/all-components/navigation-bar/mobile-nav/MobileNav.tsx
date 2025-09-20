@@ -1,13 +1,18 @@
+import { Button } from '@mui/material';
 import Image from 'next/image';
-
-import { IconButton } from '~/ds-components/icon-button/IconButton';
 
 import { styles } from './MobileNav.styles';
 
-const MobileNav = () => (
-  <IconButton size="large" customStyles={styles?.iconButton}>
-    <Image src="/icons/menu-button.svg" alt="Menu" width={40} height={24} />
-  </IconButton>
-);
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
+const MobileNav = () => {
+  const { isMobile } = useBreakpoints();
+
+  return (
+    <Button sx={styles.iconButton(isMobile)} variant="text" color="primary" size="medium">
+      <Image src="/icons/menu-button.svg" alt="Menu" width={40} height={24} />
+    </Button>
+  );
+};
 
 export default MobileNav;

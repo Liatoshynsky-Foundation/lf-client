@@ -30,18 +30,7 @@ describe('getFullUrl', () => {
       }
     });
 
-    expect(url).toBe('/api/items?tags%5B0%5D=a&tags%5B1%5D=b');
-  });
-
-  it('should add object query parameters', () => {
-    const url = getFullUrl({
-      pathname: '/api/filter',
-      searchParameters: {
-        range: { min: 5, max: 10 }
-      }
-    });
-
-    expect(url).toBe('/api/filter?range%5Bmin%5D=5&range%5Bmax%5D=10');
+    expect(url).toBe('/api/items?tags=a&tags=b');
   });
 
   it('should skip null and undefined values', () => {

@@ -1,32 +1,24 @@
-type SearchParameterValue =
-  | string
-  | string[]
-  | number
-  | number[]
-  | boolean
-  | boolean[]
-  | null
-  | undefined
-  | Record<string, string | number | boolean | null | undefined>;
+type Primitive = string | number | boolean;
+type SearchParameterValue = Primitive | Primitive[] | null | undefined | Record<string, Primitive | null | undefined>;
 
 const getSearchParametersEntries = (searchParameters: Record<string, SearchParameterValue>): [string, string][] => {
   const queryEntries: [string, string][] = [];
 
+  const append = (key: string, value: unknown) => {
+    if (value != null) queryEntries.push([key, String(value)]);
+  };
+
   for (const [parameterName, parameterValue] of Object.entries(searchParameters)) {
+    if (parameterValue == null) continue;
+
     if (Array.isArray(parameterValue)) {
-      parameterValue.forEach((arrayItem, index) => {
-        if (arrayItem !== null && arrayItem !== undefined) {
-          queryEntries.push([`${parameterName}[${index}]`, String(arrayItem)]);
-        }
-      });
-    } else if (typeof parameterValue === 'object' && parameterValue !== null) {
-      for (const [objectKey, objectValue] of Object.entries(parameterValue)) {
-        if (objectValue !== null && objectValue !== undefined) {
-          queryEntries.push([`${parameterName}[${objectKey}]`, String(objectValue)]);
-        }
+      parameterValue.forEach((v) => append(parameterName, v));
+    } else if (typeof parameterValue === 'object') {
+      for (const [subKey, subValue] of Object.entries(parameterValue)) {
+        append(`${parameterName}[${subKey}]`, subValue);
       }
-    } else if (parameterValue !== null && parameterValue !== undefined) {
-      queryEntries.push([parameterName, String(parameterValue)]);
+    } else {
+      append(parameterName, parameterValue);
     }
   }
 
@@ -47,18 +39,18 @@ type Options<Path extends string> = {
   : { parameters: Record<ExtractDynamicParameters<Path>, string> });
 
 export const getFullUrl = <Path extends string>({ pathname, parameters, searchParameters }: Options<Path>): string => {
-  let resultUrl: string = pathname;
+  let resultUrl = pathname;
 
   if (parameters) {
     for (const [param, value] of Object.entries(parameters)) {
-      resultUrl = resultUrl.replace(`[${param}]`, String(value));
+      const replacement = encodeURIComponent(String(value));
+      resultUrl = (resultUrl as string).replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
     }
   }
 
   if (searchParameters) {
     const query = new URLSearchParams(getSearchParametersEntries(searchParameters)).toString();
-    return `${resultUrl}?${query}`;
+    return `${resultUrl}${query ? `?${query}` : ''}`;
   }
-
   return resultUrl;
 };

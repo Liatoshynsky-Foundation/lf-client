@@ -4,17 +4,17 @@ import React from 'react';
 import ContactUsButton from './ContactUsButton/ContactUsButton';
 import DonationButton from './DonationButton/DonationButton';
 import { styles } from './FooterContactAndSupport.styles';
-import { ButtonData } from './types';
+import { type ButtonData } from '~/types/types/common.types';
 
 type FooterContactAndSupportProps = {
-  contactLabel: string;
+  contact: ButtonData;
   donation: ButtonData;
 };
 
-const FooterContactAndSupport: React.FC<FooterContactAndSupportProps> = ({ contactLabel, donation }) => {
+const FooterContactAndSupport: React.FC<FooterContactAndSupportProps> = ({ contact, donation }) => {
   return (
     <Box sx={styles.container}>
-      <ContactUsButton contactLabel={contactLabel} />
+      <ContactUsButton data={contact} />
       <DonationButton data={donation} />
     </Box>
   );

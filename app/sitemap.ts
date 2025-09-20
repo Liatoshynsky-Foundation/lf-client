@@ -1,7 +1,12 @@
 import { MetadataRoute } from 'next';
+import { headers } from 'next/headers';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_BASE_URL : 'http://localhost:3000';
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const headersList = await headers();
+  const hostName = headersList.get('host') ?? 'localhost:3000';
+  const protocol = headersList.get('x-forwarded-proto') ?? 'http';
+  const baseUrl = `${protocol}://${hostName}`;
+
   const languages = ['en', 'uk'];
   const staticPages = ['', '/artistry'];
 

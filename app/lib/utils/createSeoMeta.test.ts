@@ -1,5 +1,8 @@
 import { createSeoMeta } from './createSeoMeta';
 
+const localBaseUrl = 'http://localhost:3000';
+const prodBaseUrl = 'https://lf-client.com';
+
 describe('createSeoMeta', () => {
   const originalEnv = process.env;
 
@@ -8,7 +11,7 @@ describe('createSeoMeta', () => {
   });
 
   it('should generate metadata in development mode (localhost)', () => {
-    process.env = { ...originalEnv, NODE_ENV: 'development' };
+    process.env = { ...originalEnv, NODE_ENV: 'development', CLIENT_BASE_URL: localBaseUrl };
 
     const meta = createSeoMeta({
       title: 'Test Title',
@@ -20,7 +23,7 @@ describe('createSeoMeta', () => {
 
     expect(meta.title).toBe('Test Title');
     expect(meta.description).toBe('Test Description');
-    expect(meta.openGraph?.url).toBe('http://localhost:3000/uk/artistry');
+    expect(meta.openGraph?.url).toBe(`${localBaseUrl}/uk/artistry`);
     expect(meta.openGraph?.locale).toBe('uk_UA');
     expect(meta.openGraph?.alternateLocale).toBe('en_US');
 
@@ -28,17 +31,16 @@ describe('createSeoMeta', () => {
       expect(meta.openGraph.images[0]).toEqual({
         alt: 'Test Title',
         height: 630,
-        url: 'http://localhost:3000/images/test.jpg',
+        url: `${localBaseUrl}/images/test.jpg`,
         width: 1200
       });
 
-      expect(meta.twitter.images[0]).toBe('http://localhost:3000/images/test.jpg');
+      expect(meta.twitter.images[0]).toBe(`${localBaseUrl}/images/test.jpg`);
     }
   });
 
   it('should generate metadata for production', () => {
-    const baseUrl = 'https://lf-client.com';
-    process.env = { ...originalEnv, NODE_ENV: 'production', NEXT_PUBLIC_BASE_URL: baseUrl };
+    process.env = { ...originalEnv, NODE_ENV: 'production', CLIENT_BASE_URL: prodBaseUrl };
 
     const meta = createSeoMeta({
       title: 'Prod Title',
@@ -47,7 +49,7 @@ describe('createSeoMeta', () => {
       locale: 'en'
     });
 
-    expect(meta.openGraph?.url).toBe(`${baseUrl}/en/`);
+    expect(meta.openGraph?.url).toBe(`${prodBaseUrl}/en/`);
     expect(meta.openGraph?.locale).toBe('en_US');
     expect(meta.openGraph?.alternateLocale).toBe('uk_UA');
 
@@ -55,14 +57,14 @@ describe('createSeoMeta', () => {
       expect(meta.openGraph.images[0]).toEqual({
         alt: 'Prod Title',
         height: 630,
-        url: `${baseUrl}/images/liatoshynsky-thumbnail.jpg`,
+        url: `${prodBaseUrl}/images/liatoshynsky-thumbnail.jpg`,
         width: 1200
       });
     }
   });
 
   it('should fallback to defaults when optional fields are missing', () => {
-    process.env = { ...originalEnv, NODE_ENV: 'development' };
+    process.env = { ...originalEnv, NODE_ENV: 'development', CLIENT_BASE_URL: localBaseUrl };
 
     const meta = createSeoMeta({
       title: 'Fallback Title',
@@ -74,7 +76,7 @@ describe('createSeoMeta', () => {
       expect(meta.openGraph.images[0]).toEqual({
         alt: 'Fallback Title',
         height: 630,
-        url: 'http://localhost:3000/images/liatoshynsky-thumbnail.jpg',
+        url: `${localBaseUrl}/images/liatoshynsky-thumbnail.jpg`,
         width: 1200
       });
     }

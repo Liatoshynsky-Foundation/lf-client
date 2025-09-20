@@ -8,19 +8,11 @@ import Quote from '~/components/Quote/Quote';
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './LiatoshynskyOffice.styles';
-import { LiatoshynskyOfficeProps } from '~/types/pages/home/homePage';
-
-import { Link } from '~/i18n/navigation';
+import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = ({
-  data,
-  t
-}: {
-  data: Readonly<LiatoshynskyOfficeProps>;
-  t: ReturnType<typeof useTranslations>;
-}) => {
+const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnType<typeof useTranslations> }) => {
   const { quote } = data;
   return (
     <Box sx={styles.mainContainer}>
@@ -29,7 +21,7 @@ const LiatoshynskyOffice = ({
         <Box sx={styles.quoteBlock}>
           <Quote
             quoteText={quote?.text}
-            sourceText={quote?.author}
+            sourceText={quote?.source}
             quoteIconColor="black"
             mainTextColor="black"
             alignRight
@@ -43,9 +35,7 @@ const LiatoshynskyOffice = ({
           <OfficeMedia />
         </Box>
         <Box sx={styles.buttonBlock}>
-          <Link href={'/office'} passHref>
-            <Button size="large" color="primary" variant="contained" label={t('goToOfficeButton')} />
-          </Link>
+          <Button size="large" color="primary" variant="contained" link="/office" label={t('goToOfficeButton')} />
         </Box>
       </Box>
     </Box>

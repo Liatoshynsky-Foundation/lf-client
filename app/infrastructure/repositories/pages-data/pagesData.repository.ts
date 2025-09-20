@@ -1,14 +1,18 @@
-import '~/infrastructure/models/pages-data/block/blockBase';
+import { PageStatus } from '~/types/enums/common.enums';
 
 import dbConnect from '~/infrastructure/db/connect';
-import PagesData from '~/infrastructure/models/pages-data/pagesData';
-import { populatedPageSchema } from '~/validators/page/page.schema';
+import DraftPageModel from '~/infrastructure/models/pages/draftPages.model';
+import PageModel from '~/infrastructure/models/pages/pages';
+import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
+
+const getBySlugFactory = (model: typeof PageModel, status: PageStatus) => async (slug: string) => {
+  await dbConnect();
+  const page = await model.findOne({ slug, status }).lean().exec();
+  if (!page) return null;
+  return PageZodSchema.parse(page);
+};
 
 export const pagesDataRepository = {
-  async getPageData(slug: string) {
-    await dbConnect();
-    const page = await PagesData.findOne({ slug }).populate('blocks').lean().exec();
-    if (!page) return null;
-    return populatedPageSchema.parse(page);
-  }
+  getBySlug: getBySlugFactory(PageModel, PageStatus.Published),
+  getDraftBySlug: getBySlugFactory(DraftPageModel, PageStatus.Draft)
 };

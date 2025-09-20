@@ -3,11 +3,16 @@ import React from 'react';
 
 import ContactUsButton from './ContactUsButton';
 
+jest.mock('~/ds-components/button/Button');
+
 describe('ContactUsButton', () => {
-  const label = 'Contact us';
+  const data = {
+    text: 'Contact Us',
+    link: '/contact'
+  };
 
   beforeEach(() => {
-    render(<ContactUsButton contactLabel={label} />);
+    render(<ContactUsButton data={data} />);
   });
 
   afterEach(() => {

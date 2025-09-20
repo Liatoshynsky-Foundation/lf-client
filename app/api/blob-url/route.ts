@@ -4,7 +4,7 @@ import { validateWithZod } from '~/utils/validateRequestData';
 
 import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
-import { zBlobQuerySchema } from '~/validators/blob.schema';
+import { zBlobQuerySchema } from '~/validators/queryParams.schema';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

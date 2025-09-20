@@ -114,8 +114,8 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
 
     if (item.href) {
       return (
-        <Button disableRipple key={`${item.href}-${index}`} sx={styles.iconButtonSx}>
-          <Link href={item.href}>{item.label}</Link>
+        <Button disableRipple key={`${item.href}-${index}`} link={item.href} sx={styles.iconButtonSx}>
+          {item.label}
         </Button>
       );
     }

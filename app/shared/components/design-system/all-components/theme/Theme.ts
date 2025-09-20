@@ -60,6 +60,9 @@ declare module '@mui/material/styles' {
     customItalic14?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
     customBold25: React.CSSProperties;
+    customBold236?: React.CSSProperties;
+    customBold132?: React.CSSProperties;
+    customBold114?: React.CSSProperties;
   }
   interface TypographyVariants {
     customBold32: React.CSSProperties;
@@ -74,6 +77,9 @@ declare module '@mui/material/styles' {
     customItalic14: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
     customBold25: React.CSSProperties;
+    customBold236: React.CSSProperties;
+    customBold132: React.CSSProperties;
+    customBold114: React.CSSProperties;
   }
 }
 
@@ -95,6 +101,12 @@ declare module '@mui/material/Button' {
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
+    tertiary: true;
+  }
+}
+
+declare module '@mui/material/ButtonGroup' {
+  interface ButtonGroupPropsColorOverrides {
     tertiary: true;
   }
 }
@@ -331,6 +343,24 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px',
       fontFamily: mulish.style.fontFamily
+    },
+    customBold236: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '236px',
+      lineHeight: '100%'
+    },
+    customBold132: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '132px',
+      lineHeight: '100%'
+    },
+    customBold114: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 500,
+      fontSize: '114px',
+      lineHeight: '100%'
     }
   },
   components: {
@@ -677,6 +707,13 @@ export const theme = createTheme({
             backgroundColor: hexButtonGroupColors.secondary.groupBackgroundColor,
             color: hexButtonGroupColors.secondary.buttonTextColor
           }
+        },
+        {
+          props: { color: 'tertiary' },
+          style: {
+            backgroundColor: hexButtonGroupColors.tertiary.groupBackgroundColor,
+            color: hexButtonGroupColors.tertiary.buttonTextColor
+          }
         }
       ]
     },
@@ -774,16 +811,16 @@ export const theme = createTheme({
         root: {
           borderRadius: '24px',
           width: '100%',
-          maxWidth: '742px',
-          marginTop: '16px',
-          marginLeft: '16px',
+          maxWidth: '744px',
           boxShadow: 'none',
           transition: 'all 0.3s ease',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.summary.color,
           '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
             color: accordionColorsRgb.accordion.expanded.color
+          },
+          '&:before': {
+            display: 'none'
           }
         }
       },
@@ -800,10 +837,7 @@ export const theme = createTheme({
           borderRadius: '24px',
           padding: '16px 16px 16px 24px',
           backgroundColor: accordionColorsRgb.summary.backgroundColor,
-          color: accordionColorsRgb.summary.color,
-          '&.Mui-expanded': {
-            backgroundColor: accordionColorsRgb.summary.expanded.backgroundColor
-          }
+          color: accordionColorsRgb.summary.color
         },
         content: {
           margin: 0
@@ -813,9 +847,9 @@ export const theme = createTheme({
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          padding: '16px 16px 16px 24px',
+          padding: '8px 64px 32px 40px',
           borderRadius: '0 0 24px 24px',
-          backgroundColor: accordionColorsRgb.accordion.expanded.backgroundColor,
+          backgroundColor: accordionColorsRgb.summary.backgroundColor,
           color: accordionColorsRgb.accordion.expanded.color
         }
       }

@@ -10,8 +10,8 @@ export const DESKTOP_COLUMN_WIDTHS: FullColumnWidths = {
   play: '48px',
   name: '504px',
   year: '140px',
-  genre: '248px',
-  actions: 'auto'
+  genre: 'auto',
+  actions: '300px'
 };
 
 export const LAPTOP_COLUMN_WIDTHS: FullColumnWidths = {
@@ -20,8 +20,8 @@ export const LAPTOP_COLUMN_WIDTHS: FullColumnWidths = {
   play: '44px',
   name: '440px',
   year: '112px',
-  genre: '124px',
-  actions: 'auto'
+  genre: 'auto',
+  actions: '160px'
 };
 
 export const TABLET_COLUMN_WIDTHS: PartialColumnWidths = {

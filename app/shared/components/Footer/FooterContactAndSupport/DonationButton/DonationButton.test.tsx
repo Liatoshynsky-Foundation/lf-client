@@ -1,44 +1,64 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { ButtonData } from '../types';
 import DonationButton from './DonationButton';
+import { type ButtonData } from '~/types/types/common.types';
 
-jest.mock('@public/icons/donation-button.svg', () => ({
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
+jest.mock('~/components/svg-image/SvgImage', () => ({
   __esModule: true,
-  default: () => <svg data-testid="donation-icon" />
+  SvgImage: ({ alt, src }: { alt: string; src: string }) => <img data-testid="donation-icon" alt={alt} src={src} />
 }));
 
-const mockData: ButtonData = {
-  text: 'Donate Now',
-  link: '/donate'
-};
+jest.mock('~/ds-components/button/Button');
 
-jest.mock('~/i18n/navigation', () => ({
-  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: jest.fn()
 }));
+
+const mockedUseBreakpoints = useBreakpoints as jest.Mock;
 
 describe('DonationButton', () => {
-  beforeEach(() => {
-    render(<DonationButton data={mockData} />);
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render the button with correct label', () => {
-    const button = screen.getByRole('button', { name: /donate now/i });
-    expect(button).toBeInTheDocument();
+  const baseData: ButtonData = {
+    text: 'Donate Now',
+    link: '/donate'
+  };
+
+  it('should render desktop label when not mobile', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: false });
+    render(<DonationButton data={baseData} />);
+    expect(screen.getByRole('button', { name: /donate now/i })).toBeInTheDocument();
   });
 
-  it('should render the donation icon with correct alt text', () => {
-    const icon = screen.getByAltText('Donation Button');
-    expect(icon).toBeInTheDocument();
+  it('should render shortText when mobile and shortText is provided', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: true });
+    const dataWithShort: ButtonData = { ...baseData, shortText: 'Donate' };
+    render(<DonationButton data={dataWithShort} />);
+    expect(screen.getByRole('button', { name: /donate$/i })).toBeInTheDocument();
   });
 
-  it('should have correct link in wrapper', () => {
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/donate');
+  it('should fallback to text when mobile and shortText is absent', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: true });
+    render(<DonationButton data={baseData} />);
+    expect(screen.getByRole('button', { name: /donate now/i })).toBeInTheDocument();
+  });
+
+  it('should render icon with correct alt text', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: false });
+    render(<DonationButton data={baseData} />);
+    expect(screen.getByAltText('Donation Button')).toBeInTheDocument();
+    expect(screen.getByTestId('donation-icon')).toBeInTheDocument();
+  });
+
+  it('should wrap button with correct link', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: false });
+    render(<DonationButton data={baseData} />);
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/donate');
   });
 });

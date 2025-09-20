@@ -1,4 +1,4 @@
-type OpusDTO = {
+export type OpusDTO = {
   _id: string;
   number: number;
   title: string;

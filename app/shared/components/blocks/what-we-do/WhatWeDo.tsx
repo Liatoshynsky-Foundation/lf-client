@@ -2,36 +2,39 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
+import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import TitleWithDescription from '~/components/title-with-description/TitleWithDescription';
 
 import { iconSizes, styles } from './WhatWeDo.styles';
-import { WhatWeDoItem, WhatWeDoProps } from '~/types/pages/home/homePage';
+import { IWhatWeDo } from '~/types/page/about-us.types';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
-const WhatWeDo = ({ data }: { data: Readonly<WhatWeDoProps> }) => {
-  const { mainTitle, items } = data;
-  const columns: WhatWeDoItem[][] = [items.slice(0, 1), items.slice(1, 3), items.slice(3, 5)];
+const getParagraph = (title: string) => {
+  const Paragraph = (children: React.ReactNode) => (
+    <TitleWithDescription variant="whatWeDo" title={title} description={children} />
+  );
+  return Paragraph;
+};
+
+const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
+  const { title, items } = data;
   const sizesAttribute = generateSizesAttribute(iconSizes);
 
   return (
     <Box sx={styles.mainContainer}>
-      <SectionTitle title={mainTitle} mb={0} />
+      <SectionTitle title={title} mb={0} />
       <Box sx={styles.grid}>
-        {columns.map((columnItems, colIndex) => (
-          <Box
-            key={columnItems[colIndex]?.description + `column-${colIndex}`}
-            sx={{
-              ...styles.column
-            }}
-          >
-            {columnItems.map((item, itemIndex) => (
-              <Box sx={styles.item} key={item.id ?? `item-${itemIndex}`}>
-                <Box sx={styles.icon}>
-                  <Image src="/icons/bullet-small.svg" alt="bullet icon" fill sizes={sizesAttribute} />
-                </Box>
-                <TitleWithDescription variant="whatWeDo" title={item.title} description={item.description} />
-              </Box>
-            ))}
+        {items.map((item, index) => (
+          <Box sx={styles.item} key={item.title + index}>
+            <Box sx={styles.icon}>
+              <Image src="/icons/bullet-small.svg" alt="bullet icon" fill sizes={sizesAttribute} />
+            </Box>
+            <TipTapContent
+              data={item.description}
+              nodeRenderers={{
+                paragraph: getParagraph(item.title)
+              }}
+            />
           </Box>
         ))}
       </Box>

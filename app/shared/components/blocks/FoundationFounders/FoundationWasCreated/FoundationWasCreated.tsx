@@ -3,21 +3,52 @@ import React from 'react';
 
 import { styles } from '~/components/blocks/FoundationFounders/FoundationWasCreated/FoundationWasCreated.styles';
 import { SvgImage } from '~/components/svg-image/SvgImage';
+import { getItalic, getLink, getUnderline } from '~/components/tip-tap-content/marks';
+import renderText from '~/components/tip-tap-content/renderText';
+import TipTapContent from '~/components/tip-tap-content/TipTapContent';
+
+import { TextNode, TipTapDoc } from '~/types/types/common.types';
 
 interface FoundationWasCreatedProps {
-  title: string;
-  description: string;
+  data: TipTapDoc;
 }
 
-const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ title, description }) => {
+const descriptionParagraph = (children: React.ReactNode) => <Typography sx={styles.description}>{children}</Typography>;
+
+const boldTitle = (children: React.ReactNode) => (
+  <Typography component="strong" sx={styles.title}>
+    {children}
+  </Typography>
+);
+
+const boldTitleWrapper = (node: TextNode) => (
+  <Typography component="span">
+    {renderText(
+      {
+        italic: getItalic,
+        underline: getUnderline,
+        link: getLink,
+        bold: boldTitle
+      },
+      node
+    )}
+  </Typography>
+);
+
+const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => {
   return (
     <Box sx={styles.container}>
       <Box sx={styles.ellipseWrapper}>
         <SvgImage src="icons/ellipse.svg" alt="ellipse" width={32} height={30} />
       </Box>
       <Box sx={styles.text}>
-        <Typography sx={styles.title}>{title}</Typography>
-        <Typography sx={styles.description}>{description}</Typography>
+        <TipTapContent
+          data={data}
+          nodeRenderers={{
+            paragraph: descriptionParagraph,
+            text: boldTitleWrapper
+          }}
+        />
       </Box>
     </Box>
   );

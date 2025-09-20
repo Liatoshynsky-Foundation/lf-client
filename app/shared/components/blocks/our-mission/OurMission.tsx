@@ -3,19 +3,22 @@ import { Box } from '@mui/material';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import ListItem from '~/components/list-item/ListItem';
 import SectionTitle from '~/components/section-title/SectionTitle';
+import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import { styles } from './OurMission.styles';
-import { OurMissionProps } from '~/types/pages/home/homePage';
+import { IOurMission } from '~/types/page/about-us.types';
 
-const OurMission = ({ data }: { data: Readonly<OurMissionProps> }) => {
-  const { title, smallImage, bigImage, listItems } = data;
+const getListItem = (children: React.ReactNode) => <ListItem text={children} />;
+
+const OurMission = ({ data }: { data: IOurMission }) => {
+  const { title, smallImage, bigImage, list } = data;
 
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle title={title} />
       <Box sx={styles.list}>
-        {listItems.map((item) => (
-          <ListItem key={item} text={item} />
+        {list.map((item, idx) => (
+          <TipTapContent key={`${item.type}-${idx}`} data={item} nodeRenderers={{ paragraph: getListItem }} />
         ))}
       </Box>
       <Box sx={styles.imagesContainer}>

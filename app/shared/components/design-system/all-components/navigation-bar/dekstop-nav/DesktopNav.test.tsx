@@ -23,6 +23,8 @@ jest.mock('~/public/icons/chevron-up.svg', () => ({
   default: () => <svg data-testid="chevron-up-icon" />
 }));
 
+jest.mock('~/ds-components/button/Button');
+
 const navLabels: NavigationDTO[] = [
   {
     title: 'Фундація',

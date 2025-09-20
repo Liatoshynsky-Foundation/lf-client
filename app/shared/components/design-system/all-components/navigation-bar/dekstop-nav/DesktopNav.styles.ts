@@ -1,3 +1,5 @@
+import { backgroundColors } from '~/ds-components/theme/colors';
+
 export const styles = {
   iconButtonSx: {
     background: 'none',
@@ -22,10 +24,10 @@ export const styles = {
   buttonGroup: {
     maxHeight: '40px',
     minWidth: '615px',
-    backgroundСolor: 'rgba(25, 13, 3, 0.06)'
+    backgroundColor: backgroundColors.offWhite
   },
   buttonGroupBackground: {
-    border: '7px solid rgba(247, 245, 241, 1)',
+    border: `6px solid ${backgroundColors.white}`,
     borderRadius: '999px'
   }
 };

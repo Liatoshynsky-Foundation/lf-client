@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { draftMode } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -25,26 +26,29 @@ export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = await createRequestContainer().resolve('pageService');
+  const { isEnabled } = await draftMode();
+  const container = createRequestContainer();
+
+  const selectedPagesService = isEnabled
+    ? container.resolve('draftPagesDataService')
+    : container.resolve('pagesDataService');
 
   const [page, t] = await Promise.all([
-    pageService.getPageData('home', lang),
+    selectedPagesService.getPageData('about-us', lang),
     getTranslations('home.liatoshynskyOffice')
   ]);
 
-  if (!page) {
-    return <Box />;
-  }
+  if (!page) return <Box />;
 
   return (
     <>
-      {page.IntroSection && <IntroSection data={page.IntroSection} />}
-      {page.FoundationInfo && <FoundationInfo data={page.FoundationInfo} />}
-      {page.OurMission && <OurMission data={page.OurMission} />}
-      {page.OurGoals && <OurGoals data={page.OurGoals} />}
-      {page.LiatoshynskyOffice && <LiatoshynskyOffice data={page.LiatoshynskyOffice} t={t} />}
-      {page.WhatWeDo && <WhatWeDo data={page.WhatWeDo} />}
-      {page.FoundationFounders && <FoundationFounders data={page.FoundationFounders} />}
+      {page.blocks.IntroSection && <IntroSection data={page.blocks.IntroSection} />}
+      {page.blocks.FoundationInfo && <FoundationInfo data={page.blocks.FoundationInfo} />}
+      {page.blocks.OurMission && <OurMission data={page.blocks.OurMission} />}
+      {page.blocks.OurGoals && <OurGoals data={page.blocks.OurGoals} />}
+      {page.blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={page.blocks.LiatoshynskyOffice} t={t} />}
+      {page.blocks.WhatWeDo && <WhatWeDo data={page.blocks.WhatWeDo} />}
+      {page.blocks.FoundationFounders && <FoundationFounders data={page.blocks.FoundationFounders} />}
     </>
   );
 }

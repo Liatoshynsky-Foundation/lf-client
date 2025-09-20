@@ -1,27 +1,27 @@
 import { Locale } from 'next-intl';
 
-import { PageServiceDeps } from '~/domain/services/pagesService.type';
-import { blockTransformers } from '~/services/strategy/blockStrategy/blockTransformStrategy';
-import { AnyBlock } from '~/validators/page/blocks/anyBlock.schema';
+import { selectSchema } from './selectSchema';
+import { PageData } from '~/types/page/pagesBase.type';
 
-export const createPagesDataService = ({ pagesDataRepository }: PageServiceDeps) => ({
-  async getPageData(slug: string, locale: Locale) {
-    const pageData = await pagesDataRepository.getPageData(slug);
-    if (!pageData) return null;
+import type { DraftPagesService, PagesService } from '~/services/core/pagesDataService';
 
-    return pageData.blocks.reduce(
-      (acc, block) => {
-        const { componentName } = block;
-        const transformer = blockTransformers[componentName];
+const makeComposed = (get: (slug: string) => Promise<unknown>) => {
+  return async (slug: string, locale: Locale): Promise<PageData | null> => {
+    const page = await get(slug);
+    if (!page) return null;
 
-        if (transformer) {
-          acc[componentName] = transformer(block, locale);
-        } else {
-          acc[componentName] = block;
-        }
-        return acc;
-      },
-      {} as Record<string, AnyBlock>
-    );
-  }
+    const schema = selectSchema(slug, locale);
+    return schema ? schema.parse(page) : null;
+  };
+};
+
+export const createPagesDataService = (service: PagesService) => ({
+  getPageData: makeComposed(service.getPageData)
 });
+
+export const createDraftPagesDataService = (service: DraftPagesService) => ({
+  getPageData: makeComposed(service.getPageData)
+});
+
+export type PagesDataService = ReturnType<typeof createPagesDataService>;
+export type DraftPagesDataService = ReturnType<typeof createDraftPagesDataService>;

@@ -6,17 +6,17 @@ import FoundationTeam from '~/components/blocks/FoundationFounders/FoundationTea
 import FoundationWasCreated from '~/components/blocks/FoundationFounders/FoundationWasCreated/FoundationWasCreated';
 import { ColumnGuides } from '~/components/column-guides/ColumnGuides';
 
-import { FoundationFoundersProps } from '~/types/pages/home/homePage';
+import { IFoundationFounders } from '~/types/page/about-us.types';
 
-const FoundationFounders = ({ data }: { data: FoundationFoundersProps }) => {
-  const { title, members, description } = data;
+const FoundationFounders = ({ data }: { data: IFoundationFounders }) => {
+  const { titleText, listTitle, members } = data;
 
   return (
     <Box sx={styles.container}>
       <ColumnGuides lineColor="rgba(252, 252, 252, 1)" />
       <Box sx={styles.contentContainer}>
-        <FoundationWasCreated title={title} description={description} />
-        <FoundationTeam title={title} team={members} />
+        <FoundationWasCreated data={titleText} />
+        <FoundationTeam title={listTitle} team={members} />
       </Box>
     </Box>
   );

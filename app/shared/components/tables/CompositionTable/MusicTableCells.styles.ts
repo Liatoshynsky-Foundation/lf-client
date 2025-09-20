@@ -1,6 +1,6 @@
 import { SxProps, Theme } from '@mui/material';
 
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const playCellSx: SxProps<Theme> = (theme) => ({
   display: 'flex',
@@ -21,10 +21,6 @@ export const playCellSx: SxProps<Theme> = (theme) => ({
 
 export const headerTypographySx: SxProps<Theme> = {
   color: mainHexPallete.blue[800]
-};
-
-export const genreEllipsisSx: SxProps<Theme> = {
-  maxWidth: { md: 170, lg: 240 }
 };
 
 export const actionsCellContainerSx: SxProps<Theme> = {

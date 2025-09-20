@@ -1,10 +1,12 @@
-import React, { ReactElement } from 'react';
+import { setRequestLocale } from 'next-intl/server';
+import React from 'react';
 
 import ResearchAndScientificWork from '~/components/research-and-scientific-work/ResearchAndScientificWork';
+import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSelection';
 
-import { workTableMock } from './WorksTable/WorkTable.constants';
-import WorkTableSection from './WorksTable/WorkTableSelection';
+import { Language } from '~/types/types/language';
 
+import { createRequestContainer } from '~/di/container';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
 export const metadata = createSeoMeta({
@@ -13,11 +15,18 @@ export const metadata = createSeoMeta({
   url: '/research'
 });
 
-export default function Research(): ReactElement {
+export default async function ResearchPage({ params }: Readonly<Language>) {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const pageService = await createRequestContainer().resolve('pageService');
+
+  const page = await pageService.getPageData('research', lang);
+
   return (
     <>
-      <ResearchAndScientificWork />
-      <WorkTableSection data={workTableMock} />
+      {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
+      <WorkTableSection lang={lang} />
     </>
   );
 }

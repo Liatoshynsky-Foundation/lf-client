@@ -1,0 +1,98 @@
+'use client';
+
+import { Box, Typography } from '@mui/material';
+import type { CellContext } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
+import EyeIcon from 'public/icons/eye.svg';
+import LogOut from 'public/icons/log-out.svg';
+
+import Button from '~/ds-components/button/Button';
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
+import type { WorkTable } from '~/types/types/enhancedTable';
+
+export const RenderNameHeader = () => {
+  const t = useTranslations('table.work.columns');
+  return (
+    <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', pl: '72px' }}>
+      <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
+        {t('name')}
+      </Typography>
+    </Box>
+  );
+};
+
+export const RenderAuthorHeader = () => {
+  const t = useTranslations('table.work.columns');
+  return (
+    <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
+      {t('author')}
+    </Typography>
+  );
+};
+
+export const RenderYearHeader = () => {
+  const t = useTranslations('table.work.columns');
+  return (
+    <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
+      {t('year')}
+    </Typography>
+  );
+};
+
+export const renderNameCell = (info: CellContext<WorkTable, unknown>) => (
+  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '738px', pl: '72px' }}>
+    {info.getValue<string>()}
+  </Typography>
+);
+
+export const renderAuthorCell = (info: CellContext<WorkTable, unknown>) => (
+  <Typography variant="customMedium16" sx={{ maxWidth: '192px' }}>
+    {info.getValue<string>()}
+  </Typography>
+);
+
+export const renderYearCell = (value: string | number) => (
+  <Typography variant="customMedium16" sx={{ display: 'inline-block', maxWidth: '85px' }}>
+    {value}
+  </Typography>
+);
+
+export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
+  const t = useTranslations('table.work.buttons');
+  const row = info.row.original;
+
+  if (row.isPreview) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+          maxWidth: '189px'
+        }}
+      >
+        <Button variant="outlined" size="medium" color="primary" endIcon={<EyeIcon />}>
+          {t('view')}
+        </Button>
+      </Box>
+    );
+  }
+
+  if (row.url) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+          maxWidth: '189px'
+        }}
+      >
+        <Button variant="outlined" size="medium" color="primary" link={row.url} endIcon={<LogOut />}>
+          {t('goto')}
+        </Button>
+      </Box>
+    );
+  }
+
+  return null;
+};
