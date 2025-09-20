@@ -25,7 +25,12 @@ import { ApiRoutes } from '~/constants/routes/api-routes';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 
+<<<<<<< HEAD
 import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
+=======
+import { CategoryDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
+import { getColumnWidths } from '~/lib/utils/getColumnWidth';
+>>>>>>> 9354a6f (feat: added function for dynamic responsivness + fix bug)
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import GetNotesModal from '~/shared/components/get-notes-modal/GetNotesModal';
 import { Search } from '~/shared/components/search/Search';
@@ -48,7 +53,19 @@ export default function MusicTableSection() {
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [yearFilter, setYearFilter] = useState<[number, number]>(() => [1900, new Date().getFullYear()]);
 
+<<<<<<< HEAD
   const [categoryOptions, setCategoryOptions] = useState<CategoryNameDTO[]>([]);
+=======
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [categoriesOptions, setCategoriesOptions] = useState<CategoryDTO[]>([]);
+  const mockCategories: CategoryDTO[] = [
+    { id: 'solo', name: 'Solo' },
+    { id: 'chamber', name: 'Chamber' },
+    { id: 'orchestral', name: 'Orchestral' },
+    { id: 'vocal', name: 'Vocal' }
+  ];
+
+>>>>>>> 9354a6f (feat: added function for dynamic responsivness + fix bug)
   const [genresOptions, setGenresOptions] = useState<GenreNameDTO[]>([]);
   const [titleOptions, setTitleOptions] = useState<TitlesDTO[]>([]);
   const [yearOptions, setYearOptions] = useState<[number, number]>([yearFilter[0], yearFilter[1]]);
@@ -69,7 +86,16 @@ export default function MusicTableSection() {
   } = useSearch<any>({
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
+<<<<<<< HEAD
 
+=======
+  type StaticFiltersType = {
+    titles?: TitlesDTO[];
+    genres?: GenreNameDTO[];
+    yearRange?: { minYear?: number; maxYear?: number };
+    categories?: CategoryDTO[];
+  };
+>>>>>>> 9354a6f (feat: added function for dynamic responsivness + fix bug)
   const { data: staticFilters } = useFetchStaticFilters<StaticFiltersType>(ApiRoutes.COMPOSITION_FILTERS ?? null);
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
@@ -127,15 +153,12 @@ export default function MusicTableSection() {
     if (staticFilters) {
       setGenresOptions(staticFilters.genres ?? []);
       setTitleOptions(staticFilters.titles ?? []);
+<<<<<<< HEAD
       setCategoryOptions(staticFilters.categories ?? []);
+=======
+      setCategoriesOptions(staticFilters.categories ?? mockCategories);
+>>>>>>> 9354a6f (feat: added function for dynamic responsivness + fix bug)
       setYearOptions([defaultMinYear, defaultMaxYear]);
-      if (!initialYearSet.current && staticFilters.yearRange) {
-        setYearFilter([
-          Number(staticFilters.yearRange.minYear ?? 1900),
-          Number(staticFilters.yearRange.maxYear ?? new Date().getFullYear())
-        ]);
-        initialYearSet.current = true;
-      }
     }
   }, [staticFilters]);
 
