@@ -109,7 +109,6 @@ export function MusicTableFilters({
           maxSelections={10}
           onAdd={(val, lab, allSelected) => onGenresChange(allSelected)}
           onRemove={(val, lab, allSelected) => onGenresChange(allSelected)}
-          sx={{ width: layout.containers.genre.width ?? '100%' }}
         />
       </Box>
 
