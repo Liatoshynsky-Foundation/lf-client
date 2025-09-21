@@ -1,74 +1,98 @@
-import { Theme } from '@mui/material';
-
 import { AppTypography } from '~/constants';
 
 const containerHelper = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(12, 1fr)'
+  gridTemplateColumns: {
+    xs: 'repeat(4, 1fr)',
+    sm: 'repeat(8, 1fr)',
+    md: 'repeat(12, 1fr)'
+  },
+  columnGap: {
+    xs: '16px',
+    sm: '24px',
+    md: '40px'
+  }
 };
 
-export const styles = (theme: Theme) => ({
+export const styles = {
   container: {
     ...containerHelper,
     gridColumn: '1 / -1',
-    gridTemplateRows: 'repeat(6, auto)',
-    columnGap: '40px',
-    position: 'relative',
-    [theme.breakpoints.down('sm')]: {
-      columnGap: '16px',
-      marginBottom: '90px'
-    }
+    margin: {
+      xs: '96px 0 64px',
+      sm: '103px 0 68px',
+      md: '132px 0 56px',
+      lg: '140px 0 56px'
+    },
+    position: 'relative'
   },
+
   title: {
     ...AppTypography.oswald64Semibold,
     display: 'flex',
-    gridColumnStart: '1',
-    gridColumnEnd: '5',
     alignSelf: 'center',
-    marginTop: '75px',
-    fontSize: '64px',
-    gridRow: '1',
-    [theme.breakpoints.down('md')]: {
-      fontSize: '40px'
+    fontSize: {
+      xs: '40px',
+      md: '64px'
     },
-    [theme.breakpoints.down('sm')]: {
-      gridColumn: '1/-1',
-      marginBottom: '60px',
-      marginTop: '159px',
-      fontSize: '40px'
-    }
+    margin: {
+      xs: '0 0 64px',
+      sm: '20px 0 64px',
+      md: '42px 0 50px',
+      xl: '42px 0 127px'
+    },
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / 4',
+      md: '1 / 6',
+      lg: '1 / 5'
+    },
+    gridRow: '1'
   },
+
   photoContainer: {
-    ...containerHelper,
-    gridColumn: '6/-1',
-    gridRow: '1',
-    marginTop: '159px',
-    [theme.breakpoints.down('xs')]: {
-      gridColumn: '2/-1'
+    marginBottom: {
+      xs: '40px',
+      sm: 0
     },
-    [theme.breakpoints.down('sm')]: {
-      gridColumn: '2/-1',
-      gridRow: '2',
-      marginTop: '0'
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / -1',
+      md: '6 / -1'
+    },
+    gridRow: {
+      xs: '2 / 3',
+      sm: '1 / 3'
     }
   },
+
   quote: {
-    gridRow: '2',
-    gridColumn: '1/4',
+    gridRow: {
+      xs: '3',
+      sm: '2'
+    },
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / 4',
+      md: '1 / 6',
+      lg: '1 / 5'
+    },
     alignSelf: 'center',
-    position: 'relative',
-    [theme.breakpoints.down('sm')]: {
-      marginTop: '40px',
-      gridRow: '3'
+    position: 'relative'
+  },
+
+  imageCaption: {
+    display: {
+      xs: 'none',
+      md: 'block'
     }
   },
-  ImageCaption: {
-    [theme.breakpoints.down('md')]: { display: 'none' }
-  },
-  ImageContainer: {
-    ml: '0',
-    [theme.breakpoints.down('sm')]: {
-      gridColumn: '2/-1'
+
+  imageContainer: {
+    marginLeft: 0,
+    gridColumn: {
+      xs: '2 / -1',
+      sm: 'auto'
     }
   }
-});
+};

@@ -12,7 +12,16 @@ export const iconSizes = {
 export const styles = {
   mainContainer: {
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     gridColumn: '1 / -1',
     mb: { xs: '116px', md: '104px', lg: '132px', xxl: '196px' },
     mt: { xs: '120px', sm: '116px', md: '128px' }

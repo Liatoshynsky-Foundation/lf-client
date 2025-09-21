@@ -5,8 +5,16 @@ export const getSpan = (start: number, span: number) => `${start} / span ${span}
 export const styles = {
   container: {
     display: 'grid',
-    gridTemplateColumns: { xs: 'repeat(4, 1fr)', sm: 'repeat(8, 1fr)', md: 'repeat(12, 1fr)' },
-    columnGap: { xs: '16px', sm: '40px' },
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     width: '100%',
     mt: '100px'
   },
@@ -21,14 +29,14 @@ export const styles = {
     mb: 5,
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
-    fontSize: { xs: '16px', md: '26px' },
+    fontSize: { xs: '14px', md: '26px' },
     color: black,
     fontWeight: 700
   },
   description: {
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
-    fontSize: { xs: '16px', md: '26px' },
+    fontSize: { xs: '14px', md: '26px' },
     color: black,
     fontWeight: 400,
     '& span:nth-child(2)': {

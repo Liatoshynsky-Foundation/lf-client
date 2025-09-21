@@ -48,7 +48,7 @@ export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGui
     paddingX = 24;
   } else if (isMd) {
     layout = 8;
-    gap = 20;
+    gap = 24;
     paddingX = 56;
   } else {
     layout = 12;

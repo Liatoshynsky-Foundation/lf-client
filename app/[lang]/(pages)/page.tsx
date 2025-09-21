@@ -5,7 +5,7 @@ import React from 'react';
 
 import FoundationFounders from '~/components/blocks/FoundationFounders/FoundationFounders';
 import FoundationInfo from '~/components/blocks/FoundationInfo/FoundationInfo';
-import IntroSection from '~/components/blocks/IntroSection/IntroSection';
+import { IntroSection } from '~/components/blocks/IntroSection/IntroSection';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';

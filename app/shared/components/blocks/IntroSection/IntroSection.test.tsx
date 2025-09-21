@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import IntroSection from '~/components/blocks/IntroSection/IntroSection';
+import { IntroSection } from '~/components/blocks/IntroSection/IntroSection';
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
   __esModule: true,

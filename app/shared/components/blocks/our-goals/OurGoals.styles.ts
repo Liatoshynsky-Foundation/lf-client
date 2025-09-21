@@ -1,28 +1,40 @@
 export const styles = {
   mainContainer: {
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     gridColumn: '1 / -1',
-    mb: { xs: '116px', md: '104px', lg: '132px', xxl: '196px' }
+    mb: { xs: '108px', sm: '130px', md: '148px', lg: '175px', xxl: '230px' }
   },
 
   goalsGrid: {
-    display: 'grid',
-    gridColumn: { xs: '2 / 4', sm: '4 / 8', md: '6 / 12' },
-    gridTemplateColumns: {
-      xs: '1fr',
-      lg: '1fr 1fr'
+    display: 'flex',
+    flexDirection: {
+      xs: 'column',
+      lg: 'row'
     },
+    flexWrap: {
+      lg: 'wrap'
+    },
+    gridColumn: { xs: '2 / -1', sm: '4 / 8', md: '6 / 12', lg: '6 / -1' },
     gap: {
       xs: '48px',
       md: '56px'
     },
-    mt: { xs: '40px', md: '72px' }
+    mt: { xs: '40px', md: '75px' }
   },
 
   cardWithIcon: {
     display: 'flex',
-    gap: { xs: '16px', md: '20px' },
+    gap: { xs: '6px', sm: '16px', md: '20px' },
     alignItems: 'flex-start'
   },
 
