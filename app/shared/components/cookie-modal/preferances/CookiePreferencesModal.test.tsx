@@ -44,12 +44,6 @@ describe('CookiePreferences Modal', () => {
     expect(screen.getByText('Cookie Settings')).toBeInTheDocument();
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
   });
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 5005ab7 (fix: removed lint error)
   it('should render analytics section and toggle', () => {
     expect(screen.getByText('Analytics')).toBeInTheDocument();
     expect(screen.getByRole('switch')).toBeInTheDocument();
@@ -60,7 +54,6 @@ describe('CookiePreferences Modal', () => {
     expect(props.onChecked).toHaveBeenCalled();
   });
 
->>>>>>> 749f814 (fix:changes checkox with switch)
   it('should render both buttons with correct labels', () => {
     expect(screen.getByRole('button', { name: 'Select All' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save Settings' })).toBeInTheDocument();
