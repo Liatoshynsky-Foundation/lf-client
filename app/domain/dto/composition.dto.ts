@@ -35,3 +35,10 @@ export type CompositionTitlesDTO = {
   _id: string;
   title: string;
 };
+export type Condition = {
+  $or?: Array<{ 'title.uk'?: string } | { 'title.en'?: string }>;
+  genres?: { $in?: Array<string | number | Record<string, unknown>> };
+  [key: string]: unknown;
+};
+
+export type Query = Condition | { $and: Condition[] } | Record<string, unknown>;

@@ -1,3 +1,4 @@
+import { Condition, Query } from '~/domain/dto/composition.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
@@ -44,26 +45,25 @@ export const compositionsRepository = {
   ) {
     await dbConnect();
 
-    const conditions: any[] = [];
+    const conditions: Condition[] = [];
 
-    const searchCond = searchHelper(search);
-    if (searchCond) {
-      conditions.push({ $or: searchCond });
+    const readySearchExpression = searchHelper(search);
+    if (readySearchExpression) {
+      conditions.push({ $or: [{ 'title.uk': readySearchExpression }, { 'title.en': readySearchExpression }] });
     }
 
-    const genreKeys = genreHelper(filters?.genres);
-    if (genreKeys) {
-      const found = await Genre.find({ key: { $in: genreKeys } })
+    const readyGenreArray = genreHelper(filters?.genres);
+    if (readyGenreArray.length > 0) {
+      const genresIds = await Genre.find({ key: { $in: readyGenreArray } })
         .select('_id')
         .lean();
-      const ids = (found || []).map((g: any) => g._id).filter(Boolean);
-      if (ids.length > 0) conditions.push({ genres: { $in: ids } });
+      conditions.push({ genres: { $in: genresIds } });
     }
 
-    const yearsCond = yearHelper(filters?.years);
-    if (yearsCond) conditions.push(yearsCond);
+    const readyYearObject = yearHelper(filters?.years);
+    if (readyYearObject) conditions.push({ year: { $gte: readyYearObject.min, $lte: readyYearObject.max } });
 
-    let query: any = {};
+    let query: Query = {};
     if (conditions.length === 1) query = conditions[0];
     else if (conditions.length > 1) query = { $and: conditions };
 
