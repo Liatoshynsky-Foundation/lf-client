@@ -1,7 +1,7 @@
 import { escapeRegex } from './escapeRegex';
 
 export const searchHelper = (search?: string) => {
-  if (!search) return '';
+  if (!search) return null;
   const cleanedExpression = escapeRegex(search);
   return cleanedExpression;
 };
