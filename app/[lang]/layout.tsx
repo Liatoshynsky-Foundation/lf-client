@@ -1,4 +1,5 @@
 import '../globals.css';
+import { Box } from '@mui/material';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { cookies } from 'next/headers';
@@ -6,7 +7,11 @@ import { notFound } from 'next/navigation';
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
+import Footer from '~/components/Footer/Footer';
+import Header from '~/components/Header/Header';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
+
+import { layoutStyles } from './layout.styles';
 
 import { routing } from '~/i18n/routing';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
@@ -72,7 +77,19 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             <ThemeProvider>
               <QueryProvider>
                 <AudioPlayerProvider>
-                  {children}
+                  <Box sx={layoutStyles.container}>
+                    <Box sx={layoutStyles.grid}>
+                      <Box sx={{ gridColumn: '1 / -1' }}>
+                        <Header />
+                      </Box>
+                      <Box sx={{ display: 'grid', gridTemplateColumns: 'subgrid', gridColumn: '1 / -1' }}>
+                        {children}
+                      </Box>
+                      <Box sx={{ gridColumn: '1 / -1' }}>
+                        <Footer />
+                      </Box>
+                    </Box>
+                  </Box>
                   <CookieModalWrapper cookie_consent={cookieConsent} />
                 </AudioPlayerProvider>
               </QueryProvider>
