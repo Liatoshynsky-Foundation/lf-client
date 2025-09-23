@@ -11,7 +11,7 @@ const makeComposed = (get: (slug: string) => Promise<unknown>) => {
     if (!page) return null;
 
     const schema = selectSchema(slug, locale);
-    return schema ? (schema.parse(page) as PageData) : null;
+    return schema ? schema.parse(page) : null;
   };
 };
 
