@@ -6,7 +6,7 @@ import { FilterSelectItemProps } from './FilterSelectItem/FilterSelectItem';
 
 jest.mock('~/ds-components/selector/FilterSelectItem/FilterSelectItem', () => {
   const Mock = ({ label, onClick, selected, disabled }: FilterSelectItemProps) => (
-    <div
+    <option
       onClick={onClick}
       onKeyDown={(e) => {
         if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
@@ -16,11 +16,11 @@ jest.mock('~/ds-components/selector/FilterSelectItem/FilterSelectItem', () => {
       tabIndex={0}
       data-testid={'checkbox-' + label}
       aria-disabled={disabled}
-      role="option"
+      aria-selected={selected}
     >
       <input type="checkbox" checked={selected} readOnly />
       {label}
-    </div>
+    </option>
   );
   Mock.displayName = 'FilterSelectItem';
   return Mock;
