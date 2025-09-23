@@ -75,9 +75,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         setOpened(true);
       }
       debouncedInputChange(value);
-      setSearch(value);
     },
-    [debouncedInputChange, setSearch, opened]
+    [debouncedInputChange, opened]
   );
 
   const handleIconClick = () => {

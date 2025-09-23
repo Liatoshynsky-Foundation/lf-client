@@ -232,5 +232,9 @@
       "subtitle": "Thank you for your request for sheet music materials",
       "btnText": "Закрити"
     }
+  },
+  "error": {
+    "title": "SoRrY, sOmEtHinG wEnT wRoNg...",
+    "subtitle": "Try to use navigation one more time"
   }
 }
