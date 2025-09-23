@@ -1,15 +1,14 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import Button from '../../design-system/all-components/button/Button';
-import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
-import PaperComponent from '../../paper-component/PaperComponent';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import PaperComponent from '~/components/paper-component/PaperComponent';
+import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
+import Button from '~/ds-components/button/Button';
+import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
+import { useDonation } from '~/hooks/use-donation/useDonation';
 import { style } from './DonationForm.styles';
 import { Currency, DonateType } from '~/types/types/common.types';
-import { WayforPayInvoice } from '~/types/types/wayForPay';
-
-import TurnstileWidget from '~/[lang]/support-us/TurnstileWidget';
 
 const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP'];
 const proposedSum: Record<Currency, number[]> = {
@@ -49,6 +48,17 @@ function DonationForm() {
     </Button>
   ];
 
+  const onVerificationFailure = useCallback(() => {
+    setShowCaptcha(true);
+    setCaptchaToken(null);
+  }, []);
+
+  const { donate } = useDonation({
+    lang,
+    currency,
+    onVerificationFailure
+  });
+
   useEffect(() => {
     if (typeof window !== 'undefined' && !window.Wayforpay) {
       const script = document.createElement('script');
@@ -56,32 +66,6 @@ function DonationForm() {
       document.body.appendChild(script);
     }
   }, []);
-
-  const handleDonate = async (amount: number) => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/create-invoice', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount,
-          lang,
-          currency
-        })
-      });
-      const invoice = await res.json();
-
-      if (res.ok) {
-        new window.Wayforpay().run(invoice as WayforPayInvoice);
-      } else {
-        alert(invoice.error || 'Failed to create invoice.');
-      }
-    } catch (error) {
-      console.error('Error during donation process.', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleDonateClick = (amount: number) => {
     setSelectedAmount(amount);
@@ -99,36 +83,18 @@ function DonationForm() {
 
   useEffect(() => {
     const donateIfReady = async () => {
-      if (!selectedAmount || !captchaToken) return;
-      setIsLoading(true);
       try {
-        const response = await fetch('/api/verify', {
-          method: 'POST',
-          body: JSON.stringify({ token: captchaToken })
-        });
-        if (!response.ok) {
-          setShowCaptcha(true);
-          setCaptchaToken(null);
-          setIsLoading(false);
-          return;
-        }
-        const data = await response.json();
-        if (data.success) {
-          await handleDonate(selectedAmount);
-          setSelectedAmount(null);
-        } else {
-          setShowCaptcha(true);
-          setCaptchaToken(null);
-        }
-      } catch {
-        setShowCaptcha(true);
+        if (!selectedAmount || !captchaToken) return;
+        await donate({ amount: selectedAmount, captchaToken });
+        setSelectedAmount(null);
         setCaptchaToken(null);
-      } finally {
-        setIsLoading(false);
+      } catch {
+        setSelectedAmount(null);
+        setShowCaptcha(false);
       }
     };
     donateIfReady();
-  }, [selectedAmount, captchaToken]);
+  }, [selectedAmount, captchaToken, donate]);
 
   const suggestButtons = proposedSum[currency].map((item) => (
     <Button
@@ -194,7 +160,7 @@ function DonationForm() {
 
         {showCaptcha && (
             <Box sx={style.turnstileWidget}>
-                <TurnstileWidget language="uk" onSuccess={handleCaptchaSuccess} />
+                <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
             </Box>
         )}
       <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>

@@ -33,7 +33,8 @@ export const errors = {
     status: 500
   },
   USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider',
-  NOT_FOUND: 'This resource was not found'
+  NOT_FOUND: 'This resource was not found',
+  CAPTCHA_FAILED: 'Captcha verification failed'
 };
 
 export const envErrors = {
