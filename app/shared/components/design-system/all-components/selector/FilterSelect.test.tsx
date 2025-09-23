@@ -6,7 +6,7 @@ import { FilterSelectItemProps } from './FilterSelectItem/FilterSelectItem';
 
 jest.mock('~/ds-components/selector/FilterSelectItem/FilterSelectItem', () => {
   const Mock = ({ label, onClick, selected, disabled }: FilterSelectItemProps) => (
-    <div onClick={onClick} data-testid={'checkbox-' + label} aria-disabled={disabled}>
+    <div onClick={onClick} data-testid={'checkbox-' + label} aria-disabled={disabled} role="option">
       <input type="checkbox" checked={selected} readOnly />
       {label}
     </div>
