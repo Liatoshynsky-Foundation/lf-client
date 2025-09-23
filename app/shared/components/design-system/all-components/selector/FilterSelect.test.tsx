@@ -63,21 +63,21 @@ describe('FilterSelect', () => {
     expect(screen.getByText('Test Label')).toBeInTheDocument();
   });
 
-  // it('should open dropdown when clicked', () => {
-  //   render(<FilterSelect label="Dropdown" options={mockOptions} />);
-  //   fireEvent.click(screen.getByText('Dropdown'));
-  //   mockOptions.forEach(({ label }) => {
-  //     expect(screen.getByText(label)).toBeInTheDocument();
-  //   });
-  // });
+  it('should open dropdown when clicked', () => {
+    render(<FilterSelect label="Dropdown" options={mockOptions} />);
+    fireEvent.click(screen.getByText('Dropdown'));
+    mockOptions.forEach(({ label }) => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    });
+  });
 
-  // it('should add selected option as chip', () => {
-  //   render(<FilterSelect label="Select" options={mockOptions} />);
-  //   fireEvent.click(screen.getByText('Select'));
-  //   fireEvent.click(screen.getByText('First'));
+  it('should add selected option as chip', () => {
+    render(<FilterSelect label="Select" options={mockOptions} />);
+    fireEvent.click(screen.getByText('Select'));
+    fireEvent.click(screen.getByText('First'));
 
-  //   expect(screen.getByText('1 обрано')).toBeInTheDocument();
-  // });
+    expect(screen.getByText('1 обрано')).toBeInTheDocument();
+  });
 
   it('should remove chip when delete icon is clicked', () => {
     render(<FilterSelect label="Select" options={mockOptions} defaultValues={['1']} />);
@@ -86,13 +86,13 @@ describe('FilterSelect', () => {
     expect(screen.queryByText('1 обрано')).not.toBeInTheDocument();
   });
 
-  // it('should call onAdd when item is selected', () => {
-  //   const onAdd = jest.fn();
-  //   render(<FilterSelect label="Select" options={mockOptions} onAdd={onAdd} />);
-  //   fireEvent.click(screen.getByText('Select'));
-  //   fireEvent.click(screen.getByText('Second'));
-  //   expect(onAdd).toHaveBeenCalledWith('2', 'Second', ['2']);
-  // });
+  it('should call onAdd when item is selected', () => {
+    const onAdd = jest.fn();
+    render(<FilterSelect label="Select" options={mockOptions} onAdd={onAdd} />);
+    fireEvent.click(screen.getByText('Select'));
+    fireEvent.click(screen.getByText('Second'));
+    expect(onAdd).toHaveBeenCalledWith('2', 'Second', ['2']);
+  });
 
   it('should call onRemove when chip is deleted', () => {
     const onRemove = jest.fn();
