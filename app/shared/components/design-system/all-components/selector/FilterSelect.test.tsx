@@ -1,6 +1,37 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { ComponentType } from 'react';
 
 import { FilterSelect } from './FilterSelect';
+import { FilterSelectItemProps } from './FilterSelectItem/FilterSelectItem';
+
+jest.mock('~/ds-components/selector/FilterSelectItem/FilterSelectItem', () => {
+  const Mock = ({ label, onClick, selected, disabled }: FilterSelectItemProps) => (
+    <div onClick={onClick} data-testid={'checkbox-' + label} aria-disabled={disabled}>
+      <input type="checkbox" checked={selected} readOnly />
+      {label}
+    </div>
+  );
+  Mock.displayName = 'FilterSelectItem';
+  return Mock;
+});
+
+jest.mock('~/public/icons/trash-2.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="clear-icon" />
+}));
+
+jest.mock('next-intl', () => ({
+  useTranslations: (module: string) => (key: string) => module + '.' + key
+}));
+
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: ({ Component, alt }: { Component: ComponentType; alt?: string }) => (
+    <div data-testid="svg-wrapper">
+      <Component />
+      {alt}
+    </div>
+  )
+}));
 
 const mockOptions = [
   { value: '1', label: 'First' },
@@ -55,8 +86,9 @@ describe('FilterSelect', () => {
   it('should disable selection if maxSelections is reached', () => {
     render(<FilterSelect label="Max" options={mockOptions} maxSelections={1} defaultValues={['1']} />);
     fireEvent.click(screen.getByText('Max'));
-    const secondItem = screen.getByText('Second');
-    expect(secondItem.closest('li')).toHaveAttribute('aria-disabled', 'true');
+    const secondItem = screen.getByTestId('checkbox-Second');
+
+    expect(secondItem).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('should not open menu if disabled', () => {
