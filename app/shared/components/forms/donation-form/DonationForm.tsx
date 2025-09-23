@@ -61,7 +61,7 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (typeof globalThis.window !== 'undefined' && !globalThis.window.Wayforpay) {
+    if (globalThis.window !== undefined && !globalThis.window.Wayforpay) {
       const script = document.createElement('script');
       script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
       document.body.appendChild(script);

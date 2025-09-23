@@ -7,7 +7,7 @@ interface TurnstileWidgetProps {
   language: Locale;
 }
 
-export default function TurnstileWidget({ onSuccessAction, language }: TurnstileWidgetProps) {
+export default function TurnstileWidget({ onSuccessAction, language }: Readonly<TurnstileWidgetProps>) {
   return (
     <div className="mt-4">
       <Turnstile
