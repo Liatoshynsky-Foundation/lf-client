@@ -1,5 +1,5 @@
-import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 import { WayforPayInvoice } from '~/types/types/wayForPay';

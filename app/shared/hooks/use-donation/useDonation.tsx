@@ -43,7 +43,7 @@ export function useDonation({ lang, currency, onVerificationFailure }: UseDonati
   const mutation = useMutation<WayforPayInvoice, Error, DonationVariables>({
     mutationFn,
     onSuccess: (invoice) => {
-      new window.Wayforpay().run(invoice);
+      new globalThis.window.Wayforpay().run(invoice);
     },
     onError
   });

@@ -2,13 +2,12 @@
 
 import { Locale } from 'next-intl';
 import Turnstile from 'react-cloudflare-turnstile';
-export default function TurnstileWidget({
-  onSuccessAction,
-  language
-}: {
-  language: Locale;
+interface TurnstileWidgetProps {
   onSuccessAction: (token: string) => void;
-}) {
+  language: Locale;
+}
+
+export default function TurnstileWidget({ onSuccessAction, language }: TurnstileWidgetProps) {
   return (
     <div className="mt-4">
       <Turnstile
