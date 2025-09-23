@@ -44,7 +44,6 @@ describe('CookiePreferences Modal', () => {
     expect(screen.getByText('Cookie Settings')).toBeInTheDocument();
     expect(screen.getByText('We respect your right to privacy.')).toBeInTheDocument();
   });
-  
   it('should render both buttons with correct labels', () => {
     expect(screen.getByRole('button', { name: 'Select All' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save Settings' })).toBeInTheDocument();
