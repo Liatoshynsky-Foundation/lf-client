@@ -107,7 +107,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
       setErrors({});
       onChange([parsed.data.from, parsed.data.to]);
     } else {
-      const fieldErrors = parsed.error.flatten().fieldErrors;
+      const fieldErrors = parsed.error.formErrors.fieldErrors;
       setErrors({
         from: fieldErrors.from?.[0],
         to: fieldErrors.to?.[0]
