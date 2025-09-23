@@ -2,11 +2,13 @@
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+
 import PaperComponent from '~/components/paper-component/PaperComponent';
 import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
 import { useDonation } from '~/hooks/use-donation/useDonation';
+
 import { style } from './DonationForm.styles';
 import { Currency, DonateType } from '~/types/types/common.types';
 
@@ -27,10 +29,9 @@ function DonationForm() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [touched, setTouched] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [showCaptcha, setShowCaptcha] = useState(false);
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-    const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
 
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
@@ -68,9 +69,14 @@ function DonationForm() {
   }, []);
 
   const handleDonateClick = (amount: number) => {
-    setSelectedAmount(amount);
-      setTouched(true);
-      setHasError(donationSum === 0 || donationSum === '');
+    setTouched(true);
+    const currentAmount = Number(amount);
+    const isInvalid = currentAmount <= 0;
+    setHasError(isInvalid);
+    if (isInvalid) {
+      return;
+    }
+    setSelectedAmount(currentAmount);
     if (!captchaToken) {
       setShowCaptcha(true);
     }
@@ -158,11 +164,11 @@ function DonationForm() {
       </Box>
       <Box sx={style.addBtns}>{suggestButtons}</Box>
 
-        {showCaptcha && (
-            <Box sx={style.turnstileWidget}>
-                <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
-            </Box>
-        )}
+      {showCaptcha && (
+        <Box sx={style.turnstileWidget}>
+          <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
+        </Box>
+      )}
       <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
         <Typography variant="customSemiBold18">
           {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
