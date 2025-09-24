@@ -1,7 +1,7 @@
 import { mainHexPallete } from '~/ds-components//theme/colors';
 
 export const ControlPanelStyles = {
-  root: (theme: Theme) => ({ //Theme from Mui material
+  root: (theme: Theme) => ({ 
     display: 'column',
     gap: 8,
     pl: 3,
