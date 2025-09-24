@@ -42,8 +42,8 @@ export const getFullUrl = <Path extends string>({ pathname, parameters, searchPa
   let resultUrl = pathname;
 
   if (parameters) {
-    for (const [param, value] of Object.entries(parameters)) {
-      const replacement = encodeURIComponent(String(value));
+    for (const [param, value] of Object.entries<string>(parameters)) {
+      const replacement = encodeURIComponent(value);
       resultUrl = (resultUrl as string).replace(new RegExp(`\\[${param}\\]`, 'g'), replacement) as Path;
     }
   }

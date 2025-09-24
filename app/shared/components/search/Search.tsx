@@ -85,7 +85,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
   const handleClear = () => {
     setSearch('');
-    setFocused(false);
+    setValue(null);
     setOpened(false);
   };
 
@@ -100,6 +100,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         onFocus={() => setFocused(true)}
         onBlur={() => {
           setOpened(false);
+          setFocused(false);
         }}
         slotProps={{
           input: {

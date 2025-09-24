@@ -8,7 +8,7 @@ const handleChange = jest.fn();
 describe('CustomSwitch', () => {
   it('should render with checked state when checked prop is true', () => {
     render(<Switch checked={true} onChange={handleChange} />);
-    const input = screen.getByRole('checkbox');
+    const input = screen.getByRole('switch');
     expect(input).toBeChecked();
   });
 

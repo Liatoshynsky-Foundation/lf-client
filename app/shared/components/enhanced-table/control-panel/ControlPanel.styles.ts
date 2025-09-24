@@ -1,5 +1,9 @@
+import { Theme } from '@mui/material/styles';
+
+import { mainHexPallete } from '~/ds-components//theme/colors';
+
 export const ControlPanelStyles = {
-  root: (theme: any) => ({
+  root: (theme: Theme) => ({
     display: 'column',
     gap: 8,
     pl: 3,
@@ -19,15 +23,6 @@ export const ControlPanelStyles = {
     gap: 2,
     marginRight: '40px'
   },
-  mobileSearchBox: {
-    marginRight: '30px',
-    marginBottom: '10px'
-  },
-  searchIconButton: {
-    padding: '6px',
-    minWidth: '40px',
-    borderRadius: '8px'
-  },
   filtersBadge: {
     '& .MuiBadge-badge': { top: '5px', right: '5px', borderRadius: '50%', minWidth: '18px', height: '18px' }
   },
@@ -41,5 +36,13 @@ export const ControlPanelStyles = {
     display: 'flex',
     alignItems: 'center',
     gap: 2
-  }
+  },
+  searchIconButton: (searchActive: boolean) => ({
+    backgroundColor: searchActive ? mainHexPallete.black : mainHexPallete.white,
+    color: searchActive ? mainHexPallete.white : mainHexPallete.black,
+    border: `1px solid ${mainHexPallete.black}`,
+    '&:hover': {
+      backgroundColor: searchActive ? mainHexPallete.black : mainHexPallete.white
+    }
+  })
 };
