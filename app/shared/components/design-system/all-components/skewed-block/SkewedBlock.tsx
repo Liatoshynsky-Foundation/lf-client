@@ -1,31 +1,86 @@
-import { Box } from '@mui/system';
+import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
 import type { ReactNode } from 'react';
 
-type SkewedBlockProps = {
+import { styles } from './SkewedBlock.styles';
+
+type BaseProps = {
   image: string;
-  backgroundSize: 'cover' | 'contain';
-  height: object;
+  useBackground?: boolean;
+  width?: number | string;
   sx?: object;
   children?: ReactNode;
+  caption?: string;
+  align?: 'left' | 'right';
 };
-export const SkewedBlock = ({ image, backgroundSize, height, sx, children }: SkewedBlockProps) => {
+
+type CoverProps = BaseProps & {
+  backgroundSize: 'cover';
+  height: number | string | object;
+};
+
+type ContainProps = BaseProps & {
+  backgroundSize: 'contain';
+  height?: number | string | object;
+};
+
+export type SkewedBlockProps = CoverProps | ContainProps;
+
+export const SkewedBlock = ({
+  image,
+  useBackground = false,
+  backgroundSize,
+  width = '100%',
+  height = 'auto',
+  sx,
+  children,
+  caption,
+  align = 'right'
+}: SkewedBlockProps) => {
+  const isCover = backgroundSize === 'cover';
+
   return (
     <Box
       data-testid="skewed-block"
       sx={{
-        backgroundImage: `url(${image})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize,
-        gridColumn: '1 / -1',
-        position: 'relative',
-        left: '50%',
-        marginLeft: '-50vw',
-        width: '100vw',
+        ...styles.mainContainer,
         height,
-        transform: 'skewY(-2deg)',
-        ...sx
+        ...(useBackground && {
+          backgroundImage: `url(${image})`,
+          backgroundSize,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          ...sx
+        })
       }}
     >
+      {!useBackground && (
+        <Box sx={{ display: 'inline-block', width, textAlign: 'center' }}>
+          <Box sx={{ position: 'relative', width: '100%', height: isCover ? height : 'auto' }}>
+            <Image
+              aria-label="image-with-caption"
+              src={image}
+              alt={caption || ''}
+              fill={isCover}
+              width={isCover ? undefined : 600}
+              height={isCover ? undefined : 400}
+              style={{
+                objectFit: backgroundSize,
+                width: '100%',
+                height: isCover ? undefined : 'auto',
+                ...sx
+              }}
+            />
+          </Box>
+
+          {caption && (
+            <Typography variant="caption" sx={styles.caption(align)}>
+              {caption}
+            </Typography>
+          )}
+        </Box>
+      )}
+
       {children}
     </Box>
   );
