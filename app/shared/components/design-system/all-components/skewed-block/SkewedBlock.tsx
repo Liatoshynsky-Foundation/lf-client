@@ -58,7 +58,7 @@ export const SkewedBlock = ({
         <Box sx={{ display: 'inline-block', width, textAlign: 'center' }}>
           <Box sx={{ position: 'relative', width: '100%', height: isCover ? height : 'auto' }}>
             <Image
-              aria-label="image-with-caption"
+              aria-label={caption || 'image-with-caption'}
               src={image}
               alt={caption || ''}
               fill={isCover}
