@@ -19,13 +19,13 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = await createRequestContainer().resolve('pageService');
+  const pageService = await createRequestContainer().resolve('pagesService');
 
   const page = await pageService.getPageData('research', lang);
 
   return (
     <>
-      {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
+      {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} lang={lang} />}
       <WorkTableSection lang={lang} />
     </>
   );

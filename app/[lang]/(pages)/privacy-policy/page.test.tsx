@@ -20,19 +20,19 @@ jest.mock('~/di/container', () => {
   const createRequestContainer = jest.fn(() => ({
     resolve: () => ({
       getPageData: jest.fn().mockResolvedValue({
-        title: 'Privacy Policy',
+        title: { en: 'Privacy Policy' },
         blocks: {
           IntroSection: { trustAndSecurity: {}, agreement: {} },
-          DataWeCollect: { title: 'Data We Collect', description: {}, sections: [] },
-          DataUsage: { title: 'How We Use Data', description: {}, list: [] },
-          Cookies: { title: 'Cookies', description: {}, list: [], note: {} },
-          GoogleAuth: { title: 'Google Auth', description: {}, list: [], note: {} },
-          SocialNetworks: { title: 'Social Networks', description: {} },
-          TargetedAds: { title: 'Targeted Ads', description: {} },
-          NewsletterSubscription: { title: 'Newsletter', description: {} },
-          DataRetention: { title: 'Data Retention', description: {} },
-          UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
-          ContactUs: { title: 'Contact Us', description: {} }
+          DataWeCollect: { title: { en: 'Data We Collect' }, description: {}, sections: [] },
+          DataUsage: { title: { en: 'How We Use Data' }, description: {}, list: [] },
+          Cookies: { title: { en: 'Cookies' }, description: {}, list: [], note: {} },
+          GoogleAuth: { title: { en: 'Google Auth' }, description: {}, list: [], note: {} },
+          SocialNetworks: { title: { en: 'Social Networks' }, description: {} },
+          TargetedAds: { title: { en: 'Targeted Ads' }, description: {} },
+          NewsletterSubscription: { title: { en: 'Newsletter' }, description: {} },
+          DataRetention: { title: { en: 'Data Retention' }, description: {} },
+          UserRights: { title: { en: 'Your Rights' }, description: {}, list: [], note: {} },
+          ContactUs: { title: { en: 'Contact Us' }, description: {} }
         }
       })
     })
@@ -76,11 +76,11 @@ describe('PrivacyPolicy page', () => {
     (createRequestContainer as jest.Mock).mockReturnValueOnce({
       resolve: () => ({
         getPageData: jest.fn().mockResolvedValue({
-          title: 'Selective',
+          title: { en: 'Selective' },
           blocks: {
             IntroSection: { trustAndSecurity: {}, agreement: {} },
-            DataUsage: { title: 'How We Use Data', description: {}, list: [] },
-            ContactUs: { title: 'Contact Us', description: {} }
+            DataUsage: { title: { en: 'How We Use Data' }, description: {}, list: [] },
+            ContactUs: { title: { en: 'Contact Us' }, description: {} }
           }
         })
       })

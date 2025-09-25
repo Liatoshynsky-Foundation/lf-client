@@ -1,9 +1,23 @@
+import { Locale } from 'next-intl';
+
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import { ResearchAndScientificWorkProps } from '~/types/page/research.types';
 
-export default function ResearchAndScientificWork({ data }: { readonly data: ResearchAndScientificWorkProps }) {
+import { localizeField } from '~/lib/utils/localize';
+
+export default function ResearchAndScientificWork({
+  data,
+  lang
+}: {
+  readonly data: ResearchAndScientificWorkProps;
+  lang: Locale;
+}) {
   const { title, quote } = data;
+
+  const localizedTitle = localizeField<string>(title, lang) ?? '';
+  const localizedQuoteText = localizeField<string>(quote.text, lang) ?? '';
+  const localizedSourceText = localizeField<string>(quote.source, lang) ?? '';
 
   return (
     <TitleWithQuote
@@ -15,9 +29,9 @@ export default function ResearchAndScientificWork({ data }: { readonly data: Res
           md: '8 / -1'
         }
       }}
-      title={title}
-      quoteText={quote.text}
-      sourceText={quote.source}
+      title={localizedTitle}
+      quoteText={localizedQuoteText}
+      sourceText={localizedSourceText}
       color="brown"
     />
   );

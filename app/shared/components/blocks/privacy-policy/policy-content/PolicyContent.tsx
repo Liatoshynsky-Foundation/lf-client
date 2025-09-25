@@ -7,7 +7,9 @@ import type { TipTapDoc } from '~/types/types/common.types';
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
   const ParagraphRenderer = (children: React.ReactNode) => (
-    <Typography sx={{ display: 'block', ...paragraphSx }}>{children}</Typography>
+    <Typography component="div" sx={{ display: 'block', ...paragraphSx }}>
+      {children}
+    </Typography>
   );
   ParagraphRenderer.displayName = 'ParagraphRenderer';
   return ParagraphRenderer;

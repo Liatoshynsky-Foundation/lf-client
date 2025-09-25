@@ -34,7 +34,7 @@ describe('PolicyContent', () => {
     expect(tiptap).toBeInTheDocument();
 
     const typography = screen.getByText('Mocked content');
-    expect(typography.tagName).toBe('P');
+    expect(typography.tagName).toBe('DIV');
     expect(typography).toHaveStyle('color: red');
     expect(typography).toHaveStyle('display: block');
   });

@@ -1,11 +1,12 @@
-export interface QuoteBlock {
-  text: string;
-  source: string;
-}
+export type Localized<T> = { [lang: string]: T };
 
+export interface QuoteBlock {
+  text: Localized<string>;
+  source: Localized<string>;
+}
 export interface ResearchAndScientificWorkProps {
   quote: QuoteBlock;
-  title: string;
+  title: Localized<string>;
 }
 
 export interface IResearchPage {
