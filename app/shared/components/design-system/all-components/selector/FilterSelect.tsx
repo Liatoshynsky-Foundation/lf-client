@@ -51,7 +51,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 
   useEffect(() => {
     setSelectedValues(defaultValues);
-  }, [defaultValues, defaultValuesKey]);
+  }, [defaultValues]);
 
   const handleToggleMenu = () => {
     if (!disabled && menuAnchorRef.current) {
