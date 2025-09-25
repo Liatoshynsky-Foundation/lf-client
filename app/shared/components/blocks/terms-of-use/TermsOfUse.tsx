@@ -41,7 +41,7 @@ const TermsOfUse = () => {
         <SkewedBlock
           image="/images/liatoshynsky.png"
           backgroundSize="cover"
-          useBackground
+          isBackground
           height={skewedBlockHeight}
           sx={style.backgroundContainer}
         >

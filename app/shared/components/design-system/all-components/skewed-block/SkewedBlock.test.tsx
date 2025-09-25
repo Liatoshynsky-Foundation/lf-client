@@ -9,14 +9,14 @@ describe('SkewedBlock', () => {
     expect(screen.getByTestId('skewed-block')).toBeInTheDocument();
   });
   it('should apply correct background image', () => {
-    render(<SkewedBlock image="/image.svg" useBackground backgroundSize="cover" height={{ xs: 200 }} />);
+    render(<SkewedBlock image="/image.svg" isBackground backgroundSize="cover" height={{ xs: 200 }} />);
     expect(screen.getByTestId('skewed-block')).toHaveStyle('background-image: url(/image.svg)');
   });
   it('should apply custom styles from sx prop', () => {
     render(
       <SkewedBlock
         image="/image.svg"
-        useBackground
+        isBackground
         backgroundSize="cover"
         height={{ xs: 200 }}
         sx={{ backgroundPosition: 'center' }}

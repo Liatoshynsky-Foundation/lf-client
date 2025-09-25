@@ -6,7 +6,7 @@ import { styles } from './SkewedBlock.styles';
 
 type BaseProps = {
   image: string;
-  useBackground?: boolean;
+  isBackground?: boolean;
   width?: number | string;
   sx?: object;
   children?: ReactNode;
@@ -28,7 +28,7 @@ export type SkewedBlockProps = CoverProps | ContainProps;
 
 export const SkewedBlock = ({
   image,
-  useBackground = false,
+  isBackground = false,
   backgroundSize,
   width = '100%',
   height = 'auto',
@@ -45,7 +45,7 @@ export const SkewedBlock = ({
       sx={{
         ...styles.mainContainer,
         height,
-        ...(useBackground && {
+        ...(isBackground && {
           backgroundImage: `url(${image})`,
           backgroundSize,
           backgroundPosition: 'center',
@@ -54,7 +54,7 @@ export const SkewedBlock = ({
         })
       }}
     >
-      {!useBackground && (
+      {!isBackground && (
         <Box sx={{ display: 'inline-block', width, textAlign: 'center' }}>
           <Box sx={{ position: 'relative', width: '100%', height: isCover ? height : 'auto' }}>
             <Image
@@ -62,8 +62,7 @@ export const SkewedBlock = ({
               src={image}
               alt={caption || ''}
               fill={isCover}
-              width={isCover ? undefined : 600}
-              height={isCover ? undefined : 400}
+              {...(!isCover && { width: 600, height: 400 })}
               style={{
                 objectFit: backgroundSize,
                 width: '100%',
