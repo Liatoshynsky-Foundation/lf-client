@@ -4,10 +4,8 @@ import { mainHexPallete } from '~/ds-components//theme/colors';
 
 export const ControlPanelStyles = {
   root: (theme: Theme) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    // numeric values are multiplied by theme.spacing; use explicit px or theme.spacing(1)
-    gap: '8px',
+    display: 'column',
+    gap: 8,
     pl: 3,
     [theme.breakpoints.up('sm')]: { pr: '30px' },
     [theme.breakpoints.up('md')]: { pr: '60px' }
@@ -17,7 +15,7 @@ export const ControlPanelStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    mb: '8px'
+    mb: 2
   },
   headerRight: {
     display: 'flex',
@@ -34,7 +32,7 @@ export const ControlPanelStyles = {
     gap: 2
   },
   filtersContainer: {
-    marginBottom: '8px',
+    marginBottom: 2,
     display: 'flex',
     alignItems: 'center',
     gap: 2
