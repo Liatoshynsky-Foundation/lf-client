@@ -7,7 +7,7 @@ jest.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       'numeric.from': 'From',
       'numeric.to': 'To',
-      'numeric.clearFilter': 'Clear filter',
+      clear: 'Clear filter',
       'errors.minLength': `The 'From' value cannot be less than ${params?.min}`,
       'errors.maxLength': `The 'To' value cannot be greater than ${params?.max}`,
       'errors.minDistance': 'The "To" value cannot be less than the "From" value',
