@@ -9,13 +9,11 @@ interface TurnstileWidgetProps {
 
 export default function TurnstileWidget({ onSuccessAction, language }: Readonly<TurnstileWidgetProps>) {
   return (
-    <div className="mt-4">
-      <Turnstile
-        language={language}
-        turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-        callback={onSuccessAction}
-        theme="light"
-      />
-    </div>
+    <Turnstile
+      language={language}
+      turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+      callback={onSuccessAction}
+      theme="light"
+    />
   );
 }
