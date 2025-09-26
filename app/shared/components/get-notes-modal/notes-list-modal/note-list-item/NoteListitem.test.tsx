@@ -13,7 +13,7 @@ jest.mock('~/components/svg-image/SvgImage', () => ({
   SvgImage: (props: any) => <img data-testid="svg-image" alt={props.alt} />
 }));
 
-const note = { title: 'Test Note', free: true, date: '2023-01-01' };
+const note = { url: '/notes/test-note.pdf', isFree: true, dateUploaded: '2023-01-01' };
 
 const icon = <svg data-testid="end-icon" />;
 
@@ -26,10 +26,10 @@ describe('NotesListItem', () => {
 
   it('should render note title, date, and button', () => {
     render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
-    expect(screen.getByText('Test Note')).toBeInTheDocument();
-    expect(screen.getByText('2023-01-01')).toBeInTheDocument();
+    expect(screen.getByText('test-note')).toBeInTheDocument();
+    expect(screen.getByText('01.01.2023')).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeInTheDocument();
-    expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'Test Note');
+    expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'test-note');
   });
 
   it('should render correct button text for freeNotesButton', () => {
@@ -39,7 +39,7 @@ describe('NotesListItem', () => {
 
   it('should render correct button text for paidNotesButton', () => {
     render(
-      <NotesListItem note={{ ...note, free: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
+      <NotesListItem note={{ ...note, isFree: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
     );
     expect(screen.getByRole('button')).toHaveTextContent('paidNotesButton');
   });
