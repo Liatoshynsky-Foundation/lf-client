@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
+import { v4 as uuidv4 } from 'uuid';
 
 import { WayforPayInvoice } from '~/types/types/wayForPay';
 import { errorResponse } from '~/utils/apiResponse';
@@ -30,16 +31,20 @@ export async function POST(request: NextRequest) {
   const data: WayforPayInvoice = {
     merchantAccount: WayForPay.MERCHANT_ACCOUNT,
     merchantDomainName: WayForPay.DOMAIN_NAME,
-    orderReference: `DON-${Date.now()}`,
+    orderReference: `DON-${uuidv4()}`,
     orderDate: Math.floor(Date.now() / 1000),
     amount,
     currency: currency ?? 'UAH',
     productName: ['Donation'],
     productCount: [1],
     productPrice: [amount],
-    language: lang === 'en' ? 'EN' : 'UA'
+    language: lang === 'en' ? 'EN' : 'UA',
+    merchantCallbackUrl: `${WayForPay.DOMAIN_NAME}/api/wayforpay/callback`
   };
 
+  // ⚠️ IMPORTANT:
+  // The order of fields below is predefined by WayforPay and MUST NOT be changed
+  // Values are joined using ";" as a separator according to their API specification
   const signatureBase = [
     data.merchantAccount,
     data.merchantDomainName,

@@ -9,4 +9,5 @@ export type WayforPayInvoice = {
   productCount: number[];
   productPrice: number[];
   language: 'UA' | 'EN';
+  merchantCallbackUrl: string;
 };
