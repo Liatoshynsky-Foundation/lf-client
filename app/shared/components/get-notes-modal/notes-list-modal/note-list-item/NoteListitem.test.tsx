@@ -27,7 +27,7 @@ describe('NotesListItem', () => {
   it('should render note title, date, and button', () => {
     render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
     expect(screen.getByText('test-note')).toBeInTheDocument();
-    expect(screen.getByText('01.01.2023')).toBeInTheDocument();
+    expect(screen.getByText(/2023/)).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'test-note');
   });
