@@ -15,7 +15,7 @@ interface IContactInfoProps {
   socialLinks: LinkIcon[];
 }
 
-export default function ContactsInfo({ contacts, socialLinks }: IContactInfoProps) {
+export default function ContactsInfo({ contacts, socialLinks }: Readonly<IContactInfoProps>) {
   const t = useTranslations('contactsInfoPage');
 
   return (

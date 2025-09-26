@@ -1,13 +1,20 @@
 'use client';
 
-import { Box, MenuItem, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Chip } from '../chip/Chip';
-import DropdownMenu from '../dropdown-menu/DropdownMenu';
+import { Svg } from '~/components/colored-svg/ColoredSvg';
+import { Chip } from '~/ds-components/chip/Chip';
+import DropdownMenu from '~/ds-components/dropdown-menu/DropdownMenu';
+import FilterSelectItem from '~/ds-components/selector/FilterSelectItem/FilterSelectItem';
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 import { filterSelectStyles } from './FilterSelect.styles';
 import { PositionEnum } from '~/types/enums/common.enums';
+
+import Trash from '~/public/icons/trash-2.svg';
 
 interface FilterOption {
   value: string;
@@ -35,9 +42,11 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   onAdd,
   onRemove
 }) => {
+  const t = useTranslations('filtering');
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(defaultValues);
-  const iconRef = useRef<HTMLDivElement | null>(null);
+  const menuAnchorRef = useRef<HTMLDivElement | null>(null);
   const defaultValuesKey = JSON.stringify(defaultValues);
 
   useEffect(() => {
@@ -45,8 +54,8 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   }, [defaultValuesKey]);
 
   const handleToggleMenu = () => {
-    if (!disabled && iconRef.current) {
-      setAnchorEl(iconRef.current);
+    if (!disabled && menuAnchorRef.current) {
+      setAnchorEl(menuAnchorRef.current);
     }
   };
 
@@ -79,26 +88,38 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const selectedOptionsCount = selectedValues.length;
   const isMaxReached = maxSelections ? selectedValues.length >= maxSelections : false;
 
-  const menuList = options.map((option) => {
-    const isSelected = selectedValues.includes(option.value);
-    const isDisabled = !isSelected && isMaxReached;
+  const menuList = (
+    <Box>
+      <Box sx={{ maxHeight: 220, overflowY: 'auto' }}>
+        {options.map((option) => {
+          const isSelected = selectedValues.includes(option.value);
+          const isDisabled = !isSelected && isMaxReached;
 
-    return (
-      <MenuItem
-        key={option.value}
-        onClick={() => !isDisabled && handleOptionClick(option)}
-        selected={isSelected}
-        disabled={isDisabled}
-        sx={filterSelectStyles.menuItem}
-      >
-        <span>{option.label}</span>
-      </MenuItem>
-    );
-  });
+          return (
+            <FilterSelectItem
+              label={option.label}
+              key={option.value}
+              onClick={() => !isDisabled && handleOptionClick(option)}
+              selected={isSelected}
+              disabled={isDisabled}
+              sx={filterSelectStyles.menuItem}
+            />
+          );
+        })}
+      </Box>
+      <Divider sx={{ my: 1 }} />
+      <Box sx={filterSelectStyles.clearAllContainer} onClick={handleChipDelete}>
+        <Svg Component={Trash} alt="clear" stroke={mainHexPallete.red[600]} />
+        <Typography variant="customSemiBold16" sx={{ color: mainHexPallete.red[600], whiteSpace: 'nowrap' }}>
+          {t('clear')}
+        </Typography>
+      </Box>
+    </Box>
+  );
 
   return (
-    <>
-      <Box sx={filterSelectStyles.root(variant, disabled)} onClick={handleToggleMenu}>
+    <Box>
+      <Box ref={menuAnchorRef} sx={filterSelectStyles.root(variant, disabled)} onClick={handleToggleMenu}>
         <Typography sx={filterSelectStyles.label(disabled)}>{label}</Typography>
         <Box sx={filterSelectStyles.chipContainer}>
           {selectedOptionsCount > 0 && (
@@ -110,7 +131,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
               size="small"
             />
           )}
-          <Box ref={iconRef} sx={filterSelectStyles.dropdownIcon(disabled)}>
+          <Box sx={filterSelectStyles.dropdownIcon(disabled)}>
             <Image src="/icons/chevron-down.svg" alt="dropdown" width={16} height={16} />
           </Box>
         </Box>
@@ -131,6 +152,6 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
         maxHeight={300}
         menuList={menuList}
       />
-    </>
+    </Box>
   );
 };

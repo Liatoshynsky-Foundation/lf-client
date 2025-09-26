@@ -170,7 +170,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
             onClick={handleClearFilter}
             variant="text"
           >
-            {t('numeric.clearFilter')}
+            {t('clear')}
           </CustomButton>
         </Box>
       </Box>

@@ -60,8 +60,11 @@
   },
   "common": {
     "languageNotFound": "The page is not yet available in this language",
-    "pageNotFound": "404 Page not found",
-    "goHome": "return to home",
+    "pageNotFound": {
+      "errorTitle": "OoPs!",
+      "errorMessage": "The page you are looking for does not exist, search again on the main page"
+    },
+    "goHome": "Return to home",
     "viewMore": "View More"
   },
   "quote": {
@@ -191,15 +194,15 @@
   "filtering": {
     "numeric": {
       "from": "From",
-      "to": "To",
-      "clearFilter": "Clear filter"
+      "to": "To"
     },
     "errors": {
       "minValue": "The 'From' value cannot be less than {min}",
       "maxValue": "The 'To' value cannot be greater than {max}",
       "minDistance": "The 'To' value cannot be less than the 'From' value",
       "onlyNumbers": "Only numeric values are allowed"
-    }
+    },
+    "clear": "Clear filter"
   },
   "search": {
     "notFound": "Not found",

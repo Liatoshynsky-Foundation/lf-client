@@ -86,5 +86,16 @@ export const filterSelectStyles = {
     fontSize: '16px',
     lineHeight: '150%',
     letterSpacing: '0%'
+  },
+
+  clearAllContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '8px 16px',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)'
+    }
   }
 };

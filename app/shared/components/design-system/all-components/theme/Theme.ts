@@ -42,6 +42,7 @@ declare module '@mui/material' {
     customMedium16: true;
     customItalic16: true;
     customItalic14: true;
+    customSemiBold16: true;
     customSemiBold18: true;
     customBold25: true;
   }
@@ -58,6 +59,7 @@ declare module '@mui/material/styles' {
     customItalic16?: React.CSSProperties;
     customCaption?: React.CSSProperties;
     customItalic14?: React.CSSProperties;
+    customSemiBold16?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
     customBold25: React.CSSProperties;
     customBold236?: React.CSSProperties;
@@ -65,17 +67,18 @@ declare module '@mui/material/styles' {
     customBold114?: React.CSSProperties;
   }
   interface TypographyVariants {
-    customBold32: React.CSSProperties;
-    customSemiBold20: React.CSSProperties;
-    customBold20: React.CSSProperties;
-    customItalic18: React.CSSProperties;
-    customMedium18: React.CSSProperties;
-    customBold16: React.CSSProperties;
-    customMedium16: React.CSSProperties;
-    customItalic16: React.CSSProperties;
     customCaption: React.CSSProperties;
+    customBold32: React.CSSProperties;
+    customBold20: React.CSSProperties;
     customItalic14: React.CSSProperties;
+    customItalic16: React.CSSProperties;
+    customItalic18: React.CSSProperties;
+    customMedium16: React.CSSProperties;
+    customMedium18: React.CSSProperties;
+    customSemiBold16: React.CSSProperties;
     customSemiBold18: React.CSSProperties;
+    customSemiBold20: React.CSSProperties;
+    customBold16: React.CSSProperties;
     customBold25: React.CSSProperties;
     customBold236: React.CSSProperties;
     customBold132: React.CSSProperties;
@@ -277,6 +280,13 @@ export const theme = createTheme({
       fontSize: '25px',
       lineHeight: '140%',
       letterSpacing: '0px'
+    },
+    customSemiBold16: {
+      fontSize: '16px',
+      fontWeight: 600,
+      lineHeight: '140%',
+      letterSpacing: '0px',
+      fontFamily: mulish.style.fontFamily
     },
     customSemiBold18: {
       fontSize: '18px',
