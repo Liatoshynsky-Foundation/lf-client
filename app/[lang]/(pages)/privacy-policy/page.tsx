@@ -29,78 +29,78 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
     <>
       {blocks.IntroSection && (
         <IntroSection
-          title={localizeField(page!.title, lang)!}
-          trustAndSecurity={localizeField(blocks.IntroSection.trustAndSecurity, lang) as TipTapDoc | undefined}
-          agreement={localizeField(blocks.IntroSection.agreement, lang) as TipTapDoc | undefined}
+          title={localizeField(page.title, lang)!}
+          trustAndSecurity={localizeField(blocks.IntroSection.trustAndSecurity, lang)}
+          agreement={localizeField(blocks.IntroSection.agreement, lang)}
         />
       )}
       {blocks.DataWeCollect && (
         <PolicySection
           title={localizeField(blocks.DataWeCollect.title, lang)}
-          description={localizeField(blocks.DataWeCollect.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.DataWeCollect.description, lang)}
           sections={localizeSections(blocks.DataWeCollect.sections, lang)}
-          note={localizeField(blocks.DataWeCollect.note, lang) as TipTapDoc | undefined}
+          note={localizeField(blocks.DataWeCollect.note, lang)}
         />
       )}
       {blocks.DataUsage && (
         <PolicySection
           title={localizeField(blocks.DataUsage.title, lang)}
-          description={localizeField(blocks.DataUsage.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.DataUsage.description, lang)}
           list={localizeList(blocks.DataUsage.list, lang)}
         />
       )}
       {blocks.Cookies && (
         <PolicySection
           title={localizeField(blocks.Cookies.title, lang)}
-          description={localizeField(blocks.Cookies.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.Cookies.description, lang)}
           list={localizeList(blocks.Cookies.list, lang)}
-          note={localizeField(blocks.Cookies.note, lang) as TipTapDoc | undefined}
+          note={localizeField(blocks.Cookies.note, lang)}
         />
       )}
       {blocks.GoogleAuth && (
         <PolicySection
           title={localizeField(blocks.GoogleAuth.title, lang)}
-          description={localizeField(blocks.GoogleAuth.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.GoogleAuth.description, lang)}
           list={localizeList(blocks.GoogleAuth.list, lang)}
-          note={localizeField(blocks.GoogleAuth.note, lang) as TipTapDoc | undefined}
+          note={localizeField(blocks.GoogleAuth.note, lang)}
         />
       )}
       {blocks.SocialNetworks && (
         <PolicySection
           title={localizeField(blocks.SocialNetworks.title, lang)}
-          description={localizeField(blocks.SocialNetworks.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.SocialNetworks.description, lang)}
         />
       )}
       {blocks.TargetedAds && (
         <PolicySection
           title={localizeField(blocks.TargetedAds.title, lang)}
-          description={localizeField(blocks.TargetedAds.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.TargetedAds.description, lang)}
         />
       )}
       {blocks.NewsletterSubscription && (
         <PolicySection
           title={localizeField(blocks.NewsletterSubscription.title, lang)}
-          description={localizeField(blocks.NewsletterSubscription.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.NewsletterSubscription.description, lang)}
         />
       )}
       {blocks.DataRetention && (
         <PolicySection
           title={localizeField(blocks.DataRetention.title, lang)}
-          description={localizeField(blocks.DataRetention.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.DataRetention.description, lang)}
         />
       )}
       {blocks.UserRights && (
         <PolicySection
           title={localizeField(blocks.UserRights.title, lang)}
-          description={localizeField(blocks.UserRights.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.UserRights.description, lang)}
           list={localizeList(blocks.UserRights.list, lang)}
-          note={localizeField(blocks.UserRights.note, lang) as TipTapDoc | undefined}
+          note={localizeField(blocks.UserRights.note, lang)}
         />
       )}
       {blocks.ContactUs && (
         <PolicySection
           title={localizeField(blocks.ContactUs.title, lang)}
-          description={localizeField(blocks.ContactUs.description, lang) as TipTapDoc | undefined}
+          description={localizeField(blocks.ContactUs.description, lang)}
         />
       )}
     </>

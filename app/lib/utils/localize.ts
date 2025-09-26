@@ -19,10 +19,10 @@ export function localizeList<T>(list: Array<Localized<T>> | undefined, lang: str
 export function localizeSections(sections: RawSectionItem[], lang: string) {
   return sections
     ? sections.map((section) => ({
-      subtitle: localizeField(section.subtitle, lang),
-      description: localizeField(section.description, lang),
-      note: localizeField(section.note, lang),
-      list: localizeList(section.list, lang)
-    }))
+        subtitle: localizeField(section.subtitle, lang),
+        description: localizeField(section.description, lang),
+        note: localizeField(section.note, lang),
+        list: localizeList(section.list, lang)
+      }))
     : [];
 }

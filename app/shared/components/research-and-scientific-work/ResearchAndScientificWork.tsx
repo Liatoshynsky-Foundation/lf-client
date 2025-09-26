@@ -11,7 +11,7 @@ export default function ResearchAndScientificWork({
   lang
 }: {
   readonly data: ResearchAndScientificWorkProps;
-  lang: Locale;
+  readonly lang: Locale;
 }) {
   const { title, quote } = data;
 
