@@ -18,20 +18,15 @@ import { GetNotesState } from '~/types/enums/getNotes.enums';
 import { Notes } from '~/types/types/getNotes.types';
 
 type GetNotesModalProps = {
+  composition: string;
   notes: Notes[];
   opened: boolean;
+  handleClose: () => void;
 };
 
-const GetNotesModal = ({ notes, opened }: GetNotesModalProps) => {
+const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModalProps) => {
   const t = useTranslations('getNotes');
-
-  const [open, setOpen] = useState(opened);
   const [state, setState] = useState(GetNotesState.LIST);
-
-  const fNHandler = () => {
-    setOpen(false);
-    alert('Free notes gotten');
-  };
 
   const pNHandler = () => {
     setState(GetNotesState.FORM);
@@ -43,7 +38,7 @@ const GetNotesModal = ({ notes, opened }: GetNotesModalProps) => {
   switch (state) {
     case GetNotesState.LIST:
       title = <Typography variant="h2">{t('notesList.title')}</Typography>;
-      innards = <NotesListModal notes={notes} freeNotesHandler={fNHandler} paidNotesHandler={pNHandler} />;
+      innards = <NotesListModal composition={composition} notes={notes} paidNotesHandler={pNHandler} />;
       break;
     case GetNotesState.FORM:
       title = (
@@ -72,7 +67,7 @@ const GetNotesModal = ({ notes, opened }: GetNotesModalProps) => {
   const paper = () => (
     <PaperComponent sx={{ ...styles.paper, ...styles.maxWidth(state) }}>
       <Box sx={styles.headerContainer}>
-        <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={() => setOpen(false)}>
+        <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
           <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
         </IconButton>
         {title}
@@ -81,7 +76,7 @@ const GetNotesModal = ({ notes, opened }: GetNotesModalProps) => {
     </PaperComponent>
   );
 
-  return <ModalComponent open={open} sx={styles.backdrop} slots={{ paper }} />;
+  return <ModalComponent open={opened} sx={styles.backdrop} slots={{ paper }} />;
 };
 
 export default GetNotesModal;
