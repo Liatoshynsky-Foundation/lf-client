@@ -18,9 +18,9 @@ describe('CardWithText', () => {
   it('should render the component with the necessary props', () => {
     render(<CardWithText title="Some title" list={smallList} />);
     expect(screen.getByText('Some title')).toBeInTheDocument();
-    smallList.forEach((item) => {
+    for (const item of smallList) {
       expect(screen.getByText(item)).toBeInTheDocument();
-    });
+    }
   });
 
   it('should render the main icon if the prop icon is passed', () => {
@@ -48,7 +48,9 @@ describe('CardWithText', () => {
     const scrollContainer = titleElement.parentElement;
     expect(scrollContainer).toBeInTheDocument();
 
-    const styles = window.getComputedStyle(scrollContainer!);
+    if (!scrollContainer) throw new Error('Scroll container not found');
+
+    const styles = globalThis.getComputedStyle(scrollContainer);
     expect(styles.overflowY).toBe('auto');
   });
 });
