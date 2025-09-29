@@ -12,7 +12,7 @@ type CardWithTextProps = {
   list: Array<string>;
 };
 
-export default function CardWithText({ id, title, list }: CardWithTextProps) {
+export default function CardWithText({ id, title, list }: Readonly<CardWithTextProps>) {
   const icon = icons[id % icons.length];
 
   return (
