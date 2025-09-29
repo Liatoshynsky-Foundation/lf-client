@@ -20,9 +20,9 @@ export const styles = {
     gridColumn: '1 / -1',
     margin: {
       xs: '100px 0 64px',
-      sm: '103px 0 68px',
-      md: '132px 0 56px',
-      lg: '140px 0 56px'
+      sm: '105px 0 66px',
+      md: '132px 0 52px',
+      lg: '140px 0 54px'
     },
     position: 'relative'
   },
@@ -37,7 +37,7 @@ export const styles = {
     },
     margin: {
       xs: '0 0 80px',
-      sm: '20px 0 64px',
+      sm: '20px 0 68px',
       md: '42px 0 50px',
       xl: '42px 0 127px'
     },
@@ -47,7 +47,10 @@ export const styles = {
       md: '1 / 6',
       lg: '1 / 5'
     },
-    gridRow: '1'
+    gridRow: '1',
+    lineHeight: {
+      sm: '120%'
+    }
   },
 
   photoContainer: {
@@ -97,6 +100,6 @@ export const styles = {
   },
 
   quoteBlock: {
-    gap: { xs: '25px' }
+    gap: { xs: '25px', md: '36px' }
   }
 };

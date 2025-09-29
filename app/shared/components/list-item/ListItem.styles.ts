@@ -5,7 +5,7 @@ export const styles = {
     columnGap: {
       xs: '8px',
       sm: '16px',
-      md: '20px'
+      md: '24px'
     },
     maxWidth: '425px',
     '&:nth-child(2)': {
@@ -22,7 +22,7 @@ export const styles = {
     fontFamily: 'Mulish',
     fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
-    lineHeight: '150%',
+    lineHeight: { xs: '150%', md: '160%' },
     letterSpacing: '0px',
     color: '#190D03'
   }

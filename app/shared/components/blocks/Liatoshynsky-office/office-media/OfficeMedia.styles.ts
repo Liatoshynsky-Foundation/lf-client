@@ -41,13 +41,17 @@ export const styles = {
     ...basePhoto,
     width: { xs: '78.9px', sm: '97px', md: '132px', lg: '188px' },
     height: { xs: '107.9px', sm: '132px', md: '178px', lg: '256px' },
-    transform: 'rotate(2.68deg)',
+    transform: {
+      xs: 'rotate(2.68deg)',
+      sm: 'rotate(1deg)',
+      md: 'rotate(2deg)'
+    },
     left: '3px'
   },
   logo: {
     position: 'absolute',
     bottom: { xs: '-15px', sm: '-30px', md: '-30px', lg: '-50px' },
-    right: { xs: '35px', sm: '-21px', md: '20px', lg: '40px' },
+    right: { xs: '35px', sm: '-23px', md: '20px', lg: '40px' },
     zIndex: 3
   }
 };

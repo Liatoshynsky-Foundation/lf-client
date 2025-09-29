@@ -42,7 +42,7 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
             variant="contained"
             link="/office"
             label={t('goToOfficeButton')}
-            sx={{ py: '8px', height: '40px', width: '208px' }}
+            sx={styles.button}
           />
         </Box>
       </Box>

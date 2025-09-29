@@ -23,7 +23,7 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mb: { xs: '116px', md: '104px', lg: '132px', xxl: '196px' }
+    mb: { xs: '124px', sm: '148px', md: '182px', lg: '160px', xl: '196px', xxl: '243px', ultra: '208px' }
   },
 
   grid: {
@@ -36,7 +36,7 @@ export const styles = {
     gap: '40px',
     rowGap: {
       xs: '47px',
-      md: '56px'
+      md: '41px'
     },
     mt: { xs: '40px', md: '72px' },
     direction: { xs: 'ltr', md: 'rtl' }

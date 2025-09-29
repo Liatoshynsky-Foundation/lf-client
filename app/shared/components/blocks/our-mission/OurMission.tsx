@@ -27,6 +27,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
           src={smallImage.src}
           alt={smallImage.alt}
           caption={smallImage.caption ?? ''}
+          captionSx={styles.smallCaptionSx}
           align="left"
           sizes={{
             width: { xs: 128, sm: 170, md: 266, lg: 336 },
@@ -41,6 +42,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
           src={bigImage.src}
           alt={bigImage.alt}
           caption={bigImage.caption ?? ''}
+          captionSx={styles.bigCaptionSx}
           sizes={{
             width: { xs: 224, sm: 457, md: 569, lg: 718, xl: 816, xxl: 979, ultra: 816 },
             height: { xs: 138, sm: 292, md: 336, lg: 498, xl: 498, xxl: 498, ultra: 498 }

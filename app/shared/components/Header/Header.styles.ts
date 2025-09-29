@@ -6,7 +6,8 @@ export const styles = {
     position: 'fixed',
     top: {
       xs: '30px',
-      md: '48px'
+      md: '48px',
+      lg: '40px'
     },
     left: 0,
     right: 0,
@@ -36,7 +37,7 @@ export const styles = {
     }
   },
   navigationContainer: {
-    marginRight: { xl: '35px', xxl: '70px' },
+    marginRight: { lg: '31px', xl: '35px', xxl: '70px' },
     fontSize: { md: '15px', lg: '16px' }
   },
   rightActionsContainer: {

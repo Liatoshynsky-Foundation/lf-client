@@ -14,7 +14,12 @@ export const styles = {
       md: '40px'
     },
     width: '100%',
-    mt: '22px'
+    mt: {
+      xs: '13px',
+      sm: '27px',
+      md: '62px',
+      xl: '53px'
+    }
   },
   ellipseWrapper: {
     gridColumn: {
@@ -31,7 +36,11 @@ export const styles = {
   },
   title: {
     display: 'block',
-    mb: 3,
+    mb: {
+      xs: 3,
+      sm: '29px',
+      md: '48px'
+    },
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
     fontSize: { xs: '14px', sm: '16px', md: '26px' },

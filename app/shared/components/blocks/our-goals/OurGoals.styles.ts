@@ -12,7 +12,7 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mb: { xs: '108px', sm: '130px', md: '148px', lg: '175px', xxl: '230px' }
+    mb: { xs: '110px', sm: '130px', md: '148px', lg: '220px', xl: '169px', xxl: '272px' }
   },
 
   goalsGrid: {
@@ -24,17 +24,23 @@ export const styles = {
     flexWrap: {
       lg: 'wrap'
     },
-    gridColumn: { xs: '2 / -1', sm: '4 / 8', md: '6 / 12', lg: '6 / -1' },
+    gridColumn: { xs: '2 / -1', sm: '4 / 8', md: '6 / 11', lg: '6 / -1' },
     gap: {
       xs: '47px',
-      md: '56px'
+      md: '56px',
+      lg: '22px 56px'
     },
     mt: { xs: '40px', md: '75px' }
   },
 
   cardWithIcon: {
+    maxWidth: {
+      lg: '295px',
+      xl: '344px',
+      xxl: '425px'
+    },
     display: 'flex',
-    gap: { xs: '6px', sm: '16px', md: '20px' },
+    gap: { xs: '8px', sm: '16px', md: '20px' },
     alignItems: 'flex-start'
   },
 

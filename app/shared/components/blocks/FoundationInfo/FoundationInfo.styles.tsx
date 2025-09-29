@@ -32,7 +32,7 @@ const textHeading = {
     xs: '18px',
     md: '26px'
   },
-  lineHeight: '180%',
+  lineHeight: '177%',
   textTransform: 'uppercase'
 };
 
@@ -43,7 +43,8 @@ export const styles = {
     marginBottom: {
       xs: '59px',
       sm: '132px',
-      md: '180px'
+      md: '155px',
+      lg: '180px'
     }
   },
 
@@ -55,8 +56,9 @@ export const styles = {
     },
     textAlign: 'justify',
     marginBottom: {
-      xs: '50px',
-      sm: '62px'
+      xs: '55px',
+      sm: '62px',
+      md: '100px'
     }
   },
 
@@ -72,12 +74,16 @@ export const styles = {
       sm: '1 / 7',
       md: '1 / 9'
     },
-    marginBottom: { xs: '40px' }
+    marginBottom: { xs: '40px', md: '53px', xl: '90px', xxl: '51px' }
   },
 
   explanationText: {
     ...textHeading,
-    fontWeight: 500
+    fontWeight: 500,
+    textAlign: {
+      xs: 'left',
+      sm: 'justify'
+    }
   },
 
   firstBulletIcon: {

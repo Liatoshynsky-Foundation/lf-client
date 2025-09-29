@@ -13,7 +13,7 @@ export const styles = {
     transformOrigin: 'top left'
   },
   contentContainer: {
-    maxWidth: '1920px',
+    maxWidth: '1728px',
     margin: '0 auto',
     transform: 'skewY(2deg)',
     transformOrigin: 'top left',

@@ -21,13 +21,18 @@ export const styles = {
   footerContent: {
     position: 'relative',
     width: '100%',
-    maxWidth: '1728px',
+    maxWidth: {
+      xs: '1728px',
+      ultra: '1920px'
+    },
     padding: {
       xs: '48px 24px 86px',
       sm: '35px 56px 56px',
-      md: '24px 72px 72px',
-      lg: '36px 72px 72px',
-      xl: '36px 72px 50px'
+      md: '34px 72px 72px',
+      lg: '39px 72px 72px',
+      xl: '54px 72px 50px',
+      xxl: '44px 72px 50px',
+      ultra: '40px 96px 50px'
     },
     margin: '0 auto',
     display: 'grid',
@@ -60,12 +65,12 @@ export const styles = {
       sm: 'flex-start'
     },
     width: '100%',
-    marginBottom: { xs: '35px', sm: '32px' },
+    marginBottom: { xs: '35px', sm: '34px' },
     gridColumn: '1 / -1',
     transform: { sm: 'translate(-23px)' }
   },
   contactInfoWrapper: {
-    marginBottom: { xs: '38px', sm: '40px', md: '60px' },
+    marginBottom: { xs: '38px', sm: '40px', md: '58px', xl: '55px' },
     gridColumn: {
       xs: '1 / 5',
       sm: '1 / 6',
@@ -105,16 +110,17 @@ export const styles = {
     marginBottom: {
       xs: '48px',
       sm: '72px',
-      md: '28px',
+      md: '0px',
       lg: '32px',
-      xl: '56px'
+      xl: '55px'
     },
     gridColumn: {
       xs: '1 / 5',
       sm: '6 / 9',
       md: '7 / 13',
       lg: '5 / 13',
-      xl: '6 / 13'
+      xl: '6 / 13',
+      xxl: '7 / -1'
     },
     gridRow: {
       sm: '3 / 5',
@@ -122,7 +128,7 @@ export const styles = {
     }
   },
   copyrightWrapper: {
-    marginTop: { md: '126px', lg: '72px' },
+    marginTop: { md: '126px', lg: '70px', xl: '72px' },
     gridColumn: {
       xs: '1 / 5',
       sm: '1 / -1',
@@ -137,7 +143,8 @@ export const styles = {
       xs: '64px',
       sm: '306px',
       md: '278px',
-      lg: '218px',
+      lg: '220px',
+      xl: '217px',
       xxl: '250px'
     }
   },

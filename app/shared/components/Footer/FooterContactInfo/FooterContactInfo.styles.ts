@@ -50,6 +50,9 @@ export const styles = {
   titleAndAddressCont: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '15px'
+    gap: {
+      xs: '15px',
+      sm: '17px'
+    }
   }
 };

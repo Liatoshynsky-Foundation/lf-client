@@ -7,7 +7,9 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: '30px'
+    gap: {
+      xs: '30px'
+    }
   },
   photoWrapper: {
     position: 'relative',
@@ -22,19 +24,20 @@ export const styles = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '5px',
+    gap: { xs: '5px', md: '7px' },
     color: '#190D03'
   },
   name: {
     fontSize: { xs: '20px', md: '24px' },
     fontWeight: 700,
     textAlign: 'left',
-    fontFamily: 'inherit'
+    fontFamily: 'inherit',
+    lineHeight: '140%'
   },
   description: {
     fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
-    lineHeight: '150%',
+    lineHeight: { xs: '150%', md: '160%' },
     textAlign: 'left',
     fontFamily: 'inherit'
   },

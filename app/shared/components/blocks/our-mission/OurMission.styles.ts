@@ -14,8 +14,8 @@ export const styles = {
     gridColumn: '1 / -1',
     mb: {
       xs: '19px',
-      sm: '132px',
-      md: '156px'
+      sm: '74px',
+      md: '100px'
     }
   },
   title: {
@@ -47,17 +47,22 @@ export const styles = {
       xs: '72px',
       sm: '132px',
       md: '164px',
-      lg: '180px'
+      lg: '179px'
     }
   },
   smallImg: {
     gridColumn: {
       xs: '1 / 3',
-      lg: '1 / 5',
+      md: '1 / 5',
       xl: '1 / 4'
     },
     gridRow: {
       sm: '4 / 6'
+    },
+    mt: {
+      md: '-62px',
+      lg: '-78px',
+      xl: '-20px'
     },
     mb: {
       xs: '56px'
@@ -74,6 +79,17 @@ export const styles = {
     },
     mb: {
       xs: '56px'
+    }
+  },
+  smallCaptionSx: {
+    mt: {
+      sm: '15px'
+    }
+  },
+  bigCaptionSx: {
+    mt: {
+      sm: '10px',
+      md: '14px'
     }
   }
 };

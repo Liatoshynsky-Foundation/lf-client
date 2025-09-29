@@ -10,9 +10,10 @@ export const styles = {
     },
     mb: {
       xs: '110px',
-      sm: '120px',
+      sm: '117px',
       md: '128px',
-      lg: '180px'
+      lg: '180px',
+      xxl: '175px'
     }
   },
   trapezoid: {
@@ -38,12 +39,15 @@ export const styles = {
   },
   contentContainer: {
     p: {
-      xs: '40px 0 65px',
-      sm: '16px 46px 72px 35px',
-      md: '30px 56px 83px 52px',
-      lg: '0 75px 97px 70px',
-      xl: '0 87px 97px 78px',
-      xxl: '0 113px 97px 119px'
+      xs: '39px 0 65px',
+      sm: '18px 46px 72px 35px',
+      md: '18px 56px 83px 52px',
+      lg: '0 75px 137px 70px',
+      xl: '0 87px 139px 78px',
+      xxl: '0 113px 144px 119px'
+    },
+    mt: {
+      xxl: '-5px'
     },
     display: 'flex',
     flexDirection: 'column',
@@ -65,7 +69,9 @@ export const styles = {
       lg: '520px'
     },
     gap: {
-      xs: '25px'
+      xs: '25px',
+      sm: '18px',
+      md: '32px'
     }
   },
   textBlock: {
@@ -76,7 +82,7 @@ export const styles = {
     },
     pt: {
       xs: '23px',
-      sm: '0'
+      sm: '2px'
     },
     mx: {
       xs: 'auto',
@@ -111,11 +117,31 @@ export const styles = {
       sm: 'left'
     }
   },
+  media: {
+    mt: {
+      xs: '-12px',
+      sm: '-82px',
+      md: '-62px',
+      lg: '-75px'
+    },
+    mr: {
+      xs: '-20px',
+      sm: '-5px',
+      md: '-8px',
+      lg: '10px',
+      xxl: '120px'
+    },
+    display: 'flex',
+    justifyContent: {
+      xs: 'center',
+      sm: 'right'
+    }
+  },
   buttonBlock: {
     mt: {
       xs: '39px',
-      sm: '-13px',
-      md: '-30px',
+      sm: '-10px',
+      md: '-35px',
       lg: '-55px'
     },
     mx: {
@@ -126,24 +152,5 @@ export const styles = {
       xl: '28px'
     }
   },
-  media: {
-    mt: {
-      xs: '-12px',
-      sm: '-78px',
-      md: '-63px',
-      lg: '-75px'
-    },
-    mr: {
-      xs: '-20px',
-      sm: '-5px',
-      md: '-8px',
-      lg: '10px',
-      xxl: '125px'
-    },
-    display: 'flex',
-    justifyContent: {
-      xs: 'center',
-      sm: 'right'
-    }
-  }
+  button: { py: '8px', height: { xs: '40px', md: '56px' }, width: { xs: '208px', md: '264px' } }
 };

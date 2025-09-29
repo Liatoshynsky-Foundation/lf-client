@@ -25,8 +25,8 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             }}
             border={{
               sizes: {
-                width: { xs: 134, sm: 255, md: 271, lg: 334 },
-                height: { xs: 28, sm: 55, md: 52, lg: 64 }
+                width: { xs: 134, sm: 255, md: 271, lg: 334, xl: 376 },
+                height: { xs: 28, sm: 55, md: 52, lg: 64, xl: 72 }
               },
               top: { xs: 15, sm: 28, md: 31, lg: 32, xl: 34 },
               left: { xs: 17, sm: 24, md: 41, lg: 40, xl: 40 }
