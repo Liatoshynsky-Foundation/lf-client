@@ -19,25 +19,24 @@ jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
 
 describe('ResearchAndScientificWork', () => {
   const mockData = {
-    title: { uk: 'ДоСліДжЕннЯ ТА НауКовІ РоБотИ' },
+    title: 'ДоСліДжЕннЯ ТА НауКовІ РоБотИ',
     quote: {
-      text: { uk: 'Ах, мила, милий мій котику...' },
-      source: { uk: 'Лист Бориса Лятошинського' }
+      text: 'Ах, мила, милий мій котику...',
+      source: 'Лист Бориса Лятошинського'
     }
   };
-  const lang = 'uk';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should render TitleWithQuote with correct data', () => {
-    render(<ResearchAndScientificWork data={mockData} lang={lang} />);
+    render(<ResearchAndScientificWork data={mockData} />);
 
     expect(screen.getByTestId('title-with-quote')).toBeInTheDocument();
-    expect(screen.getByTestId('title')).toHaveTextContent(mockData.title.uk);
-    expect(screen.getByTestId('quote-text')).toHaveTextContent(mockData.quote.text.uk);
-    expect(screen.getByTestId('source-title')).toHaveTextContent(mockData.quote.source.uk);
+    expect(screen.getByTestId('title')).toHaveTextContent(mockData.title);
+    expect(screen.getByTestId('quote-text')).toHaveTextContent(mockData.quote.text);
+    expect(screen.getByTestId('source-title')).toHaveTextContent(mockData.quote.source);
     expect(screen.getByTestId('color')).toHaveTextContent('brown');
   });
 });
