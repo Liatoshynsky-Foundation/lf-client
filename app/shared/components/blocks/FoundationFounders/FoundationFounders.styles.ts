@@ -9,11 +9,14 @@ export const styles = {
     marginRight: '-50vw',
     width: '100vw',
     backgroundColor: '#EDE8DF',
-    clipPath: { xs: 'polygon( 0% 1%, 100% 0%, 100% 99%, 0% 100%)', sm: 'polygon( 0% 2%, 100% 0%, 100% 99%, 0% 100%)' }
+    transform: 'skewY(-2deg)',
+    transformOrigin: 'top left'
   },
   contentContainer: {
     maxWidth: '1920px',
     margin: '0 auto',
-    padding: { xs: '40px 24px', sm: '40px 72px' }
+    transform: 'skewY(2deg)',
+    transformOrigin: 'top left',
+    padding: { xs: '35px 24px', sm: '40px 56px', md: '40px 72px' }
   }
 };

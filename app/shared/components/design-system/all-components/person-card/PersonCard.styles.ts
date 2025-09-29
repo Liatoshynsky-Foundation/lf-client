@@ -7,7 +7,7 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: '24px'
+    gap: '30px'
   },
   photoWrapper: {
     position: 'relative',
@@ -22,7 +22,7 @@ export const styles = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '5px',
     color: '#190D03'
   },
   name: {
@@ -34,6 +34,7 @@ export const styles = {
   description: {
     fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
+    lineHeight: '150%',
     textAlign: 'left',
     fontFamily: 'inherit'
   },

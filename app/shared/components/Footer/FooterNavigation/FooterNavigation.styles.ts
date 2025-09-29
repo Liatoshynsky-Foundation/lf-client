@@ -11,7 +11,7 @@ export const styles: Record<string, SxProps> = {
     display: 'grid',
     gridTemplateColumns: '1fr',
     gap: {
-      xs: '40px',
+      xs: '44px',
       md: '48px 73px',
       lg: '48px',
       xl: '56px'
@@ -35,7 +35,7 @@ export const styles: Record<string, SxProps> = {
     fontSize: '16px'
   },
   heading: {
-    marginBottom: '16px',
+    marginBottom: '20px',
     textWrap: 'nowrap'
   },
   list: {

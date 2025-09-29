@@ -44,6 +44,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             quoteIconColor="burgundy"
             mainTextColor="burgundy"
             alignRight={false}
+            sx={styles.quoteBlock}
           />
         )}
       </Box>

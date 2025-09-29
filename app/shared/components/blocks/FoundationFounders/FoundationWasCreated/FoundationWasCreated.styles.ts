@@ -1,7 +1,5 @@
 const black = '#190D03';
 
-export const getSpan = (start: number, span: number) => `${start} / span ${span}`;
-
 export const styles = {
   container: {
     display: 'grid',
@@ -16,32 +14,44 @@ export const styles = {
       md: '40px'
     },
     width: '100%',
-    mt: '100px'
+    mt: '22px'
   },
   ellipseWrapper: {
-    gridColumn: { xs: 1, sm: getSpan(1, 3), md: getSpan(1, 5) }
+    gridColumn: {
+      xs: '1 / 2'
+    }
   },
   text: {
-    gridColumn: { xs: getSpan(2, 3), sm: getSpan(4, 5), md: getSpan(6, 7), xxl: getSpan(6, 6) }
+    gridColumn: {
+      xs: '2 / 5',
+      sm: '4 / -1',
+      md: '6 / -1'
+    },
+    maxWidth: '744px'
   },
   title: {
     display: 'block',
-    mb: 5,
+    mb: 3,
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
-    fontSize: { xs: '14px', md: '26px' },
+    fontSize: { xs: '14px', sm: '16px', md: '26px' },
     color: black,
-    fontWeight: 700
+    fontWeight: 700,
+    lineHeight: '180%'
   },
   description: {
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
-    fontSize: { xs: '14px', md: '26px' },
+    fontSize: { xs: '14px', sm: '16px', md: '26px' },
     color: black,
     fontWeight: 400,
+    lineHeight: '180%',
     '& span:nth-child(2)': {
       display: 'block',
-      textIndent: '2em'
+      textIndent: {
+        xs: '40px',
+        md: '70px'
+      }
     }
   }
 };

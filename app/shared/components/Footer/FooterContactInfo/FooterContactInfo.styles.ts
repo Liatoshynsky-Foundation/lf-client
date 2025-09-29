@@ -3,7 +3,7 @@ const commonTextStyle = {
   color: '#190D03',
   letterSpacing: '0px',
   whiteSpace: 'pre-line',
-  fontSize: { xs: '14px', sm: '16px' }
+  fontSize: { xs: '16px', sm: '16px' }
 };
 
 const commonLinkStyle = {
@@ -26,8 +26,8 @@ export const styles = {
   title: {
     ...commonTextStyle,
     fontWeight: 700,
-    fontSize: { xs: '16px', sm: '20px' },
-    lineHeight: '140%'
+    fontSize: { xs: '18px', sm: '20px' },
+    lineHeight: '135%'
   },
   text: {
     ...commonTextStyle,
@@ -50,6 +50,6 @@ export const styles = {
   titleAndAddressCont: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px'
+    gap: '15px'
   }
 };

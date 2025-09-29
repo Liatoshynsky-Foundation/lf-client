@@ -26,7 +26,7 @@ export const styles = {
     },
     gridColumn: { xs: '2 / -1', sm: '4 / 8', md: '6 / 12', lg: '6 / -1' },
     gap: {
-      xs: '48px',
+      xs: '47px',
       md: '56px'
     },
     mt: { xs: '40px', md: '75px' }

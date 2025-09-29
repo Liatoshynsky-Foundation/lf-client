@@ -13,7 +13,7 @@ export const styles = {
     },
     gridColumn: '1 / -1',
     mb: {
-      xs: '72px',
+      xs: '19px',
       sm: '132px',
       md: '156px'
     }

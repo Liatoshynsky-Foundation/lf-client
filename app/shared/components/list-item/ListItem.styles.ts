@@ -22,7 +22,7 @@ export const styles = {
     fontFamily: 'Mulish',
     fontSize: { xs: '16px', md: '20px' },
     fontWeight: 400,
-    lineHeight: '160%',
+    lineHeight: '150%',
     letterSpacing: '0px',
     color: '#190D03'
   }

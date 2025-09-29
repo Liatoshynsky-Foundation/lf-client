@@ -23,20 +23,19 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mb: { xs: '116px', md: '104px', lg: '132px', xxl: '196px' },
-    mt: { xs: '120px', sm: '116px', md: '128px' }
+    mb: { xs: '116px', md: '104px', lg: '132px', xxl: '196px' }
   },
 
   grid: {
     display: 'grid',
-    gridColumn: { xs: '2 / 4', sm: '4/7', md: '6 / 10', lg: '3 / 12' },
+    gridColumn: { xs: '2 / 5', sm: '4 / 8', md: '6 / 11', lg: '3 / 12' },
     gridTemplateColumns: {
       xs: '1fr',
       lg: '1fr 1fr 1fr'
     },
     gap: '40px',
     rowGap: {
-      xs: '48px',
+      xs: '47px',
       md: '56px'
     },
     mt: { xs: '40px', md: '72px' },
@@ -45,7 +44,7 @@ export const styles = {
 
   item: {
     display: 'flex',
-    gap: { xs: '16px', md: '20px' },
+    gap: { xs: '8px', sm: '16px', md: '20px' },
     alignItems: 'flex-start',
     direction: 'ltr'
   },

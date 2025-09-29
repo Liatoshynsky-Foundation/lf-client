@@ -19,7 +19,7 @@ export const styles = {
     ...containerHelper,
     gridColumn: '1 / -1',
     margin: {
-      xs: '96px 0 64px',
+      xs: '100px 0 64px',
       sm: '103px 0 68px',
       md: '132px 0 56px',
       lg: '140px 0 56px'
@@ -36,7 +36,7 @@ export const styles = {
       md: '64px'
     },
     margin: {
-      xs: '0 0 64px',
+      xs: '0 0 80px',
       sm: '20px 0 64px',
       md: '42px 0 50px',
       xl: '42px 0 127px'
@@ -94,5 +94,9 @@ export const styles = {
       xs: '2 / -1',
       sm: 'auto'
     }
+  },
+
+  quoteBlock: {
+    gap: { xs: '25px' }
   }
 };

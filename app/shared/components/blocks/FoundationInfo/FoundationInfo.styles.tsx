@@ -20,7 +20,7 @@ const textBase = {
     md: '24px'
   },
   lineHeight: {
-    xs: '180%',
+    xs: '150%',
     md: '160%'
   }
 };
@@ -55,7 +55,7 @@ export const styles = {
     },
     textAlign: 'justify',
     marginBottom: {
-      xs: '56px',
+      xs: '50px',
       sm: '62px'
     }
   },

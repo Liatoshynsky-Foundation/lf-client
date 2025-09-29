@@ -4,6 +4,6 @@ export const styles = {
     flexDirection: { xs: 'column', lg: 'row' },
     flexWrap: { xs: 'wrap', md: 'nowrap' },
     alignItems: 'flex-start',
-    gap: '16px'
+    gap: '14px'
   }
 };

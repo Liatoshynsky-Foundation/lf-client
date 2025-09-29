@@ -22,7 +22,7 @@ const boldTitle = (children: React.ReactNode) => (
 );
 
 const boldTitleWrapper = (node: TextNode) => (
-  <Typography component="span">
+  <Typography sx={styles.description} component="span">
     {renderText(
       {
         italic: getItalic,

@@ -2,7 +2,7 @@ export const getSpan = (start: number, span: number) => `${start} / span ${span}
 
 export const styles = {
   container: {
-    mt: { xs: '40px', sm: '60px', md: '80px', lg: '100px', xl: '120px' },
+    mt: { xs: '105px', sm: '60px', md: '80px', lg: '100px', xl: '120px' },
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -13,7 +13,7 @@ export const styles = {
     gridTemplateColumns: { xs: 'repeat(4, 1fr)', sm: 'repeat(8, 1fr)', md: 'repeat(12, 1fr)' },
     columnGap: { xs: '16px', sm: '40px' },
     width: '100%',
-    mb: { xs: '40px', sm: '60px', md: '80px', lg: '100px', xl: '120px' }
+    mb: { xs: '43px', sm: '48px', md: '98px' }
   },
   title: {
     color: '#190D03',
@@ -38,6 +38,10 @@ export const styles = {
     gap: { xs: '56px', sm: '40px' }
   },
   logo: {
-    mt: '44px'
+    minWidth: '258px',
+    height: '180px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 };

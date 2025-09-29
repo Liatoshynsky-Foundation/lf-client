@@ -19,6 +19,12 @@ interface Teammate {
 }
 
 const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
+  const fallback = (
+    <Box sx={styles.logo}>
+      <SvgImage src="/images/light-logo.svg" width={210} height={78} alt="logo" />
+    </Box>
+  );
+
   return (
     <Box sx={styles.container}>
       <Box sx={styles.titleWrapper}>
@@ -27,17 +33,9 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
       <Box sx={styles.foundationTeam}>
         {team.map((member, index) => (
           <React.Fragment key={member.name}>
-            {index === 0 && (
-              <Box sx={styles.logo}>
-                <SvgImage src="/images/light-logo.svg" width={236} height={88} alt="logo" />
-              </Box>
-            )}
+            {index === 0 && fallback}
             <PersonCard name={member.name} description={member.description} imgURL={member.photo.src} />
-            {(index + 1) % 2 === 0 && (
-              <Box sx={styles.logo}>
-                <SvgImage src="/images/light-logo.svg" width={236} height={88} alt="logo" />
-              </Box>
-            )}
+            {(index + 1) % 2 === 0 && fallback}
           </React.Fragment>
         ))}
       </Box>

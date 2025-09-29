@@ -30,6 +30,7 @@ export const alignments = {
 export const quoteTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
+  lineHeight: '150%',
   fontSize: { xs: '16px', md: '18px' },
   letterSpacing: 0
 };
@@ -37,6 +38,7 @@ export const quoteTextStyles = {
 export const sourceTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
+  lineHeight: '150%',
   fontStyle: 'italic',
   fontSize: { xs: '14px', md: '16px' },
   letterSpacing: 0

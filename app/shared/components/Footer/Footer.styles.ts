@@ -4,13 +4,14 @@ export const styles = {
     width: '100%',
     overflow: 'hidden',
     paddingTop: 'calc(100vw * 0.035)',
+    marginTop: 'calc((100vw * 0.035) * -1)',
     zIndex: '2',
     left: 0
   },
   backgroundBox: {
     position: 'absolute',
-    left: '-60px',
-    width: '150%',
+    left: '0',
+    width: '100vw',
     height: '150%',
     backgroundColor: '#FCBD28',
     transform: 'skewY(-2deg)',
@@ -64,7 +65,7 @@ export const styles = {
     transform: { sm: 'translate(-23px)' }
   },
   contactInfoWrapper: {
-    marginBottom: { xs: '32px', sm: '40px', md: '60px' },
+    marginBottom: { xs: '38px', sm: '40px', md: '60px' },
     gridColumn: {
       xs: '1 / 5',
       sm: '1 / 6',
@@ -133,7 +134,7 @@ export const styles = {
     position: 'absolute',
     right: '0',
     bottom: {
-      xs: '62px',
+      xs: '64px',
       sm: '306px',
       md: '278px',
       lg: '218px',
