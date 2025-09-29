@@ -6,5 +6,6 @@ export const ApiRoutes = {
   SCIENTIFIC_AUTHORS: '/api/scientific-authors',
   SCIENTIFIC_WORKS: '/api/scientific-works',
   VERIFY: '/api/verify',
-  CREATE_INVOICE: '/api/create-invoice'
+  CREATE_INVOICE: '/api/create-invoice',
+  TURNSTILE: '/api/config'
 };

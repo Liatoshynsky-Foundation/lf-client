@@ -12,6 +12,6 @@ namespace NodeJS {
     DOMAIN_NAME: string;
     TURNSTILE_SECRET_KEY: string;
     VERIFY_URL: string;
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: string;
+    TURNSTILE_SITE_KEY: string;
   }
 }
