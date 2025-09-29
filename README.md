@@ -25,6 +25,8 @@
   - [How to work with swagger UI](#How-to-work-with-swagger-UI)
   - [How to run tests](#How-to-run-tests)
   - [How to Checkstyle](#How-to-Checkstyle)
+  - [Turnstile Captcha](#turnstile-captcha)
+  - [WayforPay Integration](#wayforpay-integration)
 - [Documentation](#Documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
@@ -40,6 +42,24 @@
 ---
 
 ## Installation
+
+---
+
+## Turnstile Captcha
+
+This project uses [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) for user verification before allowing donations. Turnstile is a privacy-focused captcha solution that helps prevent automated abuse while maintaining a smooth user experience.
+
+- The captcha widget appears when a user initiates a donation.
+- The backend verifies the token received from Turnstile before processing payment requests.
+- See `TurnstileWidget` in the codebase for implementation details.
+
+## WayforPay Integration
+
+Donations are processed using [WayforPay](https://wayforpay.com/), a secure payment gateway widely used in Ukraine.
+
+- When a donation is initiated and captcha verification succeeds, an invoice is created via the WayforPay API.
+- The payment widget is loaded dynamically and presented to the user for completing the transaction.
+- See the donation flow in `Donate.tsx` for integration details.
 
 - All the `code` required to get started
 - Images of what it should look like
@@ -133,11 +153,11 @@ app/
 │ │ └── page.tsx # /[lang]/collaboration
 ├── shared/
 │ ├── components/
-│ │ ├── design-system/ 
+│ │ ├── design-system/
 │ │ │ └── button/
-│ │ │   ├── Button.test.tsx
-│ │ │   ├── Button.tsx
-│ │ │   └── Button.styles.ts
+│ │ │ ├── Button.test.tsx
+│ │ │ ├── Button.tsx
+│ │ │ └── Button.styles.ts
 │ │ ├── Header.tsx
 │ │ └── Footer.tsx
 │ └── hooks/

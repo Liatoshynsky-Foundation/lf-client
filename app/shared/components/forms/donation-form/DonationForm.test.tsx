@@ -13,6 +13,14 @@ jest.mock('../../design-system/all-components/button/Button', () => {
   };
 });
 
+const mockDonate = jest.fn();
+jest.mock('~/hooks/use-donation/useDonation', () => ({
+  useDonation: () => ({
+    donate: mockDonate,
+    isPending: false
+  })
+}));
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const messages: Record<string, string> = {
@@ -24,7 +32,8 @@ jest.mock('next-intl', () => ({
       subscribeButton: 'Підписатися'
     };
     return messages[key] || key;
-  }
+  },
+  useLocale: () => 'uk'
 }));
 
 describe('DonationForm', () => {

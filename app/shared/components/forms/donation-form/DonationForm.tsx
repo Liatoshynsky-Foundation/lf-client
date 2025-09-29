@@ -1,11 +1,14 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
-import { ChangeEvent, useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
-import Button from '../../design-system/all-components/button/Button';
-import ButtonGroup from '../../design-system/all-components/button-group/ButtonGroup';
-import PaperComponent from '../../paper-component/PaperComponent';
+import PaperComponent from '~/components/paper-component/PaperComponent';
+import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
+import Button from '~/ds-components/button/Button';
+import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
+import { useDonation } from '~/hooks/use-donation/useDonation';
+
 import { style } from './DonationForm.styles';
 import { Currency, DonateType } from '~/types/types/common.types';
 
@@ -19,13 +22,16 @@ const proposedSum: Record<Currency, number[]> = {
 
 function DonationForm() {
   const t = useTranslations('donationForm');
-
+  const lang = useLocale();
   const [selected, setSelected] = useState<DonateType>('donation');
   const [donationSum, setDonationSum] = useState<number | ''>('');
   const [currency, setCurrency] = useState<Currency>('UAH');
   const [openDropdown, setOpenDropdown] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [touched, setTouched] = useState(false);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
 
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
@@ -42,6 +48,59 @@ function DonationForm() {
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];
+
+  const onVerificationFailure = useCallback(() => {
+    setShowCaptcha(true);
+    setCaptchaToken(null);
+  }, []);
+
+  const { donate } = useDonation({
+    lang,
+    currency,
+    onVerificationFailure
+  });
+
+  useEffect(() => {
+    if (globalThis.window !== undefined && !globalThis.window.Wayforpay) {
+      const script = document.createElement('script');
+      script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  const handleDonateClick = (amount: number) => {
+    setTouched(true);
+    const currentAmount = Number(amount);
+    const isInvalid = currentAmount <= 0;
+    setHasError(isInvalid);
+    if (isInvalid) {
+      return;
+    }
+    setSelectedAmount(currentAmount);
+    if (!captchaToken) {
+      setShowCaptcha(true);
+    }
+  };
+
+  const handleCaptchaSuccess = (token: string) => {
+    setCaptchaToken(token);
+    setShowCaptcha(false);
+  };
+
+  useEffect(() => {
+    const donateIfReady = async () => {
+      try {
+        if (!selectedAmount || !captchaToken) return;
+        await donate({ amount: selectedAmount, captchaToken });
+        setSelectedAmount(null);
+        setCaptchaToken(null);
+      } catch {
+        setSelectedAmount(null);
+        setShowCaptcha(false);
+      }
+    };
+    donateIfReady();
+  }, [selectedAmount, captchaToken, donate]);
 
   const suggestButtons = proposedSum[currency].map((item) => (
     <Button
@@ -65,11 +124,6 @@ function DonationForm() {
       <Typography variant="body1">{c.toUpperCase()}</Typography>
     </MenuItem>
   ));
-
-  const handleSubmit = () => {
-    setTouched(true);
-    setHasError(donationSum === 0 || donationSum === '');
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
@@ -109,7 +163,13 @@ function DonationForm() {
         </FormControl>
       </Box>
       <Box sx={style.addBtns}>{suggestButtons}</Box>
-      <Button color="primary" variant="contained" fullWidth onClick={handleSubmit}>
+
+      {showCaptcha && (
+        <Box sx={style.turnstileWidget}>
+          <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
+        </Box>
+      )}
+      <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
         <Typography variant="customSemiBold18">
           {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
         </Typography>
