@@ -6,41 +6,40 @@ jest.mock('next/headers', () => ({
   draftMode: jest.fn().mockResolvedValue({ isEnabled: false })
 }));
 
-jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => {
-  const Mock = () => <div>Liatoshynsky office</div>;
-  Mock.displayName = 'MockLiatoshynskyOffice';
-  return Mock;
-});
-jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => {
-  const Mock = () => <div>Foundation founders</div>;
-  Mock.displayName = 'MockFoundationFounders';
-  return Mock;
-});
-jest.mock('~/components/blocks/our-mission/OurMission', () => {
-  const Mock = () => <div>Our mission</div>;
-  Mock.displayName = 'MockOurMission';
-  return Mock;
-});
-jest.mock('~/components/blocks/IntroSection/IntroSection', () => {
-  const Mock = () => <div>Intro section</div>;
-  Mock.displayName = 'MockIntroSection';
-  return Mock;
-});
-jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => {
-  const Mock = () => <div>Foundation info</div>;
-  Mock.displayName = 'MockFoundationInfo';
-  return Mock;
-});
-jest.mock('~/components/blocks/our-goals/OurGoals', () => {
-  const Mock = () => <div>Our goals</div>;
-  Mock.displayName = 'MockOurGoals';
-  return Mock;
-});
-jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => {
-  const Mock = () => <div>What we do</div>;
-  Mock.displayName = 'MockWhatWeDo';
-  return Mock;
-});
+jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
+  __esModule: true,
+  default: () => <div>Foundation founders</div>
+}));
+
+jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => ({
+  __esModule: true,
+  default: () => <div>Foundation info</div>
+}));
+
+jest.mock('~/components/blocks/IntroSection/IntroSection', () => ({
+  __esModule: true,
+  IntroSection: () => <div>Intro section</div>
+}));
+
+jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => ({
+  __esModule: true,
+  default: () => <div>Liatoshynsky office</div>
+}));
+
+jest.mock('~/components/blocks/our-goals/OurGoals', () => ({
+  __esModule: true,
+  default: () => <div>Our goals</div>
+}));
+
+jest.mock('~/components/blocks/our-mission/OurMission', () => ({
+  __esModule: true,
+  default: () => <div>Our mission</div>
+}));
+
+jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
+  __esModule: true,
+  default: () => <div>What we do</div>
+}));
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn(),
