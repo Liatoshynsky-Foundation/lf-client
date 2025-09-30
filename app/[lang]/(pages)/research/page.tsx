@@ -19,7 +19,7 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = await createRequestContainer().resolve('pageService');
+  const pageService = await createRequestContainer().resolve('pagesDataService');
 
   const page = await pageService.getPageData('research', lang);
 

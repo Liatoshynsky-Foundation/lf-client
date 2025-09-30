@@ -19,7 +19,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = createRequestContainer().resolve('pageService');
+  const pageService = createRequestContainer().resolve('pagesDataService');
   const page = await pageService.getPageData('privacy-policy', lang);
   const blocks = page?.blocks ?? {};
 

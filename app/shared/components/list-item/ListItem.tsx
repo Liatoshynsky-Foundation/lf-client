@@ -14,7 +14,7 @@ const ListItem: React.FC<ListItemProps> = ({ text, sx }) => {
       <Box sx={styles.bulletIcon}>
         <SvgImage src="/icons/bullet-small.svg" alt="bullet" width={16} height={16} />
       </Box>
-      <Typography sx={styles.typography} component="p">
+      <Typography sx={styles.typography} component="div">
         {text}
       </Typography>
     </Box>

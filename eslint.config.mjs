@@ -68,6 +68,12 @@ const eslintConfig = [
       ],
       'simple-import-sort/exports': 'error'
     }
+  },
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
   }
 ];
 

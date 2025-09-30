@@ -2,7 +2,6 @@ export interface QuoteBlock {
   text: string;
   source: string;
 }
-
 export interface ResearchAndScientificWorkProps {
   quote: QuoteBlock;
   title: string;
