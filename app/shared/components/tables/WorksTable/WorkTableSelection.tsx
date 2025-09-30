@@ -1,11 +1,11 @@
 'use client';
 
-import Box from '@mui/material/Box';
 import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { WorkTableFilters } from './filters/Filters';
+import { getWorkTableColumnWidths } from './getColumnWidth';
 import {
   RenderActionCell,
   renderAuthorCell,
@@ -19,6 +19,7 @@ import { WorkTable } from '~/types/types/enhancedTable';
 
 import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export type AuthorFilterOption = {
   label: string;
@@ -86,6 +87,7 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
   const [works, setWorks] = useState<WorkTable[]>([]);
   const [authorsList, setAuthorsList] = useState<AuthorFilterOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const bp = useBreakpoints();
 
   const t = useTranslations('table.work');
 
@@ -112,6 +114,20 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
   const isFiltersActive = columnFilters.length > 0;
   const activeFiltersCount = columnFilters.length;
 
+  const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
+
+  const columnWidths = useMemo(
+    () =>
+      getWorkTableColumnWidths({
+        isMobile,
+        isTablet,
+        isLaptop,
+        isDesktop,
+        isLaptopAndAbove
+      }),
+    [isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove]
+  );
+
   const handleAuthorFilterChange = useCallback((authors: string[]) => {
     setColumnFilters((prev) => {
       const without = prev.filter((f) => f.id !== 'author');
@@ -134,75 +150,72 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
     setColumnFilters([]);
   }, []);
 
-  const columns: ColumnDef<WorkTable>[] = [
-    {
-      accessorKey: 'name',
-      header: RenderNameHeader,
-      cell: renderNameCell,
-      sortingFn: 'alphanumeric'
-    },
-    {
-      accessorKey: 'author',
-      header: RenderAuthorHeader,
-      cell: renderAuthorCell,
-      sortingFn: 'alphanumeric'
-    },
-    {
-      accessorKey: 'sortableYear',
-      header: RenderYearHeader,
-      cell: (info) => {
-        const originalData = info.row.original;
-        return renderYearCell(originalData.year);
+  const baseColumns: ColumnDef<WorkTable>[] = useMemo(
+    () => [
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: RenderNameHeader,
+        cell: renderNameCell,
+        sortingFn: 'alphanumeric'
       },
-      sortingFn: 'basic'
-    },
-    {
-      id: 'actions',
-      header: '',
-      cell: RenderActionCell
+      {
+        id: 'author',
+        accessorKey: 'author',
+        header: RenderAuthorHeader,
+        cell: renderAuthorCell,
+        sortingFn: 'alphanumeric'
+      },
+      {
+        id: 'sortableYear',
+        accessorKey: 'sortableYear',
+        header: RenderYearHeader,
+        cell: (info) => renderYearCell(info.row.original.year),
+        sortingFn: 'basic'
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: RenderActionCell
+      }
+    ],
+    []
+  );
+
+  const columns: ColumnDef<WorkTable>[] = useMemo(() => {
+    if (bp.isTablet || bp.isMobile) {
+      const hidden = new Set(['author', 'sortableYear']);
+      return baseColumns.filter((c) => !hidden.has(String(c.id)));
     }
-  ];
+    return baseColumns;
+  }, [bp.isTablet, bp.isMobile, baseColumns]);
+
+  const tableKey = (bp.isMobile && 'mobile') || (bp.isTablet && 'tablet') || 'desktop';
 
   return (
-    <Box
-      sx={{
-        '& .MuiTableRow-root': {
-          '& td': {
-            verticalAlign: 'top'
-          }
-        },
-        gridColumn: '1/-1',
-        width: '100%'
-      }}
-    >
-      <EnhancedTable
-        data={works}
-        columns={columns}
-        columnFilters={columnFilters}
-        onColumnFiltersChange={setColumnFilters}
-        columnWidths={{
-          name: '57%',
-          author: '17%',
-          year: '8%',
-          actions: 'auto'
-        }}
-        itemsPerPage={10}
-        tableName={t('name')}
-        Filters={
-          <WorkTableFilters
-            authors={authorsList}
-            authorFilter={currentAuthorFilter}
-            onAuthorFilterChange={handleAuthorFilterChange}
-            yearFilter={currentYearFilter}
-            onYearFilterChange={handleYearFilterChange}
-            onClearAllFilters={onClearAllFilters}
-          />
-        }
-        isFiltersActive={isFiltersActive}
-        activeFiltersCount={activeFiltersCount}
-        onClearFilters={onClearAllFilters}
-        loading={isLoading}
-      />
-    </Box>
+    <EnhancedTable
+      key={tableKey}
+      data={works}
+      columns={columns}
+      columnFilters={columnFilters}
+      onColumnFiltersChange={setColumnFilters}
+      columnWidths={columnWidths}
+      itemsPerPage={10}
+      tableName={t('name')}
+      Filters={
+        <WorkTableFilters
+          authors={authorsList}
+          authorFilter={currentAuthorFilter}
+          onAuthorFilterChange={handleAuthorFilterChange}
+          yearFilter={currentYearFilter}
+          onYearFilterChange={handleYearFilterChange}
+          onClearAllFilters={onClearAllFilters}
+        />
+      }
+      isFiltersActive={isFiltersActive}
+      activeFiltersCount={activeFiltersCount}
+      onClearFilters={onClearAllFilters}
+      loading={isLoading}
+    />
   );
 };

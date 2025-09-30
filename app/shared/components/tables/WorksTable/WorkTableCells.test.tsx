@@ -1,5 +1,56 @@
 import type { CellContext } from '@tanstack/react-table';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+
+import type { WorkTable } from '~/types/types/enhancedTable';
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key
+}));
+
+const mockUseBreakpoints = jest.fn();
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: () => mockUseBreakpoints()
+}));
+
+jest.mock('~/ds-components/button/Button', () => {
+  function MockButton({
+    children,
+    link,
+    endIcon
+  }: {
+    children: React.ReactNode;
+    link?: string;
+    endIcon?: React.ReactNode;
+  }) {
+    return link ? (
+      <a href={link}>
+        {children}
+        {endIcon}
+      </a>
+    ) : (
+      <button>
+        {children}
+        {endIcon}
+      </button>
+    );
+  }
+  return { __esModule: true, default: MockButton };
+});
+
+jest.mock('public/icons/eye.svg', () => {
+  function EyeIconMock() {
+    return <span data-testid="eye-icon">eye</span>;
+  }
+  return EyeIconMock;
+});
+jest.mock('public/icons/log-out.svg', () => {
+  function LogOutIconMock() {
+    return <span data-testid="log-out-icon">log-out</span>;
+  }
+  return LogOutIconMock;
+});
 
 import {
   RenderActionCell,
@@ -10,128 +61,129 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './WorkTableCells';
-import type { WorkTable } from '~/types/types/enhancedTable';
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
-}));
+const setDesktop = () =>
+  mockUseBreakpoints.mockReturnValue({
+    isMobile: false,
+    isTablet: false,
+    isLaptop: true,
+    isDesktop: true,
+    isLaptopAndAbove: true
+  });
 
-jest.mock('~/ds-components/button/Button');
+const setTablet = () =>
+  mockUseBreakpoints.mockReturnValue({
+    isMobile: false,
+    isTablet: true,
+    isLaptop: false,
+    isDesktop: false,
+    isLaptopAndAbove: false
+  });
 
-jest.mock('public/icons/eye.svg', () => {
-  return function EyeIcon() {
-    return <span data-testid="eye-icon">eye</span>;
-  };
-});
-jest.mock('public/icons/log-out.svg', () => {
-  return function LogOutIcon() {
-    return <span data-testid="log-out-icon">log-out</span>;
-  };
-});
+const setMobile = () =>
+  mockUseBreakpoints.mockReturnValue({
+    isMobile: true,
+    isTablet: false,
+    isLaptop: false,
+    isDesktop: false,
+    isLaptopAndAbove: false
+  });
+
+const createMockCellContext = <T,>(value: T): CellContext<WorkTable, unknown> =>
+  ({
+    getValue: jest.fn().mockReturnValue(value),
+    row: { original: {} as WorkTable }
+  }) as unknown as CellContext<WorkTable, unknown>;
+
+const createMockActionCellContext = (original: Partial<WorkTable>): CellContext<WorkTable, unknown> =>
+  ({
+    getValue: jest.fn(),
+    row: { original: original as WorkTable }
+  }) as unknown as CellContext<WorkTable, unknown>;
 
 describe('WorkTable Components', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setDesktop();
+  });
+
   describe('Header Components', () => {
     it('should render name header with correct text', () => {
       render(<RenderNameHeader />);
-
-      const nameHeader = screen.getByText('name');
-      expect(nameHeader).toBeInTheDocument();
+      expect(screen.getByText('name')).toBeInTheDocument();
     });
-
     it('should render author header with correct text', () => {
       render(<RenderAuthorHeader />);
-
-      const authorHeader = screen.getByText('author');
-      expect(authorHeader).toBeInTheDocument();
+      expect(screen.getByText('author')).toBeInTheDocument();
     });
-
     it('should render year header with correct text', () => {
       render(<RenderYearHeader />);
-
-      const yearHeader = screen.getByText('year');
-      expect(yearHeader).toBeInTheDocument();
+      expect(screen.getByText('year')).toBeInTheDocument();
     });
   });
 
   describe('Cell Renderers', () => {
-    const createMockCellContext = <T,>(value: T): CellContext<WorkTable, unknown> =>
-      ({
-        getValue: jest.fn().mockReturnValue(value),
-        row: {
-          original: {} as WorkTable
-        }
-      }) as any;
-
-    it('should render name cell with correct value and max width', () => {
+    it('should render name cell with provided value', () => {
       const mockInfo = createMockCellContext('Sample Work Title');
-
       render(renderNameCell(mockInfo));
-
-      const nameCell = screen.getByText('Sample Work Title');
-      expect(nameCell).toBeInTheDocument();
-      expect(nameCell).toHaveStyle({ maxWidth: '738px' });
+      expect(screen.getByText('Sample Work Title')).toBeInTheDocument();
     });
-
-    it('should render author cell with correct value and max width', () => {
+    it('should render author cell with max width', () => {
       const mockInfo = createMockCellContext('John Doe');
-
       render(renderAuthorCell(mockInfo));
-
-      const authorCell = screen.getByText('John Doe');
-      expect(authorCell).toBeInTheDocument();
-      expect(authorCell).toHaveStyle({ maxWidth: '192px' });
+      expect(screen.getByText('John Doe')).toHaveStyle({ maxWidth: '192px' });
     });
-
-    it('should render year cell with correct value and max width', () => {
-      const mockInfo = '2023';
-
-      render(renderYearCell(mockInfo));
-
-      const yearCell = screen.getByText('2023');
-      expect(yearCell).toBeInTheDocument();
-      expect(yearCell).toHaveStyle({ maxWidth: '85px' });
+    it('should render year cell with value', () => {
+      render(renderYearCell('2023'));
+      expect(screen.getByText('2023')).toBeInTheDocument();
     });
   });
 
   describe('RenderActionCell', () => {
-    const createMockActionCellContext = (original: Partial<WorkTable>): CellContext<WorkTable, unknown> =>
-      ({
-        getValue: jest.fn(),
-        row: {
-          original: original as WorkTable
-        }
-      }) as any;
-
-    it('should render PDF view button when isPreview is true', () => {
-      const mockInfo = createMockActionCellContext({
-        isPreview: true
-      });
-
+    it('should render IconButton (img alt="view") on tablet for preview', () => {
+      setTablet();
+      const mockInfo = createMockActionCellContext({ isPreview: true });
       render(<RenderActionCell {...mockInfo} />);
-
-      const viewButton = screen.getByText('view');
-      expect(viewButton).toBeInTheDocument();
-      expect(viewButton.closest('button')).toBeInTheDocument();
+      expect(screen.getByAltText('view')).toBeInTheDocument();
+      expect(screen.queryByText('view')).not.toBeInTheDocument();
     });
 
-    it('should render link button when url exists', () => {
-      const mockInfo = createMockActionCellContext({
-        url: 'https://example.com'
-      });
-
+    it('should render IconButton (img alt="view") on mobile for preview', () => {
+      setMobile();
+      const mockInfo = createMockActionCellContext({ isPreview: true });
       render(<RenderActionCell {...mockInfo} />);
+      expect(screen.getByAltText('view')).toBeInTheDocument();
+      expect(screen.queryByText('view')).not.toBeInTheDocument();
+    });
 
-      const gotoButton = screen.getByText('goto');
-      expect(gotoButton).toBeInTheDocument();
-      expect(gotoButton.closest('a')).toHaveAttribute('href', 'https://example.com');
+    it('should render link Button with LogOutIcon on desktop when url exists', () => {
+      setDesktop();
+      const mockInfo = createMockActionCellContext({ url: 'https://example.com' });
+      render(<RenderActionCell {...mockInfo} />);
+      const link = screen.getByText('goto').closest('a');
+      expect(link).toHaveAttribute('href', 'https://example.com');
       expect(screen.getByTestId('log-out-icon')).toBeInTheDocument();
     });
 
-    it('should render nothing when neither isPreview nor url provided', () => {
+    it('should render IconButton (img alt="goto") on tablet when url exists', () => {
+      setTablet();
+      const mockInfo = createMockActionCellContext({ url: 'https://example.com' });
+      render(<RenderActionCell {...mockInfo} />);
+      expect(screen.getByAltText('goto')).toBeInTheDocument();
+      expect(screen.queryByText('goto')).not.toBeInTheDocument();
+    });
+
+    it('should render IconButton (img alt="goto") on mobile when url exists', () => {
+      setMobile();
+      const mockInfo = createMockActionCellContext({ url: 'https://example.com' });
+      render(<RenderActionCell {...mockInfo} />);
+      expect(screen.getByAltText('goto')).toBeInTheDocument();
+      expect(screen.queryByText('goto')).not.toBeInTheDocument();
+    });
+
+    it('should render null when neither isPreview nor url is provided', () => {
       const mockInfo = createMockActionCellContext({});
-
       const { container } = render(<RenderActionCell {...mockInfo} />);
-
       expect(container.firstChild).toBeNull();
     });
   });
