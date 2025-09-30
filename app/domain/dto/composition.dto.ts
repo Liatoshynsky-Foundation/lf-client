@@ -19,6 +19,12 @@ export type GenreDTO = {
   name: string;
 };
 
+export type CategoryDTO = {
+  _id: string;
+  key: string;
+  name: string;
+};
+
 export type CompositionDTO = {
   _id: string;
   title: string;

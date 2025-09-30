@@ -3,7 +3,7 @@ import { compositionsRepository } from './сompositions.repository';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
 import { compositionsArraySchema } from '~/validators/artistry/composition.schema';
-import { genresArraySchema } from '~/validators/artistry/genre.schema';
+import { genresArraySchema } from '~/validators/artistry/namedFilter.schema';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,

@@ -5,20 +5,15 @@ import React from 'react';
 
 import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 
-import { GenreNameDTO } from '~/domain/dto/table.dto';
+import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
 import { FilterPanel } from '~/shared/components/filters/FilterPanel';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
-
-interface FilterOption {
-  value: string;
-  label: string;
-}
 
 interface MusicTableFiltersProps {
   labelGenre?: string;
   labelCategory?: string;
   genresOptions: GenreNameDTO[];
-  categoriesOptions?: FilterOption[];
+  categoriesOptions: CategoryNameDTO[];
   genreFilter: string[];
   categoryFilter?: string[];
   yearLabel?: string;
@@ -54,7 +49,7 @@ export function MusicTableFilters({
       <Box sx={{ width: 'fit-content' }}>
         <FilterSelect
           label={labelCategory}
-          options={categoriesOptions}
+          options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
           defaultValues={categoryFilter}
           variant="filled"
           maxSelections={10}

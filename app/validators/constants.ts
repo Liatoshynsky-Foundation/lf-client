@@ -1,4 +1,5 @@
-import { z } from 'zod';
+import { Locale } from 'next-intl';
+import { z, ZodTypeAny } from 'zod';
 
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
@@ -14,6 +15,35 @@ export const translatedLinkSchema = z.object({
   href: hrefSchema
 });
 
+export function ArraySchema(schema: ZodTypeAny) {
+  const arraySchema = z.array(schema);
+  return arraySchema;
+}
+
+function isTranslatedField(value: unknown, locale: Locale): value is Record<Locale, string> {
+  return typeof value === 'object' && value !== null && locale in value;
+}
+
+export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, locale: Locale) {
+  function localizeValue(value: unknown): unknown {
+    if (isTranslatedField(value, locale)) {
+      return value[locale];
+    }
+    if (Array.isArray(value)) {
+      return value.map(localizeValue);
+    }
+    if (typeof value === 'object' && value !== null) {
+      const result: Record<string, unknown> = {};
+      for (const key in value) {
+        result[key] = localizeValue((value as Record<string, unknown>)[key]);
+      }
+      return result;
+    }
+    return value;
+  }
+
+  return z.union([z.array(schema), schema]).transform(localizeValue);
+}
 export type Stringifiable = {
   toString: () => string;
 };
