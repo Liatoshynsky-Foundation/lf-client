@@ -74,5 +74,11 @@ export const style = {
     display: 'flex',
     gap: '8px',
     margin: '32px 0'
+  },
+  turnstileWidget: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '24px'
   }
 };

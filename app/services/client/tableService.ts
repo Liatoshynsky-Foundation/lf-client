@@ -15,7 +15,7 @@ async function getTableStaticData<T>(pathname: string, locale: Locale): Promise<
 }
 
 async function getTableData<T>(pathname: string, locale: Locale, params: Record<string, any>): Promise<T[]> {
-  let url = getFullUrl({
+  const url = getFullUrl({
     pathname,
     searchParameters: {
       locale,
