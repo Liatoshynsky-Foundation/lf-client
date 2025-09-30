@@ -61,7 +61,12 @@ const TermsContent = () => {
           mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
         }}
       >
-        <SkewedBlock image="/images/retro-collage.jpg" backgroundSize="cover" height={{ xs: '90%', sm: '100%' }} />
+        <SkewedBlock
+          isBackground
+          image="/images/retro-collage.jpg"
+          backgroundSize="cover"
+          height={{ xs: '90%', sm: '100%' }}
+        />
       </Box>
       <ContentBlock title={t('copyrightTitle')} containerSx={{ marginBottom: '16px' }} />
       <ContentBlock description={rightsDoc[locale]} containerSx={{ marginBottom: '32px' }} />
