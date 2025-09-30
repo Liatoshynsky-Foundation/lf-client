@@ -1,19 +1,10 @@
 export const styles = {
   mainContainer: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     mb: {
-      xs: '19px',
+      xs: '16px',
       sm: '74px',
       md: '100px'
     }
@@ -83,11 +74,13 @@ export const styles = {
   },
   smallCaptionSx: {
     mt: {
+      xs: '10px',
       sm: '15px'
     }
   },
   bigCaptionSx: {
     mt: {
+      xs: '9px',
       sm: '10px',
       md: '14px'
     }

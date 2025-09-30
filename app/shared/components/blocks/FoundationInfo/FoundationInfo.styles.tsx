@@ -1,17 +1,3 @@
-const containerHelper = {
-  display: 'grid',
-  gridTemplateColumns: {
-    xs: 'repeat(4, 1fr)',
-    sm: 'repeat(8, 1fr)',
-    md: 'repeat(12, 1fr)'
-  },
-  columnGap: {
-    xs: '16px',
-    sm: '24px',
-    md: '40px'
-  }
-};
-
 const textBase = {
   fontFamily: 'Mulish',
   fontWeight: 400,
@@ -38,7 +24,9 @@ const textHeading = {
 
 export const styles = {
   container: {
-    ...containerHelper,
+    display: 'grid',
+    gridTemplateColumns: 'subgrid',
+    gridColumn: '1 / -1',
     position: 'relative',
     marginBottom: {
       xs: '59px',

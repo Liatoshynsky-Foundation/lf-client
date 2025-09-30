@@ -17,6 +17,6 @@ export const styles = {
     margin: '0 auto',
     transform: 'skewY(2deg)',
     transformOrigin: 'top left',
-    padding: { xs: '35px 24px', sm: '40px 56px', md: '40px 72px' }
+    padding: { xs: '35px 24px', sm: '40px 56px 57px', md: '40px 72px' }
   }
 };

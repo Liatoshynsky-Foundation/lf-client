@@ -7,7 +7,7 @@ export const styles = {
     flexDirection: 'column',
     justifyContent: 'space-between',
     pb: {
-      xs: '100px',
+      xs: '90px',
       sm: '80px',
       lg: '126px',
       xl: '71px',

@@ -107,6 +107,14 @@ export const styles = {
     }
   },
   navigationWrapper: {
+    ml: {
+      sm: '36px',
+      md: '21px',
+      lg: '25px',
+      xl: '-16px',
+      xxl: '16px',
+      ultra: '80px'
+    },
     marginBottom: {
       xs: '48px',
       sm: '72px',

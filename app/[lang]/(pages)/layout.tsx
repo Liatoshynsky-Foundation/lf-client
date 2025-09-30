@@ -33,8 +33,7 @@ const sx: SxProps<Theme> = {
     xs: '24px',
     sm: '56px',
     md: '72px'
-  },
-  pb: 'calc(100% * 0.035)'
+  }
 };
 
 export default function PagesLayout({ children }: LayoutProps) {

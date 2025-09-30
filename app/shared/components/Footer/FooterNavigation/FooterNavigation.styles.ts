@@ -4,11 +4,6 @@ export const styles: Record<string, SxProps> = {
   footer: {
     width: '100%',
     maxWidth: '100%',
-    marginLeft: {
-      lg: '-30px',
-      xxl: '30px',
-      ultra: '160px'
-    },
     color: '#190D03',
     display: 'grid',
     gridTemplateColumns: {

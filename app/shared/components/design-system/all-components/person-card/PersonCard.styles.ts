@@ -24,7 +24,7 @@ export const styles = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '5px', md: '7px' },
+    gap: { xs: '5px', sm: '7px', md: '7px' },
     color: '#190D03'
   },
   name: {

@@ -1,25 +1,12 @@
 import { AppTypography } from '~/constants';
 
-const containerHelper = {
-  display: 'grid',
-  gridTemplateColumns: {
-    xs: 'repeat(4, 1fr)',
-    sm: 'repeat(8, 1fr)',
-    md: 'repeat(12, 1fr)'
-  },
-  columnGap: {
-    xs: '16px',
-    sm: '24px',
-    md: '40px'
-  }
-};
-
 export const styles = {
   container: {
-    ...containerHelper,
+    display: 'grid',
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     margin: {
-      xs: '100px 0 64px',
+      xs: '90px 0 64px',
       sm: '105px 0 66px',
       md: '132px 0 52px',
       lg: '140px 0 54px'
@@ -36,7 +23,7 @@ export const styles = {
       md: '64px'
     },
     margin: {
-      xs: '0 0 80px',
+      xs: '0 0 66px',
       sm: '20px 0 68px',
       md: '42px 0 50px',
       xl: '42px 0 127px'

@@ -5,7 +5,9 @@ export const styles = {
     columnGap: {
       xs: '8px',
       sm: '16px',
-      md: '24px'
+      md: '24px',
+      lg: '20px',
+      xl: '24px'
     },
     maxWidth: '425px',
     '&:nth-child(2)': {
