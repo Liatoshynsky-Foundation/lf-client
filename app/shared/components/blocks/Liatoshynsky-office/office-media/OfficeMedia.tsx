@@ -16,7 +16,11 @@ const OfficeMedia: React.FC = () => {
     <Box sx={styles.mainContainer}>
       <Box sx={styles.mediaContainer}>
         {images.map((img) => (
-          <Box key={img.styleKey} sx={[{ backgroundImage: `url(${img.src})` }, styles[img.styleKey]]} role={'img'} />
+          <Box
+            key={img.styleKey}
+            sx={[{ backgroundImage: `url(${img.src})` }, styles[img.styleKey]]}
+            data-testid={'img'}
+          />
         ))}
       </Box>
       <Box sx={styles.logo}>

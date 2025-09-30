@@ -21,7 +21,7 @@ const mockImages: OfficeMediaProps['images'] = [
 describe('OfficeMedia component', () => {
   it('should render all photos without crashing', () => {
     render(<OfficeMedia />);
-    expect(screen.getAllByRole('img')).toHaveLength(mockImages.length);
+    expect(screen.getAllByTestId('img')).toHaveLength(mockImages.length);
   });
 
   it('should render logo with correct props', () => {
