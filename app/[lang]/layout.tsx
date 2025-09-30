@@ -78,11 +78,9 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
               <QueryProvider>
                 <AudioPlayerProvider>
                   <Box sx={styles.container}>
-                    <Box sx={styles.grid}>
-                      <Header />
-                      <Box sx={styles.childrenBox}>{children}</Box>
-                      <Footer />
-                    </Box>
+                    <Header />
+                    <Box sx={styles.childrenBox}>{children}</Box>
+                    <Footer />
                   </Box>
                   <CookieModalWrapper cookie_consent={cookieConsent} />
                 </AudioPlayerProvider>

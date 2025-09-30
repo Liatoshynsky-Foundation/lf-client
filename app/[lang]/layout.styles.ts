@@ -1,26 +1,13 @@
 export const styles = {
   container: {
-    position: 'relative',
     width: '100vw',
+    maxWidth: '100vw',
     minHeight: '100vh'
   },
-  grid: {
-    width: '100%',
-    maxWidth: '1728px',
-    mx: 'auto'
-  },
   childrenBox: {
-    minHeight: 'calc(100vh + (100vw * 0.035))',
-    pt: {
-      xs: '70px',
-      sm: '82px',
-      md: '100px',
-      lg: '92px'
-    },
-    px: {
-      xs: '24px',
-      sm: '56px',
-      md: '72px'
-    }
+    position: 'relative',
+    width: '100%',
+    maxWidth: '100vw',
+    minHeight: 'calc(100vh + (100vw * 0.035))'
   }
 };
