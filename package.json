@@ -42,7 +42,7 @@
     "react-virtualized": "^9.22.6",
     "uuid": "^13.0.0",
     "winston": "^3.17.0",
-    "winston-mongodb": "^6.0.0",
+    "winston-mongodb": "^7.0.1",
     "zod": "^3.25.49"
   },
   "devDependencies": {
