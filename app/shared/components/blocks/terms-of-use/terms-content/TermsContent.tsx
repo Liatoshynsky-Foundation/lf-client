@@ -26,7 +26,7 @@ const TermsContent = () => {
   const locale = useLocale();
   const { isMobile } = useBreakpoints();
   return (
-    <Box sx={{ gridTemplateColumns: 'subgrid', gridColumn: '1/-1', mb: '40px' }}>
+    <Box sx={{ gridTemplateColumns: 'subgrid', gridColumn: '1/-1', pb: '40px' }}>
       <ContentBlock
         title={t('libraryAccessTitle')}
         containerSx={{
@@ -61,7 +61,12 @@ const TermsContent = () => {
           mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
         }}
       >
-        <SkewedBlock image="/images/retro-collage.jpg" backgroundSize="cover" height={{ xs: '90%', sm: '100%' }} />
+        <SkewedBlock
+          image="/images/retro-collage.jpg"
+          backgroundSize="cover"
+          height={{ xs: '90%', sm: '100%' }}
+          isBackground
+        />
       </Box>
       <ContentBlock title={t('copyrightTitle')} containerSx={{ marginBottom: '16px' }} />
       <ContentBlock description={rightsDoc[locale]} containerSx={{ marginBottom: '32px' }} />
@@ -111,10 +116,7 @@ const TermsContent = () => {
       />
       <ContentBlock title={t('respectAuthorsTitle')} containerSx={{ marginBottom: '16px' }} />
       <ContentBlock description={t('respectAuthorsIntro')} containerSx={{ marginBottom: '16px' }} />
-      <ContentBlock
-        description={t('respectAuthorsOutro')}
-        containerSx={{ marginBottom: { xs: '120px', md: '160px' } }}
-      />
+      <ContentBlock description={t('respectAuthorsOutro')} containerSx={{ pb: { xs: '120px', md: '160px' } }} />
     </Box>
   );
 };

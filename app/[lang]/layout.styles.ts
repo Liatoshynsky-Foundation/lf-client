@@ -10,7 +10,7 @@ export const styles = {
     mx: 'auto'
   },
   childrenBox: {
-    minHeight: '100vh',
+    minHeight: 'calc(100vh + (100vw * 0.035))',
     pt: {
       xs: '70px',
       sm: '82px',

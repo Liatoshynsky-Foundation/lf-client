@@ -2,8 +2,17 @@ export const styles = {
   gridContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: 'subgrid',
-    m: '160px 0'
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
+    p: '160px 0'
   },
   contacts: {
     gridColumn: '1 / 5',
