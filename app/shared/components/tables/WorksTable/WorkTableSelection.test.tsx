@@ -76,12 +76,14 @@ jest.mock('./filters/Filters', () => {
 import { WorkTableSection } from './WorkTableSelection';
 
 describe('WorkTableSection', () => {
-  const originalFetch = global.fetch;
+  let originalFetch: typeof fetch;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    global.fetch = jest
+    originalFetch = globalThis.fetch;
+
+    globalThis.fetch = jest
       .fn()
       .mockResolvedValueOnce({
         ok: true,
@@ -127,11 +129,11 @@ describe('WorkTableSection', () => {
             url: w.url,
             isPreview: w.isPreview
           }))
-      } as Response);
+      } as Response) as unknown as typeof fetch;
   });
 
   afterEach(() => {
-    global.fetch = originalFetch as any;
+    globalThis.fetch = originalFetch;
   });
 
   it('should render correct number of rows', async () => {
@@ -172,10 +174,10 @@ describe('WorkTableSection', () => {
     fireEvent.click(screen.getByTestId('mock-apply-author-filter'));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(3);
+      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(3);
     });
 
-    const lastCallArg = (global.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
+    const lastCallArg = (globalThis.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
     expect(lastCallArg).toContain('/api/scientific-works');
     expect(lastCallArg).toContain('authorIds=1');
 
@@ -191,16 +193,16 @@ describe('WorkTableSection', () => {
     fireEvent.click(screen.getByTestId('mock-apply-author-filter'));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(3);
+      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(3);
     });
 
     fireEvent.click(screen.getByTestId('mock-clear-filters'));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(4);
+      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(4);
     });
 
-    const lastCallArg = (global.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
+    const lastCallArg = (globalThis.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
     expect(lastCallArg).toContain('/api/scientific-works');
     expect(lastCallArg).not.toContain('authorIds=');
 
