@@ -92,8 +92,6 @@ export const compositionsRepository = {
 
     if (!compositions || compositions.length === 0) return [];
 
-    console.log('Fetched compositions:', JSON.stringify(compositions, null, 2));
-
     return ArraySchema(compositionSchema).parse(compositions);
   }
 };
