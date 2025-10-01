@@ -1,3 +1,5 @@
+import { Notes } from './getNotes.types';
+
 export type ColumnWidths = Record<string, string | number>;
 
 export type CollapsibleGroupColumnMeta<T> = {
@@ -21,6 +23,12 @@ export type Music = {
   genre?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
+  sheetMusic?: Notes[];
+};
+
+export type CompositionWithNotes = {
+  composition: string;
+  notes: Notes[];
 };
 
 export type WorkTable = {

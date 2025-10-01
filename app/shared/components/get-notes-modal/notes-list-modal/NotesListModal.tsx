@@ -1,29 +1,32 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 import NotesListItem from './note-list-item/NoteListItem';
 import { styles } from './NotesListModal.styles';
 import { Notes } from '~/types/types/getNotes.types';
 
-import Eye from '~/public/icons/eye.svg';
-import Chat from '~/public/icons/message-square.svg';
+import ArrowUpRightIcon from '~/public/icons/arrow-up-right.svg';
+import MessagesSquareIcon from '~/public/icons/messages-square.svg';
 
 type NotesListModalProps = {
+  composition: string;
   notes: Notes[];
-  freeNotesHandler: () => void;
   paidNotesHandler: () => void;
 };
 
-const NotesListModal = ({ notes, freeNotesHandler, paidNotesHandler }: NotesListModalProps) => {
+const NotesListModal = ({ composition, notes, paidNotesHandler }: NotesListModalProps) => {
   return (
     <Box sx={styles.container}>
+      <Typography sx={styles.typography}>{composition}</Typography>
       {notes.map((note, index) => (
         <NotesListItem
-          key={note.title + index}
+          key={note.dateUploaded + index}
           note={note}
-          endIcon={note.free ? <Eye /> : <Chat />}
-          handler={note.free ? freeNotesHandler : paidNotesHandler}
-          buttonText={note.free ? 'freeNotesButton' : 'paidNotesButton'}
+          endIcon={
+            note.isFree ? <ArrowUpRightIcon width={20} height={20} /> : <MessagesSquareIcon width={20} height={20} />
+          }
+          handler={!note.isFree ? paidNotesHandler : undefined}
+          buttonText={note.isFree ? 'freeNotesButton' : 'paidNotesButton'}
         />
       ))}
     </Box>

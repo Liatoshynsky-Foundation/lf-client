@@ -14,7 +14,7 @@ import {
   playCellSx
 } from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
-import type { Music } from '~/types/types/enhancedTable';
+import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
@@ -26,7 +26,7 @@ import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-type RowProp = Readonly<{ row: Row<Music> }>;
+type RowProp = Readonly<{ row: Row<Music>; onAction?: (data: CompositionWithNotes) => void }>;
 
 export const RenderOpusHeader = () => {
   const t = useTranslations('table.columns');
@@ -109,20 +109,33 @@ export const PlayCell: React.FC<RowProp> = ({ row }) => {
   );
 };
 
-export const ActionsCell: React.FC<RowProp> = ({ row }) => {
+export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
   const rowData = row.original;
   const t = useTranslations('table.buttons');
   const { isDesktop, isLaptop } = useBreakpoints();
   const shouldRender = isDesktop || isLaptop;
+
+  const handleActionClick = () => {
+    if (onAction && rowData.sheetMusic) {
+      onAction({ composition: rowData.name, notes: rowData.sheetMusic });
+    }
+  };
 
   return (
     <Box sx={actionsCellContainerSx}>
       {rowData.sheetAvailable &&
         shouldRender &&
         (isDesktop ? (
-          <Button variant="outlined">{t('viewSheetMusic')}</Button>
+          <Button onClick={handleActionClick} variant="outlined">
+            {t('viewSheetMusic')}
+          </Button>
         ) : (
-          <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryOutlinedSx}>
+          <IconButton
+            onClick={handleActionClick}
+            size="small"
+            variant={IconButtonColorVariant.Secondary}
+            sx={iconButtonSecondaryOutlinedSx}
+          >
             <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={30} height={30} />
           </IconButton>
         ))}
@@ -136,7 +149,10 @@ export const ActionsCell: React.FC<RowProp> = ({ row }) => {
 
 export const RenderPlayCell = (info: CellContext<Music, unknown>) => <PlayCell row={info.row} />;
 
-export const RenderActionsCell = (info: CellContext<Music, unknown>) => <ActionsCell row={info.row} />;
+export const RenderActionsCell = (
+  info: CellContext<Music, unknown>,
+  onAction: (data: CompositionWithNotes) => void
+) => <ActionsCell row={info.row} onAction={onAction} />;
 
 export const RenderExpanderCell = (ctx: CellContext<Music, unknown>) => {
   const { isTablet, isMobile } = useBreakpoints();

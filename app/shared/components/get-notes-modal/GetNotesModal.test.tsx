@@ -43,46 +43,43 @@ jest.mock('./notes-confirmation-modal/NotesConfirmModal', () => ({
 
 jest.mock('./notes-list-modal/NotesListModal', () => ({
   __esModule: true,
-  default: ({ notes, freeNotesHandler, paidNotesHandler }: any) => (
+  default: ({ notes, paidNotesHandler }: any) => (
     <div data-testid="notes-list-modal">
-      <button onClick={freeNotesHandler}>Free Notes</button>
+      <a href={notes[0].url} target="_blank" rel="noopener noreferrer">
+        Free Notes
+      </a>
       <button onClick={paidNotesHandler}>Paid Notes</button>
       {notes.map((n: any) => (
-        <div key={n.title}>{n.title}</div>
+        <div key={n.url}>{n.url}</div>
       ))}
     </div>
   )
 }));
 
+const composition = 'Composition 1';
 const notes = [
-  { title: 'Note 1', free: true, date: '2023-01-01' },
-  { title: 'Note 2', free: false, date: '2023-01-02' }
+  { url: '/note-1.pdf', isFree: true, dateUploaded: '2023-01-01' },
+  { url: '/note-2.pdf', isFree: false, dateUploaded: '2023-01-02' }
 ];
 
-const alertFn = jest.fn();
-const originalAlert = window.alert;
+const handleCloseModal = jest.fn();
 
 describe('GetNotesModal', () => {
-  beforeAll(() => {
-    window.alert = alertFn;
-  });
-
   afterAll(() => {
-    window.alert = originalAlert;
     jest.clearAllMocks();
   });
 
   it('should render notes list modal and title in LIST state', () => {
-    render(<GetNotesModal notes={notes} opened={true} />);
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
     expect(screen.getByTestId('modal')).toBeInTheDocument();
     expect(screen.getByText('notesList.title')).toBeInTheDocument();
     expect(screen.getByTestId('notes-list-modal')).toBeInTheDocument();
-    expect(screen.getByText('Note 1')).toBeInTheDocument();
-    expect(screen.getByText('Note 2')).toBeInTheDocument();
+    expect(screen.getByText('/note-1.pdf')).toBeInTheDocument();
+    expect(screen.getByText('/note-2.pdf')).toBeInTheDocument();
   });
 
   it('should switch to FORM state when Paid Notes button is clicked', () => {
-    render(<GetNotesModal notes={notes} opened={true} />);
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
     fireEvent.click(screen.getByText('Paid Notes'));
     expect(screen.getByText('form.title')).toBeInTheDocument();
     expect(screen.getByText('form.subtitle')).toBeInTheDocument();
@@ -90,7 +87,7 @@ describe('GetNotesModal', () => {
   });
 
   it('should switch to CONFIRM state when ContactForm is submitted', () => {
-    render(<GetNotesModal notes={notes} opened={true} />);
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
     fireEvent.click(screen.getByText('Paid Notes'));
     fireEvent.click(screen.getByText('ContactForm'));
 
@@ -103,14 +100,16 @@ describe('GetNotesModal', () => {
   });
 
   it('should close modal when close icon is clicked', () => {
-    render(<GetNotesModal notes={notes} opened={true} />);
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
     fireEvent.click(screen.getByTestId('icon-button'));
-    expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
+    expect(handleCloseModal).toHaveBeenCalled();
   });
 
-  it('should call alert when Free Notes button is clicked', () => {
-    render(<GetNotesModal notes={notes} opened={true} />);
-    fireEvent.click(screen.getByText('Free Notes'));
-    expect(alertFn).toHaveBeenCalledWith('Free notes gotten');
+  it('should render Free Notes as a link with correct attributes', () => {
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
+    const link = screen.getByText('Free Notes');
+    expect(link).toHaveAttribute('href', notes[0].url);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 });

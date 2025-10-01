@@ -29,7 +29,7 @@ export const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row-reverse',
-    marginBottom: '16px'
+    marginBottom: '8px'
   },
   closeIcon: {
     width: '30px',

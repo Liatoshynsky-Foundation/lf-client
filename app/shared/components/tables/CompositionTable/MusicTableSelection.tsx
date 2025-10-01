@@ -21,11 +21,13 @@ import {
   RenderYearHeader
 } from './MusicTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
-import { Music } from '~/types/types/enhancedTable';
+import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
+import { Notes } from '~/types/types/getNotes.types';
 
 import { GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
 import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
+import GetNotesModal from '~/shared/components/get-notes-modal/GetNotesModal';
 import { Search } from '~/shared/components/search/Search';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
@@ -41,6 +43,10 @@ export default function MusicTableSection() {
   const [genresOptions, setGenresOptions] = useState<GenreNameDTO[]>([]);
   const [titleOptions, setTitleOptions] = useState<TitlesDTO[]>([]);
   const [yearOptions, setYearOptions] = useState<[number, number]>([yearFilter[0], yearFilter[1]]);
+
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [modalNotes, setModalNotes] = useState<Notes[]>([]);
+  const [compositionName, setCompositionName] = useState<string>('');
 
   const initialYearSet = useRef(false);
   const t = useTranslations('table.composition');
@@ -110,6 +116,18 @@ export default function MusicTableSection() {
     }
   }, [staticFilters]);
 
+  const handleOpenModal = ({ composition, notes }: CompositionWithNotes) => {
+    setCompositionName(composition);
+    setModalNotes(notes);
+    setIsModalOpened(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpened(false);
+    setCompositionName('');
+    setModalNotes([]);
+  };
+
   const baseColumns: ColumnDef<Music>[] = useMemo(
     () => [
       {
@@ -151,7 +169,7 @@ export default function MusicTableSection() {
       {
         id: 'actions',
         header: '',
-        cell: RenderActionsCell,
+        cell: (info) => RenderActionsCell(info, handleOpenModal),
         meta: { groupLabelContentFactory: renderGroupActions }
       }
     ],
@@ -174,37 +192,46 @@ export default function MusicTableSection() {
   const activeFiltersCount = Number(isGenreActive) + Number(isYearActive);
 
   return (
-    <EnhancedTable
-      key={tableKey}
-      data={data}
-      loading={loadingData}
-      columns={columns}
-      groupByKey="opus"
-      columnFilters={columnFilters}
-      onColumnFiltersChange={setColumnFilters}
-      columnWidths={columnWidths}
-      itemsPerPage={10}
-      tableName={t('name.composition')}
-      Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
-      Filters={
-        <MusicTableFilters
-          labelCategory={tFilters('category')}
-          labelGenre={tFilters('genre')}
-          genresOptions={genresOptions}
-          genreFilter={genreFilter}
-          yearLabel={tFilters('year')}
-          yearFilter={yearFilter}
-          onGenresChange={handleGenreChange}
-          onYearChange={handleYearChange}
-          onClearAllFilters={clearAllFilters}
-          isAnyFilterActive={isAnyFilterActive}
-          minYear={minYear ?? defaultMinYear}
-          maxYear={maxYear ?? defaultMaxYear}
-        />
-      }
-      isFiltersActive={isAnyFilterActive}
-      activeFiltersCount={activeFiltersCount}
-      onClearFilters={clearAllFilters}
-    />
+    <>
+      <EnhancedTable
+        key={tableKey}
+        data={data}
+        loading={loadingData}
+        columns={columns}
+        groupByKey="opus"
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
+        columnWidths={columnWidths}
+        itemsPerPage={10}
+        tableName={t('name.composition')}
+        Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
+        Filters={
+          <MusicTableFilters
+            labelCategory={tFilters('category')}
+            labelGenre={tFilters('genre')}
+            genresOptions={genresOptions}
+            genreFilter={genreFilter}
+            yearLabel={tFilters('year')}
+            yearFilter={yearFilter}
+            onGenresChange={handleGenreChange}
+            onYearChange={handleYearChange}
+            onClearAllFilters={clearAllFilters}
+            isAnyFilterActive={isAnyFilterActive}
+            minYear={minYear ?? defaultMinYear}
+            maxYear={maxYear ?? defaultMaxYear}
+          />
+        }
+        isFiltersActive={isAnyFilterActive}
+        activeFiltersCount={activeFiltersCount}
+        onClearFilters={clearAllFilters}
+      />
+      <GetNotesModal
+        key={modalNotes[0]?.dateUploaded}
+        composition={compositionName}
+        notes={modalNotes}
+        handleClose={handleCloseModal}
+        opened={isModalOpened}
+      />
+    </>
   );
 }
