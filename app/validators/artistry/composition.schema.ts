@@ -50,5 +50,3 @@ export const compositionsYearRangeSchema = z.object({
   minYear: z.number(),
   maxYear: z.number()
 });
-
-export const parseCompositionsYearRange = (data: unknown) => compositionsYearRangeSchema.parse(data);

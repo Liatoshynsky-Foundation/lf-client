@@ -16,8 +16,7 @@ export const translatedLinkSchema = z.object({
 });
 
 export function ArraySchema(schema: ZodTypeAny) {
-  const arraySchema = z.array(schema);
-  return arraySchema;
+  return z.array(schema);
 }
 
 function isTranslatedField(value: unknown, locale: Locale): value is Record<Locale, string> {
@@ -32,7 +31,7 @@ export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, 
     if (Array.isArray(value)) {
       return value.map(localizeValue);
     }
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === 'object' && value !== null && Object.getPrototypeOf(value) === Object.prototype) {
       const result: Record<string, unknown> = {};
       for (const key in value) {
         result[key] = localizeValue((value as Record<string, unknown>)[key]);
@@ -44,6 +43,11 @@ export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, 
 
   return z.union([z.array(schema), schema]).transform(localizeValue);
 }
+
+export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _id: any }>) {
+  return schema.omit({ _id: true });
+}
+
 export type Stringifiable = {
   toString: () => string;
 };

@@ -11,11 +11,13 @@ export async function GET(req: NextRequest) {
     const search = params.get('search') || '';
 
     const genres = params.getAll('genre');
+    const categories = params.getAll('category');
     const yearFrom = params.get('yearFrom');
     const yearTo = params.get('yearTo');
 
     const filters: any = {};
     if (genres.length) filters.genres = genres;
+    if (categories.length) filters.categories = categories;
 
     if (yearFrom || yearTo) {
       const min = yearFrom ? Number(yearFrom) : 1900;

@@ -10,16 +10,16 @@ import { FilterPanel } from '~/shared/components/filters/FilterPanel';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 
 interface MusicTableFiltersProps {
-  labelGenre?: string;
-  labelCategory?: string;
+  labelGenre: string;
+  labelCategory: string;
   genresOptions: GenreNameDTO[];
   categoriesOptions: CategoryNameDTO[];
   genreFilter: string[];
-  categoryFilter?: string[];
-  yearLabel?: string;
+  categoryFilter: string[];
+  yearLabel: string;
   yearFilter: [number, number];
   onGenresChange: (values: string[]) => void;
-  onCategoriesChange?: (values: string[]) => void;
+  onCategoriesChange: (values: string[]) => void;
   onYearChange: (value: [number, number]) => void;
   onClearAllFilters?: () => void;
   isAnyFilterActive: boolean;
@@ -53,8 +53,8 @@ export function MusicTableFilters({
           defaultValues={categoryFilter}
           variant="filled"
           maxSelections={10}
-          onAdd={(val, lab, allSelected) => onCategoriesChange?.(allSelected)}
-          onRemove={(val, lab, allSelected) => onCategoriesChange?.(allSelected)}
+          onAdd={(val, lab, allSelected) => onCategoriesChange(allSelected)}
+          onRemove={(val, lab, allSelected) => onCategoriesChange(allSelected)}
         />
       </Box>
 

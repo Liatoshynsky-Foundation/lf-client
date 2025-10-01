@@ -3,22 +3,22 @@ import { Locale } from 'next-intl';
 import { ArtistryServiceDeps } from '~/domain/services/artistry.type';
 import {
   compositionSchema,
+  compositionsYearRangeSchema,
   compositionTableReadySchema,
-  compositionTitlesSchema,
-  parseCompositionsYearRange
+  compositionTitlesSchema
 } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
-import { ArraySchema, LocalizeSchema } from '~/validators/constants';
+import { ArraySchema, LocalizeSchema, NoIDSchema } from '~/validators/constants';
 
 export const createArtistryService = ({ compositionService }: ArtistryServiceDeps) => ({
   async getAllGenres(locale: Locale) {
     const genres = await compositionService.getAllGenres();
-    return ArraySchema(LocalizeSchema(namedFilterSchema, locale)).parse(genres);
+    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(genres);
   },
 
   async getAllCategories(locale: Locale) {
     const categories = await compositionService.getAllCategories();
-    return ArraySchema(LocalizeSchema(namedFilterSchema, locale)).parse(categories);
+    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(categories);
   },
 
   async getAllCompositions(
@@ -36,11 +36,11 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
     const allTitles = await compositionService.getAllCompositionTitles();
     if (!allTitles) return [];
 
-    return LocalizeSchema(compositionTitlesSchema, locale).parse(allTitles);
+    return ArraySchema(LocalizeSchema(compositionTitlesSchema, locale)).parse(allTitles);
   },
 
   async getCompositionsYearRange() {
     const range = await compositionService.getCompositionsYearRange();
-    return parseCompositionsYearRange(range);
+    return compositionsYearRangeSchema.parse(range);
   }
 });

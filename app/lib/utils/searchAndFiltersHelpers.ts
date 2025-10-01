@@ -6,9 +6,9 @@ export const searchHelper = (search?: string) => {
   return cleanedExpression;
 };
 
-export const genreHelper = (genres?: string[]) => {
-  const genreArray = Array.isArray(genres) ? genres.filter(Boolean) : [];
-  return genreArray;
+export const namedFilterHelper = (namedFilter?: string[]) => {
+  const filterArray = Array.isArray(namedFilter) ? namedFilter.filter(Boolean) : [];
+  return filterArray;
 };
 
 export const yearHelper = (years?: { min?: number; max?: number }) => {
