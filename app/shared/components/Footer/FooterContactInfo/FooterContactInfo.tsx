@@ -38,7 +38,7 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
         </Box>
       </Box>
       <Box>
-        <Box sx={styles.linkContainer}>
+        <Box sx={styles.linkContainer} style={{ marginBottom: '4px' }}>
           <Typography sx={styles.weakText}>{labels.phoneLabel}:</Typography>
           <Link sx={styles.link} {...telLinkProps}>
             {contacts.phone}

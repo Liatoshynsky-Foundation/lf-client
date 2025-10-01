@@ -2,32 +2,28 @@ import { SxProps } from '@mui/material';
 
 export const styles: Record<string, SxProps> = {
   footer: {
+    width: '100%',
     maxWidth: '100%',
-    marginLeft: {
-      lg: 'calc(100%/24)',
-      xl: '0'
-    },
     color: '#190D03',
     display: 'grid',
-    gridTemplateColumns: '1fr',
+    gridTemplateColumns: {
+      xs: '1fr',
+      md: 'repeat(2, minmax(min-content, max-content))',
+      lg: 'repeat(4, minmax(min-content, max-content))'
+    },
     gap: {
-      xs: '48px',
+      xs: '44px',
       md: '48px 73px',
       lg: '48px',
-      xl: '56px'
+      xl: '80px',
+      xxl: '56px',
+      ultra: '85px'
     },
     fontFamily: 'Mulish, sans-serif',
-
-    '@media (min-width: 1024px)': {
-      gridTemplateColumns: 'repeat(2, minmax(min-content, max-content))'
-    },
-
-    '@media (min-width: 1280px)': {
-      gridTemplateColumns: 'repeat(4, minmax(min-content, max-content))'
-    },
     justifySelf: {
       xs: 'start',
-      sm: 'end'
+      sm: 'end',
+      md: 'center'
     }
   },
   column: {
@@ -35,7 +31,7 @@ export const styles: Record<string, SxProps> = {
     fontSize: '16px'
   },
   heading: {
-    marginBottom: '16px',
+    marginBottom: '20px',
     textWrap: 'nowrap'
   },
   list: {

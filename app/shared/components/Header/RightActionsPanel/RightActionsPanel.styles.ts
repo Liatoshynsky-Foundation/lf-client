@@ -4,7 +4,7 @@ export const styles = {
   controls: (isMobile: boolean) => ({
     display: isMobile ? 'none' : 'flex',
     alignItems: 'center',
-    gap: '18px'
+    gap: '4px'
   }),
   backgroundContainer: {
     display: 'flex',
@@ -13,6 +13,6 @@ export const styles = {
     maxHeight: '52px',
     borderRadius: '40px',
     border: `6px solid ${backgroundColors.white}`,
-    gap: '18px'
+    gap: '16px'
   }
 };

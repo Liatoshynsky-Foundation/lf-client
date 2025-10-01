@@ -6,7 +6,7 @@ export const styles = {
     flexDirection: 'column-reverse',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: { xs: '32px', sm: '24px', lg: '8px' },
+    gap: { xs: '24px', md: '8px' },
     fontFamily: 'Mulish, sans-serif'
   },
   text: {

@@ -1,118 +1,140 @@
-import { Theme } from '@mui/material';
-
-import { theme } from '~/ds-components/theme/Theme';
-
-const conatinerHelper = {
-  display: 'grid',
-  gridTemplateColumns: 'subgrid'
-};
-const mainText = {
+const textBase = {
   fontFamily: 'Mulish',
   fontWeight: 400,
-  fontSize: '24px',
-  lineHeight: '160%',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '18px',
-    lineHeight: '180%'
+  fontSize: {
+    xs: '18px',
+    md: '24px'
+  },
+  lineHeight: {
+    xs: '150%',
+    md: '160%'
   }
 };
-export const styles = (theme: Theme) => ({
+
+const textHeading = {
+  fontFamily: 'Mulish',
+  fontWeight: 800,
+  fontSize: {
+    xs: '18px',
+    md: '26px'
+  },
+  lineHeight: '177%',
+  textTransform: 'uppercase'
+};
+
+export const styles = {
   container: {
-    ...conatinerHelper,
+    display: 'grid',
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    gridTemplateRows: 'repeat(6, auto)',
-    columnGap: '40px',
     position: 'relative',
-    marginBottom: '180px',
-    [theme.breakpoints.down('sm')]: {
-      columnGap: '16px',
-      marginBottom: '90px'
+    marginBottom: {
+      xs: '59px',
+      sm: '132px',
+      md: '155px',
+      lg: '180px'
     }
   },
+
   organisationSection: {
-    gridRow: '4',
-    gridColumnStart: '6',
-    gridColumnEnd: '-1',
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / -1',
+      md: '6 / -1'
+    },
     textAlign: 'justify',
-    marginTop: '75px',
-    marginBottom: '96px',
-    [theme.breakpoints.down('md')]: {
-      gridColumnStart: '4'
-    },
-    [theme.breakpoints.down('sm')]: {
-      gridColumnStart: '2'
+    marginBottom: {
+      xs: '55px',
+      sm: '62px',
+      md: '100px'
     }
   },
+
   organisationText: {
-    fontFamily: 'Mulish',
-    fontWeight: 800,
-    fontSize: '28px',
-    lineHeight: '160%',
-    textTransform: 'uppercase',
-    marginRight: '200px',
-    [theme.breakpoints.down('md')]: {
-      fontSize: '18px',
-      lineHeight: '180%'
-    }
+    ...textHeading,
+    marginRight: { xs: 0 }
   },
+
   explanationSection: {
-    ...conatinerHelper,
-    gridRow: '5',
-    gridColumn: 'span 12',
-    marginBottom: '94px',
-    [theme.breakpoints.down('sm')]: {
-      gridColumn: 'span 4'
-    }
-  },
-  explanationText: {
-    fontFamily: 'Mulish',
-    fontWeight: 500,
-    fontSize: '28px',
-    lineHeight: '160%',
-    textTransform: 'uppercase',
-    [theme.breakpoints.down('md')]: {
-      fontSize: '18px',
-      lineHeight: '180%'
-    }
-  },
-  FirstBulletIcon: {
-    gridColumn: '12',
-    justifySelf: 'end',
-    [theme.breakpoints.down('sm')]: {
-      display: 'none'
-    }
-  },
-  textSection: {
-    ...mainText,
-    gridColumn: '1/9',
-    [theme.breakpoints.down('md')]: { gridColumn: '1/7', fontSize: '18px', lineHeight: '180%' },
-    [theme.breakpoints.down('sm')]: { gridColumn: '1/6' }
-  },
-  textImage: {
-    ...mainText,
-    gridRow: '6',
-    gridColumn: '1/6',
-    [theme.breakpoints.down('md')]: { gridColumn: '1/4', fontSize: '18px' },
-    [theme.breakpoints.down('sm')]: { gridColumn: '1/-2' }
-  },
-  bodyImage: {
-    gridColumn: '6/-5',
-    gridRow: '6',
-    width: '100%',
-    height: '450px',
-    position: 'relative',
-    [theme.breakpoints.down('md')]: {
-      gridColumn: '4/span 3',
-      width: '230px',
-      height: '300px'
+    gridRow: '2',
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / 7',
+      md: '1 / 9'
     },
-    [theme.breakpoints.down('sm')]: {
-      gridRow: '7',
-      gridColumn: '2/-1',
-      width: '230px',
-      height: '300px',
-      marginTop: '40px',
-      marginBottom: '96px'
+    marginBottom: { xs: '40px', md: '53px', xl: '90px', xxl: '51px' }
+  },
+
+  explanationText: {
+    ...textHeading,
+    fontWeight: 500,
+    textAlign: {
+      xs: 'left',
+      sm: 'justify'
+    }
+  },
+
+  firstBulletIcon: {
+    gridColumn: '1 / 2',
+    justifySelf: 'start',
+    display: { sm: 'none' }
+  },
+
+  secondBulletIcon: {
+    gridColumn: {
+      sm: '8',
+      md: '10 / -1'
+    },
+    justifySelf: 'end',
+    display: {
+      xs: 'none',
+      sm: 'block'
+    }
+  },
+
+  textSection: {
+    ...textBase,
+    textIndent: {
+      sm: '88px',
+      md: 0
+    }
+  },
+
+  textImage: {
+    ...textBase,
+    gridRow: '3',
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / 4',
+      md: '1 / 6'
+    },
+    marginBottom: {
+      xs: '40px',
+      sm: 0
+    }
+  },
+
+  bodyImage: {
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / 7',
+      md: '6 / 10'
+    },
+    gridRow: { sm: '3' },
+    position: 'relative',
+    width: {
+      xs: '199px',
+      sm: '230px',
+      lg: '295px',
+      xl: '337px',
+      xxl: '407px'
+    },
+    height: {
+      xs: '260px',
+      sm: '299px',
+      lg: '350px',
+      xl: '400px',
+      xxl: '484px'
     }
   }
-});
+};

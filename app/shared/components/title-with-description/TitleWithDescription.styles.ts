@@ -1,8 +1,8 @@
 import type { Variant } from '~/types/types/titleWithDescriptionComponent';
 
 export const Sizes = {
-  goals: { xs: '213px', sm: '287px', md: '308px', lg: '256px', xl: '308px', xxl: '389.5px' },
-  whatWeDo: { xs: '213px', sm: '287px', md: '308px', lg: '218px', xl: '260px', xxl: '330px' }
+  goals: '100%',
+  whatWeDo: '100%'
 };
 
 export const Gap = {

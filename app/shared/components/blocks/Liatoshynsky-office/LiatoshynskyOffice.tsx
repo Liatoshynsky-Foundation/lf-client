@@ -25,6 +25,7 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
             quoteIconColor="black"
             mainTextColor="black"
             alignRight
+            sx={styles.quoteSx}
           />
         </Box>
         <Box sx={styles.textBlock} className={oswald.className}>
@@ -35,7 +36,14 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
           <OfficeMedia />
         </Box>
         <Box sx={styles.buttonBlock}>
-          <Button size="large" color="primary" variant="contained" link="/office" label={t('goToOfficeButton')} />
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            link="/office"
+            label={t('goToOfficeButton')}
+            sx={styles.button}
+          />
         </Box>
       </Box>
     </Box>

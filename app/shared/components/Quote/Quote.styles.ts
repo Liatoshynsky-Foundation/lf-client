@@ -2,7 +2,7 @@ import type { Align } from '~/types/types/quoteComponent';
 
 export const quoteSizes = {
   height: 'fit-content',
-  width: { xs: '240px', sm: '320px', md: '370px', lg: '430px', xl: '456px' },
+  width: { xs: '272px', sm: '231px', md: '305px', lg: '367px', xl: '408px' },
   icon: { xs: '33px', sm: '48px', md: '60px' },
   textGap: { xs: '16px', md: '24px' }
 };
@@ -30,6 +30,7 @@ export const alignments = {
 export const quoteTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
+  lineHeight: '150%',
   fontSize: { xs: '16px', md: '18px' },
   letterSpacing: 0
 };
@@ -37,6 +38,7 @@ export const quoteTextStyles = {
 export const sourceTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
+  lineHeight: '150%',
   fontStyle: 'italic',
   fontSize: { xs: '14px', md: '16px' },
   letterSpacing: 0

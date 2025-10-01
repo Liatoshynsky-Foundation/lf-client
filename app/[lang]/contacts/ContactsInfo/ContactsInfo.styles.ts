@@ -4,7 +4,8 @@ import { oswald } from '~/shared/components/design-system/all-components/theme/T
 export const styles = {
   root: {
     gridColumn: '1 / -1',
-    background: '#F2EEE8',
+    maxWidth: '1728px',
+    mx: 'auto',
     p: { xs: '20px 24px', sm: '20px 56px', md: '20px 72px' },
     m: { xs: '-20px -24px', sm: '-20px -56px', md: '-20px -72px' }
   },
@@ -12,7 +13,7 @@ export const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    mt: { xs: '120px', md: '136px' },
+    mt: { xs: '120px', md: '136px', xl: '55px' },
     mb: { xs: '45px', sm: '160px' },
     flexDirection: { xs: 'column', sm: 'row' }
   },

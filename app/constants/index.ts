@@ -9,8 +9,8 @@ export const logoSizes = {
     height: { xs: 30, sm: 40 }
   },
   office: {
-    width: { xs: 180, sm: 210, md: 240, lg: 270 },
-    height: { xs: 50, sm: 70, md: 90, lg: 110 }
+    width: { xs: 87, sm: 210, lg: 270 },
+    height: { xs: 34, sm: 70, lg: 110 }
   }
 };
 

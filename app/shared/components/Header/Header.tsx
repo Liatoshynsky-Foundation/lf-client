@@ -11,7 +11,6 @@ import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 
 import { headerClientService } from '~/services/client/headerService';
 import useQuery from '~/shared/hooks/query/useQuery';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
@@ -20,7 +19,6 @@ export default function Header() {
   const hideHeader = useHideHeader(0.3);
   const t = useTranslations('header');
   const locale = useLocale();
-  const { isTablet, isLaptop } = useBreakpoints();
 
   const { data: headerData, isLoading } = useQuery({
     queryKey: ['header', locale],
@@ -38,35 +36,18 @@ export default function Header() {
         <Logo />
       </Box>
 
-      {isTablet || isLaptop ? (
-        <Box sx={styles.navWrapper}>
-          <Box sx={styles.navigationContainer}>
-            <NavigationBar navLabels={headerData.navigation} />
-          </Box>
-          <Box sx={styles.rightActionsContainer}>
-            <RightActionsPanel
-              supportButtonData={{
-                text: t('supportButton'),
-                link: headerData.supportButtonLink
-              }}
-            />
-          </Box>
-        </Box>
-      ) : (
-        <>
-          <Box sx={styles.navigationContainer}>
-            <NavigationBar navLabels={headerData.navigation} />
-          </Box>
-          <Box sx={styles.rightActionsContainer}>
-            <RightActionsPanel
-              supportButtonData={{
-                text: t('supportButton'),
-                link: headerData.supportButtonLink
-              }}
-            />
-          </Box>
-        </>
-      )}
+      <Box sx={styles.navigationContainer}>
+        <NavigationBar navLabels={headerData.navigation} />
+      </Box>
+
+      <Box sx={styles.rightActionsContainer}>
+        <RightActionsPanel
+          supportButtonData={{
+            text: t('supportButton'),
+            link: headerData.supportButtonLink
+          }}
+        />
+      </Box>
     </Box>
   );
 }

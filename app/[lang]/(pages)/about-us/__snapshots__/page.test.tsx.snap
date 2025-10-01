@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`About Component renders the About component correctly 1`] = `
-<div>
-  AboutUs
-</div>
-`;

@@ -4,7 +4,16 @@ export const styles = {
   gridContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     mt: '160px'
   },
   typography: {

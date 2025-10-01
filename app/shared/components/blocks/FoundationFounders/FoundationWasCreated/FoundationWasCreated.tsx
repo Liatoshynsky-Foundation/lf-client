@@ -22,7 +22,7 @@ const boldTitle = (children: React.ReactNode) => (
 );
 
 const boldTitleWrapper = (node: TextNode) => (
-  <Typography component="span">
+  <Typography sx={styles.description} component="span">
     {renderText(
       {
         italic: getItalic,
@@ -39,7 +39,7 @@ const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => 
   return (
     <Box sx={styles.container}>
       <Box sx={styles.ellipseWrapper}>
-        <SvgImage src="icons/ellipse.svg" alt="ellipse" width={32} height={30} />
+        <SvgImage src="icons/ellipse.svg" alt="ellipse" width={22} height={20} />
       </Box>
       <Box sx={styles.text}>
         <TipTapContent

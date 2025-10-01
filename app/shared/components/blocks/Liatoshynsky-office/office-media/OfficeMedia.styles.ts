@@ -7,7 +7,9 @@ const basePhoto = {
   },
   width: { xs: 110, sm: 133, md: 167, lg: 210, xl: 230 },
   aspectRatio: '3 / 4',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  backgroundPosition: 'center',
+  backgroundSize: 'cover'
 };
 
 export const styles = {
@@ -20,23 +22,36 @@ export const styles = {
   },
   photo1: {
     ...basePhoto,
-    top: '0px',
-    marginLeft: 0
+    width: { xs: '78px', sm: '97px', md: '130px', lg: '186px' },
+    height: { xs: '105px', sm: '130px', md: '176px', lg: '251px' },
+    transform: 'rotate(-7.65deg)'
   },
   photo2: {
     ...basePhoto,
-    top: { xs: '5px', md: '35px' },
-    marginLeft: { xs: '-15px', md: '-27px' }
+    width: { xs: '82.8px', sm: '102px', md: '138px', lg: '197px' },
+    height: { xs: '111.6px', sm: '138px', md: '186px', lg: '266px' },
+    transform: {
+      xs: 'rotate(5.09deg)',
+      sm: 'rotate(5.09deg) translateY(10px)',
+      lg: 'rotate(5.09deg) translateY(35px)'
+    },
+    top: '4px'
   },
   photo3: {
     ...basePhoto,
-    top: '5px',
-    marginLeft: { xs: '-2px', md: '-5px' }
+    width: { xs: '78.9px', sm: '97px', md: '132px', lg: '188px' },
+    height: { xs: '107.9px', sm: '132px', md: '178px', lg: '256px' },
+    transform: {
+      xs: 'rotate(2.68deg)',
+      sm: 'rotate(1deg)',
+      md: 'rotate(2deg)'
+    },
+    left: '3px'
   },
   logo: {
     position: 'absolute',
-    bottom: '-38px',
-    right: { xs: '0', sm: '20px', md: '30px', lg: '55px' },
+    bottom: { xs: '-15px', sm: '-30px', md: '-30px', lg: '-50px' },
+    right: { xs: '35px', sm: '-23px', md: '20px', lg: '40px' },
     zIndex: 3
   }
 };

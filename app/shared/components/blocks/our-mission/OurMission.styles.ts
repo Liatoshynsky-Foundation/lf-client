@@ -3,20 +3,86 @@ export const styles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    mb: { xs: '96px', sm: '132px', md: '156px' }
+    mb: {
+      xs: '16px',
+      sm: '74px',
+      md: '100px'
+    }
   },
-  imagesContainer: {
-    display: 'flex',
-    flexDirection: { xs: 'column', sm: 'row' },
-    justifyContent: { xs: 'flex-start', sm: 'space-between' },
-    alignSelf: 'flex-start',
-    gridColumn: '1 / -1',
-    mt: { xs: '72px', sm: '132px', md: '164px', lg: '180px' }
+  title: {
+    marginBottom: {
+      xs: '40px',
+      md: '75px'
+    }
   },
   list: {
     display: 'grid',
-    gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, 1fr)' },
-    gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' },
-    gap: '56px'
+    gridTemplateColumns: {
+      xs: '1fr',
+      lg: 'repeat(2, 1fr)'
+    },
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / 8',
+      md: '6 / 11',
+      lg: '6 / -1'
+    },
+    gridRow: {
+      sm: '2 / 5'
+    },
+    gap: {
+      xs: '48px',
+      md: '56px'
+    },
+    mb: {
+      xs: '72px',
+      sm: '132px',
+      md: '164px',
+      lg: '179px'
+    }
+  },
+  smallImg: {
+    gridColumn: {
+      xs: '1 / 3',
+      md: '1 / 5',
+      xl: '1 / 4'
+    },
+    gridRow: {
+      sm: '4 / 6'
+    },
+    mt: {
+      md: '-62px',
+      lg: '-78px',
+      xl: '-20px'
+    },
+    mb: {
+      xs: '56px'
+    }
+  },
+  bigImg: {
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / -1',
+      md: '6 / -1'
+    },
+    gridRow: {
+      sm: '5 / 7'
+    },
+    mb: {
+      xs: '56px'
+    }
+  },
+  smallCaptionSx: {
+    mt: {
+      xs: '10px',
+      sm: '15px'
+    }
+  },
+  bigCaptionSx: {
+    mt: {
+      xs: '9px',
+      sm: '10px',
+      md: '14px'
+    }
   }
 };

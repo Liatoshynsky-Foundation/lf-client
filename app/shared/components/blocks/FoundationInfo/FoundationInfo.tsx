@@ -4,36 +4,33 @@ import Image from 'next/image';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
-import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './FoundationInfo.styles';
 import { IFoundationInfo } from '~/types/page/about-us.types';
 
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
   const { image, ourOrganisation, ourName, ourBelief } = data;
-  const sectionStyles = styles(theme);
 
   const organisationParagraph = (children: React.ReactNode) => (
-    <Typography sx={sectionStyles.explanationText}>{children}</Typography>
+    <Typography sx={styles.explanationText}>{children}</Typography>
   );
 
   const organisationBoldText = (children: React.ReactNode) => (
-    <Box component="strong" sx={sectionStyles.organisationText}>
+    <Box component="strong" sx={styles.organisationText}>
       {children}
     </Box>
   );
 
-  const nameParagraph = (children: React.ReactNode) => (
-    <Typography sx={sectionStyles.textSection}>{children}</Typography>
-  );
+  const nameParagraph = (children: React.ReactNode) => <Typography sx={styles.textSection}>{children}</Typography>;
 
-  const beliefParagraph = (children: React.ReactNode) => (
-    <Typography sx={sectionStyles.textImage}>{children}</Typography>
-  );
+  const beliefParagraph = (children: React.ReactNode) => <Typography sx={styles.textImage}>{children}</Typography>;
 
   return (
-    <Box sx={sectionStyles.container}>
-      <Box sx={sectionStyles.organisationSection}>
+    <Box sx={styles.container}>
+      <Box sx={styles.firstBulletIcon}>
+        <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={22} height={20} />
+      </Box>
+      <Box sx={styles.organisationSection}>
         <TipTapContent
           data={ourOrganisation}
           markRenderers={{
@@ -45,16 +42,17 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         />
       </Box>
 
-      <Box sx={sectionStyles.explanationSection}>
+      <Box sx={styles.explanationSection}>
         <TipTapContent
           data={ourName}
           nodeRenderers={{
             paragraph: nameParagraph
           }}
         />
-        <Box sx={sectionStyles.FirstBulletIcon}>
-          <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={30} height={32} />
-        </Box>
+      </Box>
+
+      <Box sx={styles.secondBulletIcon}>
+        <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={22} height={20} />
       </Box>
 
       <TipTapContent
@@ -64,7 +62,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         }}
       />
 
-      <Box sx={sectionStyles.bodyImage}>
+      <Box sx={styles.bodyImage}>
         {image && (
           <Image src={image.src} alt={image.alt} fill style={{ objectFit: 'contain', objectPosition: 'top' }} />
         )}

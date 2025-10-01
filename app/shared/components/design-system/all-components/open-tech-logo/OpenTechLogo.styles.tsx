@@ -1,15 +1,18 @@
 export const styles = {
   container: {
     display: 'flex',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'column',
     fontFamily: 'Proxima Nova',
     backgroundColor: '#FCFCFC',
     padding: {
-      xs: '4px 8px',
+      xs: '8px 16px',
       sm: '6px 12px',
       md: '8px 16px'
-    }
+    },
+    width: '262px',
+    height: '38px'
   },
   label: {
     fontFamily: 'Proxima Nova',
