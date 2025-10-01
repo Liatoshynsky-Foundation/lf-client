@@ -39,7 +39,7 @@ const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => 
   return (
     <Box sx={styles.container}>
       <Box sx={styles.ellipseWrapper}>
-        <SvgImage src="icons/ellipse.svg" alt="ellipse" width={22} height={20} />
+        <SvgImage src="/icons/ellipse.svg" alt="ellipse" width={22} height={20} />
       </Box>
       <Box sx={styles.text}>
         <TipTapContent
