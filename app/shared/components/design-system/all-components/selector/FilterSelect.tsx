@@ -47,7 +47,6 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(defaultValues);
   const menuAnchorRef = useRef<HTMLDivElement | null>(null);
-  const defaultValuesKey = JSON.stringify(defaultValues);
 
   useEffect(() => {
     setSelectedValues(defaultValues);
