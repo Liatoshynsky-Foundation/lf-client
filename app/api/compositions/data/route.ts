@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const yearFrom = params.get('yearFrom');
     const yearTo = params.get('yearTo');
 
-    const filters: any = {};
+    const filters: any = { genres: null, years: { min: 1900, max: 1998 } };
     if (genres.length) filters.genres = genres;
 
     if (yearFrom || yearTo) {
