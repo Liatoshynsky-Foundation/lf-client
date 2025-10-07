@@ -45,11 +45,11 @@ export const sourceTextStyles = {
 };
 
 export const styles = {
-  mainContainer: (align: Align) => ({
+  mainContainer: (align: Align, width?: Record<string, string> | string) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
-    width: quoteSizes.width,
+    width: width ?? quoteSizes.width,
     gap: { xs: '32px', md: '40px' }
   }),
   image: (color: keyof typeof quoteColors, align: Align) => ({

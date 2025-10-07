@@ -6,11 +6,19 @@ import { QuoteBlockProps } from '~/types/types/quoteComponent';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import QuoteImage from '~/public/images/quote.svg';
 
-const QuoteBlock = ({ quoteText, sourceText, quoteIconColor, mainTextColor, alignRight, sx }: QuoteBlockProps) => {
+const QuoteBlock = ({
+  quoteText,
+  sourceText,
+  quoteIconColor,
+  mainTextColor,
+  alignRight,
+  sx,
+  width
+}: QuoteBlockProps) => {
   const alignKey = alignRight ? 'right' : 'left';
 
   return (
-    <Box sx={[styles.mainContainer(alignKey), ...sxToArray(sx)]}>
+    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]}>
       <Box sx={styles.image(quoteIconColor, alignKey)}>
         <QuoteImage />
       </Box>

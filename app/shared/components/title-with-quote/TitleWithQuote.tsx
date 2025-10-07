@@ -13,9 +13,18 @@ export interface TitleWithQuoteProps {
   color: 'black' | 'brown';
   quoteBlockSx?: SxProps;
   quoteSectionSx?: SxProps;
+  quoteWidth?: string | Record<string, string>;
 }
 
-const TitleWithQuote = ({ title, quoteText, sourceText, color, quoteBlockSx, quoteSectionSx }: TitleWithQuoteProps) => {
+const TitleWithQuote = ({
+  title,
+  quoteText,
+  sourceText,
+  color,
+  quoteBlockSx,
+  quoteSectionSx,
+  quoteWidth
+}: TitleWithQuoteProps) => {
   const styles = getStyles(color);
   return (
     <Box sx={styles.mainContainer}>
@@ -27,6 +36,7 @@ const TitleWithQuote = ({ title, quoteText, sourceText, color, quoteBlockSx, quo
 
       <Box sx={[styles.quoteSection, ...sxToArray(quoteSectionSx)]}>
         <QuoteBlock
+          width={quoteWidth}
           sx={quoteBlockSx}
           quoteIconColor={'burgundy'}
           mainTextColor={'burgundy'}

@@ -15,7 +15,7 @@ export const getStyles = (color: 'black' | 'brown') => ({
     gridColumn: {
       xs: '1 / -1',
       sm: '1 / 5',
-      md: '1 / 8'
+      md: '1 / 7'
     },
     display: 'flex',
     maxWidth: '496px'
@@ -42,13 +42,10 @@ export const getStyles = (color: 'black' | 'brown') => ({
 
   quoteSection: {
     gridColumn: {
-      xs: '1 / 3',
+      xs: '1 / -1',
       sm: '5 / -1',
-      md: '8 / -1',
-      lg: '9 / -1'
+      md: '8 / -1'
     },
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
+    display: 'flex'
   }
 });
