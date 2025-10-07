@@ -55,10 +55,11 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
   const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [inputValue, setInputValue] = useState(search);
   const inputRef = useRef<HTMLInputElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
-  const DEBOUNCE_TIME_MS = 500;
+  const DEBOUNCE_TIME_MS = 800;
   const t = useTranslations('search');
 
   const debouncedInputChange = useMemo(
@@ -74,6 +75,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       if (!opened) {
         setOpened(true);
       }
+      setInputValue(value);
       debouncedInputChange(value);
     },
     [debouncedInputChange, opened]
@@ -85,6 +87,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
   const handleClear = () => {
     setSearch('');
+    setInputValue('');
     setValue(null);
     setOpened(false);
   };
@@ -157,7 +160,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         setValue(value);
         setSearch(value ? getOptionLabel(value) : '');
       }}
-      inputValue={search}
+      inputValue={inputValue}
       onInputChange={handleInputChange}
       renderInput={renderInput}
       renderOption={renderOption}
