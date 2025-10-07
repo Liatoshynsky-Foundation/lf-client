@@ -27,7 +27,7 @@ export default async function Footer() {
     .getFooterData(locale);
 
   const contactUsLink = navigation?.[1]?.links?.find(
-    (link: { label: string; href: string }) => link.label === 'Contacts'
+    (link: { label: string; href: string }) => link.href === '/contacts'
   )?.href;
 
   return (
