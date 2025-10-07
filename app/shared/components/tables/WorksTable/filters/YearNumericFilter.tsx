@@ -16,9 +16,17 @@ interface YearNumericFilterProps {
   onChange: (numbers: [number, number]) => void;
   minYear?: number;
   maxYear?: number;
+  onChangeCommitted: (numbers: [number, number]) => void;
 }
 
-export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({ label, value, onChange, minYear, maxYear }) => {
+export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
+  label,
+  value,
+  onChange,
+  onChangeCommitted,
+  minYear,
+  maxYear
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,10 +43,16 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({ label, val
   const numericFilterElement = useMemo(
     () => (
       <Box sx={{ p: 2, minWidth: buttonRef.current?.offsetWidth }} key="numeric-filter">
-        <NumericFiltering value={value} onChange={onChange} minNumber={minYear} maxNumber={maxYear} />
+        <NumericFiltering
+          value={value}
+          onChange={onChange}
+          minNumber={minYear}
+          maxNumber={maxYear}
+          onChangeCommitted={onChangeCommitted}
+        />
       </Box>
     ),
-    [value, onChange, minYear, maxYear]
+    [value, onChange, minYear, maxYear, onChangeCommitted]
   );
 
   return (

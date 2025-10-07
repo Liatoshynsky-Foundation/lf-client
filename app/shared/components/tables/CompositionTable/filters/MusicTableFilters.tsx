@@ -25,6 +25,7 @@ interface MusicTableFiltersProps {
   onGenresChange: (values: string[]) => void;
   onCategoriesChange: (values: string[]) => void;
   onYearChange: (value: [number, number]) => void;
+  onYearChangeCommitted: (value: [number, number]) => void;
   onClearAllFilters?: () => void;
   isAnyFilterActive: boolean;
   minYear?: number;
@@ -43,6 +44,7 @@ export function MusicTableFilters({
   onGenresChange,
   onCategoriesChange,
   onYearChange,
+  onYearChangeCommitted,
   onClearAllFilters,
   isAnyFilterActive,
   minYear,
@@ -75,7 +77,6 @@ export function MusicTableFilters({
   };
 
   const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected });
-
   return (
     <Box
       sx={{
@@ -117,6 +118,7 @@ export function MusicTableFilters({
           label={yearLabel ?? 'Year'}
           value={yearFilter}
           onChange={onYearChange}
+          onChangeCommitted={onYearChangeCommitted}
           minYear={minYear}
           maxYear={maxYear}
         />
@@ -129,6 +131,7 @@ export function MusicTableFilters({
             variant={IconButtonColorVariant.Secondary}
             size="medium"
             onClick={onClearAllFilters}
+            sx={{ border: 'none' }}
           >
             <Delete />
           </IconButton>

@@ -14,8 +14,12 @@ export async function GET(req: NextRequest) {
     const categories = params.getAll('category');
     const yearFrom = params.get('yearFrom');
     const yearTo = params.get('yearTo');
+<<<<<<< HEAD
 
     const filters: any = { genres: null, years: { min: 1900, max: 1998 } };
+=======
+    const filters: any = {};
+>>>>>>> bfc2ba6 (fix: fixed filtering and removed bugs)
     if (genres.length) filters.genres = genres;
     if (categories.length) filters.categories = categories;
 

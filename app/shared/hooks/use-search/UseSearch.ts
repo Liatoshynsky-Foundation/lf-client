@@ -1,7 +1,8 @@
+'use client';
 import debounce from 'lodash.debounce';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
@@ -12,78 +13,52 @@ interface UseSearchableTitlesOptions {
 }
 
 export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptions>) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const locale = useLocale();
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
 
-  const [extraParams, setExtraParams] = useState<Record<string, any>>(() => {
-    const initial: Record<string, any> = {};
-    const sp = searchParams as any;
-    if (!sp) return initial;
-    for (const key of sp.keys()) {
-      if (key === 'search') continue;
-      const values = typeof sp.getAll === 'function' ? sp.getAll(key) : [sp.get(key)];
-      initial[key] = values.length > 1 ? values : values[0];
-    }
-
-    return initial;
-  });
-
-  useEffect(() => {
-    const newParams = new URLSearchParams(searchParams as any);
-
-    if (search) {
-      newParams.set('search', search);
-    } else {
-      newParams.delete('search');
-    }
-    const newQuery = `?${newParams.toString()}`;
-
-    if (newQuery !== window.location.search) {
-      router.replace(newQuery, { scroll: false });
-      router.refresh();
-    }
-  }, [router, search, searchParams]);
+  const [extraParams, setExtraParams] = useState<Record<string, any>>({});
+  const urlParams = new URLSearchParams(window.location.search);
 
   const setFilterParam = useCallback(
-    (key: string, value: string | string[] | number | null) => {
-      setExtraParams((prev) => {
-        const next = { ...prev };
-        if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-          delete next[key];
-        } else {
-          next[key] = value;
+    (params: Record<string, string | number | string[] | null>) => {
+      for (const [key, value] of Object.entries(params)) {
+        if ((!Array.isArray(value) && typeof value === 'string') || typeof value === 'number') {
+          urlParams.set(key, String(value));
+          setExtraParams((prev) => ({ ...prev, [key]: value }));
+        } else if (Array.isArray(value)) {
+          value.forEach((val) => {
+            urlParams.append(key, String(val));
+            setExtraParams((prev) => ({ ...prev, [key]: val }));
+          });
         }
-        return next;
-      });
-
-      const newParams = new URLSearchParams(searchParams as any);
-      newParams.delete(key);
-
-      if (Array.isArray(value)) {
-        value.forEach((v) => newParams.append(key, String(v)));
-      } else {
-        newParams.set(key, String(value));
-      }
-
-      const newQuery = `?${newParams.toString()}`;
-      if (newQuery !== window.location.search) {
-        router.replace(newQuery, { scroll: false });
-        router.refresh();
+        if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+          urlParams.delete(key);
+          console.log('deleted');
+          setExtraParams((prev) => {
+            const next = { ...prev };
+            delete next[key];
+            return next;
+          });
+        }
+        if (search) {
+          urlParams.set('search', search);
+        }
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+        window.history.pushState({}, '', newUrl);
       }
     },
-    [router, searchParams]
+    [search, urlParams]
   );
-
   const debouncedSetFilterParam = useMemo(() => {
-    return debounce((key: string, value: string | string[] | number | null) => setFilterParam(key, value), 750);
+    return debounce((key: string, value: string | string[] | number | null) => setFilterParam({ [key]: value }), 750);
   }, [setFilterParam]);
 
   const { data = [], isLoading: loadingData } = useQuery({
     queryKey: ['table-data', dataEndpoint, locale, search, JSON.stringify(extraParams)],
     queryFn: async () => {
+      JSON.stringify(extraParams);
       const params: Record<string, any> = { ...(extraParams || {}) };
       if (search) params.search = search;
       return dataEndpoint ? tableClientService.getTableData<T>(dataEndpoint, locale, params) : Promise.resolve([]);
@@ -98,7 +73,8 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     setSearch,
     data,
     loadingData,
-    setFilterParam: debouncedSetFilterParam,
+    setFilterParam,
+    debouncedSetFilterParam,
     extraParams
   };
 }
