@@ -1,5 +1,4 @@
 import { mainHexPallete } from '../theme/colors';
-import { BorderParams } from './ImageWithBorder';
 
 export const styles = {
   container: (width: number, height: number) => ({
@@ -9,11 +8,11 @@ export const styles = {
     gridColumn: '1 / -1',
     transform: 'skewY(-2deg)'
   }),
-  border: (border: BorderParams) => ({
+  border: (borderWidth: number, height: number) => ({
     display: 'block',
     position: 'absolute',
-    width: border.width,
-    height: border.height,
+    width: borderWidth,
+    height: height,
     top: 0,
     left: 0,
     backgroundColor: mainHexPallete.yellow[300],
