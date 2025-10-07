@@ -18,6 +18,7 @@ import { getFilteringSchema } from '~/validators/filtering.schema';
 interface NumericFilteringProps {
   value: [number, number];
   onChange: (numbers: [number, number]) => void;
+  onChangeCommitted: (numbers: [number, number]) => void;
   minNumber?: number;
   maxNumber?: number;
 }
@@ -61,7 +62,8 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   value,
   onChange,
   minNumber = 1900,
-  maxNumber = new Date().getFullYear()
+  maxNumber = new Date().getFullYear(),
+  onChangeCommitted
 }) => {
   const [inputNumbers, setInputNumbers] = useState<string[]>([String(value[0]), String(value[1])]);
   const [errors, setErrors] = useState<{ from?: string; to?: string }>({});
@@ -76,23 +78,32 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
     setErrors({});
   }, [value]);
 
-  const handleSliderChange = useCallback(
-    (event: Event, newValue: number | number[], activeThumb: number) => {
+  // While dragging — only update local UI state
+  const handleSliderChange = useCallback((event: Event, newValue: number | number[], activeThumb: number) => {
+    if (!Array.isArray(newValue)) return;
+
+    let [newMin, newMax] = newValue;
+
+    if (activeThumb === 0) {
+      newMin = Math.min(newMin, newMax - minDistance);
+    } else {
+      newMax = Math.max(newMax, newMin + minDistance);
+    }
+
+    // Update only local UI
+    setInputNumbers([String(newMin), String(newMax)]);
+    setErrors({});
+  }, []);
+
+  // When released — update parameters (filters)
+  const handleSliderChangeCommitted = useCallback(
+    (event: Event | React.SyntheticEvent, newValue: number | number[]) => {
       if (!Array.isArray(newValue)) return;
-
-      let [newMin, newMax] = newValue;
-
-      if (activeThumb === 0) {
-        newMin = Math.min(newMin, newMax - minDistance);
-      } else {
-        newMax = Math.max(newMax, newMin + minDistance);
-      }
-
-      setInputNumbers([String(newMin), String(newMax)]);
-      setErrors({});
-      onChange([newMin, newMax]);
+      console.log('Slider released!');
+      const [newMin, newMax] = newValue;
+      onChangeCommitted([newMin, newMax]);
     },
-    [onChange]
+    [onChangeCommitted]
   );
 
   const handleInputChange = (type: 'from' | 'to') => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +130,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
     setInputNumbers([String(minNumber), String(maxNumber)]);
     setErrors({});
     onChange([minNumber, maxNumber]);
+    onChangeCommitted([minNumber, maxNumber]);
   };
 
   return (
@@ -150,8 +162,9 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
           min={minNumber}
           max={maxNumber}
           step={1}
-          value={value}
+          value={[Number(inputNumbers[0]), Number(inputNumbers[1])]}
           onChange={handleSliderChange}
+          onChangeCommitted={handleSliderChangeCommitted}
         />
       </Box>
       <Box>
