@@ -52,8 +52,12 @@ export function MusicTableFilters({
 }: Readonly<MusicTableFiltersProps>) {
   const [hasCategorySelected, setHasCategorySelected] = useState<boolean>(categoryFilter.length > 0);
   const [hasGenreSelected, setHasGenreSelected] = useState<boolean>(genreFilter.length > 0);
+  const [hasYearSelected, setHasYearSelected] = useState<boolean>(
+    yearFilter[0] !== undefined && yearFilter[1] !== undefined
+  );
   const isLess350 = useMediaQuery('(max-width:350px)');
   const isLess420 = useMediaQuery('(max-width:419px)');
+  const isLess450 = useMediaQuery('(max-width:450px)');
   const isBetween420And550 = useMediaQuery('(min-width:420px) and (max-width:549px)');
   const isGreater550 = useMediaQuery('(min-width:550px)');
   const isGreater700 = useMediaQuery('(min-width:701px)');
@@ -67,16 +71,21 @@ export function MusicTableFilters({
     setHasGenreSelected(genreFilter.length > 0);
   }, [genreFilter]);
 
+  useEffect(() => {
+    setHasYearSelected(yearFilter[0] !== undefined && yearFilter[1] !== undefined);
+  }, [yearFilter]);
+
   const screenSize = {
     isLess350,
     isLess420,
+    isLess450,
     isGreater500,
     isGreater700,
     isBetween420And550,
     isGreater550
   };
 
-  const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected });
+  const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected, hasYearSelected });
   return (
     <Box
       sx={{
@@ -124,7 +133,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ ...layout.containers.clear, display: 'flex', alignItems: 'center', justifyContent: 'center' }} ml={2}>
+      <Box sx={{ ...layout.containers.clear }}>
         {onClearAllFilters && isAnyFilterActive && (
           <IconButton
             type={IconButtonVariant.outlined}
