@@ -19,38 +19,39 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
   const [search, setSearch] = useState(searchParams.get('search') || '');
 
   const [extraParams, setExtraParams] = useState<Record<string, any>>({});
-  const urlParams = new URLSearchParams(window.location.search);
-
   const setFilterParam = useCallback(
     (params: Record<string, string | number | string[] | null>) => {
+      const urlParams = new URLSearchParams(window.location.search); // fresh copy each call
+      const nextExtraParams: Record<string, any> = {};
+
       for (const [key, value] of Object.entries(params)) {
-        if ((!Array.isArray(value) && typeof value === 'string') || typeof value === 'number') {
-          urlParams.set(key, String(value));
-          setExtraParams((prev) => ({ ...prev, [key]: value }));
-        } else if (Array.isArray(value)) {
-          value.forEach((val) => {
-            urlParams.append(key, String(val));
-            setExtraParams((prev) => ({ ...prev, [key]: val }));
-          });
-        }
+        urlParams.delete(key);
+
         if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-          urlParams.delete(key);
-          console.log('deleted');
-          setExtraParams((prev) => {
-            const next = { ...prev };
-            delete next[key];
-            return next;
-          });
+          continue;
         }
-        if (search) {
-          urlParams.set('search', search);
+
+        if (Array.isArray(value)) {
+          const uniqueValues = [...new Set(value)];
+          uniqueValues.forEach((val) => urlParams.append(key, String(val)));
+          nextExtraParams[key] = uniqueValues;
+        } else {
+          urlParams.set(key, String(value));
+          nextExtraParams[key] = value;
         }
-        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-        window.history.pushState({}, '', newUrl);
       }
+
+      if (search) {
+        urlParams.set('search', search);
+      }
+      setExtraParams(nextExtraParams);
+
+      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+      window.history.pushState({}, '', newUrl);
     },
-    [search, urlParams]
+    [search]
   );
+
   const debouncedSetFilterParam = useMemo(() => {
     return debounce((key: string, value: string | string[] | number | null) => setFilterParam({ [key]: value }), 750);
   }, [setFilterParam]);
