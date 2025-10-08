@@ -24,7 +24,31 @@ export const ControlPanelStyles = {
     marginRight: '40px'
   },
   filtersBadge: {
-    '& .MuiBadge-badge': { top: '5px', right: '5px', borderRadius: '50%', minWidth: '18px', height: '18px' }
+    '& .MuiBadge-badge': {
+      top: '5px',
+      right: { xs: '0px', md: '5px' },
+      minWidth: '18px',
+      height: '18px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: '12px'
+    }
+  },
+  filterButton: {
+    ['@media (max-width:400px)']: {
+      '& .filtersLabel': {
+        display: 'none'
+      },
+      '& .MuiButton-startIcon': {
+        margin: 0,
+        mt: '5px'
+      },
+      minWidth: 'auto',
+      width: 40,
+      height: 40,
+      padding: 0
+    }
   },
   controlsColumn: {
     display: 'flex',
