@@ -99,7 +99,6 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   const handleSliderChangeCommitted = useCallback(
     (event: Event | React.SyntheticEvent, newValue: number | number[]) => {
       if (!Array.isArray(newValue)) return;
-      console.log('Slider released!');
       const [newMin, newMax] = newValue;
       onChangeCommitted([newMin, newMax]);
     },

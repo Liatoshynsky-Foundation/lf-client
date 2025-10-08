@@ -2,15 +2,16 @@ export const filterGridHelper = (
   screenSize: {
     isLess350?: boolean;
     isLess420: boolean;
+    isLess450?: boolean;
     isLess500?: boolean;
     isGreater550?: boolean;
     isGreater700?: boolean;
   },
-  selected: { hasCategorySelected: boolean; hasGenreSelected: boolean }
+  selected: { hasCategorySelected: boolean; hasGenreSelected: boolean; hasYearSelected?: boolean }
 ) => {
-  const { isLess350, isLess420, isLess500, isGreater550, isGreater700 } = screenSize;
+  const { isLess350, isLess420, isLess450, isLess500, isGreater550, isGreater700 } = screenSize;
   const isExtraSmall = !!isLess350;
-  const { hasCategorySelected, hasGenreSelected } = selected;
+  const { hasCategorySelected, hasGenreSelected, hasYearSelected } = selected;
 
   type Layout = {
     gridTemplateColumns: string;
@@ -180,6 +181,30 @@ export const filterGridHelper = (
       clear: { gridColumn: '4', gridRow: '1', width: '48px' }
     }
   };
+  const onlyYearSelectedLarge: Layout = {
+    gridTemplateColumns: '130px 100px 70px 48px',
+    gridTemplateRows: 'auto',
+    containers: {
+      category: { gridColumn: '1', gridRow: '1', width: '130px' },
+      genre: { gridColumn: '2', gridRow: '1', width: '100px' },
+      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      clear: { gridColumn: '4', gridRow: '1', width: '48px' }
+    }
+  };
+  const onlyYearSelectedSmall: Layout = {
+    gridTemplateColumns: '70px 50px 100px',
+    gridTemplateRows: 'auto auto',
+    containers: {
+      category: { gridColumn: '1 / 2', gridRow: '1', width: '130px' },
+      genre: { gridColumn: '2 / 3', gridRow: '1', width: '100px' },
+      year: { gridColumn: '1', gridRow: '2', width: '70px' },
+      clear: { gridColumn: '2', gridRow: '2', width: '48px' }
+    }
+  };
+  if (hasYearSelected && !hasCategorySelected && !hasGenreSelected) {
+    if (isLess450) return onlyYearSelectedSmall;
+    return pickDefault(onlyYearSelectedLarge, onlyYearSelectedLarge, onlyYearSelectedLarge, onlyYearSelectedLarge);
+  }
   if (hasGenreSelected && !hasCategorySelected)
     return pickDefault(genreOnlyExtraSmall, genreOnlyMobile, genreOnlyMid, genreOnlyLarge);
   if (!hasGenreSelected && hasCategorySelected)
