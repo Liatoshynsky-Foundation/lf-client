@@ -2,9 +2,11 @@ import { render, screen } from '@testing-library/react';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    return <img {...props} />;
+    const { alt = '', ...rest } = props;
+    return <img alt={alt} {...rest} />;
   }
 }));
+
 import ImageWithBorder from './ImageWithBorder';
 
 describe('ImageWithBorder', () => {
