@@ -4,6 +4,8 @@ import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useCallback, useMemo, useState } from 'react';
 
+import { tableParams } from '~/types/types/tableParams.types';
+
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
 
@@ -18,11 +20,11 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
 
-  const [extraParams, setExtraParams] = useState<Record<string, any>>({});
+  const [extraParams, setExtraParams] = useState<tableParams>({});
   const setFilterParam = useCallback(
     (params: Record<string, string | number | string[] | null>) => {
-      const urlParams = new URLSearchParams(window.location.search); // fresh copy each call
-      const nextExtraParams: Record<string, any> = {};
+      const urlParams = new URLSearchParams(window.location.search);
+      const nextExtraParams: Record<string, string | number | string[] | number[]> = {};
 
       for (const [key, value] of Object.entries(params)) {
         urlParams.delete(key);
@@ -60,7 +62,7 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     queryKey: ['table-data', dataEndpoint, locale, search, JSON.stringify(extraParams)],
     queryFn: async () => {
       JSON.stringify(extraParams);
-      const params: Record<string, any> = { ...(extraParams || {}) };
+      const params: tableParams = { ...(extraParams || {}) };
       if (search) params.search = search;
       return dataEndpoint ? tableClientService.getTableData<T>(dataEndpoint, locale, params) : Promise.resolve([]);
     },

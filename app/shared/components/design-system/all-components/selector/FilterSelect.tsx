@@ -35,7 +35,7 @@ interface FilterSelectProps {
 export const FilterSelect: React.FC<FilterSelectProps> = ({
   label,
   options,
-  defaultValues = [],
+  defaultValues,
   variant = 'filled',
   disabled = false,
   maxSelections,
@@ -45,11 +45,11 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const t = useTranslations('filtering');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedValues, setSelectedValues] = useState<string[]>(defaultValues);
+  const [selectedValues, setSelectedValues] = useState<string[]>(() => defaultValues ?? []);
   const menuAnchorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setSelectedValues(defaultValues);
+    setSelectedValues(defaultValues ?? []);
   }, [defaultValues]);
 
   const handleToggleMenu = () => {
