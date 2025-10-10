@@ -63,7 +63,7 @@ export default function MusicTableSection() {
     loadingData = false,
     setFilterParam,
     debouncedSetFilterParam
-  } = useSearch<any>({
+  } = useSearch<Music>({
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
   const { data: staticFilters } = useFetchStaticFilters<StaticFiltersType>(ApiRoutes.COMPOSITION_FILTERS ?? null);
@@ -233,7 +233,8 @@ export default function MusicTableSection() {
             onCategoriesChange={handleCategoryChange}
             yearLabel={tFilters('year')}
             yearFilter={yearFilter}
-            onYearChange={handleYearChange}
+            onYearChange={handleYearChangeForInput}
+            onYearChangeCommitted={handleYearChangeForParams}
             onClearAllFilters={clearAllFilters}
             isAnyFilterActive={isAnyFilterActive}
             minYear={minYear ?? defaultMinYear}

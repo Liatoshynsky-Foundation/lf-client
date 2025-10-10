@@ -69,7 +69,7 @@ export function WorkTableFilters({
           label="Рік написання"
           value={yearFilter}
           onChange={onYearFilterChange}
-          onChangeCommitted={{ onYearFilterChange }}
+          onChangeCommitted={onYearFilterChange}
         />
       </Box>
       {isAnyFilterActive && (
