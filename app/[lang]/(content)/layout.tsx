@@ -1,5 +1,3 @@
-'use client';
-
 import { Theme } from '@emotion/react';
 import { Box, SxProps } from '@mui/material';
 import { ReactNode } from 'react';
