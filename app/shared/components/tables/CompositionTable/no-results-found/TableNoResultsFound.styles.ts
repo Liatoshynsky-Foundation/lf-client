@@ -7,7 +7,7 @@ const styles = {
     py: 6,
     p: 0,
     mb: 10,
-    width: '85vw',
+    width: { xs: '95vw', md: '89vw' },
     minHeight: '300px',
     textAlign: 'center'
   },
