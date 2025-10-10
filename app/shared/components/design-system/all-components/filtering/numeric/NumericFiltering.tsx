@@ -78,7 +78,6 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
     setErrors({});
   }, [value]);
 
-  // While dragging — only update local UI state
   const handleSliderChange = useCallback((event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) return;
 
@@ -90,12 +89,10 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
       newMax = Math.max(newMax, newMin + minDistance);
     }
 
-    // Update only local UI
     setInputNumbers([String(newMin), String(newMax)]);
     setErrors({});
   }, []);
 
-  // When released — update parameters (filters)
   const handleSliderChangeCommitted = useCallback(
     (event: Event | React.SyntheticEvent, newValue: number | number[]) => {
       if (!Array.isArray(newValue)) return;

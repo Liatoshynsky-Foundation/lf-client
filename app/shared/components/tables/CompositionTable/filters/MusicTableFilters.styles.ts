@@ -196,7 +196,7 @@ export const filterGridHelper = (
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 2', gridRow: '1', width: '130px' },
-      genre: { gridColumn: '2 / 3', gridRow: '1', width: '100px' },
+      genre: { gridColumn: '3', gridRow: '1', width: '100px' },
       year: { gridColumn: '1', gridRow: '2', width: '70px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }

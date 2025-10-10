@@ -220,7 +220,7 @@ export default function MusicTableSection() {
         columnWidths={columnWidths}
         itemsPerPage={10}
         tableName={t('name.composition')}
-        Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
+        Search={<Search<TitlesDTO> search={search} setSearch={setSearch} options={titleOptions} />}
         Filters={
           <MusicTableFilters
             labelGenre={tFilters('genre')}
