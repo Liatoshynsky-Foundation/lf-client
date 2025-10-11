@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MusicTableFilters } from './filters/MusicTableFilters';
+import { getCompositionColumnWidths } from './getColumnWidth';
 import {
   RenderActionsCell,
   RenderExpanderCell,
@@ -78,10 +79,16 @@ export default function MusicTableSection() {
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
 
   const columnWidths = useMemo(
-    () => getColumnWidths({ isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove }),
+    () =>
+      getCompositionColumnWidths({
+        isMobile,
+        isTablet,
+        isLaptop,
+        isDesktop,
+        isLaptopAndAbove
+      }),
     [isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove]
   );
-
   const handleGenreChange = useCallback(
     (values: string[]) => {
       setGenreFilter(values);
