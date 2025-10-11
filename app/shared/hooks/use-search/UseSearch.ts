@@ -33,7 +33,9 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
 
       if (Array.isArray(value)) {
         const uniqueValues = [...new Set(value)];
-        uniqueValues.forEach((val) => urlParams.append(key, String(val)));
+        for (const val of uniqueValues) {
+          urlParams.append(key, String(val));
+        }
         nextExtraParams[key] = uniqueValues;
       } else {
         urlParams.set(key, String(value));
