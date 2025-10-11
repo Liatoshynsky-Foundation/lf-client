@@ -22,7 +22,7 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
 
   const [extraParams, setExtraParams] = useState<tableParams>({});
   const setFilterParam = useCallback((params: Record<string, string | number | string[] | null>) => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(globalThis.location.search);
     const nextExtraParams: Record<string, string | number | string[] | number[]> = {};
     for (const [key, value] of Object.entries(params)) {
       urlParams.delete(key);
@@ -42,8 +42,8 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     }
     setExtraParams(nextExtraParams);
 
-    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-    window.history.pushState({}, '', newUrl);
+    const newUrl = `${globalThis.location.pathname}?${urlParams.toString()}`;
+    globalThis.history.pushState({}, '', newUrl);
   }, []);
 
   const debouncedSetFilterParam = useMemo(() => {
@@ -54,7 +54,7 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
     queryKey: ['table-data', dataEndpoint, locale, search, JSON.stringify(extraParams)],
     queryFn: async () => {
       JSON.stringify(extraParams);
-      const params: tableParams = { ...(extraParams || {}) };
+      const params: tableParams = extraParams;
       if (search) params.search = search;
       return dataEndpoint ? tableClientService.getTableData<T>(dataEndpoint, locale, params) : Promise.resolve([]);
     },

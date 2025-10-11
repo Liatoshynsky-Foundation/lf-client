@@ -42,7 +42,7 @@ export const ControlPanelStyles = {
     height: 40,
     backgroundColor: searchActive ? mainHexPallete.black : mainHexPallete.white,
     color: searchActive ? mainHexPallete.white : mainHexPallete.black,
-    border: !searchActive ? `1px solid ${mainHexPallete.black}` : 'none',
+    border: `1px solid ${mainHexPallete.black}`,
     '&:hover': {
       backgroundColor: searchActive ? mainHexPallete.black : mainHexPallete.white
     }
