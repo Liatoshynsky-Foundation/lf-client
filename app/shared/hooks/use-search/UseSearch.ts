@@ -21,38 +21,30 @@ export function useSearch<T>({ dataEndpoint }: Readonly<UseSearchableTitlesOptio
   const [search, setSearch] = useState(searchParams.get('search') || '');
 
   const [extraParams, setExtraParams] = useState<tableParams>({});
-  const setFilterParam = useCallback(
-    (params: Record<string, string | number | string[] | null>) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const nextExtraParams: Record<string, string | number | string[] | number[]> = {};
+  const setFilterParam = useCallback((params: Record<string, string | number | string[] | null>) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nextExtraParams: Record<string, string | number | string[] | number[]> = {};
+    for (const [key, value] of Object.entries(params)) {
+      urlParams.delete(key);
 
-      for (const [key, value] of Object.entries(params)) {
-        urlParams.delete(key);
-
-        if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-          continue;
-        }
-
-        if (Array.isArray(value)) {
-          const uniqueValues = [...new Set(value)];
-          uniqueValues.forEach((val) => urlParams.append(key, String(val)));
-          nextExtraParams[key] = uniqueValues;
-        } else {
-          urlParams.set(key, String(value));
-          nextExtraParams[key] = value;
-        }
+      if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        continue;
       }
 
-      if (search) {
-        urlParams.set('search', search);
+      if (Array.isArray(value)) {
+        const uniqueValues = [...new Set(value)];
+        uniqueValues.forEach((val) => urlParams.append(key, String(val)));
+        nextExtraParams[key] = uniqueValues;
+      } else {
+        urlParams.set(key, String(value));
+        nextExtraParams[key] = value;
       }
-      setExtraParams(nextExtraParams);
+    }
+    setExtraParams(nextExtraParams);
 
-      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-      window.history.pushState({}, '', newUrl);
-    },
-    [search]
-  );
+    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }, []);
 
   const debouncedSetFilterParam = useMemo(() => {
     return debounce((key: string, value: string | string[] | number | null) => setFilterParam({ [key]: value }), 750);

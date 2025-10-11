@@ -32,7 +32,15 @@ const onChange = jest.fn();
 
 describe('NumericFiltering', () => {
   beforeEach(() => {
-    render(<NumericFiltering minNumber={minNumber} maxNumber={maxNumber} value={value} onChange={onChange} />);
+    render(
+      <NumericFiltering
+        minNumber={minNumber}
+        maxNumber={maxNumber}
+        value={value}
+        onChange={onChange}
+        onChangeCommitted={onChange}
+      />
+    );
     onChange.mockClear();
   });
 
