@@ -26,7 +26,6 @@ import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 
 import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
-import { getColumnWidths } from '~/lib/utils/getColumnWidth';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import GetNotesModal from '~/shared/components/get-notes-modal/GetNotesModal';
 import { Search } from '~/shared/components/search/Search';
