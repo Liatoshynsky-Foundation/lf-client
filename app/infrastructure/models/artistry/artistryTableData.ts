@@ -15,6 +15,7 @@ const songSchema = new mongoose.Schema(
     title: { type: String, required: true },
     year: { type: Number, required: true },
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     audioAvailable: { type: Boolean, default: true },
     sheetAvailable: { type: Boolean, default: true },
     sheetMusic: [sheetMusicItemSchema]

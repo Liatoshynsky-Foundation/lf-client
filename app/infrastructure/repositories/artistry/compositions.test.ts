@@ -1,9 +1,11 @@
 import { compositionsRepository } from './сompositions.repository';
 
+import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
-import { compositionsArraySchema } from '~/validators/artistry/composition.schema';
-import { genresArraySchema } from '~/validators/artistry/genre.schema';
+import { compositionSchema } from '~/validators/artistry/composition.schema';
+import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
+import { ArraySchema } from '~/validators/constants';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -18,6 +20,12 @@ jest.mock('~/infrastructure/models/artistry/artistryGenreData', () => ({
 
 jest.mock('~/infrastructure/models/artistry/artistryTableData', () => ({
   Compositions: {
+    find: jest.fn()
+  }
+}));
+
+jest.mock('~/infrastructure/models/artistry/artistryCategoriesData', () => ({
+  Category: {
     find: jest.fn()
   }
 }));
@@ -38,6 +46,14 @@ const mockGenres = [
       en: 'Romance',
       uk: 'Романс'
     }
+  }
+];
+
+const mockCategories = [
+  {
+    _id: '63f8b3b7a8b3d6c1b3e8e4d1',
+    key: 'classical',
+    name: { en: 'Classical', uk: 'Класична' }
   }
 ];
 
@@ -75,7 +91,18 @@ describe('compositionsRepository', () => {
       const result = await compositionsRepository.getAllGenres();
 
       expect(Genre.find).toHaveBeenCalled();
-      expect(result).toEqual(genresArraySchema.parse(mockGenres));
+      expect(result).toEqual(ArraySchema(namedFilterSchema).parse(mockGenres));
+    });
+  });
+
+  describe('getAllCategories', () => {
+    it('should return parsed categories', async () => {
+      (Category.find as jest.Mock).mockReturnValueOnce(mockLean(mockCategories));
+
+      const result = await compositionsRepository.getAllCategories();
+
+      expect(Category.find).toHaveBeenCalled();
+      expect(result).toEqual(ArraySchema(namedFilterSchema).parse(mockCategories));
     });
   });
 
@@ -89,8 +116,8 @@ describe('compositionsRepository', () => {
       const result = await compositionsRepository.getAllCompositions(searchFilter);
 
       expect(Compositions.find).toHaveBeenCalled();
-      expect(populateMock).toHaveBeenCalledTimes(2);
-      expect(result).toEqual(compositionsArraySchema.parse(mockCompositions));
+      expect(populateMock).toHaveBeenCalledTimes(3);
+      expect(result).toEqual(ArraySchema(compositionSchema).parse(mockCompositions));
     });
 
     it('should return empty array if no compositions found', async () => {

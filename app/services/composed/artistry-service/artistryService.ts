@@ -2,17 +2,25 @@ import { Locale } from 'next-intl';
 
 import { ArtistryServiceDeps } from '~/domain/services/artistry.type';
 import {
-  createLocalizedCompositionsArraySchema,
-  createLocalizedCompositionTitlesSchemaArray,
-  parseCompositionsYearRange
+  compositionSchema,
+  compositionsYearRangeSchema,
+  compositionTableReadySchema,
+  compositionTitlesSchema
 } from '~/validators/artistry/composition.schema';
-import { createLocalizedGenresArraySchema } from '~/validators/artistry/genre.schema';
+import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
+import { ArraySchema, LocalizeSchema, NoIDSchema } from '~/validators/constants';
 
 export const createArtistryService = ({ compositionService }: ArtistryServiceDeps) => ({
   async getAllGenres(locale: Locale) {
     const genres = await compositionService.getAllGenres();
-    return createLocalizedGenresArraySchema(locale).parse(genres);
+    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(genres);
   },
+
+  async getAllCategories(locale: Locale) {
+    const categories = await compositionService.getAllCategories();
+    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(categories);
+  },
+
   async getAllCompositions(
     locale: Locale,
     search?: string,
@@ -20,17 +28,19 @@ export const createArtistryService = ({ compositionService }: ArtistryServiceDep
   ) {
     const allSongs = await compositionService.getAllCompositions(search, filters);
     if (!allSongs) return [];
-    return createLocalizedCompositionsArraySchema(locale).parse(allSongs);
+
+    return ArraySchema(compositionTableReadySchema(LocalizeSchema(compositionSchema, locale))).parse(allSongs);
   },
 
   async getAllCompositionTitles(locale: Locale) {
     const allTitles = await compositionService.getAllCompositionTitles();
     if (!allTitles) return [];
-    return createLocalizedCompositionTitlesSchemaArray(locale).parse(allTitles);
+
+    return ArraySchema(LocalizeSchema(compositionTitlesSchema, locale)).parse(allTitles);
   },
 
   async getCompositionsYearRange() {
     const range = await compositionService.getCompositionsYearRange();
-    return parseCompositionsYearRange(range);
+    return compositionsYearRangeSchema.parse(range);
   }
 });

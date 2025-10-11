@@ -25,7 +25,7 @@ import { ApiRoutes } from '~/constants/routes/api-routes';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 
-import { GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
+import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import GetNotesModal from '~/shared/components/get-notes-modal/GetNotesModal';
 import { Search } from '~/shared/components/search/Search';
@@ -35,11 +35,20 @@ import { useSearch } from '~/shared/hooks/use-search/UseSearch';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
 
+type StaticFiltersType = {
+  titles?: TitlesDTO[];
+  genres?: GenreNameDTO[];
+  categories?: CategoryNameDTO[];
+  yearRange?: { minYear?: number; maxYear?: number };
+};
+
 export default function MusicTableSection() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [yearFilter, setYearFilter] = useState<[number, number]>(() => [1900, new Date().getFullYear()]);
 
+  const [categoryOptions, setCategoryOptions] = useState<CategoryNameDTO[]>([]);
   const [genresOptions, setGenresOptions] = useState<GenreNameDTO[]>([]);
   const [titleOptions, setTitleOptions] = useState<TitlesDTO[]>([]);
   const [yearOptions, setYearOptions] = useState<[number, number]>([yearFilter[0], yearFilter[1]]);
@@ -60,11 +69,7 @@ export default function MusicTableSection() {
   } = useSearch<any>({
     dataEndpoint: ApiRoutes.COMPOSITION_DATA
   });
-  type StaticFiltersType = {
-    titles?: TitlesDTO[];
-    genres?: GenreNameDTO[];
-    yearRange?: { minYear?: number; maxYear?: number };
-  };
+
   const { data: staticFilters } = useFetchStaticFilters<StaticFiltersType>(ApiRoutes.COMPOSITION_FILTERS ?? null);
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
@@ -91,6 +96,14 @@ export default function MusicTableSection() {
     [setFilterParam]
   );
 
+  const handleCategoryChange = useCallback(
+    (values: string[]) => {
+      setCategoryFilter(values);
+      setFilterParam('category', values.length ? values : null);
+    },
+    [setFilterParam]
+  );
+
   const handleYearChange = useCallback(
     (v: [number, number]) => {
       setYearFilter(v);
@@ -102,15 +115,19 @@ export default function MusicTableSection() {
 
   const clearAllFilters = useCallback(() => {
     setGenreFilter([]);
+    setCategoryFilter([]);
     setYearFilter([defaultMinYear, defaultMaxYear]);
     setFilterParam('genre', []);
+    setFilterParam('category', []);
     setFilterParam('yearFrom', null);
     setFilterParam('yearTo', null);
   }, [defaultMaxYear, defaultMinYear, setFilterParam]);
+
   useEffect(() => {
     if (staticFilters) {
       setGenresOptions(staticFilters.genres ?? []);
       setTitleOptions(staticFilters.titles ?? []);
+      setCategoryOptions(staticFilters.categories ?? []);
       setYearOptions([defaultMinYear, defaultMaxYear]);
       if (!initialYearSet.current && staticFilters.yearRange) {
         setYearFilter([
@@ -193,9 +210,10 @@ export default function MusicTableSection() {
   const minYear = yearOptions?.[0];
   const maxYear = yearOptions?.[1];
   const isGenreActive = genreFilter.length > 0;
+  const isCategoryActive = categoryFilter.length > 0;
   const isYearActive = yearFilter[0] > (minYear ?? defaultMinYear) || yearFilter[1] < (maxYear ?? defaultMaxYear);
-  const isAnyFilterActive = isGenreActive || isYearActive;
-  const activeFiltersCount = Number(isGenreActive) + Number(isYearActive);
+  const isAnyFilterActive = isGenreActive || isYearActive || isCategoryActive;
+  const activeFiltersCount = Number(isGenreActive) + Number(isYearActive) + Number(isCategoryActive);
 
   return (
     <>
@@ -213,13 +231,16 @@ export default function MusicTableSection() {
         Search={<Search<any> search={search} setSearch={setSearch} options={titleOptions} />}
         Filters={
           <MusicTableFilters
-            labelCategory={tFilters('category')}
             labelGenre={tFilters('genre')}
-            genresOptions={genresOptions}
             genreFilter={genreFilter}
+            genresOptions={genresOptions}
+            onGenresChange={handleGenreChange}
+            labelCategory={tFilters('category')}
+            categoryFilter={categoryFilter}
+            categoriesOptions={categoryOptions}
+            onCategoriesChange={handleCategoryChange}
             yearLabel={tFilters('year')}
             yearFilter={yearFilter}
-            onGenresChange={handleGenreChange}
             onYearChange={handleYearChange}
             onClearAllFilters={clearAllFilters}
             isAnyFilterActive={isAnyFilterActive}

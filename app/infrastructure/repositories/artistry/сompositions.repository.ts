@@ -1,17 +1,25 @@
 import { Condition, Query } from '~/domain/dto/composition.dto';
 import dbConnect from '~/infrastructure/db/connect';
+import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
-import { genreHelper, searchHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
-import { compositionNamesArraySchema, compositionsArraySchema } from '~/validators/artistry/composition.schema';
-import { genresArraySchema } from '~/validators/artistry/genre.schema';
+import { namedFilterHelper, searchHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
+import { compositionSchema, compositionTitlesSchema } from '~/validators/artistry/composition.schema';
+import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
+import { ArraySchema } from '~/validators/constants';
 
 export const compositionsRepository = {
   async getAllGenres() {
     await dbConnect();
     const genres = await Genre.find().lean();
-    return genresArraySchema.parse(genres);
+    return ArraySchema(namedFilterSchema).parse(genres);
+  },
+
+  async getAllCategories() {
+    await dbConnect();
+    const categories = await Category.find().lean();
+    return ArraySchema(namedFilterSchema).parse(categories);
   },
 
   async getCompositionsYearRange() {
@@ -37,11 +45,11 @@ export const compositionsRepository = {
   async getAllCompositionTitles() {
     await dbConnect();
     const titles = await Compositions.find().select({ _id: 1, title: 1 }).lean();
-    return compositionNamesArraySchema.parse(titles);
+    return ArraySchema(compositionTitlesSchema).parse(titles);
   },
   async getAllCompositions(
     search?: string,
-    filters?: { categories?: Array<string | number>; genres?: string[]; years?: { min?: number; max?: number } }
+    filters?: { categories?: string[]; genres?: string[]; years?: { min?: number; max?: number } }
   ) {
     await dbConnect();
 
@@ -52,12 +60,21 @@ export const compositionsRepository = {
       conditions.push({ $or: [{ 'title.uk': readySearchExpression }, { 'title.en': readySearchExpression }] });
     }
 
-    const readyGenreArray = genreHelper(filters?.genres);
+    const readyGenreArray = namedFilterHelper(filters?.genres);
     if (readyGenreArray.length > 0) {
       const genresIds = await Genre.find({ key: { $in: readyGenreArray } })
         .select('_id')
         .lean();
       conditions.push({ genres: { $in: genresIds } });
+    }
+
+    const readyCategoryArray = namedFilterHelper(filters?.categories);
+    if (readyCategoryArray.length > 0) {
+      const categoryIds = await Category.find({ key: { $in: readyCategoryArray } })
+        .select('_id')
+        .lean();
+
+      conditions.push({ categories: { $in: categoryIds } });
     }
 
     const readyYearObject = yearHelper(filters?.years);
@@ -69,11 +86,12 @@ export const compositionsRepository = {
 
     const compositions = await Compositions.find(query)
       .populate('genres')
+      .populate('categories')
       .populate({ path: 'opusId', model: Opus })
       .lean();
 
     if (!compositions || compositions.length === 0) return [];
 
-    return compositionsArraySchema.parse(compositions);
+    return ArraySchema(compositionSchema).parse(compositions);
   }
 };
