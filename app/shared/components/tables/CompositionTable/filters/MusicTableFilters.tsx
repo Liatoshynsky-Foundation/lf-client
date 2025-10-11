@@ -133,7 +133,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ ...layout.containers.clear }} ml={1}>
+      <Box sx={{ ...layout.containers.clear }}>
         {onClearAllFilters && isAnyFilterActive && (
           <IconButton
             type={IconButtonVariant.outlined}

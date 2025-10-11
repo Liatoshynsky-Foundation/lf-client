@@ -33,12 +33,12 @@ export const filterGridHelper = (
   };
 
   const bothExtraSmall: Layout = {
-    gridTemplateColumns: '70px 50px 100px 30px',
+    gridTemplateColumns: '80px 50px 100px 30px',
     gridTemplateRows: 'auto auto auto',
     containers: {
       category: { gridColumn: '1 / 4', gridRow: '1', width: '250px' },
       genre: { gridColumn: '1 / 3', gridRow: '2', width: '220px' },
-      year: { gridColumn: '1', gridRow: '3', width: '70px' },
+      year: { gridColumn: '1', gridRow: '3', width: '80px' },
       clear: { gridColumn: '2', gridRow: '3', width: '48px' }
     }
   };
@@ -53,63 +53,63 @@ export const filterGridHelper = (
     }
   };
   const categoryOnlyExtraSmall: Layout = {
-    gridTemplateColumns: '100px 70px 25px 25px',
+    gridTemplateColumns: '100px 80px 70px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 4', gridRow: '1', width: '240px' },
       genre: { gridColumn: '1', gridRow: '2', width: '100px' },
-      year: { gridColumn: '2', gridRow: '2', width: '70px' },
+      year: { gridColumn: '2', gridRow: '2', width: '80px' },
       clear: { gridColumn: '3', gridRow: '2', width: '48px' }
     }
   };
   const defaultExtraSmall: Layout = {
-    gridTemplateColumns: '130px 70px',
+    gridTemplateColumns: '130px 80px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '130px' },
       genre: { gridColumn: '1', gridRow: '2', width: '100px' },
-      year: { gridColumn: '2', gridRow: '1', width: '70px' },
+      year: { gridColumn: '2', gridRow: '1', width: '80px' },
       clear: { gridColumn: '2', gridRow: '1', width: '48px' }
     }
   };
 
   const bothMobile: Layout = {
-    gridTemplateColumns: '220px 40px 70px',
+    gridTemplateColumns: '220px 40px 80px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 2', gridRow: '2', width: '250px' },
       genre: { gridColumn: '1', gridRow: '1', width: '210px' },
-      year: { gridColumn: '2 / 3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '2 / 3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }
   };
   const bothMid: Layout = {
-    gridTemplateColumns: '210px 40px 70px',
+    gridTemplateColumns: '210px 40px 80px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 2', gridRow: '1', width: '250px' },
       genre: { gridColumn: '1', gridRow: '2', width: '210px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }
   };
   const bothLarge: Layout = {
-    gridTemplateColumns: '210px 40px 70px',
+    gridTemplateColumns: '210px 40px 80px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 2', gridRow: '1', width: '250px' },
       genre: { gridColumn: '1', gridRow: '2', width: '210px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }
   };
   const bothLarge700: Layout = {
-    gridTemplateColumns: '250px 210px 70px 48px',
+    gridTemplateColumns: '250px 210px 80px 48px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '250px' },
       genre: { gridColumn: '2', gridRow: '1', width: '210px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '4', gridRow: '1', width: '48px' }
     }
   };
@@ -125,79 +125,79 @@ export const filterGridHelper = (
     containers: {
       category: { gridColumn: '1 / span 2', gridRow: '2', width: '130px' },
       genre: { gridColumn: '1', gridRow: '1', width: '220px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '2 / span 3', gridRow: '2', width: '48px' }
     }
   };
   const categoryOnlyMobile: Layout = {
-    gridTemplateColumns: '110px 55px 55px 70px',
+    gridTemplateColumns: '100px 80px 50px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 4', gridRow: '1' },
       genre: { gridColumn: '1', gridRow: '2' },
-      year: { gridColumn: '4', gridRow: '1' },
-      clear: { gridColumn: '2', gridRow: '2' }
+      year: { gridColumn: '2', gridRow: '2' },
+      clear: { gridColumn: '3', gridRow: '2' }
     }
   };
 
   const genreOnlyMid: Layout = {
-    gridTemplateColumns: '70px 50px 70px 130px',
+    gridTemplateColumns: '80px 50px 80px 130px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '4', gridRow: '1', width: '130px' },
       genre: { gridColumn: '1 / 3', gridRow: '1', width: '220px' },
-      year: { gridColumn: '1', gridRow: '2', width: '70px' },
+      year: { gridColumn: '1', gridRow: '2', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '50px' }
     }
   };
   const categoryOnlyMid: Layout = {
-    gridTemplateColumns: '60px 60px 60px 20px 100px',
+    gridTemplateColumns: '80px 60px 80px 80px',
     gridTemplateRows: 'auto auto',
     containers: {
-      category: { gridColumn: '1 / 4', gridRow: '1', width: '250px' },
-      genre: { gridColumn: '5', gridRow: '1', width: '100px' },
-      year: { gridColumn: '1', gridRow: '2', width: '70px' },
+      category: { gridColumn: '1 / 3', gridRow: '1', width: '250px' },
+      genre: { gridColumn: '4', gridRow: '1', width: '100px' },
+      year: { gridColumn: '1', gridRow: '2', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }
   };
 
   const genreOnlyLarge: Layout = {
-    gridTemplateColumns: '220px 130px 50px 48px',
+    gridTemplateColumns: '220px 130px 80px 48px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '2', gridRow: '1', width: '130px' },
       genre: { gridColumn: '1', gridRow: '1', width: '220px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '4', gridRow: '1', width: '48px' }
     }
   };
   const categoryOnlyLarge: Layout = {
-    gridTemplateColumns: '250px 100px 50px 48px',
+    gridTemplateColumns: '250px 100px 80px 48px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '250px' },
       genre: { gridColumn: '2', gridRow: '1', width: '100px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '4', gridRow: '1', width: '48px' }
     }
   };
   const onlyYearSelectedLarge: Layout = {
-    gridTemplateColumns: '130px 100px 70px 48px',
+    gridTemplateColumns: '130px 100px 80px 48px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '130px' },
       genre: { gridColumn: '2', gridRow: '1', width: '100px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '4', gridRow: '1', width: '48px' }
     }
   };
   const onlyYearSelectedSmall: Layout = {
-    gridTemplateColumns: '70px 50px 100px',
+    gridTemplateColumns: '80px 50px 100px',
     gridTemplateRows: 'auto auto',
     containers: {
       category: { gridColumn: '1 / 2', gridRow: '1', width: '130px' },
       genre: { gridColumn: '3', gridRow: '1', width: '100px' },
-      year: { gridColumn: '1', gridRow: '2', width: '70px' },
+      year: { gridColumn: '1', gridRow: '2', width: '80px' },
       clear: { gridColumn: '2', gridRow: '2', width: '48px' }
     }
   };
@@ -216,27 +216,27 @@ export const filterGridHelper = (
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '130px' },
       genre: { gridColumn: '2', gridRow: '1', width: '100px' },
-      year: { gridColumn: '1', gridRow: '2', width: '70px' },
+      year: { gridColumn: '1', gridRow: '2', width: '80px' },
       clear: { gridColumn: '1', gridRow: '2', width: '48px' }
     }
   };
   const defaultMid: Layout = {
-    gridTemplateColumns: '130px 100px 70px',
+    gridTemplateColumns: '130px 100px 80px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '130px' },
       genre: { gridColumn: '2', gridRow: '1', width: '100px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '80px' },
       clear: { gridColumn: '3', gridRow: '1', width: '48px' }
     }
   };
   const defaultLarge: Layout = {
-    gridTemplateColumns: '130px 100px 70px',
+    gridTemplateColumns: '130px 100px 75px',
     gridTemplateRows: 'auto',
     containers: {
       category: { gridColumn: '1', gridRow: '1', width: '130px' },
       genre: { gridColumn: '2', gridRow: '1', width: '100px' },
-      year: { gridColumn: '3', gridRow: '1', width: '70px' },
+      year: { gridColumn: '3', gridRow: '1', width: '75px' },
       clear: { gridColumn: '3', gridRow: '1', width: '48px' }
     }
   };
