@@ -10,4 +10,5 @@ export type QuoteBlockProps = {
   mainTextColor: Color;
   alignRight?: boolean;
   sx?: SxProps;
+  width?: string | Record<string, string>;
 };

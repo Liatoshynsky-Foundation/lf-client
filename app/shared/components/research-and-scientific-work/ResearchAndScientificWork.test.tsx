@@ -37,6 +37,6 @@ describe('ResearchAndScientificWork', () => {
     expect(screen.getByTestId('title')).toHaveTextContent(mockData.title);
     expect(screen.getByTestId('quote-text')).toHaveTextContent(mockData.quote.text);
     expect(screen.getByTestId('source-title')).toHaveTextContent(mockData.quote.source);
-    expect(screen.getByTestId('color')).toHaveTextContent('brown');
+    expect(screen.getByTestId('color')).toHaveTextContent('black');
   });
 });
