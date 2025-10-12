@@ -46,6 +46,7 @@ export type Condition = {
     | { 'title.uk'?: { $regex?: RegExp | string; $options?: string } }
     | { 'title.en'?: { $regex?: RegExp | string; $options?: string } }
   >;
+  categories?: { $in?: Array<string | number | Record<string, unknown>> };
   genres?: { $in?: Array<string | number | Record<string, unknown>> };
   year?: { $gte: number; $lte: number };
 };
