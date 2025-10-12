@@ -37,6 +37,11 @@ export const errors = {
     message: 'Failed to fetch compositions',
     status: 500
   },
+  FILTERS_FETCH_FAILED: {
+    code: 'FILTERS_FETCH_FAILED',
+    message: 'Failed to fetch filters (titles, years, genres, categories)',
+    status: 500
+  },
   USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider',
   NOT_FOUND: 'This resource was not found',
   CAPTCHA_FAILED: 'Captcha verification failed'
