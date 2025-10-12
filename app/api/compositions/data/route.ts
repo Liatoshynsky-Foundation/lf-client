@@ -17,11 +17,7 @@ export async function GET(req: NextRequest) {
     const yearTo = params.get('yearTo');
     const filters = { categories: [] as string[], genres: [] as string[], years: { min: 1900, max: 1998 } };
     if (genres.length) filters.genres = genres;
-<<<<<<< HEAD
     if (categories.length) filters.categories = categories;
-
-=======
->>>>>>> a5c690c (fix:fixed filtering with search, added custom error)
     if (yearFrom || yearTo) {
       const min = yearFrom ? Number(yearFrom) : 1900;
       const max = yearTo ? Number(yearTo) : new Date().getFullYear();

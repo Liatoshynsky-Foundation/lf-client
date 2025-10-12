@@ -10,9 +10,7 @@ interface ErrorProps {
 }
 
 export default function ErrorFallback({ error }: Readonly<ErrorProps>) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+  useEffect(() => {}, [error]);
 
   return (
     <Box sx={{ gridColumn: '1 / -1', overflow: 'visible' }}>
