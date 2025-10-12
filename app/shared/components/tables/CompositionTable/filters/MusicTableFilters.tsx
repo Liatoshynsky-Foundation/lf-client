@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 
+import { filterGridHelper } from './MusicTableFilters.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
-import { filterGridHelper } from '~/lib/utils/filterGridHelper';
 import Delete from '~/public/icons/trash-2.svg';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 
