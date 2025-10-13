@@ -58,11 +58,25 @@ describe('ContactsInfo', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Contacts' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 5, name: 'Contact form' })).toBeInTheDocument();
 
-    expect(screen.getByText('We are on social media')).toBeInTheDocument();
+    expect(screen.getByText('We are on social media:')).toBeInTheDocument();
     expect(screen.getByText('Send a request and we will contact you within a few business days')).toBeInTheDocument();
 
     expect(screen.getByText('Phone number:')).toBeInTheDocument();
-    expect(screen.getByText('Email')).toBeInTheDocument();
+    expect(screen.getByText('Email:')).toBeInTheDocument();
+  });
+
+  it('should render headings from props', () => {
+    render(
+      <ContactsInfo
+        title="Collaboration"
+        formTitle="Offer collaboration"
+        contacts={contacts}
+        socialLinks={socialLinks}
+      />
+    );
+
+    expect(screen.getByText('Collaboration')).toBeInTheDocument();
+    expect(screen.getByText('Offer collaboration')).toBeInTheDocument();
   });
 
   it('should show phone and email values as links', () => {

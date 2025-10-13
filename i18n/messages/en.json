@@ -134,6 +134,12 @@
       "phoneCopiedAlert": "Phone number copied to clipboard"
     }
   },
+  "collaboration": {
+    "offerCollaboration": {
+      "title": "We are open to collaboration, inquiries, and dialogue:",
+      "formTitle": "Offer collaboration"
+    }
+  },
   "table": {
     "columns": {
       "opus": "Opus",
