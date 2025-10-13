@@ -7,11 +7,17 @@ interface ImageWithBorderProps {
   image: string;
   width: number;
   height: number;
-  borderWidth: number;
+  borderWidth?: number;
   alt: string;
 }
 
-export default function ImageWithBorder({ image, width, height, borderWidth, alt }: Readonly<ImageWithBorderProps>) {
+export default function ImageWithBorder({
+  image,
+  width,
+  height,
+  borderWidth = 8,
+  alt
+}: Readonly<ImageWithBorderProps>) {
   return (
     <Box sx={styles.container(width, height)}>
       <Box sx={styles.border(borderWidth, height)} />
