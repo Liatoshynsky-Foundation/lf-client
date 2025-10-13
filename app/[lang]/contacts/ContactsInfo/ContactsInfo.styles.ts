@@ -5,22 +5,29 @@ export const styles = {
   root: {
     gridColumn: '1 / -1',
     maxWidth: '1728px',
-    mx: 'auto',
-    p: { xs: '20px 24px', sm: '20px 56px', md: '20px 72px' },
-    m: { xs: '-20px -24px', sm: '-20px -56px', md: '-20px -72px' }
+    width: '100%',
+    mx: 'auto'
   },
   wrapper: {
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    mt: { xs: '120px', md: '136px', xl: '55px' },
-    mb: { xs: '45px', sm: '160px' },
     flexDirection: { xs: 'column', sm: 'row' }
   },
 
-  title: {
+  titleMain: {
     fontSize: { xs: '40px', md: '64px' },
     lineHeight: '120%'
+  },
+
+  title: {
+    fontSize: '20px',
+    fontFamily: 'Oswald',
+    fontWeight: 700,
+    lineHeight: '160%',
+    color: mainHexPallete.black,
+    textTransform: 'uppercase',
+    maxWidth: '305px'
   },
 
   contactsInfoWrapper: {
@@ -58,9 +65,9 @@ export const styles = {
   },
 
   formWrapper: {
-    padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '93.5px 95.5px' },
+    padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '75px 96px' },
     margin: { xs: '0px -24px', sm: 'unset' },
-    maxWidth: { sm: '400px', md: '496px', lg: '744px' },
+    maxWidth: { sm: '400px', md: '496px', lg: '646px', xl: '744px' },
     width: { xs: '100vw', sm: '100%' }
   },
 

@@ -134,6 +134,12 @@
       "phoneCopiedAlert": "Номер телефону скопійовано до буферу обміну"
     }
   },
+  "collaboration": {
+    "offerCollaboration": {
+      "title": "Ми відкриті до співпраці, запитів і діалогу:",
+      "formTitle": "Запропонувати співпрацю"
+    }
+  },
   "table": {
     "columns": {
       "opus": "Опус",
@@ -209,8 +215,8 @@
     "loading": "Завантажується..."
   },
   "contactsInfoPage": {
-    "contacts": "Контакти",
-    "phoneNumber": "Номер телефону",
+    "contacts": "КонТактИ",
+    "phoneNumber": "Телефон",
     "email": "Email",
     "socialMedia": "Ми в соцмережах",
     "formTitle": "Форма звернення",

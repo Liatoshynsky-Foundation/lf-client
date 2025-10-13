@@ -17,11 +17,20 @@ const styles = {
   container: {
     width: '100%',
     minHeight: 'calc(100vh + (100vw * 0.035))',
-    background: '#F2EEE8'
+    background: '#F2EEE8',
+    pt: {
+      xs: '70px',
+      sm: '82px',
+      md: '100px',
+      lg: '92px'
+    },
+    pb: 'calc(100% * 0.035)'
   },
   childrenBox: {
     width: '100%',
     maxWidth: '1728px',
+    pt: { xs: '120px', md: '136px', xl: '55px' },
+    pb: { xs: '45px', sm: '160px' },
     display: 'grid',
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
@@ -33,19 +42,12 @@ const styles = {
       sm: '24px',
       md: '40px'
     },
-    m: '0 auto',
-    pt: {
-      xs: '70px',
-      sm: '82px',
-      md: '100px',
-      lg: '92px'
-    },
     px: {
       xs: '24px',
       sm: '56px',
       md: '72px'
     },
-    pb: 'calc(100% * 0.035)'
+    m: '0 auto'
   }
 };
 
