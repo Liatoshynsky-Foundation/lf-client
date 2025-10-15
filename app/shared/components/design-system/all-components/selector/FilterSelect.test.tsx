@@ -32,7 +32,14 @@ jest.mock('~/public/icons/trash-2.svg', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-  useTranslations: (module: string) => (key: string) => module + '.' + key
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      selected: 'обрано',
+      clear: 'Очистити фільтр'
+    };
+
+    return translations[key] || key;
+  }
 }));
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
