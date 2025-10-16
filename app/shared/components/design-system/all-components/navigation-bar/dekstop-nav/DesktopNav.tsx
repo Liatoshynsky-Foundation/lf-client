@@ -23,6 +23,10 @@ export interface DropdownItem {
 }
 
 const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
+  const specialNavItem = navLabels.find((group) => ['Війна в Україні', 'War in Ukraine'].includes(group.title));
+
+  navLabels = navLabels.filter((group) => !['Війна в Україні', 'War in Ukraine'].includes(group.title));
+
   const NAV_ITEMS = useMemo(() => {
     return navLabels.map((group) => {
       const dropdown = group.links.map((link) => ({
@@ -140,6 +144,9 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
           buttons={renderedNavButtons}
           size="big"
         />
+        {specialNavItem && specialNavItem.links.length > 0 && specialNavItem.links[0].visibility && (
+          <Button label={specialNavItem.title} link={specialNavItem.links[0].href} sx={styles.warInUkraineButton} />
+        )}
       </Box>
 
       {openDropdownState && (

@@ -16,5 +16,21 @@ export const navigationRepository = {
         links: validated.links
       };
     });
+  },
+  async getSpecialNavigation() {
+    await dbConnect();
+
+    const specialNav = await Navigation.findOne({ title: { $in: ['Війна в Україні', 'War in Ukraine'] } }).lean();
+
+    if (!specialNav) {
+      return null;
+    }
+
+    const validated = navigationSchema.parse(specialNav);
+
+    return {
+      title: validated.title,
+      links: validated.links
+    };
   }
 };
