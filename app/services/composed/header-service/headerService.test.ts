@@ -13,6 +13,11 @@ describe('headerService (composed)', () => {
     }
   ];
 
+  const mockSpecialNavigationRaw = {
+    title: { uk: 'Спеціальна', en: 'Special' },
+    links: [{ label: { uk: 'Спеціальна посилання', en: 'Special Link' }, href: '/special', visibility: true }]
+  };
+
   const mockSupportButtonData = {
     supportButtonLink: 'https://donate.com'
   };
@@ -22,7 +27,8 @@ describe('headerService (composed)', () => {
   };
 
   const navigationServiceMock = {
-    getNavigation: jest.fn().mockResolvedValue(mockNavigationRaw)
+    getNavigation: jest.fn().mockResolvedValue(mockNavigationRaw),
+    getSpecialNavigation: jest.fn().mockResolvedValue(mockSpecialNavigationRaw)
   };
 
   const headerService = createHeaderService({
@@ -47,6 +53,10 @@ describe('headerService (composed)', () => {
           ]
         }
       ],
+      specialNavigation: {
+        title: 'Special',
+        links: [{ label: 'Special Link', href: '/special', visibility: true }]
+      },
       supportButtonLink: mockSupportButtonData.supportButtonLink
     });
 
