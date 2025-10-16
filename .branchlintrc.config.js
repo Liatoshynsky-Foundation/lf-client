@@ -7,8 +7,8 @@ module.exports = {
     'chore/987/update-dependencies',
     'test/456/write-login-tests',
     'hotfix/1.0.1',
-    'release/1.2.3'
+    'release/1.2.3',
   ],
 
-  exclude: ['main', 'develop']
+  exclude: ['main', 'develop', 'qa']
 };

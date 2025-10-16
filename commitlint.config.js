@@ -26,7 +26,9 @@ module.exports = {
         // Other changes that don't modify src or test files
         'chore',
         // Reverts a previous commit
-        'revert'
+        'revert',
+        // QA changes
+        'qa'
       ]
     ]
   }
