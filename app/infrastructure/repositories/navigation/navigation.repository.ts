@@ -6,7 +6,9 @@ export const navigationRepository = {
   async getNavigation() {
     await dbConnect();
 
-    const navigations = await Navigation.find().sort({ order: 1 }).lean();
+    const navigations = await Navigation.find({ order: { $gte: 0 } })
+      .sort({ order: 1 })
+      .lean();
 
     return navigations.map((navigation) => {
       const validated = navigationSchema.parse(navigation);
@@ -20,7 +22,7 @@ export const navigationRepository = {
   async getSpecialNavigation() {
     await dbConnect();
 
-    const specialNav = await Navigation.findOne({ title: { $in: ['Війна в Україні', 'War in Ukraine'] } }).lean();
+    const specialNav = await Navigation.findOne({ order: { $lt: 0 } }).lean();
 
     if (!specialNav) {
       return null;
