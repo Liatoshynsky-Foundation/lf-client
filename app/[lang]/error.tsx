@@ -1,6 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
+
 import ErrorComponent from '~/shared/components/error-component/Error';
 
 interface ErrorProps {
