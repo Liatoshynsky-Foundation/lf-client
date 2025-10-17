@@ -13,7 +13,7 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: { [key: string]: string } = {
       clear: 'clear',
-      selected: '1 обрано'
+      selected: 'обрано'
     };
     return translations[key];
   }
