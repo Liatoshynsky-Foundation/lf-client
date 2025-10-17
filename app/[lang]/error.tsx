@@ -1,8 +1,6 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
-
 import ErrorComponent from '~/shared/components/error-component/Error';
 
 interface ErrorProps {
