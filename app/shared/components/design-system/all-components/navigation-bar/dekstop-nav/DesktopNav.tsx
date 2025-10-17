@@ -50,6 +50,11 @@ const DesktopNav = ({ navLabels, specialNav }: { navLabels: NavigationDTO[]; spe
   }, [pathname]);
 
   useEffect(() => {
+    if (pathname === specialNav?.links[0].href) {
+      setActiveButton(undefined);
+      return;
+    }
+
     const index = NAV_ITEMS.findIndex(
       (item) => item.href === pathname || item.dropdown?.some((dropdownItem) => dropdownItem.href === pathname)
     );
