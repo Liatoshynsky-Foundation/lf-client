@@ -37,6 +37,9 @@ export const styles = {
   },
   warInUkraineButton: {
     backgroundColor: mainHexPallete.blue[900],
-    color: mainHexPallete.white
+    color: mainHexPallete.white,
+    '&:hover': {
+      backgroundColor: mainHexPallete.black
+    }
   }
 };
