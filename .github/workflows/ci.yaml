@@ -124,7 +124,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          tags: lf-admin:test
+          tags: lf-client:test
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -160,18 +160,18 @@ jobs:
 
       # - name: Test Docker container startup
       #   run: |
-      #     docker run -d --name lf-admin \
+      #     docker run -d --name lf-client \
       #       --network host \
       #       -e MONGO_HOST=localhost \
       #       -e MONGO_PORT=27017 \
       #       -e MONGO_DB=mongodb \
       #       -e NODE_ENV=production \
-      #       lf-admin:test
+      #       lf-client:test
 
       #     curl -f http://localhost:3000/api/health 2>/dev/null
 
-      #     docker stop lf-admin || true
-      #     docker rm lf-admin || true
+      #     docker stop lf-client || true
+      #     docker rm lf-client || true
 
       - name: Set up Snyk CLI
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
@@ -185,13 +185,13 @@ jobs:
 
       - name: Snyk Container test (SARIF)
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
-        run: snyk container test lf-admin:test --file=Dockerfile --exclude-app-vulns --sarif-file-output=./sarif/snyk-container.sarif || true
+        run: snyk container test lf-client:test --file=Dockerfile --exclude-app-vulns --sarif-file-output=./sarif/snyk-container.sarif || true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk Container monitor
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
-        run: snyk container monitor lf-admin:test --file=Dockerfile
+        run: snyk container monitor lf-client:test --file=Dockerfile
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -215,7 +215,7 @@ jobs:
 
       - name: Cleanup test image
         run: |
-          docker rmi ghcr.io/${{ github.repository }}/lf-admin:test || true
+          docker rmi ghcr.io/${{ github.repository }}/lf-client:test || true
 
   run-security-scan:
     name: Run Security Scan
