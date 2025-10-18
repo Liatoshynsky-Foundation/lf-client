@@ -1,0 +1,273 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  run-lint:
+    name: Run ESLint
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  run-tests:
+    name: Run Tests
+    runs-on: "ubuntu-latest"
+    needs: ["run-lint"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: 8
+          mongodb-container-name: mongodb
+          mongodb-port: 27017
+          mongodb-db: mongodb
+          mongodb-username: admin
+          mongodb-password: password
+
+      - name: Install MongoDB shell
+        run: |
+          sudo apt-get install -y gnupg curl
+          curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+          sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+          --dearmor
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | \
+          sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+          sudo apt-get update && sudo apt-get install -y mongodb-mongosh
+
+      - name: Check MongoDB
+        run: |
+          for i in {1..30}; do
+            mongosh --eval "db.runCommand({ ping: 1 })" localhost:27017 && echo "MongoDB is up (attempt $i)" && exit 0
+            echo "Waiting for MongoDB... (attempt $i)"
+            sleep 2
+          done
+          echo "MongoDB did not start in time!" && exit 1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+          MONGO_HOST: mongodb
+          MONGO_PORT: 2017
+          MONGO_DB: mongodb
+          MONGO_USERNAME: admin
+          MONGO_PASSWORD: password
+        run: npm run test
+
+  build-and-test-docker:
+    name: Build and Test Docker Container
+    runs-on: "ubuntu-latest"
+    needs: ["run-lint", "run-tests"]
+    permissions:
+      security-events: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Extract metadata
+      #   id: meta
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: ghcr.io/${{ github.repository }}
+      #     tags: |
+      #       type=raw,value=latest,enable={{is_default_branch}}
+      #       type=raw,value=develop,enable={{is_develop_branch}}
+      #       type=sha,enable={{is_default_branch || is_develop_branch}}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          tags: lf-admin:test
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # - name: Install MongoDB
+      #   uses: supercharge/mongodb-github-action@1.12.0
+      #   with:
+      #     mongodb-version: 8
+      #     mongodb-container-name: mongodb
+      #     mongodb-port: 27017
+      #     mongodb-db: mongodb
+      #     mongodb-username: admin
+      #     mongodb-password: password
+
+      # - name: Install MongoDB shell
+      #   run: |
+      #     sudo apt-get install -y gnupg curl
+      #     curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+      #     sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+      #     --dearmor
+      #     echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | \
+      #     sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+      #     sudo apt-get update && sudo apt-get install -y mongodb-mongosh
+
+      # - name: Check MongoDB
+      #   run: |
+      #     for i in {1..30}; do
+      #       mongosh --eval "db.runCommand({ ping: 1 })" localhost:27017 && echo "MongoDB is up (attempt $i)" && exit 0
+      #       echo "Waiting for MongoDB... (attempt $i)"
+      #       sleep 2
+      #     done
+      #     echo "MongoDB did not start in time!" && exit 1
+
+      # - name: Test Docker container startup
+      #   run: |
+      #     docker run -d --name lf-admin \
+      #       --network host \
+      #       -e MONGO_HOST=localhost \
+      #       -e MONGO_PORT=27017 \
+      #       -e MONGO_DB=mongodb \
+      #       -e NODE_ENV=production \
+      #       lf-admin:test
+
+      #     curl -f http://localhost:3000/api/health 2>/dev/null
+
+      #     docker stop lf-admin || true
+      #     docker rm lf-admin || true
+
+      - name: Set up Snyk CLI
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Prepare SARIF directory
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: mkdir -p sarif
+
+      - name: Snyk Container test (SARIF)
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: snyk container test lf-admin:test --file=Dockerfile --exclude-app-vulns --sarif-file-output=./sarif/snyk-container.sarif || true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Container monitor
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: snyk container monitor lf-admin:test --file=Dockerfile
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Snyk Container SARIF
+        if: github.event_name == 'pull_request' && github.base_ref == 'main' && hashFiles('sarif/snyk-container.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif/snyk-container.sarif
+          category: snyk-container
+
+      # - name: Build and push production image
+      #   if: success()
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+      #     push: true
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+
+      - name: Cleanup test image
+        run: |
+          docker rmi ghcr.io/${{ github.repository }}/lf-admin:test || true
+
+  run-security-scan:
+    name: Run Security Scan
+    runs-on: "ubuntu-latest"
+    needs: ["run-lint", "run-tests"]
+    permissions:
+      security-events: write
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Snyk CLI to check for security issues
+        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare SARIF directory
+        run: mkdir -p sarif
+
+      - name: Snyk Code test (SARIF)
+        run: snyk code test --sarif-file-output=./sarif/snyk-code.sarif || true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Open Source monitor (lockfile, tolerate mismatch)
+        run: snyk monitor --file=package-lock.json --package-manager=npm --strict-out-of-sync=false
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Open Source test (SARIF, tolerate mismatch)
+        run: snyk test --all-projects --sarif-file-output=./sarif/snyk-oss.sarif --strict-out-of-sync=false || true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Snyk Code SARIF
+        if: hashFiles('sarif/snyk-code.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif/snyk-code.sarif
+          category: snyk-code
+
+      - name: Upload Snyk OSS SARIF
+        if: hashFiles('sarif/snyk-oss.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif/snyk-oss.sarif
+          category: snyk-oss
