@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - develop
-      - feat/0/vps-cd
 
 jobs:
   build:
