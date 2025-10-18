@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.15.0",
+    "mongoose": "^8.19.1",
     "next": "15.4.6",
     "next-intl": "^4.1.0",
     "rate-limiter-flexible": "^7.3.1",
