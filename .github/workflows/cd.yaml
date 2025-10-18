@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - develop
-      - feature/453/snyk
 
 jobs:
   build:
@@ -60,7 +59,7 @@ jobs:
     steps:
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: "lf-client-stage"
           slot-name: "production"
