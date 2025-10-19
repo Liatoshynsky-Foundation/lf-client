@@ -72,6 +72,9 @@ jobs:
       name: Deploy to QA Web App
       runs-on: ubuntu-latest
       needs: deploy-azure-dev
+      environment:
+        name: "qa"
+        url: ${{ steps.deploy-to-qa-webapp.outputs.webapp-url }}
       if: github.ref == 'refs/heads/develop'
       
       steps:
