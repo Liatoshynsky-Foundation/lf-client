@@ -10,5 +10,5 @@ module.exports = {
     'release/1.2.3',
   ],
 
-  exclude: ['main', 'develop', 'qa']
+  exclude: ['main', 'develop']
 };
