@@ -124,7 +124,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
         <Box sx={filterSelectStyles.chipContainer}>
           {selectedOptionsCount > 0 && (
             <Chip
-              label={`${selectedOptionsCount} обрано`}
+              label={`${selectedOptionsCount} ${t('selected')}`}
               variant={variant}
               disabled={disabled}
               onDelete={handleChipDelete}

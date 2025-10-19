@@ -1,47 +1,47 @@
 version: 2
 updates:
   # JS
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'quarterly'
-      day: 'wednesday'
-      time: '00:00'
-      timezone: 'Europe/Kyiv'
+      interval: "quarterly"
+      day: "wednesday"
+      time: "00:00"
+      timezone: "Europe/Kyiv"
     commit-message:
-      prefix: '[DEPENDABOT]'
+      prefix: "deps(dependabot):"
     labels:
-      - 'dependencies'
-      - 'dependabot'
+      - "dependencies"
+      - "dependabot"
     open-pull-requests-limit: 10
-    versioning-strategy: 'increase'
+    versioning-strategy: "increase"
   # Docker
-  - package-ecosystem: 'docker'
-    directory: '/'
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
-      interval: 'quarterly'
-      day: 'monday'
-      time: '00:00'
-      timezone: 'Europe/Kyiv'
+      interval: "quarterly"
+      day: "monday"
+      time: "00:00"
+      timezone: "Europe/Kyiv"
     commit-message:
-      prefix: '[DEPENDABOT]'
+      prefix: "deps(dependabot):"
     labels:
-      - 'dependencies'
-      - 'dependabot'
-      - 'DevOps'
+      - "dependencies"
+      - "dependabot"
+      - "DevOps"
     open-pull-requests-limit: 3
   # GH Actions
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'quarterly'
-      day: 'monday'
-      time: '00:00'
-      timezone: 'Europe/Kyiv'
+      interval: "quarterly"
+      day: "monday"
+      time: "00:00"
+      timezone: "Europe/Kyiv"
     commit-message:
-      prefix: '[DEPENDABOT]'
+      prefix: "deps(dependabot):"
     labels:
-      - 'dependencies'
-      - 'dependabot'
-      - 'DevOps'
+      - "dependencies"
+      - "dependabot"
+      - "DevOps"
     open-pull-requests-limit: 3

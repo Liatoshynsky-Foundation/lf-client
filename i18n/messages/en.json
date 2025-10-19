@@ -208,6 +208,7 @@
       "minDistance": "The 'To' value cannot be less than the 'From' value",
       "onlyNumbers": "Only numeric values are allowed"
     },
+    "selected": "selected",
     "clear": "Clear filter"
   },
   "search": {
@@ -242,5 +243,10 @@
   "error": {
     "title": "SoRrY, sOmEtHinG wEnT wRoNg...",
     "subtitle": "Try to use navigation one more time"
+  },
+  "underDevelopment": {
+    "title": "PaGe UnDeR CoNsTrUcTiOn",
+    "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
+    "button": "Return to home"
   }
 }
