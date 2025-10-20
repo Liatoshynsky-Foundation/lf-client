@@ -77,7 +77,7 @@ jobs:
       environment:
         name: "qa"
         url: ${{ steps.deploy-to-qa-webapp.outputs.webapp-url }}
-      if: github.ref == 'refs/heads/develop'
+      if: github.ref == 'refs/heads/chore/685/cd-workflow-for-qa-stage'
       
       steps:
         - name: Deploy to lf-client-qa-stage
