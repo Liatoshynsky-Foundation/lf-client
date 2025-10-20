@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - develop
+      - chore/685/cd-workflow-for-qa-stage
 #      - "release/*"
 
 jobs:
@@ -49,6 +49,7 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:latest
           file: ./Dockerfile
 
+          
   # deploy-azure-dev:
   #   name: Deploy to Azure Web App
   #   runs-on: ubuntu-latest
