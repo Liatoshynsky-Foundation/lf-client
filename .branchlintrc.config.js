@@ -6,8 +6,7 @@ module.exports = {
     'bugfix/23/fix-login-error',
     'chore/987/update-dependencies',
     'test/456/write-login-tests',
-    'hotfix/1.0.1',
-    'release/1.2.3',
+    'hotfix/1.0.1'
   ],
 
   exclude: ['main', 'develop']
