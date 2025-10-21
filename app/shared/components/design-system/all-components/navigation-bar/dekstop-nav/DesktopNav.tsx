@@ -66,7 +66,7 @@ const DesktopNav = ({ navLabels, specialNav }: { navLabels: NavigationDTO[]; spe
     } else {
       setActiveButton(undefined);
     }
-  }, [pathname, navLabels]);
+  }, [pathname, NAV_ITEMS]);
 
   const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
 
