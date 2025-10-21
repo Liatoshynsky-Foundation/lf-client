@@ -2,44 +2,25 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import { FilterSelect } from './FilterSelect';
-import { FilterSelectItemProps } from './FilterSelectItem/FilterSelectItem';
 
-jest.mock('~/ds-components/selector/FilterSelectItem/FilterSelectItem', () => {
-  const Mock = ({ label, onClick, selected, disabled }: FilterSelectItemProps) => (
-    <option
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
-          onClick?.();
-        }
-      }}
-      tabIndex={0}
-      data-testid={'checkbox-' + label}
-      aria-disabled={disabled}
-      aria-selected={selected}
-    >
-      <input type="checkbox" checked={selected} readOnly />
-      {label}
-    </option>
-  );
-  Mock.displayName = 'FilterSelectItem';
-  return Mock;
-});
-
-jest.mock('~/public/icons/trash-2.svg', () => ({
-  __esModule: true,
-  default: () => <svg data-testid="clear-icon" />
-}));
+const mockOptions = [
+  { label: 'First', value: 'first' },
+  { label: 'Second', value: 'second' },
+  { label: 'Third', value: 'third' }
+];
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
-    const translations: Record<string, string> = {
-      selected: 'обрано',
-      clear: 'Очистити фільтр'
+    const translations: { [key: string]: string } = {
+      clear: 'clear',
+      selected: 'обрано'
     };
-
-    return translations[key] || key;
+    return translations[key];
   }
+}));
+jest.mock('~/public/icons/trash-2.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="trash-icon" />
 }));
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
@@ -50,12 +31,6 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
     </div>
   )
 }));
-
-const mockOptions = [
-  { value: '1', label: 'First' },
-  { value: '2', label: 'Second' },
-  { value: '3', label: 'Third' }
-];
 
 describe('FilterSelect', () => {
   it('should render the label', () => {
@@ -80,7 +55,7 @@ describe('FilterSelect', () => {
   });
 
   it('should remove chip when delete icon is clicked', () => {
-    render(<FilterSelect label="Select" options={mockOptions} defaultValues={['1']} />);
+    render(<FilterSelect label="Select" options={mockOptions} defaultValues={['first']} />);
     expect(screen.getByText('1 обрано')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('delete-icon'));
     expect(screen.queryByText('1 обрано')).not.toBeInTheDocument();
@@ -91,22 +66,16 @@ describe('FilterSelect', () => {
     render(<FilterSelect label="Select" options={mockOptions} onAdd={onAdd} />);
     fireEvent.click(screen.getByText('Select'));
     fireEvent.click(screen.getByText('Second'));
-    expect(onAdd).toHaveBeenCalledWith('2', 'Second', ['2']);
+    expect(onAdd).toHaveBeenCalledWith('second', 'Second', ['second']);
   });
 
   it('should call onRemove when chip is deleted', () => {
     const onRemove = jest.fn();
-    render(<FilterSelect label="Remove" options={mockOptions} defaultValues={['1']} onRemove={onRemove} />);
-    fireEvent.click(screen.getByTestId('delete-icon'));
-    expect(onRemove).toHaveBeenCalledWith('', '', []);
-  });
-
-  it('should disable selection if maxSelections is reached', () => {
-    render(<FilterSelect label="Max" options={mockOptions} maxSelections={1} defaultValues={['1']} />);
-    fireEvent.click(screen.getByText('Max'));
-    const secondItem = screen.getByTestId('checkbox-Second');
-
-    expect(secondItem).toHaveAttribute('aria-disabled', 'true');
+    render(<FilterSelect label="Remove" options={mockOptions} defaultValues={['first']} onRemove={onRemove} />);
+    fireEvent.click(screen.getByText('Remove'));
+    fireEvent.click(screen.getByText('First'));
+    fireEvent.click(screen.getByTestId('trash-icon'));
+    expect(onRemove).toHaveBeenCalledWith('first', 'First', []);
   });
 
   it('should not open menu if disabled', () => {

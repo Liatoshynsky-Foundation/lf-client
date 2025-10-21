@@ -42,9 +42,13 @@ export type CompositionTitlesDTO = {
   title: string;
 };
 export type Condition = {
-  $or?: Array<{ 'title.uk'?: string } | { 'title.en'?: string }>;
+  $or?: Array<
+    | { 'title.uk'?: { $regex?: RegExp | string; $options?: string } }
+    | { 'title.en'?: { $regex?: RegExp | string; $options?: string } }
+  >;
+  categories?: { $in?: Array<string | number | Record<string, unknown>> };
   genres?: { $in?: Array<string | number | Record<string, unknown>> };
-  [key: string]: unknown;
+  year?: { $gte: number; $lte: number };
 };
 
 export type Query = Condition | { $and: Condition[] } | Record<string, unknown>;

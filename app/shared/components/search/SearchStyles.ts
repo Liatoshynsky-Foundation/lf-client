@@ -4,6 +4,7 @@ import { TextField } from '@mui/material';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const CustomBorderTextField = styled(TextField)(() => ({
+  marginTop: '5px',
   borderColor: `${mainHexPallete.black} !important`,
   '& .MuiOutlinedInput-root': {
     borderColor: `${mainHexPallete.black} !important`,
