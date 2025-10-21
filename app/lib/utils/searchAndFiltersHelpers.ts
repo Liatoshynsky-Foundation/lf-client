@@ -12,5 +12,5 @@ export const namedFilterHelper = (namedFilter?: string[]) => {
 };
 
 export const yearHelper = (years?: { min?: number; max?: number }) => {
-  return { min: years?.min ?? 1990, max: years?.max ?? new Date().getFullYear() };
+  return { min: years?.min ?? 1900, max: years?.max ?? new Date().getFullYear() };
 };
