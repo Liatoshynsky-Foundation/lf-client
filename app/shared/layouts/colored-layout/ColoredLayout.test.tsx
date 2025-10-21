@@ -1,9 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 
 import ColoredLayout from './ColoredLayout';
-import { styles } from './ColoredLayout.styles';
 
 jest.mock('~/layouts/main-layout/MainLayout', () => {
   return jest.fn(({ children, ...props }: any) => (
@@ -12,13 +10,6 @@ jest.mock('~/layouts/main-layout/MainLayout', () => {
     </div>
   ));
 });
-
-jest.mock('./ColoredLayout.styles', () => ({
-  styles: {
-    container: jest.fn((color) => ({ background: color })),
-    childrenBox: { pt: '100px' }
-  }
-}));
 
 describe('ColoredLayout Component', () => {
   afterEach(() => {
@@ -37,13 +28,15 @@ describe('ColoredLayout Component', () => {
   it('should use default background color when no color prop is provided', () => {
     const defaultColor = '#F2EEE8';
     render(<ColoredLayout />);
-    expect(styles.container).toHaveBeenCalledWith(defaultColor);
+    const ColoredLayoutElement = screen.getByTestId('colored-layout');
+    expect(ColoredLayoutElement).toHaveStyle({ background: defaultColor });
   });
 
   it('should use the provided background color', () => {
-    const customColor = 'rgb(0, 0, 255)'; // blue
+    const customColor = 'rgb(0, 0, 255)';
     render(<ColoredLayout color={customColor} />);
-    expect(styles.container).toHaveBeenCalledWith(customColor);
+    const ColoredLayoutElement = screen.getByTestId('colored-layout');
+    expect(ColoredLayoutElement).toHaveStyle({ background: customColor });
   });
 
   it('should pass down mainLayoutProps to MainLayout component', () => {

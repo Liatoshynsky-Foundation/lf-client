@@ -19,7 +19,7 @@ const ColoredLayout: React.FC<ColoredLayoutProps> = ({
   const { sx: mainLayoutSx, ...otherProps } = mainLayoutProps;
 
   return (
-    <Box sx={[styles.container(color), ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
+    <Box sx={[styles.container(color), ...(Array.isArray(sx) ? sx : [sx])]} data-testid="colored-layout" {...props}>
       <MainLayout
         sx={[styles.childrenBox, ...(Array.isArray(mainLayoutSx) ? mainLayoutSx : [mainLayoutSx])]}
         {...otherProps}
