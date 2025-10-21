@@ -25,6 +25,10 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const page = await pageService.getPageData('privacy-policy', lang);
   const blocks = page?.blocks ?? {};
 
+  if (Object.keys(blocks).length === 0) {
+    return <></>;
+  }
+
   return (
     <MainLayout withLines>
       {blocks.IntroSection && (

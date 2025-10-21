@@ -1,5 +1,8 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+
+import ResearchPage from './page';
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
@@ -7,44 +10,55 @@ jest.mock('next-intl/server', () => ({
 
 jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork', () => {
   const Mock = (props: any) =>
-    React.createElement('div', { 'data-testid': 'mock-hero' }, props?.data ? 'Hero' : 'NoHero');
+    React.createElement('div', { 'data-testid': 'mock-hero' }, props?.data ? 'Hero Section' : 'No Hero');
   Mock.displayName = 'MockResearchAndScientificWork';
   return { __esModule: true, default: Mock };
 });
 
 jest.mock('~/components/tables/WorksTable/WorkTableSelection', () => {
-  const MockWorkTable = (props: any) =>
-    React.createElement(
-      'div',
-      { 'data-testid': 'mock-work-table' },
-      'Work table',
-      props?.Filters ? React.createElement('div', { 'data-testid': 'mock-filters' }, 'filters') : null,
-      props?.Search ? React.createElement('div', { 'data-testid': 'mock-search' }, 'search') : null
-    );
+  const MockWorkTable = () => React.createElement('div', { 'data-testid': 'mock-work-table' }, 'Work Table Section');
   MockWorkTable.displayName = 'MockWorkTable';
-  return { __esModule: true, default: MockWorkTable, WorkTableSection: MockWorkTable };
+  return { __esModule: true, WorkTableSection: MockWorkTable };
 });
 
+const mockGetPageData = jest.fn();
 jest.mock('~/di/container', () => ({
   createRequestContainer: () => ({
     resolve: () => ({
-      getPageData: jest.fn().mockResolvedValue({
-        blocks: {
-          HeroSection: {}
-        }
-      })
+      getPageData: mockGetPageData
     })
   })
 }));
 
 describe('Research Page', () => {
-  it('should render Research page correctly', async () => {
-    await jest.isolateModulesAsync(async () => {
-      const Research = (await import('./page')).default;
-      const element = await Research({ params: { lang: 'en' } } as any);
-      render(element);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-      expect(screen.getByText(/Work table/i)).toBeInTheDocument();
+  it('should render all components when data is successfully fetched', async () => {
+    mockGetPageData.mockResolvedValue({
+      blocks: {
+        HeroSection: { title: 'Some hero data' }
+      }
     });
+    const element = await ResearchPage({ params: { lang: 'uk' } } as any);
+    render(element);
+    expect(await screen.findByText('Hero Section')).toBeInTheDocument();
+    expect(await screen.findByText('Work Table Section')).toBeInTheDocument();
+
+    expect(mockGetPageData).toHaveBeenCalledWith('research', 'uk');
+  });
+
+  it('should render only the table when hero section data is missing', async () => {
+    mockGetPageData.mockResolvedValue({
+      blocks: {}
+    });
+    const element = await ResearchPage({ params: { lang: 'en' } } as any);
+    render(element);
+    expect(screen.queryByText('Hero Section')).not.toBeInTheDocument();
+
+    expect(await screen.findByText('Work Table Section')).toBeInTheDocument();
+
+    expect(mockGetPageData).toHaveBeenCalledWith('research', 'en');
   });
 });
