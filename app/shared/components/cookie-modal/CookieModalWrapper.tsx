@@ -4,16 +4,13 @@ import React, { useState } from 'react';
 import { CookieModal } from './modal/CookieModal';
 import { CookiePreferencesModal } from './preferances/CookiePreferencesModal';
 
-import type { parseDaConsent } from '~/lib/utils/consent';
 import { consentObj } from '~/lib/utils/consent';
+
+type GtagConsentParams = ReturnType<typeof consentObj>;
 
 declare global {
   interface Window {
-    gtag: {
-      (command: 'consent', action: 'update', params: ReturnType<typeof consentObj>): void;
-
-      (command: 'consent', action: 'default', params: ReturnType<typeof parseDaConsent>): void;
-    };
+    gtag: (command: 'consent', action: 'update' | 'default', params: GtagConsentParams) => void;
   }
 }
 
