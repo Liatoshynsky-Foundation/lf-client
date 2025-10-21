@@ -45,12 +45,14 @@ interface SearchProps<T> {
   setSearch: (value: string) => void;
   search: string;
   options: T[];
+  setFilterParams: (params: Record<string, string | number | string[] | null>) => void;
 }
 
 export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
   search,
   setSearch,
-  options
+  options,
+  setFilterParams
 }: SearchProps<T>) => {
   const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
@@ -66,8 +68,9 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     () =>
       debounce((value: string) => {
         setSearch(value);
+        setFilterParams({ search: value });
       }, DEBOUNCE_TIME_MS),
-    [setSearch]
+    [setFilterParams, setSearch]
   );
 
   const handleInputChange = useCallback(
@@ -76,9 +79,11 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         setOpened(true);
       }
       setInputValue(value);
+      setSearch(value);
+      setFilterParams({ search: value });
       debouncedInputChange(value);
     },
-    [debouncedInputChange, opened]
+    [debouncedInputChange, opened, setFilterParams, setSearch]
   );
 
   const handleIconClick = () => {
@@ -90,6 +95,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     setInputValue('');
     setValue(null);
     setOpened(false);
+    setFilterParams({ search: '' });
   };
 
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
@@ -142,7 +148,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     );
   }
 
-  const renderOption = useMemo(() => renderOptionFn, []);
+  const renderOption = useMemo(() => renderOptionFn, [renderOptionFn]);
   const getOptionLabel = (option: T) => {
     if (typeof option.title === 'string') {
       return option.title;

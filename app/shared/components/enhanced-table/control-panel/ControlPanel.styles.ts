@@ -37,7 +37,9 @@ export const ControlPanelStyles = {
     alignItems: 'center',
     gap: 2
   },
-  searchIconButton: (searchActive: boolean) => ({
+  iconButton: (searchActive: boolean) => ({
+    width: 40,
+    height: 40,
     backgroundColor: searchActive ? mainHexPallete.black : mainHexPallete.white,
     color: searchActive ? mainHexPallete.white : mainHexPallete.black,
     border: `1px solid ${mainHexPallete.black}`,

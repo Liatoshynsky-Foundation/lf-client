@@ -29,7 +29,14 @@ describe('Search', () => {
 
   const renderSearch = (opts = options, initialSearch = '') => {
     const setSearch = jest.fn();
-    render(<Search<{ _id: string; title: string }> search={initialSearch} setSearch={setSearch} options={opts} />);
+    render(
+      <Search<{ _id: string; title: string }>
+        search={initialSearch}
+        setSearch={setSearch}
+        options={opts}
+        setFilterParams={jest.fn()}
+      />
+    );
     const input = screen.getByRole('combobox');
     const searchIcon = screen.queryByAltText('search');
     return { setSearch, input, searchIcon };
