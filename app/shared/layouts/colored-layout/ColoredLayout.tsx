@@ -1,29 +1,21 @@
-import { Box, BoxProps } from '@mui/material';
+import { Box, SxProps, Theme } from '@mui/material';
 import React from 'react';
 
 import { styles } from '~/layouts/colored-layout/ColoredLayout.styles';
 import MainLayout, { MainLayoutProps } from '~/layouts/main-layout/MainLayout';
 
-export interface ColoredLayoutProps extends BoxProps {
+export interface ColoredLayoutProps extends MainLayoutProps {
   color?: string;
-  mainLayoutProps?: Omit<MainLayoutProps, 'children'>;
+  wrapperSx?: SxProps<Theme>;
 }
 
-const ColoredLayout: React.FC<ColoredLayoutProps> = ({
-  mainLayoutProps = {},
-  color = '#F2EEE8',
-  children,
-  sx,
-  ...props
-}) => {
-  const { sx: mainLayoutSx, ...otherProps } = mainLayoutProps;
-
+const ColoredLayout: React.FC<ColoredLayoutProps> = ({ color = '#F2EEE8', wrapperSx = {}, children, sx, ...props }) => {
   return (
-    <Box sx={[styles.container(color), ...(Array.isArray(sx) ? sx : [sx])]} data-testid="colored-layout" {...props}>
-      <MainLayout
-        sx={[styles.childrenBox, ...(Array.isArray(mainLayoutSx) ? mainLayoutSx : [mainLayoutSx])]}
-        {...otherProps}
-      >
+    <Box
+      sx={[styles.container(color), ...(Array.isArray(wrapperSx) ? wrapperSx : [wrapperSx])]}
+      data-testid="colored-layout"
+    >
+      <MainLayout sx={[styles.childrenBox, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
         {children}
       </MainLayout>
     </Box>
