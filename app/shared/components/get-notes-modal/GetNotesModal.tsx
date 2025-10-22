@@ -59,6 +59,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
           title={t('confirmation.title')}
           subtitle={t('confirmation.subtitle')}
           btnText={t('confirmation.btnText')}
+          onSubmit={handleClose}
         />
       );
       break;
