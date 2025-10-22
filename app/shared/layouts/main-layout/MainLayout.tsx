@@ -6,12 +6,13 @@ import { styles } from '~/layouts/main-layout/MainLayout.styles';
 
 export interface MainLayoutProps extends BoxProps {
   readonly withLines?: boolean;
+  readonly lineColor?: string;
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ withLines = false, children, sx, ...props }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ withLines = false, lineColor, children, sx, ...props }) => {
   return (
     <Box sx={[styles, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
-      {withLines && <ColumnGuides />}
+      {withLines && <ColumnGuides lineColor={lineColor} />}
       {children}
     </Box>
   );

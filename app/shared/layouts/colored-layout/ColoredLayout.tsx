@@ -9,15 +9,13 @@ export interface ColoredLayoutProps extends MainLayoutProps {
   wrapperSx?: SxProps<Theme>;
 }
 
-const ColoredLayout: React.FC<ColoredLayoutProps> = ({ color = '#F2EEE8', wrapperSx = {}, children, sx, ...props }) => {
+const ColoredLayout: React.FC<ColoredLayoutProps> = ({ color = '#F2EEE8', wrapperSx = {}, children, ...props }) => {
   return (
     <Box
       sx={[styles.container(color), ...(Array.isArray(wrapperSx) ? wrapperSx : [wrapperSx])]}
       data-testid="colored-layout"
     >
-      <MainLayout sx={[styles.childrenBox, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
-        {children}
-      </MainLayout>
+      <MainLayout {...props}>{children}</MainLayout>
     </Box>
   );
 };

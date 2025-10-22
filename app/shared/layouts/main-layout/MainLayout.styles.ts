@@ -1,7 +1,7 @@
 export const styles = {
   width: '100%',
   maxWidth: '1728px',
-  height: '100%',
+  minHeight: 'inherit',
   display: 'grid',
   gridTemplateColumns: {
     xs: 'repeat(4, 1fr)',
