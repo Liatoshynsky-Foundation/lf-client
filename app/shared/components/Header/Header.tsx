@@ -37,7 +37,7 @@ export default function Header() {
       </Box>
 
       <Box sx={styles.navigationContainer}>
-        <NavigationBar navLabels={headerData.navigation} />
+        <NavigationBar navLabels={headerData.navigation} specialNav={headerData.specialNavigation} />
       </Box>
 
       <Box sx={styles.rightActionsContainer}>
