@@ -12,8 +12,7 @@ export function useFetchStaticFilters<T = unknown>(endpoint: string | null) {
     queryKey: ['static-filters', endpoint ?? 'none', locale],
     queryFn: async (): Promise<T | null> => {
       if (!endpoint) return null;
-      const resp = await tableClientService.getTableStaticData<T>(endpoint, locale);
-      return resp;
+      return await tableClientService.getTableStaticData<T>(endpoint, locale);
     },
     options: {
       staleTime: Infinity
