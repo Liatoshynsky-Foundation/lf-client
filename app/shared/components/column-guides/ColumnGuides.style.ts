@@ -24,6 +24,6 @@ export const styles = {
     bottom: 0,
     [side]: 0,
     backgroundColor: lineColor,
-    border: `1px solid ${lineColor}`
+    borderRight: `1px solid ${lineColor}`
   })
 };
