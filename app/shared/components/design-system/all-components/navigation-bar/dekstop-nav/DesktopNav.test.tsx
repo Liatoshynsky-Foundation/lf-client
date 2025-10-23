@@ -35,8 +35,8 @@ const navLabels: NavigationDTO[] = [
     ]
   },
   {
-    title: 'Кабінет-Архів',
-    links: [{ label: 'Кабінет-Архів', href: '/archive', visibility: true }]
+    title: 'Архів',
+    links: [{ label: 'Архів', href: '/archive', visibility: true }]
   },
   {
     title: 'Співпраця',
@@ -70,7 +70,7 @@ describe('DesktopNav', () => {
     render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
 
     expect(screen.getByText('Фундація')).toBeInTheDocument();
-    expect(screen.getByText('Кабінет-Архів')).toBeInTheDocument();
+    expect(screen.getByText('Архів')).toBeInTheDocument();
     expect(screen.getByText('Співпраця')).toBeInTheDocument();
     expect(screen.getByText('Спеціальна')).toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe('DesktopNav', () => {
   it('should assign correct href to single-link navigation items', () => {
     render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
 
-    const archiveLink = screen.getByText('Кабінет-Архів').closest('a');
+    const archiveLink = screen.getByText('Архів').closest('a');
     const collabLink = screen.getByText('Співпраця').closest('a');
 
     expect(archiveLink).toHaveAttribute('href', '/archive');
