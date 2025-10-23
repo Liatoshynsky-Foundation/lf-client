@@ -1,7 +1,10 @@
 import React from 'react';
 
-import { createSeoMeta } from '~/lib/utils/createSeoMeta';
-import TermsOfUse from '~/shared/components/blocks/terms-of-use/TermsOfUse';
+import TermsOfUse from '~/components/blocks/terms-of-use/TermsOfUse';
+
+import { createSeoMeta } from '~/utils/createSeoMeta';
+
+import MainLayout from '~/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
   title: 'Умови користування сайтом',
@@ -11,5 +14,9 @@ export const metadata = createSeoMeta({
 });
 
 export default function Terms() {
-  return <TermsOfUse />;
+  return (
+    <MainLayout withLines>
+      <TermsOfUse />
+    </MainLayout>
+  );
 }
