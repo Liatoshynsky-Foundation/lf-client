@@ -24,6 +24,7 @@ export const styles = {
     bottom: 0,
     [side]: 0,
     backgroundColor: lineColor,
+    maxWidth: '1px',
     borderRight: `1px solid ${lineColor}`
   })
 };
