@@ -22,7 +22,7 @@
       "foundationHome": "About the foundation",
       "news": "News",
       "mediaAboutUs": "Media about us",
-      "archive": "Cabinet-Archive",
+      "archive": "Archive",
       "collaboration": "Cooperation"
     }
   },
@@ -114,8 +114,8 @@
         "full": "View the sheet music library"
       },
       "archive": {
-        "short": "View the archive",
-        "full": "View the Archive Cabinet"
+        "short": "View the Archive",
+        "full": "View the Archive"
       }
     },
     "seeMore": "See more"
