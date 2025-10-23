@@ -14,7 +14,7 @@ describe('isProductionMode', () => {
   });
 
   afterEach(() => {
-    if (originalNodeEnv !== undefined) {
+    if (originalNodeEnv) {
       (process.env as MockedProcessEnv).NODE_ENV = originalNodeEnv;
     } else {
       delete (process.env as MockedProcessEnv).NODE_ENV;
