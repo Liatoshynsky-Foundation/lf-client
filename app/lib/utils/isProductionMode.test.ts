@@ -1,3 +1,5 @@
+jest.unmock('~/utils/isProductionMode');
+
 import { isProductionMode } from './isProductionMode';
 
 type MockedProcessEnv = {
