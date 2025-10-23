@@ -56,6 +56,10 @@ export const style = {
     '& input[type=number]::-webkit-inner-spin-button': {
       WebkitAppearance: 'none',
       margin: 0
+    },
+    '& input::placeholder': {
+      color: mainHexPallete.brown[700],
+      opacity: 1
     }
   },
   moneyInputError: {
