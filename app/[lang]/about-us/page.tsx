@@ -10,9 +10,11 @@ import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/Liatoshy
 import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
+import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
@@ -40,6 +42,10 @@ export default async function Home({ params }: Readonly<Language>) {
   ]);
 
   if (!page) return <Box />;
+
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
+  }
 
   return (
     <MainLayout withLines>

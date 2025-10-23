@@ -3,9 +3,11 @@ import React from 'react';
 
 import IntroSection from '~/components/blocks/privacy-policy/intro-section/IntroSection';
 import PolicySection from '~/components/blocks/privacy-policy/policy-section/PolicySection';
+import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
@@ -27,6 +29,10 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
 
   if (Object.keys(blocks).length === 0) {
     return <></>;
+  }
+
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
   }
 
   return (
