@@ -42,8 +42,10 @@ function PaymentDetails() {
 
             {isIban ? (
               <Typography variant="customSemiBold20" sx={styles.iban}>
-                {selectedPaymentDetails[key]}
-                <IconButton size="small" sx={styles.copyIcon} onClick={handleCopyIban}>
+                <Typography component="span" variant="customSemiBold20" sx={styles.ibanText}>
+                  {selectedPaymentDetails[key]}
+                </Typography>
+                <IconButton size="small" onClick={handleCopyIban}>
                   <SvgImage src="/icons/content-copy.svg" alt="content copy" width={24} height={24} />
                 </IconButton>
               </Typography>

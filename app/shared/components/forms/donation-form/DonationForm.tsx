@@ -42,9 +42,11 @@ function DonationForm() {
 
   const Buttons = [
     <Button key="donation" onClick={() => setSelected('donation')}>
-      <Typography variant="customSemiBold18">{t('donationSwitch')}</Typography>
+      <Typography sx={style.btnGroupText} variant="customSemiBold18">
+        {t('donationSwitch')}
+      </Typography>
     </Button>,
-    <Button key="subscription" onClick={() => setSelected('subscription')}>
+    <Button sx={style.btnGroupText} key="subscription" onClick={() => setSelected('subscription')}>
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];

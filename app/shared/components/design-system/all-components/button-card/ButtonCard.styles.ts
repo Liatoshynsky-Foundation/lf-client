@@ -1,7 +1,7 @@
 export const styles = {
   container: {
     position: 'relative',
-    width: '296px',
+    width: { xs: '270px', sm: '90%', md: '230px', lg: '272px', xl: '296px' },
     height: '351px',
     cursor: 'pointer',
     overflow: 'hidden',
@@ -21,8 +21,8 @@ export const styles = {
   },
   content: {
     position: 'relative',
-    padding: '48px 40px',
-    width: '296px',
+    padding: { xs: '25px 20px', sm: '40px 30px', lg: '48px 40px' },
+    width: { xs: '100%', sm: '296px' },
     height: '351px',
     display: 'flex',
     alignItems: 'flex-start',

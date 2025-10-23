@@ -47,7 +47,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
 
   return (
     <Box sx={styles.gridContainer}>
-      <SectionTitle title={t('title')} mb={48} />
+      <SectionTitle title={t('title')} mb={48} sx={styles.title} />
       <Box sx={styles.contacts}>
         <Typography sx={styles.typography}>{t('subtitle.question')}</Typography>
         <Typography sx={styles.typography}>{t('subtitle.answer')}</Typography>

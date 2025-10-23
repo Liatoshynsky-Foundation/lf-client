@@ -36,7 +36,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
 
   return (
     <Box sx={styles.gridContainer}>
-      <SectionTitle title={title} mb={52} />
+      <SectionTitle title={title} mb={52} sx={styles.title} />
       <TipTapContent
         data={subtitle}
         nodeRenderers={{
