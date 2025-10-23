@@ -145,7 +145,7 @@ export default function MusicTableSection() {
       setCategoryOptions(staticFilters.categories ?? []);
       setYearOptions([defaultMinYear, defaultMaxYear]);
     }
-  }, [staticFilters]);
+  }, [staticFilters, defaultMinYear, defaultMaxYear]);
 
   const handleOpenModal = ({ composition, notes }: CompositionWithNotes) => {
     setCompositionName(composition);
