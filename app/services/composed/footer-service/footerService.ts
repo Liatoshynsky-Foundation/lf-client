@@ -1,12 +1,13 @@
 import type { Locale } from 'next-intl';
 
 import type { FooterServiceDeps } from '~/domain/services/footerService.type';
+import { LocalizeSchema } from '~/validators/constants';
 import {
   createLocalizedBrandingInfoSchema,
   createLocalizedContactInfoSchema,
   createLocalizedPublicInfoSchema
 } from '~/validators/foundationInfo.schema';
-import { createLocalizedNavigationSchema } from '~/validators/navigation.schema';
+import { navigationSchema } from '~/validators/navigation.schema';
 
 export const createFooterService = ({ navigationService, foundationInfoService }: FooterServiceDeps) => ({
   async getFooterData(locale: Locale) {
@@ -21,7 +22,7 @@ export const createFooterService = ({ navigationService, foundationInfoService }
     const addressInfo = createLocalizedContactInfoSchema(locale).parse(contactInfo);
     const brandingInfo = createLocalizedBrandingInfoSchema(locale).parse(brandingInfoRaw);
     const publicInfo = createLocalizedPublicInfoSchema(locale).parse(publicInfoRaw);
-    const navigationData = navigationRaw.map((nav) => createLocalizedNavigationSchema(locale).parse(nav));
+    const navigationData = navigationRaw.map((nav) => LocalizeSchema(navigationSchema, locale).parse(nav));
 
     return {
       contacts: {
