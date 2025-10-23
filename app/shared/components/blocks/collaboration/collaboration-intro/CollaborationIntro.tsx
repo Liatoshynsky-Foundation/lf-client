@@ -6,9 +6,9 @@ import { TipTapDoc } from '~/types/types/common.types';
 import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
 
 interface CollaborationIntroProps {
-  title: string;
-  subtitle: string;
-  content: TipTapDoc;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly content: TipTapDoc;
 }
 
 export default function CollaborationIntro({ title, subtitle, content }: CollaborationIntroProps) {
