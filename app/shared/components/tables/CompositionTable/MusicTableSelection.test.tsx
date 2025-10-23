@@ -92,7 +92,6 @@ type MusicTableFiltersProps = {
   onClearAllFilters: () => void;
   minYear: number;
   maxYear: number;
-  isAnyFilterActive: boolean;
 };
 
 jest.mock('./filters/MusicTableFilters', () => {
