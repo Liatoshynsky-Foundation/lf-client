@@ -36,7 +36,7 @@ export const ControlPanelStyles = {
     }
   },
   filterButton: {
-    ['@media (max-width:400px)']: {
+    '@media (max-width:400px)': {
       '& .filtersLabel': {
         display: 'none'
       },
