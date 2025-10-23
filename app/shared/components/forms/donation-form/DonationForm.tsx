@@ -108,12 +108,11 @@ function DonationForm() {
       id={item.toString()}
       variant="outlined"
       onClick={() => {
-        const newSum = (donationSum || 0) + item;
-        setDonationSum(newSum);
-        if (touched) setHasError(newSum === 0);
+        setDonationSum(item);
+        if (touched) setHasError(donationSum === 0);
       }}
     >
-      <Typography variant="customSemiBold18">+{item}</Typography>
+      <Typography variant="customSemiBold18">{item}</Typography>
       <Typography variant="customMedium16" sx={style.currencySuggestion}>
         {currency}
       </Typography>
