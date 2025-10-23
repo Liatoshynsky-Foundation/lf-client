@@ -16,14 +16,23 @@ export const styles = {
       case GetNotesState.FORM:
       case GetNotesState.CONFIRM:
         return {
-          maxWidth: 'min(70vw, 744px)'
+          maxWidth: {
+            xs: '90vw',
+            sm: 'min(85vw, 600px)',
+            md: 'min(70vw, 744px)'
+          }
         };
     }
   },
   paper: {
-    maxHeight: '80vh',
+    maxHeight: '95vh',
     minHeight: '475px',
-    padding: '32px 72px 72px 72px'
+    padding: {
+      xs: '16px 24px 24px 24px',
+      sm: '24px 48px 48px 48px',
+      md: '32px 72px 72px 72px'
+    },
+    minWidth: 'min(40vw, 768px)'
   },
   headerContainer: {
     display: 'flex',
