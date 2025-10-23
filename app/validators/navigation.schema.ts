@@ -12,12 +12,31 @@ export const navigationSchema = z.object({
   links: z.array(navigationLinkSchema)
 });
 
-export const createLocalizedNavigationSchema = (locale: Locale) =>
-  navigationSchema.transform((data) => ({
-    title: data.title[locale],
-    links: data.links.map((link) => ({
-      label: link.label[locale],
-      href: link.href,
-      visibility: link.visibility
-    }))
-  }));
+export function LocalizeSchemaWithSingleLink(locale: Locale) {
+  return navigationSchema.transform((data) => {
+    const localizedData = {
+      ...data,
+      title: data.title[locale],
+      links: data.links?.map((link) => ({
+        ...link,
+        label: link.label[locale]
+      }))
+    };
+
+    if (localizedData.links?.length === 1) {
+      const [singleLink] = localizedData.links;
+      return {
+        ...localizedData,
+        title: singleLink.label,
+        links: [
+          {
+            ...singleLink,
+            label: localizedData.title
+          }
+        ]
+      };
+    }
+
+    return localizedData;
+  });
+}

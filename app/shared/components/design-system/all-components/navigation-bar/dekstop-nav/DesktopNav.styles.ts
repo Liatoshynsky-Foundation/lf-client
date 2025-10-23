@@ -1,4 +1,4 @@
-import { backgroundColors } from '~/ds-components/theme/colors';
+import { backgroundColors, mainHexPallete } from '~/ds-components/theme/colors';
 
 export const styles = {
   iconButtonSx: {
@@ -27,7 +27,19 @@ export const styles = {
     backgroundColor: backgroundColors.offWhite
   },
   buttonGroupBackground: {
-    border: `6px solid ${backgroundColors.white}`,
-    borderRadius: '999px'
+    backgroundColor: backgroundColors.white,
+    padding: '6px',
+    borderRadius: '999px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
+  },
+  warInUkraineButton: {
+    backgroundColor: mainHexPallete.blue[900],
+    color: mainHexPallete.white,
+    '&:hover': {
+      backgroundColor: mainHexPallete.black
+    }
   }
 };

@@ -21,7 +21,8 @@ export const styles = {
     px: {
       xs: '24px',
       sm: '56px',
-      md: '72px'
+      lg: '67px',
+      xl: '72px'
     },
     pointerEvents: 'auto'
   }),
@@ -37,7 +38,7 @@ export const styles = {
     }
   },
   navigationContainer: {
-    marginRight: { lg: '31px', xl: '35px', xxl: '70px' },
+    marginRight: { xl: '35px', xxl: '70px' },
     fontSize: { md: '15px', lg: '16px' }
   },
   rightActionsContainer: {
