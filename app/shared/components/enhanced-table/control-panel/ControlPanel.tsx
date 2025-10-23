@@ -94,8 +94,14 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
       invisible={activeFiltersCount === 0}
       sx={ControlPanelStyles.filtersBadge}
     >
-      <Button variant="outlined" size="medium" onClick={toggleFilters} startIcon={<Filter />}>
-        {t('controls.filters')}
+      <Button
+        variant="outlined"
+        size="medium"
+        onClick={toggleFilters}
+        startIcon={<Filter width="28px" height="28px" />}
+        sx={ControlPanelStyles.filterButton}
+      >
+        <span className="filtersLabel">{t('controls.filters')}</span>
       </Button>
     </Badge>
   );

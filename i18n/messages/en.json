@@ -155,6 +155,10 @@
       },
       "name": {
         "composition": "All compositions"
+      },
+      "notFound": {
+        "title": "OoPs! NoThinG HeRe",
+        "description": "Our archivist cat has searched every drawer. Try another query"
       }
     },
     "buttons": {
