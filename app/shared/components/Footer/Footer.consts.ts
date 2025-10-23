@@ -41,7 +41,7 @@ export const sections = [
   },
   {
     title: 'МУЗЕЙ',
-    links: [{ label: 'Кабінет-архів', href: '/museum' }]
+    links: [{ label: 'Архів', href: '/museum' }]
   }
 ];
 

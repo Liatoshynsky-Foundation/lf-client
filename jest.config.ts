@@ -41,6 +41,7 @@ const config: Config = {
     '^~/utils/(.*)$': '<rootDir>/app/lib/utils/$1',
     '^~/ds-components/(.*)$': '<rootDir>/app/shared/components/design-system/all-components/$1',
     '^~/components/(.*)$': '<rootDir>/app/shared/components/$1',
+    '^~/layouts/(.*)$': '<rootDir>/app/shared/layouts/$1',
     '^~/hooks/(.*)$': '<rootDir>/app/shared/hooks/$1',
     '^~/(.*)$': '<rootDir>/app/$1'
   },

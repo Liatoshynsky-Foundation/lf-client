@@ -5,9 +5,10 @@ import ResearchAndScientificWork from '~/components/research-and-scientific-work
 import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSelection';
 
 import { Language } from '~/types/types/language';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 
 import { createRequestContainer } from '~/di/container';
-import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import MainLayout from '~/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
   title: 'Дослідження та наукові роботи - Фундація Лятошинського',
@@ -24,9 +25,9 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   const page = await pageService.getPageData('research', lang);
 
   return (
-    <>
+    <MainLayout>
       {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
       <WorkTableSection lang={lang} />
-    </>
+    </MainLayout>
   );
 }

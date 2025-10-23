@@ -7,5 +7,6 @@ export type SupportButtonData = {
 
 export type HeaderData = {
   navigation: NavigationDTO[];
+  specialNavigation: NavigationDTO | null;
   supportButtonLink: string;
 };

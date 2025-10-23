@@ -44,7 +44,7 @@ export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, 
   return z.union([z.array(schema), schema]).transform(localizeValue);
 }
 
-export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _id: any }>) {
+export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _id: typeof mongoObjectIdSchema }>) {
   return schema.omit({ _id: true });
 }
 
