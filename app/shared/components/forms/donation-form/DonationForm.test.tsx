@@ -67,13 +67,6 @@ describe('DonationForm', () => {
     expect(screen.getByText('Підписатися')).toBeInTheDocument();
   });
 
-  it('should add suggest sum to input', () => {
-    fireEvent.click(screen.getByText('+200'));
-    expect(screen.getByDisplayValue('200')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('+500'));
-    expect(screen.getByDisplayValue('700')).toBeInTheDocument();
-  });
-
   it('should show entered value', () => {
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '100' } });
@@ -84,7 +77,7 @@ describe('DonationForm', () => {
   });
 
   it('should switch currency', () => {
-    fireEvent.click(screen.getByText('+200'));
+    fireEvent.click(screen.getByText('200'));
     expect(screen.getByDisplayValue('200')).toBeInTheDocument();
 
     fireEvent.mouseDown(screen.getByRole('combobox'));
