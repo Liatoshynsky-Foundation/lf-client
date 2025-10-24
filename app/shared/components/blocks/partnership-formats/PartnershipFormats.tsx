@@ -59,7 +59,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
         )}
         <Box sx={styles.emptyColumn} />
         {data.row1Card2 && (
-          <Box sx={styles.card}>
+          <Box sx={[styles.card, styles.card2]}>
             <CardWithText icon={data.row1Card2.icon} title={data.row1Card2.title} list={data.row1Card2.list} />
           </Box>
         )}
@@ -70,7 +70,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
               alt={data.row1Image.alt}
               width={294}
               height={386}
-              borderWidth={data.row1Image.borderWidth}
+              borderWidth={8}
             />
           </Box>
         )}
@@ -84,12 +84,12 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
               alt={data.row2Image.alt}
               width={618}
               height={386}
-              borderWidth={data.row2Image.borderWidth}
+              borderWidth={8}
             />
           </Box>
         )}
         {data.row2Card1 && (
-          <Box sx={styles.card}>
+          <Box sx={[styles.card, styles.card5]}>
             <CardWithText icon={data.row2Card1.icon} title={data.row2Card1.title} list={data.row2Card1.list} />
           </Box>
         )}

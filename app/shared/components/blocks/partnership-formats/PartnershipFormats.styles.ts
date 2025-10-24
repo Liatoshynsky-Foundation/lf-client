@@ -46,7 +46,12 @@ export const styles = {
   card1: {
     alignSelf: 'end'
   },
-  card2: {},
+  card2: {
+    marginTop: '20px'
+  },
+  card5: {
+    marginTop: '15px'
+  },
   emptyColumn: {
     gridColumn: {
       xs: '1 / -1',
