@@ -18,16 +18,8 @@ export const styles = {
   row1: {
     display: 'grid',
     height: '427px',
-    gridTemplateColumns: {
-      xs: '1fr',
-      sm: 'repeat(4, 1fr)'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    gap: {
-      xs: '16px',
-      sm: '20px',
-      md: '24px'
-    },
     mb: {
       xs: '24px',
       sm: '32px',
@@ -37,17 +29,8 @@ export const styles = {
   row2: {
     display: 'grid',
     height: '427px',
-    gridTemplateColumns: {
-      xs: '1fr',
-      sm: 'repeat(2, 1fr)',
-      md: 'repeat(4, 1fr)'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    gap: {
-      xs: '16px',
-      sm: '20px',
-      md: '24px'
-    },
     mb: {
       xs: '24px',
       sm: '32px',
@@ -57,7 +40,7 @@ export const styles = {
   card: {
     gridColumn: {
       xs: '1 / -1',
-      sm: 'span 1'
+      sm: 'span 3'
     }
   },
   card1: {
@@ -67,7 +50,7 @@ export const styles = {
   emptyColumn: {
     gridColumn: {
       xs: '1 / -1',
-      sm: 'span 1'
+      sm: 'span 3'
     },
     display: {
       xs: 'none',
@@ -78,21 +61,13 @@ export const styles = {
     alignSelf: 'end',
     gridColumn: {
       xs: '1 / -1',
-      sm: 'span 2'
+      sm: 'span 6'
     }
   },
   row3Container: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: '1fr',
-      sm: 'repeat(4, 1fr)'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    gap: {
-      xs: '16px',
-      sm: '20px',
-      md: '24px'
-    },
     mb: {
       xs: '24px',
       sm: '32px',
@@ -102,7 +77,7 @@ export const styles = {
   row3Text: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '3 / span 12'
+      sm: '6 / 13'
     }
   },
   row4Container: {
