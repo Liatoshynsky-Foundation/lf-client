@@ -1,12 +1,11 @@
 'use client';
 
-import { Box, useMediaQuery } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import React from 'react';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 
-import { filterGridHelper } from './MusicTableFilters.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
@@ -50,55 +49,17 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
-  const [hasCategorySelected, setHasCategorySelected] = useState<boolean>(categoryFilter.length > 0);
-  const [hasGenreSelected, setHasGenreSelected] = useState<boolean>(genreFilter.length > 0);
-  const [hasYearSelected, setHasYearSelected] = useState<boolean>(
-    yearFilter[0] !== undefined && yearFilter[1] !== undefined
-  );
-  const isLess350 = useMediaQuery('(max-width:350px)');
-  const isLess420 = useMediaQuery('(max-width:419px)');
-  const isLess450 = useMediaQuery('(max-width:450px)');
-  const isBetween420And550 = useMediaQuery('(min-width:420px) and (max-width:549px)');
-  const isGreater550 = useMediaQuery('(min-width:550px)');
-  const isGreater700 = useMediaQuery('(min-width:701px)');
-  const isGreater500 = useMediaQuery('(min-width:501px)');
-
-  useEffect(() => {
-    setHasCategorySelected(categoryFilter.length > 0);
-  }, [categoryFilter]);
-
-  useEffect(() => {
-    setHasGenreSelected(genreFilter.length > 0);
-  }, [genreFilter]);
-
-  useEffect(() => {
-    setHasYearSelected(yearFilter[0] !== undefined && yearFilter[1] !== undefined);
-  }, [yearFilter]);
-
-  const screenSize = {
-    isLess350,
-    isLess420,
-    isLess450,
-    isGreater500,
-    isGreater700,
-    isBetween420And550,
-    isGreater550
-  };
-
-  const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected, hasYearSelected });
   return (
     <Box
       sx={{
         width: '100%',
-        display: 'grid',
+        display: 'flex',
+        flexWrap: 'wrap',
         gap: 2,
-        gridTemplateColumns: layout.gridTemplateColumns,
-        gridTemplateRows: layout.gridTemplateRows,
-        alignContent: 'start',
-        alignItems: 'start'
+        alignItems: 'flex-start'
       }}
     >
-      <Box sx={layout.containers.category}>
+      <Box sx={{ minHeight: '40px' }}>
         <FilterSelect
           label={labelCategory}
           options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -110,8 +71,9 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={layout.containers.genre}>
+      <Box>
         <FilterSelect
+          sx={{ minHeight: '40px' }}
           label={labelGenre}
           options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
           defaultValues={genreFilter}
@@ -122,7 +84,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={layout.containers.year}>
+      <Box>
         <YearNumericFilter
           label={yearLabel ?? 'Year'}
           value={yearFilter}
@@ -133,7 +95,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ ...layout.containers.clear }}>
+      <Box>
         {onClearAllFilters && isAnyFilterActive && (
           <IconButton
             type={IconButtonVariant.outlined}

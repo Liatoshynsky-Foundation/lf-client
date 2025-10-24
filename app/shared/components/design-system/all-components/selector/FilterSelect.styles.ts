@@ -27,6 +27,7 @@ export const filterSelectStyles = {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      minHeight: '40px',
       gap: '8px',
       borderRadius: '8px',
       padding: '6px 8px 6px 16px',
