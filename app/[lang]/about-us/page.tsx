@@ -12,9 +12,10 @@ import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
 import { Language } from '~/types/types/language';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 
 import { createRequestContainer } from '~/di/container';
-import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import MainLayout from '~/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
   title: 'Фундація Лятошинського',
@@ -41,7 +42,7 @@ export default async function Home({ params }: Readonly<Language>) {
   if (!page) return <Box />;
 
   return (
-    <>
+    <MainLayout withLines>
       {page.blocks.IntroSection && <IntroSection data={page.blocks.IntroSection} />}
       {page.blocks.FoundationInfo && <FoundationInfo data={page.blocks.FoundationInfo} />}
       {page.blocks.OurMission && <OurMission data={page.blocks.OurMission} />}
@@ -49,6 +50,6 @@ export default async function Home({ params }: Readonly<Language>) {
       {page.blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={page.blocks.LiatoshynskyOffice} t={t} />}
       {page.blocks.WhatWeDo && <WhatWeDo data={page.blocks.WhatWeDo} />}
       {page.blocks.FoundationFounders && <FoundationFounders data={page.blocks.FoundationFounders} />}
-    </>
+    </MainLayout>
   );
 }

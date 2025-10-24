@@ -20,6 +20,7 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './MusicTableCells';
+import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
@@ -145,7 +146,7 @@ export default function MusicTableSection() {
       setCategoryOptions(staticFilters.categories ?? []);
       setYearOptions([defaultMinYear, defaultMaxYear]);
     }
-  }, [staticFilters]);
+  }, [staticFilters, defaultMinYear, defaultMaxYear]);
 
   const handleOpenModal = ({ composition, notes }: CompositionWithNotes) => {
     setCompositionName(composition);
@@ -219,6 +220,7 @@ export default function MusicTableSection() {
         onColumnFiltersChange={setColumnFilters}
         columnWidths={columnWidths}
         itemsPerPage={10}
+        noResults={<TableNoResultsFound />}
         tableName={t('name.composition')}
         Search={
           <Search<TitlesDTO>

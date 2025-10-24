@@ -23,7 +23,7 @@ export const styles = {
   },
   buttonGroup: {
     maxHeight: '40px',
-    minWidth: '615px',
+    minWidth: '553px',
     backgroundColor: backgroundColors.offWhite
   },
   buttonGroupBackground: {

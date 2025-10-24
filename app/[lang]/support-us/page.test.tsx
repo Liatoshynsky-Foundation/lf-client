@@ -14,7 +14,7 @@ jest.mock('~/components/blocks/FAQ/FAQ', () => {
   return MockFAQ;
 });
 
-jest.mock('~/shared/components/blocks/support-foundation/SupportFoundation', () => {
+jest.mock('~/components/blocks/support-foundation/SupportFoundation', () => {
   const MockSupportFoundation = () => <div>Support Foundation</div>;
   MockSupportFoundation.displayName = 'MockSupportFoundation';
   return MockSupportFoundation;
