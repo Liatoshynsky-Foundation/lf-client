@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useLocale } from 'next-intl';
 
 import { usePathname, useRouter } from '../../../../../../i18n/navigation';
@@ -18,12 +18,13 @@ jest.mock('~/shared/components/svg-image/SvgImage', () => ({
 }));
 
 describe('LanguageSwitcher', () => {
+  const mockReplace = jest.fn();
   const mockPush = jest.fn();
   const mockPathname = '/test-path';
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (useRouter as jest.Mock).mockReturnValue({ replace: mockReplace, push: mockPush });
     (usePathname as jest.Mock).mockReturnValue(mockPathname);
   });
 
@@ -41,7 +42,7 @@ describe('LanguageSwitcher', () => {
 
       const englishOption = screen.getByText('English');
       fireEvent.click(englishOption);
-      expect(mockPush).toHaveBeenCalledWith(mockPathname, { locale: 'en' });
+      expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'en', scroll: false });
     });
 
     it('should show check icon for current locale', () => {
@@ -64,7 +65,7 @@ describe('LanguageSwitcher', () => {
       const englishOption = screen.getByText('English');
       fireEvent.click(englishOption);
 
-      expect(mockPush).not.toHaveBeenCalled();
+      expect(mockReplace).not.toHaveBeenCalled();
     });
   });
 
@@ -79,15 +80,17 @@ describe('LanguageSwitcher', () => {
       expect(toggleButton.textContent).toContain('Українською');
 
       fireEvent.click(toggleButton);
-      expect(mockPush).toHaveBeenCalledWith(mockPathname, { locale: 'uk' });
+      expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'uk', scroll: false });
     });
   });
 
-  it('should close menu after selecting a language', () => {
+  it('should close menu after selecting a language', async () => {
     (useLocale as jest.Mock).mockReturnValue('uk');
     render(<LanguageSwitcher variant="icon" />);
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByText('English'));
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
   });
 });
