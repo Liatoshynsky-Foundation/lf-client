@@ -129,12 +129,16 @@ describe('ControlPanel', () => {
 
       expect(searchButton).toBeInTheDocument();
 
+      if (!searchButton) {
+        throw new Error('Search button on Control panel not found');
+      }
+
       expect(screen.queryByTestId('search-component')).not.toBeInTheDocument();
 
-      fireEvent.click(searchButton!);
+      fireEvent.click(searchButton);
       expect(screen.getByTestId('search-component')).toBeInTheDocument();
 
-      fireEvent.click(searchButton!);
+      fireEvent.click(searchButton);
       expect(screen.queryByTestId('search-component')).not.toBeInTheDocument();
     });
   });
