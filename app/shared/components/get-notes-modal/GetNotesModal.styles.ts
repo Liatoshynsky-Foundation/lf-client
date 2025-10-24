@@ -24,15 +24,25 @@ export const styles = {
         };
     }
   },
-  paper: {
-    maxHeight: '95vh',
-    minHeight: '475px',
-    padding: {
-      xs: '16px 24px 24px 24px',
-      sm: '24px 48px 48px 48px',
-      md: '32px 72px 72px 72px'
-    },
-    minWidth: 'min(40vw, 768px)'
+  paper: () => {
+    return {
+      maxHeight: '95vh',
+      minHeight: '475px',
+      padding: {
+        xs: '16px 24px 24px 24px',
+        sm: '24px 48px 48px 48px',
+        md: '72px 72px 72px 72px'
+      },
+      minWidth: {
+        xs: '90vw',
+        sm: 'min(60vw, 768px)',
+        md: 'min(40vw, 768px)'
+      },
+      '@media (max-height: 800px) and (max-width:600px)': {
+        height: 'calc(100vh - 32px)',
+        overflowY: 'scroll'
+      }
+    };
   },
   headerContainer: {
     display: 'flex',

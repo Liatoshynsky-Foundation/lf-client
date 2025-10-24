@@ -8,6 +8,8 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './NoteListItem.styles';
 import { Notes } from '~/types/types/getNotes.types';
 
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 type NotesListItemProps = {
   note: Notes;
   buttonText: 'freeNotesButton' | 'paidNotesButton';
@@ -17,13 +19,14 @@ type NotesListItemProps = {
 
 const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProps) => {
   const t = useTranslations('getNotes.notesList');
+  const { isMobile, isTablet } = useBreakpoints();
 
   const title = note.url.split('/').pop()?.split('.')[0];
   const date = new Date(note.dateUploaded).toLocaleDateString();
 
   const buttonComponent = (
-    <Button variant="outlined" endIcon={endIcon} onClick={handler}>
-      {t(buttonText)}
+    <Button variant="outlined" endIcon={!isMobile && endIcon} onClick={handler}>
+      {isMobile ? endIcon : t(buttonText)}
     </Button>
   );
 
@@ -35,7 +38,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
           {title}
         </Typography>
       </Box>
-      <Typography variant="customMedium16">{date}</Typography>
+      {!isMobile && !isTablet && <Typography variant="customMedium16">{date}</Typography>}
       {note.isFree ? (
         <a href={note.url} target="_blank" rel="noopener noreferrer">
           {buttonComponent}

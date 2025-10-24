@@ -66,7 +66,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   }
 
   const paper = () => (
-    <PaperComponent sx={{ ...styles.paper, ...styles.maxWidth(state) }}>
+    <PaperComponent sx={{ ...styles.paper(), ...styles.maxWidth(state) }}>
       <Box sx={styles.headerContainer}>
         <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
           <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
