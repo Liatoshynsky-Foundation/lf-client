@@ -59,7 +59,7 @@ export function MusicTableFilters({
         alignItems: 'flex-start'
       }}
     >
-      <Box sx={{ minHeight: '40px' }}>
+      <Box>
         <FilterSelect
           label={labelCategory}
           options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -73,7 +73,6 @@ export function MusicTableFilters({
 
       <Box>
         <FilterSelect
-          sx={{ minHeight: '40px' }}
           label={labelGenre}
           options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
           defaultValues={genreFilter}
