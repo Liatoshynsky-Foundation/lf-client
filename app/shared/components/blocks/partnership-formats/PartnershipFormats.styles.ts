@@ -15,18 +15,14 @@ export const styles = {
       md: '75px'
     }
   },
-  row: {
+  row1: {
     display: 'grid',
+    height: '427px',
     gridTemplateColumns: {
       xs: '1fr',
-      sm: 'repeat(2, 1fr)',
-      md: 'repeat(4, 1fr)'
+      sm: 'repeat(4, 1fr)'
     },
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '2 / -1',
-      md: '3 / -2'
-    },
+    gridColumn: '1 / -1',
     gap: {
       xs: '16px',
       sm: '20px',
@@ -38,17 +34,15 @@ export const styles = {
       md: '40px'
     }
   },
-  row1: {
+  row2: {
     display: 'grid',
+    height: '427px',
     gridTemplateColumns: {
       xs: '1fr',
-      sm: 'repeat(4, 1fr)'
+      sm: 'repeat(2, 1fr)',
+      md: 'repeat(4, 1fr)'
     },
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '2 / -1',
-      md: '3 / -2'
-    },
+    gridColumn: '1 / -1',
     gap: {
       xs: '16px',
       sm: '20px',
@@ -66,6 +60,10 @@ export const styles = {
       sm: 'span 1'
     }
   },
+  card1: {
+    alignSelf: 'end'
+  },
+  card2: {},
   emptyColumn: {
     gridColumn: {
       xs: '1 / -1',
@@ -77,6 +75,7 @@ export const styles = {
     }
   },
   row2Image: {
+    alignSelf: 'end',
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 2'
@@ -88,11 +87,7 @@ export const styles = {
       xs: '1fr',
       sm: 'repeat(4, 1fr)'
     },
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '2 / -1',
-      md: '3 / -2'
-    },
+    gridColumn: '1 / -1',
     gap: {
       xs: '16px',
       sm: '20px',
@@ -107,17 +102,13 @@ export const styles = {
   row3Text: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '3 / 5'
+      sm: '3 / span 12'
     }
   },
   row4Container: {
     display: 'flex',
     justifyContent: 'center',
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '2 / -1',
-      md: '3 / -2'
-    },
+    gridColumn: '1 / -1',
     mb: {
       xs: '24px',
       sm: '32px',

@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 import ModalComponent from '~/components/modal-component/ModalComponent';
@@ -52,7 +53,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
       <Box sx={styles.row1}>
         {data.row1Card1 && (
-          <Box sx={styles.card}>
+          <Box sx={[styles.card, styles.card1]}>
             <CardWithText icon={data.row1Card1.icon} title={data.row1Card1.title} list={data.row1Card1.list} />
           </Box>
         )}
@@ -67,22 +68,22 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
             <ImageWithBorder
               image={data.row1Image.src}
               alt={data.row1Image.alt}
-              width={data.row1Image.width}
-              height={data.row1Image.height}
+              width={294}
+              height={386}
               borderWidth={data.row1Image.borderWidth}
             />
           </Box>
         )}
       </Box>
 
-      <Box sx={styles.row}>
+      <Box sx={styles.row2}>
         {data.row2Image && (
           <Box sx={styles.row2Image}>
             <ImageWithBorder
               image={data.row2Image.src}
               alt={data.row2Image.alt}
-              width={data.row2Image.width}
-              height={data.row2Image.height}
+              width={618}
+              height={386}
               borderWidth={data.row2Image.borderWidth}
             />
           </Box>
@@ -109,7 +110,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
       {data.row4ButtonText && (
         <Box sx={styles.row4Container}>
-          <Button variant="contained" size="large" onClick={handleOpenModal}>
+          <Button
+            variant="contained"
+            size="medium"
+            onClick={handleOpenModal}
+            color="tertiary"
+            endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} />}
+          >
             {data.row4ButtonText}
           </Button>
         </Box>
