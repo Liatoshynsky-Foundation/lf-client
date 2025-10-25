@@ -6,9 +6,11 @@ import { CookiePreferencesModal } from './preferances/CookiePreferencesModal';
 
 import { consentObj } from '~/lib/utils/consent';
 
+type GtagConsentParams = ReturnType<typeof consentObj>;
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (command: 'consent', action: 'update' | 'default', params: GtagConsentParams) => void;
   }
 }
 

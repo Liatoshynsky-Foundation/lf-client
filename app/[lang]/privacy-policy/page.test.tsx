@@ -4,13 +4,13 @@ import PrivacyPolicy from './page';
 
 import { createRequestContainer } from '~/di/container';
 
-jest.mock('~/shared/components/blocks/privacy-policy/intro-section/IntroSection', () => {
+jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => {
   const MockIntroSection = ({ title }: { title: string }) => <div>Intro section: {title}</div>;
   MockIntroSection.displayName = 'MockIntroSection';
   return MockIntroSection;
 });
 
-jest.mock('~/shared/components/blocks/privacy-policy/policy-section/PolicySection', () => {
+jest.mock('~/components/blocks/privacy-policy/policy-section/PolicySection', () => {
   const MockPolicySection = ({ title }: { title?: string }) => <div>Policy section: {title ?? 'untitled'}</div>;
   MockPolicySection.displayName = 'MockPolicySection';
   return MockPolicySection;

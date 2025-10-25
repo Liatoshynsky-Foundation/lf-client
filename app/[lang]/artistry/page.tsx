@@ -1,13 +1,13 @@
-import { Box } from '@mui/material';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
+import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSelection';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 
 import { Language } from '~/types/types/language';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 
-import { createSeoMeta } from '~/lib/utils/createSeoMeta';
-import MusicTableSection from '~/shared/components/tables/CompositionTable/MusicTableSelection';
+import MainLayout from '~/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
   title: 'Творчість - Фундація Лятошинського',
@@ -20,23 +20,7 @@ export default async function Artistry({ params }: Readonly<Language>) {
   setRequestLocale(lang);
   const t = await getTranslations('liatoshynskyArtistry');
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: {
-          xs: 'repeat(4, 1fr)',
-          sm: 'repeat(8, 1fr)',
-          md: 'repeat(12, 1fr)'
-        },
-        columnGap: {
-          xs: '16px',
-          sm: '24px',
-          md: '40px'
-        },
-        gridColumn: '1 / -1',
-        overflow: 'visible'
-      }}
-    >
+    <MainLayout>
       <TitleWithQuote
         quoteWidth={{ xs: '272px', sm: '316px', md: '341px', lg: '520px' }}
         title={t('title-with-quote.title')}
@@ -45,6 +29,6 @@ export default async function Artistry({ params }: Readonly<Language>) {
         color="black"
       />
       <MusicTableSection />
-    </Box>
+    </MainLayout>
   );
 }

@@ -29,6 +29,7 @@
       "~/utils/*": ["app/lib/utils/*"],
       "~/ds-components/*": ["app/shared/components/design-system/all-components/*"],
       "~/components/*": ["app/shared/components/*"],
+      "~/layouts/*": ["app/shared/layouts/*"],
       "~/hooks/*": ["app/shared/hooks/*"],
       "~/i18n/*": ["i18n/*"]
     },

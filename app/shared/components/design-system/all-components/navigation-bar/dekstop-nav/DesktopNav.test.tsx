@@ -35,14 +35,19 @@ const navLabels: NavigationDTO[] = [
     ]
   },
   {
-    title: 'Кабінет-Архів',
-    links: [{ label: 'Кабінет-Архів', href: '/archive', visibility: true }]
+    title: 'Архів',
+    links: [{ label: 'Архів', href: '/archive', visibility: true }]
   },
   {
     title: 'Співпраця',
     links: [{ label: 'Співпраця', href: '/collaboration', visibility: true }]
   }
 ];
+
+const specialNav: NavigationDTO = {
+  title: 'Спеціальна',
+  links: [{ label: 'Спеціальна посилання', href: '/special', visibility: true }]
+};
 
 describe('DesktopNav', () => {
   let originalResizeObserver: typeof global.ResizeObserver;
@@ -62,15 +67,16 @@ describe('DesktopNav', () => {
   });
 
   it('should render all top-level navigation labels', () => {
-    render(<DesktopNav navLabels={navLabels} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
 
     expect(screen.getByText('Фундація')).toBeInTheDocument();
-    expect(screen.getByText('Кабінет-Архів')).toBeInTheDocument();
+    expect(screen.getByText('Архів')).toBeInTheDocument();
     expect(screen.getByText('Співпраця')).toBeInTheDocument();
+    expect(screen.getByText('Спеціальна')).toBeInTheDocument();
   });
 
   it('should open dropdown when clicking on a group with multiple links', () => {
-    render(<DesktopNav navLabels={navLabels} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
 
     fireEvent.click(screen.getByText('Фундація'));
 
@@ -80,7 +86,7 @@ describe('DesktopNav', () => {
   });
 
   it('should close dropdown when clicking on a dropdown item', async () => {
-    render(<DesktopNav navLabels={navLabels} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
     fireEvent.click(screen.getByText('Фундація'));
 
     fireEvent.click(screen.getByText('Про Фундацію'));
@@ -91,9 +97,9 @@ describe('DesktopNav', () => {
   });
 
   it('should assign correct href to single-link navigation items', () => {
-    render(<DesktopNav navLabels={navLabels} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
 
-    const archiveLink = screen.getByText('Кабінет-Архів').closest('a');
+    const archiveLink = screen.getByText('Архів').closest('a');
     const collabLink = screen.getByText('Співпраця').closest('a');
 
     expect(archiveLink).toHaveAttribute('href', '/archive');
@@ -101,10 +107,16 @@ describe('DesktopNav', () => {
   });
 
   it('dropdown items have correct hrefs', () => {
-    render(<DesktopNav navLabels={navLabels} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
     fireEvent.click(screen.getByText('Фундація'));
 
     expect(screen.getByText('Новини').closest('a')).toHaveAttribute('href', '/news');
     expect(screen.getByText('Медіа про нас').closest('a')).toHaveAttribute('href', '/media');
+  });
+
+  it('should not show special navigation if specialNav is null', () => {
+    render(<DesktopNav navLabels={navLabels} specialNav={null} />);
+
+    expect(screen.queryByText('Спеціальна')).not.toBeInTheDocument();
   });
 });
