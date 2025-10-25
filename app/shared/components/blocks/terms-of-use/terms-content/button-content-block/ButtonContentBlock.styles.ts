@@ -10,21 +10,21 @@ export const styles = {
       md: '"buttons content"'
     },
     gap: { xs: '20px', sm: '24px', md: '40px' },
-    alignItems: 'start'
+    alignItems: 'start',
+    height: '100%'
   },
 
-  buttonBox: {
+  buttonBox: (gridColumn: object, button: object | string) => ({
     gridArea: 'buttons',
     display: 'flex',
     flexDirection: 'column',
     gap: 2,
     justifySelf: 'start',
-    gridColumn: { xs: '1/9', sm: '1/12', md: '3 / 6' },
+    gridColumn: gridColumn,
     height: 'calc(100% - 40px)',
     justifyContent: 'flex-end',
-    width: '100%'
-  },
-
+    width: button
+  }),
   button: {
     alignSelf: 'end',
     px: 0,

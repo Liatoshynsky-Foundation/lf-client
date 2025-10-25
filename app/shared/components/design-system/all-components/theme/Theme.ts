@@ -22,6 +22,7 @@ export const mulish = Mulish({ subsets: ['latin'] });
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
     xs: true;
+    customxs: true;
     sm: true;
     md: true;
     lg: true;
@@ -45,6 +46,8 @@ declare module '@mui/material' {
     customSemiBold16: true;
     customSemiBold18: true;
     customBold25: true;
+    customUppercase20Bold: true;
+    oswald116Bold: true;
   }
 }
 declare module '@mui/material/styles' {
@@ -65,6 +68,8 @@ declare module '@mui/material/styles' {
     customBold236?: React.CSSProperties;
     customBold132?: React.CSSProperties;
     customBold114?: React.CSSProperties;
+    customUppercase20Bold?: React.CSSProperties;
+    oswald116Bold?: React.CSSProperties;
   }
   interface TypographyVariants {
     customCaption: React.CSSProperties;
@@ -83,6 +88,8 @@ declare module '@mui/material/styles' {
     customBold236: React.CSSProperties;
     customBold132: React.CSSProperties;
     customBold114: React.CSSProperties;
+    customUppercase20Bold: React.CSSProperties;
+    oswald116Bold: React.CSSProperties;
   }
 }
 
@@ -199,6 +206,7 @@ export const theme = createTheme({
       lg: 1280,
       md: 1024,
       sm: 768,
+      customxs: 351,
       xs: 0
     }
   },
@@ -371,6 +379,24 @@ export const theme = createTheme({
       fontWeight: 500,
       fontSize: '114px',
       lineHeight: '100%'
+    },
+    customUppercase20Bold: {
+      fontFamily: mulish.style.fontFamily,
+      fontWeight: 700,
+      fontStyle: 'normal',
+      fontSize: '20px',
+      lineHeight: '150%',
+      letterSpacing: '0px',
+      verticalAlign: 'baseline',
+      textTransform: 'uppercase'
+    },
+    oswald116Bold: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 700,
+      fontStyle: 'normal',
+      fontSize: '116px',
+      lineHeight: '100%',
+      letterSpacing: '-2px'
     }
   },
   components: {
