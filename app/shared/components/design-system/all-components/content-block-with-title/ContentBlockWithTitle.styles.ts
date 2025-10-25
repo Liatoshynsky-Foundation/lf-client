@@ -29,7 +29,7 @@ export const styles = {
   title: (gridColumn?: object) => ({
     color: theme.palette.text.primary,
     gridRow: '1',
-    gridColumn: gridColumn ?? { xs: '1 / 4', customxs: '1 / -1', sm: '1 / 5'},
+    gridColumn: gridColumn ?? { xs: '1 / 4', customxs: '1 / -1', sm: '1 / 5' },
     mb: { xs: 0, sm: '180px', md: '40px' },
     maxWidth: { xs: '300px', sm: '250px' },
     minWidth: 0,
