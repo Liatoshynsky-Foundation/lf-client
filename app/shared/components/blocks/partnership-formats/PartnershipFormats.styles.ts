@@ -102,9 +102,7 @@ export const styles = {
   firstRowImageWrapper: {
     width: '100%',
     mt: { sm: '40px', lg: '0' },
-    maxWidth: { xs: '100%', lg: '294px' },
-    '& > div': { width: '100% !important', height: 'auto !important' },
-    '& img': { width: '100%', height: 'auto' }
+    maxWidth: { xs: '100%', lg: '294px' }
   },
   secondRowImageContainer: {
     alignSelf: {
@@ -122,9 +120,7 @@ export const styles = {
   secondRowImageWrapper: {
     width: '100%',
     mb: { sm: '40px', lg: '0' },
-    maxWidth: { xs: '100%', lg: '618px' },
-    '& > div': { width: '100% !important', height: 'auto !important' },
-    '& img': { width: '100%', height: 'auto' }
+    maxWidth: { xs: '100%', lg: '618px' }
   },
   descriptionContainer: {
     display: 'grid',
