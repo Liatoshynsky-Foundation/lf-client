@@ -65,13 +65,23 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
         )}
         {data.row1Image && (
           <Box sx={styles.card}>
-            <ImageWithBorder
-              image={data.row1Image.src}
-              alt={data.row1Image.alt}
-              width={294}
-              height={386}
-              borderWidth={8}
-            />
+            <Box
+              sx={{
+                width: '100%',
+                mt: { sm: '40px' },
+                maxWidth: { xs: '100%', lg: '294px' },
+                '& > div': { width: '100% !important', height: 'auto !important' },
+                '& img': { width: '100%', height: 'auto' }
+              }}
+            >
+              <ImageWithBorder
+                image={data.row1Image.src}
+                alt={data.row1Image.alt}
+                width={294}
+                height={386}
+                borderWidth={8}
+              />
+            </Box>
           </Box>
         )}
       </Box>
@@ -79,13 +89,23 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
       <Box sx={styles.row2}>
         {data.row2Image && (
           <Box sx={styles.row2Image}>
-            <ImageWithBorder
-              image={data.row2Image.src}
-              alt={data.row2Image.alt}
-              width={618}
-              height={386}
-              borderWidth={8}
-            />
+            <Box
+              sx={{
+                width: '100%',
+                mb: { sm: '40px' },
+                maxWidth: { xs: '100%', lg: '618px' },
+                '& > div': { width: '100% !important', height: 'auto !important' },
+                '& img': { width: '100%', height: 'auto' }
+              }}
+            >
+              <ImageWithBorder
+                image={data.row2Image.src}
+                alt={data.row2Image.alt}
+                width={618}
+                height={386}
+                borderWidth={8}
+              />
+            </Box>
           </Box>
         )}
         {data.row2Card1 && (
@@ -103,7 +123,9 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
       {data.row3Text && (
         <Box sx={styles.row3Container}>
           <Box sx={styles.row3Text}>
-            <Typography variant="body1">{data.row3Text}</Typography>
+            <Typography variant="body1" sx={{ fontSize: { xs: '16px', md: '18px' } }}>
+              {data.row3Text}
+            </Typography>
           </Box>
         </Box>
       )}
