@@ -1,5 +1,5 @@
 export const styles = {
-  mainContainer: {
+  container: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
@@ -15,7 +15,7 @@ export const styles = {
       md: '75px'
     }
   },
-  row1: {
+  firstRow: {
     display: 'grid',
     height: {
       xs: 'auto',
@@ -36,7 +36,7 @@ export const styles = {
       md: '40px'
     }
   },
-  row2: {
+  secondRow: {
     display: 'grid',
     height: {
       xs: 'auto',
@@ -65,13 +65,13 @@ export const styles = {
       lg: 'span 3'
     }
   },
-  card1: {
+  firstRowFirstCard: {
     alignSelf: {
       xs: 'start',
       lg: 'end'
     }
   },
-  card2: {
+  firstRowSecondCard: {
     marginTop: {
       xs: '0',
       sm: '0',
@@ -79,7 +79,7 @@ export const styles = {
       lg: '20px'
     }
   },
-  card5: {
+  secondRowFirstCard: {
     marginTop: {
       xs: '0',
       lg: '15px'
@@ -99,7 +99,14 @@ export const styles = {
       lg: 'block'
     }
   },
-  row2Image: {
+  firstRowImageWrapper: {
+    width: '100%',
+    mt: { sm: '40px', lg: '0' },
+    maxWidth: { xs: '100%', lg: '294px' },
+    '& > div': { width: '100% !important', height: 'auto !important' },
+    '& img': { width: '100%', height: 'auto' }
+  },
+  secondRowImageContainer: {
     alignSelf: {
       xs: 'start',
       lg: 'end'
@@ -109,9 +116,17 @@ export const styles = {
       sm: 'span 8',
       md: '1 / -1',
       lg: 'span 6'
-    }
+    },
+    mt: { lg: '35px' }
   },
-  row3Container: {
+  secondRowImageWrapper: {
+    width: '100%',
+    mb: { sm: '40px', lg: '0' },
+    maxWidth: { xs: '100%', lg: '618px' },
+    '& > div': { width: '100% !important', height: 'auto !important' },
+    '& img': { width: '100%', height: 'auto' }
+  },
+  descriptionContainer: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
@@ -121,7 +136,7 @@ export const styles = {
       md: '40px'
     }
   },
-  row3Text: {
+  descriptionText: {
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
@@ -129,7 +144,10 @@ export const styles = {
       lg: '6 / 13'
     }
   },
-  row4Container: {
+  descriptionTypography: {
+    fontSize: { xs: '16px', md: '18px' }
+  },
+  buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
     gridColumn: '1 / -1',

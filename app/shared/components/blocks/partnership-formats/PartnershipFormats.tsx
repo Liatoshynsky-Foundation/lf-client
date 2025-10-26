@@ -12,13 +12,13 @@ import ImageWithBorder from '~/ds-components/image-with-border/ImageWithBorder';
 
 import { styles } from './PartnershipFormats.styles';
 
-interface CardData {
+interface PartnershipCard {
   icon?: string;
   title: string;
   list: string[];
 }
 
-interface ImageData {
+interface PartnershipImage {
   src: string;
   alt: string;
   width: number;
@@ -29,14 +29,14 @@ interface ImageData {
 interface PartnershipFormatsProps {
   data: {
     title: string;
-    row1Card1?: CardData;
-    row1Card2?: CardData;
-    row1Image?: ImageData;
-    row2Image?: ImageData;
-    row2Card1?: CardData;
-    row2Card2?: CardData;
-    row3Text?: string;
-    row4ButtonText?: string;
+    firstRowFirstCard?: PartnershipCard;
+    firstRowSecondCard?: PartnershipCard;
+    firstRowImage?: PartnershipImage;
+    secondRowImage?: PartnershipImage;
+    secondRowFirstCard?: PartnershipCard;
+    secondRowSecondCard?: PartnershipCard;
+    descriptionText?: string;
+    actionButtonText?: string;
     modalContent?: React.ReactNode;
   };
 }
@@ -47,91 +47,73 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const renderCard = (card: PartnershipCard | undefined, additionalStyles?: object) => {
+    if (!card) return null;
+
+    const cardStyles = additionalStyles ? [styles.card, additionalStyles] : styles.card;
+
+    return (
+      <Box sx={cardStyles}>
+        <CardWithText icon={card.icon} title={card.title} list={card.list} />
+      </Box>
+    );
+  };
+
+  const renderImage = (
+    image: PartnershipImage | undefined,
+    containerStyles: object,
+    imageWrapperStyles: object,
+    dimensions: { width: number; height: number }
+  ) => {
+    if (!image) return null;
+
+    return (
+      <Box sx={containerStyles}>
+        <Box sx={imageWrapperStyles}>
+          <ImageWithBorder
+            image={image.src}
+            alt={image.alt}
+            width={dimensions.width}
+            height={dimensions.height}
+            borderWidth={8}
+          />
+        </Box>
+      </Box>
+    );
+  };
+
   return (
-    <Box sx={styles.mainContainer}>
+    <Box sx={styles.container}>
       <SectionTitle title={data.title} sx={styles.title} />
 
-      <Box sx={styles.row1}>
-        {data.row1Card1 && (
-          <Box sx={[styles.card, styles.card1]}>
-            <CardWithText icon={data.row1Card1.icon} title={data.row1Card1.title} list={data.row1Card1.list} />
-          </Box>
-        )}
+      <Box sx={styles.firstRow}>
+        {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />
-        {data.row1Card2 && (
-          <Box sx={[styles.card, styles.card2]}>
-            <CardWithText icon={data.row1Card2.icon} title={data.row1Card2.title} list={data.row1Card2.list} />
-          </Box>
-        )}
-        {data.row1Image && (
-          <Box sx={styles.card}>
-            <Box
-              sx={{
-                width: '100%',
-                mt: { sm: '40px' },
-                maxWidth: { xs: '100%', lg: '294px' },
-                '& > div': { width: '100% !important', height: 'auto !important' },
-                '& img': { width: '100%', height: 'auto' }
-              }}
-            >
-              <ImageWithBorder
-                image={data.row1Image.src}
-                alt={data.row1Image.alt}
-                width={294}
-                height={386}
-                borderWidth={8}
-              />
-            </Box>
-          </Box>
-        )}
+        {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
+        {renderImage(data.firstRowImage, styles.card, styles.firstRowImageWrapper, { width: 294, height: 386 })}
       </Box>
 
-      <Box sx={styles.row2}>
-        {data.row2Image && (
-          <Box sx={styles.row2Image}>
-            <Box
-              sx={{
-                width: '100%',
-                mb: { sm: '40px' },
-                maxWidth: { xs: '100%', lg: '618px' },
-                '& > div': { width: '100% !important', height: 'auto !important' },
-                '& img': { width: '100%', height: 'auto' }
-              }}
-            >
-              <ImageWithBorder
-                image={data.row2Image.src}
-                alt={data.row2Image.alt}
-                width={618}
-                height={386}
-                borderWidth={8}
-              />
-            </Box>
-          </Box>
-        )}
-        {data.row2Card1 && (
-          <Box sx={[styles.card, styles.card5]}>
-            <CardWithText icon={data.row2Card1.icon} title={data.row2Card1.title} list={data.row2Card1.list} />
-          </Box>
-        )}
-        {data.row2Card2 && (
-          <Box sx={styles.card}>
-            <CardWithText icon={data.row2Card2.icon} title={data.row2Card2.title} list={data.row2Card2.list} />
-          </Box>
-        )}
+      <Box sx={styles.secondRow}>
+        {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper, {
+          width: 618,
+          height: 386
+        })}
+        {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
+        {renderCard(data.secondRowSecondCard)}
       </Box>
 
-      {data.row3Text && (
-        <Box sx={styles.row3Container}>
-          <Box sx={styles.row3Text}>
-            <Typography variant="body1" sx={{ fontSize: { xs: '16px', md: '18px' } }}>
-              {data.row3Text}
+      {data.descriptionText && (
+        <Box sx={styles.descriptionContainer}>
+          <Box sx={styles.descriptionText}>
+            <Typography variant="body1" sx={styles.descriptionTypography}>
+              {data.descriptionText}
             </Typography>
           </Box>
         </Box>
       )}
 
-      {data.row4ButtonText && (
-        <Box sx={styles.row4Container}>
+      {data.actionButtonText && (
+        <Box sx={styles.buttonContainer}>
           <Button
             variant="contained"
             size="medium"
@@ -139,7 +121,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
             color="tertiary"
             endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} />}
           >
-            {data.row4ButtonText}
+            {data.actionButtonText}
           </Button>
         </Box>
       )}
