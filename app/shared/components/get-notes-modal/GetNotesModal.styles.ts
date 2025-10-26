@@ -7,43 +7,61 @@ export const styles = {
     justifyContent: 'center'
   },
   maxWidth: (state: number) => {
-    switch (state) {
-      case GetNotesState.LIST:
-        return {
-          width: '1000px',
-          maxWidth: 'min(70vw, 1000px)'
-        };
-      case GetNotesState.FORM:
-      case GetNotesState.CONFIRM:
-        return {
-          maxWidth: {
-            xs: '90vw',
-            sm: 'min(85vw, 600px)',
-            md: 'min(70vw, 744px)'
-          }
-        };
+    if (state === GetNotesState.LIST) {
+      return {
+        maxWidth: 'min(70vw, 1024px)'
+      };
     }
-  },
-  paper: () => {
+
     return {
-      maxHeight: '95vh',
-      minHeight: '475px',
-      padding: {
-        xs: '16px 24px 24px 24px',
-        sm: '24px 48px 48px 48px',
-        md: '72px 72px 72px 72px'
-      },
-      minWidth: {
+      maxWidth: {
         xs: '90vw',
-        sm: 'min(60vw, 768px)',
-        md: 'min(40vw, 768px)'
-      },
-      '@media (max-height: 800px) and (max-width:600px)': {
-        height: 'calc(100vh - 32px)',
-        overflowY: 'scroll'
+        sm: 'min(85vw, 600px)',
+        md: 'min(70vw, 744px)'
       }
     };
   },
+  paper: (state: number) => {
+    if (state === GetNotesState.LIST) {
+      return {
+        maxHeight: '95vh',
+        padding: {
+          xs: '16px 20px 24px',
+          sm: '24px 32px 32px',
+          md: '20px 56px 56px'
+        },
+        minWidth: {
+          xs: '95vw',
+          sm: 'min(90vw, 900px)',
+          md: 'min(70vw, 726px)',
+          lg: 'min(70vw, 1024px)'
+        },
+        '@media (max-height: 800px) and (max-width:600px)': {
+          height: 'calc(100vh - 32px)',
+          overflowY: 'auto'
+        }
+      };
+    }
+
+    return {
+      maxHeight: '95vh',
+      padding: {
+        xs: '16px 24px 24px',
+        sm: '24px 48px 48px',
+        md: '72px'
+      },
+      minWidth: {
+        xs: '90vw',
+        sm: 'min(85vw, 600px)',
+        md: 'min(70vw, 744px)'
+      },
+      '@media (max-height: 800px) and (max-width:600px)': {
+        height: 'calc(100vh - 32px)',
+        overflowY: 'auto'
+      }
+    };
+  },
+
   headerContainer: {
     display: 'flex',
     justifyContent: 'space-between',

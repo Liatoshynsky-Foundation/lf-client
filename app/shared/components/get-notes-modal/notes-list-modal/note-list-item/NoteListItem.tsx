@@ -23,29 +23,40 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
 
   const title = note.url.split('/').pop()?.split('.')[0];
   const date = new Date(note.dateUploaded).toLocaleDateString();
+  const isCompact = isMobile || isTablet;
 
-  const buttonComponent = (
-    <Button variant="outlined" endIcon={!isMobile && endIcon} onClick={handler}>
-      {isMobile ? endIcon : t(buttonText)}
+  const button = isCompact ? (
+    <Box sx={styles.iconButton} onClick={handler}>
+      {endIcon}
+    </Box>
+  ) : (
+    <Button variant="outlined" endIcon={endIcon} onClick={handler}>
+      {t(buttonText)}
     </Button>
+  );
+
+  const buttonWithLink = note.isFree ? (
+    <a href={note.url} target="_blank" rel="noopener noreferrer">
+      {button}
+    </a>
+  ) : (
+    button
   );
 
   return (
     <Box sx={styles.container}>
-      <Box sx={styles.notesTitleContainer}>
-        <SvgImage src={'/icons/frame.svg'} alt={title ?? 'file-icon'} width={25} height={25} />
-        <Typography sx={styles.notesTitle} variant="customMedium16">
-          {title}
-        </Typography>
+      <Box sx={styles.leftBlock}>
+        <Box sx={styles.notesTitleContainer}>
+          {!isCompact && <SvgImage alt="Note Icon" src="/icons/frame.svg" width={25} height={25} />}
+          <Typography sx={styles.notesTitle}>{title}</Typography>
+        </Box>
+
+        <Typography sx={styles.dateMobile}>{date}</Typography>
       </Box>
-      {!isMobile && !isTablet && <Typography variant="customMedium16">{date}</Typography>}
-      {note.isFree ? (
-        <a href={note.url} target="_blank" rel="noopener noreferrer">
-          {buttonComponent}
-        </a>
-      ) : (
-        buttonComponent
-      )}
+
+      <Typography sx={styles.dateDesktop}>{date}</Typography>
+
+      {buttonWithLink}
     </Box>
   );
 };

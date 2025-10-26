@@ -37,16 +37,23 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
 
   switch (state) {
     case GetNotesState.LIST:
-      title = <Typography variant="h2">{t('notesList.title')}</Typography>;
+      title = (
+        <Typography variant="h2" sx={{ fontSize: { xs: '40px', /*sm: '40px',*/ md: '64px' } }}>
+          {t('notesList.title')}
+        </Typography>
+      );
       innards = <NotesListModal composition={composition} notes={notes} paidNotesHandler={pNHandler} />;
       break;
     case GetNotesState.FORM:
       title = (
         <Box>
-          <Typography sx={{ mb: 2, textTransform: 'uppercase' }} variant="h4">
+          <Typography sx={{ mb: 2, textTransform: 'uppercase', fontSize: { xs: '20px', md: '28px' } }} variant="h4">
             {t('form.title')}
           </Typography>
-          <Typography sx={{ textIndent: 'calc(50% - 50px)', display: 'block' }} variant="subtitle1">
+          <Typography
+            sx={{ textIndent: 'calc(50% - 50px)', display: 'block', fontSize: { xs: '16px', md: '18px' } }}
+            variant="subtitle1"
+          >
             {t('form.subtitle')}
           </Typography>
         </Box>
@@ -66,7 +73,19 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   }
 
   const paper = () => (
-    <PaperComponent sx={{ ...styles.paper(), ...styles.maxWidth(state) }}>
+    <PaperComponent
+      sx={{
+        ...styles.paper(state),
+        ...styles.maxWidth(state)
+        // '& .MuiTypography-h2, & .MuiTypography-h4': {
+        //   fontSize: {
+        //     xs: '40px',
+        //     sm: '40px',
+        //     md: '64px'
+        //   }
+        // }
+      }}
+    >
       <Box sx={styles.headerContainer}>
         <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
           <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
