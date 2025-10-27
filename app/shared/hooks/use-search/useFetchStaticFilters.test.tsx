@@ -32,7 +32,7 @@ describe('useFetchStaticFilters', () => {
     useQueryMock.mockImplementation((opts: any) => ({ data: opts.queryFn() }));
   });
 
-  it('returns null data when endpoint is null', async () => {
+  it('should return null data when endpoint is null', async () => {
     const { result } = renderHook(() => useFetchStaticFilters(null));
 
     const data = await result.current.data;
@@ -40,7 +40,7 @@ describe('useFetchStaticFilters', () => {
     expect(getTableStaticDataMock).not.toHaveBeenCalled();
   });
 
-  it('calls getTableStaticData when endpoint is provided', async () => {
+  it('should call getTableStaticData and return its result when endpoint is provided', async () => {
     const endpoint = '/api/static/filters';
     const mockData = { genres: [{ name: 'rock' }] };
     getTableStaticDataMock.mockResolvedValueOnce(mockData);
@@ -53,7 +53,7 @@ describe('useFetchStaticFilters', () => {
     expect(data).toEqual(mockData);
   });
 
-  it('includes locale in queryKey', () => {
+  it('should include locale in queryKey', () => {
     const endpoint = '/api/static/filters';
     useQueryMock.mockImplementation(() => ({ data: null }));
 
