@@ -133,6 +133,7 @@ export const styles = {
     }
   },
   descriptionText: {
+    textIndent: '21em',
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
@@ -145,8 +146,12 @@ export const styles = {
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'center',
-    gridColumn: '1 / -1',
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '4 / -1',
+      md: '6 / -1',
+      lg: '6 / 13'
+    },
     mb: {
       xs: '24px',
       sm: '32px',
