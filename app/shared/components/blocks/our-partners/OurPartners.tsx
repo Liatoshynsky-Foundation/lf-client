@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 import ContentBlock from '../../design-system/all-components/content-block/ContentBlock';
 import PartnerLogo from '../../partner-logo/PartnerLogo';
@@ -8,16 +9,14 @@ import { gridConfigs, layouts } from './partnerLayouts';
 import { partners } from './partners.const';
 
 export default function OurPartners() {
+  const t = useTranslations('ourPartners');
   const xsPartners = Object.entries(partners).slice(0, 2);
 
   return (
     <Box sx={styles.wrapper}>
-      <ContentBlock title="Our Partners" containerSx={styles.titleContainer} />
+      <ContentBlock title={t('title')} containerSx={styles.titleContainer} />
 
-      <ContentBlock
-        textSx={styles.text}
-        description="Фундація Лятошинського щиро відкрита до партнерства і цінує будь-яку підтримку. Ми віримо, що співпраця на засадах довіри та взаємоповаги допоможе нам разом розвивати українську музичну культуру. Запрошуємо до партнерства усіх, хто поділяє нашу місію та прагне долучитися до збереження спадщини Бориса Лятошинського й підтримки сучасних музичних ініціатив."
-      />
+      <ContentBlock textSx={styles.text} description={t('description')} />
 
       <Box sx={styles.xsGrid}>
         {xsPartners.map(([key, partner]) => (

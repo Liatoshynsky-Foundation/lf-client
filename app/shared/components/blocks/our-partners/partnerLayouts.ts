@@ -17,13 +17,13 @@ const largeLayout: (PartnerKey | null)[] = [
 const smallLayout: (PartnerKey | null)[] = [
   'musicHouse',
   'philharmonic',
-  null,
   'liatoshynsky',
+  null,
   'masterKlass',
   'kolomyia',
-  null,
   'axon',
   'espreso',
+  null,
   'softserve',
   'opentech'
 ];
