@@ -148,7 +148,7 @@ describe('MusicTableSection', () => {
     (useFetchStaticFilters as jest.Mock).mockReturnValue(staticFiltersData);
   });
 
-  it('renders EnhancedTable and search', () => {
+  it('should render EnhancedTable and Search', () => {
     render(<MusicTableSection />);
 
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
@@ -156,7 +156,7 @@ describe('MusicTableSection', () => {
     expect(screen.getByTestId('music-table-filters')).toBeInTheDocument();
   });
 
-  it('correct render EnhancedTable props', () => {
+  it('should correctly render EnhancedTable props', () => {
     render(<MusicTableSection />);
 
     expect(screen.getByTestId('table-name').textContent).toBe('name.composition');
@@ -164,25 +164,25 @@ describe('MusicTableSection', () => {
     expect(screen.queryAllByTestId('row').length).toBe(2);
   });
 
-  it('calls debouncedSetFilterParam when applying genre filter', () => {
+  it('should call debouncedSetFilterParam when applying genre filter', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-genre-filter'));
     expect(useSearchMockReturn.debouncedSetFilterParam).toHaveBeenCalledWith('genre', ['рок']);
   });
 
-  it('calls debouncedSetFilterParam when applying category filter', () => {
+  it('should call debouncedSetFilterParam when applying category filter', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-category-filter'));
     expect(useSearchMockReturn.debouncedSetFilterParam).toHaveBeenCalledWith('category', ['класика']);
   });
 
-  it('committed year change calls setFilterParam with yearFrom/yearTo', () => {
+  it('should call setFilterParam with yearFrom/yearTo on committed year change', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-year-committed'));
     expect(useSearchMockReturn.setFilterParam).toHaveBeenCalledWith({ yearFrom: 1990, yearTo: 2000 });
   });
 
-  it('clearAllFilters calls setFilterParam with cleared params', () => {
+  it('should clear all filters by calling setFilterParam with cleared params', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-genre-filter'));
     fireEvent.click(screen.getByTestId('mock-apply-category-filter'));
@@ -193,26 +193,26 @@ describe('MusicTableSection', () => {
     );
   });
 
-  it('does not call setFilterParam when no filters are active', () => {
+  it('should not call setFilterParam when no filters are active', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-clear-filters'));
     expect(useSearchMockReturn.setFilterParam).not.toHaveBeenCalled();
   });
 
-  it('notes modal renders closed by default and close keeps it closed', () => {
+  it('should render notes modal closed by default and remain closed after closing', () => {
     render(<MusicTableSection />);
     expect(screen.getByTestId('notes-opened').textContent).toBe('false');
     fireEvent.click(screen.getByTestId('notes-close'));
     expect(screen.getByTestId('notes-opened').textContent).toBe('false');
   });
 
-  it('adjusts columns for mobile', () => {
+  it('should adjust columns for mobile', () => {
     breakpointMock = { isMobile: true, isTablet: true, isLaptop: false, isDesktop: false, isLaptopAndAbove: false };
     render(<MusicTableSection />);
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
   });
 
-  it('uses defaultMinYear/defaultMaxYear when yearRange is missing', () => {
+  it('should use defaultMinYear/defaultMaxYear when yearRange is missing', () => {
     (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({
       ...staticFiltersData,
       yearRange: undefined
@@ -224,7 +224,7 @@ describe('MusicTableSection', () => {
     expect(screen.getByTestId('max-year')).toHaveTextContent('2025');
   });
 
-  it('passes yearRange values from staticFilters into MusicTableFilters (min/max)', () => {
+  it('should pass yearRange values from staticFilters into MusicTableFilters (min/max)', () => {
     (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({ data: staticFiltersData });
 
     render(<MusicTableSection />);
