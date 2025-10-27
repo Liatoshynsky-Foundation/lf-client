@@ -8,6 +8,7 @@ export const styles = {
     position: 'relative',
     width: '100%',
     maxWidth: '100vw',
-    minHeight: 'calc(100vh + (100vw * 0.035))'
+    minHeight: 'calc(100vh + (100vw * 0.035))',
+    overflowX: 'clip'
   }
 };
