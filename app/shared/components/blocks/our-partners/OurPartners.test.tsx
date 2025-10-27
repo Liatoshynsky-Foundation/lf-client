@@ -4,6 +4,16 @@ import OurPartners from './OurPartners';
 import { gridConfigs } from './partnerLayouts';
 import { partners } from './partners.const';
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'ourPartners.title': 'Our Partners',
+      'ourPartners.description': 'Фундація Лятошинського щиро відкрита до партнерства і цінує будь-яку підтримку'
+    };
+    return translations[key] ?? key;
+  }
+}));
+
 jest.mock('../../design-system/all-components/content-block/ContentBlock', () => {
   const MockContentBlock = ({ title, description }: { title?: string; description?: string }) => (
     <div data-testid={title ? 'content-block-title' : 'content-block-description'}>{title || description}</div>
@@ -23,17 +33,16 @@ jest.mock('./partner-grid/PartnerGrid', () => {
   MockPartnerGrid.displayName = 'PartnerGrid';
   return MockPartnerGrid;
 });
+
 describe('OurPartners', () => {
-  it('should render the title', () => {
+  it('should render translated title', () => {
     render(<OurPartners />);
-    expect(screen.getByTestId('content-block-title')).toHaveTextContent('Our Partners');
+    expect(screen.getByTestId('content-block-title')).toHaveTextContent('title');
   });
 
-  it('should render the description', () => {
+  it('should render translated description', () => {
     render(<OurPartners />);
-    expect(screen.getByTestId('content-block-description')).toHaveTextContent(
-      'Фундація Лятошинського щиро відкрита до партнерства і цінує будь-яку підтримку'
-    );
+    expect(screen.getByTestId('content-block-description')).toHaveTextContent('description');
   });
 
   it('should render the first two xs partners', () => {
