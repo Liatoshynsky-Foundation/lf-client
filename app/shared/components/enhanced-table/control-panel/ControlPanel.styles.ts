@@ -1,15 +1,10 @@
-import { Theme } from '@mui/material/styles';
-
 import { mainHexPallete } from '~/ds-components//theme/colors';
 
 export const ControlPanelStyles = {
-  root: (theme: Theme) => ({
+  root: {
     display: 'column',
-    gap: 8,
-    pl: 3,
-    [theme.breakpoints.up('sm')]: { pr: '30px' },
-    [theme.breakpoints.up('md')]: { pr: '60px' }
-  }),
+    gap: 8
+  },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -20,8 +15,7 @@ export const ControlPanelStyles = {
   headerRight: {
     display: 'flex',
     alignItems: 'center',
-    gap: 2,
-    marginRight: '40px'
+    gap: 2
   },
   filtersBadge: {
     '& .MuiBadge-badge': {
