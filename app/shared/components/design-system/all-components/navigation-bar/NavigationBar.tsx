@@ -11,15 +11,13 @@ import type { ScrollDirection } from '~/types/types/common.types';
 
 import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 
-const NavigationBar = ({
-  navLabels,
-  specialNav,
-  scrollDirection
-}: {
+interface NavigationBarProps {
   navLabels: NavigationDTO[];
   specialNav: NavigationDTO | null;
   scrollDirection: ScrollDirection;
-}) => {
+}
+
+const NavigationBar = ({ navLabels, specialNav, scrollDirection }: NavigationBarProps) => {
   const { isDesktop } = useBreakpoints();
   const [isMounted, setIsMounted] = useState(false);
 
