@@ -9,18 +9,16 @@ const WarInfoSection = () => {
   const t = useTranslations('warSupport');
   const locale = useLocale();
   return (
-    <>
-      <Box sx={style.gridContainer}>
-        <Box sx={style.titleSection}>
-          <Typography variant="h2" sx={style.titleText}>
-            {t('title')}
-          </Typography>
-        </Box>
-        <Box sx={style.textBlockContainer}>
-          <ContentBlock description={warSupportDoc[locale]} textSx={style.contentText} />
-        </Box>
+    <Box sx={style.gridContainer}>
+      <Box sx={style.titleSection}>
+        <Typography variant="h2" sx={style.titleText}>
+          {t('title')}
+        </Typography>
       </Box>
-    </>
+      <Box sx={style.textBlockContainer}>
+        <ContentBlock description={warSupportDoc[locale]} textSx={style.contentText} />
+      </Box>
+    </Box>
   );
 };
 
