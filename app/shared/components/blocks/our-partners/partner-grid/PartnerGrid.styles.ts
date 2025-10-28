@@ -1,20 +1,21 @@
 const styles = {
-  grid: (columns: number, rows: number) => ({
+  grid: (columns: number) => ({
     display: 'grid',
-    justifyContent: 'center',
-    alignItems: 'center',
     gap: { xs: '12px', sm: '24px' },
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
-    gridTemplateRows: `repeat(${rows}, 1fr)`
+    gridAutoRows: '1fr',
+    width: '100%'
   }),
   logoBox: {
-    justifySelf: 'center'
+    justifySelf: 'center',
+    alignSelf: 'center'
   },
   img: {
     objectFit: 'contain',
-    height: 'auto',
+    width: '100%',
+    maxWidth: '100%',
     maxHeight: '112px',
-    width: '100%'
+    height: 'auto'
   }
 };
 

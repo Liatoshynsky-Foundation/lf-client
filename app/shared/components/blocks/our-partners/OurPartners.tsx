@@ -1,26 +1,30 @@
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import ContentBlock from '../../design-system/all-components/content-block/ContentBlock';
+import ContentBlock from '~/ds-components/content-block/ContentBlock';
+
 import PartnerLogo from '../../partner-logo/PartnerLogo';
 import { styles } from './OurPartners.styles';
 import PartnerGrid from './partner-grid/PartnerGrid';
-import { gridConfigs, layouts } from './partnerLayouts';
-import { partners } from './partners.const';
+import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
+import { partnersMock } from './partners.const';
 
 export default function OurPartners() {
   const t = useTranslations('ourPartners');
-  const xsPartners = Object.entries(partners).slice(0, 2);
+
+  const partners = partnersMock;
+
+  const layouts = generateLayouts(partners, patterns);
+  const xsPartners = partners.slice(0, 2);
 
   return (
     <Box sx={styles.wrapper}>
       <ContentBlock title={t('title')} containerSx={styles.titleContainer} />
-
       <ContentBlock textSx={styles.text} description={t('description')} />
 
       <Box sx={styles.xsGrid}>
-        {xsPartners.map(([key, partner]) => (
-          <Box key={key} sx={styles.logoWrapper}>
+        {xsPartners.map((partner) => (
+          <Box key={partner.id} sx={styles.logoWrapper}>
             <PartnerLogo
               link={partner.link}
               image={
@@ -48,7 +52,7 @@ export default function OurPartners() {
             }
           }}
         >
-          <PartnerGrid layout={layouts[key]} columns={columns} rows={rows} />
+          <PartnerGrid layout={layouts[key] ?? []} columns={columns} rows={rows} partners={partners} />
         </Box>
       ))}
     </Box>

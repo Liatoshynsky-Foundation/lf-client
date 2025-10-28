@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import OurPartners from './OurPartners';
 import { gridConfigs } from './partnerLayouts';
-import { partners } from './partners.const';
+import { partnersMock } from './partners.const';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -14,7 +14,7 @@ jest.mock('next-intl', () => ({
   }
 }));
 
-jest.mock('../../design-system/all-components/content-block/ContentBlock', () => {
+jest.mock('~/ds-components/content-block/ContentBlock', () => {
   const MockContentBlock = ({ title, description }: { title?: string; description?: string }) => (
     <div data-testid={title ? 'content-block-title' : 'content-block-description'}>{title || description}</div>
   );
@@ -50,8 +50,8 @@ describe('OurPartners', () => {
     const logos = screen.getAllByTestId('partner-logo');
     expect(logos.length).toBe(2);
 
-    const firstPartnerName = Object.values(partners)[0].name;
-    const secondPartnerName = Object.values(partners)[1].name;
+    const firstPartnerName = partnersMock[0].name;
+    const secondPartnerName = partnersMock[1].name;
 
     expect(logos[0].querySelector('img')).toHaveAttribute('alt', firstPartnerName);
     expect(logos[1].querySelector('img')).toHaveAttribute('alt', secondPartnerName);
@@ -61,5 +61,14 @@ describe('OurPartners', () => {
     render(<OurPartners />);
     const grids = screen.getAllByTestId('partner-grid');
     expect(grids.length).toBe(gridConfigs.length);
+
+    grids.forEach((grid) => {
+      const props = JSON.parse(grid.textContent || '{}');
+      expect(props).toHaveProperty('layout');
+      expect(props).toHaveProperty('columns');
+      expect(props).toHaveProperty('rows');
+      expect(props).toHaveProperty('partners');
+      expect(props.partners.length).toBeGreaterThan(0);
+    });
   });
 });
