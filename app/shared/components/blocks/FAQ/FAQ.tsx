@@ -56,7 +56,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
             <IconButton customStyles={styles.iconButton} disabled>
               <Svg Component={PhoneIcon} stroke={mainHexPallete.black} alt="phone icon" width="20px" height="20px" />
             </IconButton>
-            <Link style={styles.linkItem} {...telLinkProps}>
+            <Link sx={styles.linkItem} {...telLinkProps}>
               {contacts.phone}
             </Link>
           </Box>
@@ -64,7 +64,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
             <IconButton customStyles={styles.iconButton} disabled>
               <Svg Component={MailIcon} stroke={mainHexPallete.black} alt="mail icon" width="20px" height="20px" />
             </IconButton>
-            <Link style={styles.linkItem} href={`mailto:${contacts.email}`}>
+            <Link sx={styles.linkItem} href={`mailto:${contacts.email}`}>
               {contacts.email}
             </Link>
           </Box>

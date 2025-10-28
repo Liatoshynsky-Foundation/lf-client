@@ -1,6 +1,8 @@
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 const commonTextStyle = {
   fontFamily: 'Mulish, Sans-serif',
-  color: '#190D03',
+  color: mainHexPallete.black,
   letterSpacing: '0px',
   whiteSpace: 'pre-line',
   fontSize: { xs: '16px', sm: '16px' }
@@ -8,8 +10,21 @@ const commonTextStyle = {
 
 const commonLinkStyle = {
   textDecoration: 'underline',
+  transition: 'color 0.2s ease',
+
   '&:hover': {
+    color: '#5F0E0F',
     cursor: 'pointer'
+  },
+
+  '&:active': {
+    color: mainHexPallete.black
+  },
+
+  '&.Mui-disabled, &[aria-disabled="true"], &:disabled': {
+    color: mainHexPallete.blue[500],
+    pointerEvents: 'none',
+    textDecoration: 'underline'
   }
 };
 
@@ -36,7 +51,7 @@ export const styles = {
   },
   weakText: {
     ...commonTextStyle,
-    color: '#574139',
+    color: mainHexPallete.brown[700],
     marginRight: '10px'
   },
   link: {

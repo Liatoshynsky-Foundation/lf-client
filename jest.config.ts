@@ -53,7 +53,7 @@ const config: Config = {
   transformIgnorePatterns: [
     'node_modules/(?!(lodash-es|@azure/(storage-blob|core-rest-pipeline|core-auth|core-http))/)'
   ],
-  setupFilesAfterEnv: ['@testing-library/jest-dom']
+  setupFilesAfterEnv: ['@testing-library/jest-dom', '<rootDir>/jest.setup.ts']
 };
 
 export default createJestConfig(config);

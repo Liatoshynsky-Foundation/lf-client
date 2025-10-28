@@ -2,6 +2,8 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+jest.unmock('~/components/under-development/UnderDevelopment');
+
 import UnderDevelopment from './UnderDevelopment';
 
 jest.mock('next-intl', () => ({
