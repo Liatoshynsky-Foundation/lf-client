@@ -8,18 +8,9 @@ export const styles = {
   },
 
   paper: (state: GetNotesState) => {
-    const shared = {
-      maxHeight: '95vh',
-      '@media (max-height: 700px) and (max-width: 600px)': {
-        maxHeight: '100vh',
-        height: state === GetNotesState.LIST ? '100vh' : 'auto',
-        overflowY: 'auto'
-      }
-    };
-
     if (state === GetNotesState.LIST) {
       return {
-        ...shared,
+        maxHeight: '95vh',
         maxWidth: {
           xs: '100vw',
           sm: '482px',
@@ -33,16 +24,20 @@ export const styles = {
           xl: 'min(70vw, 1024px)'
         },
         padding: {
-          xs: '16px 20px 24px',
+          xs: '40px 24px',
           sm: '48px',
           md: '64px 56px',
           xl: '72px'
+        },
+        '@media (max-width: 480px)': {
+          height: 'calc(100vh - 24px)',
+          width: '100vw'
         }
       };
     }
 
     return {
-      ...shared,
+      maxHeight: '95vh',
       maxWidth: {
         xs: '100vw',
         sm: '394px',
@@ -59,29 +54,45 @@ export const styles = {
         xl: '75px 81px'
       },
       '@media (max-width: 425px)': {
-        maxWidth: '100vw'
+        maxWidth: '100vw',
+        maxHeight: '100vh'
       },
       '@media (min-width: 426px) and (max-width: 767px)': {
         maxWidth: 'min(90vw, 394px)'
-      },
-      '@media (max-height: 800px)': {
-        maxHeight: '100vh'
-      },
-      '@media (max-height: 680px)': {
-        overflowY: 'auto'
       }
     };
   },
+  headerSticky: (state: GetNotesState) => {
+    if (state === GetNotesState.LIST) {
+      return {};
+    }
 
-  headerContainer: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    marginBottom: '8px'
+    return {
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'sticky',
+      top: 0,
+      zIndex: 2,
+      backgroundColor: 'background.paper',
+      paddingBottom: '8px'
+    };
   },
-
   closeIcon: {
     width: '30px',
     height: '30px'
+  },
+  scrollContainer: (state: GetNotesState) => {
+    if (state === GetNotesState.LIST) {
+      return {};
+    }
+
+    return {
+      overflowY: 'auto',
+      flex: 1,
+      maxHeight: 'calc(95vh - 200px)',
+      paddingRight: '8px'
+    };
   }
 };
