@@ -45,6 +45,7 @@ declare module '@mui/material' {
     customSemiBold16: true;
     customSemiBold18: true;
     customBold25: true;
+    customBold48: true;
   }
 }
 declare module '@mui/material/styles' {
@@ -65,6 +66,7 @@ declare module '@mui/material/styles' {
     customBold236?: React.CSSProperties;
     customBold132?: React.CSSProperties;
     customBold114?: React.CSSProperties;
+    customBold48?: React.CSSProperties;
   }
   interface TypographyVariants {
     customCaption: React.CSSProperties;
@@ -83,6 +85,7 @@ declare module '@mui/material/styles' {
     customBold236: React.CSSProperties;
     customBold132: React.CSSProperties;
     customBold114: React.CSSProperties;
+    customBold48: React.CSSProperties;
   }
 }
 
@@ -371,6 +374,12 @@ export const theme = createTheme({
       fontWeight: 500,
       fontSize: '114px',
       lineHeight: '100%'
+    },
+    customBold48: {
+      fontFamily: oswald.style.fontFamily,
+      fontWeight: 600,
+      fontSize: '48px',
+      lineHeight: '120%'
     }
   },
   components: {
