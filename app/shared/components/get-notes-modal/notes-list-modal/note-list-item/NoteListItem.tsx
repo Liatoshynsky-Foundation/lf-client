@@ -47,7 +47,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
     <Box sx={styles.container}>
       <Box sx={styles.leftBlock}>
         <Box sx={styles.notesTitleContainer}>
-          {!isCompact && <SvgImage alt="Note Icon" src="/icons/frame.svg" width={25} height={25} />}
+          {!isCompact && <SvgImage alt={title ?? 'file-icon'} src="/icons/frame.svg" width={25} height={25} />}
           <Typography sx={styles.notesTitle}>{title}</Typography>
         </Box>
 
