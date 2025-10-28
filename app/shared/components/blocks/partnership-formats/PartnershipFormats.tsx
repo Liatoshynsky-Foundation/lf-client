@@ -96,10 +96,10 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
       <Box sx={styles.secondRow}>
         {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper, {
           width: 618,
-          height: 386
+          height: 400
         })}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
-        {renderCard(data.secondRowSecondCard)}
+        {renderCard(data.secondRowSecondCard, { ...styles.secondRowSecondCard, ...styles.lastCardInRow })}
       </Box>
 
       {data.descriptionText && (

@@ -17,14 +17,14 @@ export const partnershipFormatsData = {
     src: '/images/partnership-formats-photo-small.png',
     alt: 'Partnership collaboration',
     width: 400,
-    height: 300,
+    height: 386,
     borderWidth: 2
   },
   secondRowImage: {
     src: '/images/partnership-formats-photo-large.png',
     alt: 'Team collaboration',
     width: 400,
-    height: 300,
+    height: 400,
     borderWidth: 2
   },
   secondRowFirstCard: {

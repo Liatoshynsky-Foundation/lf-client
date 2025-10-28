@@ -20,7 +20,7 @@ export const styles = {
     height: {
       xs: 'auto',
       md: 'auto',
-      lg: '427px'
+      lg: '480px'
     },
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
@@ -30,10 +30,11 @@ export const styles = {
       md: '24px',
       lg: '0'
     },
-    mb: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
+    columnGap: {
+      lg: '12px'
+    },
+    position: {
+      lg: 'relative'
     }
   },
   secondRow: {
@@ -41,7 +42,7 @@ export const styles = {
     height: {
       xs: 'auto',
       md: 'auto',
-      lg: '427px'
+      lg: '480px'
     },
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
@@ -51,10 +52,16 @@ export const styles = {
       md: '24px',
       lg: '0'
     },
+    columnGap: {
+      lg: '12px'
+    },
     mb: {
       xs: '24px',
       sm: '32px',
       md: '40px'
+    },
+    position: {
+      lg: 'relative'
     }
   },
   card: {
@@ -65,10 +72,17 @@ export const styles = {
       lg: 'span 3'
     }
   },
+  lastCardInRow: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
   firstRowFirstCard: {
     alignSelf: {
       xs: 'start',
       lg: 'end'
+    },
+    marginTop: {
+      lg: '60px'
     }
   },
   firstRowSecondCard: {
@@ -76,13 +90,19 @@ export const styles = {
       xs: '0',
       sm: '0',
       md: '0',
-      lg: '20px'
+      lg: '65px'
     }
   },
   secondRowFirstCard: {
     marginTop: {
       xs: '0',
-      lg: '15px'
+      lg: '28px'
+    }
+  },
+  secondRowSecondCard: {
+    marginTop: {
+      xs: '0',
+      lg: '12px'
     }
   },
   emptyColumn: {
@@ -101,13 +121,14 @@ export const styles = {
   },
   firstRowImageWrapper: {
     width: '100%',
-    mt: { sm: '40px', lg: '0' },
-    maxWidth: { xs: '100%', lg: '294px' }
+    mt: { sm: '40px', lg: '42px' },
+    maxWidth: { xs: '100%', lg: '294px' },
+    marginLeft: { lg: 'auto' }
   },
   secondRowImageContainer: {
     alignSelf: {
       xs: 'start',
-      lg: 'end'
+      lg: 'start'
     },
     gridColumn: {
       xs: '1 / -1',
@@ -115,7 +136,9 @@ export const styles = {
       md: '1 / -1',
       lg: 'span 6'
     },
-    mt: { lg: '35px' }
+    mt: {
+      lg: '50px'
+    }
   },
   secondRowImageWrapper: {
     width: '100%',
