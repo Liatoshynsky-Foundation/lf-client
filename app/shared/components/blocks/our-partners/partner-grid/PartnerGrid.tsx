@@ -8,7 +8,6 @@ import PartnerLogo from '~/shared/components/partner-logo/PartnerLogo';
 interface PartnerGridProps {
   layout: (string | null)[];
   columns: number;
-  rows: number;
   partners: Partner[];
 }
 

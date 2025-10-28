@@ -41,7 +41,7 @@ export default function OurPartners() {
         ))}
       </Box>
 
-      {gridConfigs.map(({ key, min, max, columns, rows }) => (
+      {gridConfigs.map(({ key, min, max, columns }) => (
         <Box
           key={key}
           sx={{
@@ -52,7 +52,7 @@ export default function OurPartners() {
             }
           }}
         >
-          <PartnerGrid layout={layouts[key] ?? []} columns={columns} rows={rows} partners={partners} />
+          <PartnerGrid layout={layouts[key] ?? []} columns={columns} partners={partners} />
         </Box>
       ))}
     </Box>

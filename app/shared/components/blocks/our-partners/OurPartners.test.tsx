@@ -62,13 +62,12 @@ describe('OurPartners', () => {
     const grids = screen.getAllByTestId('partner-grid');
     expect(grids.length).toBe(gridConfigs.length);
 
-    grids.forEach((grid) => {
+    for (const grid of grids) {
       const props = JSON.parse(grid.textContent || '{}');
       expect(props).toHaveProperty('layout');
       expect(props).toHaveProperty('columns');
-      expect(props).toHaveProperty('rows');
       expect(props).toHaveProperty('partners');
       expect(props.partners.length).toBeGreaterThan(0);
-    });
+    }
   });
 });
