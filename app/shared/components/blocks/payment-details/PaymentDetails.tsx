@@ -20,6 +20,7 @@ function PaymentDetails() {
     <Box>
       <ButtonGroup
         sx={styles.buttonGroup}
+        data-testid="SupportUsPage-paymentDetails-currencySwitcher"
         defaultActiveButton={0}
         buttons={currencyList.map((currency) => (
           <Button

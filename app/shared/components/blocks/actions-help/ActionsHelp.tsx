@@ -36,16 +36,22 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
 
   return (
     <Box sx={styles.gridContainer}>
-      <SectionTitle title={title} mb={52} />
+      <SectionTitle title={title} mb={52} data-testid="SupportUsPage-actionsHelp-title" />
       <TipTapContent
         data={subtitle}
+        data-testid="SupportUsPage-actionsHelp-subtitle"
         nodeRenderers={{
           paragraph: renderSubtitle
         }}
       />
       <Box sx={styles.papersContainer}>
         {paperComponents}
-        <ButtonCard sx={styles.paper(paperComponents.length)} text={paperButton.text} link={paperButton.link} />
+        <ButtonCard
+          sx={styles.paper(paperComponents.length)}
+          text={paperButton.text}
+          link={paperButton.link}
+          data-testid="SupportUsPage-actionsHelp-helpButtonCard"
+        />
       </Box>
     </Box>
   );

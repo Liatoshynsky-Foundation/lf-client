@@ -13,19 +13,19 @@ function SupportFoundation() {
 
   return (
     <Box sx={styles.wrapper}>
-      <Typography variant="h2" sx={styles.sectionTitle}>
+      <Typography variant="h2" sx={styles.sectionTitle} data-testid="SupportUsPage-mainTitle">
         {t('title')}
       </Typography>
 
       <Box sx={styles.donationSection}>
         <Box sx={styles.donationFormWrapper}>
-          <DonationForm />
+          <DonationForm data-testid="SupportUsPage-donationForm" />
         </Box>
-        <Box sx={styles.infoSection}>
-          <Typography variant="body2" sx={styles.sectionSubtitle}>
+        <Box sx={styles.infoSection} data-testid="SupportUsPage-infoSection">
+          <Typography variant="body2" sx={styles.sectionSubtitle} data-testid="SupportUsPage-infoSection-subtitle">
             {t.rich('subTitle', { b: bold })}
           </Typography>
-          <PaymentDetails />
+          <PaymentDetails data-testid="SupportUsPage-paymentDetails" />
         </Box>
       </Box>
     </Box>

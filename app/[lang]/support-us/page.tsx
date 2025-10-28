@@ -15,10 +15,10 @@ export default function SupportUs() {
   };
 
   return (
-    <MainLayout withLines>
-      <SupportFoundation />
-      <ActionsHelp data={actionsHelpPageData} />
-      <Faq data={faqData} />
+    <MainLayout data-testid="SupportUsPage" withLines>
+      <SupportFoundation data-testid="SupportUsPage-supportFoundation" />
+      <ActionsHelp data-testid="SupportUsPage-actionsHelp" data={actionsHelpPageData} />
+      <Faq data-testid="SupportUsPage-faq" data={faqData} />
     </MainLayout>
   );
 }

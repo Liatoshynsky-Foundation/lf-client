@@ -41,10 +41,18 @@ function DonationForm() {
   };
 
   const Buttons = [
-    <Button key="donation" onClick={() => setSelected('donation')}>
+    <Button
+      key="donation"
+      onClick={() => setSelected('donation')}
+      data-testid="SupportUsPage-donationForm-modeButton--donation"
+    >
       <Typography variant="customSemiBold18">{t('donationSwitch')}</Typography>
     </Button>,
-    <Button key="subscription" onClick={() => setSelected('subscription')}>
+    <Button
+      key="subscription"
+      onClick={() => setSelected('subscription')}
+      data-testid="SupportUsPage-donationForm-modeButton--subscription"
+    >
       <Typography variant="customSemiBold18">{t('subscribeSwitch')}</Typography>
     </Button>
   ];
@@ -134,11 +142,17 @@ function DonationForm() {
 
   return (
     <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square>
-      <Typography variant="h4">
+      <Typography variant="h4" data-testid="SupportUsPage-donationForm-title">
         {selected === 'donation' && t('donationTitle')}
         {selected === 'subscription' && t('subscribeTitle')}
       </Typography>
-      <ButtonGroup defaultActiveButton={0} buttons={Buttons} palette="tertiary" sx={style.btnGroup} />
+      <ButtonGroup
+        defaultActiveButton={0}
+        buttons={Buttons}
+        palette="tertiary"
+        sx={style.btnGroup}
+        data-testid="SupportUsPage-donationForm-modeSwitcher"
+      />
       <Box sx={{ ...style.sumInputs, ...(hasError && style.errorBorder) }}>
         <Input
           disableUnderline
@@ -147,6 +161,7 @@ function DonationForm() {
           value={donationSum}
           onChange={handleInputChange}
           sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
+          data-testid="SupportUsPage-donationForm-amountInput"
         />
         <FormControl variant="standard" sx={style.currencyInput}>
           <Select
@@ -156,19 +171,28 @@ function DonationForm() {
             disableUnderline
             value={currency}
             onChange={handleCurrencySwitch}
+            data-testid="SupportUsPage-donationForm-currencySelect"
           >
             {currencyItems}
           </Select>
         </FormControl>
       </Box>
-      <Box sx={style.addBtns}>{suggestButtons}</Box>
+      <Box sx={style.addBtns} data-testid="SupportUsPage-donationForm-suggestButtonsContainer">
+        {suggestButtons}
+      </Box>
 
       {showCaptcha && (
         <Box sx={style.turnstileWidget}>
           <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
         </Box>
       )}
-      <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
+      <Button
+        color="primary"
+        variant="contained"
+        fullWidth
+        onClick={() => handleDonateClick(donationSum as number)}
+        data-testid="SupportUsPage-donationForm-submitButton"
+      >
         <Typography variant="customSemiBold18">
           {selected === 'donation' ? t('donationButton') : t('subscribeButton')}
         </Typography>

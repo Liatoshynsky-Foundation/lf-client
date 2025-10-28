@@ -47,10 +47,14 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
 
   return (
     <Box sx={styles.gridContainer}>
-      <SectionTitle title={t('title')} mb={48} />
+      <SectionTitle title={t('title')} mb={48} data-testid="SupportUsPage-faq-title" />
       <Box sx={styles.contacts}>
-        <Typography sx={styles.typography}>{t('subtitle.question')}</Typography>
-        <Typography sx={styles.typography}>{t('subtitle.answer')}</Typography>
+        <Typography sx={styles.typography} data-testid="SupportUsPage-faq-question">
+          {t('subtitle.question')}
+        </Typography>
+        <Typography sx={styles.typography} data-testid="SupportUsPage-faq-answer">
+          {t('subtitle.answer')}
+        </Typography>
         <Box sx={styles.contactsList}>
           <Box sx={styles.contactsItem}>
             <IconButton customStyles={styles.iconButton} disabled>
