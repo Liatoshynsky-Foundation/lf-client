@@ -49,6 +49,9 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
+  const categoryOrder = categoryFilter.length > 0 ? 1 : 2;
+  const genreOrder = genreFilter.length > 0 ? 1 : 2;
+
   return (
     <Box
       sx={{
@@ -59,7 +62,7 @@ export function MusicTableFilters({
         alignItems: 'flex-start'
       }}
     >
-      <Box>
+      <Box sx={{ order: categoryOrder }}>
         <FilterSelect
           label={labelCategory}
           options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -71,7 +74,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box>
+      <Box sx={{ order: genreOrder }}>
         <FilterSelect
           label={labelGenre}
           options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
@@ -83,7 +86,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box>
+      <Box sx={{ order: 3 }}>
         <YearNumericFilter
           label={yearLabel ?? 'Year'}
           value={yearFilter}
@@ -94,7 +97,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box>
+      <Box sx={{ order: 4 }}>
         {onClearAllFilters && isAnyFilterActive && (
           <IconButton
             type={IconButtonVariant.outlined}
