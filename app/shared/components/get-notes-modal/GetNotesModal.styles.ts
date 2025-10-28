@@ -6,57 +6,68 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center'
   },
-  maxWidth: (state: number) => {
-    if (state === GetNotesState.LIST) {
-      return {
-        maxWidth: 'min(70vw, 1024px)'
-      };
-    }
 
-    return {
-      maxWidth: {
-        xs: '90vw',
-        sm: 'min(85vw, 600px)',
-        md: 'min(70vw, 744px)'
+  paper: (state: GetNotesState) => {
+    const shared = {
+      maxHeight: '95vh',
+      '@media (max-height: 700px) and (max-width: 600px)': {
+        maxHeight: '100vh',
+        height: state === GetNotesState.LIST ? '100vh' : 'auto',
+        overflowY: 'auto'
       }
     };
-  },
-  paper: (state: number) => {
+
     if (state === GetNotesState.LIST) {
       return {
-        maxHeight: '95vh',
-        padding: {
-          xs: '16px 20px 24px',
-          sm: '24px 32px 32px',
-          md: '20px 56px 56px'
+        ...shared,
+        maxWidth: {
+          xs: '100vw',
+          sm: '482px',
+          md: '744px',
+          xl: '1024px'
         },
         minWidth: {
           xs: '95vw',
-          sm: 'min(90vw, 900px)',
-          md: 'min(70vw, 726px)',
-          lg: 'min(70vw, 1024px)'
+          sm: 'min(90vw, 482px)',
+          md: 'min(70vw, 744px)',
+          xl: 'min(70vw, 1024px)'
         },
-        '@media (max-height: 800px) and (max-width:600px)': {
-          height: 'calc(100vh - 32px)',
-          overflowY: 'auto'
+        padding: {
+          xs: '16px 20px 24px',
+          sm: '48px',
+          md: '64px 56px',
+          xl: '72px'
         }
       };
     }
 
     return {
-      maxHeight: '95vh',
+      ...shared,
+      maxWidth: {
+        xs: '100vw',
+        sm: '394px',
+        md: '496px',
+        lg: '646px',
+        xl: '744px',
+        xxl: '772px'
+      },
       padding: {
-        xs: '16px 24px 24px',
-        sm: '24px 48px 48px',
-        md: '72px'
+        xs: '51px 24px',
+        sm: '50px 32px',
+        md: '57px 53px',
+        lg: '80px',
+        xl: '75px 81px'
       },
-      minWidth: {
-        xs: '90vw',
-        sm: 'min(85vw, 600px)',
-        md: 'min(70vw, 744px)'
+      '@media (max-width: 425px)': {
+        maxWidth: '100vw'
       },
-      '@media (max-height: 800px) and (max-width:600px)': {
-        height: 'calc(100vh - 32px)',
+      '@media (min-width: 426px) and (max-width: 767px)': {
+        maxWidth: 'min(90vw, 394px)'
+      },
+      '@media (max-height: 800px)': {
+        maxHeight: '100vh'
+      },
+      '@media (max-height: 680px)': {
         overflowY: 'auto'
       }
     };
@@ -64,10 +75,11 @@ export const styles = {
 
   headerContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
     flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
     marginBottom: '8px'
   },
+
   closeIcon: {
     width: '30px',
     height: '30px'

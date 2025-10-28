@@ -1,5 +1,5 @@
 export const styles = {
-  container: () => ({
+  container: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -13,7 +13,7 @@ export const styles = {
       sm: '24px',
       md: '40px'
     }
-  }),
+  },
   leftBlock: {
     display: 'flex',
     flexDirection: 'column',
@@ -48,7 +48,6 @@ export const styles = {
   iconButton: {
     width: 40,
     height: 40,
-    minWidth: 40,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
