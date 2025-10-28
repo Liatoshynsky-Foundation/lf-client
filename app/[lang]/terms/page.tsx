@@ -1,8 +1,10 @@
 import React from 'react';
 
 import TermsOfUse from '~/components/blocks/terms-of-use/TermsOfUse';
+import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
@@ -14,6 +16,10 @@ export const metadata = createSeoMeta({
 });
 
 export default function Terms() {
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
+  }
+
   return (
     <MainLayout withLines>
       <TermsOfUse />
