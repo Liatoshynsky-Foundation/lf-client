@@ -81,7 +81,7 @@ const DesktopNav = ({
     } else {
       setActiveButton(undefined);
     }
-  }, [pathname, navLabels]);
+  }, [pathname, NAV_ITEMS, specialNav?.links]);
 
   const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
 
