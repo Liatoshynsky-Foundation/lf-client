@@ -181,7 +181,9 @@ export const styles = {
     mt: {
       lg: '50px'
     },
-    overflow: 'hidden',
+    overflowX: {
+      xl: 'hidden'
+    },
     maxWidth: '100%'
   },
   secondRowImageWrapper: {
