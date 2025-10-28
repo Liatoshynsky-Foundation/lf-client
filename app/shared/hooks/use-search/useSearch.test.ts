@@ -41,7 +41,7 @@ describe('useSearch', () => {
     useQueryMock.mockImplementation((opts: any) => ({ data: opts.queryFn(), isLoading: false }));
   });
 
-  it('повертає дефолтні значення при ініціалізації', () => {
+  it('should return default values on initialization', () => {
     useQueryMock.mockImplementation(() => ({ data: [{ id: 1 }], isLoading: true }));
     const { result } = renderHook(() => useSearch({ dataEndpoint: '/api/items' }));
 
@@ -51,7 +51,7 @@ describe('useSearch', () => {
     expect(result.current.data).toEqual([{ id: 1 }]);
   });
 
-  it('оновлює параметри фільтрації та відображає відповідні дані', () => {
+  it('should update filter params and return corresponding data', () => {
     useSearchParamsMock.mockReturnValue(new URLSearchParams('search=apple'));
     useQueryMock.mockImplementation(() => ({ data: [{ id: 1 }], isLoading: true }));
 
@@ -66,7 +66,6 @@ describe('useSearch', () => {
       tags: ['a', 'b']
     });
 
-    // новий виклик useQueryMock з новим queryKey
     const newCallArgs = useQueryMock.mock.calls[1][0];
     expect(newCallArgs.queryKey).toEqual([
       'table-data',
@@ -79,7 +78,7 @@ describe('useSearch', () => {
     expect(result.current.data).toEqual([{ id: 1 }]);
   });
 
-  it('оновлює extraParams через debouncedSetFilterParam', () => {
+  it('should update extraParams through debouncedSetFilterParam', () => {
     const { result } = renderHook(() => useSearch({ dataEndpoint: '/api/items' }));
 
     act(() => result.current.debouncedSetFilterParam('type', 'fruit'));
@@ -87,35 +86,31 @@ describe('useSearch', () => {
     expect(result.current.extraParams).toEqual({ type: 'fruit' });
   });
 
-  it('queryFn формує params правильно та викликає getTableData', async () => {
+  it('should correctly form query params and call getTableData inside queryFn', async () => {
     const mockData = [{ id: 1 }];
     getTableDataMock.mockResolvedValueOnce(mockData);
 
     let queryFn: any;
     useQueryMock.mockImplementation((opts: any) => {
-      queryFn = opts.queryFn; // зберігаємо queryFn
+      queryFn = opts.queryFn;
       return { data: [], isLoading: false };
     });
 
     const { result } = renderHook(() => useSearch({ dataEndpoint: '/api/items' }));
 
-    // встановлюємо search і extraParams
     act(() => {
       result.current.setSearch('apple');
       result.current.setFilterParam({ category: 'books', tags: ['a', 'b'] });
     });
 
-    // викликаємо queryFn
     const data = await queryFn();
 
-    // перевіряємо, що tableClientService отримав правильні params
     expect(getTableDataMock).toHaveBeenCalledWith('/api/items', 'en', {
       category: 'books',
       tags: ['a', 'b'],
       search: 'apple'
     });
 
-    // перевіряємо результат
     expect(data).toEqual(mockData);
   });
 });
