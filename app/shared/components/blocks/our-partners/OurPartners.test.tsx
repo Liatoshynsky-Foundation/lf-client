@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import OurPartners from './OurPartners';
 import { gridConfigs } from './partnerLayouts';
-import { partnersMock } from './partners.const';
+import { partnersMock } from './partners.data';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {

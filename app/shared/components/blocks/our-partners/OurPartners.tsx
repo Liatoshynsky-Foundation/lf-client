@@ -7,7 +7,7 @@ import PartnerLogo from '../../partner-logo/PartnerLogo';
 import { styles } from './OurPartners.styles';
 import PartnerGrid from './partner-grid/PartnerGrid';
 import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
-import { partnersMock } from './partners.const';
+import { partnersMock } from './partners.data';
 
 export default function OurPartners() {
   const t = useTranslations('ourPartners');

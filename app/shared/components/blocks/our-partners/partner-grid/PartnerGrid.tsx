@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import type { Partner } from '../partners.const';
+import type { Partner } from '../partners.data';
 import styles from './PartnerGrid.styles';
 
 import PartnerLogo from '~/shared/components/partner-logo/PartnerLogo';

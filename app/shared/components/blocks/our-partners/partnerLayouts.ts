@@ -1,4 +1,4 @@
-import { Partner } from './partners.const';
+import { Partner } from './partners.data';
 
 type LayoutItem = string | null;
 
