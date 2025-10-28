@@ -92,7 +92,7 @@ describe('useSearch', () => {
 
     let queryFn: any;
     useQueryMock.mockImplementation((opts: any) => {
-      queryFn = opts.queryFn; 
+      queryFn = opts.queryFn;
       return { data: [], isLoading: false };
     });
 
