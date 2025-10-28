@@ -1,10 +1,8 @@
-'use client';
-
-import { Link } from '@mui/material';
+import { Box, Link } from '@mui/material';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
-import { socialMediaHoverMap, styles } from './SocialMediaIcon.styles';
+import { iconButtonBase, styles } from './SocialMediaIcon.styles';
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -14,30 +12,19 @@ interface SocialMediaIconProps {
   href: string;
 }
 
-const SocialMediaIcon = ({ icon, href }: SocialMediaIconProps) => {
-  const hoverStyle = socialMediaHoverMap[icon] ?? { backgroundColor: '#1A1008' };
-
-  return (
-    <Link href={href} key={icon} target="_blank" sx={styles.link}>
-      <IconButton
-        sx={{
-          ...styles.iconButtonBase,
-          '&:hover': {
-            ...(hoverStyle || {})
-          }
-        }}
-      >
-        <div style={styles.iconWrapper as React.CSSProperties}>
-          <SvgImage
-            src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}
-            alt={icon}
-            width={24}
-            height={24}
-          />
-        </div>
-      </IconButton>
-    </Link>
-  );
-};
+const SocialMediaIcon = ({ icon, href }: SocialMediaIconProps) => (
+  <Link href={href} key={icon} target="_blank" sx={styles.link}>
+    <IconButton sx={iconButtonBase(icon)}>
+      <Box sx={styles.iconWrapper}>
+        <SvgImage
+          src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}
+          alt={icon}
+          width={24}
+          height={24}
+        />
+      </Box>
+    </IconButton>
+  </Link>
+);
 
 export default SocialMediaIcon;
