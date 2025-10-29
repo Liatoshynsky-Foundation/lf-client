@@ -100,7 +100,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
       <Box sx={styles.secondRow}>
         {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper, {
-          width: 618,
+          width: 608,
           height: 385
         })}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}

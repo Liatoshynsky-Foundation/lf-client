@@ -21,7 +21,8 @@ export const styles = {
   title: {
     marginBottom: {
       xs: '10px',
-      md: '15px'
+      md: '40px',
+      lg: '15px'
     }
   },
   firstRow: {
@@ -53,7 +54,7 @@ export const styles = {
     mb: {
       xs: '24px',
       sm: '32px',
-      md: '20px',
+      md: '30px',
       lg: '40px',
       xl: '10px',
       xxl: '10px'
@@ -103,7 +104,7 @@ export const styles = {
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 4',
-      md: 'span 6',
+      md: 'span 5',
       lg: 'span 3',
       xl: 'span 3'
     },
@@ -135,6 +136,7 @@ export const styles = {
       xl: '60px'
     },
     gridColumn: {
+      md: '4 / 8',
       lg: '3 / 6',
       xl: 'span 3',
       xxl: '3 / 6'
@@ -155,14 +157,18 @@ export const styles = {
   firstRowSecondCard: {
     display: 'flex',
     justifyContent: 'center',
+    justifySelf: {
+      xxl: 'end'
+    },
     marginTop: {
       xs: '0',
       sm: '0',
-      md: '0',
+      md: '20px',
       lg: '0',
       xl: '65px'
     },
     gridColumn: {
+      md: '4 / 8',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
@@ -188,13 +194,18 @@ export const styles = {
       lg: 'none',
       xl: 'flex'
     },
+    justifySelf: {
+      xxl: 'end'
+    },
     justifyContent: 'center',
     marginTop: {
       xs: '0',
+      md: '12px',
       lg: '0',
       xl: '28px'
     },
     gridColumn: {
+      md: '4 / 8',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
@@ -213,12 +224,16 @@ export const styles = {
     }
   },
   secondRowSecondCard: {
+    justifySelf: {
+      xxl: 'end'
+    },
     marginTop: {
       xs: '0',
       lg: '12px',
       xl: '12px'
     },
     gridColumn: {
+      md: '8 / 12',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '10 / 13'
@@ -240,7 +255,7 @@ export const styles = {
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 4',
-      md: 'span 6',
+      md: '8 / 13',
       lg: '7 / 9',
       xl: 'span 3',
       xxl: '6 / 7'
@@ -248,7 +263,7 @@ export const styles = {
     display: {
       xs: 'none',
       sm: 'none',
-      md: 'none',
+      md: 'block',
       lg: 'block',
       xl: 'block'
     }
@@ -288,19 +303,26 @@ export const styles = {
     }
   },
   firstRowImageContainer: {
+    overflow: {
+      md: 'hidden'
+    },
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 4',
-      md: 'span 6',
+      md: '8 / 12',
       lg: '3 / 6',
       xl: 'span 3',
       xxl: '10 / 13'
     }
   },
   firstRowImageWrapper: {
+    display: 'flex',
+    justifyContent: {
+      xxl: 'flex-end'
+    },
     transform: 'skewY(-2deg)',
     width: '100%',
-    mt: { sm: '40px', lg: '25px', xl: '42px' },
+    mt: { sm: '40px', md: '10px', lg: '25px', xl: '42px' },
     maxWidth: { xs: '100%', lg: '294px', xl: '294px' },
     marginLeft: { lg: 'auto', xl: 'auto' }
   },
@@ -315,7 +337,7 @@ export const styles = {
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 8',
-      md: '1 / -1',
+      md: '4 / 12',
       lg: '3 / 10',
       xl: 'span 6',
       xxl: '3 / 7'
