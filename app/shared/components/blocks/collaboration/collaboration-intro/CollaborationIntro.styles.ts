@@ -25,11 +25,20 @@ export const styles = {
     letterSpacing: '0px',
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   },
-  text: (isFirst: boolean = false) => ({
+  textAbove: {
     gridColumn: '1 / -1',
-    textIndent: isFirst ? { xs: '3.7em', sm: '17em' } : '0',
+    textIndent: {
+      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
+    },
     mt: { xs: '16px', md: '32px' }
-  }),
+  },
+  text: {
+    gridColumn: '1 / -1',
+    mt: { xs: '16px', md: '32px' }
+  },
   title: {
     alignSelf: 'start',
     mb: { sm: '0px', md: '34px' },

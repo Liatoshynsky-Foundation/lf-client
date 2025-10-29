@@ -20,8 +20,8 @@ export default function CollaborationIntro({ title, subtitle, content, contentAb
       </Typography>
       <Box sx={styles.textContainer}>
         <Typography sx={styles.subtitle}>{subtitle}</Typography>
-        <ContentBlock description={contentAbove} textSx={styles.text(true)} />
-        <ContentBlock description={content} textSx={styles.text()} />
+        <ContentBlock description={contentAbove} textSx={styles.textAbove} />
+        <ContentBlock description={content} textSx={styles.text} />
       </Box>
     </Box>
   );
