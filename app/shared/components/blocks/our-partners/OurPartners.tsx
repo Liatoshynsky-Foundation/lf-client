@@ -10,7 +10,7 @@ import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
 import { partnersMock } from './partners.data';
 
 export default function OurPartners() {
-  const t = useTranslations('ourPartners');
+  const t = useTranslations('warSupport.ourPartners');
 
   const partners = partnersMock;
 
