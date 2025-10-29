@@ -44,7 +44,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
       break;
     case GetNotesState.FORM:
       title = (
-        <Box>
+        <Box sx={{ mb: '8px' }}>
           <Typography variant="h4" sx={{ mb: 2, textTransform: 'uppercase', fontSize: { xs: '20px', md: '28px' } }}>
             {t('form.title')}
           </Typography>
@@ -76,17 +76,21 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
 
   const paper = () => (
     <PaperComponent sx={styles.paper(state)}>
-      <Box sx={{ position: state === GetNotesState.LIST ? 'relative' : 'sticky' }}>
-        <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
-          <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
-        </IconButton>
-        {title}
-      </Box>
+      <Box sx={{ position: 'sticky' }}>{title}</Box>
       <Box sx={styles.scrollContainer(state)}>{innards}</Box>
     </PaperComponent>
   );
 
-  return <ModalComponent open={opened} sx={styles.backdrop} slots={{ paper }} />;
+  return (
+    <ModalComponent open={opened} sx={styles.backdrop}>
+      <Box sx={{ position: 'relative' }}>
+        <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="large" onClick={handleClose}>
+          <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
+        </IconButton>
+        {paper()}
+      </Box>
+    </ModalComponent>
+  );
 };
 
 export default GetNotesModal;

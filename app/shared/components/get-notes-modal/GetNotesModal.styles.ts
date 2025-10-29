@@ -8,14 +8,9 @@ export const styles = {
   },
 
   paper: (state: GetNotesState) => {
-    const shared = {
-      maxHeight: '95vh',
-      position: 'relative'
-    };
-
     if (state === GetNotesState.LIST) {
       return {
-        ...shared,
+        maxHeight: '95vh',
         maxWidth: {
           xs: '100vw',
           sm: '482px',
@@ -42,7 +37,7 @@ export const styles = {
     }
 
     return {
-      ...shared,
+      maxHeight: '95vh',
       maxWidth: {
         xs: '100vw',
         sm: '394px',
@@ -68,35 +63,29 @@ export const styles = {
     const shared = {
       position: 'absolute',
       width: '30px',
-      height: '30px'
+      height: '30px',
+      zIndex: '100',
+      right: '23px'
     };
-
     if (state === GetNotesState.LIST) {
       return {
         ...shared,
         top: {
-          xs: '-20px',
-          sm: 0,
-          xl: '-24px'
-        },
-        right: 0
+          xs: '23px',
+          lg: 0
+        }
       };
     }
-
     return {
       ...shared,
       top: {
-        xs: '-30px',
-        sm: '-45px',
-        xl: '-45px'
+        xs: '10px',
+        lg: '16px'
       },
       right: {
-        xs: 0,
-        sm: '-24px'
-      },
-      '@media (max-height: 780px)': {
-        top: 0,
-        right: 0
+        xs: '23px',
+        md: '35px',
+        lg: '50px'
       }
     };
   },
