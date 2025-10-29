@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   gridContainer: {
     display: 'grid',
@@ -39,34 +37,6 @@ export const styles = {
     display: 'flex',
     gap: '8px',
     alignItems: 'center'
-  },
-  linkItem: {
-    fontFamily: 'Mulish',
-    fontSize: '16px',
-    fontWeight: 600,
-    lineHeight: '110%',
-    textDecoration: 'underline',
-
-    '&:hover': {
-      color: '#5F0E0F',
-      cursor: 'pointer'
-    },
-
-    '&:active': {
-      color: mainHexPallete.black
-    },
-
-    '&.Mui-disabled, &[aria-disabled="true"], &:disabled': {
-      color: mainHexPallete.blue[500],
-      pointerEvents: 'none',
-      textDecoration: 'underline'
-    }
-  },
-  iconButton: {
-    backgroundColor: 'rgba(25, 13, 3, 0.1)',
-    '&:disabled': {
-      backgroundColor: 'rgba(25, 13, 3, 0.1)'
-    }
   },
   faq: {
     gridColumn: { xs: '1 / -1', sm: '4 / -1', md: '6 / -1' },
