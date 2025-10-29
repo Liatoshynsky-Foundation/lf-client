@@ -45,6 +45,7 @@
   },
   "donationForm": {
     "donationTitle": "QUICK DONATION:",
+    "donationDescription": "Choose an amount to support the Foundation",
     "subscribeTitle": "SUBSCRIBE:",
     "donationSwitch": "Donation",
     "subscribeSwitch": "Subscription",
