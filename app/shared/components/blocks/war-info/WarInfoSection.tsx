@@ -15,9 +15,11 @@ const WarInfoSection = () => {
           {t('title')}
         </Typography>
       </Box>
-      <Box sx={style.textBlockContainer}>
-        <ContentBlock description={warSupportDoc[locale]} textSx={style.contentText} />
-      </Box>
+      <ContentBlock
+        description={warSupportDoc[locale]}
+        textSx={style.contentText}
+        containerSx={style.textBlockContainer}
+      />
     </Box>
   );
 };
