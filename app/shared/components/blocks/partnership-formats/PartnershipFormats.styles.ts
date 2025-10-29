@@ -156,7 +156,7 @@ export const styles = {
     },
     marginTop: {
       xs: '0',
-      sm: '0',
+      sm: '15px',
       md: '20px',
       lg: '0',
       xl: '55px'
@@ -194,6 +194,7 @@ export const styles = {
     justifyContent: 'center',
     marginTop: {
       xs: '0',
+      sm: '12px',
       md: '12px',
       lg: '0',
       xl: '28px'
@@ -219,6 +220,7 @@ export const styles = {
   },
   secondRowSecondCard: {
     justifySelf: {
+      sm: 'end',
       xxl: 'end'
     },
     marginTop: {
@@ -256,7 +258,7 @@ export const styles = {
     },
     display: {
       xs: 'none',
-      sm: 'none',
+      sm: 'block',
       md: 'block',
       lg: 'block',
       xl: 'block'
@@ -312,11 +314,12 @@ export const styles = {
   firstRowImageWrapper: {
     display: 'flex',
     justifyContent: {
+      sm: 'flex-end',
       xxl: 'flex-end'
     },
     transform: 'skewY(-2deg)',
     width: '100%',
-    mt: { sm: '40px', md: '10px', lg: '25px', xl: '42px' },
+    mt: { sm: '0', md: '10px', lg: '25px', xl: '42px' },
     maxWidth: { xs: '100%', lg: '294px', xl: '294px' },
     marginLeft: { lg: 'auto', xl: 'auto' }
   },
