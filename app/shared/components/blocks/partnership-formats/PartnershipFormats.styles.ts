@@ -397,13 +397,14 @@ export const styles = {
   buttonContainer: {
     display: 'flex',
     justifyContent: {
-      xs: 'center'
+      xs: 'center',
+      sm: 'flex-start'
     },
     gridColumn: {
       xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
-      lg: '6 / 13'
+      lg: '6 / -1'
     },
     mb: {
       xs: '24px',
