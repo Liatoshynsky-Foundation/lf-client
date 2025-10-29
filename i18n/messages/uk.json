@@ -152,7 +152,7 @@
       "filters": {
         "category": "Категорія",
         "genre": "Жанр",
-        "year": "Рік"
+        "year": "Рік створення"
       },
       "name": {
         "composition": "Усі Композиції"
