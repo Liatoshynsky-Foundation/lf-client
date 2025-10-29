@@ -17,14 +17,13 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
-
   return (
     <MainLayout withLines>
       <CollaborationIntro
-        title={collaborationIntroPageData.title}
-        subtitle={collaborationIntroPageData.subtitle}
-        contentAbove={collaborationIntroPageData.contentAbove}
-        content={collaborationIntroPageData.content}
+        title={collaborationIntroPageData[lang].title}
+        subtitle={collaborationIntroPageData[lang].subtitle}
+        contentAbove={collaborationIntroPageData[lang].contentAbove}
+        content={collaborationIntroPageData[lang].content}
       />
     </MainLayout>
   );
