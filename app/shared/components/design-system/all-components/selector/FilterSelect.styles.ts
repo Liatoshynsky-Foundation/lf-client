@@ -74,7 +74,9 @@ export const filterSelectStyles = {
 
   dropdownIcon: (disabled: boolean): SxProps => ({
     cursor: disabled ? 'default' : 'pointer',
-    opacity: disabled ? 0.5 : 1
+    opacity: disabled ? 0.5 : 1,
+    display: 'flex',
+    justifyContent: 'center'
   }),
 
   menuItem: {

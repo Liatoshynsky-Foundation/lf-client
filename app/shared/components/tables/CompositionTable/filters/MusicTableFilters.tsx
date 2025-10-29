@@ -11,6 +11,7 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
 import Delete from '~/public/icons/trash-2.svg';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MusicTableFiltersProps {
   labelGenre: string;
@@ -49,6 +50,8 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
+  const { isMobile } = useBreakpoints();
+
   const categoryOrder = categoryFilter.length > 0 ? 1 : 2;
   const genreOrder = genreFilter.length > 0 ? 1 : 2;
 
@@ -57,9 +60,9 @@ export function MusicTableFilters({
       sx={{
         width: '100%',
         display: 'flex',
-        flexWrap: 'wrap',
         gap: 2,
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        overflowX: 'scroll'
       }}
     >
       <Box sx={{ order: categoryOrder }}>
@@ -97,14 +100,14 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ order: 4 }}>
-        {onClearAllFilters && isAnyFilterActive && (
+      <Box sx={{ order: 4, alignSelf: 'center' }}>
+        {onClearAllFilters && isAnyFilterActive && !isMobile && (
           <IconButton
             type={IconButtonVariant.outlined}
             variant={IconButtonColorVariant.Secondary}
             size="medium"
             onClick={onClearAllFilters}
-            sx={{ border: 'none' }}
+            sx={{ border: 'none', padding: 0 }}
           >
             <Delete />
           </IconButton>

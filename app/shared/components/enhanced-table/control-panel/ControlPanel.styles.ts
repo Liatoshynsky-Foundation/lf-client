@@ -15,7 +15,10 @@ export const ControlPanelStyles = {
   headerRight: {
     display: 'flex',
     alignItems: 'center',
-    gap: 2
+    gap: {
+      xs: 1,
+      sm: 2
+    }
   },
   filtersBadge: {
     '& .MuiBadge-badge': {

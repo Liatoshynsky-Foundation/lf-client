@@ -24,7 +24,7 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let borderRadius;
 
   if (isMobile) {
-    width = 230;
+    width = '100%';
     borderRadius = '8px';
   } else if (focused) {
     width = 280;
