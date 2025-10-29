@@ -90,7 +90,12 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
         {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />
         {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
-        {renderImage(data.firstRowImage, styles.card, styles.firstRowImageWrapper, { width: 294, height: 386 })}
+        {renderImage(data.firstRowImage, styles.firstRowImageContainer, styles.firstRowImageWrapper, {
+          width: 294,
+          height: 386
+        })}
+        <Box sx={styles.emptyColumnSecond} />
+        {renderCard(data.secondRowFirstCard, styles.secondRowFirstCardLg)}
       </Box>
 
       <Box sx={styles.secondRow}>

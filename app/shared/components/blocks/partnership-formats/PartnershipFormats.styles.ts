@@ -29,7 +29,7 @@ export const styles = {
     height: {
       xs: 'auto',
       md: 'auto',
-      lg: '480px',
+      lg: 'auto',
       xl: '480px'
     },
     gridTemplateColumns: {
@@ -47,8 +47,16 @@ export const styles = {
       xs: '24px',
       sm: '24px',
       md: '24px',
-      lg: '0',
+      lg: '24px',
       xl: '0'
+    },
+    mb: {
+      xs: '24px',
+      sm: '32px',
+      md: '20px',
+      lg: '40px',
+      xl: '10px',
+      xxl: '10px'
     },
     position: {
       lg: 'relative',
@@ -60,7 +68,7 @@ export const styles = {
     height: {
       xs: 'auto',
       md: 'auto',
-      lg: '480px',
+      lg: 'auto',
       xl: '480px'
     },
     gridTemplateColumns: {
@@ -78,7 +86,7 @@ export const styles = {
       xs: '24px',
       sm: '24px',
       md: '24px',
-      lg: '0',
+      lg: '24px',
       xl: '0'
     },
     mb: {
@@ -107,11 +115,11 @@ export const styles = {
   firstRowFirstCard: {
     alignSelf: {
       xs: 'start',
-      lg: 'end',
+      lg: 'start',
       xl: 'end'
     },
     marginTop: {
-      lg: '60px',
+      lg: '25px',
       xl: '60px'
     },
     gridColumn: {
@@ -127,25 +135,31 @@ export const styles = {
       xs: '0',
       sm: '0',
       md: '0',
-      lg: '65px',
+      lg: '0',
       xl: '65px'
     },
     gridColumn: {
-      lg: '7 / 10',
+      lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
     }
   },
   secondRowFirstCard: {
-    display: 'flex',
+    display: {
+      xs: 'flex',
+      sm: 'flex',
+      md: 'flex',
+      lg: 'none',
+      xl: 'flex'
+    },
     justifyContent: 'center',
     marginTop: {
       xs: '0',
-      lg: '28px',
+      lg: '0',
       xl: '28px'
     },
     gridColumn: {
-      lg: '7 / 10',
+      lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
     }
@@ -167,7 +181,7 @@ export const styles = {
       xs: '1 / -1',
       sm: 'span 4',
       md: 'span 6',
-      lg: '6 / 7',
+      lg: '7 / 10',
       xl: 'span 3',
       xxl: '6 / 7'
     },
@@ -179,17 +193,47 @@ export const styles = {
       xl: 'block'
     }
   },
-  firstRowImageWrapper: {
-    transform: 'skewY(-2deg)',
-    width: '100%',
-    mt: { sm: '40px', lg: '42px', xl: '42px' },
-    maxWidth: { xs: '100%', lg: '294px', xl: '294px' },
-    marginLeft: { lg: 'auto', xl: 'auto' },
+  emptyColumnSecond: {
     gridColumn: {
-      lg: '10 / 13',
+      lg: '7 / 10'
+    },
+    display: {
+      xs: 'none',
+      sm: 'none',
+      md: 'none',
+      lg: 'block',
+      xl: 'none'
+    }
+  },
+  secondRowFirstCardLg: {
+    display: {
+      xs: 'none',
+      sm: 'none',
+      md: 'none',
+      lg: 'flex',
+      xl: 'none'
+    },
+    justifyContent: 'center',
+    gridColumn: {
+      lg: '10 / 13'
+    }
+  },
+  firstRowImageContainer: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: 'span 4',
+      md: 'span 6',
+      lg: '3 / 6',
       xl: 'span 3',
       xxl: '10 / 13'
     }
+  },
+  firstRowImageWrapper: {
+    transform: 'skewY(-2deg)',
+    width: '100%',
+    mt: { sm: '40px', lg: '25px', xl: '42px' },
+    maxWidth: { xs: '100%', lg: '294px', xl: '294px' },
+    marginLeft: { lg: 'auto', xl: 'auto' }
   },
   secondRowImageContainer: {
     transform: 'skewY(-2deg)',
@@ -203,12 +247,12 @@ export const styles = {
       xs: '1 / -1',
       sm: 'span 8',
       md: '1 / -1',
-      lg: '3 / 7',
+      lg: '3 / 10',
       xl: 'span 6',
       xxl: '3 / 7'
     },
     mt: {
-      lg: '50px',
+      lg: '35px',
       xl: '50px'
     },
     overflowX: {
