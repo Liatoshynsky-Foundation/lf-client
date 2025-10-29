@@ -13,8 +13,7 @@ export const styles = {
     flexDirection: 'column',
     gap: '57px',
     pt: '24px',
-    pl: '16px',
-    pr: '16px'
+    px: '24px'
   },
   textfieldContainer: {
     display: 'flex',

@@ -62,7 +62,7 @@ export function MusicTableFilters({
         display: 'flex',
         gap: 2,
         alignItems: 'flex-start',
-        overflowX: 'scroll'
+        overflowX: { xs: 'scroll', sm: 'hidden' }
       }}
     >
       <Box sx={{ order: categoryOrder }}>
