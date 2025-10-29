@@ -26,7 +26,13 @@ export const styles = {
     }
   },
   firstRow: {
-    display: 'grid',
+    display: {
+      xs: 'grid',
+      sm: 'grid',
+      md: 'grid',
+      lg: 'contents',
+      xl: 'contents'
+    },
     height: {
       xs: 'auto',
       md: 'auto',
@@ -65,7 +71,13 @@ export const styles = {
     }
   },
   secondRow: {
-    display: 'grid',
+    display: {
+      xs: 'grid',
+      sm: 'grid',
+      md: 'grid',
+      lg: 'contents',
+      xl: 'contents'
+    },
     height: {
       xs: 'auto',
       md: 'auto',
