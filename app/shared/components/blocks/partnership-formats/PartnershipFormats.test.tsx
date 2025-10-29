@@ -87,7 +87,7 @@ describe('PartnershipFormats', () => {
       src: '/images/partnership-large.png',
       alt: 'Team collaboration',
       width: 618,
-      height: 386,
+      height: 385,
       borderWidth: 8
     },
     secondRowFirstCard: {
@@ -152,13 +152,14 @@ describe('PartnershipFormats', () => {
     );
   });
 
-  it('should render all second row cards', () => {
+  it('should render all cards including duplicated card for responsive layout', () => {
     render(<PartnershipFormats data={mockData} />);
     const cards = screen.getAllByTestId('card-with-text');
-    expect(cards.length).toBe(4);
 
-    const thirdCard = cards[2];
-    expect(within(thirdCard).getByTestId('card-title')).toHaveTextContent('Joint Projects');
+    expect(cards.length).toBe(5);
+
+    const jointProjectCards = cards.filter((card) => within(card).queryByText('Joint Projects'));
+    expect(jointProjectCards.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should render description text when provided', () => {
