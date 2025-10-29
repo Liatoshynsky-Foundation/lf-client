@@ -33,6 +33,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             }}
             containerSx={styles.imageContainer}
             captionSx={styles.imageCaption}
+            imageSx={{ width: { xs: '80vw', sm: '60vw', xxl: '980px' } }}
           />
         )}
       </Box>

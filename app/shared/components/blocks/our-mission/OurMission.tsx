@@ -56,6 +56,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
             left: { xs: 16, sm: 26, md: 41, lg: 40, xl: 40 }
           }}
           containerSx={styles.bigImg}
+          imageSx={{ width: { xs: '80vw', sm: '60vw', xxl: '816px' } }}
         />
       )}
     </Box>
