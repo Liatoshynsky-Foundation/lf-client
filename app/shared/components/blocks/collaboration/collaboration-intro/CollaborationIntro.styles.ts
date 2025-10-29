@@ -2,6 +2,7 @@ import { AppTypography } from '~/constants';
 
 export const styles = {
   container: {
+    height: '0%',
     display: 'grid',
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
@@ -14,7 +15,8 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mt: '120px'
+    mt: '120px',
+    gridTemplateRows: 'auto auto'
   },
   subtitle: {
     ...AppTypography.oswald28Bold,
@@ -24,12 +26,13 @@ export const styles = {
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   },
   text: (isFirst: boolean = false) => ({
-    gridColumn: '6 / -1',
+    gridColumn: '1 / -1',
     textIndent: isFirst ? { xs: '3.7em', sm: '17em' } : '0',
     mt: { xs: '16px', md: '32px' }
   }),
   title: {
-    mb: '34px',
+    alignSelf: 'start',
+    mb: { sm: '0px', md: '34px' },
     gridColumn: { xs: '1 / -1', md: '1 / 3' },
     fontSize: { xs: '40px', md: '64px' }
   },
