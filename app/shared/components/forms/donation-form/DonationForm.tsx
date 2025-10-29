@@ -132,6 +132,7 @@ function DonationForm() {
           inputProps={{ 'aria-invalid': hasError }}
           value={donationSum}
           onChange={handleInputChange}
+          placeholder="0"
           sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
         />
         <FormControl variant="standard" sx={style.currencyInput}>
