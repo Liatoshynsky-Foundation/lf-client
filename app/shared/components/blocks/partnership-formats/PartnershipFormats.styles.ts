@@ -1,16 +1,7 @@
 export const styles = {
   container: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     mb: {
       xs: '16px',
@@ -39,16 +30,7 @@ export const styles = {
       lg: 'auto',
       xl: '480px'
     },
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     rowGap: {
       xs: '24px',
@@ -84,16 +66,7 @@ export const styles = {
       lg: 'auto',
       xl: '480px'
     },
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     rowGap: {
       xs: '24px',
@@ -121,14 +94,23 @@ export const styles = {
       xl: 'span 3'
     },
     width: {
+      xs: '294px',
+      sm: '294px',
+      md: '294px',
       lg: '294px',
       xl: '294px'
     },
     maxWidth: {
+      xs: '294px',
+      sm: '294px',
+      md: '294px',
       lg: '294px',
       xl: '294px'
     },
     minWidth: {
+      xs: '294px',
+      sm: '294px',
+      md: '294px',
       lg: '294px',
       xl: '294px'
     }
@@ -177,7 +159,7 @@ export const styles = {
       sm: '0',
       md: '20px',
       lg: '0',
-      xl: '65px'
+      xl: '55px'
     },
     gridColumn: {
       md: '4 / 8',
@@ -245,7 +227,7 @@ export const styles = {
       xl: '12px'
     },
     gridColumn: {
-      md: '8 / 12',
+      md: '9 / 13',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '10 / 13'
@@ -321,7 +303,7 @@ export const styles = {
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 4',
-      md: '8 / 12',
+      md: '9 / 13',
       lg: '3 / 6',
       xl: 'span 3',
       xxl: '10 / 13'
@@ -370,16 +352,7 @@ export const styles = {
   },
   descriptionContainer: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     mb: {
       xs: '24px',
