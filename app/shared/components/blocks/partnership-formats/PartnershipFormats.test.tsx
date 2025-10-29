@@ -86,7 +86,7 @@ describe('PartnershipFormats', () => {
     secondRowImage: {
       src: '/images/partnership-large.png',
       alt: 'Team collaboration',
-      width: 618,
+      width: 608,
       height: 385,
       borderWidth: 8
     },
@@ -144,7 +144,7 @@ describe('PartnershipFormats', () => {
   it('should render second row image', () => {
     render(<PartnershipFormats data={mockData} />);
     const images = screen.getAllByTestId('image-with-border');
-    const secondRowImage = images.find((img) => img.getAttribute('data-width') === '618');
+    const secondRowImage = images.find((img) => img.getAttribute('data-width') === '608');
     expect(secondRowImage).toBeInTheDocument();
     expect(within(secondRowImage!).getByAltText('Team collaboration')).toHaveAttribute(
       'src',
