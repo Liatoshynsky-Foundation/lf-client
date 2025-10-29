@@ -1,6 +1,6 @@
 import { ImageProps } from 'next/image';
 
-const image = ({ alt, src, width, height, style, fill, sizes }: ImageProps) => {
+const image = ({ alt, src, width, height, style, fill, sizes, 'aria-label': ariaLabel }: ImageProps) => {
   return (
     <img
       alt={alt}
@@ -9,6 +9,7 @@ const image = ({ alt, src, width, height, style, fill, sizes }: ImageProps) => {
       height={height}
       style={style}
       sizes={sizes}
+      aria-label={ariaLabel}
       data-fill={fill}
     />
   );
