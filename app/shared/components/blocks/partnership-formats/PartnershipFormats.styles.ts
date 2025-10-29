@@ -11,14 +11,26 @@ export const styles = {
   },
   title: {
     marginBottom: {
-      xs: '10px',
+      xs: '30px',
+      sm: '40px',
       md: '40px',
-      lg: '15px'
+      lg: '50px',
+      xl: '15px'
+    }
+  },
+  mobileSlider: {
+    display: {
+      xs: 'block',
+      sm: 'none'
+    },
+    gridColumn: '1 / -1',
+    mb: {
+      xs: '24px'
     }
   },
   firstRow: {
     display: {
-      xs: 'grid',
+      xs: 'none',
       sm: 'grid',
       md: 'grid',
       lg: 'contents',
@@ -54,7 +66,7 @@ export const styles = {
   },
   secondRow: {
     display: {
-      xs: 'grid',
+      xs: 'none',
       sm: 'grid',
       md: 'grid',
       lg: 'contents',
@@ -357,6 +369,10 @@ export const styles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
+    mt: {
+      lg: '50px',
+      xxl: '50px'
+    },
     mb: {
       xs: '24px',
       sm: '32px',
@@ -364,9 +380,12 @@ export const styles = {
     }
   },
   descriptionText: {
-    textIndent: '21em',
+    textIndent: {
+      sm: '15em',
+      md: '21em'
+    },
     gridColumn: {
-      xs: '2 / -1',
+      xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
       lg: '6 / 13'
@@ -377,8 +396,11 @@ export const styles = {
   },
   buttonContainer: {
     display: 'flex',
+    justifyContent: {
+      xs: 'center'
+    },
     gridColumn: {
-      xs: '2 / -1',
+      xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
       lg: '6 / 13'

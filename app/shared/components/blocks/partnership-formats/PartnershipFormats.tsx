@@ -11,6 +11,7 @@ import CardWithText from '~/ds-components/card-with-text/CardWithText';
 import ImageWithBorder from '~/ds-components/image-with-border/ImageWithBorder';
 
 import { styles } from './PartnershipFormats.styles';
+import PartnershipSlider from './PartnershipSlider';
 
 interface PartnershipCard {
   icon?: string;
@@ -82,10 +83,26 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
     );
   };
 
+  // Подготовка слайдов для мобильной версии
+  const mobileSlides = [
+    data.firstRowFirstCard && { type: 'card' as const, card: data.firstRowFirstCard },
+    data.firstRowImage && { type: 'image' as const, image: data.firstRowImage },
+    data.firstRowSecondCard && { type: 'card' as const, card: data.firstRowSecondCard },
+    data.secondRowImage && { type: 'image' as const, image: data.secondRowImage },
+    data.secondRowFirstCard && { type: 'card' as const, card: data.secondRowFirstCard },
+    data.secondRowSecondCard && { type: 'card' as const, card: data.secondRowSecondCard }
+  ].filter(Boolean) as Array<{ type: 'card' | 'image'; card?: PartnershipCard; image?: PartnershipImage }>;
+
   return (
     <Box sx={styles.container}>
       <SectionTitle title={data.title} sx={styles.title} />
 
+      {/* Мобильный слайдер (только для xs) */}
+      <Box sx={styles.mobileSlider}>
+        <PartnershipSlider slides={mobileSlides} />
+      </Box>
+
+      {/* Десктопная версия (скрыта на xs) */}
       <Box sx={styles.firstRow}>
         {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />
