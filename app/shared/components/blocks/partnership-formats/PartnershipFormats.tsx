@@ -94,8 +94,8 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
           width: 294,
           height: 386
         })}
-        <Box sx={styles.emptyColumnSecond} />
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCardLg)}
+        <Box sx={styles.emptyColumnSecond} />
       </Box>
 
       <Box sx={styles.secondRow}>

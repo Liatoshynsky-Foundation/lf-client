@@ -106,6 +106,18 @@ export const styles = {
       md: 'span 6',
       lg: 'span 3',
       xl: 'span 3'
+    },
+    width: {
+      lg: '294px',
+      xl: '294px'
+    },
+    maxWidth: {
+      lg: '294px',
+      xl: '294px'
+    },
+    minWidth: {
+      lg: '294px',
+      xl: '294px'
     }
   },
   lastCardInRow: {
@@ -126,6 +138,18 @@ export const styles = {
       lg: '3 / 6',
       xl: 'span 3',
       xxl: '3 / 6'
+    },
+    width: {
+      lg: '294px',
+      xl: '294px'
+    },
+    maxWidth: {
+      lg: '294px',
+      xl: '294px'
+    },
+    minWidth: {
+      lg: '294px',
+      xl: '294px'
     }
   },
   firstRowSecondCard: {
@@ -142,6 +166,18 @@ export const styles = {
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
+    },
+    width: {
+      lg: '294px',
+      xl: '294px'
+    },
+    maxWidth: {
+      lg: '294px',
+      xl: '294px'
+    },
+    minWidth: {
+      lg: '294px',
+      xl: '294px'
     }
   },
   secondRowFirstCard: {
@@ -162,6 +198,18 @@ export const styles = {
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
+    },
+    width: {
+      lg: '294px',
+      xl: '294px'
+    },
+    maxWidth: {
+      lg: '294px',
+      xl: '294px'
+    },
+    minWidth: {
+      lg: '294px',
+      xl: '294px'
     }
   },
   secondRowSecondCard: {
@@ -174,6 +222,18 @@ export const styles = {
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '10 / 13'
+    },
+    width: {
+      lg: '294px',
+      xl: '294px'
+    },
+    maxWidth: {
+      lg: '294px',
+      xl: '294px'
+    },
+    minWidth: {
+      lg: '294px',
+      xl: '294px'
     }
   },
   emptyColumn: {
@@ -181,7 +241,7 @@ export const styles = {
       xs: '1 / -1',
       sm: 'span 4',
       md: 'span 6',
-      lg: '7 / 10',
+      lg: '7 / 9',
       xl: 'span 3',
       xxl: '6 / 7'
     },
@@ -191,18 +251,6 @@ export const styles = {
       md: 'none',
       lg: 'block',
       xl: 'block'
-    }
-  },
-  emptyColumnSecond: {
-    gridColumn: {
-      lg: '7 / 10'
-    },
-    display: {
-      xs: 'none',
-      sm: 'none',
-      md: 'none',
-      lg: 'block',
-      xl: 'none'
     }
   },
   secondRowFirstCardLg: {
@@ -215,7 +263,28 @@ export const styles = {
     },
     justifyContent: 'center',
     gridColumn: {
+      lg: '7 / 10'
+    },
+    width: {
+      lg: '294px'
+    },
+    maxWidth: {
+      lg: '294px'
+    },
+    minWidth: {
+      lg: '294px'
+    }
+  },
+  emptyColumnSecond: {
+    gridColumn: {
       lg: '10 / 13'
+    },
+    display: {
+      xs: 'none',
+      sm: 'none',
+      md: 'none',
+      lg: 'block',
+      xl: 'none'
     }
   },
   firstRowImageContainer: {
