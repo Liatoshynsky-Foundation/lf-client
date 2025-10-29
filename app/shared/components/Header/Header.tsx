@@ -37,7 +37,11 @@ export default function Header() {
       </Box>
 
       <Box sx={styles.navigationContainer}>
-        <NavigationBar navLabels={headerData.navigation} specialNav={headerData.specialNavigation} />
+        <NavigationBar
+          navLabels={headerData.navigation}
+          specialNav={headerData.specialNavigation}
+          scrollDirection={scrollDirection}
+        />
       </Box>
 
       <Box sx={styles.rightActionsContainer}>
@@ -46,6 +50,7 @@ export default function Header() {
             text: t('supportButton'),
             link: headerData.supportButtonLink
           }}
+          scrollDirection={scrollDirection}
         />
       </Box>
     </Box>

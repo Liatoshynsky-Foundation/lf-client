@@ -1,9 +1,26 @@
 export const styles = {
+  wrapper: {
+    bgcolor: {
+      xs: '#FCFCFC',
+      sm: '#F2EEE8'
+    }
+  },
+
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   paper: {
+    mt: 'calc((100vw * 0.035) * -1)',
     maxWidth: 920,
     width: { xs: '272px', sm: '488px', md: '690px' },
     height: { xs: '380px', sm: '439px', md: '551px' },
-    mt: '150px'
+    bgcolor: {
+      xs: 'transparent',
+      sm: '#FCFCFC'
+    }
   },
 
   paperChildren: {

@@ -4,6 +4,6 @@ export const styles = {
     width: '100%',
     minHeight: 'inherit',
     background: color,
-    zIndex: -2
+    zIndex: 0
   })
 };

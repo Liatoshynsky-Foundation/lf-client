@@ -10,6 +10,7 @@ import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { styles } from './DesktopNav.styles';
+import type { ScrollDirection } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { usePathname } from '~/i18n/navigation';
@@ -22,7 +23,15 @@ export interface DropdownItem {
   href: string;
 }
 
-const DesktopNav = ({ navLabels, specialNav }: { navLabels: NavigationDTO[]; specialNav: NavigationDTO | null }) => {
+const DesktopNav = ({
+  navLabels,
+  specialNav,
+  scrollDirection
+}: {
+  navLabels: NavigationDTO[];
+  specialNav: NavigationDTO | null;
+  scrollDirection: ScrollDirection;
+}) => {
   const NAV_ITEMS = useMemo(() => {
     return navLabels.map((group) => {
       const dropdown = group.links.map((link) => ({
@@ -46,6 +55,12 @@ const DesktopNav = ({ navLabels, specialNav }: { navLabels: NavigationDTO[]; spe
   const [activeButton, setActiveButton] = useState<number | undefined>();
 
   useEffect(() => {
+    if (scrollDirection === 'down' && anchorEl) {
+      handleDropdownClose();
+    }
+  }, [scrollDirection, anchorEl]);
+
+  useEffect(() => {
     setTemporaryActiveIndex(null);
   }, [pathname]);
 
@@ -66,7 +81,7 @@ const DesktopNav = ({ navLabels, specialNav }: { navLabels: NavigationDTO[]; spe
     } else {
       setActiveButton(undefined);
     }
-  }, [pathname, navLabels]);
+  }, [pathname, NAV_ITEMS, specialNav?.links]);
 
   const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
 

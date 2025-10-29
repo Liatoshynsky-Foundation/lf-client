@@ -2,13 +2,14 @@
 
 import { MenuItem } from '@mui/material';
 import { useLocale } from 'next-intl';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '../button/Button';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
 import { IconButton } from '../icon-button/IconButton';
 import { styles } from './LanguageSwitcher.styles';
 import { IconButtonColorVariant, IconButtonVariant, PositionEnum } from '~/types/enums/common.enums';
+import type { ScrollDirection } from '~/types/types/common.types';
 
 import { usePathname, useRouter } from '~/../i18n/navigation';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -18,14 +19,21 @@ type Locale = (typeof locales)[number];
 
 export interface LanguageSwitcherProps {
   variant: 'icon' | 'toggle';
+  scrollDirection?: ScrollDirection;
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDirection }) => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (scrollDirection === 'down' && anchorEl) {
+      handleClose();
+    }
+  }, [scrollDirection, anchorEl]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -35,14 +43,14 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant }) => {
 
   const handleLanguageChange = (newLocale: Locale) => {
     if (newLocale === currentLocale) return;
-    router.push(pathname, { locale: newLocale });
+    router.replace(pathname, { locale: newLocale, scroll: false });
     handleClose();
   };
 
   const toggleLocale = () => {
     const newLocale = currentLocale === 'uk' ? 'en' : 'uk';
     if (newLocale === currentLocale) return;
-    router.push(pathname, { locale: newLocale });
+    router.replace(pathname, { locale: newLocale, scroll: false });
   };
 
   const menuItems = locales.map((locale) => (

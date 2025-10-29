@@ -3,9 +3,11 @@ import React from 'react';
 
 import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSelection';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
+import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
@@ -19,6 +21,11 @@ export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
   const t = await getTranslations('liatoshynskyArtistry');
+
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
+  }
+
   return (
     <MainLayout>
       <TitleWithQuote

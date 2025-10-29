@@ -33,7 +33,7 @@ const columnsMap: Record<number, { col: number; align: 'start' | 'end' }[]> = {
   ]
 };
 
-export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGuidesProps) => {
+export const ColumnGuides = ({ lineColor = '#EFE9E0' }: ColumnGuidesProps) => {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down('sm'));
   const isMd = useMediaQuery(theme.breakpoints.down('md'));

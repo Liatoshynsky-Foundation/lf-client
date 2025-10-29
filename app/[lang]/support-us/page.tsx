@@ -5,6 +5,9 @@ import { actionsHelpPageData } from '~/components/blocks/actions-help/ActionsHel
 import Faq from '~/components/blocks/FAQ/FAQ';
 import { contacts, faqItems } from '~/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/components/blocks/support-foundation/SupportFoundation';
+import UnderDevelopment from '~/components/under-development/UnderDevelopment';
+
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
@@ -13,6 +16,10 @@ export default function SupportUs() {
     contacts,
     faq: faqItems
   };
+
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
+  }
 
   return (
     <MainLayout withLines>

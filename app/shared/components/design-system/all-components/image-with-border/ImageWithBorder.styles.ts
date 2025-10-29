@@ -5,8 +5,7 @@ export const styles = {
     position: 'relative',
     width: width,
     height: height,
-    gridColumn: '1 / -1',
-    transform: 'skewY(-2deg)'
+    gridColumn: '1 / -1'
   }),
   border: (borderWidth: number, height: number) => ({
     display: 'block',
