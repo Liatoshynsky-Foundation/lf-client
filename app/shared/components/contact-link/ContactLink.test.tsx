@@ -14,21 +14,21 @@ describe('ContactLink component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders with label', () => {
+  it('Should render with label', () => {
     render(<ContactLink type="email" value="test@example.com" label="Email" />);
 
     expect(screen.getByText('Email:')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /test@example.com/i })).toHaveAttribute('href', 'mailto:test@example.com');
   });
 
-  it('renders with icon', () => {
+  it('Should render with icon', () => {
     render(<ContactLink type="phone" value="+380123456789" icon={IconMock} isMobile />);
 
     expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute('href', 'tel:+380123456789');
   });
 
-  it('copies phone to clipboard when clicked on desktop', async () => {
+  it('Should copy phone to clipboard when clicked on desktop', async () => {
     render(<ContactLink type="phone" label="Phone" value="+380123456789" isMobile={false} />);
 
     const link = screen.getByRole('link');
@@ -37,7 +37,7 @@ describe('ContactLink component', () => {
     expect(mockWriteText).toHaveBeenCalledWith('+380123456789');
   });
 
-  it('does nothing when disabled', () => {
+  it('Should do nothing when disabled', () => {
     render(<ContactLink type="phone" label="Phone" value="+380111111111" disabled />);
 
     const link = screen.getByRole('link');
@@ -48,14 +48,14 @@ describe('ContactLink component', () => {
     expect(link).toHaveAttribute('tabindex', '-1');
   });
 
-  it('renders in column direction correctly', () => {
+  it('Should render in column direction correctly', () => {
     render(<ContactLink type="email" value="column@example.com" label="Email" direction="column" />);
 
     const box = screen.getByText('Email:').parentElement;
     expect(box).toHaveStyle({ flexDirection: 'column' });
   });
 
-  it('applies custom linkSx styles', () => {
+  it('Should apply custom linkSx styles', () => {
     render(<ContactLink type="email" value="style@example.com" label="Email" linkSx={{ color: 'red' }} />);
 
     const link = screen.getByRole('link');
