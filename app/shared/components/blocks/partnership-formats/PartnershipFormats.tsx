@@ -83,7 +83,6 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
     );
   };
 
-  // Подготовка слайдов для мобильной версии
   const mobileSlides = [
     data.firstRowFirstCard && { type: 'card' as const, card: data.firstRowFirstCard },
     data.firstRowImage && { type: 'image' as const, image: data.firstRowImage },
@@ -97,12 +96,10 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
     <Box sx={styles.container}>
       <SectionTitle title={data.title} sx={styles.title} />
 
-      {/* Мобильный слайдер (только для xs) */}
       <Box sx={styles.mobileSlider}>
         <PartnershipSlider slides={mobileSlides} />
       </Box>
 
-      {/* Десктопная версия (скрыта на xs) */}
       <Box sx={styles.firstRow}>
         {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />

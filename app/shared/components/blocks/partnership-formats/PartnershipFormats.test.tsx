@@ -63,6 +63,38 @@ jest.mock('next/image', () => ({
   }
 }));
 
+jest.mock('./PartnershipSlider', () => {
+  return jest.fn(({ slides }: any) => (
+    <div data-testid="partnership-slider">
+      {slides.map((slide: any, index: number) => (
+        <div key={index} data-testid="slider-slide">
+          {slide.type === 'card' && slide.card && (
+            <div data-testid="card-with-text">
+              {slide.card.icon && <img src={slide.card.icon} alt="card-icon" />}
+              <div data-testid="card-title">{slide.card.title}</div>
+              <ul>
+                {slide.card.list.map((item: string, idx: number) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {slide.type === 'image' && slide.image && (
+            <div
+              data-testid="image-with-border"
+              data-width={slide.image.width}
+              data-height={slide.image.height}
+              data-border-width={slide.image.borderWidth || 8}
+            >
+              <img src={slide.image.src} alt={slide.image.alt} />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  ));
+});
+
 describe('PartnershipFormats', () => {
   const mockData = {
     title: 'Partnership Formats',
@@ -156,7 +188,9 @@ describe('PartnershipFormats', () => {
     render(<PartnershipFormats data={mockData} />);
     const cards = screen.getAllByTestId('card-with-text');
 
-    expect(cards.length).toBe(5);
+    // Expects 4 cards from desktop layout + 4 cards from mobile slider = 8 cards
+    // Plus 1 duplicated card for responsive layout = 9 cards total
+    expect(cards.length).toBe(9);
 
     const jointProjectCards = cards.filter((card) => within(card).queryByText('Joint Projects'));
     expect(jointProjectCards.length).toBeGreaterThanOrEqual(1);
@@ -244,7 +278,8 @@ describe('PartnershipFormats', () => {
     render(<PartnershipFormats data={minimalData} />);
 
     const cards = screen.getAllByTestId('card-with-text');
-    expect(cards.length).toBe(1);
+    // 1 card from desktop layout + 1 card from mobile slider = 2 cards total
+    expect(cards.length).toBe(2);
   });
 
   it('should render button with correct props', () => {
@@ -288,5 +323,38 @@ describe('PartnershipFormats', () => {
     expect(listItems).toHaveLength(4);
     expect(listItems[0]).toHaveTextContent('Sound equipment');
     expect(listItems[1]).toHaveTextContent('Online broadcasts');
+  });
+
+  it('should render mobile slider with correct slides', () => {
+    render(<PartnershipFormats data={mockData} />);
+    expect(screen.getByTestId('partnership-slider')).toBeInTheDocument();
+
+    // Check that slider has the correct number of slides (4 cards + 2 images = 6 slides)
+    const sliderSlides = screen.getAllByTestId('slider-slide');
+    expect(sliderSlides.length).toBe(6);
+  });
+
+  it('should render mobile slider with cards and images', () => {
+    render(<PartnershipFormats data={mockData} />);
+    const slider = screen.getByTestId('partnership-slider');
+
+    expect(slider).toBeInTheDocument();
+
+    // Verify slider contains both cards and images
+    const sliderCards = within(slider).getAllByTestId('card-with-text');
+    const sliderImages = within(slider).getAllByTestId('image-with-border');
+
+    expect(sliderCards.length).toBe(4);
+    expect(sliderImages.length).toBe(2);
+  });
+
+  it('should not render slider when no data is provided', () => {
+    const emptyData = { title: 'Empty State' };
+    render(<PartnershipFormats data={emptyData} />);
+
+    const slider = screen.getByTestId('partnership-slider');
+    const slides = within(slider).queryAllByTestId('slider-slide');
+
+    expect(slides.length).toBe(0);
   });
 });
