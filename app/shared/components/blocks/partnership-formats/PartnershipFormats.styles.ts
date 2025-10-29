@@ -106,7 +106,7 @@ export const styles = {
       lg: '60px'
     },
     gridColumn: {
-      xl: '3 / 6'
+      xxl: '3 / 6'
     }
   },
   firstRowSecondCard: {
@@ -119,7 +119,7 @@ export const styles = {
       lg: '65px'
     },
     gridColumn: {
-      xl: '7 / 10'
+      xxl: '7 / 10'
     }
   },
   secondRowFirstCard: {
@@ -130,7 +130,7 @@ export const styles = {
       lg: '28px'
     },
     gridColumn: {
-      xl: '7 / 10'
+      xxl: '7 / 10'
     }
   },
   secondRowSecondCard: {
@@ -139,7 +139,7 @@ export const styles = {
       lg: '12px'
     },
     gridColumn: {
-      xl: '10 / 13'
+      xxl: '10 / 13'
     }
   },
   emptyColumn: {
@@ -148,7 +148,7 @@ export const styles = {
       sm: 'span 4',
       md: 'span 6',
       lg: 'span 3',
-      xl: '6 / 7'
+      xxl: '6 / 7'
     },
     display: {
       xs: 'none',
@@ -164,7 +164,7 @@ export const styles = {
     maxWidth: { xs: '100%', lg: '294px' },
     marginLeft: { lg: 'auto' },
     gridColumn: {
-      xl: '10 / 13'
+      xxl: '10 / 13'
     }
   },
   secondRowImageContainer: {
@@ -179,13 +179,13 @@ export const styles = {
       sm: 'span 8',
       md: '1 / -1',
       lg: 'span 6',
-      xl: '3 / 7'
+      xxl: '3 / 7'
     },
     mt: {
       lg: '50px'
     },
     overflowX: {
-      xl: 'hidden'
+      xxl: 'hidden'
     },
     maxWidth: '100%'
   },
