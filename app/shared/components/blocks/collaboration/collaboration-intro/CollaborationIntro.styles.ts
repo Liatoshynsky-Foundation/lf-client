@@ -23,7 +23,7 @@ export const styles = {
     letterSpacing: '0px',
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   },
-  text: (isFirst: boolean) => ({
+  text: (isFirst: boolean = false) => ({
     gridColumn: '6 / -1',
     textIndent: isFirst ? { xs: '3.7em', sm: '17em' } : '0',
     mt: { xs: '16px', md: '32px' }
