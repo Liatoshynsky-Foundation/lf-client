@@ -4,7 +4,7 @@ import { mulish } from '../../design-system/all-components/theme/Theme';
 export const style = {
   paper: {
     background: mainHexPallete.brown[100],
-    width: { xs: '90vw', sm: '528px' },
+    width: { xs: '92vw', sm: '100%' },
     borderLeft: `4px solid ${mainHexPallete.yellow[500]}`,
     gridColumn: '1/-1'
   },

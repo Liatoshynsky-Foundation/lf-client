@@ -45,6 +45,7 @@
   },
   "donationForm": {
     "donationTitle": "ШВИДКО ЗАДОНАТИТИ:",
+    "donationDescription": "Оберіть суму для підтримки Фундації",
     "subscribeTitle": "ПІДПИСАТИСЯ:",
     "donationSwitch": "Разовий внесок",
     "subscribeSwitch": "Підписка",

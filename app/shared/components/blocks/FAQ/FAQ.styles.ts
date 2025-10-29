@@ -16,11 +16,6 @@ export const styles = {
     },
     p: '160px 0'
   },
-  title: {
-    display: 'flex',
-    width: '100%',
-    gap: { xs: '10%', sm: '25%', md: '40%' }
-  },
   contacts: {
     overflow: 'hidden',
     position: 'relative',
@@ -74,7 +69,7 @@ export const styles = {
     }
   },
   faq: {
-    gridColumn: { xs: '1fr', sm: '4 / -1', md: '6 / -1' },
+    gridColumn: { xs: '1 / -1', sm: '4 / -1', md: '6 / -1' },
     display: 'flex',
     flexDirection: 'column',
     gap: '24px'

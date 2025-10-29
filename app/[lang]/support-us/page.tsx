@@ -6,17 +6,18 @@ import { actionsHelpPageData } from '~/shared/components/blocks/actions-help/Act
 import Faq from '~/shared/components/blocks/FAQ/FAQ';
 import { contacts, faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/shared/components/blocks/support-foundation/SupportFoundation';
+import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { isProductionMode } from '~/utils/isProductionMode';
-import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
   title: 'Підтримати Фундацію',
   description:
     'Усі внески надходять безпосередньо на рахунок Фундації Лятошинського та спрямовуються на реалізацію її місії.',
-  url: '/research'
+  url: '/support-us'
 });
+
 export default function SupportUs() {
   const faqData = {
     contacts,

@@ -45,7 +45,7 @@ function PaymentDetails() {
                 <Typography component="span" variant="customSemiBold20" sx={styles.ibanText}>
                   {selectedPaymentDetails[key]}
                 </Typography>
-                <IconButton size="small" onClick={handleCopyIban}>
+                <IconButton size="small" onClick={handleCopyIban} aria-label="Copy IBAN">
                   <SvgImage src="/icons/content-copy.svg" alt="content copy" width={24} height={24} />
                 </IconButton>
               </Typography>

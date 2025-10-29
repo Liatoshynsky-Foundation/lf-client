@@ -51,13 +51,13 @@ export const styles = {
   paymentDetailsRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: { xs: '', sm: '25px' },
+    gap: { xs: '0px', sm: '25px' },
     flexWrap: { xs: 'wrap', sm: 'nowrap' }
   },
 
   iban: {
     display: 'flex',
-    wrap: { xs: 'wrap', md: 'nowrap' },
+    flexWrap: { xs: 'wrap', md: 'nowrap' },
     alignItems: 'center',
     borderRadius: '40px',
     p: '12px 15px 12px 24px',

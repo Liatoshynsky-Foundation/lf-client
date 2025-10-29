@@ -1,7 +1,7 @@
 export const styles = {
   card: {
     position: 'relative',
-    width: { sm: '90%', md: '230px', lg: '272px', xl: '296px' },
+    width: { sm: '100%', md: '100%', lg: '272px', xl: '296px' },
     height: '351px',
     overflow: 'hidden',
     display: { xs: 'none', sm: 'block' }
@@ -38,6 +38,6 @@ export const styles = {
     fontWeight: 700,
     lineHeight: '130%',
     color: '#190D03',
-    marginTop: { md: '30px', lg: '50px', xl: '79px' }
+    marginTop: { sm: '80px', md: '30px', lg: '50px', xl: '79px' }
   }
 };
