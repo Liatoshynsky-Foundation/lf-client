@@ -2,8 +2,7 @@ import { mainHexPallete } from '~/ds-components//theme/colors';
 
 export const ControlPanelStyles = {
   root: {
-    display: 'column',
-    gap: 8
+    pr: { xs: '2%', sm: 0 }
   },
   header: {
     display: 'flex',
