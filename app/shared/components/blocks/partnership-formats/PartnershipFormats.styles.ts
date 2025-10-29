@@ -158,6 +158,7 @@ export const styles = {
     }
   },
   firstRowImageWrapper: {
+    transform: 'skewY(-2deg)',
     width: '100%',
     mt: { sm: '40px', lg: '42px' },
     maxWidth: { xs: '100%', lg: '294px' },
@@ -167,6 +168,8 @@ export const styles = {
     }
   },
   secondRowImageContainer: {
+    transform: 'skewY(-2deg)',
+    overflow: 'hidden',
     alignSelf: {
       xs: 'start',
       lg: 'start'
