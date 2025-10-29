@@ -76,8 +76,8 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
 
   const paper = () => (
     <PaperComponent sx={styles.paper(state)}>
-      <Box sx={styles.headerSticky(state)}>
-        <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
+      <Box sx={{ position: state === GetNotesState.LIST ? 'relative' : 'sticky' }}>
+        <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
           <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
         </IconButton>
         {title}
