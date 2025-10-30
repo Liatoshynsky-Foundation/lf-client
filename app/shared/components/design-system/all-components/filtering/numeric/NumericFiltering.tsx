@@ -1,18 +1,15 @@
 'use client';
 
-import { Box, Divider, styled } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Svg } from '~/components/colored-svg/ColoredSvg';
-import Button from '~/ds-components/button/Button';
 import { DesignSystemSlider } from '~/ds-components/slider/Slider';
 import TextField from '~/ds-components/text-field/TextField';
-import { mainHexPallete, rgbaClearFilterButton } from '~/ds-components/theme/colors';
 
+import ClearFilterButton from '../../clear-filter-button/ClearFilterButton';
 import { styles } from './NumericFiltering.styles';
 
-import TrashIcon from '~/public/icons/trash-2.svg';
 import { getFilteringSchema } from '~/validators/filtering.schema';
 
 interface NumericFilteringProps {
@@ -22,39 +19,6 @@ interface NumericFilteringProps {
   minNumber?: number;
   maxNumber?: number;
 }
-
-const CustomButton = styled(Button)(() => ({
-  lineHeight: '140%',
-  color: rgbaClearFilterButton.defaultTextColor,
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  borderRadius: '8px',
-
-  '&:hover': {
-    backgroundColor: mainHexPallete.red[50],
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:focus-visible': {
-    color: mainHexPallete.red[700]
-  },
-  '&:active': {
-    color: mainHexPallete.red[700]
-  },
-
-  '& svg': {
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:hover svg': {
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:focus-visible svg': {
-    color: mainHexPallete.red[700]
-  },
-  '&:active svg': {
-    color: mainHexPallete.red[700]
-  }
-}));
 
 const minDistance = 1;
 
@@ -166,21 +130,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
       <Box>
         <Divider sx={styles.divider} />
         <Box sx={styles.footer}>
-          <CustomButton
-            startIcon={
-              <Svg
-                Component={TrashIcon}
-                alt="trash"
-                stroke={rgbaClearFilterButton.defaultTextColor}
-                width="20px"
-                height="22px"
-              />
-            }
-            onClick={handleClearFilter}
-            variant="text"
-          >
-            {t('clear')}
-          </CustomButton>
+          <ClearFilterButton onClick={handleClearFilter}>{t('clear')}</ClearFilterButton>
         </Box>
       </Box>
     </Box>
