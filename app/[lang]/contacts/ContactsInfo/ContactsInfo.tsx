@@ -45,7 +45,7 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
                 value={contacts.phone}
                 isMobile={isMobile}
                 direction="column"
-                data-testid="ContactsInfo-phone"
+                data-testid="ContactsInfo-phoneLink"
               />
             </Box>
             <Box sx={styles.contacts} data-testid="ContactsInfo-emailSection">
@@ -54,7 +54,7 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
                 label={t('email')}
                 value={contacts.email}
                 direction="column"
-                data-testid="ContactsInfo-email"
+                data-testid="ContactsInfo-emailLink"
               />
             </Box>
           </Box>
