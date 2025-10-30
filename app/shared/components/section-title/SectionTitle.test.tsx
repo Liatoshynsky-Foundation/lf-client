@@ -13,7 +13,6 @@ describe('SectionTitle', () => {
     expect(title).toBeInTheDocument();
 
     expect(icon).toBeInTheDocument();
-    // this was unintended size specified nowhere, please remove this comment before merging
   });
 
   it('should render title without icon', () => {

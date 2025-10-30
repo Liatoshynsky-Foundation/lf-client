@@ -1,4 +1,4 @@
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const styles = {
   imageContainer: {
