@@ -1,12 +1,14 @@
 'use client';
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
 import { styles } from './ContactsInfo.styles';
 
+import { ContactLink } from '~/shared/components/contact-link/ContactLink';
 import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 import PaperComponent from '~/shared/components/paper-component/PaperComponent';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface IContactInfoProps {
   title?: string;
@@ -20,6 +22,7 @@ interface IContactInfoProps {
 
 export default function ContactsInfo({ title, formTitle, contacts, socialLinks }: Readonly<IContactInfoProps>) {
   const t = useTranslations('contactsInfoPage');
+  const { isMobile } = useBreakpoints();
 
   return (
     <Box sx={styles.root} data-testid="ContactsInfo">
@@ -36,20 +39,23 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
           )}
           <Box sx={styles.contactsDetails}>
             <Box sx={styles.contacts} data-testid="ContactsInfo-phoneSection">
-              <Typography variant="subtitle1" data-testid="ContactsInfo-phoneLabel">
-                {t('phoneNumber')}:
-              </Typography>
-              <Link variant="customSemiBold18" data-testid="ContactsInfo-phoneLink">
-                {contacts.phone}
-              </Link>
+              <ContactLink
+                type="phone"
+                label={t('phoneNumber')}
+                value={contacts.phone}
+                isMobile={isMobile}
+                direction="column"
+                data-testid="ContactsInfo-phoneLink"
+              />
             </Box>
             <Box sx={styles.contacts} data-testid="ContactsInfo-emailSection">
-              <Typography variant="subtitle1" data-testid="ContactsInfo-emailLabel">
-                {t('email')}:
-              </Typography>
-              <Link variant="customSemiBold18" data-testid="ContactsInfo-emailLink">
-                {contacts.email}
-              </Link>
+              <ContactLink
+                type="email"
+                label={t('email')}
+                value={contacts.email}
+                direction="column"
+                data-testid="ContactsInfo-emailLink"
+              />
             </Box>
           </Box>
           <Box sx={styles.socialMediaWrapper} data-testid="ContactsInfo-socialMediaSection">
