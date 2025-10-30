@@ -32,7 +32,7 @@ const TermsContent = () => {
         containerSx={{
           marginBottom: '16px'
         }}
-        data-testid="TermsContent-libraryAccessTitle"
+        dataTestId="TermsContent-libraryAccessTitle"
       />
       <ButtonContentBlock
         buttonText={isMobile ? t('buttons.library.short') : t('buttons.library.full')}
@@ -55,7 +55,7 @@ const TermsContent = () => {
       <ContentBlock
         description={t('archiveUsage')}
         containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }}
-        data-testid="TermsContent-archiveUsageDescription"
+        dataTestId="TermsContent-archiveUsageDescription"
       />
       <Box
         sx={{
@@ -74,43 +74,43 @@ const TermsContent = () => {
       <ContentBlock
         title={t('copyrightTitle')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-copyrightTitle"
+        dataTestId="TermsContent-copyrightTitle"
       />
       <ContentBlock
         description={rightsDoc[locale]}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-copyrightRightsDescription"
+        dataTestId="TermsContent-copyrightRightsDescription"
       />
       <ContentBlock
         description={rightsManagementDoc[locale]}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-copyrightManagementDescription"
+        dataTestId="TermsContent-copyrightManagementDescription"
       />
       <ContentBlock
         description={meaningDoc[locale]}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-copyrightMeaningDescription"
+        dataTestId="TermsContent-copyrightMeaningDescription"
       />
       <ContentBlock
         list={licenseDoc[locale]}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-copyrightLicenseList"
+        dataTestId="TermsContent-copyrightLicenseList"
       />
       <ContentBlock
         description={t('paidNotes')}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-copyrightPaidNotesDescription"
+        dataTestId="TermsContent-copyrightPaidNotesDescription"
       />
       <ContentBlock containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }} />
       <ContentBlock
         title={t('registerTitle')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-registerTitle"
+        dataTestId="TermsContent-registerTitle"
       />
       <ContentBlock
         description={registerDoc[locale]}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-registerDescription"
+        dataTestId="TermsContent-registerDescription"
       />
 
       {registerListKeys.map((key, i) => (
@@ -120,24 +120,24 @@ const TermsContent = () => {
           containerSx={{
             mb: i === registerListKeys.length - 1 ? { xs: '32px' } : { xs: '24px', md: '32px' }
           }}
-          data-testid={`TermsContent-registerList-${key}`}
+          dataTestId={`TermsContent-registerList-${key}`}
         />
       ))}
 
       <ContentBlock
         description={privacyDoc[locale]}
         containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }}
-        data-testid="TermsContent-registerPrivacyDescription"
+        dataTestId="TermsContent-registerPrivacyDescription"
       />
       <ContentBlock
         title={t('behaviorTitle')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-behaviorTitle"
+        dataTestId="TermsContent-behaviorTitle"
       />
       <ContentBlock
         description={t('behaviorIntro')}
         containerSx={{ marginBottom: '32px' }}
-        data-testid="TermsContent-behaviorIntroDescription"
+        dataTestId="TermsContent-behaviorIntroDescription"
       />
 
       <Box data-testid="TermsContent-behaviorRules">
@@ -151,34 +151,34 @@ const TermsContent = () => {
                   ? { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
                   : { xs: '24px', md: '32px' }
             }}
-            data-testid={`TermsContent-behaviorList-${key}`}
+            dataTestId={`TermsContent-behaviorList-${key}`}
           />
         ))}
       </Box>
       <ContentBlock
         title={t('supportTitle')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-supportTitle"
+        dataTestId="TermsContent-supportTitle"
       />
       <ContentBlock
         description={supportDoc[locale]}
         containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }}
-        data-testid="TermsContent-supportDescription"
+        dataTestId="TermsContent-supportDescription"
       />
       <ContentBlock
         title={t('respectAuthorsTitle')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-respectAuthorsTitle"
+        dataTestId="TermsContent-respectAuthorsTitle"
       />
       <ContentBlock
         description={t('respectAuthorsIntro')}
         containerSx={{ marginBottom: '16px' }}
-        data-testid="TermsContent-respectAuthorsIntroDescription"
+        dataTestId="TermsContent-respectAuthorsIntroDescription"
       />
       <ContentBlock
         description={t('respectAuthorsOutro')}
         containerSx={{ pb: { xs: '120px', md: '160px' } }}
-        data-testid="TermsContent-respectAuthorsOutroDescription"
+        dataTestId="TermsContent-respectAuthorsOutroDescription"
       />
     </Box>
   );

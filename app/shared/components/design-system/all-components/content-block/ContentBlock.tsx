@@ -23,7 +23,7 @@ type ContentBlockProps = Readonly<{
   additionalDescription?: RichContent;
   textSx?: SxProps<Theme>;
   containerSx?: SxProps<Theme>;
-  'data-testid'?: string;
+  dataTestId?: string;
 }>;
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
@@ -103,7 +103,7 @@ export default function ContentBlock({
   additionalDescription,
   textSx,
   containerSx,
-  'data-testid': dataTestId
+  dataTestId
 }: ContentBlockProps) {
   return (
     <Box sx={{ ...styles.container, ...containerSx }} data-testid={dataTestId}>
