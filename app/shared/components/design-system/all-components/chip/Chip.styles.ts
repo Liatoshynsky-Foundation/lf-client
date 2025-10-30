@@ -1,14 +1,19 @@
+import { mainHexPallete } from '../theme/colors';
+
 export const ChipColors = {
-  text: '#190D03',
-  bgFilledDefault: '#FCFCFC',
-  bgFilledHover: '#EFE9E0',
-  bgFilledPressed: '#C6B6A9',
-  bgFilledDisabled: '#F7F8FC',
-  textDisabled: '#63666E',
-  borderOutlined: '#190D03',
-  bgOutlinedHovered: '#190D0314',
-  bgOutlinedPressed: '#190D033D',
-  borderDisabled: '#D9D9D9'
+  text: mainHexPallete.black,
+  textDisabled: mainHexPallete.blue[700],
+
+  bgFilledDefault: mainHexPallete.white,
+  bgFilledHover: mainHexPallete.blue[50],
+  bgFilledPressed: mainHexPallete.blue[100],
+  bgFilledDisabled: mainHexPallete.blue[50],
+
+  borderOutlined: mainHexPallete.black,
+  borderDisabled: mainHexPallete.blue[700],
+
+  bgOutlinedHovered: `${'#190D03'}14`,
+  bgOutlinedPressed: `${'#190D03'}3D`
 };
 
 export const baseChipStyles = (variant: 'filled' | 'outlined') => {
