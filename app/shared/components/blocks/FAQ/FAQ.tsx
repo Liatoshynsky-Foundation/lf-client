@@ -59,10 +59,11 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
               value={contacts.phone}
               isMobile={isMobile}
               alertMsg={t('phoneCopiedAlert')}
+              dataTestid="Faq-phoneLink"
             />
           </Box>
           <Box sx={styles.contactsItem}>
-            <ContactLink type="email" icon={MailIcon} value={contacts.email} />
+            <ContactLink type="email" icon={MailIcon} value={contacts.email} dataTestid="Faq-emailLink" />
           </Box>
         </Box>
       </Box>
