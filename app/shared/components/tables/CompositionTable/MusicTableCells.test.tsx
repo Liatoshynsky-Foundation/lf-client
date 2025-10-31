@@ -91,7 +91,7 @@ describe('MusicTableCells', () => {
   });
 
   describe('Header renderers', () => {
-    it('renders all headers with correct translation keys', () => {
+    it('should render all headers with correct translation keys', () => {
       render(
         <>
           <RenderOpusHeader />
@@ -108,7 +108,7 @@ describe('MusicTableCells', () => {
   });
 
   describe('Basic cell renderers', () => {
-    it('renders name and year cells with values', () => {
+    it('should render name and year cells with values', () => {
       const nameCell = renderNameCell({ getValue: () => 'Poem about the Forest' } as CellContext<Music, unknown>);
       const yearCell = renderYearCell({ getValue: () => '1918' } as CellContext<Music, unknown>);
       const { getByText } = render(
@@ -121,13 +121,13 @@ describe('MusicTableCells', () => {
       expect(getByText('1918')).toBeInTheDocument();
     });
 
-    it('renders genre cell joined with commas', () => {
+    it('should render genre cell joined with commas', () => {
       const genreCell = RenderGenreCell({ getValue: () => ['Classical', 'Romantic'] } as CellContext<Music, unknown>);
       const { getByText } = render(<>{genreCell}</>);
       expect(getByText('Classical, Romantic')).toBeInTheDocument();
     });
 
-    it('renders nothing if no genres', () => {
+    it('should render nothing if no genres', () => {
       const genreCell = RenderGenreCell({ getValue: () => [] } as CellContext<Music, unknown>);
       const { container } = render(<>{genreCell}</>);
       expect(container).toBeEmptyDOMElement();
@@ -135,13 +135,13 @@ describe('MusicTableCells', () => {
   });
 
   describe('PlayCell', () => {
-    it('renders play icon', () => {
+    it('should render play icon', () => {
       mockUseAudioPlayer.mockReturnValue(useAudioPlayerMockReturn);
       const { getByTestId } = render(RenderPlayCell(mockCellContext));
       expect(getByTestId('mock-svg')).toBeInTheDocument();
     });
 
-    it('calls playTrack when clicked if different track', () => {
+    it('should call playTrack when clicked if different track', () => {
       mockUseAudioPlayer.mockReturnValue({ ...useAudioPlayerMockReturn, src: 'different-src' });
       const { getByRole } = render(RenderPlayCell(mockCellContext));
       fireEvent.click(getByRole('button', { hidden: true }));
@@ -151,7 +151,7 @@ describe('MusicTableCells', () => {
       );
     });
 
-    it('calls togglePlay when same track is playing', () => {
+    it('should call togglePlay when same track is playing', () => {
       mockUseAudioPlayer.mockReturnValue(useAudioPlayerMockReturn);
       const { getByRole } = render(RenderPlayCell(mockCellContext));
       fireEvent.click(getByRole('button', { hidden: true }));
@@ -160,7 +160,7 @@ describe('MusicTableCells', () => {
   });
 
   describe('ActionsCell', () => {
-    it('renders button when desktop', () => {
+    it('should render button when desktop', () => {
       mockUseBreakpoints.mockReturnValue({
         isDesktop: true
       });
@@ -172,7 +172,7 @@ describe('MusicTableCells', () => {
       expect(onAction).toHaveBeenCalled();
     });
 
-    it('renders icon button on laptop', () => {
+    it('should render icon button on laptop', () => {
       mockUseBreakpoints.mockReturnValue({
         isLaptop: true
       });
@@ -183,24 +183,24 @@ describe('MusicTableCells', () => {
   });
 
   describe('Group renderers', () => {
-    it('renders opus label', () => {
+    it('should render opus label', () => {
       const { getByText } = render(renderOpusGroupLabel([mockMusic]));
       expect(getByText('op.50')).toBeInTheDocument();
     });
 
-    it('renders opus title label', () => {
+    it('should render opus title label', () => {
       const { getByText } = render(renderOpusTitleGroupLabel([mockMusic]));
       expect(getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
     });
 
-    it('renders group actions icon', () => {
+    it('should render group actions icon', () => {
       const { getByAltText } = render(renderGroupActions());
       expect(getByAltText('menu')).toBeInTheDocument();
     });
   });
 
   describe('RenderExpanderCell', () => {
-    it('renders expander icon for group rows', () => {
+    it('should render expander icon for group rows', () => {
       mockUseBreakpoints.mockReturnValue({
         isMobile: true
       });
