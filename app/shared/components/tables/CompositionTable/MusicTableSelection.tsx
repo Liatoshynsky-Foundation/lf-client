@@ -211,7 +211,6 @@ export default function MusicTableSection() {
   return (
     <>
       <EnhancedTable
-        dataTestId="MusicTableSelection"
         key={tableKey}
         data={data}
         loading={loadingData}
