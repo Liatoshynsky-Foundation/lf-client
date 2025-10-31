@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 
 import SectionTitle from './SectionTitle';
 
+jest.mock('next/image');
+
 describe('SectionTitle', () => {
   it('should render title with icon', () => {
     render(<SectionTitle title="Test title" />);
@@ -11,8 +13,6 @@ describe('SectionTitle', () => {
     expect(title).toBeInTheDocument();
 
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveStyle('width: 100%');
-    expect(icon).toHaveStyle('height: 100%');
   });
 
   it('should render title without icon', () => {

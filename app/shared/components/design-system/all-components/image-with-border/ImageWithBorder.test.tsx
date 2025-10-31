@@ -1,13 +1,8 @@
 import { render, screen } from '@testing-library/react';
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: any) => {
-    const { alt = '', ...rest } = props;
-    return <img alt={alt} {...rest} />;
-  }
-}));
 
 import ImageWithBorder from './ImageWithBorder';
+
+jest.mock('next/image');
 
 describe('ImageWithBorder', () => {
   it('should render without crashing with valid props', () => {

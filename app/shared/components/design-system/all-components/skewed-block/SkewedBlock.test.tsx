@@ -3,6 +3,8 @@ import React from 'react';
 
 import { SkewedBlock } from './SkewedBlock';
 
+jest.mock('next/image');
+
 describe('SkewedBlock', () => {
   it('should render with basic props', () => {
     render(<SkewedBlock image="/image.svg" backgroundSize="cover" height={{ xs: 200 }} />);
