@@ -20,9 +20,9 @@ const TermsOfUse = () => {
 
   return (
     <>
-      <Box sx={style.gridContainer}>
+      <Box sx={style.gridContainer} data-testid="TermsOfUse">
         <Box sx={style.titleSection}>
-          <Typography variant="h2" sx={style.titleText}>
+          <Typography variant="h2" sx={style.titleText} data-testid="TermsOfUse-title">
             {t('title')}
           </Typography>
         </Box>
@@ -33,7 +33,7 @@ const TermsOfUse = () => {
           />
         </Box>
       </Box>
-      <Box sx={{ gridColumn: '-1/1', position: 'relative' }}>
+      <Box sx={{ gridColumn: '-1/1', position: 'relative' }} data-testid="TermsOfUse-quoteSection">
         <Box sx={style.downArrowLabel}>
           <Svg Component={ArrowDown} color={mainHexPallete.brown[500]} alt="arrow down" />
           {t('seeMore')}
@@ -56,6 +56,7 @@ const TermsOfUse = () => {
                     ...styles.mainText('white', 'left'),
                     lineHeight: { xs: '150%', md: '160%' }
                   }}
+                  data-testid="TermsOfUse-quote"
                 >
                   {t('quote')}
                 </Typography>

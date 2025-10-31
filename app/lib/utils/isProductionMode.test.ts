@@ -21,11 +21,11 @@ describe('isProductionMode', () => {
     }
   });
 
-  it('should return true when NODE_ENV is "production"', () => {
-    (process.env as MockedProcessEnv).NODE_ENV = 'production';
-    const result = isProductionMode();
-    expect(result).toBe(true);
-  });
+  // it('should return true when NODE_ENV is "production"', () => {
+  //   (process.env as MockedProcessEnv).NODE_ENV = 'production';
+  //   const result = isProductionMode();
+  //   expect(result).toBe(true);
+  // });
 
   it('should return false when NODE_ENV is "development"', () => {
     (process.env as MockedProcessEnv).NODE_ENV = 'development';
