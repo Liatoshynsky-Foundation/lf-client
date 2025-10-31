@@ -26,6 +26,7 @@ type PolicySectionProps = {
   sx?: object;
   contentGridColumn?: { xs: string; sm: string; md: string } & Record<string, string>;
   listGridColumn?: { xs: string; sm: string; md: string } & Record<string, string>;
+  dataTestId?: string;
 };
 
 export default function PolicySection({
@@ -36,13 +37,14 @@ export default function PolicySection({
   sections,
   sx,
   contentGridColumn = { xs: '2 / 5', sm: '4 / 9', md: '6 / 13' },
-  listGridColumn = { xs: '2 / 5', sm: '4 / 9', md: '6 / 13' }
+  listGridColumn = { xs: '2 / 5', sm: '4 / 9', md: '6 / 13' },
+  dataTestId
 }: Readonly<PolicySectionProps>) {
   const hasList = Array.isArray(list) && list.length > 0;
   const hasSections = Array.isArray(sections) && sections.length > 0;
 
   return (
-    <Box sx={{ ...styles(theme).root, ...sx }}>
+    <Box sx={{ ...styles(theme).root, ...sx }} data-testid={dataTestId}>
       {title && <SectionTitle title={title} mb={16} />}
 
       {description && (
