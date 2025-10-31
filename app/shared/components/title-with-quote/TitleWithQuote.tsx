@@ -14,6 +14,7 @@ export interface TitleWithQuoteProps {
   quoteBlockSx?: SxProps;
   quoteSectionSx?: SxProps;
   quoteWidth?: string | Record<string, string>;
+  dataTestId?: string;
 }
 
 const TitleWithQuote = ({
@@ -23,11 +24,12 @@ const TitleWithQuote = ({
   color,
   quoteBlockSx,
   quoteSectionSx,
-  quoteWidth
+  quoteWidth,
+  dataTestId
 }: TitleWithQuoteProps) => {
   const styles = getStyles(color);
   return (
-    <Box sx={styles.mainContainer}>
+    <Box sx={styles.mainContainer} data-testid={dataTestId}>
       <Box sx={styles.titleSection}>
         <Typography variant="h2" sx={styles.titleText}>
           {title}
