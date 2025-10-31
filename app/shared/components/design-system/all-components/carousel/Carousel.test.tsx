@@ -4,12 +4,7 @@ import * as React from 'react';
 
 import Carousel from './Carousel';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: ({ src, alt, fill, sizes }: { src: string; alt: string; fill?: boolean; sizes?: string }) => (
-    <img src={src} alt={alt} data-fill={fill} data-sizes={sizes} />
-  )
-}));
+jest.mock('next/image');
 
 jest.mock('~/ds-components/arrow-carousel/ArrowCarousel', () => ({
   __esModule: true,
