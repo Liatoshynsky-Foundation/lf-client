@@ -22,10 +22,7 @@ jest.mock('next/link', () => ({
   default: ({ href, children }: any) => <a href={href}>{children}</a>
 }));
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: ({ alt }: { alt: string }) => <img alt={alt} />
-}));
+jest.mock('next/image');
 
 jest.mock('../paper-component/PaperComponent', () => ({
   __esModule: true,
