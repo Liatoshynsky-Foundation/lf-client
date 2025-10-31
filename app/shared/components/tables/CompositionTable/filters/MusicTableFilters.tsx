@@ -88,6 +88,7 @@ export function MusicTableFilters({
   const layout = filterGridHelper(screenSize, { hasCategorySelected, hasGenreSelected, hasYearSelected });
   return (
     <Box
+      data-testid="MusicTableFilters"
       sx={{
         width: '100%',
         display: 'grid',
@@ -98,7 +99,7 @@ export function MusicTableFilters({
         alignItems: 'start'
       }}
     >
-      <Box sx={layout.containers.category}>
+      <Box sx={layout.containers.category} data-testid="MusicTableFilters-category">
         <FilterSelect
           label={labelCategory}
           options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -110,7 +111,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={layout.containers.genre}>
+      <Box sx={layout.containers.genre} data-testid="MusicTableFilters-genre">
         <FilterSelect
           label={labelGenre}
           options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
@@ -122,7 +123,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={layout.containers.year}>
+      <Box sx={layout.containers.year} data-testid="MusicTableFilters-year">
         <YearNumericFilter
           label={yearLabel ?? 'Year'}
           value={yearFilter}
@@ -133,7 +134,7 @@ export function MusicTableFilters({
         />
       </Box>
 
-      <Box sx={{ ...layout.containers.clear }}>
+      <Box sx={{ ...layout.containers.clear }} data-testid="MusicTableFilters-clear">
         {onClearAllFilters && isAnyFilterActive && (
           <IconButton
             type={IconButtonVariant.outlined}

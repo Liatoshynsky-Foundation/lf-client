@@ -154,7 +154,7 @@ export const EnhancedTable = <T extends RowData>({
   });
 
   return (
-    <Box sx={styles.root}>
+    <Box sx={styles.root} data-testid="EnhancedTable">
       <ControlPanel
         Search={Search}
         tableName={tableName}
@@ -167,10 +167,10 @@ export const EnhancedTable = <T extends RowData>({
         </Box>
       ) : (
         <>
-          <TableContainer component={Paper} sx={styles.container}>
-            <Table sx={{ tableLayout: 'fixed' }}>
+          <TableContainer data-testid="EnhancedTable-tableContainer" component={Paper} sx={styles.container}>
+            <Table sx={{ tableLayout: 'fixed' }} data-testid="EnhancedTable-table">
               <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
-              <TableBody>
+              <TableBody data-testid="EnhancedTable-tableBody">
                 {!loading && data.length === 0 && noResults}
                 {rowsToRender.map((entry) =>
                   entry.type === 'group' ? (
@@ -189,7 +189,7 @@ export const EnhancedTable = <T extends RowData>({
             </Table>
           </TableContainer>
 
-          <Box sx={styles.paginationWrapper}>
+          <Box sx={styles.paginationWrapper} data-testid="EnhancedTable-paginationWrapper">
             {hasMore && (
               <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
                 {t('viewMore')}

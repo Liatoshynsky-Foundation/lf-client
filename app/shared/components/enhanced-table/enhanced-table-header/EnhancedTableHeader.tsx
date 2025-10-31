@@ -13,7 +13,7 @@ interface TableHeaderProps<T> {
 
 export default function EnhancedTableHeader<T>({ table, columnWidths = {} }: Readonly<TableHeaderProps<T>>) {
   return (
-    <TableHead>
+    <TableHead data-testid="EnhancedTableHeader">
       {table.getHeaderGroups().map((headerGroup) => (
         <TableRow key={headerGroup.id} sx={styles.row}>
           {headerGroup.headers.map((header: Header<T, unknown>) => (

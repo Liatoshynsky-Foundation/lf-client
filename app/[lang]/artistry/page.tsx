@@ -29,7 +29,6 @@ export default async function Artistry({ params }: Readonly<Language>) {
   return (
     <MainLayout data-testid="Artistry">
       <TitleWithQuote
-        dataTestId="Artistry-title"
         quoteWidth={{ xs: '272px', sm: '316px', md: '341px', lg: '520px' }}
         title={t('title-with-quote.title')}
         quoteText={t('title-with-quote.quoteText')}

@@ -42,11 +42,15 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
       break;
     case GetNotesState.FORM:
       title = (
-        <Box>
-          <Typography sx={{ mb: 2, textTransform: 'uppercase' }} variant="h4">
+        <Box data-testid="GetNotesModal">
+          <Typography sx={{ mb: 2, textTransform: 'uppercase' }} variant="h4" data-testid="GetNotesModal-title">
             {t('form.title')}
           </Typography>
-          <Typography sx={{ textIndent: 'calc(50% - 50px)', display: 'block' }} variant="subtitle1">
+          <Typography
+            sx={{ textIndent: 'calc(50% - 50px)', display: 'block' }}
+            variant="subtitle1"
+            data-testid="GetNotesModal-subtitle"
+          >
             {t('form.subtitle')}
           </Typography>
         </Box>

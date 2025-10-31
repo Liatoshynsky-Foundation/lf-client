@@ -18,13 +18,17 @@ const QuoteBlock = ({
   const alignKey = alignRight ? 'right' : 'left';
 
   return (
-    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]}>
+    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]} data-testid="Quote">
       <Box sx={styles.image(quoteIconColor, alignKey)}>
         <QuoteImage />
       </Box>
-      <Box sx={styles.textContainer(alignKey)}>
-        <Typography sx={styles.mainText(mainTextColor, alignKey)}>{quoteText}</Typography>
-        <Typography sx={styles.sourceText(alignKey)}>{sourceText}</Typography>
+      <Box sx={styles.textContainer(alignKey)} data-testid="Quote-textContainer">
+        <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
+          {quoteText}
+        </Typography>
+        <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
+          {sourceText}
+        </Typography>
       </Box>
     </Box>
   );
