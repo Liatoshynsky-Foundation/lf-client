@@ -12,13 +12,14 @@ interface SectionTitleProps {
   gridColumn?: object;
   title: string;
   sx?: SxProps<Theme>;
+  dataTestId?: string;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx, dataTestId }) => {
   const sizesAttribute = generateSizesAttribute(imageSizes);
 
   return (
-    <Box sx={[styles.container(mb), ...sxToArray(sx)]}>
+    <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestId}>
       {icon && (
         <Box sx={styles.image} data-testid="title-icon">
           <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />
