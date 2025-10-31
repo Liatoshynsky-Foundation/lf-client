@@ -46,15 +46,20 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
   });
 
   return (
-    <Box sx={styles.gridContainer}>
+    <Box sx={styles.gridContainer} data-testid="Faq">
       <SectionTitle
         title={t('title')}
         mb={48}
         gridColumn={{ xs: '2 ', sm: '4 / -1', md: '6 / -1', lg: '5 / -1', xl: '6 / -1' }}
+        dataTestid="Faq-titleContainer"
       />
       <Box sx={styles.contacts}>
-        <Typography sx={styles.typography}>{t('subtitle.question')}</Typography>
-        <Typography sx={styles.typography}>{t('subtitle.answer')}</Typography>
+        <Typography sx={styles.typography} data-testid="Faq-question">
+          {t('subtitle.question')}
+        </Typography>
+        <Typography sx={styles.typography} data-testid="Faq-answer">
+          {t('subtitle.answer')}
+        </Typography>
         <Box sx={styles.contactsList}>
           <Box sx={styles.contactsItem}>
             <IconButton customStyles={styles.iconButton} disabled>
