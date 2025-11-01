@@ -22,7 +22,7 @@ const WhatWeDo = ({ data }: { data: IWhatWeDo }) => {
 
   return (
     <Box sx={styles.mainContainer} data-testid="WhatWeDo">
-      <SectionTitle title={title} mb={0} data-testid="WhatWeDo-title" />
+      <SectionTitle title={title} mb={0} dataTestId="WhatWeDo-title" />
       <Box sx={styles.grid} data-testid="WhatWeDo-listContainer">
         {items.map((item, index) => (
           <Box sx={styles.item} key={item.title + index}>
