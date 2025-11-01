@@ -4,10 +4,10 @@ import { Box, Divider } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import ClearFilterButton from '~/ds-components/clear-filter-button/ClearFilterButton';
 import { DesignSystemSlider } from '~/ds-components/slider/Slider';
 import TextField from '~/ds-components/text-field/TextField';
 
-import ClearFilterButton from '../../clear-filter-button/ClearFilterButton';
 import { styles } from './NumericFiltering.styles';
 
 import { getFilteringSchema } from '~/validators/filtering.schema';
