@@ -5,16 +5,13 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { Chip } from '~/ds-components/chip/Chip';
 import DropdownMenu from '~/ds-components/dropdown-menu/DropdownMenu';
 import FilterSelectItem from '~/ds-components/selector/FilterSelectItem/FilterSelectItem';
-import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import ClearFilterButton from '../clear-filter-button/ClearFilterButton';
 import { filterSelectStyles } from './FilterSelect.styles';
 import { PositionEnum } from '~/types/enums/common.enums';
-
-import Trash from '~/public/icons/trash-2.svg';
 
 interface FilterOption {
   value: string;
@@ -107,12 +104,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
         })}
       </Box>
       <Divider sx={{ my: 1 }} />
-      <Box sx={filterSelectStyles.clearAllContainer} onClick={handleChipDelete}>
-        <Svg Component={Trash} alt="clear" stroke={mainHexPallete.red[600]} />
-        <Typography variant="customSemiBold16" sx={{ color: mainHexPallete.red[600], whiteSpace: 'nowrap' }}>
-          {t('clear')}
-        </Typography>
-      </Box>
+      <ClearFilterButton onClick={handleChipDelete}>{t('clear')}</ClearFilterButton>
     </Box>
   );
 

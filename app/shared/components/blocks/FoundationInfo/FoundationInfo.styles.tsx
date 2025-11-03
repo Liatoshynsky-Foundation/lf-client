@@ -118,23 +118,14 @@ export const styles = {
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / 7',
-      md: '6 / 10'
+      md: '6 / 9'
     },
     gridRow: { sm: '3' },
     position: 'relative',
     width: {
-      xs: '199px',
-      sm: '230px',
-      lg: '295px',
-      xl: '337px',
-      xxl: '407px'
-    },
-    height: {
-      xs: '260px',
-      sm: '299px',
-      lg: '350px',
-      xl: '400px',
-      xxl: '484px'
+      xs: '100%',
+      sm: '100%',
+      md: 'calc(100% + 40px)'
     }
   }
 };

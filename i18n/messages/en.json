@@ -45,6 +45,7 @@
   },
   "donationForm": {
     "donationTitle": "QUICK DONATION:",
+    "donationDescription": "Choose an amount to support the Foundation",
     "subscribeTitle": "SUBSCRIBE:",
     "donationSwitch": "Donation",
     "subscribeSwitch": "Subscription",
@@ -252,5 +253,12 @@
     "title": "PaGe UnDeR CoNsTrUcTiOn",
     "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
     "button": "Return to home"
+  },
+  "warSupport": {
+    "title": "RUSSIA'S WAR AGAINST UKRAINIANS",
+    "ourPartners": {
+      "title": "OUR PARTNERS:",
+      "description": "The Lyatoshynsky Foundation is sincerely open to partnership and appreciates any support. We believe that cooperation based on trust and mutual respect will help us develop Ukrainian musical culture together. We invite those who share our mission and seek to participate in preserving the legacy of Borys Lyatoshynsky and supporting contemporary musical initiatives to partner with us."
+    }
   }
 }

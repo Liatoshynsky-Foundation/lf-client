@@ -107,7 +107,7 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
   );
 
   return (
-    <Box sx={ControlPanelStyles.root(theme)}>
+    <Box sx={ControlPanelStyles.root}>
       <Box sx={ControlPanelStyles.header}>
         <Typography variant={isLessThan405 ? 'customBold25' : 'customBold32'}>{tableName}</Typography>
         <Box sx={ControlPanelStyles.headerRight}>

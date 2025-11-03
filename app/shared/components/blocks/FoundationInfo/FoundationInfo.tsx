@@ -64,7 +64,20 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
 
       <Box sx={styles.bodyImage}>
         {image && (
-          <Image src={image.src} alt={image.alt} fill style={{ objectFit: 'contain', objectPosition: 'top' }} />
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill={false}
+            width={410}
+            height={490}
+            style={{
+              width: '100%',
+              height: 'auto',
+              objectFit: 'cover',
+              objectPosition: 'top',
+              position: 'relative'
+            }}
+          />
         )}
       </Box>
     </Box>

@@ -6,19 +6,10 @@ import { useFetchStaticFilters } from './useFetchStaticFilters';
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';
 
-jest.mock('next-intl', () => ({
-  useLocale: jest.fn()
-}));
-
-jest.mock('~/shared/hooks/query/useQuery', () => ({
-  __esModule: true,
-  default: jest.fn()
-}));
-
+jest.mock('next-intl', () => ({ useLocale: jest.fn() }));
+jest.mock('~/shared/hooks/query/useQuery', () => ({ __esModule: true, default: jest.fn() }));
 jest.mock('~/services/client/tableService', () => ({
-  tableClientService: {
-    getTableStaticData: jest.fn()
-  }
+  tableClientService: { getTableStaticData: jest.fn() }
 }));
 
 describe('useFetchStaticFilters', () => {
@@ -33,9 +24,11 @@ describe('useFetchStaticFilters', () => {
   });
 
   it('should return null data when endpoint is null', async () => {
-    const { result } = renderHook(() => useFetchStaticFilters(null));
+    const endpoint = null;
 
+    const { result } = renderHook(() => useFetchStaticFilters(endpoint));
     const data = await result.current.data;
+
     expect(data).toBeNull();
     expect(getTableStaticDataMock).not.toHaveBeenCalled();
   });
@@ -46,7 +39,6 @@ describe('useFetchStaticFilters', () => {
     getTableStaticDataMock.mockResolvedValueOnce(mockData);
 
     const { result } = renderHook(() => useFetchStaticFilters(endpoint));
-
     const data = await result.current.data;
 
     expect(getTableStaticDataMock).toHaveBeenCalledWith(endpoint, 'en');
@@ -58,8 +50,8 @@ describe('useFetchStaticFilters', () => {
     useQueryMock.mockImplementation(() => ({ data: null }));
 
     renderHook(() => useFetchStaticFilters(endpoint));
-
     const callArgs = useQueryMock.mock.calls[0][0];
+
     expect(callArgs.queryKey).toEqual(['static-filters', endpoint, 'en']);
   });
 });

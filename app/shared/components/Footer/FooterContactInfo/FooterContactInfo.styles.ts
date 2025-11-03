@@ -8,26 +8,6 @@ const commonTextStyle = {
   fontSize: { xs: '16px', sm: '16px' }
 };
 
-const commonLinkStyle = {
-  textDecoration: 'underline',
-  transition: 'color 0.2s ease',
-
-  '&:hover': {
-    color: '#5F0E0F',
-    cursor: 'pointer'
-  },
-
-  '&:active': {
-    color: mainHexPallete.black
-  },
-
-  '&.Mui-disabled, &[aria-disabled="true"], &:disabled': {
-    color: mainHexPallete.blue[500],
-    pointerEvents: 'none',
-    textDecoration: 'underline'
-  }
-};
-
 export const styles = {
   container: {
     width: '100%',
@@ -48,16 +28,6 @@ export const styles = {
     ...commonTextStyle,
     fontWeight: 400,
     lineHeight: '150%'
-  },
-  weakText: {
-    ...commonTextStyle,
-    color: mainHexPallete.brown[700],
-    marginRight: '10px'
-  },
-  link: {
-    ...commonTextStyle,
-    ...commonLinkStyle,
-    marginTop: '2px'
   },
   linkContainer: {
     display: 'flex'

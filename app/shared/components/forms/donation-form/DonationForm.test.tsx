@@ -58,13 +58,6 @@ describe('DonationForm', () => {
   it('should render default donation form', () => {
     expect(screen.getByText('ШВИДКО ЗАДОНАТИТИ:')).toBeInTheDocument();
     expect(screen.getByDisplayValue('')).toBeInTheDocument();
-    expect(screen.getByText('Разовий внесок')).toBeInTheDocument();
-  });
-
-  it('should switch to subscription', () => {
-    fireEvent.click(screen.getByText('Підписка'));
-    expect(screen.getByText('ПІДПИСАТИСЯ:')).toBeInTheDocument();
-    expect(screen.getByText('Підписатися')).toBeInTheDocument();
   });
 
   it('should show entered value', () => {

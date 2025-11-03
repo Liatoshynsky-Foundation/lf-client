@@ -97,7 +97,7 @@ describe('PaymentDetails', () => {
   test('should copy current currency IBAN to clipboard', async () => {
     renderWithTheme(<PaymentDetails />);
 
-    const copyBtn = screen.getByRole('button', { name: /content copy/i });
+    const copyBtn = screen.getByRole('button', { name: /Copy IBAN/i });
     fireEvent.click(copyBtn);
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-A-H');
 
