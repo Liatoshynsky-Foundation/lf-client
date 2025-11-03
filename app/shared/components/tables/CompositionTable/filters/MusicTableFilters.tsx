@@ -12,7 +12,6 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
 import Delete from '~/public/icons/trash-2.svg';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MusicTableFiltersProps {
   labelGenre: string;
@@ -51,8 +50,6 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
-  const { isMobile } = useBreakpoints();
-
   const categoryOrder = categoryFilter.length > 0 ? 1 : 3;
   const genreOrder = genreFilter.length > 0 ? 2 : 3;
 
@@ -95,7 +92,7 @@ export function MusicTableFilters({
         </Box>
 
         <Box sx={{ order: 4, alignSelf: 'center' }}>
-          {onClearAllFilters && isAnyFilterActive && !isMobile && (
+          {onClearAllFilters && isAnyFilterActive && (
             <IconButton
               type={IconButtonVariant.outlined}
               variant={IconButtonColorVariant.Secondary}

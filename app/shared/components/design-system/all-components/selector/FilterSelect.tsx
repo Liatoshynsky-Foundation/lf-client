@@ -85,7 +85,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const isMaxReached = maxSelections ? selectedValues.length >= maxSelections : false;
 
   const menuList = (
-    <Box>
+    <Box sx={{ padding: '0 8px' }}>
       <Box sx={{ maxHeight: 220, overflowY: 'auto' }}>
         {options.map((option) => {
           const isSelected = selectedValues.includes(option.value);
@@ -142,6 +142,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
         }}
         maxHeight={300}
         menuList={menuList}
+        sx={{ padding: '0px 8px' }}
       />
     </Box>
   );
