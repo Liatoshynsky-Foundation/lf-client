@@ -152,7 +152,7 @@
       "filters": {
         "category": "Category",
         "genre": "Genre",
-        "year": "Year"
+        "year": "Year of composition"
       },
       "name": {
         "composition": "All compositions"

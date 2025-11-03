@@ -27,6 +27,7 @@ export const filterSelectStyles = {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      minHeight: '40px',
       gap: '8px',
       borderRadius: '8px',
       padding: '6px 8px 6px 16px',
@@ -73,7 +74,9 @@ export const filterSelectStyles = {
 
   dropdownIcon: (disabled: boolean): SxProps => ({
     cursor: disabled ? 'default' : 'pointer',
-    opacity: disabled ? 0.5 : 1
+    opacity: disabled ? 0.5 : 1,
+    display: 'flex',
+    justifyContent: 'center'
   }),
 
   menuItem: {

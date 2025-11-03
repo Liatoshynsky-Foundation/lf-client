@@ -111,8 +111,10 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
     maxYear
   ];
 
-  const isFiltersActive = columnFilters.length > 0;
-  const activeFiltersCount = columnFilters.length;
+  const isYearActive = currentYearFilter[0] !== minYear || currentYearFilter[1] !== maxYear;
+
+  const activeFiltersCount = currentAuthorFilter.length + (isYearActive ? 1 : 0);
+  const isFiltersActive = activeFiltersCount > 0;
 
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
 
