@@ -10,6 +10,7 @@ export interface BorderProps {
   sizes: ElementSizes;
   top: Partial<Record<Breakpoint, number>>;
   left: Partial<Record<Breakpoint, number>>;
+  color?: string;
 }
 
 interface ImageWithCaptionProps {
