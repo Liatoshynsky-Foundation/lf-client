@@ -44,23 +44,5 @@ export const styles = {
     fontSize: '16px',
     display: { xs: 'none', md: 'block' },
     marginRight: '12px'
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    border: '1px solid #1C1C1C',
-    cursor: 'pointer',
-    transition: '0.2s ease',
-    '&:hover': {
-      backgroundColor: '#f2f2f2'
-    },
-    svg: {
-      width: 18,
-      height: 18
-    }
   }
 };

@@ -44,8 +44,10 @@ describe('NotesListItem', () => {
     expect(screen.getByRole('button')).toHaveTextContent('paidNotesButton');
   });
 
-  it('calls handler when button is clicked', () => {
-    render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+  it('should call handler when button is clicked', () => {
+    render(
+      <NotesListItem note={{ ...note, isFree: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
+    );
     fireEvent.click(screen.getByRole('button'));
     expect(handler).toHaveBeenCalled();
   });

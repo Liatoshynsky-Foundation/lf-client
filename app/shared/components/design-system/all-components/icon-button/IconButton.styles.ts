@@ -60,11 +60,11 @@ export const IconButtonStyles = {
   },
   primaryIcon: {
     fontSize: '0',
-    PrimaryIconStyles
+    ...PrimaryIconStyles
   },
   primaryOutlined: {
     fontSize: '0',
-    PrimaryIconStyles,
+    ...PrimaryIconStyles,
     border: '1px black solid'
   },
   secondary: {

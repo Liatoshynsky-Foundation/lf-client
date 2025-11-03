@@ -6,8 +6,10 @@ import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './NoteListItem.styles';
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import { Notes } from '~/types/types/getNotes.types';
 
+import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type NotesListItemProps = {
@@ -22,25 +24,27 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
   const { isMobile, isTablet } = useBreakpoints();
 
   const title = note.url.split('/').pop()?.split('.')[0];
-  const date = new Date(note.dateUploaded).toLocaleDateString();
+  const date = new Date(note.dateUploaded).toLocaleDateString('uk-UA', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
   const isCompact = isMobile || isTablet;
+  const buttonProps = note.isFree ? { link: note.url, externalLink: true } : { onClick: handler };
 
-  const button = isCompact ? (
-    <Box sx={styles.iconButton} onClick={handler}>
-      {endIcon}
-    </Box>
-  ) : (
-    <Button variant="outlined" endIcon={endIcon} onClick={handler}>
-      {t(buttonText)}
-    </Button>
-  );
+  const desktopButton = <Button variant="outlined" label={t(buttonText)} endIcon={endIcon} {...buttonProps} />;
 
-  const buttonWithLink = note.isFree ? (
+  const mobileButton = note.isFree ? (
     <a href={note.url} target="_blank" rel="noopener noreferrer">
-      {button}
+      <IconButton variant={IconButtonColorVariant.Primary} type={IconButtonVariant.outlined}>
+        {endIcon}
+      </IconButton>
     </a>
   ) : (
-    button
+    <IconButton onClick={handler} variant={IconButtonColorVariant.Primary} type={IconButtonVariant.outlined}>
+      {endIcon}
+    </IconButton>
   );
 
   return (
@@ -56,7 +60,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
 
       <Typography sx={styles.dateDesktop}>{date}</Typography>
 
-      {buttonWithLink}
+      {isCompact ? mobileButton : desktopButton}
     </Box>
   );
 };
