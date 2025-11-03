@@ -19,7 +19,7 @@ export const styles = {
   contentWrapper: {
     gridColumn: {
       xs: '1 / 5',
-      sm: '4 / 8',
+      sm: '3 / 8',
       md: '6 / 11',
       lg: '6 / 12'
     },
