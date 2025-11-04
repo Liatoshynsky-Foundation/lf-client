@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import Faq from './FAQ';
@@ -81,13 +81,16 @@ describe('FAQ component', () => {
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
-  it('should copy phone to clipboard when not mobile', async () => {
+  it('should copy phone when clicking CopyButton', async () => {
     render(<Faq data={mockFaqData} />);
-    const phoneLink = screen.getByText(mockFaqData.contacts.phone);
-    fireEvent.click(phoneLink);
+    const phoneBlock = screen.getByText(mockFaqData.contacts.phone).closest('div')!;
+    const copyButton = within(phoneBlock).getByRole('button', { name: /copy content/i });
+
+    await act(async () => {
+      fireEvent.click(copyButton);
+    });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.phone);
-    expect(window.alert).toHaveBeenCalledWith('Phone copied!');
   });
 
   it('should use tel: link when on mobile', () => {
