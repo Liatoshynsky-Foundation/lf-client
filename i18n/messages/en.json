@@ -9,7 +9,7 @@
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "phoneLabel": "Phone",
-    "phoneCopiedAlert": "Phone number copied to clipboard"
+    "phoneCopiedAlert": "Copied"
   },
   "header": {
     "supportButton": "Support",
@@ -66,7 +66,8 @@
       "errorMessage": "The page you are looking for does not exist, search again on the main page"
     },
     "goHome": "Return to home",
-    "viewMore": "View More"
+    "viewMore": "View More",
+    "copied": "Copied"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -132,7 +133,7 @@
         "question": "Didn't find the answer you were looking for?",
         "answer": "Contact us in a way convenient for you:"
       },
-      "phoneCopiedAlert": "Phone number copied to clipboard"
+      "phoneCopiedAlert": "Copied"
     }
   },
   "collaboration": {
