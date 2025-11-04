@@ -42,6 +42,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           title={page.title}
           trustAndSecurity={blocks.IntroSection.trustAndSecurity}
           agreement={blocks.IntroSection.agreement}
+          dataTestId="PrivacyPolicy-intro"
         />
       )}
 
@@ -51,6 +52,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           description={blocks.DataWeCollect.description}
           sections={blocks.DataWeCollect.sections}
           note={blocks.DataWeCollect.note}
+          dataTestId="PrivacyPolicy-dataWeCollect"
         />
       )}
 
@@ -59,6 +61,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           title={blocks.DataUsage.title}
           description={blocks.DataUsage.description}
           list={blocks.DataUsage.list}
+          dataTestId="PrivacyPolicy-dataUsage"
         />
       )}
 
@@ -68,6 +71,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           description={blocks.Cookies.description}
           list={blocks.Cookies.list}
           note={blocks.Cookies.note}
+          dataTestId="PrivacyPolicy-cookies"
         />
       )}
 
@@ -77,21 +81,40 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           description={blocks.GoogleAuth.description}
           list={blocks.GoogleAuth.list}
           note={blocks.GoogleAuth.note}
+          dataTestId="PrivacyPolicy-googleAuth"
         />
       )}
 
       {blocks.SocialNetworks && (
-        <PolicySection title={blocks.SocialNetworks.title} note={blocks.SocialNetworks.description} />
+        <PolicySection
+          title={blocks.SocialNetworks.title}
+          note={blocks.SocialNetworks.description}
+          dataTestId="PrivacyPolicy-socialNetworks"
+        />
       )}
 
-      {blocks.TargetedAds && <PolicySection title={blocks.TargetedAds.title} note={blocks.TargetedAds.description} />}
+      {blocks.TargetedAds && (
+        <PolicySection
+          title={blocks.TargetedAds.title}
+          note={blocks.TargetedAds.description}
+          dataTestId="PrivacyPolicy-targetedAds"
+        />
+      )}
 
       {blocks.NewsletterSubscription && (
-        <PolicySection title={blocks.NewsletterSubscription.title} note={blocks.NewsletterSubscription.description} />
+        <PolicySection
+          title={blocks.NewsletterSubscription.title}
+          note={blocks.NewsletterSubscription.description}
+          dataTestId="PrivacyPolicy-newsletter"
+        />
       )}
 
       {blocks.DataRetention && (
-        <PolicySection title={blocks.DataRetention.title} note={blocks.DataRetention.description} />
+        <PolicySection
+          title={blocks.DataRetention.title}
+          note={blocks.DataRetention.description}
+          dataTestId="PrivacyPolicy-dataRetention"
+        />
       )}
 
       {blocks.UserRights && (
@@ -100,10 +123,17 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
           description={blocks.UserRights.description}
           list={blocks.UserRights.list}
           note={blocks.UserRights.note}
+          dataTestId="PrivacyPolicy-userRights"
         />
       )}
 
-      {blocks.ContactUs && <PolicySection title={blocks.ContactUs.title} description={blocks.ContactUs.description} />}
+      {blocks.ContactUs && (
+        <PolicySection
+          title={blocks.ContactUs.title}
+          description={blocks.ContactUs.description}
+          dataTestId="PrivacyPolicy-contactUs"
+        />
+      )}
     </MainLayout>
   );
 }

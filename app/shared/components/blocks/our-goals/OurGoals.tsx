@@ -21,9 +21,9 @@ const OurGoals = ({ data }: { data: IOurGoals }) => {
   const sizesAttribute = generateSizesAttribute(iconSizes);
 
   return (
-    <Box sx={styles.mainContainer}>
-      <SectionTitle title={title} mb={0} />
-      <Box sx={styles.goalsGrid}>
+    <Box sx={styles.mainContainer} data-testid="OurGoals">
+      <SectionTitle title={title} mb={0} data-testid="OurGoals-title" />
+      <Box sx={styles.goalsGrid} data-testid="OurGoals-goalsGrid">
         {goals.map((goal, index) => (
           <Box sx={styles.cardWithIcon} key={`${goal.title + index}`}>
             <Box sx={styles.iconWrapper}>

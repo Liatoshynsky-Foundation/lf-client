@@ -13,12 +13,13 @@ const QuoteBlock = ({
   mainTextColor,
   alignRight,
   sx,
-  width
+  width,
+  dataTestId
 }: QuoteBlockProps) => {
   const alignKey = alignRight ? 'right' : 'left';
 
   return (
-    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]} data-testid="Quote">
+    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]} data-testid={dataTestId}>
       <Box sx={styles.image(quoteIconColor, alignKey)}>
         <QuoteImage />
       </Box>
