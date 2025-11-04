@@ -1,6 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
@@ -11,6 +12,7 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 
 import { CategoryNameDTO, GenreNameDTO } from '~/domain/dto/table.dto';
 import Delete from '~/public/icons/trash-2.svg';
+import TooltipCustom from '~/shared/components/design-system/all-components/tooltip/Tooltip';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 
 interface MusicTableFiltersProps {
@@ -50,6 +52,8 @@ export function MusicTableFilters({
   minYear,
   maxYear
 }: Readonly<MusicTableFiltersProps>) {
+  const t = useTranslations('filtering');
+
   const categoryOrder = categoryFilter.length > 0 ? 1 : 3;
   const genreOrder = genreFilter.length > 0 ? 2 : 3;
 
@@ -93,15 +97,17 @@ export function MusicTableFilters({
 
         <Box sx={{ order: 4, alignSelf: 'center' }}>
           {onClearAllFilters && isAnyFilterActive && (
-            <IconButton
-              type={IconButtonVariant.outlined}
-              variant={IconButtonColorVariant.Secondary}
-              size="medium"
-              onClick={onClearAllFilters}
-              sx={{ border: 'none', padding: 0 }}
-            >
-              <Delete />
-            </IconButton>
+            <TooltipCustom title={t('clearAll')} placement="top">
+              <IconButton
+                type={IconButtonVariant.outlined}
+                variant={IconButtonColorVariant.Secondary}
+                size="medium"
+                onClick={onClearAllFilters}
+                sx={{ border: 'none', padding: 0 }}
+              >
+                <Delete />
+              </IconButton>
+            </TooltipCustom>
           )}
         </Box>
       </Box>
