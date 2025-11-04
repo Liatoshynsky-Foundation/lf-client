@@ -20,6 +20,7 @@ type BaseButtonProps = {
   label?: string;
   shortLabel?: string;
   link?: string;
+  externalLink?: boolean;
 } & (
   | {
       color?: 'primary' | 'secondary';
@@ -33,7 +34,7 @@ type BaseButtonProps = {
 export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ label, shortLabel, link, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
+  ({ label, shortLabel, link, externalLink, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
     const isDisabled = disabled ?? loading;
 
     const { isMobile } = useBreakpoints();
@@ -51,7 +52,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       </CustomButton>
     );
 
-    return link ? <Link href={link}>{content}</Link> : content;
+    if (!link) return content;
+
+    if (externalLink) {
+      return (
+        <a href={link} target="_blank" rel="noopener noreferrer">
+          {content}
+        </a>
+      );
+    }
+
+    return <Link href={link}>{content}</Link>;
   }
 );
 
