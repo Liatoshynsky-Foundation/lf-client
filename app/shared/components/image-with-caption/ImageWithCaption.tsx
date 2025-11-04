@@ -22,6 +22,7 @@ interface ImageWithCaptionProps {
   containerSx?: BoxProps['sx'];
   imageSx?: BoxProps['sx'];
   captionSx?: TypographyProps['sx'];
+  dataTestId?: string;
 }
 
 const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
@@ -33,12 +34,13 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   align = 'right',
   containerSx = {},
   imageSx = {},
-  captionSx = {}
+  captionSx = {},
+  dataTestId
 }) => {
   const sizesAttribute = generateSizesAttribute(sizes);
 
   return (
-    <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']}>
+    <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']} data-testid={dataTestId}>
       <Box sx={{ ...styles.imageContainer(sizes), ...imageSx } as BoxProps['sx']}>
         {border && <Box sx={styles.border(border)} data-testid="img-border" />}
         <Image style={styles.image as React.CSSProperties} src={src} fill alt={alt} sizes={sizesAttribute} />

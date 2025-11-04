@@ -20,6 +20,14 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gri
 
   return (
     <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestid}>
+  dataTestId?: string;
+}
+
+const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx, dataTestId }) => {
+  const sizesAttribute = generateSizesAttribute(imageSizes);
+
+  return (
+    <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestId}>
       {icon && (
         <Box sx={styles.image} {...(dataTestid ? { 'data-testid': `${dataTestid}-icon` } : {})}>
           <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />

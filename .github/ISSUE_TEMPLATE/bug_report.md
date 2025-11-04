@@ -1,74 +1,68 @@
 ---
 name: Bug Report
-about: Create a detailed bug report to help us improve
-title: '[Feature/Module] Short summary of the bug'
-labels: bug
+about: Report an unexpected behaviour or error
+title: '(SP: 0.5) '
+labels:
+  - bug
 assignees: ''
 ---
 
-Environment:
+## Summary
 
-<!-- OS, browser (with a version), device (if mobile) -->
-<!-- Example: Windows 11, Chrome 117, Pixel 6 Android 13 -->
+<!--A clear and concise description of what the bug is.-->
 
-Reproducibility:
+## Severity
 
-<!-- always / sometimes / rarely -->
+- [ ] Blocker
+- [ ] Critical
+- [ ] Major
+- [ ] Minor
+- [ ] Trivial
 
-Build:
+## Steps to reproduce
 
-<!-- Commit hash or version where bug was found -->
-<!-- Example: commit 147fa44 from dev branch -->
+<!--Steps to reproduce the behavior:-->
+<!--
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
+-->
 
----
+## Expected behavior
 
-## Preconditions (if any)
+<!--Describe what you expected to happen. -->
 
-<!-- Setup required before reproducing -->
-<!-- Example: User created in DB, logged in with valid credentials -->
+## Actual behavior
 
-## Steps to Reproduce
+<!--Describe what actually happened instead.-->
 
-<!-- Step-by-step actions -->
+## Reproducible example / Test case
 
-1. ...
-2. ...
-3. ...
+<!--If possible, provide a minimal reproducible example, URLs, or test steps.-->
 
----
+## Screenshots
 
-## Actual Result
+<!--If applicable, add screenshots to help explain your problem.-->
 
-<!-- What happened -->
-<!-- Example: "Publish button is missing on Preview page" -->
-<!-- Attach screenshot/video if possible -->
+## Logs / Console output
 
-## Expected Result
+<!--Paste relevant logs or error messages.-->
 
-<!-- What should happen -->
-<!-- Example: "Publish button should be visible on Preview page" -->
-<!-- Attach mockups/designs if available -->
+## Environment
 
----
+- OS:
+- Browser / Version:
+- App version / Commit:
 
-## Postconditions (if any)
+## Workaround
 
-<!-- Cleanup needed after reproducing -->
-<!-- Example: Delete created test data from DB -->
+<!--If a temporary workaround exists, describe it.-->
 
----
+## Acceptance criteria
 
-## References
-
-<!-- Related user story, test case, or task -->
-<!-- Example: User story #100, [Test case](https://jira.softserve.academy/browse/100) -->
-
----
-
-## Labels
-
-<!-- Add applicable labels:
-- Priority: pri:high / pri:medium / pri:low
-- Severity: severity:blocker / severity:critical / severity:minor
-- Type: UI / Functional / API / Performance
+<!--
+- [ ] Bug reproduced
+- [ ] Fix implemented and tested
+- [ ] Regression tests added (if applicable)
 -->

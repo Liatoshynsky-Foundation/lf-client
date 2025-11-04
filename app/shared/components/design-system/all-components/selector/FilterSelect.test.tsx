@@ -31,6 +31,9 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
     </div>
   )
 }));
+jest.mock('~/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
 
 describe('FilterSelect', () => {
   it('should render the label', () => {

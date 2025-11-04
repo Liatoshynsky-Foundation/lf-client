@@ -64,16 +64,10 @@ jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () 
 }));
 
 jest.mock('./MusicTableFilters.styles', () => ({
-  filterGridHelper: jest.fn(() => ({
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: 'auto',
-    containers: {
-      category: { gridArea: 'cat' },
-      genre: { gridArea: 'gen' },
-      year: { gridArea: 'year' },
-      clear: { gridArea: 'clear' }
-    }
-  }))
+  styles: {
+    container: {},
+    row: {}
+  }
 }));
 
 jest.mock('~/public/icons/trash-2.svg', () => ({

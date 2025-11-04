@@ -14,9 +14,9 @@ const OurMission = ({ data }: { data: IOurMission }) => {
   const { title, smallImage, bigImage, list } = data;
 
   return (
-    <Box sx={styles.mainContainer}>
-      <SectionTitle title={title} sx={styles.title} />
-      <Box sx={styles.list}>
+    <Box sx={styles.mainContainer} data-testid="OurMission">
+      <SectionTitle title={title} sx={styles.title} data-testid="OurMission-title" />
+      <Box sx={styles.list} data-testid="OurMission-list">
         {list.map((item, idx) => (
           <TipTapContent key={`${item.type}-${idx}`} data={item} nodeRenderers={{ paragraph: getListItem }} />
         ))}
@@ -34,6 +34,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
             height: { xs: 167, sm: 221, md: 319, lg: 400 }
           }}
           containerSx={styles.smallImg}
+          dataTestId="OurMission-smallImage"
         />
       )}
 
@@ -57,6 +58,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
           }}
           containerSx={styles.bigImg}
           imageSx={{ width: { xs: '80vw', sm: '60vw', xxl: '816px' } }}
+          dataTestId="OurMission-bigImage"
         />
       )}
     </Box>
