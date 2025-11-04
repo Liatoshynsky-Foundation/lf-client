@@ -3,6 +3,7 @@ name: Bug Report
 about: Report an unexpected behaviour or error
 title: '(SP: 0.5) '
 labels:
+  - verification required
   - bug
 assignees: ''
 ---
