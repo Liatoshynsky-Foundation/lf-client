@@ -66,7 +66,8 @@ describe('Contact information block inside of the Footer', () => {
     it('renders tel phone link with CopyButton', async () => {
       const phoneSection = screen.getByText(contacts.phone).closest('div');
       expect(phoneSection).not.toBeNull();
-      const copyButton = within(phoneSection!).getByRole('button', { name: /copy content/i });
+
+      const copyButton = within(phoneSection).getByRole('button', { name: /copy content/i });
 
       await act(async () => {
         fireEvent.click(copyButton);
