@@ -21,11 +21,15 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gri
   return (
     <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestId}>
       {icon && (
-        <Box sx={styles.image} data-testid="title-icon">
+        <Box sx={styles.image} {...(dataTestId ? { 'data-testid': `${dataTestId}-icon` } : {})}>
           <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />
         </Box>
       )}
-      <Typography sx={styles.title(gridColumn)} component="h2">
+      <Typography
+        sx={styles.title(gridColumn)}
+        component="h2"
+        {...(dataTestId ? { 'data-testid': `${dataTestId}-title` } : {})}
+      >
         {title}
       </Typography>
     </Box>

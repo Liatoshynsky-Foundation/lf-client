@@ -17,7 +17,7 @@ function PaymentDetails() {
   }, [selectedPaymentDetails.iban]);
 
   return (
-    <Box>
+    <Box data-testid="PaymentDetails">
       <ButtonGroup
         sx={styles.buttonGroup}
         defaultActiveButton={0}
@@ -31,6 +31,7 @@ function PaymentDetails() {
             {currency.toUpperCase()}
           </Button>
         ))}
+        data-testid="PaymentDetails-currencySwitcher"
       />
 
       <Box sx={styles.paymentDetailsContainer}>

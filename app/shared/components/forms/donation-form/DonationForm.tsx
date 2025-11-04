@@ -122,9 +122,13 @@ function DonationForm() {
   };
 
   return (
-    <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square>
-      <Typography variant="h4">{t('donationTitle')}</Typography>
-      <Typography variant="customSemiBold18">{t('donationDescription')}</Typography>
+    <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square data-testid="DonationForm">
+      <Typography data-testid="DonationForm-title" variant="h4">
+        {t('donationTitle')}
+      </Typography>
+      <Typography data-testid="DonationForm-description" variant="customSemiBold18">
+        {t('donationDescription')}
+      </Typography>
       <Box sx={{ ...style.sumInputs, ...(hasError && style.errorBorder) }}>
         <Input
           disableUnderline
@@ -134,6 +138,7 @@ function DonationForm() {
           onChange={handleInputChange}
           placeholder="0"
           sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
+          data-testid="DonationForm-moneyInput"
         />
         <FormControl variant="standard" sx={style.currencyInput}>
           <Select
@@ -143,19 +148,28 @@ function DonationForm() {
             disableUnderline
             value={currency}
             onChange={handleCurrencySwitch}
+            data-testid="DonationForm-currencySelect"
           >
             {currencyItems}
           </Select>
         </FormControl>
       </Box>
-      <Box sx={style.addBtns}>{suggestButtons}</Box>
+      <Box sx={style.addBtns} data-testid="DonationForm-suggestButtonsContainer">
+        {suggestButtons}
+      </Box>
 
       {showCaptcha && (
         <Box sx={style.turnstileWidget}>
           <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
         </Box>
       )}
-      <Button color="primary" variant="contained" fullWidth onClick={() => handleDonateClick(donationSum as number)}>
+      <Button
+        color="primary"
+        variant="contained"
+        fullWidth
+        onClick={() => handleDonateClick(donationSum as number)}
+        data-testid="DonationForm-donateButton"
+      >
         <Typography variant="customSemiBold18">{t('donationButton')}</Typography>
       </Button>
     </PaperComponent>
