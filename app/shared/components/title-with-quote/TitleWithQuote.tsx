@@ -36,6 +36,7 @@ const TitleWithQuote = ({
 
       <Box sx={[styles.quoteSection, ...sxToArray(quoteSectionSx)]} data-testid="TitleWithQuote-quoteBlock">
         <QuoteBlock
+          dataTestId="Quote"
           width={quoteWidth}
           sx={quoteBlockSx}
           quoteIconColor={'burgundy'}
