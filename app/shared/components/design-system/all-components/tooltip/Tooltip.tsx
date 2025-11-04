@@ -26,7 +26,7 @@ const TooltipCustom: React.FC<TooltipCustomProps> = ({
 }) => {
   const finalTitle = title ?? text ?? '';
   const finalArrow = showArrow ?? arrow ?? false;
-  const controlledProps = isOpen !== undefined ? { open: isOpen } : {};
+  const controlledProps = isOpen === undefined ? {} : { open: isOpen };
 
   return (
     <Box {...wrapperProps}>
