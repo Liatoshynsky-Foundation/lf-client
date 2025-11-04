@@ -18,15 +18,15 @@ type NotesConfirmModalProps = {
 
 const NotesConfirmModal = ({ title, subtitle, btnText, onSubmit }: NotesConfirmModalProps) => {
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.container} data-testid="NotesConfirmModal">
       <Logo color={mainHexPallete.brown[100]} variant="office" />
-      <Typography sx={styles.title} variant="h2">
+      <Typography sx={styles.title} variant="h2" data-testid="NotesConfirmModal-title">
         {title}
       </Typography>
-      <Typography sx={styles.subtitle} variant="body2">
+      <Typography sx={styles.subtitle} data-testid="NotesConfirmModal-subtitle" variant="body2">
         {subtitle}
       </Typography>
-      <Box sx={styles.signature}>
+      <Box sx={styles.signature} data-testid="NotesConfirmModal-signature">
         <Signature />
       </Box>
       <Button onClick={onSubmit} sx={styles.button} variant="contained" color="tertiary" size="large" fullWidth>

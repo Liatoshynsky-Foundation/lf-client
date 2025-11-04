@@ -54,9 +54,9 @@ export function MusicTableFilters({
   const genreOrder = genreFilter.length > 0 ? 2 : 3;
 
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.container} data-testid="MusicTableFilters">
       <Box sx={styles.row}>
-        <Box sx={{ order: categoryOrder }}>
+        <Box sx={{ order: categoryOrder }} data-testid="MusicTableFilters-category">
           <FilterSelect
             label={labelCategory}
             options={categoriesOptions.map((c) => ({ value: c.key, label: c.name }))}
@@ -68,7 +68,7 @@ export function MusicTableFilters({
           />
         </Box>
 
-        <Box sx={{ order: genreOrder }}>
+        <Box sx={{ order: genreOrder }} data-testid="MusicTableFilters-genre">
           <FilterSelect
             label={labelGenre}
             options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
@@ -80,7 +80,7 @@ export function MusicTableFilters({
           />
         </Box>
 
-        <Box sx={{ order: 3 }}>
+        <Box sx={{ order: 3 }} data-testid="MusicTableFilters-year">
           <YearNumericFilter
             label={yearLabel ?? 'Year'}
             value={yearFilter}
@@ -91,7 +91,7 @@ export function MusicTableFilters({
           />
         </Box>
 
-        <Box sx={{ order: 4, alignSelf: 'center' }}>
+        <Box sx={{ order: 4, alignSelf: 'center' }} data-testid="MusicTableFilters-clear">
           {onClearAllFilters && isAnyFilterActive && (
             <IconButton
               type={IconButtonVariant.outlined}
