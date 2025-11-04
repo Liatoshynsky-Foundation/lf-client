@@ -42,7 +42,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
         title={t('title')}
         mb={48}
         gridColumn={{ xs: '2 ', sm: '4 / -1', md: '6 / -1', lg: '5 / -1', xl: '6 / -1' }}
-        dataTestid="Faq-titleContainer"
+        dataTestId="Faq-titleContainer"
       />
       <Box sx={styles.contacts}>
         <Typography sx={styles.typography} data-testid="Faq-question">

@@ -40,7 +40,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
         title={title}
         mb={52}
         gridColumn={{ xs: '2 ', sm: '4 / -1', md: '6 / -1', lg: '5 / -1', xl: '6 / -1' }}
-        dataTestid="ActionsHelp-titleContainer"
+        dataTestId="ActionsHelp-titleContainer"
       />
       <TipTapContent
         data={subtitle}
