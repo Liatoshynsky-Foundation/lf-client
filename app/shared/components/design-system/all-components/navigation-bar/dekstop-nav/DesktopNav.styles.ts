@@ -45,7 +45,7 @@ export const styles = {
     lineHeight: '140%',
     letterSpacing: 0,
     '&:hover': {
-      backgroundColor: rgbButtonColors.primaryTextPressed
+      backgroundColor: rgbButtonColors.primaryHoveredBackground
     },
     '&:focus': {
       backgroundColor: mainHexPallete.black,
