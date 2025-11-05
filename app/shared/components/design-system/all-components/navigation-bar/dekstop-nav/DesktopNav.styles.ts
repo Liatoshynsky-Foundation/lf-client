@@ -1,4 +1,4 @@
-import { backgroundColors, mainHexPallete } from '~/ds-components/theme/colors';
+import { backgroundColors, hexButtonGroupColors, mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
 
 export const styles = {
   iconButtonSx: {
@@ -36,7 +36,25 @@ export const styles = {
     gap: '8px'
   },
   warInUkraineButton: {
-    backgroundColor: mainHexPallete.blue[900],
+    backgroundColor: backgroundColors.offWhite,
+    verticalAlign: 'middle',
+    fontWeight: 'normal',
+    marginTop: '-0.2px',
+    color: hexButtonGroupColors.primary.buttonTextColor,
+    padding: '0 16px',
+    lineHeight: '140%',
+    letterSpacing: 0,
+    '&:hover': {
+      backgroundColor: rgbButtonColors.primaryTextPressed
+    },
+    '&:focus': {
+      backgroundColor: mainHexPallete.black,
+      color: mainHexPallete.white
+    }
+  },
+
+  warInUkraineButtonActive: {
+    backgroundColor: mainHexPallete.black,
     color: mainHexPallete.white,
     '&:hover': {
       backgroundColor: mainHexPallete.black

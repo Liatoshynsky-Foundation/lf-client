@@ -54,6 +54,8 @@ const DesktopNav = ({
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
   const [activeButton, setActiveButton] = useState<number | undefined>();
 
+  const isSpecialActive = pathname === specialNav?.links[0].href;
+
   useEffect(() => {
     if (scrollDirection === 'down' && anchorEl) {
       handleDropdownClose();
@@ -161,7 +163,15 @@ const DesktopNav = ({
           size="big"
         />
         {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
-          <Button label={specialNav.title} link={specialNav.links[0].href} sx={styles.warInUkraineButton} />
+          <Button
+            disableRipple
+            label={specialNav.title}
+            link={specialNav.links[0].href}
+            sx={{
+              ...styles.warInUkraineButton,
+              ...(isSpecialActive && styles.warInUkraineButtonActive)
+            }}
+          />
         )}
       </Box>
 
