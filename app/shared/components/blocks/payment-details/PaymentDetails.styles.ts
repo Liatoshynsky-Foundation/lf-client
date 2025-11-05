@@ -15,18 +15,19 @@ export const styles = {
     },
 
     '& [aria-label="indicator"]': {
-      width: '66px'
+      width: '66px',
+      height: 'calc(100% - 8px)',
+      top: 4
     }
   },
 
   currencyBtn: {
-    width: '68px',
-    height: '28px',
     border: 'none',
     display: 'flex',
     alignItems: 'center',
 
     '&, &:hover': {
+      background: 'transparent',
       borderRadius: '28px'
     }
   },
