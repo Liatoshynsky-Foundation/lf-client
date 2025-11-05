@@ -214,7 +214,8 @@
       "onlyNumbers": "Only numeric values are allowed"
     },
     "selected": "selected",
-    "clear": "Clear filter"
+    "clear": "Clear filter",
+    "clearAll": "Clear all filters"
   },
   "search": {
     "notFound": "Not found",

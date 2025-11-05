@@ -75,6 +75,10 @@ jest.mock('~/public/icons/trash-2.svg', () => ({
   default: () => <svg data-testid="delete-icon" />
 }));
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key
+}));
+
 const genresOptions = [
   { key: 'g1', name: 'Genre1' },
   { key: 'g2', name: 'Genre2' }
