@@ -1,20 +1,18 @@
 'use client';
-import { Box, Button, IconButton, Typography } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import { useMemo, useRef, useState } from 'react';
 
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
 
-import { SvgImage } from '../../svg-image/SvgImage';
 import { currencyList, currencyType, paymentDetails, paymentFields } from './constants';
 import { styles } from './PaymentDetails.styles';
+
+import { CopyButton } from '~/shared/components/copy-button/CopyButton';
 
 function PaymentDetails() {
   const [currency, setCurrency] = useState<currencyType>('uah');
   const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
-
-  const handleCopyIban = useCallback(async () => {
-    await navigator.clipboard.writeText(selectedPaymentDetails.iban);
-  }, [selectedPaymentDetails.iban]);
+  const ibanRef = useRef<HTMLSpanElement>(null);
 
   return (
     <Box data-testid="PaymentDetails">
@@ -43,12 +41,10 @@ function PaymentDetails() {
 
             {isIban ? (
               <Typography variant="customSemiBold20" sx={styles.iban}>
-                <Typography component="span" variant="customSemiBold20" sx={styles.ibanText}>
+                <Typography component="span" variant="customSemiBold20" sx={styles.ibanText} ref={ibanRef}>
                   {selectedPaymentDetails[key]}
                 </Typography>
-                <IconButton size="small" onClick={handleCopyIban} aria-label="Copy IBAN">
-                  <SvgImage src="/icons/content-copy.svg" alt="content copy" width={24} height={24} />
-                </IconButton>
+                <CopyButton targetRef={ibanRef} hint="IBAN is copied" iconSize="large" />
               </Typography>
             ) : (
               <Typography variant="customSemiBold20">{selectedPaymentDetails[key]}</Typography>
