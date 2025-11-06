@@ -4,12 +4,13 @@ import { styled } from '@mui/material/styles';
 import { hexButtonGroupColors } from '~/ds-components/theme/colors';
 
 export const StyledIndicator = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette'
+  shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette' && prop !== 'animate'
 })<{
   left: number;
   width: number;
   palette: 'primary' | 'secondary' | 'tertiary';
-}>(({ left, width, palette }) => {
+  animate?: boolean;
+}>(({ left, width, palette, animate = true }) => {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
@@ -17,7 +18,7 @@ export const StyledIndicator = styled(Box, {
     top: 2,
     position: 'absolute',
     borderRadius: '9999px',
-    transition: 'all 0.3s ease',
+    transition: animate ? 'all 0.3s ease' : 'none',
     zIndex: 0,
     backgroundColor: paletteValues.selectedButtonColor,
     color: paletteValues.selectedButtonTextColor,
