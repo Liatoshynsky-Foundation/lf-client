@@ -23,6 +23,8 @@ type ContactFormProps = {
 function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
+  const { handlePhoneInput, hasError } = useHandlePhoneInput();
+  const phoneInputRef = useRef<HTMLInputElement | null>(null);
   const { isMobile, isTablet } = useBreakpoints();
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
