@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import InfoErrorIcon from 'public/icons/info-error.svg';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -12,6 +13,7 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
+import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type ContactFormProps = {
@@ -22,6 +24,8 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
   const { isMobile, isTablet } = useBreakpoints();
+  const { handlePhoneInput, hasError } = useHandlePhoneInput();
+  const phoneInputRef = useRef<HTMLInputElement | null>(null);
 
   const schema = z.object({
     name: z.string().min(2, tErrors('nameMinLength')),
@@ -41,6 +45,8 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
     mode: 'onChange'
   });
 
+  const phoneField = register('phoneNumber');
+
   return (
     <Box component="form">
       <Typography variant="customItalic14" sx={styles.formWarning}>
@@ -54,7 +60,17 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
           error={!!errors.email}
           helperText={errors.email?.message}
         />
-        <TextField label={t('phoneNumber')} {...register('phoneNumber')} />
+        <TextField
+          label={t('phoneNumber')}
+          {...phoneField}
+          inputRef={phoneInputRef}
+          onChange={(e) => {
+            phoneField.onChange(e);
+            handlePhoneInput(e.target.value, phoneInputRef.current);
+          }}
+          error={!!errors.phoneNumber || hasError}
+          helperText={errors.phoneNumber?.message || (hasError ? tErrors('phoneNumberInvalid') : '')}
+        />
         <TextField
           sx={styles.textArea}
           multiline

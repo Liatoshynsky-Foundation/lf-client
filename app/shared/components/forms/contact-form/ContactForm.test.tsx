@@ -24,6 +24,7 @@ jest.mock('next-intl', () => ({
       nameMinLength: 'Імʼя має містити щонайменше 2 символи',
       emailRequired: 'Будь ласка, вкажіть вашу електронну адресу',
       emailInvalid: 'Введіть коректну email-адресу',
+      phoneNumberInvalid: 'Перевірте формат номера телефону',
       messageMinLength: 'Напишіть кілька слів у повідомленні',
       policyRequired: 'Щоб продовжити, потрібно дати згоду'
     };
@@ -89,12 +90,14 @@ describe('ContactForm', () => {
   it('should show errors when incorrect inputs', async () => {
     fillInput('Імя', 'A');
     fillInput('Електронна адреса (email) *', 'test@');
+    fillInput('Номер телефону', '531632');
     fillInput('Ваше повідомлення *', 'Привіт');
     submitForm();
 
     await waitFor(() => {
       expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
       expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
+      expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
     });
   });
