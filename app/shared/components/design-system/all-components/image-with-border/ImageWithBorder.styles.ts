@@ -5,7 +5,8 @@ export const styles = {
     position: 'relative',
     width: width ?? '100%',
     height: height ?? '100%',
-    gridColumn: '1 / -1'
+    gridColumn: '1 / -1',
+    ...(height ? {} : { minHeight: 100 })
   }),
   border: (borderWidth: number, height?: number) => ({
     display: 'block',
