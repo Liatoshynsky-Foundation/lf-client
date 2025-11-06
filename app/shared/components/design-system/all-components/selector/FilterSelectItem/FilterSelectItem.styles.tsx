@@ -5,7 +5,6 @@ export const styles = {
     justifyContent: 'flex-start',
     cursor: 'pointer',
     borderRadius: '8px',
-    margin: '0 8px',
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)'
     }

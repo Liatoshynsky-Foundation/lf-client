@@ -14,6 +14,7 @@ import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type ContactFormProps = {
   onSubmit: () => void;
@@ -24,6 +25,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const tErrors = useTranslations('contactForm.errors');
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const { isMobile, isTablet } = useBreakpoints();
 
   const schema = z.object({
     name: z.string().min(2, tErrors('nameMinLength')),
@@ -89,7 +91,8 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
                   color: errors.policy ? 'error.main' : undefined,
                   '&.Mui-checked': {
                     color: errors.policy ? 'error.main' : 'primary.main'
-                  }
+                  },
+                  alignSelf: 'flex-start'
                 }}
               />
             }
@@ -109,7 +112,13 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
           />
         </FormControl>
       </Box>
-      <Button onClick={onSubmit} size="large" variant="contained" color="tertiary" sx={styles.requestButton}>
+      <Button
+        onClick={onSubmit}
+        size={isMobile || isTablet ? 'medium' : 'large'}
+        variant="contained"
+        color="tertiary"
+        sx={styles.requestButton}
+      >
         {t('buttonText')}
       </Button>
     </Box>

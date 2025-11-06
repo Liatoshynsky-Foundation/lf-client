@@ -1,9 +1,11 @@
-import { Box, type BoxProps, Tooltip, type TooltipProps, Typography, type TypographyProps } from '@mui/material';
+import { Box, type BoxProps, type TooltipProps, Typography, type TypographyProps } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 
 import { arrowStyles, tooltipStyles } from './Tooltip.styles';
 
-interface TooltipCustomProps extends Omit<TooltipProps, 'children'> {
+interface TooltipCustomProps extends Omit<TooltipProps, 'children' | 'title'> {
+  title?: string;
   showArrow?: boolean;
   text?: string;
   wrapperProps?: BoxProps;

@@ -24,6 +24,7 @@ const Pagination: React.FC<PaginationProps> = ({ visiblePages, renderItem, page,
 
   return (
     <MuiPagination
+      data-testid="Pagination"
       {...props}
       page={page}
       renderItem={(item) =>

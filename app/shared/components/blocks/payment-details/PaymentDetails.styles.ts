@@ -15,18 +15,19 @@ export const styles = {
     },
 
     '& [aria-label="indicator"]': {
-      width: '66px'
+      width: '66px',
+      height: 'calc(100% - 8px)',
+      top: 4
     }
   },
 
   currencyBtn: {
-    width: '68px',
-    height: '28px',
     border: 'none',
     display: 'flex',
     alignItems: 'center',
 
     '&, &:hover': {
+      background: 'transparent',
       borderRadius: '28px'
     }
   },
@@ -59,10 +60,7 @@ export const styles = {
     display: 'flex',
     flexWrap: { xs: 'wrap', md: 'nowrap' },
     alignItems: 'center',
-    borderRadius: '40px',
-    p: '12px 15px 12px 24px',
-    backgroundColor: mainHexPallete.brown[100],
-    ml: '-24px',
+    pr: '16px',
     gap: '8px'
   },
 

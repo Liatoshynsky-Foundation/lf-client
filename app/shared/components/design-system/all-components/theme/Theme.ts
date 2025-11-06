@@ -539,16 +539,16 @@ export const theme = createTheme({
             backgroundColor: mainHexPallete.yellow[500],
             color: mainHexPallete.black,
             '&:hover': {
-              backgroundColor: mainHexPallete.black,
-              color: mainHexPallete.white
+              backgroundColor: mainHexPallete.yellow[600],
+              color: mainHexPallete.black
             },
             '&:focus-visible': {
-              backgroundColor: mainHexPallete.black,
-              color: mainHexPallete.white
+              backgroundColor: mainHexPallete.yellow[600],
+              color: mainHexPallete.black
             },
             '&:active': {
-              backgroundColor: mainHexPallete.black,
-              color: mainHexPallete.white
+              backgroundColor: mainHexPallete.yellow[600],
+              color: mainHexPallete.black
             },
             '&:disabled': {
               backgroundColor: mainHexPallete.blue[300],

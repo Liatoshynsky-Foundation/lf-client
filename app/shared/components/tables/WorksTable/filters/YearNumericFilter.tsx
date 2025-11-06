@@ -42,7 +42,7 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
 
   const numericFilterElement = useMemo(
     () => (
-      <Box sx={{ p: 2, minWidth: buttonRef.current?.offsetWidth }} key="numeric-filter">
+      <Box sx={{ minWidth: buttonRef.current?.offsetWidth }} key="numeric-filter">
         <NumericFiltering
           value={value}
           onChange={onChange}

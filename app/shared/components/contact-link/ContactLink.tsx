@@ -23,6 +23,7 @@ interface ContactLinkProps {
   disabled?: boolean;
   linkSx?: SxProps<Theme>;
   direction?: ContactLinkDirection;
+  dataTestid?: string;
 }
 
 type LinkProps = {
@@ -48,7 +49,8 @@ export const ContactLink = ({
   linkSx,
   isMobile = false,
   disabled = false,
-  direction = 'row'
+  direction = 'row',
+  dataTestid
 }: ContactLinkProps) => {
   const handleCopy = () => {
     if (disabled) return;
@@ -80,6 +82,7 @@ export const ContactLink = ({
         aria-disabled={disabled}
         tabIndex={disabled ? -1 : 0}
         onClick={disabled ? (e) => e.preventDefault() : linkProps.onClick}
+        data-testid={dataTestid}
       >
         {value}
       </Link>
