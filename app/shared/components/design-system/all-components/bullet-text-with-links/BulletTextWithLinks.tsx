@@ -38,7 +38,11 @@ const imageSizes = {
   }
 };
 
-export default function BulletTextWithLinks({ description, buttons, buttonText }: IconButtonContentBlockProps) {
+export default function BulletTextWithLinks({
+  description,
+  buttons,
+  buttonText
+}: Readonly<IconButtonContentBlockProps>) {
   const { isMobile } = useBreakpoints();
   const sizesAttribute = generateSizesAttribute(imageSizes);
 
