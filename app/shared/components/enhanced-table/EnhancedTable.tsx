@@ -12,7 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import Pagination from '~/ds-components/pagination/Pagination';
@@ -70,6 +70,12 @@ export const EnhancedTable = <T extends RowData>({
   const t = useTranslations('common');
 
   const breakpoint = useBreakpoints();
+
+  const tableRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToTableTop = useCallback(() => {
+    tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
 
   const toggleGroupCollapse = (groupLabel: string) => {
     setCollapsedGroups((prev) => ({
@@ -154,7 +160,7 @@ export const EnhancedTable = <T extends RowData>({
   });
 
   return (
-    <Box sx={styles.root} data-testid="EnhancedTable">
+    <Box ref={tableRef} sx={styles.root} data-testid="EnhancedTable">
       <ControlPanel
         Search={Search}
         tableName={tableName}
@@ -201,7 +207,10 @@ export const EnhancedTable = <T extends RowData>({
                 siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
                 visiblePages={visiblePages}
-                onChange={(_, page) => handlePageChange(page)}
+                onChange={(_, page) => {
+                  handlePageChange(page);
+                  scrollToTableTop();
+                }}
               />
             )}
           </Box>
