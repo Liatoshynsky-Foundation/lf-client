@@ -65,10 +65,10 @@ describe('validateContactData', () => {
 
   it('should return error if phone number is too short', () => {
     const result = validateContactData({
-      name: 'John',
-      email: 'john@example.com',
+      name: 'kate',
+      email: 'kate@example.com',
       phoneNumber: '+38012345',
-      message: undefined
+      message: 'Too long'
     });
 
     expect(result).toContain(errors.PHONE_NUMBER_ERROR);
@@ -76,10 +76,10 @@ describe('validateContactData', () => {
 
   it('should return error if phone number is too long', () => {
     const result = validateContactData({
-      name: 'John',
-      email: 'john@example.com',
+      name: 'juan',
+      email: 'juan@example.com',
       phoneNumber: '+3801234567890123',
-      message: undefined
+      message: 'Hi there!'
     });
 
     expect(result).toContain(errors.PHONE_NUMBER_ERROR);
@@ -90,7 +90,7 @@ describe('validateContactData', () => {
       name: 'John',
       email: 'john@example.com',
       phoneNumber: '380123456789',
-      message: undefined
+      message: 'How are you ?'
     });
 
     expect(result).toContain(errors.PHONE_NUMBER_ERROR);
@@ -98,10 +98,10 @@ describe('validateContactData', () => {
 
   it('should return error if phone number has an incorrect format', () => {
     const result = validateContactData({
-      name: 'John',
-      email: 'john@example.com',
+      name: 'Diego',
+      email: 'Diego@example.com',
       phoneNumber: '+38012hello34',
-      message: undefined
+      message: 'Too short '
     });
 
     expect(result).toContain(errors.PHONE_NUMBER_ERROR);
