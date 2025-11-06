@@ -50,7 +50,6 @@ const DesktopNav = ({
   const pathname = usePathname();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [temporaryActiveIndex, setTemporaryActiveIndex] = useState<number | null>(null);
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
   const [activeButton, setActiveButton] = useState<number | undefined>();
 
@@ -61,10 +60,6 @@ const DesktopNav = ({
       handleDropdownClose();
     }
   }, [scrollDirection, anchorEl]);
-
-  useEffect(() => {
-    setTemporaryActiveIndex(null);
-  }, [pathname]);
 
   useEffect(() => {
     if (pathname === specialNav?.links[0].href) {
@@ -85,17 +80,9 @@ const DesktopNav = ({
     }
   }, [pathname, NAV_ITEMS, specialNav?.links]);
 
-  const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
-
-  const handleDropdownOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    label: string,
-    items: DropdownItem[],
-    index: number
-  ) => {
+  const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>, label: string, items: DropdownItem[]) => {
     setAnchorEl(event.currentTarget);
     setOpenDropdownState({ label, items });
-    setTemporaryActiveIndex(index);
   };
 
   const handleDropdownClose = () => {
@@ -105,7 +92,7 @@ const DesktopNav = ({
 
   const renderedNavButtons = NAV_ITEMS.map((item, index) => {
     const isOpen = openDropdownState?.label === item.label && Boolean(anchorEl);
-    const isActive = index === effectiveActiveIndex;
+    const isActive = index === activeButton;
 
     const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
     const iconColor = isActive ? mainHexPallete.white : mainHexPallete.black;
@@ -117,7 +104,7 @@ const DesktopNav = ({
         <IconButton
           disableRipple
           key={`${item.label}-${index}`}
-          onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems, index)}
+          onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems)}
           sx={styles.iconButtonSx}
           style={styles.iconButtonInline}
         >
@@ -158,7 +145,7 @@ const DesktopNav = ({
       <Box sx={styles.buttonGroupBackground}>
         <ButtonGroup
           sx={styles.buttonGroup}
-          activeButton={effectiveActiveIndex}
+          activeButton={activeButton !== undefined ? activeButton : -1}
           buttons={renderedNavButtons}
           size="big"
         />
