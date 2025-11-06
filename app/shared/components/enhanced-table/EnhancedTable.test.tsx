@@ -72,7 +72,7 @@ const mockSetSearch = jest.fn();
 const mockSetFilterParams = jest.fn();
 
 beforeEach(() => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  globalThis.HTMLElement.prototype.scrollIntoView = jest.fn();
 });
 
 describe('EnhancedTable', () => {
