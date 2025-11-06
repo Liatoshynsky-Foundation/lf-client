@@ -13,8 +13,8 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
-import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 
 type ContactFormProps = {
   onSubmit: () => void;
@@ -26,8 +26,6 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
   const { isMobile, isTablet } = useBreakpoints();
-  const { handlePhoneInput, hasError } = useHandlePhoneInput();
-  const phoneInputRef = useRef<HTMLInputElement | null>(null);
 
   const schema = z.object({
     name: z.string().min(2, tErrors('nameMinLength')),
