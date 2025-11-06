@@ -29,7 +29,7 @@ export default async function Contacts({ params }: Readonly<Language>) {
   }
 
   return (
-    <ColoredLayout>
+    <ColoredLayout withLines>
       <ContactsInfo contacts={contacts} socialLinks={socialLinks} />
     </ColoredLayout>
   );
