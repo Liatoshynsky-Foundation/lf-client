@@ -23,7 +23,7 @@ function resetState(
 }
 
 function toDigitsOnly(rawValue: string) {
-  return rawValue.replace(/\D/g, '');
+  return rawValue.replaceAll(/\D/g, '');
 }
 
 function normalizeLeadingCharacters(cleanedDigits: string) {
