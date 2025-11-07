@@ -45,6 +45,12 @@ export const StyledButtonItem = styled(Box, {
     zIndex: 1,
     marginRight: '4px',
     padding: size === 'big' ? '5px 16px' : '2px 16px',
+    '&:has(svg)': {
+      paddingRight: '12px'
+    },
+    '& svg': {
+      transform: 'translateY(2px)'
+    },
     textTransform: 'none',
     lineHeight: '150%',
     border: 'none',

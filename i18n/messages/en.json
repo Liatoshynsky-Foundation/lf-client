@@ -9,7 +9,7 @@
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "phoneLabel": "Phone",
-    "phoneCopiedAlert": "Phone number copied to clipboard"
+    "phoneCopiedAlert": "Copied"
   },
   "header": {
     "supportButton": "Support",
@@ -66,7 +66,8 @@
       "errorMessage": "The page you are looking for does not exist, search again on the main page"
     },
     "goHome": "Return to home",
-    "viewMore": "View More"
+    "viewMore": "View More",
+    "copied": "Copied"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -132,7 +133,7 @@
         "question": "Didn't find the answer you were looking for?",
         "answer": "Contact us in a way convenient for you:"
       },
-      "phoneCopiedAlert": "Phone number copied to clipboard"
+      "phoneCopiedAlert": "Copied"
     }
   },
   "collaboration": {
@@ -152,7 +153,7 @@
       "filters": {
         "category": "Category",
         "genre": "Genre",
-        "year": "Year"
+        "year": "Year of composition"
       },
       "name": {
         "composition": "All compositions"
@@ -214,7 +215,8 @@
       "onlyNumbers": "Only numeric values are allowed"
     },
     "selected": "selected",
-    "clear": "Clear filter"
+    "clear": "Clear filter",
+    "clearAll": "Clear all filters"
   },
   "search": {
     "notFound": "Not found",
@@ -230,19 +232,19 @@
   },
   "getNotes": {
     "notesList": {
-      "title": "Notes:",
+      "title": "NoTeS:",
       "subtitle": "All notes",
       "freeNotesButton": "View",
       "paidNotesButton": "Contact us"
     },
     "form": {
-      "title": "Form",
-      "subtitle": "List of all notes"
+      "title": "Sheet Music Request",
+      "subtitle": "Send your request and we will contact you within a few business days"
     },
     "confirmation": {
-      "title": "Confirmation",
-      "subtitle": "Thank you for your request for sheet music materials",
-      "btnText": "Закрити"
+      "title": "ThAnK YoU",
+      "subtitle": "For submitting a request to receive the sheet music",
+      "btnText": "Close"
     }
   },
   "error": {

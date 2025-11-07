@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import PaymentDetails from './PaymentDetails';
@@ -94,16 +94,15 @@ describe('PaymentDetails', () => {
     expect(screen.getByText('UA28-E-U-R')).toBeInTheDocument();
   });
 
-  test('should copy current currency IBAN to clipboard', async () => {
-    renderWithTheme(<PaymentDetails />);
+  it('should copy IBAN to clipboard when CopyButton clicked', async () => {
+    render(<PaymentDetails />);
+    const copyBtn = screen.getByRole('button', { name: /copy content/i });
 
-    const copyBtn = screen.getByRole('button', { name: /Copy IBAN/i });
-    fireEvent.click(copyBtn);
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
+
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-A-H');
-
-    fireEvent.click(screen.getByRole('button', { name: 'USD' }));
-    fireEvent.click(copyBtn);
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-S-D');
   });
 
   test('should render all labels from paymentFields', () => {

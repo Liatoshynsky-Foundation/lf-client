@@ -5,7 +5,11 @@ import Logo from '~/ds-components/logo/Logo';
 
 import { ImageData } from '~/types/types/officeMedia';
 
-const OfficeMedia: React.FC = () => {
+interface OfficeMedia {
+  dataTestId?: string;
+}
+
+const OfficeMedia: React.FC<OfficeMedia> = ({ dataTestId }) => {
   const images: ImageData[] = [
     { src: '/images/office-media/lf-office1.png', alt: 'Фото 1', styleKey: 'photo1' },
     { src: '/images/office-media/lf-office2.png', alt: 'Фото 2', styleKey: 'photo2' },
@@ -13,7 +17,7 @@ const OfficeMedia: React.FC = () => {
   ];
 
   return (
-    <Box sx={styles.mainContainer}>
+    <Box sx={styles.mainContainer} data-testid={dataTestId}>
       <Box sx={styles.mediaContainer}>
         {images.map((img) => (
           <Box

@@ -22,7 +22,7 @@ jest.mock('~/components/forms/contact-form/ContactForm', () => ({
 
 jest.mock('~/components/modal-component/ModalComponent', () => ({
   __esModule: true,
-  default: ({ open, slots }: any) => (open ? <div data-testid="modal">{slots.paper()}</div> : null)
+  default: ({ open, children }: any) => (open ? <div data-testid="modal">{children}</div> : null)
 }));
 
 jest.mock('~/components/paper-component/PaperComponent', () => ({
