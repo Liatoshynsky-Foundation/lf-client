@@ -113,28 +113,46 @@ describe('ContactForm', () => {
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
   });
 
-  it('should normalize when user types with plus and mask chars already present', async () => {
+  it('should normalize when mask chars already present', async () => {
     const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
+    const form = submitBtn.closest('form') as HTMLFormElement;
+    if (!form) throw new Error('Form element not found');
+
+    fillInput('Імя', 'Kate');
+    fillInput('Електронна адреса (email) *', 'k@mail.com');
+    fillInput('Номер телефону', '+380 (63) 116-4627');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect((screen.getByLabelText('Номер телефону') as HTMLInputElement).value).toBe('+380 (63) 116-4627');
+    });
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    const payload = (onSubmit as jest.Mock).mock.calls[0][0];
+    expect(payload.phoneNumber).toBe('+380631164627');
+  });
+
+  it('should NOT call onSubmit when phone number is incomplete but not empty', async () => {
+    const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
+    const form = submitBtn.closest('form') as HTMLFormElement;
+    if (!form) throw new Error('Form element not found');
 
     fillInput('Імя', 'Kate');
     fillInput('Електронна адреса (email) *', 'k@mail.com');
     fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
     fireEvent.click(screen.getByRole('checkbox'));
 
-    fillInput('Номер телефону', '+380 (63) 116-4627');
-
-    const form = submitBtn.closest('form') as HTMLFormElement;
-    if (!form) throw new Error('Form element not found');
+    fillInput('Номер телефону', '+380 (63) 116-46');
 
     fireEvent.submit(form);
 
     await waitFor(() => {
-      const phoneInput = screen.getByLabelText('Номер телефону') as HTMLInputElement;
-      expect(phoneInput.value).toMatch(/^\+380/);
+      expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
     });
 
-    const fd = new FormData(form);
-    const storedPhone = fd.get('phoneNumber') as string | null;
-    expect(storedPhone).toBe('+380631164627');
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(0));
   });
 });

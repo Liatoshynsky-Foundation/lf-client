@@ -17,33 +17,39 @@ import { normalizePhoneNumberFromMask } from '~/lib/utils/normalizePhoneNumberFr
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 
-const createSchema = (tErrors: ReturnType<typeof useTranslations>) => {
-  return z.object({
-    name: z.string().min(2, tErrors('nameMinLength')),
-    email: z.string().email(tErrors('emailInvalid')),
-    phoneNumber: z.string().optional(),
-    message: z.string().trim().min(15, tErrors('messageMinLength')),
-    policy: z.literal(true, { errorMap: () => ({ message: tErrors('policyRequired') }) })
-  });
-};
-
-type ContactFormSchema = ReturnType<typeof createSchema>;
-export type ContactFormInput = z.input<ContactFormSchema>;
-export type ContactFormOutput = z.output<ContactFormSchema>;
-
 type ContactFormProps = {
-  onSubmit: (data: ContactFormOutput) => void;
+  onSubmit: (data: { name: string; email: string; message: string; policy: true; phoneNumber?: string }) => void;
 };
 
 function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
+  const { isMobile, isTablet } = useBreakpoints();
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
-  const hiddenPhoneRef = useRef<HTMLInputElement | null>(null);
-  const { isMobile, isTablet } = useBreakpoints();
 
-  const schema = createSchema(tErrors);
+  const phoneSchema = z
+    .string()
+    .trim()
+    .pipe(
+      z.union([
+        z.literal(''),
+        z.string().transform((value) => {
+          if (hasError) return;
+          return normalizePhoneNumberFromMask(value);
+        })
+      ])
+    );
+
+  const schema = z.object({
+    name: z.string().min(2, tErrors('nameMinLength')),
+    email: z.string().email(tErrors('emailInvalid')),
+    phoneNumber: phoneSchema.optional(),
+    message: z.string().trim().min(15, tErrors('messageMinLength')),
+    policy: z.literal(true, { errorMap: () => ({ message: tErrors('policyRequired') }) })
+  });
+
+  type ContactFormInput = z.input<typeof schema>;
 
   const {
     register,
@@ -54,9 +60,10 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
     mode: 'onChange'
   });
 
-  const phoneHiddenReg = register('phoneNumber');
+  const phoneField = register('phoneNumber');
 
-  const onValid = (data: ContactFormOutput) => {
+  const onValid = (data: ContactFormInput) => {
+    if (hasError) return;
     onSubmit(data);
   };
 
@@ -75,24 +82,14 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
         />
         <TextField
           label={t('phoneNumber')}
+          {...phoneField}
           inputRef={phoneInputRef}
           onChange={(e) => {
+            phoneField.onChange(e);
             handlePhoneInput(e.target.value, phoneInputRef.current);
-            const e164 = normalizePhoneNumberFromMask(e.target.value) ?? '';
-            if (hiddenPhoneRef.current && hiddenPhoneRef.current.value !== e164) {
-              hiddenPhoneRef.current.value = e164;
-            }
           }}
           error={!!errors.phoneNumber || hasError}
           helperText={errors.phoneNumber?.message || (hasError ? tErrors('phoneNumberInvalid') : '')}
-        />
-        <input
-          type="hidden"
-          {...phoneHiddenReg}
-          ref={(el) => {
-            phoneHiddenReg.ref(el);
-            hiddenPhoneRef.current = el;
-          }}
         />
         <TextField
           sx={styles.textArea}
