@@ -1,7 +1,7 @@
 import { maskPhoneNumber } from './maskPhoneNumber';
 
 describe('maskPhoneNumber', () => {
-  it('formats with operator code and single split when rest length < 9', () => {
+  it('should format with operator code and single split when rest length < 9', () => {
     const res = maskPhoneNumber({
       countryCode: '+380',
       nationalNumber: '631164284',
@@ -12,7 +12,7 @@ describe('maskPhoneNumber', () => {
     expect(res).toBe('+380 (63) 116 4284');
   });
 
-  it('formats with three groups when rest length >= 9 (last group >= previous)', () => {
+  it('should format with three groups when rest length >= 9 (last group >= previous)', () => {
     const res = maskPhoneNumber({
       countryCode: '+1',
       nationalNumber: '1234567890',
@@ -32,7 +32,7 @@ describe('maskPhoneNumber', () => {
     expect(res2).toBe('+1 123 456 789');
   });
 
-  it('uses custom separator "-"', () => {
+  it('should use custom separator "-"', () => {
     const res = maskPhoneNumber({
       countryCode: '+1',
       nationalNumber: '123456789',
@@ -43,7 +43,7 @@ describe('maskPhoneNumber', () => {
     expect(res).toBe('+1 123-456-789');
   });
 
-  it('clamps national number to maxPhoneNumberLength (total digits with "+")', () => {
+  it('should clamp national number to maxPhoneNumberLength (total digits with "+")', () => {
     const res = maskPhoneNumber({
       countryCode: '+380',
       nationalNumber: '1234567890',
@@ -54,7 +54,7 @@ describe('maskPhoneNumber', () => {
     expect(res).toBe('+380 (12) 3 4');
   });
 
-  it('handles empty nationalNumber and trims trailing spaces', () => {
+  it('should handle empty nationalNumber and trims trailing spaces', () => {
     const res = maskPhoneNumber({
       countryCode: '+380',
       nationalNumber: '',
@@ -65,7 +65,7 @@ describe('maskPhoneNumber', () => {
     expect(res).toBe('+380');
   });
 
-  it('handles operatorCodeLength > available national digits (uses what exists)', () => {
+  it('should handle operatorCodeLength > available national digits (uses what exists)', () => {
     const res = maskPhoneNumber({
       countryCode: '+380',
       nationalNumber: '6',

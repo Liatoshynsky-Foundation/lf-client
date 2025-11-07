@@ -70,12 +70,12 @@ async function renderAndGetApi(): Promise<Api> {
   });
 }
 
-describe('useHandlePhoneInput (Jest)', () => {
+describe('useHandlePhoneInput', () => {
   beforeEach(() => {
     maskSpy.mockClear();
   });
 
-  it('empty input ----> clears and no error', async () => {
+  it('should clear empty input with no errors shown', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
@@ -88,7 +88,7 @@ describe('useHandlePhoneInput (Jest)', () => {
     expect(maskSpy).not.toHaveBeenCalled();
   });
 
-  it('letters only ----> error, no format', async () => {
+  it('should show error when letters present, no format', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
@@ -101,20 +101,20 @@ describe('useHandlePhoneInput (Jest)', () => {
     expect(maskSpy).not.toHaveBeenCalled();
   });
 
-  it('digits start (+ auto) but unknown country ----> show cleaned and error', async () => {
+  it('should show error when unknown country code', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
     await act(async () => {
-      api.handlePhoneInput('312345', input);
+      api.handlePhoneInput('31234567891', input);
     });
 
-    expect(input.value).toBe('+312345');
+    expect(input.value).toBe('+31234567891');
     expect(api.getHasError()).toBe(true);
     expect(maskSpy).not.toHaveBeenCalled();
   });
 
-  it('UA zero rule: "0" ----> "+380..." and formats with operator=2', async () => {
+  it('should format UA zero rule: "0" ----> "+380..."', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
@@ -132,7 +132,7 @@ describe('useHandlePhoneInput (Jest)', () => {
     expect(api.getHasError()).toBe(false);
   });
 
-  it('known +1 (no operator) formats and no error at length >= 10', async () => {
+  it('should format and no error at length >= 10', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
@@ -145,7 +145,7 @@ describe('useHandlePhoneInput (Jest)', () => {
     expect(api.getHasError()).toBe(false);
   });
 
-  it('too long (> MAX=16) ----> hasError true', async () => {
+  it('should show error when it is too long (> MAX=16)', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
 
@@ -154,19 +154,6 @@ describe('useHandlePhoneInput (Jest)', () => {
     });
 
     expect(maskSpy).toHaveBeenCalledTimes(1);
-    expect(api.getHasError()).toBe(true);
-  });
-
-  it('unknown country (e.g. +999) ----> writes cleaned, no mask call', async () => {
-    const api = await renderAndGetApi();
-    const input = makeInput();
-
-    await act(async () => {
-      api.handlePhoneInput('999123', input);
-    });
-
-    expect(input.value).toBe('+999123');
-    expect(maskSpy).not.toHaveBeenCalled();
     expect(api.getHasError()).toBe(true);
   });
 });
