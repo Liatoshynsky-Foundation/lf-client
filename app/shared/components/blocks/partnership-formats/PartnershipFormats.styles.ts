@@ -111,6 +111,10 @@ export const styles = {
     justifyContent: 'flex-end'
   },
   firstRowFirstCard: {
+    justifySelf: {
+      lg: 'end',
+      xl: 'start'
+    },
     alignSelf: {
       xs: 'start',
       lg: 'start',
@@ -122,7 +126,7 @@ export const styles = {
     },
     gridColumn: {
       md: '4 / 10',
-      lg: '3 / 6',
+      lg: '2 / 6',
       xl: 'span 3',
       xxl: '3 / 6'
     },
@@ -229,7 +233,7 @@ export const styles = {
       xl: 'none'
     },
     justifySelf: {
-      lg: 'end'
+      lg: 'start'
     },
     gridColumn: {
       lg: '6 / 10'
@@ -258,13 +262,13 @@ export const styles = {
       xs: '1 / -1',
       sm: 'span 4',
       md: '10 / 13',
-      lg: '3 / 6',
+      lg: '2 / 6',
       xl: 'span 3',
       xxl: '10 / 13'
     },
     justifySelf: {
       md: 'end',
-      lg: 'start',
+      lg: 'end',
       xl: 'end'
     },
     mt: {
@@ -314,6 +318,13 @@ export const styles = {
       lg: '0'
     },
     height: '100%',
+    transform: {
+      lg: 'translateX(-37px)',
+      xl: 'translateX(0px)'
+    },
+    width: {
+      lg: '626px'
+    },
     display: 'flex',
     alignItems: 'stretch'
   },
@@ -343,7 +354,10 @@ export const styles = {
   descriptionText: {
     textIndent: {
       sm: '15em',
-      md: '21em'
+      md: '21em',
+      lg: '21em',
+      xl: '21em',
+      xxl: '17em'
     },
     gridColumn: {
       xs: '1 / -1',
