@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -52,7 +52,9 @@ const DesktopNav = ({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
   const [activeButton, setActiveButton] = useState<number | undefined>();
+  const [animateIndicator, setAnimateIndicator] = useState(true);
 
+  const prevActiveButtonRef = useRef<number | undefined>(undefined);
   const isSpecialActive = pathname === specialNav?.links[0].href;
 
   useEffect(() => {
@@ -79,6 +81,19 @@ const DesktopNav = ({
       setActiveButton(undefined);
     }
   }, [pathname, NAV_ITEMS, specialNav?.links]);
+
+  useEffect(() => {
+    const becameDefined = prevActiveButtonRef.current === undefined && activeButton !== undefined;
+    if (becameDefined) {
+      setAnimateIndicator(false);
+      const id = requestAnimationFrame(() => {
+        setAnimateIndicator(true);
+      });
+      prevActiveButtonRef.current = activeButton;
+      return () => cancelAnimationFrame(id);
+    }
+    prevActiveButtonRef.current = activeButton;
+  }, [activeButton]);
 
   const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>, label: string, items: DropdownItem[]) => {
     setAnchorEl(event.currentTarget);
@@ -148,6 +163,7 @@ const DesktopNav = ({
           activeButton={activeButton !== undefined ? activeButton : -1}
           buttons={renderedNavButtons}
           size="big"
+          animateIndicator={animateIndicator}
         />
         {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
           <Button

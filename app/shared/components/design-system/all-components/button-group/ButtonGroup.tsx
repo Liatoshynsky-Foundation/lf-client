@@ -11,6 +11,7 @@ interface ButtonGroupProps extends Omit<BoxProps, 'color' | 'size'> {
   activeButton?: number;
   size?: ButtonGroupSizeOptions;
   palette?: ButtonGroupPaletteOptions;
+  animateIndicator?: boolean;
 }
 
 const ButtonGroup = ({
@@ -19,6 +20,7 @@ const ButtonGroup = ({
   activeButton: controlledActiveButton,
   size = 'small',
   palette = 'primary',
+  animateIndicator = true,
   sx,
   ...props
 }: ButtonGroupProps) => {
@@ -72,6 +74,7 @@ const ButtonGroup = ({
         palette={palette}
         left={indicatorStyle.left}
         width={indicatorStyle.width}
+        animate={animateIndicator}
         aria-label="indicator"
         aria-hidden="true"
       />
