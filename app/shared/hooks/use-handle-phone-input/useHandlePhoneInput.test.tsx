@@ -56,12 +56,12 @@ function makeInput(initial = ''): HTMLInputElement {
   el.value = initial;
   Object.defineProperty(el, 'selectionStart', {
     get() {
-      return (el as HTMLInputElement).value.length;
+      return el.value.length;
     },
     configurable: true
   });
-  (el as HTMLInputElement).setSelectionRange = () => {};
-  return el as HTMLInputElement;
+  el.setSelectionRange = () => {};
+  return el;
 }
 
 async function renderAndGetApi(): Promise<Api> {
