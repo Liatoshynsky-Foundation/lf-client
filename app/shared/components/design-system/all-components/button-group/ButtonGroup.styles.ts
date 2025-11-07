@@ -13,8 +13,8 @@ export const StyledIndicator = styled(Box, {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
-    height: 'calc(100% - 4px)',
-    top: 2,
+    height: 'calc(100% - 8px)',
+    top: 4,
     position: 'absolute',
     borderRadius: '9999px',
     transition: 'all 0.3s ease',
@@ -36,7 +36,9 @@ export const StyledButtonItem = styled(Box, {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
-    display: 'inline-block',
+    display: 'inline-flex',
+    alignItems: 'center',
+    height: '100%',
     borderRadius: '9999px',
     color: active ? paletteValues.selectedButtonTextColor : paletteValues.buttonTextColor,
     fontFamily: 'inherit',
@@ -73,7 +75,7 @@ export const StyledButtonItem = styled(Box, {
       border: 'none',
       padding: 0,
       margin: 0,
-      display: 'inline-block',
+      display: 'inline-flex',
       height: '100%',
       transition: 'none'
     }

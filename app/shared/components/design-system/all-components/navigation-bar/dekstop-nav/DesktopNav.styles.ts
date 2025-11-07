@@ -22,13 +22,12 @@ export const styles = {
     marginTop: '8px'
   },
   buttonGroup: {
-    maxHeight: '40px',
-    minWidth: '553px',
-    backgroundColor: backgroundColors.offWhite
+    height: '40px',
+    backgroundColor: backgroundColors.offWhite,
+    p: '4px'
   },
   buttonGroupBackground: {
     backgroundColor: backgroundColors.white,
-    padding: '6px',
     borderRadius: '999px',
     display: 'flex',
     alignItems: 'center',
