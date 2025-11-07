@@ -63,6 +63,50 @@ describe('validateContactData', () => {
     expect(result).toContain(errors.EMAIL_ERROR);
   });
 
+  it('should return error if phone number is too short', () => {
+    const result = validateContactData({
+      name: 'John',
+      email: 'john@example.com',
+      phoneNumber: '+38012345',
+      message: undefined
+    });
+
+    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
+  });
+
+  it('should return error if phone number is too long', () => {
+    const result = validateContactData({
+      name: 'John',
+      email: 'john@example.com',
+      phoneNumber: '+3801234567890123',
+      message: undefined
+    });
+
+    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
+  });
+
+  it('should return error if phone number has an incorrect format', () => {
+    const result = validateContactData({
+      name: 'John',
+      email: 'john@example.com',
+      phoneNumber: '380123456789',
+      message: undefined
+    });
+
+    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
+  });
+
+  it('should return error if phone number has an incorrect format', () => {
+    const result = validateContactData({
+      name: 'John',
+      email: 'john@example.com',
+      phoneNumber: '+38012hello34',
+      message: undefined
+    });
+
+    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
+  });
+
   it('should return error if message is missing', () => {
     const result = validateContactData({
       name: 'John',
