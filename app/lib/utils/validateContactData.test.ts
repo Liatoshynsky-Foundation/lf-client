@@ -85,26 +85,17 @@ describe('validateContactData', () => {
     expect(result).toContain(errors.PHONE_NUMBER_ERROR);
   });
 
-  it('should return error if phone number has an incorrect format', () => {
-    const result = validateContactData({
-      name: 'John',
-      email: 'john@example.com',
-      phoneNumber: '380123456789',
-      message: undefined
+  describe('should return error if phone number has an incorrect format', () => {
+    it.each(['380123456789', '+38012hello34'])('returns error for invalid phone: %s', (phone) => {
+      const result = validateContactData({
+        name: 'John',
+        email: 'john@example.com',
+        phoneNumber: phone,
+        message: undefined
+      });
+
+      expect(result).toContain(errors.PHONE_NUMBER_ERROR);
     });
-
-    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
-  });
-
-  it('should return error if phone number has an incorrect format', () => {
-    const result = validateContactData({
-      name: 'John',
-      email: 'john@example.com',
-      phoneNumber: '+38012hello34',
-      message: undefined
-    });
-
-    expect(result).toContain(errors.PHONE_NUMBER_ERROR);
   });
 
   it('should return error if message is missing', () => {
