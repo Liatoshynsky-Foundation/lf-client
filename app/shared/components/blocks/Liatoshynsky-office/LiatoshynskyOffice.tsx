@@ -15,10 +15,10 @@ const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnType<typeof useTranslations> }) => {
   const { quote } = data;
   return (
-    <Box sx={styles.mainContainer}>
-      <Box sx={styles.trapezoid} />
-      <Box sx={styles.contentContainer}>
-        <Box sx={styles.quoteBlock}>
+    <Box sx={styles.mainContainer} data-testid="LiatoshynskyOffice">
+      <Box sx={styles.trapezoid} data-testid="LiatoshynskyOffice-trapezoid" />
+      <Box sx={styles.contentContainer} data-testid="LiatoshynskyOffice-contentContainer">
+        <Box sx={styles.quoteBlock} data-testid="LiatoshynskyOffice-quoteBlock">
           <Quote
             quoteText={quote?.text}
             sourceText={quote?.source}
@@ -26,16 +26,21 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
             mainTextColor="black"
             alignRight
             sx={styles.quoteSx}
+            dataTestId="LiatoshynskyOffice-quote"
           />
         </Box>
-        <Box sx={styles.textBlock} className={oswald.className}>
-          <Typography sx={styles.text}>{t('office')}</Typography>
-          <Typography sx={[styles.text, styles.indentedLine]}>{t('name')}</Typography>
+        <Box sx={styles.textBlock} className={oswald.className} data-testid="LiatoshynskyOffice-textBlock">
+          <Typography sx={styles.text} data-testid="LiatoshynskyOffice-textOffice">
+            {t('office')}
+          </Typography>
+          <Typography sx={[styles.text, styles.indentedLine]} data-testid="LiatoshynskyOffice-textName">
+            {t('name')}
+          </Typography>
         </Box>
-        <Box sx={styles.media}>
-          <OfficeMedia />
+        <Box sx={styles.media} data-testid="LiatoshynskyOffice-media">
+          <OfficeMedia dataTestId="LiatoshynskyOffice-officeMedia" />
         </Box>
-        <Box sx={styles.buttonBlock}>
+        <Box sx={styles.buttonBlock} data-testid="LiatoshynskyOffice-buttonBlock">
           <Button
             size="large"
             color="primary"
@@ -43,6 +48,7 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
             link="/office"
             label={t('goToOfficeButton')}
             sx={styles.button}
+            data-testid="LiatoshynskyOffice-goToOfficeButton"
           />
         </Box>
       </Box>

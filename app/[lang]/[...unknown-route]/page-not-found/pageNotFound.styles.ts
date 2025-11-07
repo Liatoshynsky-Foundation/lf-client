@@ -9,7 +9,8 @@ export const styles = {
     alignItems: 'center',
     height: '100vh',
     gridColumn: '1 / -1',
-    my: { xs: '50px', sm: '100px' }
+    my: { xs: '50px', sm: '100px' },
+    px: { xs: '16px', sm: '24px' }
   },
   titleText: {
     lineHeight: '120%',

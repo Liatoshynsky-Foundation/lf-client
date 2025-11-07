@@ -11,4 +11,5 @@ export type QuoteBlockProps = {
   alignRight?: boolean;
   sx?: SxProps;
   width?: string | Record<string, string>;
+  dataTestId?: string;
 };

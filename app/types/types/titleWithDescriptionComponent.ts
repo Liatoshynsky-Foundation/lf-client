@@ -4,4 +4,5 @@ export type TitleWithDescriptionProps = {
   variant: Variant;
   title: string;
   description?: string | React.ReactNode;
+  dataTestId?: string;
 };

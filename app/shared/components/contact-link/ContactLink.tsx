@@ -1,5 +1,8 @@
+'use client';
+
 import { Box, Link, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
+import { useRef } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
@@ -8,6 +11,7 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 import { styles } from './ContactLink.styles';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
+import { CopyButton } from '~/shared/components/copy-button/CopyButton';
 
 type ContactLinkType = 'phone' | 'email';
 type ContactLinkDirection = 'row' | 'column';
@@ -23,6 +27,7 @@ interface ContactLinkProps {
   disabled?: boolean;
   linkSx?: SxProps<Theme>;
   direction?: ContactLinkDirection;
+  dataTestid?: string;
 }
 
 type LinkProps = {
@@ -30,11 +35,9 @@ type LinkProps = {
   onClick?: () => void;
 };
 
-type GetLinkPropsType = (type: ContactLinkType, value: string, isMobile: boolean, handleCopy: () => void) => LinkProps;
-
-const getLinkProps: GetLinkPropsType = (type, value, isMobile, handleCopy) => {
+const getLinkProps = (type: ContactLinkType, value: string, isMobile: boolean): LinkProps => {
   if (type === 'phone') {
-    return isMobile ? { href: `tel:${value}` } : { href: '#', onClick: handleCopy };
+    return isMobile ? { href: `tel:${value}` } : { href: '#' };
   }
   return { href: `mailto:${value}` };
 };
@@ -46,17 +49,13 @@ export const ContactLink = ({
   icon,
   alertMsg,
   linkSx,
+  dataTestid,
   isMobile = false,
   disabled = false,
   direction = 'row'
 }: ContactLinkProps) => {
-  const handleCopy = () => {
-    if (disabled) return;
-    navigator.clipboard.writeText(value);
-    if (alertMsg) alert(alertMsg);
-  };
-
-  const linkProps = getLinkProps(type, value, isMobile, handleCopy);
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  const linkProps = getLinkProps(type, value, isMobile);
 
   return (
     <Box
@@ -74,15 +73,21 @@ export const ContactLink = ({
 
       {label && <Typography sx={styles.weakText}>{label}:</Typography>}
 
-      <Link
-        sx={[styles.link, ...sxToArray(linkSx)]}
-        {...linkProps}
-        aria-disabled={disabled}
-        tabIndex={disabled ? -1 : 0}
-        onClick={disabled ? (e) => e.preventDefault() : linkProps.onClick}
-      >
-        {value}
-      </Link>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <Link
+          ref={linkRef}
+          sx={[styles.link, ...sxToArray(linkSx)]}
+          {...linkProps}
+          aria-disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
+          onClick={disabled ? (e) => e.preventDefault() : linkProps.onClick}
+          data-testid={dataTestid}
+        >
+          {value}
+        </Link>
+
+        {!isMobile && !disabled && <CopyButton targetRef={linkRef} hint={alertMsg} />}
+      </Box>
     </Box>
   );
 };

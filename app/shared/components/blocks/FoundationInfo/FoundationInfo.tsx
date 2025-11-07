@@ -12,25 +12,35 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
   const { image, ourOrganisation, ourName, ourBelief } = data;
 
   const organisationParagraph = (children: React.ReactNode) => (
-    <Typography sx={styles.explanationText}>{children}</Typography>
+    <Typography sx={styles.explanationText} data-testid="FoundationInfo-explanationText">
+      {children}
+    </Typography>
   );
 
   const organisationBoldText = (children: React.ReactNode) => (
-    <Box component="strong" sx={styles.organisationText}>
+    <Box component="strong" sx={styles.organisationText} data-testid="FoundationInfo-organisationText">
       {children}
     </Box>
   );
 
-  const nameParagraph = (children: React.ReactNode) => <Typography sx={styles.textSection}>{children}</Typography>;
+  const nameParagraph = (children: React.ReactNode) => (
+    <Typography sx={styles.textSection} data-testid="FoundationInfo-textSection">
+      {children}
+    </Typography>
+  );
 
-  const beliefParagraph = (children: React.ReactNode) => <Typography sx={styles.textImage}>{children}</Typography>;
+  const beliefParagraph = (children: React.ReactNode) => (
+    <Typography sx={styles.textImage} data-testid="FoundationInfo-textImage">
+      {children}
+    </Typography>
+  );
 
   return (
-    <Box sx={styles.container}>
-      <Box sx={styles.firstBulletIcon}>
+    <Box sx={styles.container} data-testid="FoundationInfo">
+      <Box sx={styles.firstBulletIcon} data-testid="FoundationInfo-firstBulletIcon">
         <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={22} height={20} />
       </Box>
-      <Box sx={styles.organisationSection}>
+      <Box sx={styles.organisationSection} data-testid="FoundationInfo-organisationSection">
         <TipTapContent
           data={ourOrganisation}
           markRenderers={{
@@ -42,7 +52,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         />
       </Box>
 
-      <Box sx={styles.explanationSection}>
+      <Box sx={styles.explanationSection} data-testid="FoundationInfo-explanationSection">
         <TipTapContent
           data={ourName}
           nodeRenderers={{
@@ -51,7 +61,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         />
       </Box>
 
-      <Box sx={styles.secondBulletIcon}>
+      <Box sx={styles.secondBulletIcon} data-testid="FoundationInfo-secondBulletIcon">
         <SvgImage src="/icons/ellipse.svg" alt="bullet point" width={22} height={20} />
       </Box>
 
@@ -62,7 +72,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         }}
       />
 
-      <Box sx={styles.bodyImage}>
+      <Box sx={styles.bodyImage} data-testid="FoundationInfo-bodyImage">
         {image && (
           <Image
             src={image.src}

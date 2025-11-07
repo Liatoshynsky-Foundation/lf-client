@@ -8,11 +8,16 @@ export const styles = {
   },
   title: {
     marginBottom: '8px',
-    whiteSpace: 'pre-wrap'
+    whiteSpace: 'pre-wrap',
+    fontSize: { xs: '40px', md: '64px' }
   },
   subtitle: {
     marginBottom: '16px',
-    whiteSpace: 'pre-wrap'
+    whiteSpace: 'pre-wrap',
+    fontSize: {
+      xs: '18px',
+      md: '20px'
+    }
   },
   button: {
     marginTop: '16px'

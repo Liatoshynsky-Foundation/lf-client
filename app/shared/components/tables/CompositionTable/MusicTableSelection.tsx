@@ -201,12 +201,10 @@ export default function MusicTableSection() {
   const minYear = yearOptions?.[0];
   const maxYear = yearOptions?.[1];
 
-  const isGenreActive = genreFilter.length > 0;
-  const isCategoryActive = categoryFilter.length > 0;
   const isYearActive = yearFilter[0] > (minYear ?? defaultMinYear) || yearFilter[1] < (maxYear ?? defaultMaxYear);
 
-  const isAnyFilterActive = isGenreActive || isYearActive || isCategoryActive;
-  const activeFiltersCount = Number(isGenreActive) + Number(isYearActive) + Number(isCategoryActive);
+  const activeFiltersCount = genreFilter.length + categoryFilter.length + (isYearActive ? 1 : 0);
+  const isAnyFilterActive = activeFiltersCount > 0;
 
   return (
     <>

@@ -2,8 +2,7 @@ import { mainHexPallete } from '~/ds-components//theme/colors';
 
 export const ControlPanelStyles = {
   root: {
-    display: 'column',
-    gap: 8
+    pr: { xs: '2%', sm: 0 }
   },
   header: {
     display: 'flex',
@@ -15,7 +14,10 @@ export const ControlPanelStyles = {
   headerRight: {
     display: 'flex',
     alignItems: 'center',
-    gap: 2
+    gap: {
+      xs: 1,
+      sm: 2
+    }
   },
   filtersBadge: {
     '& .MuiBadge-badge': {

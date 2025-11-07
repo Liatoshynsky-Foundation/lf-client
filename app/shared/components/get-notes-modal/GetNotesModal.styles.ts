@@ -6,33 +6,108 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center'
   },
-  maxWidth: (state: number) => {
-    switch (state) {
-      case GetNotesState.LIST:
-        return {
-          width: '1000px',
-          maxWidth: 'min(70vw, 1000px)'
-        };
-      case GetNotesState.FORM:
-      case GetNotesState.CONFIRM:
-        return {
-          maxWidth: 'min(70vw, 744px)'
-        };
+
+  paper: (state: GetNotesState) => {
+    if (state === GetNotesState.LIST) {
+      return {
+        maxHeight: '95vh',
+        maxWidth: {
+          xs: '100vw',
+          sm: '482px',
+          md: '744px',
+          xl: '1024px'
+        },
+        minWidth: {
+          xs: '95vw',
+          sm: 'min(90vw, 482px)',
+          md: 'min(70vw, 744px)',
+          xl: 'min(70vw, 1024px)'
+        },
+        padding: {
+          xs: '40px 24px',
+          sm: '24px 30px',
+          md: '24px 56px',
+          xl: '37px 60px'
+        },
+        '@media (max-width: 480px)': {
+          height: 'calc(100vh - 24px)',
+          width: '100vw'
+        }
+      };
     }
+
+    return {
+      maxHeight: '95vh',
+      maxWidth: {
+        xs: '100vw',
+        sm: '394px',
+        md: '496px',
+        xl: '744px'
+      },
+      padding: {
+        xs: '51px 24px',
+        sm: '50px 32px',
+        md: '57px 53px',
+        xl: '75px 81px'
+      },
+      '@media (max-width: 425px)': {
+        maxWidth: '100vw',
+        maxHeight: '100vh'
+      },
+      '@media (min-width: 426px) and (max-width: 767px)': {
+        maxWidth: 'min(90vw, 394px)'
+      }
+    };
   },
-  paper: {
-    maxHeight: '80vh',
-    minHeight: '475px',
-    padding: '32px 72px 72px 72px'
+  closeIcon: (state: GetNotesState) => {
+    const shared = {
+      position: 'absolute',
+      width: '30px',
+      height: '30px',
+      zIndex: '100',
+      right: '23px'
+    };
+    if (state === GetNotesState.LIST) {
+      return {
+        ...shared,
+        top: {
+          xs: '23px',
+          lg: 0
+        }
+      };
+    }
+    return {
+      ...shared,
+      top: {
+        xs: '10px',
+        lg: '16px'
+      },
+      right: {
+        xs: '23px',
+        md: '35px',
+        lg: '50px'
+      }
+    };
   },
-  headerContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row-reverse',
-    marginBottom: '8px'
-  },
-  closeIcon: {
-    width: '30px',
-    height: '30px'
+  scrollContainer: (state: GetNotesState) => {
+    if (state === GetNotesState.LIST) return {};
+
+    const base = {
+      overflowY: 'auto',
+      flex: 1,
+      maxHeight: 'calc(95vh - 200px)'
+    };
+
+    if (state === GetNotesState.CONFIRM) {
+      return {
+        ...base,
+        '@media (min-height: 700px)': {
+          overflowY: 'hidden',
+          maxHeight: '95vh'
+        }
+      };
+    }
+
+    return base;
   }
 };

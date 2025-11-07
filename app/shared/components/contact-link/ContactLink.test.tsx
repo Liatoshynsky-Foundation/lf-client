@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { ContactLink } from './ContactLink';
 
@@ -28,11 +28,14 @@ describe('ContactLink component', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', 'tel:+380123456789');
   });
 
-  it('Should copy phone to clipboard when clicked on desktop', async () => {
-    render(<ContactLink type="phone" label="Phone" value="+380123456789" isMobile={false} />);
+  it('Should copy phone to clipboard', async () => {
+    render(<ContactLink type="phone" label="Phone" value="+380123456789" />);
 
-    const link = screen.getByRole('link');
-    fireEvent.click(link);
+    const copyButton = screen.getByRole('button', { name: /copy content/i });
+
+    await act(async () => {
+      fireEvent.click(copyButton);
+    });
 
     expect(mockWriteText).toHaveBeenCalledWith('+380123456789');
   });

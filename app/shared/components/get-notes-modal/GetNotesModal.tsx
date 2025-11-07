@@ -28,25 +28,35 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   const t = useTranslations('getNotes');
   const [state, setState] = useState(GetNotesState.LIST);
 
-  const pNHandler = () => {
-    setState(GetNotesState.FORM);
-  };
-
   let title = null;
   let innards = null;
 
   switch (state) {
     case GetNotesState.LIST:
-      title = <Typography variant="h2">{t('notesList.title')}</Typography>;
-      innards = <NotesListModal composition={composition} notes={notes} paidNotesHandler={pNHandler} />;
+      title = (
+        <Typography variant="h2" sx={{ fontSize: { xs: '40px', md: '64px' } }}>
+          {t('notesList.title')}
+        </Typography>
+      );
+      innards = (
+        <NotesListModal composition={composition} notes={notes} paidNotesHandler={() => setState(GetNotesState.FORM)} />
+      );
       break;
     case GetNotesState.FORM:
       title = (
-        <Box>
-          <Typography sx={{ mb: 2, textTransform: 'uppercase' }} variant="h4">
+        <Box data-testid="GetNotesModal" sx={{ mb: '8px' }}>
+          <Typography variant="h4" sx={{ mb: 2, textTransform: 'uppercase', fontSize: { xs: '20px', md: '28px' } }}>
             {t('form.title')}
           </Typography>
-          <Typography sx={{ textIndent: 'calc(50% - 50px)', display: 'block' }} variant="subtitle1">
+          <Typography
+            data-testid="GetNotesModal-subtitle"
+            variant="subtitle1"
+            sx={{
+              textIndent: { xs: 'calc(50% - 100px)', md: 'calc(50% - 50px)' },
+              display: 'block',
+              fontSize: { xs: '16px', md: '18px' }
+            }}
+          >
             {t('form.subtitle')}
           </Typography>
         </Box>
@@ -59,24 +69,29 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
           title={t('confirmation.title')}
           subtitle={t('confirmation.subtitle')}
           btnText={t('confirmation.btnText')}
+          onSubmit={handleClose}
         />
       );
       break;
   }
 
   const paper = () => (
-    <PaperComponent sx={{ ...styles.paper, ...styles.maxWidth(state) }}>
-      <Box sx={styles.headerContainer}>
-        <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="small" onClick={handleClose}>
-          <SvgImage src="/icons/x.svg" alt="Close" width={24} height={24} />
-        </IconButton>
-        {title}
-      </Box>
-      {innards}
+    <PaperComponent sx={styles.paper(state)}>
+      <Box sx={{ position: 'sticky' }}>{title}</Box>
+      <Box sx={styles.scrollContainer(state)}>{innards}</Box>
     </PaperComponent>
   );
 
-  return <ModalComponent open={opened} sx={styles.backdrop} slots={{ paper }} />;
+  return (
+    <ModalComponent open={opened} sx={styles.backdrop}>
+      <Box sx={{ position: 'relative' }}>
+        <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="large" onClick={handleClose}>
+          <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
+        </IconButton>
+        {paper()}
+      </Box>
+    </ModalComponent>
+  );
 };
 
 export default GetNotesModal;
