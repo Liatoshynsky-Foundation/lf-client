@@ -170,10 +170,12 @@ describe('PartnershipFormats', () => {
     const images = screen.getAllByTestId('image-with-border');
     const firstRowImage = images.find((img) => img.dataset.width === '294');
     expect(firstRowImage).toBeInTheDocument();
-    expect(within(firstRowImage!).getByAltText('Partnership collaboration')).toHaveAttribute(
-      'src',
-      '/images/partnership-small.png'
-    );
+    if (firstRowImage) {
+      expect(within(firstRowImage).getByAltText('Partnership collaboration')).toHaveAttribute(
+        'src',
+        '/images/partnership-small.png'
+      );
+    }
   });
 
   it('should render second row image', () => {
