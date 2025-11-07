@@ -275,11 +275,21 @@ export const styles = {
       md: '24px',
       lg: '0',
       xl: '24px'
-    }
+    },
+    height: '100%',
+    width: {
+      md: '294px'
+    },
+    display: 'flex',
+    alignItems: 'stretch'
   },
   firstRowImageWrapper: {
     transform: 'skewY(-2deg)',
-    mt: { sm: '0', md: '10px', lg: '0', xl: '42px' }
+    mt: { sm: '0', md: '10px', lg: '0', xl: '42px' },
+    width: '100%',
+    height: { xs: '386px', sm: '386px', md: '386px', lg: '386px', xl: '386px' },
+    position: 'relative',
+    flex: 1
   },
   secondRowImageContainer: {
     alignSelf: {
@@ -302,11 +312,18 @@ export const styles = {
     mb: {
       md: '0',
       lg: '0'
-    }
+    },
+    height: '100%',
+    display: 'flex',
+    alignItems: 'stretch'
   },
   secondRowImageWrapper: {
     transform: 'skewY(-2deg)',
-    mb: { sm: '40px', lg: '0', xl: '0' }
+    mb: { sm: '40px', lg: '0', xl: '0' },
+    width: '100%',
+    height: { xs: '386px', sm: '386px', md: '386px', lg: '386px', xl: '386px' },
+    position: 'relative',
+    flex: 1
   },
   descriptionContainer: {
     display: 'grid',

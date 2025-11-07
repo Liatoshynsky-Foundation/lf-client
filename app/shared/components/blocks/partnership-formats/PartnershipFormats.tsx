@@ -60,24 +60,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
     );
   };
 
-  const renderImage = (
-    image: PartnershipImage | undefined,
-    containerStyles: object,
-    imageWrapperStyles: object,
-    dimensions: { width: number; height: number }
-  ) => {
+  const renderImage = (image: PartnershipImage | undefined, containerStyles: object, imageWrapperStyles: object) => {
     if (!image) return null;
 
     return (
       <Box sx={containerStyles}>
         <Box sx={imageWrapperStyles}>
-          <ImageWithBorder
-            image={image.src}
-            alt={image.alt}
-            width={dimensions.width}
-            height={dimensions.height}
-            borderWidth={8}
-          />
+          <ImageWithBorder image={image.src} alt={image.alt} borderWidth={8} />
         </Box>
       </Box>
     );
@@ -104,19 +93,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
         {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />
         {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
-        {renderImage(data.firstRowImage, styles.firstRowImageContainer, styles.firstRowImageWrapper, {
-          width: 294,
-          height: 386
-        })}
+        {renderImage(data.firstRowImage, styles.firstRowImageContainer, styles.firstRowImageWrapper)}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCardLg)}
         <Box sx={styles.emptyColumnSecond} />
       </Box>
 
       <Box sx={styles.secondRow}>
-        {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper, {
-          width: 608,
-          height: 385
-        })}
+        {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper)}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
         {renderCard(data.secondRowSecondCard, { ...styles.secondRowSecondCard, ...styles.lastCardInRow })}
       </Box>
