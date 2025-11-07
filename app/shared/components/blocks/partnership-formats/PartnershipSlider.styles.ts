@@ -8,7 +8,7 @@ export const sliderStyles = {
   },
   sliderWrapper: {
     width: '100%',
-    overflow: 'hidden',
+    py: '8px',
     position: 'relative',
     touchAction: 'pan-y'
   },
@@ -21,26 +21,50 @@ export const sliderStyles = {
     minWidth: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
-    px: {
-      xs: '10px'
-    }
+    alignItems: 'center'
   },
   cardWrapper: {
-    width: '294px',
-    maxWidth: '294px',
-    minWidth: '294px'
+    width: {
+      xs: '100%',
+      sm: '294px'
+    },
+    maxWidth: {
+      xs: '100%',
+      sm: '294px'
+    },
+    minWidth: {
+      xs: '100%',
+      sm: '294px'
+    },
+    '& > *': {
+      width: '100% !important',
+      maxWidth: '100%'
+    }
   },
   imageWrapper: {
     transform: 'skewY(-2deg)',
-    width: '294px',
-    maxWidth: '294px',
-    minWidth: '294px',
+    width: {
+      xs: '100%',
+      sm: '294px'
+    },
+    maxWidth: {
+      xs: '100%',
+      sm: '294px'
+    },
+    minWidth: {
+      xs: '100%',
+      sm: '294px'
+    },
+    height: '386px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '10px 0',
-    overflow: 'visible'
+    overflow: 'visible',
+    '& > *': {
+      width: '100% !important',
+      maxWidth: '100%',
+      height: '100%'
+    }
   },
   indicators: {
     display: 'flex',

@@ -90,7 +90,7 @@ const PartnershipSlider: React.FC<PartnershipSliderProps> = ({ slides }) => {
     if (slide.type === 'image' && slide.image) {
       return (
         <Box sx={sliderStyles.imageWrapper}>
-          <ImageWithBorder image={slide.image.src} alt={slide.image.alt} width={294} height={386} borderWidth={8} />
+          <ImageWithBorder image={slide.image.src} alt={slide.image.alt} borderWidth={8} />
         </Box>
       );
     }
