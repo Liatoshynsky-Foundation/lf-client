@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -25,6 +26,10 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   const pageService = await createRequestContainer().resolve('pagesDataService');
 
   const page = await pageService.getPageData('research', lang);
+
+  if (!page) {
+    return <Box />;
+  }
 
   if (isProductionMode()) {
     return <UnderDevelopment />;

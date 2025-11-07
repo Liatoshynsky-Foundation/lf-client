@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import FoundationFounders from './FoundationFounders';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IFoundationFounders } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('./FoundationTeam/FoundationTeam', () => {
   const MockFoundationTeam = ({ title }: { title: string }) => <div data-testid="foundation-team">{title}</div>;

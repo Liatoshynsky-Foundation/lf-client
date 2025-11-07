@@ -12,7 +12,11 @@ const getBySlugFactory = (model: typeof PageModel, status: PageStatus) => async 
   return PageZodSchema.parse(page);
 };
 
-export const pagesDataRepository = {
-  getBySlug: getBySlugFactory(PageModel, PageStatus.Published),
-  getDraftBySlug: getBySlugFactory(DraftPageModel, PageStatus.Draft)
-};
+function newPagesDataRepo() {
+  return {
+    getBySlug: getBySlugFactory(PageModel, PageStatus.Published),
+    getDraftBySlug: getBySlugFactory(DraftPageModel, PageStatus.Draft)
+  };
+}
+
+export default newPagesDataRepo;

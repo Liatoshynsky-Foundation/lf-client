@@ -1,5 +1,5 @@
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type ParagraphNode = Extract<TipTapDoc['content'][number], { type: TipTapNodeTypes.paragraph }>;
 

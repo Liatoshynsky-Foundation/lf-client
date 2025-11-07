@@ -4,32 +4,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
+import { parseFilters } from '~/lib/utils/filters/parseFilters';
+import { parseLocale } from '~/lib/utils/translation/parseLocale';
 
 export async function GET(req: NextRequest) {
   try {
-    const url = req.nextUrl;
-    const params = url.searchParams;
-    const locale = params.get('locale') || 'uk';
+    const params = req.nextUrl.searchParams;
     const search = params.get('search') || '';
-    const genres = params.getAll('genre');
-    const categories = params.getAll('category');
-    const yearFrom = params.get('yearFrom');
-    const yearTo = params.get('yearTo');
-    const filters = { categories: [] as string[], genres: [] as string[], years: { min: 1900, max: 1998 } };
-    if (genres.length) filters.genres = genres;
-    if (categories.length) filters.categories = categories;
-    if (yearFrom || yearTo) {
-      const min = yearFrom ? Number(yearFrom) : 1900;
-      const max = yearTo ? Number(yearTo) : new Date().getFullYear();
-      filters.years = { min, max };
-    }
+    const locale = parseLocale(params);
+    const filters = parseFilters(params);
 
     const artistryService = createRequestContainer().resolve('artistryService');
-    const data = await artistryService.getAllCompositions(
-      locale,
-      search,
-      Object.keys(filters).length ? filters : undefined
-    );
+    const data = await artistryService.getAllCompositions(locale, search, filters);
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({ message: errors.COMPOSITION_FETCH_FAILED }, { status: 500 });

@@ -3,7 +3,7 @@ import { queryAllByTestId, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import IntroSection from './IntroSection';
-import type { TipTapDoc } from '~/types/types/common.types';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 const makeTextNode = (text: string) => ({ type: 'text', text });
 const makeParagraph = (text: string) => ({ type: 'paragraph', content: [makeTextNode(text)] });

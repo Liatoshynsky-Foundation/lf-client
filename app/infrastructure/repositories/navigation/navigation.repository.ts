@@ -2,7 +2,7 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import { navigationSchema } from '~/validators/navigation.schema';
 
-export const navigationRepository = {
+const navigationRepository = {
   async getNavigation() {
     await dbConnect();
 
@@ -36,3 +36,9 @@ export const navigationRepository = {
     };
   }
 };
+
+function newNavigationRepository(): typeof navigationRepository {
+  return navigationRepository;
+}
+
+export default newNavigationRepository;

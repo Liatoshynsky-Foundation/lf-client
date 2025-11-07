@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './IntroSection.styles';
-import { type TipTapDoc } from '~/types/types/common.types';
+import { type TipTapDoc } from '~/types/types/tiptap.types';
 
 import { PolicyContent } from '~/shared/components/blocks/privacy-policy/policy-content/PolicyContent';
 

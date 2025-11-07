@@ -35,7 +35,7 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team, dataTestId
         {team.map((member, index) => (
           <React.Fragment key={member.name}>
             {index === 0 && fallback}
-            <PersonCard name={member.name} description={member.description} imgURL={member.photo.src} />
+            <PersonCard name={member.name} description={member.description} imgURL={member.photo.generatedSrc} />
             {(index + 1) % 2 === 0 && fallback}
           </React.Fragment>
         ))}

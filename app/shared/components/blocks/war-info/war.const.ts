@@ -1,4 +1,4 @@
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { boldText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 
