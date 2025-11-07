@@ -15,21 +15,25 @@ export default function CardWithText({ icon, title, list }: Readonly<CardWithTex
   return (
     <PaperComponent sx={styles.container} childrenSx={styles.content}>
       {icon && <SvgImage src={icon} alt="Bullet icon" width={48} height={48} />}
-      <Box sx={{ overflowY: 'auto' }}>
+      <Box sx={styles.contentBox}>
         <Typography sx={styles.title} variant="customBold20">
           {title}
         </Typography>
 
-        {list.map((item) => {
-          return (
-            <Box sx={styles.listItem} key={item}>
-              <SvgImage src="/icons/bullet-small-secondary.svg" alt="List bullet icon" width={12} height={12} />
-              <Typography sx={styles.listText} variant="subtitle1">
-                {item}
-              </Typography>
-            </Box>
-          );
-        })}
+        <Box sx={styles.listContainer}>
+          {list.map((item) => {
+            return (
+              <Box sx={styles.listItem} key={item}>
+                <Box sx={styles.listIcon}>
+                  <SvgImage src="/icons/bullet-small-secondary.svg" alt="List bullet icon" width={12} height={12} />
+                </Box>
+                <Typography sx={styles.listText} variant="subtitle1">
+                  {item}
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
     </PaperComponent>
   );
