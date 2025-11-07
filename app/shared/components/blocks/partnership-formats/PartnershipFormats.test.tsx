@@ -39,8 +39,8 @@ jest.mock('~/ds-components/card-with-text/CardWithText', () => {
       {icon && <img src={icon} alt="card-icon" />}
       <div data-testid="card-title">{title}</div>
       <ul>
-        {list.map((item: string, index: number) => (
-          <li key={index}>{item}</li>
+        {list.map((item: string) => (
+          <li key={item}>{item}</li>
         ))}
       </ul>
     </div>
@@ -66,31 +66,34 @@ jest.mock('next/image', () => ({
 jest.mock('./PartnershipSlider', () => {
   return jest.fn(({ slides }: any) => (
     <div data-testid="partnership-slider">
-      {slides.map((slide: any, index: number) => (
-        <div key={index} data-testid="slider-slide">
-          {slide.type === 'card' && slide.card && (
-            <div data-testid="card-with-text">
-              {slide.card.icon && <img src={slide.card.icon} alt="card-icon" />}
-              <div data-testid="card-title">{slide.card.title}</div>
-              <ul>
-                {slide.card.list.map((item: string, idx: number) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {slide.type === 'image' && slide.image && (
-            <div
-              data-testid="image-with-border"
-              data-width={slide.image.width}
-              data-height={slide.image.height}
-              data-border-width={slide.image.borderWidth || 8}
-            >
-              <img src={slide.image.src} alt={slide.image.alt} />
-            </div>
-          )}
-        </div>
-      ))}
+      {slides.map((slide: any) => {
+        const key = slide.type === 'card' ? slide.card?.title : slide.image?.src;
+        return (
+          <div key={key} data-testid="slider-slide">
+            {slide.type === 'card' && slide.card && (
+              <div data-testid="card-with-text">
+                {slide.card.icon && <img src={slide.card.icon} alt="card-icon" />}
+                <div data-testid="card-title">{slide.card.title}</div>
+                <ul>
+                  {slide.card.list.map((item: string) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {slide.type === 'image' && slide.image && (
+              <div
+                data-testid="image-with-border"
+                data-width={slide.image.width}
+                data-height={slide.image.height}
+                data-border-width={slide.image.borderWidth || 8}
+              >
+                <img src={slide.image.src} alt={slide.image.alt} />
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   ));
 });
@@ -165,7 +168,7 @@ describe('PartnershipFormats', () => {
   it('should render first row image', () => {
     render(<PartnershipFormats data={mockData} />);
     const images = screen.getAllByTestId('image-with-border');
-    const firstRowImage = images.find((img) => img.getAttribute('data-width') === '294');
+    const firstRowImage = images.find((img) => img.dataset.width === '294');
     expect(firstRowImage).toBeInTheDocument();
     expect(within(firstRowImage!).getByAltText('Partnership collaboration')).toHaveAttribute(
       'src',
@@ -176,12 +179,14 @@ describe('PartnershipFormats', () => {
   it('should render second row image', () => {
     render(<PartnershipFormats data={mockData} />);
     const images = screen.getAllByTestId('image-with-border');
-    const secondRowImage = images.find((img) => img.getAttribute('data-width') === '608');
+    const secondRowImage = images.find((img) => img.dataset.width === '608');
     expect(secondRowImage).toBeInTheDocument();
-    expect(within(secondRowImage!).getByAltText('Team collaboration')).toHaveAttribute(
-      'src',
-      '/images/partnership-large.png'
-    );
+    if (secondRowImage) {
+      expect(within(secondRowImage).getByAltText('Team collaboration')).toHaveAttribute(
+        'src',
+        '/images/partnership-large.png'
+      );
+    }
   });
 
   it('should render all cards including duplicated card for responsive layout', () => {
@@ -309,9 +314,9 @@ describe('PartnershipFormats', () => {
   it('should render images with correct border width', () => {
     render(<PartnershipFormats data={mockData} />);
     const images = screen.getAllByTestId('image-with-border');
-    images.forEach((image) => {
+    for (const image of images) {
       expect(image).toHaveAttribute('data-border-width', '8');
-    });
+    }
   });
 
   it('should render all card list items correctly', () => {

@@ -40,12 +40,6 @@ const PartnershipSlider: React.FC<PartnershipSliderProps> = ({ slides }) => {
 
   const minSwipeDistance = 50;
 
-  //   const goToSlide = (index: number) => {
-  //     if (index >= 0 && index < slides.length) {
-  //       setCurrentSlide(index);
-  //     }
-  //   };
-
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
@@ -113,28 +107,16 @@ const PartnershipSlider: React.FC<PartnershipSliderProps> = ({ slides }) => {
             transform: `translateX(-${currentSlide * 100}%)`
           }}
         >
-          {slides.map((slide, index) => (
-            <Box key={index} sx={sliderStyles.slide}>
-              {renderSlideContent(slide)}
-            </Box>
-          ))}
+          {slides.map((slide) => {
+            const key = slide.type === 'card' ? slide.card?.title : slide.image?.src;
+            return (
+              <Box key={key} sx={sliderStyles.slide}>
+                {renderSlideContent(slide)}
+              </Box>
+            );
+          })}
         </Box>
       </Box>
-
-      {/* Slider dots */}
-
-      {/* <Box sx={sliderStyles.indicators}>
-        {slides.map((_, index) => (
-          <Box
-            key={index}
-            onClick={() => goToSlide(index)}
-            sx={{
-              ...sliderStyles.indicator,
-              ...(index === currentSlide ? sliderStyles.indicatorActive : {})
-            }}
-          />
-        ))}
-      </Box> */}
     </Box>
   );
 };
