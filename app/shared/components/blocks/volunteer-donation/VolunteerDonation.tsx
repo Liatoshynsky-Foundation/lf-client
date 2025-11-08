@@ -32,7 +32,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
       <Box sx={styles.contentWrapper}>
         {paymentMethods.map((method, idx) => (
           <Box key={`${method.label}-${idx}`} sx={styles.card}>
-            <ContactLink type="email" value={method.value} label={method.label} />
+            <ContactLink type="phone" value={method.value} label={method.label} />
           </Box>
         ))}
       </Box>
