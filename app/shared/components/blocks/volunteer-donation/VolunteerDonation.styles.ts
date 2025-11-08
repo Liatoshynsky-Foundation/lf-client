@@ -1,3 +1,5 @@
+import { mainHexPallete } from '../../design-system/all-components/theme/colors';
+
 export const styles = {
   mainContainer: {
     display: 'grid',
@@ -33,13 +35,6 @@ export const styles = {
     mb: {
       xs: '16px',
       md: '24px'
-    }
-  },
-  paypalLink: {
-    display: 'inline-block',
-    textDecoration: 'underline',
-    '&:hover': {
-      opacity: 0.8
     }
   },
   img: {
@@ -93,7 +88,7 @@ export const imageSizes = {
     },
     top: { xs: 16, sm: 20, md: 36, lg: 38, xl: 40 },
     left: { xs: 16, sm: 26, md: 41, lg: 40, xl: 40 },
-    color: '#C6C8D3'
+    color: mainHexPallete.blue[300]
   },
   imageSx: {
     width: { xs: '200px', sm: '400px', md: '496px', lg: '645px', xl: '744px', xxl: '806px', ultra: '1001px' }
