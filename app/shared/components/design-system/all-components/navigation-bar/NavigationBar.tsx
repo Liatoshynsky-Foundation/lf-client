@@ -1,6 +1,7 @@
 'use client';
 
 import { CircularProgress } from '@mui/material';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -22,10 +23,15 @@ const NavigationBar = ({ navLabels, specialNav, scrollDirection }: NavigationBar
   const { isDesktop } = useBreakpoints();
   const [isMounted, setIsMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = useParams();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   if (!isMounted) {
     return <CircularProgress />;
