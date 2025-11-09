@@ -39,7 +39,7 @@ const NavigationBar = ({ navLabels, specialNav, scrollDirection }: NavigationBar
         <MobileNav isOpen={isMobileMenuOpen} onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
       )}
 
-      <MobileMenuOverlay open={isMobileMenuOpen && !isDesktop} />
+      <MobileMenuOverlay open={isMobileMenuOpen && !isDesktop} navLabels={navLabels} />
     </>
   );
 };
