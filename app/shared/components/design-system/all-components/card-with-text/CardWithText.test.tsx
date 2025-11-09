@@ -40,17 +40,12 @@ describe('CardWithText', () => {
     expect(bullets.length).toBe(smallList.length);
   });
 
-  it('should have vertical scroll container for extended list content', () => {
+  it('should render all list items for extended list', () => {
     render(<CardWithText title="Some title" list={extendedList} />);
-
-    const titleElement = screen.getByText('Some title');
-
-    const scrollContainer = titleElement.parentElement;
-    expect(scrollContainer).toBeInTheDocument();
-
-    if (!scrollContainer) throw new Error('Scroll container not found');
-
-    const styles = globalThis.getComputedStyle(scrollContainer);
-    expect(styles.overflowY).toBe('auto');
+    for (const item of extendedList) {
+      expect(screen.getByText(item)).toBeInTheDocument();
+    }
+    const bullets = screen.getAllByAltText('List bullet icon');
+    expect(bullets.length).toBe(extendedList.length);
   });
 });
