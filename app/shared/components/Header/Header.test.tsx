@@ -10,28 +10,6 @@ jest.mock('~/shared/hooks/use-scroll-direction/useScrollDirection', () => ({
   useScrollDirection: jest.fn()
 }));
 
-jest.mock('~/shared/hooks/query/useQuery', () => ({
-  __esModule: true,
-  default: () => ({
-    data: {
-      navigation: {
-        liatoshynsky: 'Liatoshynsky',
-        biography: 'Biography',
-        artistry: 'Artistry',
-        research: 'Research',
-        foundation: 'Foundation',
-        foundationHome: 'Home',
-        news: 'News',
-        mediaAboutUs: 'Media',
-        archive: 'Archive',
-        collaboration: 'Collaboration'
-      },
-      supportButtonLink: '/support'
-    },
-    isLoading: false
-  })
-}));
-
 jest.mock('~/ds-components/logo/Logo', () => ({
   __esModule: true,
   default: () => <div data-testid="logo" />
@@ -52,15 +30,35 @@ jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => (key === 'supportButton' ? 'Support' : key),
-  useLocale: () => 'en'
+  useTranslations: () => (key: string) => (key === 'supportButton' ? 'Support' : key)
 }));
 
 jest.mock('~/shared/hooks/use-hide-header/useHideHeader', () => ({
   useHideHeader: jest.fn()
 }));
 
-const renderHeader = () => render(<Header />);
+const mockHeaderData = {
+  navigation: {
+    liatoshynsky: 'Liatoshynsky',
+    biography: 'Biography',
+    artistry: 'Artistry',
+    research: 'Research',
+    foundation: 'Foundation',
+    foundationHome: 'Home',
+    news: 'News',
+    mediaAboutUs: 'Media',
+    archive: 'Archive',
+    collaboration: 'Collaboration'
+  },
+  specialNavigation: [],
+  supportButtonLink: '/support'
+};
+
+const mockContacts = ['contact1'];
+const mockSocialLinks = ['fb'];
+
+const renderHeader = () =>
+  render(<Header headerData={mockHeaderData} contacts={mockContacts} socialLinks={mockSocialLinks} />);
 
 describe('Header', () => {
   beforeEach(() => {

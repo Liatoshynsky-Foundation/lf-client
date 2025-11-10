@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 
 import { NavAccordion } from '../../../menu-title/NavAccordion';
 import { styles } from './MobileNavOverlay.styles';
-import { SocialMediaTypes } from '~/types/enums/common.enums';
+import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
@@ -15,27 +15,13 @@ import { useIsMobile } from '~/shared/hooks/is-mobile/useIsMobile';
 interface MobileMenuOverlayProps {
   open: boolean;
   navLabels: NavigationDTO[];
-  data?: any;
+  contacts: contactsData;
+  socialLinks: LinkIcon[];
 }
 
-const MobileMenuOverlay = ({ open, navLabels }: MobileMenuOverlayProps) => {
+const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
   const isMobile = useIsMobile();
   const t = useTranslations('footer');
-
-  const socialLinks = [
-    {
-      icon: SocialMediaTypes.Instagram,
-      link: 'https://www.instagram.com/liatoshynsky_foundation/'
-    },
-    {
-      icon: SocialMediaTypes.Facebook,
-      link: 'https://www.facebook.com/LiatoshynskyFoundation/'
-    },
-    {
-      icon: SocialMediaTypes.YouTube,
-      link: 'https://www.youtube.com/'
-    }
-  ];
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
@@ -65,28 +51,11 @@ const MobileMenuOverlay = ({ open, navLabels }: MobileMenuOverlayProps) => {
         <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 
         <Box sx={styles.leftColumn}>
-          {/* <Box sx={styles.links}>
-            <ContactLink
-              type="phone"
-              label={t('phoneLabel')}
-              value={contacts.email}
-              isMobile={isMobile}
-              direction="column"
-              data-testid="ContactsInfo-phoneLink"
-            />
-            <ContactLink
-              type="email"
-              label={'Email'}
-              value={contacts.phone}
-              direction="column"
-              data-testid="ContactsInfo-emailLink"
-            />
-          </Box> */}
           <Box sx={styles.links}>
             <ContactLink
               type="phone"
               label={t('phoneLabel')}
-              value={'oaidwuoawduow'}
+              value={contacts.phone}
               isMobile={isMobile}
               direction="column"
               data-testid="ContactsInfo-phoneLink"
@@ -94,7 +63,7 @@ const MobileMenuOverlay = ({ open, navLabels }: MobileMenuOverlayProps) => {
             <ContactLink
               type="email"
               label={'Email'}
-              value={'068 736 9q83 8389'}
+              value={contacts.email}
               direction="column"
               data-testid="ContactsInfo-emailLink"
             />

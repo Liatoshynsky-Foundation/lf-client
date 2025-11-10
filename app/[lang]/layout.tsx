@@ -8,7 +8,7 @@ import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
 import Footer from '~/components/Footer/Footer';
-import Header from '~/components/Header/Header';
+import Header from '~/components/Header/ServerHeader/Header.server';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { styles } from './layout.styles';
