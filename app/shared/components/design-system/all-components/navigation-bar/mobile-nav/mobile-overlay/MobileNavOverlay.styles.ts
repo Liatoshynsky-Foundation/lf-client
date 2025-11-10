@@ -1,5 +1,7 @@
 import { mainHexPallete } from '../../../theme/colors';
 
+import { AppTypography } from '~/constants';
+
 export const styles = {
   overlay: {
     position: 'fixed',
@@ -42,12 +44,16 @@ export const styles = {
     },
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-between',
     gap: '16px',
-    justifyContent: 'center',
     order: {
       xs: 2,
       sm: 1
-    }
+    },
+    position: 'relative',
+    maxHeight: { xs: '240px', md: '320px' },
+    top: { sm: 'calc(50vh - 80px)', md: 'calc(50vh - 110px)' },
+    py: '8px'
   },
 
   rightColumn: {
@@ -62,6 +68,19 @@ export const styles = {
     order: {
       xs: 1,
       sm: 2
-    }
+    },
+    maxHeight: { xs: '240px', md: '320px' },
+    top: { sm: 'calc(50vh - 80px)', md: 'calc(50vh - 110px)' }
+  },
+  links: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px'
+  },
+  mediaTitles: {
+    ...AppTypography.mulish18Regular,
+    fontSize: { xs: '16px', md: '18px' },
+    lineHeight: { xs: '150%', md: '160%' },
+    color: mainHexPallete.brown[700]
   }
 };
