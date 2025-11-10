@@ -1,13 +1,11 @@
 'use client';
 
 import { CircularProgress } from '@mui/material';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import DesktopNav from './dekstop-nav/DesktopNav';
-import MobileMenuOverlay from './mobile-nav/mobile-overlay/MobileMenuOverlay';
 import MobileNav from './mobile-nav/MobileNav';
 import type { contactsData, LinkIcon, ScrollDirection } from '~/types/types/common.types';
 
@@ -24,16 +22,10 @@ interface NavigationBarProps {
 const NavigationBar = ({ navLabels, specialNav, scrollDirection, contacts, socialLinks }: NavigationBarProps) => {
   const { isDesktop } = useBreakpoints();
   const [isMounted, setIsMounted] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = useParams();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   if (!isMounted) {
     return <CircularProgress />;
@@ -44,15 +36,8 @@ const NavigationBar = ({ navLabels, specialNav, scrollDirection, contacts, socia
       {isDesktop ? (
         <DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection={scrollDirection} />
       ) : (
-        <MobileNav isOpen={isMobileMenuOpen} onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+        <MobileNav navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />
       )}
-
-      <MobileMenuOverlay
-        open={isMobileMenuOpen && !isDesktop}
-        navLabels={navLabels}
-        contacts={contacts}
-        socialLinks={socialLinks}
-      />
     </>
   );
 };

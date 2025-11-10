@@ -2,6 +2,15 @@ import { mainHexPallete } from '../../../theme/colors';
 
 import { AppTypography } from '~/constants';
 
+const baseColumn = {
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+  maxHeight: { xs: '240px', md: '320px' },
+  top: { sm: '33%', md: '30%' },
+  overflowY: 'visible'
+};
+
 export const styles = {
   overlay: {
     position: 'fixed',
@@ -34,53 +43,47 @@ export const styles = {
     },
 
     clipPath: 'polygon(0 0, 100% 0, 100% 87%, 0 90%)'
+    // overflowY: 'auto' // ← ВАЖЛИВО
   },
 
   leftColumn: {
+    ...baseColumn,
     gridColumn: {
       xs: '1 / -1',
       sm: '1 / span 3',
       md: '2 / span 4'
     },
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'space-between',
     gap: '16px',
     order: {
       xs: 2,
       sm: 1
     },
-    position: 'relative',
-    maxHeight: { xs: '240px', md: '320px' },
-    top: { sm: 'calc(50vh - 80px)', md: 'calc(50vh - 110px)' },
     py: '8px'
   },
 
   rightColumn: {
+    ...baseColumn,
     gridColumn: {
       xs: '1 / -1',
       sm: '4 / span 5',
       md: '6 / span 7'
     },
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
     order: {
       xs: 1,
       sm: 2
-    },
-    maxHeight: { xs: '240px', md: '320px' },
-    top: { sm: 'calc(50vh - 80px)', md: 'calc(50vh - 110px)' }
+    }
   },
   links: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px'
+    gap: '1rem'
   },
   mediaTitles: {
     ...AppTypography.mulish18Regular,
     fontSize: { xs: '16px', md: '18px' },
     lineHeight: { xs: '150%', md: '160%' },
-    color: mainHexPallete.brown[700]
+    color: mainHexPallete.brown[700],
+    display: { xs: 'none', sm: 'block' }
   }
 };

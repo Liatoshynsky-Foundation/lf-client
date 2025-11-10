@@ -1,32 +1,60 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { usePathname } from 'next/navigation';
 
 import MobileNav from './MobileNav';
+import { contactsData, LinkIcon } from '~/types/types/common.types';
+
+import { NavigationDTO } from '~/domain/dto/navigation.dto';
+
+jest.mock('next/navigation', () => ({
+  usePathname: jest.fn()
+}));
+
+jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
+  useIsMobile: () => true
+}));
 
 describe('MobileNav', () => {
-  it('should render the mobile navigation toggle button and trigger onToggle on click', () => {
-    const onToggleMock = jest.fn();
+  beforeEach(() => {
+    (usePathname as jest.Mock).mockReturnValue('/initial');
+  });
 
-    render(<MobileNav isOpen={false} onToggle={onToggleMock} />);
+  const mockNavLabels: NavigationDTO[] = [];
+  const mockContacts: contactsData = {} as any;
+  const mockSocialLinks: LinkIcon[] = [];
 
-    const button = screen.getByRole('button');
+  it('should render menu button', () => {
+    render(<MobileNav navLabels={mockNavLabels} contacts={mockContacts} socialLinks={mockSocialLinks} />);
+
+    const button = screen.getByRole('button', { name: /main menu/i });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('menu');
     expect(button).not.toHaveClass('opened');
-
-    const svg = button.querySelector('svg');
-    expect(svg).toBeInTheDocument();
-
-    const lines = button.querySelectorAll('rect');
-    expect(lines.length).toBe(2);
-
-    fireEvent.click(button);
-    expect(onToggleMock).toHaveBeenCalled();
   });
 
-  it('should apply opened class when isOpen is true', () => {
-    const { container } = render(<MobileNav isOpen={true} onToggle={() => {}} />);
+  it('should toggle menu on click', () => {
+    render(<MobileNav navLabels={mockNavLabels} contacts={mockContacts} socialLinks={mockSocialLinks} />);
 
-    const button = container.querySelector('button');
-    expect(button).toHaveClass('menu opened');
+    const button = screen.getByRole('button');
+
+    fireEvent.click(button);
+    expect(button).toHaveClass('opened');
+
+    fireEvent.click(button);
+    expect(button).not.toHaveClass('opened');
+  });
+
+  it('should close menu when pathname changes', () => {
+    const { rerender } = render(
+      <MobileNav navLabels={mockNavLabels} contacts={mockContacts} socialLinks={mockSocialLinks} />
+    );
+
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    expect(button).toHaveClass('opened');
+
+    (usePathname as jest.Mock).mockReturnValue('/new-route');
+    rerender(<MobileNav navLabels={mockNavLabels} contacts={mockContacts} socialLinks={mockSocialLinks} />);
+    expect(button).not.toHaveClass('opened');
   });
 });

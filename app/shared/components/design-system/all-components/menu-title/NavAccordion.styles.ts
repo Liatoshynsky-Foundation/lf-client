@@ -6,7 +6,6 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: { xs: '10px', md: 0 },
-    maxHeight: { xs: '240px', md: '320px' },
     overflowY: 'scroll'
   },
   itemWrapper: {
@@ -42,7 +41,7 @@ export const styles = {
     textTransform: 'uppercase'
   },
   submenuWrapper: (isOpen: boolean) => ({
-    maxHeight: isOpen ? '500px' : '0px',
+    // maxHeight: isOpen ? '500px' : '0px',
     overflow: 'hidden',
     transition: 'max-height 0.3s ease, opacity 0.3s ease',
     opacity: isOpen ? 1 : 0,
@@ -61,8 +60,8 @@ export const styles = {
     color: mainHexPallete.brown[900]
   },
   icon: {
-    width: { xs: '20px', md: '28px' },
-    height: { xs: '20px', md: '28px' },
+    // width: { xs: '20px', md: '28px' },
+    // height: { xs: '20px', md: '28px' },
     mr: '5px'
   },
   activeTitle: {
