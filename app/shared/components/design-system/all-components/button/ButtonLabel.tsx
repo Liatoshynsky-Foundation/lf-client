@@ -15,7 +15,7 @@ export const ButtonLabel: React.FC<ButtonLabelProps> = ({ label, shortLabel, chi
   if (shortLabel && label) {
     return (
       <>
-        <Box component="span" sx={labelStyles.short}>
+        <Box component="span" sx={labelStyles.short} aria-hidden>
           {shortLabel}
         </Box>
         <Box component="span" sx={labelStyles.full}>
