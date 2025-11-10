@@ -20,6 +20,18 @@ export const styles = {
       md: '8px'
     }
   },
+  bulletMobile: {
+    display: {
+      xs: 'inline-flex',
+      md: 'none'
+    }
+  },
+  bulletDesktop: {
+    display: {
+      xs: 'none',
+      md: 'inline-flex'
+    }
+  },
   typography: {
     fontFamily: 'Mulish',
     fontSize: { xs: '16px', md: '20px' },
