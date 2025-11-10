@@ -65,28 +65,5 @@ export const sliderStyles = {
       maxWidth: '100%',
       height: '100%'
     }
-  },
-  indicators: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '8px',
-    mt: '16px'
-  },
-  indicator: {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    backgroundColor: '#D9D9D9',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    '&:hover': {
-      backgroundColor: '#B0B0B0'
-    }
-  },
-  indicatorActive: {
-    width: '24px',
-    borderRadius: '4px',
-    backgroundColor: '#000000'
   }
 };

@@ -121,7 +121,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
             size="medium"
             onClick={handleOpenModal}
             color="tertiary"
-            endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} />}
+            endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} aria-hidden="true" />}
           >
             {data.actionButtonText}
           </Button>
