@@ -12,6 +12,12 @@ jest.mock('~/shared/components/blocks/collaboration/collaboration-intro/Collabor
   return MockCollaborationIntro;
 });
 
+jest.mock('~/shared/components/blocks/collaboration/offer-collaboration/OfferCollaboration', () => {
+  const MockOfferCollaboration = () => <div>Offer Collaboration</div>;
+  MockOfferCollaboration.displayName = 'MockOfferCollaboration';
+  return MockOfferCollaboration;
+});
+
 describe('Collaboration component', () => {
   it('should render CollaborationIntro component correctly', async () => {
     render(await Collaboration({ params: Promise.resolve({ lang: 'en' }) }));
