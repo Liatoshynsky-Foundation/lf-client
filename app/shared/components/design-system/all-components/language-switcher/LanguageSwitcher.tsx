@@ -18,7 +18,7 @@ const locales = ['uk', 'en'] as const;
 type Locale = (typeof locales)[number];
 
 export interface LanguageSwitcherProps {
-  variant: 'icon' | 'toggle';
+  variant: 'icon' | 'toggle' | 'mobile';
   scrollDirection?: ScrollDirection;
 }
 
@@ -76,6 +76,22 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
       >
         {currentLocale === 'uk' ? 'In English' : 'Українською'}
       </Button>
+    );
+  }
+
+  if (variant === 'mobile') {
+    return (
+      <div style={styles.mobileWrapper}>
+        <span style={styles.item(currentLocale === 'en')} onClick={() => handleLanguageChange('en')}>
+          EN
+        </span>
+
+        <span style={styles.item(false)}>/</span>
+
+        <span style={styles.item(currentLocale === 'uk')} onClick={() => handleLanguageChange('uk')}>
+          UA
+        </span>
+      </div>
     );
   }
 

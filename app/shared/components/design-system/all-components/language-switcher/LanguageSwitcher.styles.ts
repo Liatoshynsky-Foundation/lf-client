@@ -1,3 +1,5 @@
+import { mainHexPallete } from '../theme/colors';
+
 export const styles = {
   menuItem: {
     minWidth: '153px',
@@ -21,5 +23,17 @@ export const styles = {
   dropdownMenu: {
     minHeight: '88px',
     padding: '8px 0'
+  },
+  item: (isActive: boolean) => ({
+    fontFamily: 'Mulish, sans-serif',
+    fontSize: '18px',
+    fontWeight: 700,
+    lineHeight: '145%',
+    color: isActive ? mainHexPallete.black : 'rgba(65, 43, 33, 0.6)'
+  }),
+  mobileWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '14px'
   }
 };

@@ -2,6 +2,7 @@ import { Box, Slide, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo } from 'react';
 
+import LanguageSwitcher from '../../../language-switcher/LanguageSwitcher';
 import { NavAccordion } from '../../../menu-title/NavAccordion';
 import { styles } from './MobileNavOverlay.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
@@ -53,6 +54,7 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
         <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 
         <Box sx={styles.leftColumn}>
+          {isMobile && <LanguageSwitcher variant="mobile" />}
           <Box sx={styles.links}>
             <ContactLink
               type="phone"
