@@ -19,7 +19,7 @@ export const styles = {
     flexDirection: 'column',
     gap: 2,
     justifySelf: 'end',
-    gridColumn: { xs: '1/ 6', sm: '1/4', md: '1 / 6' },
+    gridColumn: { xs: '1/ -1', sm: '1/4', md: '1 / 6' },
     justifyContent: 'space-between',
     width: '100%',
     height: '100%'
