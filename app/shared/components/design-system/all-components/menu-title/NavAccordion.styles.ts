@@ -5,8 +5,7 @@ export const styles = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '10px', md: 0 },
-    overflowY: 'scroll'
+    gap: { xs: '10px', md: 0 }
   },
   itemWrapper: {
     width: '100%',
@@ -57,9 +56,6 @@ export const styles = {
     lineHeight: '120%',
     letterSpacing: '1%',
     color: mainHexPallete.brown[900]
-  },
-  icon: {
-    mr: '5px'
   },
   activeTitle: {
     color: mainHexPallete.burgundy[700]

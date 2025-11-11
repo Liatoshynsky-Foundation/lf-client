@@ -74,7 +74,6 @@ function AccordionItem({
         <Svg
           Component={isOpen ? MinusIconSvg : PlusIconSvg}
           stroke={iconColor}
-          sx={styles.icon}
           alt={isOpen ? 'Open list' : 'Close list'}
           height={{ xs: '24px', md: '32px' }}
           width={{ xs: '24px', md: '32px' }}

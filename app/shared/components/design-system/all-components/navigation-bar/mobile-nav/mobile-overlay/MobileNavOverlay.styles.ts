@@ -4,8 +4,9 @@ const baseColumn = {
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
-  top: { xs: '18%', sm: '33%', md: '30%' },
-  overflowY: 'visible'
+  top: { xs: '18.5%', sm: '33%', md: '30%' },
+  overflowY: 'visible',
+  maxHeight: { xs: '516px', sm: '240px', md: '320px' }
 };
 
 export const styles = {
@@ -60,7 +61,7 @@ export const styles = {
       sm: '4 / span 5',
       md: '6 / span 7'
     },
-    gap: '16%'
+    gap: '24%'
   },
 
   contactsContainer: {

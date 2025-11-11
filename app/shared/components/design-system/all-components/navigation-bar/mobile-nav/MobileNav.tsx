@@ -7,7 +7,7 @@ import { styles } from './MobileNav.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
-import { useIsMobile } from '~/shared/hooks/is-mobile/useIsMobile';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MobileNavProps {
   navLabels: NavigationDTO[];
@@ -17,7 +17,7 @@ interface MobileNavProps {
 
 const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoints();
   const pathname = usePathname();
 
   useEffect(() => {
