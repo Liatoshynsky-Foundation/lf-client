@@ -17,7 +17,6 @@ interface Image {
 interface CarouselProps {
   images: Image[];
   initialIndex?: number;
-  infiniteLoop?: boolean;
 }
 
 const Carousel = ({ images, initialIndex = 0 }: CarouselProps) => {

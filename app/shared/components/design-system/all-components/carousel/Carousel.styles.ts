@@ -42,11 +42,11 @@ export const SIZES = {
 };
 
 const trackCenter = {
-  xs: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.xs) / 2,
-  sm: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.sm) / 2,
-  md: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.md) / 2,
-  lg: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.lg) / 2,
-  xl: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.xl) / 2
+  xs: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.xs) / 2,
+  sm: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.sm) / 2,
+  md: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.md) / 2,
+  lg: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.lg) / 2,
+  xl: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.xl) / 2
 };
 
 export const styles = {
@@ -76,9 +76,9 @@ export const styles = {
     const trackPosition = { xs: 0, sm: 0, md: 0 };
 
     for (let i = 0; i < activeIndex; i++) {
-      trackPosition.xs += parseInt(SIZES.inactiveWidth.xs) + parseInt(SIZES.photoGap.xs);
-      trackPosition.sm += parseInt(SIZES.inactiveWidth.sm) + parseInt(SIZES.photoGap.sm);
-      trackPosition.md += parseInt(SIZES.inactiveWidth.md) + parseInt(SIZES.photoGap.md);
+      trackPosition.xs += Number.parseInt(SIZES.inactiveWidth.xs) + Number.parseInt(SIZES.photoGap.xs);
+      trackPosition.sm += Number.parseInt(SIZES.inactiveWidth.sm) + Number.parseInt(SIZES.photoGap.sm);
+      trackPosition.md += Number.parseInt(SIZES.inactiveWidth.md) + Number.parseInt(SIZES.photoGap.md);
     }
 
     const translateX = {
