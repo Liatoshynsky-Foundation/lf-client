@@ -20,8 +20,8 @@ const ArrowCarousel: React.FC<ArrowCarouselProps> = ({ direction, onClick, disab
     <Image
       src={direction === 'left' ? arrowLeft : arrowRight}
       alt={direction === 'left' ? 'Previous' : 'Next'}
-      width={48}
-      height={48}
+      width={16}
+      height={32}
     />
   );
   return (
@@ -30,7 +30,7 @@ const ArrowCarousel: React.FC<ArrowCarouselProps> = ({ direction, onClick, disab
         onClick={onClick}
         aria-label={`${direction === 'left' ? 'Previous' : 'Next'} slide`}
         disabled={disabled}
-        sx={styles.iconButton}
+        sx={{ ...styles.iconButton, ...(direction === 'left' ? { pr: '12px' } : { pl: '12px' }) }}
         {...props}
       >
         {Icon}

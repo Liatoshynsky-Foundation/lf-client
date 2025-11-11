@@ -1,17 +1,58 @@
+import { keyframes } from '@mui/system';
+
+const fadeIn = keyframes`from {opacity: 0;} to {opacity: 1;}`;
+
 export const SIZES = {
-  activeWidth: 1080,
-  activeHeight: 744,
-  inactiveWidth: 415,
-  inactiveHeight: 286,
+  activeWidth: {
+    xs: '271px',
+    sm: '484px',
+    md: '724px',
+    lg: '938px',
+    xl: '1080px'
+  },
+  activeHeight: {
+    xs: '188px',
+    sm: '334px',
+    md: '500px',
+    lg: '648px',
+    xl: '744px'
+  },
+  inactiveWidth: {
+    xs: '218px',
+    sm: '369px',
+    md: '415px'
+  },
+  inactiveHeight: {
+    xs: '150px',
+    sm: '254px',
+    md: '286px'
+  },
   containerWidth: 2900,
-  containerHeight: 818,
-  photoGap: 40
+  containerHeight: {
+    xs: '255px',
+    sm: '387px',
+    md: '703px',
+    lg: '818px'
+  },
+  photoGap: {
+    xs: '20px',
+    sm: '30px',
+    md: '40px'
+  }
+};
+
+const trackCenter = {
+  xs: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.xs) / 2,
+  sm: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.sm) / 2,
+  md: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.md) / 2,
+  lg: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.lg) / 2,
+  xl: SIZES.containerWidth / 2 - parseInt(SIZES.activeWidth.xl) / 2
 };
 
 export const styles = {
   fullWidthContainerStyles: {
     width: '100vw',
-    height: `${SIZES.containerHeight}px`,
+    height: SIZES.containerHeight,
     marginLeft: 'calc(-50vw + 50%)',
     marginRight: 'calc(-50vw + 50%)',
     overflow: 'hidden'
@@ -22,25 +63,31 @@ export const styles = {
     left: '50%',
     top: 0,
     transform: 'translateX(-50%)',
-    width: `${SIZES.containerWidth}px`,
     height: '100%'
   },
   carouselContainerStyles: {
     position: 'relative',
     width: `${SIZES.containerWidth}px`,
-    height: `${SIZES.containerHeight}px`,
+    height: SIZES.containerHeight,
     overflow: 'hidden'
   },
 
   getCarouselTrackStyles: (activeIndex: number) => {
-    let trackPosition = 0;
+    const trackPosition = { xs: 0, sm: 0, md: 0 };
 
     for (let i = 0; i < activeIndex; i++) {
-      trackPosition += SIZES.inactiveWidth + SIZES.photoGap;
+      trackPosition.xs += parseInt(SIZES.inactiveWidth.xs) + parseInt(SIZES.photoGap.xs);
+      trackPosition.sm += parseInt(SIZES.inactiveWidth.sm) + parseInt(SIZES.photoGap.sm);
+      trackPosition.md += parseInt(SIZES.inactiveWidth.md) + parseInt(SIZES.photoGap.md);
     }
 
-    const targetPosition = 910;
-    const translateX = targetPosition - trackPosition;
+    const translateX = {
+      xs: `translateX(${trackCenter.xs - trackPosition.xs}px)`,
+      sm: `translateX(${trackCenter.sm - trackPosition.sm}px)`,
+      md: `translateX(${trackCenter.md - trackPosition.md}px)`,
+      lg: `translateX(${trackCenter.lg - trackPosition.md}px)`,
+      xl: `translateX(${trackCenter.xl - trackPosition.md}px)`
+    };
 
     return {
       position: 'absolute',
@@ -49,15 +96,14 @@ export const styles = {
       height: '100%',
       display: 'flex',
       alignItems: 'flex-start',
-      gap: `${SIZES.photoGap}px`,
-      transform: `translateX(${translateX}px)`,
+      gap: SIZES.photoGap,
+      transform: translateX,
       transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
     };
   },
 
-  getImageContainerStyles: (isActive: boolean, index: number, activeIndex: number) => {
+  getImageContainerStyles: (isActive: boolean, index: number, activeIndex: number, isDragging: boolean = false) => {
     const offset = index - activeIndex;
-
     let translateY = 0;
 
     if (index > activeIndex) {
@@ -74,10 +120,10 @@ export const styles = {
 
     return {
       position: 'relative',
-      width: isActive ? `${SIZES.activeWidth}px` : `${SIZES.inactiveWidth}px`,
-      height: isActive ? `${SIZES.activeHeight}px` : `${SIZES.inactiveHeight}px`,
+      width: isActive ? SIZES.activeWidth : SIZES.inactiveWidth,
+      height: isActive ? SIZES.activeHeight : SIZES.inactiveHeight,
       transform: `translateY(${translateY}px) scale(1)`,
-      transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+      transition: isDragging ? 'none' : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
     };
   },
 
@@ -87,19 +133,21 @@ export const styles = {
     objectFit: 'cover'
   },
 
-  getArrowContainerStyles: (direction: 'left' | 'right', disabled: boolean = false) => ({
+  getArrowContainerStyles: (direction: 'left' | 'right', disabled = false) => ({
     position: 'absolute',
-    top: '354px',
-    left: direction === 'left' ? '782px' : 'none',
-    right: direction === 'right' ? '782px' : 'none',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    [direction]: { sm: '1082px', md: '782px' },
+    zIndex: 1,
     transition: 'opacity 0.5s linear',
     opacity: disabled ? 0 : 1
   }),
 
   dotsContainerStyles: {
     position: 'absolute',
-    bottom: '30px',
-    left: '1406px',
+    bottom: { xs: '10px', md: '30px' },
+    left: '50%',
+    transform: 'translateX(-50%)',
     display: 'flex',
     gap: '12px'
   },
@@ -118,13 +166,15 @@ export const styles = {
 
   getCaptionStyles: () => ({
     position: 'absolute',
-    top: '744px',
-    left: '910px',
-    width: '1080px',
+    bottom: { xs: '30px', md: '50px' },
+    left: trackCenter,
+    width: SIZES.activeWidth,
     height: '22px',
     color: 'rgba(99, 102, 110, 1)',
     textAlign: 'end',
     display: 'flex',
-    justifyContent: 'end'
+    justifyContent: 'end',
+    opacity: 0,
+    animation: `${fadeIn} 1s ease forwards`
   })
 };
