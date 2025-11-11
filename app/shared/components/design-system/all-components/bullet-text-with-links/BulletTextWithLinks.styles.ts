@@ -37,7 +37,7 @@ export const styles = {
 
   contentBox: {
     gridArea: 'content',
-    gridColumn: { xs: '1/ 6', sm: '1 / 9', md: '1 / 13' },
+    gridColumn: { xs: '1/ -1', sm: '1 / 9', md: '1 / 13' },
     width: '100%'
   },
 
