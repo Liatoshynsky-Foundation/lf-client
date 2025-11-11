@@ -3,12 +3,12 @@ import React from 'react';
 
 import VolunteerDonation from './VolunteerDonation';
 
-jest.mock('~/components/contact-link/ContactLink', () => ({
-  ContactLink: ({ label, value, type }: { label: string; value: string; type: string }) => (
-    <div data-testid={`contact-link-${type}`}>
-      {label}: {value}
-    </div>
-  )
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key
+}));
+
+jest.mock('~/components/copy-button/CopyButton', () => ({
+  CopyButton: ({ hint }: { hint: string }) => <button aria-label="Copy content">{hint}</button>
 }));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
@@ -55,17 +55,26 @@ describe('VolunteerDonation', () => {
   it('should render all payment methods', () => {
     render(<VolunteerDonation {...mockProps} />);
 
-    const contactLinks = screen.getAllByTestId(/contact-link-/);
-    expect(contactLinks).toHaveLength(2);
-    expect(screen.getByText(/PayPal: paypal@example.com/)).toBeInTheDocument();
-    expect(screen.getByText(/Bank Transfer: bank@example.com/)).toBeInTheDocument();
+    expect(screen.getByText('PayPal:')).toBeInTheDocument();
+    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Bank Transfer:')).toBeInTheDocument();
+    expect(screen.getByText('bank@example.com')).toBeInTheDocument();
   });
 
   it('should render payment methods with correct data', () => {
     render(<VolunteerDonation {...mockProps} />);
 
-    expect(screen.getByText(/paypal@example.com/)).toBeInTheDocument();
-    expect(screen.getByText(/bank@example.com/)).toBeInTheDocument();
+    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
+    expect(screen.getByText('bank@example.com')).toBeInTheDocument();
+  });
+
+  it('should render copy buttons for each payment method', () => {
+    render(<VolunteerDonation {...mockProps} />);
+
+    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    expect(copyButtons).toHaveLength(2);
+    expect(copyButtons[0]).toHaveTextContent('copied');
+    expect(copyButtons[1]).toHaveTextContent('copied');
   });
 
   it('should render image with caption', () => {
@@ -90,8 +99,8 @@ describe('VolunteerDonation', () => {
     const propsWithNoMethods = { ...mockProps, paymentMethods: [] };
     render(<VolunteerDonation {...propsWithNoMethods} />);
 
-    const contactLinks = screen.queryAllByTestId(/contact-link-/);
-    expect(contactLinks).toHaveLength(0);
+    const copyButtons = screen.queryAllByRole('button', { name: /copy content/i });
+    expect(copyButtons).toHaveLength(0);
   });
 
   it('should render single payment method', () => {
@@ -101,9 +110,10 @@ describe('VolunteerDonation', () => {
     };
     render(<VolunteerDonation {...propsWithOneMethod} />);
 
-    const contactLinks = screen.getAllByTestId(/contact-link-/);
-    expect(contactLinks).toHaveLength(1);
-    expect(screen.getByText(/PayPal: paypal@example.com/)).toBeInTheDocument();
+    expect(screen.getByText('PayPal:')).toBeInTheDocument();
+    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
+    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    expect(copyButtons).toHaveLength(1);
   });
 
   it('should use title as image alt text', () => {
