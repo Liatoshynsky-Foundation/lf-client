@@ -47,15 +47,15 @@ export default function BulletTextWithLinks({
   const sizesAttribute = generateSizesAttribute(imageSizes);
 
   const imageBox = (
-    <Box sx={styles.image}>
-      <Image src="/icons/ellipse-gray.svg" alt="ellipse" fill sizes={sizesAttribute} />
+    <Box sx={styles.image} data-testid="BulletTextWithLinks-imageBox">
+      <Image src="/icons/ellipse-gray.svg" alt="" fill sizes={sizesAttribute} />
     </Box>
   );
 
   return (
-    <Box sx={styles.wrapper}>
+    <Box sx={styles.wrapper} data-testid="BulletTextWithLinks">
       {isMobile && imageBox}
-      <Box sx={styles.buttonBox}>
+      <Box sx={styles.buttonBox} data-testid="BulletTextWithLinks-buttonBox">
         {!isMobile && imageBox}
         <Button size="medium" variant="contained" sx={{ ...styles.button }}>
           {buttonText}
@@ -63,10 +63,14 @@ export default function BulletTextWithLinks({
         </Button>
       </Box>
 
-      <Box sx={styles.contentBox}>
-        <ContentBlock description={description} textSx={{ gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' } }} />
+      <Box sx={styles.contentBox} data-testid="BulletTextWithLinks-contentBox">
+        <ContentBlock
+          dataTestId="BulletTextWithLinks-content"
+          description={description}
+          textSx={{ gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' } }}
+        />
       </Box>
-      <Box sx={styles.buttonsBox}>
+      <Box sx={styles.buttonsBox} data-testid="BulletTextWithLinks-buttonsBox">
         {buttons.map((button) => (
           <Button key={button.shortText} link={button.link} externalLink={true} variant="outlined" size="medium">
             {isMobile ? button.shortText : button.fullText}
