@@ -4,14 +4,16 @@ import React from 'react';
 import { styles } from './ColoredSvg.styles';
 import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
 
+export type ResponsiveSize = string | Record<string, string>;
+
 type SvgProps = {
   Component: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   alt: string;
   color?: string;
   fill?: string;
   stroke?: string;
-  width?: string;
-  height?: string;
+  width?: ResponsiveSize;
+  height?: ResponsiveSize;
   sx?: SxProps<Theme>;
 };
 

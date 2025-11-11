@@ -6,7 +6,7 @@ import { styles } from './NavContacts.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import MailIcon from '~/public/icons/mail.svg';
-import PhoneIcon from '~/public/icons/phone.svg';
+import PhoneIcon from '~/public/icons/phone-call.svg';
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
 import FooterSocialMedia from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 

@@ -18,7 +18,6 @@ export const styles = {
     backgroundColor: mainHexPallete.yellow[500],
     zIndex: 900,
     py: '24px',
-    overflow: 'hidden',
     display: 'grid',
 
     gridTemplateColumns: {
@@ -61,7 +60,7 @@ export const styles = {
       sm: '4 / span 5',
       md: '6 / span 7'
     },
-    gap: '125px'
+    gap: '16%'
   },
 
   contactsContainer: {

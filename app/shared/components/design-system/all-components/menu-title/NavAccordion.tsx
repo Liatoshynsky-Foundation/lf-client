@@ -3,7 +3,7 @@
 import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { /* useEffect,*/ useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { mainHexPallete } from '../theme/colors';
 import { styles } from './NavAccordion.styles';
@@ -49,19 +49,10 @@ function AccordionItem({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  // const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   if (contentRef.current) {
-  //     setContentHeight(contentRef.current.scrollHeight);
-  //   }
-  // }, [item.dropdown]);
-
-  const isActive = useMemo(() => {
-    if (item.href && pathname.startsWith(item.href)) return true;
-    return item.dropdown?.some((child) => pathname.startsWith(child.href)) ?? false;
-  }, [pathname, item]);
+  const isActive =
+    (item.href && pathname.startsWith(item.href)) || item.dropdown?.some((child) => pathname.startsWith(child.href));
 
   const iconColor = isActive ? mainHexPallete.burgundy[700] : mainHexPallete.brown[900];
   const hasDropdown = item.dropdown && item.dropdown.length > 1;
@@ -85,38 +76,12 @@ function AccordionItem({
           stroke={iconColor}
           sx={styles.icon}
           alt={isOpen ? 'Open list' : 'Close list'}
+          height={{ xs: '24px', md: '32px' }}
+          width={{ xs: '24px', md: '32px' }}
         />
       </Box>
 
-      <Box
-        ref={contentRef}
-        sx={{
-          overflow: 'hidden',
-          maxHeight: isOpen ? '160px' : 0,
-
-          opacity: isOpen ? 1 : 0,
-          transform: isOpen ? 'translateY(0)' : 'translateY(-6px)',
-
-          transition: isOpen
-            ? `
-        max-height 700ms cubic-bezier(0.215, 0.610, 0.355, 1.000),
-        opacity 500ms ease-out,
-        transform 700ms cubic-bezier(0.215, 0.610, 0.355, 1.000),
-        padding 500ms ease-out
-      `
-            : `
-        max-height 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950),
-        opacity 400ms ease-in,
-        transform 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950),
-        padding 400ms ease-in
-      `,
-
-          py: isOpen ? '12px' : 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px'
-        }}
-      >
+      <Box ref={contentRef} sx={styles.dropdownBox(isOpen)}>
         {item.dropdown!.map((child) => (
           <Link key={child.label} href={child.href} style={{ textDecoration: 'none' }}>
             <Typography

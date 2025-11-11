@@ -1,3 +1,5 @@
+import { ResponsiveSize } from './ColoredSvg';
+
 export const validateSvgColor = (color: string) => {
   if (color === 'none') {
     return true;
@@ -22,7 +24,25 @@ export const validateSvgColor = (color: string) => {
   return hexPattern.test(wslessColor);
 };
 
-export const validateSvgSize = (width: string, height: string) => {
-  const sizePattern = /^\d{1,5}(\.\d{1,2})?(px|em|rem|%)$/;
-  return sizePattern.test(width) && sizePattern.test(height);
+const VALID_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'ultra'] as const;
+
+export const validateSvgSize = (width: ResponsiveSize, height: ResponsiveSize): boolean => {
+  const validate = (val: ResponsiveSize): boolean => {
+    const sizePattern = /^\d{1,5}(\.\d{1,2})?(px|em|rem|%)$/;
+
+    if (typeof val === 'string') {
+      return sizePattern.test(val);
+    }
+
+    if (val && typeof val === 'object') {
+      return Object.entries(val).every(
+        ([key, value]) =>
+          VALID_BREAKPOINTS.includes(key as (typeof VALID_BREAKPOINTS)[number]) && sizePattern.test(value)
+      );
+    }
+
+    return false;
+  };
+
+  return validate(width) && validate(height);
 };
