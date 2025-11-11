@@ -3,8 +3,8 @@ import { backgroundColors } from '~/ds-components/theme/colors';
 export const styles = {
   iconButton: (isMobile: boolean) => ({
     borderRadius: '32px',
-    minWidth: isMobile ? '88px' : '112px',
-    minHeight: isMobile ? '32px' : '52px',
+    width: isMobile ? '88px' : '112px',
+    height: isMobile ? '40px' : '52px',
     backgroundColor: 'rgb(238, 238, 237) !important',
     border: `${isMobile ? 4 : 6}px solid ${backgroundColors.white}`,
     zIndex: 3000,

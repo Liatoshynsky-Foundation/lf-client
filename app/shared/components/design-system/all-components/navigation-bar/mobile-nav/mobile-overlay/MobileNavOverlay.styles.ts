@@ -1,13 +1,10 @@
 import { mainHexPallete } from '../../../theme/colors';
 
-import { AppTypography } from '~/constants';
-
 const baseColumn = {
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
-  maxHeight: { xs: '240px', md: '320px' },
-  top: { sm: '33%', md: '30%' },
+  top: { xs: '18%', sm: '33%', md: '30%' },
   overflowY: 'visible'
 };
 
@@ -43,7 +40,6 @@ export const styles = {
     },
 
     clipPath: 'polygon(0 0, 100% 0, 100% 87%, 0 90%)'
-    // overflowY: 'auto' // ← ВАЖЛИВО
   },
 
   leftColumn: {
@@ -55,10 +51,6 @@ export const styles = {
     },
     justifyContent: 'space-between',
     gap: '16px',
-    order: {
-      xs: 2,
-      sm: 1
-    },
     py: '8px'
   },
 
@@ -69,21 +61,12 @@ export const styles = {
       sm: '4 / span 5',
       md: '6 / span 7'
     },
-    order: {
-      xs: 1,
-      sm: 2
-    }
+    gap: '125px'
   },
-  links: {
+
+  contactsContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem'
-  },
-  mediaTitles: {
-    ...AppTypography.mulish18Regular,
-    fontSize: { xs: '16px', md: '18px' },
-    lineHeight: { xs: '150%', md: '160%' },
-    color: mainHexPallete.brown[700],
-    display: { xs: 'none', sm: 'block' }
+    gap: '25px'
   }
 };
