@@ -21,10 +21,11 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
 
   return (
     <>
-      {isMobile && <LanguageSwitcher variant="mobile" />}
+      {isMobile && <LanguageSwitcher variant="mobile" data-testid="ContactsSection-languageSwitcher" />}
 
-      <Box sx={styles.links}>
+      <Box data-testid="ContactsSection-links" sx={styles.links}>
         <ContactLink
+          data-testid="ContactsSection-phoneLink"
           type="phone"
           label={isMobile ? undefined : t('phoneNumber')}
           value={contacts.phone}
@@ -32,7 +33,9 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           direction={isMobile ? 'row' : 'column'}
           icon={isMobile ? PhoneIcon : null}
         />
+
         <ContactLink
+          data-testid="ContactsSection-emailLink"
           type="email"
           label={isMobile ? undefined : t('email')}
           value={contacts.email}
@@ -42,9 +45,16 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
         />
       </Box>
 
-      <Box sx={styles.socialMediaBox}>
-        <Typography sx={styles.mediaTitles}>{t('socialMedia')}:</Typography>
-        <FooterSocialMedia media={socialLinks} containerSx={{ gap: { xs: '18px', sm: '14px', md: '16px' } }} />
+      <Box data-testid="ContactsSection-socialMedia" sx={styles.socialMediaBox}>
+        <Typography data-testid="ContactsSection-socialMedia-title" sx={styles.mediaTitles}>
+          {t('socialMedia')}:
+        </Typography>
+
+        <FooterSocialMedia
+          data-testid="ContactsSection-socialMedia-list"
+          media={socialLinks}
+          containerSx={{ gap: { xs: '18px', sm: '14px', md: '16px' } }}
+        />
       </Box>
     </>
   );

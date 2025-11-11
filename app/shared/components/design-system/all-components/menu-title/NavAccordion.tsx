@@ -3,7 +3,7 @@
 import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { mainHexPallete } from '../theme/colors';
 import { styles } from './NavAccordion.styles';
@@ -11,6 +11,7 @@ import { styles } from './NavAccordion.styles';
 import MinusIconSvg from '~/public/icons/minus.svg';
 import PlusIconSvg from '~/public/icons/plus.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
+
 interface NavItem {
   label: string;
   href?: string;
@@ -24,7 +25,7 @@ export function NavAccordion({ items, sx }: { items: NavItem[]; sx?: object }) {
   const toggle = (label: string) => setOpenItems((prev) => ({ ...prev, [label]: !prev[label] }));
 
   return (
-    <Box sx={{ ...styles.container, ...sx }}>
+    <Box data-testid="NavAccordion" sx={{ ...styles.container, ...sx }}>
       {items.map((item) => (
         <AccordionItem
           key={item.label}
@@ -49,28 +50,44 @@ function AccordionItem({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const contentRef = useRef<HTMLDivElement>(null);
-
   const isActive =
     (item.href && pathname.startsWith(item.href)) || item.dropdown?.some((child) => pathname.startsWith(child.href));
 
   const iconColor = isActive ? mainHexPallete.burgundy[700] : mainHexPallete.brown[900];
   const hasDropdown = item.dropdown && item.dropdown.length > 1;
 
+  const baseTestId = `NavAccordion-item-${item.label.replace(/\s+/g, '')}`;
+
   if (!hasDropdown) {
     return (
       <Link href={item.href!} style={{ textDecoration: 'none' }}>
-        <Box sx={styles.itemWrapper}>
-          <Typography sx={{ ...styles.title, ...(isActive && styles.activeTitle) }}>{item.label}</Typography>
+        <Box data-testid={`${baseTestId}`} sx={styles.itemWrapper}>
+          <Typography
+            data-testid={`${baseTestId}--title${isActive ? '--active' : ''}`}
+            sx={{ ...styles.title, ...(isActive && styles.activeTitle) }}
+          >
+            {item.label}
+          </Typography>
         </Box>
       </Link>
     );
   }
 
   return (
-    <Box sx={styles.itemWrapper}>
-      <Box sx={styles.titleButton} onClick={onToggle} aria-expanded={isOpen}>
-        <Typography sx={{ ...styles.title, ...(isActive && styles.activeTitle) }}>{item.label}</Typography>
+    <Box data-testid={baseTestId} sx={styles.itemWrapper}>
+      <Box
+        data-testid={`${baseTestId}-toggle${isOpen ? '--open' : ''}`}
+        sx={styles.titleButton}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+      >
+        <Typography
+          data-testid={`${baseTestId}--title${isActive ? '--active' : ''}`}
+          sx={{ ...styles.title, ...(isActive && styles.activeTitle) }}
+        >
+          {item.label}
+        </Typography>
+
         <Svg
           Component={isOpen ? MinusIconSvg : PlusIconSvg}
           stroke={iconColor}
@@ -80,14 +97,10 @@ function AccordionItem({
         />
       </Box>
 
-      <Box ref={contentRef} sx={styles.dropdownBox(isOpen)}>
+      <Box data-testid={`${baseTestId}-submenu${isOpen ? '--open' : ''}`} sx={styles.dropdownBox(isOpen)}>
         {item.dropdown!.map((child) => (
           <Link key={child.label} href={child.href} style={{ textDecoration: 'none' }}>
-            <Typography
-              sx={{
-                ...styles.submenuItem
-              }}
-            >
+            <Typography data-testid={`${baseTestId}-submenuItem`} sx={styles.submenuItem}>
               {child.label}
             </Typography>
           </Link>

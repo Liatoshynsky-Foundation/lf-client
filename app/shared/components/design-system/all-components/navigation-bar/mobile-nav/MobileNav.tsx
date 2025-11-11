@@ -29,6 +29,7 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
   return (
     <>
       <Button
+        data-testid="MobileNav-toggleButton"
         onClick={toggle}
         sx={styles.iconButton(isMobile)}
         className={isOpen ? 'menu opened' : 'menu'}
@@ -44,6 +45,7 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           style={{ overflow: 'visible' }}
+          data-testid="MobileNav-toggleIcon"
         >
           <rect className="line top" y="5" width="40" height="2" fill="#190D03" />
           <rect className="line bottom" y="15" width="40" height="2" fill="#190D03" />

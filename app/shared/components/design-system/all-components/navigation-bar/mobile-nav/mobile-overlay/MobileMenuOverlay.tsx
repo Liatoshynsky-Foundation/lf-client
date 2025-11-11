@@ -44,17 +44,19 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
 
   return (
     <Slide direction="down" in={open} mountOnEnter unmountOnExit appear={false} timeout={600}>
-      <Box sx={styles.overlay}>
+      <Box data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`} sx={styles.overlay}>
         <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 
         {!isMobile ? (
-          <Box sx={styles.leftColumn}>
+          <Box data-testid="MobileMenuOverlay-leftColumn" sx={styles.leftColumn}>
             <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={isMobile} />
           </Box>
         ) : null}
-        <Box sx={styles.rightColumn}>
+
+        <Box data-testid="MobileMenuOverlay-rightColumn" sx={styles.rightColumn}>
           <NavAccordion items={navItems} />
-          <Box sx={styles.contactsContainer}>
+
+          <Box data-testid="MobileMenuOverlay-contacts" sx={styles.contactsContainer}>
             {isMobile && <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={isMobile} />}
           </Box>
         </Box>
