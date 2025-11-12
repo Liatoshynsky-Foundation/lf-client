@@ -4,14 +4,15 @@ import { mulish } from '../../design-system/all-components/theme/Theme';
 export const style = {
   paper: {
     background: mainHexPallete.brown[100],
-    width: '490px',
+    width: { xs: '92vw', sm: '100%' },
     borderLeft: `4px solid ${mainHexPallete.yellow[500]}`,
     gridColumn: '1/-1'
   },
   paperChildren: {
-    padding: '42px 60px'
+    padding: { xs: '20px 12px', sm: '32px 32px', md: '42px 60px' }
   },
   btnGroup: {
+    overflow: { xs: 'hidden', sm: 'visible' },
     margin: '32px 0 40px 0',
     justifySelf: 'center',
     width: '100%',
@@ -26,6 +27,9 @@ export const style = {
       display: 'flex',
       width: '100%'
     }
+  },
+  btnGroupText: {
+    fontSize: { xs: '14px', sm: '18px' }
   },
   sumInputs: {
     margin: '10px',
@@ -56,6 +60,10 @@ export const style = {
     '& input[type=number]::-webkit-inner-spin-button': {
       WebkitAppearance: 'none',
       margin: 0
+    },
+    '& input::placeholder': {
+      color: mainHexPallete.brown[700],
+      opacity: 1
     }
   },
   moneyInputError: {
@@ -67,8 +75,9 @@ export const style = {
     marginBottom: '16px'
   },
   currencySuggestion: {
-    alignSelf: 'stretch',
-    color: mainHexPallete.brown[600]
+    alignSelf: 'center',
+    color: mainHexPallete.brown[600],
+    fontSize: { xs: '12px', sm: '18px' }
   },
   addBtns: {
     display: 'flex',

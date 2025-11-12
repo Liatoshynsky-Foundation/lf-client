@@ -6,6 +6,7 @@ import { styles } from './ColumnGuides.style';
 
 interface ColumnGuidesProps {
   lineColor?: string;
+  dataTestId?: string;
 }
 
 const columnsMap: Record<number, { col: number; align: 'start' | 'end' }[]> = {
@@ -33,7 +34,7 @@ const columnsMap: Record<number, { col: number; align: 'start' | 'end' }[]> = {
   ]
 };
 
-export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGuidesProps) => {
+export const ColumnGuides = ({ lineColor = '#EFE9E0', dataTestId }: ColumnGuidesProps) => {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down('sm'));
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -70,7 +71,7 @@ export const ColumnGuides = ({ lineColor = 'rgba(237, 232, 223, 1)' }: ColumnGui
   });
 
   return (
-    <Box sx={styles.containerStyle}>
+    <Box sx={styles.containerStyle} data-testid={dataTestId}>
       <Box aria-hidden sx={styles.gridContainerStyle(layout, gap, paddingX)}>
         {Object.entries(grouped).map(([colStr, aligns]) => {
           const col = Number(colStr);

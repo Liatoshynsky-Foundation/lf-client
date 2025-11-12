@@ -24,7 +24,7 @@ export const styles = {
       xxl: `translate(-${border.left.xxl}px, -${border.top.xxl}px)`,
       ultra: `translate(-${border.left.ultra}px, -${border.top.ultra}px)`
     },
-    backgroundColor: '#FFE099',
+    backgroundColor: border.color || '#FFE099',
     zIndex: 0
   }),
   imageContainer: (sizes: ElementSizes) => ({

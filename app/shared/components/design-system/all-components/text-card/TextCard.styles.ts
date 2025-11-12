@@ -1,9 +1,10 @@
 export const styles = {
   card: {
     position: 'relative',
-    width: '296px',
+    width: { sm: '100%', md: '100%', lg: '272px', xl: '296px' },
     height: '351px',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    display: { xs: 'none', sm: 'block' }
   },
   background: {
     position: 'absolute',
@@ -16,7 +17,7 @@ export const styles = {
   },
   content: {
     position: 'relative',
-    padding: '48px 40px',
+    padding: { xs: '20px', sm: '40px 30px', lg: '48px 40px' },
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -37,6 +38,6 @@ export const styles = {
     fontWeight: 700,
     lineHeight: '130%',
     color: '#190D03',
-    marginTop: '79px'
+    marginTop: { sm: '80px', md: '30px', lg: '50px', xl: '79px' }
   }
 };

@@ -2,6 +2,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+import { errors } from '~/constants/errors';
+
 import { createRequestContainer } from '~/di/container';
 
 export async function GET(req: NextRequest) {
@@ -20,7 +22,7 @@ export async function GET(req: NextRequest) {
     ]);
 
     return NextResponse.json({ titles, yearRange, genres, categories });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message ?? 'Unexpected error' }, { status: 500 });
+  } catch {
+    return NextResponse.json(errors.FILTERS_FETCH_FAILED, { status: 500 });
   }
 }

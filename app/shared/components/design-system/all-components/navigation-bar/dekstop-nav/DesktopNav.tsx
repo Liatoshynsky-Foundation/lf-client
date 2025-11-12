@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -10,6 +10,7 @@ import CustomMenuItem from '~/ds-components/menu-item/MenuItem';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { styles } from './DesktopNav.styles';
+import type { ScrollDirection } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { usePathname } from '~/i18n/navigation';
@@ -22,7 +23,15 @@ export interface DropdownItem {
   href: string;
 }
 
-const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
+const DesktopNav = ({
+  navLabels,
+  specialNav,
+  scrollDirection
+}: {
+  navLabels: NavigationDTO[];
+  specialNav: NavigationDTO | null;
+  scrollDirection: ScrollDirection;
+}) => {
   const NAV_ITEMS = useMemo(() => {
     return navLabels.map((group) => {
       const dropdown = group.links.map((link) => ({
@@ -41,15 +50,25 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
   const pathname = usePathname();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [temporaryActiveIndex, setTemporaryActiveIndex] = useState<number | null>(null);
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
   const [activeButton, setActiveButton] = useState<number | undefined>();
+  const [animateIndicator, setAnimateIndicator] = useState(true);
+
+  const prevActiveButtonRef = useRef<number | undefined>(undefined);
+  const isSpecialActive = pathname === specialNav?.links[0].href;
 
   useEffect(() => {
-    setTemporaryActiveIndex(null);
-  }, [pathname]);
+    if (scrollDirection === 'down' && anchorEl) {
+      handleDropdownClose();
+    }
+  }, [scrollDirection, anchorEl]);
 
   useEffect(() => {
+    if (pathname === specialNav?.links[0].href) {
+      setActiveButton(undefined);
+      return;
+    }
+
     const index = NAV_ITEMS.findIndex(
       (item) => item.href === pathname || item.dropdown?.some((dropdownItem) => dropdownItem.href === pathname)
     );
@@ -61,19 +80,24 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
     } else {
       setActiveButton(undefined);
     }
-  }, [pathname, navLabels]);
+  }, [pathname, NAV_ITEMS, specialNav?.links]);
 
-  const effectiveActiveIndex = temporaryActiveIndex ?? activeButton;
+  useEffect(() => {
+    const becameDefined = prevActiveButtonRef.current === undefined && activeButton !== undefined;
+    if (becameDefined) {
+      setAnimateIndicator(false);
+      const id = requestAnimationFrame(() => {
+        setAnimateIndicator(true);
+      });
+      prevActiveButtonRef.current = activeButton;
+      return () => cancelAnimationFrame(id);
+    }
+    prevActiveButtonRef.current = activeButton;
+  }, [activeButton]);
 
-  const handleDropdownOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    label: string,
-    items: DropdownItem[],
-    index: number
-  ) => {
+  const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>, label: string, items: DropdownItem[]) => {
     setAnchorEl(event.currentTarget);
     setOpenDropdownState({ label, items });
-    setTemporaryActiveIndex(index);
   };
 
   const handleDropdownClose = () => {
@@ -83,7 +107,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
 
   const renderedNavButtons = NAV_ITEMS.map((item, index) => {
     const isOpen = openDropdownState?.label === item.label && Boolean(anchorEl);
-    const isActive = index === effectiveActiveIndex;
+    const isActive = index === activeButton;
 
     const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
     const iconColor = isActive ? mainHexPallete.white : mainHexPallete.black;
@@ -95,7 +119,7 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
         <IconButton
           disableRipple
           key={`${item.label}-${index}`}
-          onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems, index)}
+          onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems)}
           sx={styles.iconButtonSx}
           style={styles.iconButtonInline}
         >
@@ -136,10 +160,22 @@ const DesktopNav = ({ navLabels }: { navLabels: NavigationDTO[] }) => {
       <Box sx={styles.buttonGroupBackground}>
         <ButtonGroup
           sx={styles.buttonGroup}
-          activeButton={effectiveActiveIndex}
+          activeButton={activeButton !== undefined ? activeButton : -1}
           buttons={renderedNavButtons}
           size="big"
+          animateIndicator={animateIndicator}
         />
+        {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
+          <Button
+            disableRipple
+            label={specialNav.title}
+            link={specialNav.links[0].href}
+            sx={{
+              ...styles.warInUkraineButton,
+              ...(isSpecialActive && styles.warInUkraineButtonActive)
+            }}
+          />
+        )}
       </Box>
 
       {openDropdownState && (

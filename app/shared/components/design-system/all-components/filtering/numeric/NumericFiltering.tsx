@@ -1,59 +1,24 @@
 'use client';
 
-import { Box, Divider, styled } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Svg } from '~/components/colored-svg/ColoredSvg';
-import Button from '~/ds-components/button/Button';
+import ClearFilterButton from '~/ds-components/clear-filter-button/ClearFilterButton';
 import { DesignSystemSlider } from '~/ds-components/slider/Slider';
 import TextField from '~/ds-components/text-field/TextField';
-import { mainHexPallete, rgbaClearFilterButton } from '~/ds-components/theme/colors';
 
 import { styles } from './NumericFiltering.styles';
 
-import TrashIcon from '~/public/icons/trash-2.svg';
 import { getFilteringSchema } from '~/validators/filtering.schema';
 
 interface NumericFilteringProps {
   value: [number, number];
   onChange: (numbers: [number, number]) => void;
+  onChangeCommitted: (numbers: [number, number]) => void;
   minNumber?: number;
   maxNumber?: number;
 }
-
-const CustomButton = styled(Button)(() => ({
-  lineHeight: '140%',
-  color: rgbaClearFilterButton.defaultTextColor,
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  borderRadius: '8px',
-
-  '&:hover': {
-    backgroundColor: mainHexPallete.red[50],
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:focus-visible': {
-    color: mainHexPallete.red[700]
-  },
-  '&:active': {
-    color: mainHexPallete.red[700]
-  },
-
-  '& svg': {
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:hover svg': {
-    color: rgbaClearFilterButton.defaultTextColor
-  },
-  '&:focus-visible svg': {
-    color: mainHexPallete.red[700]
-  },
-  '&:active svg': {
-    color: mainHexPallete.red[700]
-  }
-}));
 
 const minDistance = 1;
 
@@ -61,7 +26,8 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   value,
   onChange,
   minNumber = 1900,
-  maxNumber = new Date().getFullYear()
+  maxNumber = new Date().getFullYear(),
+  onChangeCommitted
 }) => {
   const [inputNumbers, setInputNumbers] = useState<string[]>([String(value[0]), String(value[1])]);
   const [errors, setErrors] = useState<{ from?: string; to?: string }>({});
@@ -76,23 +42,28 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
     setErrors({});
   }, [value]);
 
-  const handleSliderChange = useCallback(
-    (event: Event, newValue: number | number[], activeThumb: number) => {
+  const handleSliderChange = useCallback((event: Event, newValue: number | number[], activeThumb: number) => {
+    if (!Array.isArray(newValue)) return;
+
+    let [newMin, newMax] = newValue;
+
+    if (activeThumb === 0) {
+      newMin = Math.min(newMin, newMax - minDistance);
+    } else {
+      newMax = Math.max(newMax, newMin + minDistance);
+    }
+
+    setInputNumbers([String(newMin), String(newMax)]);
+    setErrors({});
+  }, []);
+
+  const handleSliderChangeCommitted = useCallback(
+    (event: Event | React.SyntheticEvent, newValue: number | number[]) => {
       if (!Array.isArray(newValue)) return;
-
-      let [newMin, newMax] = newValue;
-
-      if (activeThumb === 0) {
-        newMin = Math.min(newMin, newMax - minDistance);
-      } else {
-        newMax = Math.max(newMax, newMin + minDistance);
-      }
-
-      setInputNumbers([String(newMin), String(newMax)]);
-      setErrors({});
-      onChange([newMin, newMax]);
+      const [newMin, newMax] = newValue;
+      onChangeCommitted([newMin, newMax]);
     },
-    [onChange]
+    [onChangeCommitted]
   );
 
   const handleInputChange = (type: 'from' | 'to') => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +90,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
     setInputNumbers([String(minNumber), String(maxNumber)]);
     setErrors({});
     onChange([minNumber, maxNumber]);
+    onChangeCommitted([minNumber, maxNumber]);
   };
 
   return (
@@ -150,28 +122,15 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
           min={minNumber}
           max={maxNumber}
           step={1}
-          value={value}
+          value={[Number(inputNumbers[0]), Number(inputNumbers[1])]}
           onChange={handleSliderChange}
+          onChangeCommitted={handleSliderChangeCommitted}
         />
       </Box>
       <Box>
         <Divider sx={styles.divider} />
         <Box sx={styles.footer}>
-          <CustomButton
-            startIcon={
-              <Svg
-                Component={TrashIcon}
-                alt="trash"
-                stroke={rgbaClearFilterButton.defaultTextColor}
-                width="20px"
-                height="22px"
-              />
-            }
-            onClick={handleClearFilter}
-            variant="text"
-          >
-            {t('clear')}
-          </CustomButton>
+          <ClearFilterButton onClick={handleClearFilter}>{t('clear')}</ClearFilterButton>
         </Box>
       </Box>
     </Box>

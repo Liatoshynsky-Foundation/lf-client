@@ -12,7 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 import Pagination from '~/ds-components/pagination/Pagination';
@@ -46,6 +46,7 @@ interface EnhancedTableProps<T extends RowData> {
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   enableClientSorting?: boolean;
   loading?: boolean;
+  noResults?: React.ReactNode;
 }
 
 export const EnhancedTable = <T extends RowData>({
@@ -61,7 +62,8 @@ export const EnhancedTable = <T extends RowData>({
   columnFilters,
   onColumnFiltersChange,
   defaultSorting = [],
-  loading = false
+  loading = false,
+  noResults
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -104,9 +106,7 @@ export const EnhancedTable = <T extends RowData>({
     manualFiltering: true
   });
 
-  const filteredAndSortedRows = useMemo(() => {
-    return headerTable.getRowModel().rows.map((row) => row.original);
-  }, [data, sorting]);
+  const filteredAndSortedRows = headerTable.getRowModel().rows.map((row) => row.original);
 
   const { groupedItems, flatItems } = useMemo(() => {
     const grouped = new Map<string, T[]>();
@@ -153,8 +153,26 @@ export const EnhancedTable = <T extends RowData>({
     itemsPerPage
   });
 
+  const tableRef = useRef<HTMLDivElement | null>(null);
+  const shouldScrollRef = useRef(false);
+
+  useLayoutEffect(() => {
+    if (!shouldScrollRef.current) return;
+    shouldScrollRef.current = false;
+
+    const el = tableRef.current;
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage]);
+
+  const handlePageChangeWithScroll = (page: number) => {
+    shouldScrollRef.current = true;
+    handlePageChange(page);
+  };
+
   return (
-    <Box sx={styles.root}>
+    <Box ref={tableRef} sx={styles.root} data-testid="EnhancedTable">
       <ControlPanel
         Search={Search}
         tableName={tableName}
@@ -167,10 +185,11 @@ export const EnhancedTable = <T extends RowData>({
         </Box>
       ) : (
         <>
-          <TableContainer component={Paper} sx={styles.container}>
-            <Table sx={{ tableLayout: 'fixed' }}>
+          <TableContainer data-testid="EnhancedTable-tableContainer" component={Paper} sx={styles.container}>
+            <Table sx={{ tableLayout: 'fixed' }} data-testid="EnhancedTable-table">
               <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
-              <TableBody>
+              <TableBody data-testid="EnhancedTable-tableBody">
+                {!loading && data.length === 0 && noResults}
                 {rowsToRender.map((entry) =>
                   entry.type === 'group' ? (
                     <CollapsibleRow
@@ -188,7 +207,7 @@ export const EnhancedTable = <T extends RowData>({
             </Table>
           </TableContainer>
 
-          <Box sx={styles.paginationWrapper}>
+          <Box sx={styles.paginationWrapper} data-testid="EnhancedTable-paginationWrapper">
             {hasMore && (
               <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
                 {t('viewMore')}
@@ -200,7 +219,7 @@ export const EnhancedTable = <T extends RowData>({
                 siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
                 visiblePages={visiblePages}
-                onChange={(_, page) => handlePageChange(page)}
+                onChange={(_, page) => handlePageChangeWithScroll(page)}
               />
             )}
           </Box>

@@ -2,7 +2,6 @@ import { mainHexPallete } from '../../theme/colors';
 
 export const styles = {
   container: {
-    backgroundColor: mainHexPallete.white,
     borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -12,9 +11,8 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '57px',
-    pt: '24px',
-    pl: '16px',
-    pr: '16px'
+    py: '16px',
+    px: '24px'
   },
   textfieldContainer: {
     display: 'flex',
@@ -34,7 +32,6 @@ export const styles = {
     justifyContent: 'left',
     alignItems: 'center',
     pr: '8px',
-    pl: '8px',
-    mb: '8px'
+    pl: '8px'
   }
 };

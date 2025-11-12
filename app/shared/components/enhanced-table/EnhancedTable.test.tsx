@@ -3,7 +3,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 
-import { FilterPanel } from '../filters/FilterPanel';
+import { FilterSelect } from '~/ds-components/selector/FilterSelect';
+
 import { Search } from '../search/Search';
 
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -22,7 +23,15 @@ jest.mock('~/ds-components/button/Button');
 jest.mock('./control-panel/ControlPanel', () => {
   return {
     __esModule: true,
-    default: ({ Search, tableName, Filters }: any) => (
+    default: ({
+      Search,
+      tableName,
+      Filters
+    }: {
+      Search: React.ReactNode;
+      tableName: string;
+      Filters: React.ReactNode;
+    }) => (
       <div data-testid="mock-control-panel">
         <div data-testid="mock-title">{tableName}</div>
         <div data-testid="mock-search">{Search}</div>
@@ -59,9 +68,15 @@ const columns: ColumnDef<TestRow>[] = [
   }
 ];
 
+const mockSetSearch = jest.fn();
+const mockSetFilterParams = jest.fn();
+
+beforeEach(() => {
+  globalThis.HTMLElement.prototype.scrollIntoView = jest.fn();
+});
+
 describe('EnhancedTable', () => {
   it('renders control panel title, search and filters', () => {
-    const mockSetSearch = jest.fn();
     render(
       <EnhancedTable
         data={mockData}
@@ -69,8 +84,8 @@ describe('EnhancedTable', () => {
         tableName="Test Table"
         groupByKey="group"
         itemsPerPage={2}
-        Search={<Search setSearch={mockSetSearch} search={''} options={[]} />}
-        Filters={<FilterPanel />}
+        Search={<Search setSearch={mockSetSearch} setFilterParams={mockSetFilterParams} search="" options={[]} />}
+        Filters={<FilterSelect label="" options={[]} />}
       />
     );
 
@@ -101,7 +116,6 @@ describe('EnhancedTable', () => {
     fireEvent.click(screen.getByText('Переглянути більше'));
 
     const afterRows = screen.getAllByRole('row').length;
-
     expect(afterRows).toBeGreaterThan(beforeRows);
   });
 

@@ -7,6 +7,10 @@ export const styles = {
   },
   typography: {
     ...AppTypography.mulish20Regular,
-    mb: '24px'
+    mb: '24px',
+    fontSize: {
+      xs: '16px',
+      sm: '16px'
+    }
   }
 };

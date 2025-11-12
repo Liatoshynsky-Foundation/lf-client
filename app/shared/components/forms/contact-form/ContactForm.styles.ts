@@ -61,7 +61,7 @@ export const styles = {
   confidentialPolicyText: {
     lineHeight: '130%',
     fontStyle: 'unset',
-    mt: { xs: '8px', md: '15px' }
+    mt: { xs: '8px' }
   },
 
   requestButton: {

@@ -73,6 +73,7 @@ export const rgbButtonColors = {
   primaryFilledHoveredBackground: 'rgb(52,41,33)',
   primaryOutlinedHoveredBackground: 'rgba(25, 13, 3, 0.08)',
   primaryOutlinedPressedBackground: 'rgba(25, 13, 3, 0.1)',
+  primaryHoveredBackground: 'rgba(209, 207, 205)',
   transparent: 'transparent',
   primaryTextHovered: 'rgb(243,243,242)',
   primaryTextPressed: '#D1CFCD',

@@ -65,7 +65,12 @@ export function WorkTableFilters({
         />
       </Box>
       <Box sx={{ width: 'fit-content' }}>
-        <YearNumericFilter label="Рік написання" value={yearFilter} onChange={onYearFilterChange} />
+        <YearNumericFilter
+          label="Рік написання"
+          value={yearFilter}
+          onChange={onYearFilterChange}
+          onChangeCommitted={onYearFilterChange}
+        />
       </Box>
       {isAnyFilterActive && (
         <IconButton

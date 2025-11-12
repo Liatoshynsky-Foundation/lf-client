@@ -57,7 +57,12 @@ export const compositionsRepository = {
 
     const readySearchExpression = searchHelper(search);
     if (readySearchExpression) {
-      conditions.push({ $or: [{ 'title.uk': readySearchExpression }, { 'title.en': readySearchExpression }] });
+      conditions.push({
+        $or: [
+          { 'title.uk': { $regex: readySearchExpression, $options: 'i' } },
+          { 'title.en': { $regex: readySearchExpression, $options: 'i' } }
+        ]
+      });
     }
 
     const readyGenreArray = namedFilterHelper(filters?.genres);

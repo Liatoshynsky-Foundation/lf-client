@@ -24,7 +24,7 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let borderRadius;
 
   if (isMobile) {
-    width = 230;
+    width = 270;
     borderRadius = '8px';
   } else if (focused) {
     width = 280;
@@ -45,12 +45,14 @@ interface SearchProps<T> {
   setSearch: (value: string) => void;
   search: string;
   options: T[];
+  setFilterParams: (params: Record<string, string | number | string[] | null>) => void;
 }
 
 export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
   search,
   setSearch,
-  options
+  options,
+  setFilterParams
 }: SearchProps<T>) => {
   const [value, setValue] = useState<T | null>(null);
   const [focused, setFocused] = useState(false);
@@ -66,8 +68,9 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     () =>
       debounce((value: string) => {
         setSearch(value);
+        setFilterParams({ search: value });
       }, DEBOUNCE_TIME_MS),
-    [setSearch]
+    [setFilterParams, setSearch]
   );
 
   const handleInputChange = useCallback(
@@ -76,9 +79,11 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         setOpened(true);
       }
       setInputValue(value);
+      setSearch(value);
+      setFilterParams({ search: value });
       debouncedInputChange(value);
     },
-    [debouncedInputChange, opened]
+    [debouncedInputChange, opened, setFilterParams, setSearch]
   );
 
   const handleIconClick = () => {
@@ -90,6 +95,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     setInputValue('');
     setValue(null);
     setOpened(false);
+    setFilterParams({ search: '' });
   };
 
   const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
@@ -130,7 +136,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       />
     );
   };
-  function renderOptionFn({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode {
+
+  const renderOption = useCallback(({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => {
     return (
       <div {...props} key={key}>
         <ListItem disableGutters>
@@ -140,9 +147,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         </ListItem>
       </div>
     );
-  }
+  }, []);
 
-  const renderOption = useMemo(() => renderOptionFn, []);
   const getOptionLabel = (option: T) => {
     if (typeof option.title === 'string') {
       return option.title;
@@ -151,6 +157,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     }
     return '';
   };
+
   return (
     <Autocomplete<T, false, false, false>
       data-testid="music-search"

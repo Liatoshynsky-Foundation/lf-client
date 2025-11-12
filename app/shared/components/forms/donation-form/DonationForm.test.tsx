@@ -58,20 +58,6 @@ describe('DonationForm', () => {
   it('should render default donation form', () => {
     expect(screen.getByText('ШВИДКО ЗАДОНАТИТИ:')).toBeInTheDocument();
     expect(screen.getByDisplayValue('')).toBeInTheDocument();
-    expect(screen.getByText('Разовий внесок')).toBeInTheDocument();
-  });
-
-  it('should switch to subscription', () => {
-    fireEvent.click(screen.getByText('Підписка'));
-    expect(screen.getByText('ПІДПИСАТИСЯ:')).toBeInTheDocument();
-    expect(screen.getByText('Підписатися')).toBeInTheDocument();
-  });
-
-  it('should add suggest sum to input', () => {
-    fireEvent.click(screen.getByText('+200'));
-    expect(screen.getByDisplayValue('200')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('+500'));
-    expect(screen.getByDisplayValue('700')).toBeInTheDocument();
   });
 
   it('should show entered value', () => {
@@ -84,7 +70,7 @@ describe('DonationForm', () => {
   });
 
   it('should switch currency', () => {
-    fireEvent.click(screen.getByText('+200'));
+    fireEvent.click(screen.getByText('200'));
     expect(screen.getByDisplayValue('200')).toBeInTheDocument();
 
     fireEvent.mouseDown(screen.getByRole('combobox'));

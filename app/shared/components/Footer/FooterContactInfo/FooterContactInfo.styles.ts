@@ -1,16 +1,11 @@
+import { mainHexPallete } from '~/ds-components/theme/colors';
+
 const commonTextStyle = {
   fontFamily: 'Mulish, Sans-serif',
-  color: '#190D03',
+  color: mainHexPallete.black,
   letterSpacing: '0px',
   whiteSpace: 'pre-line',
   fontSize: { xs: '16px', sm: '16px' }
-};
-
-const commonLinkStyle = {
-  textDecoration: 'underline',
-  '&:hover': {
-    cursor: 'pointer'
-  }
 };
 
 export const styles = {
@@ -33,16 +28,6 @@ export const styles = {
     ...commonTextStyle,
     fontWeight: 400,
     lineHeight: '150%'
-  },
-  weakText: {
-    ...commonTextStyle,
-    color: '#574139',
-    marginRight: '10px'
-  },
-  link: {
-    ...commonTextStyle,
-    ...commonLinkStyle,
-    marginTop: '2px'
   },
   linkContainer: {
     display: 'flex'

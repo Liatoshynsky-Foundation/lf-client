@@ -12,17 +12,17 @@ function SupportFoundation() {
   const bold = useCallback((chunks: React.ReactNode) => <b>{chunks}</b>, []);
 
   return (
-    <Box sx={styles.wrapper}>
-      <Typography variant="h2" sx={styles.sectionTitle}>
+    <Box sx={styles.wrapper} data-testid="SupportFoundation">
+      <Typography variant="h2" sx={styles.sectionTitle} data-testid="SupportFoundation-title">
         {t('title')}
       </Typography>
 
-      <Box sx={styles.donationSection}>
+      <Box sx={styles.donationSection} data-testid="SupportFoundation-donationSection">
         <Box sx={styles.donationFormWrapper}>
           <DonationForm />
         </Box>
-        <Box sx={styles.infoSection}>
-          <Typography variant="body2" sx={styles.sectionSubtitle}>
+        <Box sx={styles.infoSection} data-testid="SupportFoundation-infoSection">
+          <Typography variant="body2" sx={styles.sectionSubtitle} data-testid="SupportFoundation-infoSection-subtitle">
             {t.rich('subTitle', { b: bold })}
           </Typography>
           <PaymentDetails />

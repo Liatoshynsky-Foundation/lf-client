@@ -14,7 +14,16 @@ export const imageSizes = {
 export const styles = {
   container: (mb?: number | string) => ({
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(3, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     gridColumn: '1 / -1',
     alignItems: 'center',
     mb: `${mb ?? 72}px`
