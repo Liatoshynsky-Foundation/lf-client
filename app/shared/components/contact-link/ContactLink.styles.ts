@@ -7,7 +7,8 @@ const commonLinkBaseStyles = {
   fontSize: '16px',
   fontWeight: 600,
   lineHeight: '110%',
-  transition: 'color 0.2s ease'
+  transition: 'color 0.2s ease',
+  textDecoration: 'none'
 };
 
 const commonTextStyle = {
@@ -78,18 +79,5 @@ export const styles = {
   link: {
     ...commonLinkBaseStyles,
     ...commonLinkStates
-  },
-
-  mobileLink: {
-    textDecoration: 'none',
-    color: 'inherit',
-    display: 'block',
-    width: '100%'
-  },
-
-  copyButtonWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '5px'
   }
 };

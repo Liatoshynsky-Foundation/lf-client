@@ -6,6 +6,7 @@ import { useRef } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { mainHexPallete } from '~/ds-components/theme/colors';
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import { getContentBoxStyle, styles } from './ContactLink.styles';
 import { iconSizes } from '~/constants/design';
@@ -26,7 +27,6 @@ interface ContactLinkProps {
   iconSize?: IconSize;
   iconColor?: string;
   alertMsg?: string;
-  isMobile?: boolean;
   disabled?: boolean;
   linkSx?: SxProps<Theme>;
   labelSx?: SxProps<Theme>;
@@ -38,10 +38,8 @@ interface ContactLinkProps {
 
 type LinkProps = Readonly<{ href: string; onClick?: () => void }>;
 
-const getLinkProps = (type: ContactLinkType, value: string, isMobile: boolean): LinkProps | undefined => {
-  if (type === 'phone') {
-    return isMobile ? { href: `tel:${value}` } : undefined;
-  }
+const getLinkProps = (type: ContactLinkType, value: string): LinkProps => {
+  if (type === 'phone') return { href: `tel:${value}` };
   return { href: `mailto:${value}` };
 };
 
@@ -56,59 +54,54 @@ export const ContactLink = ({
   labelSx,
   iconSx,
   dataTestid,
-  isMobile = false,
   disabled = false,
   direction = 'row',
   iconSize = 'medium',
   copyButtonSize = 'medium'
 }: ContactLinkProps) => {
   const linkRef = useRef<HTMLAnchorElement>(null);
-  const linkProps = getLinkProps(type, value, isMobile);
+  const linkProps = getLinkProps(type, value);
+  const { isMobile } = useBreakpoints();
 
-  const isMobileClickable = isMobile && !disabled;
-  const isCopyButtonVisibleOnDesktop = !isMobile && !disabled;
-  const showInlineCopyButton = direction === 'column' && isCopyButtonVisibleOnDesktop;
-  const showRowCopyButton = direction === 'row' && isCopyButtonVisibleOnDesktop;
+  const showCopy = !disabled && !isMobile;
+  const hasLabelOutside = !!label && !isMobile;
 
-  const content = (
-    <Box sx={getContentBoxStyle(direction)}>
-      {icon && (
-        <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]}>
-          <Svg
-            Component={icon}
-            stroke={iconColor ?? mainHexPallete.black}
-            width={`${iconSizes[iconSize]}px`}
-            height={`${iconSizes[iconSize]}px`}
-            alt={`${type} icon`}
-          />
+  return (
+    <Box sx={styles.wrapper} data-testid={dataTestid}>
+      <Box sx={getContentBoxStyle(direction)}>
+        {icon && (
+          <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]}>
+            <Svg
+              Component={icon}
+              stroke={iconColor ?? mainHexPallete.black}
+              width={`${iconSizes[iconSize]}px`}
+              height={`${iconSizes[iconSize]}px`}
+              alt={`${type} icon`}
+            />
+          </Box>
+        )}
+
+        {hasLabelOutside && <Typography sx={[styles.weakText, ...sxToArray(labelSx)]}>{label}:</Typography>}
+
+        <Box sx={styles.valueBox}>
+          {isMobile ? (
+            <Link ref={linkRef} {...linkProps} sx={[styles.link, ...sxToArray(linkSx)]}>
+              {label && (
+                <Typography component="span" sx={[styles.weakText, ...sxToArray(labelSx)]}>
+                  {label}:
+                </Typography>
+              )}
+              {value}
+            </Link>
+          ) : (
+            <Link ref={linkRef} {...linkProps} sx={[styles.link, ...sxToArray(linkSx)]}>
+              {value}
+            </Link>
+          )}
+
+          {showCopy && <CopyButton targetRef={linkRef} hint={alertMsg} iconSize={copyButtonSize} />}
         </Box>
-      )}
-
-      {label && <Typography sx={[styles.weakText, ...sxToArray(labelSx)]}>{label}:</Typography>}
-
-      <Box sx={styles.valueBox}>
-        <Typography ref={linkRef} sx={[styles.link, ...sxToArray(linkSx)]}>
-          {value}
-        </Typography>
-        {showInlineCopyButton && <CopyButton targetRef={linkRef} hint={alertMsg} iconSize={copyButtonSize} />}
       </Box>
     </Box>
   );
-
-  {
-    return (
-      <Box sx={styles.wrapper}>
-        {isMobileClickable ? (
-          <Link ref={linkRef} {...linkProps} sx={styles.mobileLink} data-testid={dataTestid}>
-            {content}
-          </Link>
-        ) : (
-          <Box sx={styles.copyButtonWrapper}>
-            {content}
-            {showRowCopyButton && <CopyButton targetRef={linkRef} hint={alertMsg} iconSize={copyButtonSize} />}
-          </Box>
-        )}
-      </Box>
-    );
-  }
 };

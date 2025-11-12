@@ -1,8 +1,18 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
+
 import { ContactLink } from './ContactLink';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
+
+jest.mock('~/hooks/use-breakpoints/useBreakpoints');
+
+const mockedUseBreakpoints = useBreakpoints as jest.Mock;
+
+beforeEach(() => {
+  mockedUseBreakpoints.mockReturnValue({ isMobile: false });
+});
 
 const mockWriteText = jest.fn();
 Object.assign(navigator, {
@@ -22,23 +32,24 @@ describe('ContactLink component', () => {
   });
 
   it('should render mailto link on mobile', () => {
-    render(<ContactLink type="email" value="mobile@example.com" label="Email" isMobile />);
+    render(<ContactLink type="email" value="mobile@example.com" label="Email" />);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', 'mailto:mobile@example.com');
   });
 
   it('should render phone link with tel: on mobile', () => {
-    render(<ContactLink type="phone" value="+380123456789" isMobile />);
+    render(<ContactLink type="phone" value="+380123456789" />);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', 'tel:+380123456789');
   });
 
-  it('should not render link for phone on desktop', () => {
+  it('should render phone link with tel: on desktop', () => {
     render(<ContactLink type="phone" value="+380123456789" />);
-    expect(screen.queryByRole('link')).toBeNull();
-    expect(screen.getByText('+380123456789')).toBeInTheDocument();
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', 'tel:+380123456789');
+    expect(link).toHaveTextContent('+380123456789');
   });
 
   it('should render icon when provided', () => {
@@ -80,7 +91,10 @@ describe('ContactLink component', () => {
   });
 
   it('should not render copy button on mobile', () => {
-    render(<ContactLink type="email" value="mobile@example.com" isMobile />);
+    mockedUseBreakpoints.mockReturnValue({ isMobile: true });
+
+    render(<ContactLink type="email" value="mobile@example.com" />);
+
     expect(screen.queryByRole('button', { name: /copy content/i })).toBeNull();
   });
 
