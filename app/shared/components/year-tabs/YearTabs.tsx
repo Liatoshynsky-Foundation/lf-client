@@ -63,7 +63,7 @@ export default function YearTabs() {
       }
 
       if (closestTarget) {
-        const id = (closestTarget as HTMLElement).id;
+        const id = closestTarget.id;
         const newYear = id.replace('year-', '');
         if (newYear) {
           setYear((prevYear) => (newYear === prevYear ? prevYear : newYear));
