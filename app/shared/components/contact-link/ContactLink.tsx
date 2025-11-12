@@ -2,7 +2,7 @@
 
 import { Box, Link, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { mainHexPallete } from '~/ds-components/theme/colors';
@@ -59,11 +59,15 @@ export const ContactLink = ({
   iconSize = 'medium',
   copyButtonSize = 'medium'
 }: ContactLinkProps) => {
+  const [isClient, setIsClient] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
-  const linkProps = getLinkProps(type, value);
   const { isMobile } = useBreakpoints();
 
-  const showCopy = !disabled && !isMobile;
+  const linkProps = getLinkProps(type, value);
+
+  useEffect(() => setIsClient(true), []);
+
+  const showCopy = isClient && !disabled && !isMobile;
   const hasLabelOutside = !!label && !isMobile;
 
   return (
@@ -87,7 +91,7 @@ export const ContactLink = ({
           {isMobile ? (
             <Link ref={linkRef} {...linkProps} sx={[styles.link, ...sxToArray(linkSx)]}>
               {label && (
-                <Typography component="span" sx={[styles.weakText, ...sxToArray(labelSx)]}>
+                <Typography component="span" sx={[styles.weakTextSmall, ...sxToArray(labelSx)]}>
                   {label}:
                 </Typography>
               )}

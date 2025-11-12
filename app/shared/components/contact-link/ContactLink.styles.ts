@@ -70,6 +70,12 @@ export const styles = {
     color: mainHexPallete.brown[700]
   },
 
+  weakTextSmall: {
+    ...commonTextStyle,
+    color: mainHexPallete.brown[700],
+    marginRight: '4px'
+  },
+
   valueBox: {
     display: 'flex',
     alignItems: 'center',
