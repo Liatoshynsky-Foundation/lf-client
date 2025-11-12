@@ -45,7 +45,12 @@ export const CopyButton = <T extends HTMLElement = HTMLElement>({
   };
 
   const button = (
-    <IconButton customStyles={styles.iconButton} onClick={handleCopy} aria-label="Copy content">
+    <IconButton
+      data-testid="CopyButton"
+      customStyles={styles.iconButton}
+      onClick={handleCopy}
+      aria-label="Copy content"
+    >
       <SvgImage
         src="/icons/content-copy.svg"
         alt="content copy"
