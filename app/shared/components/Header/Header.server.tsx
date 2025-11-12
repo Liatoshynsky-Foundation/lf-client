@@ -1,6 +1,6 @@
 import { getLocale } from 'next-intl/server';
 
-import HeaderClient from '../Header';
+import HeaderClient from './Header.client';
 
 import { createRequestContainer } from '~/di/container';
 

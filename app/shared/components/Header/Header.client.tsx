@@ -9,16 +9,10 @@ import NavigationBar from '~/ds-components/navigation-bar/NavigationBar';
 import { styles } from './Header.styles';
 import RightActionsPanel from './RightActionsPanel/RightActionsPanel';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
+import { HeaderData } from '~/types/types/header.type';
 
-import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
-
-interface HeaderData {
-  navigation: NavigationDTO[];
-  specialNavigation: NavigationDTO | null;
-  supportButtonLink: string;
-}
 
 interface HeaderProps {
   contacts: contactsData;

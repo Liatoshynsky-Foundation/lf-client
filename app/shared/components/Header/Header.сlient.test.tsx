@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import Header from './Header';
+import Header from './Header.client';
+import { contactsData, LinkIcon } from '~/types/types/common.types';
+import { HeaderData } from '~/types/types/header.type';
 
 import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
@@ -17,9 +19,12 @@ jest.mock('~/ds-components/logo/Logo', () => ({
 
 jest.mock('~/ds-components/navigation-bar/NavigationBar', () => ({
   __esModule: true,
-  default: ({ navLabels }: { navLabels: Record<string, string> }) => (
-    <div data-testid="navigation-bar">{Object.values(navLabels).join(',')}</div>
-  )
+  default: ({ navLabels }: { navLabels: { title: string; links?: any[] }[] }) => {
+    const allLabels = navLabels.flatMap((section) =>
+      section.links ? section.links.map((link) => link.label) : [section.title]
+    );
+    return <div data-testid="navigation-bar">{allLabels.join(',')}</div>;
+  }
 }));
 
 jest.mock('./RightActionsPanel/RightActionsPanel', () => ({
@@ -37,25 +42,44 @@ jest.mock('~/shared/hooks/use-hide-header/useHideHeader', () => ({
   useHideHeader: jest.fn()
 }));
 
-const mockHeaderData = {
-  navigation: {
-    liatoshynsky: 'Liatoshynsky',
-    biography: 'Biography',
-    artistry: 'Artistry',
-    research: 'Research',
-    foundation: 'Foundation',
-    foundationHome: 'Home',
-    news: 'News',
-    mediaAboutUs: 'Media',
-    archive: 'Archive',
-    collaboration: 'Collaboration'
-  },
-  specialNavigation: [],
+export const mockHeaderData: HeaderData = {
+  navigation: [
+    {
+      title: 'Main Section',
+      links: [
+        { label: 'Home', href: '/home', visibility: true },
+        { label: 'News', href: '/news', visibility: true },
+        { label: 'Media', href: '/media', visibility: true },
+        { label: 'Archive', href: '/archive', visibility: true },
+        { label: 'Collaboration', href: '/collaboration', visibility: true }
+      ]
+    },
+    {
+      title: 'Other',
+      links: [
+        { label: 'Liatoshynsky', href: '/liatoshynsky', visibility: true },
+        { label: 'Biography', href: '/biography', visibility: true },
+        { label: 'Artistry', href: '/artistry', visibility: true },
+        { label: 'Research', href: '/research', visibility: true },
+        { label: 'Foundation', href: '/foundation', visibility: true }
+      ]
+    }
+  ],
+  specialNavigation: null,
   supportButtonLink: '/support'
 };
 
-const mockContacts = ['contact1'];
-const mockSocialLinks = ['fb'];
+const mockContacts: contactsData = {
+  foundationName: 'Test Foundation',
+  address: 'Test Address 12',
+  phone: '+380990000000',
+  email: 'test@example.com'
+};
+
+const mockSocialLinks: LinkIcon[] = [
+  { link: 'https://facebook.com', icon: 'facebook.svg' },
+  { link: 'https://instagram.com', icon: 'insta.svg' }
+];
 
 const renderHeader = () =>
   render(<Header headerData={mockHeaderData} contacts={mockContacts} socialLinks={mockSocialLinks} />);

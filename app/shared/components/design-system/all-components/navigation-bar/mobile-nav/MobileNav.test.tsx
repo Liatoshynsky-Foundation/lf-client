@@ -7,11 +7,17 @@ import { contactsData, LinkIcon } from '~/types/types/common.types';
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 
 jest.mock('next/navigation', () => ({
-  usePathname: jest.fn()
+  usePathname: jest.fn(),
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })
 }));
 
-jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
-  useIsMobile: () => true
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => () => ({
+  isMobile: true
+}));
+
+jest.mock('./mobile-overlay/MobileMenuOverlay', () => ({
+  __esModule: true,
+  default: () => <div data-testid="mobile-menu-overlay" />
 }));
 
 describe('MobileNav', () => {
