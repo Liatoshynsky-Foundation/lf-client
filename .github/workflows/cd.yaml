@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - develop
+      - "develop"
       - "release/*"
 
 jobs:
@@ -49,7 +49,8 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:latest
           file: ./Dockerfile
 
-  deploy-azure:
+
+  deploy-azure-dev:
     name: Deploy to Azure Web App
     runs-on: ubuntu-latest
     needs: build
@@ -59,7 +60,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App(Dev)
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
@@ -68,6 +69,25 @@ jobs:
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_33658204638a4070adadb0337bf888b8 }}
           images: "lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38 }}/lf-stage-client:${{ github.sha }}"
 
+  deploy-azure-qa:
+      name: Deploy to Azure Web App(QA)
+      runs-on: ubuntu-latest
+      needs: build
+      environment:
+        name: "qa"
+        url: ${{ steps.deploy-to-qa-webapp.outputs.webapp-url }}
+      if: github.ref == 'refs/heads/develop'
+      
+      steps:
+        - name: Deploy to lf-client-qa-stage
+          id: deploy-to-qa-webapp
+          uses: azure/webapps-deploy@v3
+          with:
+            app-name: "lf-client-qa-stage" 
+            slot-name: "production"
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_QA }} 
+            images: "lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38 }}/lf-stage-client:${{ github.sha }}"
+            
   deploy-vps:
     name: Deploy to VPS
     runs-on: ubuntu-latest
