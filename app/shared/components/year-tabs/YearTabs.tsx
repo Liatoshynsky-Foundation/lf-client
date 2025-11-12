@@ -37,7 +37,7 @@ export default function YearTabs() {
     if (isMobile) return;
 
     const selector = '[id^="year-"]';
-    const elements = Array.from(document.querySelectorAll(selector)) as HTMLElement[];
+    const elements = Array.from(document.querySelectorAll<HTMLElement>(selector));
     if (!elements.length) return;
 
     const options: IntersectionObserverInit = {
@@ -51,7 +51,7 @@ export default function YearTabs() {
       let closestTarget: HTMLElement | null = null;
       let closestDistance = Infinity;
 
-      entries.forEach((entry) => {
+      for (const entry of entries) {
         if (!entry.isIntersecting) return;
 
         const top = entry.boundingClientRect.top;
@@ -60,20 +60,22 @@ export default function YearTabs() {
           closestDistance = distance;
           closestTarget = entry.target as HTMLElement;
         }
-      });
+      }
 
       if (closestTarget) {
         const id = (closestTarget as HTMLElement).id;
         const newYear = id.replace('year-', '');
         if (newYear) {
-          setYear((prevYear) => (newYear !== prevYear ? newYear : prevYear));
+          setYear((prevYear) => (newYear === prevYear ? prevYear : newYear));
         }
       }
     };
 
     const observer = new IntersectionObserver(callback, options);
 
-    elements.forEach((el: HTMLElement) => observer.observe(el));
+    for (const el of elements) {
+      observer.observe(el);
+    }
 
     return () => {
       observer.disconnect();
@@ -103,25 +105,23 @@ export default function YearTabs() {
   if (isMobile) return null;
 
   return (
-    <>
-      <Box data-testid="YearTabs">
-        <ButtonGroup
-          palette="secondary"
-          sx={{
-            ...styles.buttonGroup,
-            transform: isVisible ? 'translate(-50%)' : 'translate(-50%, calc(100% + 5vh))',
-            transition: 'transform 0.4s ease'
-          }}
-          activeButton={years.indexOf(year)}
-          defaultActiveButton={0}
-          buttons={years.map((year) => (
-            <Button sx={styles.yearButton} value={year} key={year} onClick={() => handleYearChange(year)}>
-              {year}
-            </Button>
-          ))}
-          data-testid="YearTabs-yearsGroup"
-        />
-      </Box>
-    </>
+    <Box data-testid="YearTabs">
+      <ButtonGroup
+        palette="secondary"
+        sx={{
+          ...styles.buttonGroup,
+          transform: isVisible ? 'translate(-50%)' : 'translate(-50%, calc(100% + 5vh))',
+          transition: 'transform 0.4s ease'
+        }}
+        activeButton={years.indexOf(year)}
+        defaultActiveButton={0}
+        buttons={years.map((year) => (
+          <Button sx={styles.yearButton} value={year} key={year} onClick={() => handleYearChange(year)}>
+            {year}
+          </Button>
+        ))}
+        data-testid="YearTabs-yearsGroup"
+      />
+    </Box>
   );
 }

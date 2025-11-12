@@ -32,14 +32,14 @@ jest.mock('~/ds-components/button-group/ButtonGroup', () => ({
 }));
 
 const mockScrollTo = jest.fn();
-global.scrollTo = mockScrollTo;
+globalThis.scrollTo = mockScrollTo;
 
 let mockIntersectionObserverCallback: IntersectionObserverCallback;
 const mockObserve = jest.fn();
 const mockDisconnect = jest.fn();
 const mockUnobserve = jest.fn();
 
-global.IntersectionObserver = jest.fn((callback) => {
+globalThis.IntersectionObserver = jest.fn((callback) => {
   mockIntersectionObserverCallback = callback;
   return {
     observe: mockObserve,
@@ -64,8 +64,8 @@ describe('YearTabs', () => {
 
     mockUseBreakpoints.mockReturnValue({ isMobile: false });
     mockUseScrollDirection.mockReturnValue('up');
-    global.scrollY = 0;
-    global.pageYOffset = 0;
+    globalThis.scrollY = 0;
+    globalThis.pageYOffset = 0;
 
     mockElements = MOCK_YEARS.map((year) => {
       const el = document.createElement('div');
@@ -98,12 +98,12 @@ describe('YearTabs', () => {
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
     expect(buttonGroup).toBeInTheDocument();
 
-    MOCK_YEARS.forEach((year) => {
+    for (const year of MOCK_YEARS) {
       expect(screen.getByText(year)).toBeInTheDocument();
-    });
+    }
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '0');
-    expect(global.IntersectionObserver).toHaveBeenCalled();
+    expect(globalThis.IntersectionObserver).toHaveBeenCalled();
     expect(mockObserve).toHaveBeenCalledTimes(MOCK_YEARS.length);
   });
 
@@ -114,7 +114,7 @@ describe('YearTabs', () => {
     expect(buttonGroup).toHaveStyle('transform: translate(-50%)');
 
     act(() => {
-      global.scrollY = 200;
+      globalThis.scrollY = 200;
       mockUseScrollDirection.mockReturnValue('down');
     });
 
@@ -123,7 +123,7 @@ describe('YearTabs', () => {
     expect(buttonGroup).toHaveStyle('transform: translate(-50%, calc(100% + 5vh))');
 
     act(() => {
-      global.scrollY = 150;
+      globalThis.scrollY = 150;
       mockUseScrollDirection.mockReturnValue('up');
     });
 
@@ -137,7 +137,7 @@ describe('YearTabs', () => {
     const targetElement = mockElements[1];
 
     targetElement.getBoundingClientRect = jest.fn(() => ({ top: 500 }) as DOMRect);
-    global.pageYOffset = 100;
+    globalThis.pageYOffset = 100;
 
     render(<YearTabs />);
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
@@ -229,12 +229,12 @@ describe('YearTabs', () => {
     mockQuerySelectorAll.mockReturnValue([]);
     render(<YearTabs />);
 
-    expect(global.IntersectionObserver).not.toHaveBeenCalled();
+    expect(globalThis.IntersectionObserver).not.toHaveBeenCalled();
   });
 
   it('should remove scroll event listener on unmount', () => {
     const mockRemoveEventListener = jest.fn();
-    global.removeEventListener = mockRemoveEventListener;
+    globalThis.removeEventListener = mockRemoveEventListener;
 
     const { unmount } = render(<YearTabs />);
     unmount();
@@ -245,7 +245,7 @@ describe('YearTabs', () => {
   it('should disconnect IntersectionObserver on unmount', () => {
     const { unmount } = render(<YearTabs />);
 
-    expect(global.IntersectionObserver).toHaveBeenCalled();
+    expect(globalThis.IntersectionObserver).toHaveBeenCalled();
 
     unmount();
 
