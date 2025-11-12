@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
@@ -18,7 +19,7 @@ const labels = {
 
 const alertMsg = 'Copied';
 
-jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
+jest.mock('~/hooks/is-mobile/useIsMobile', () => ({
   useIsMobile: jest.fn()
 }));
 
@@ -26,15 +27,6 @@ describe('Contact information block inside of the Footer', () => {
   describe('Contact information on desktop', () => {
     beforeAll(() => {
       (useIsMobile as jest.Mock).mockReturnValue(false);
-
-      Object.defineProperties(navigator, {
-        clipboard: {
-          value: {
-            writeText: jest.fn()
-          }
-        }
-      });
-
       jest.spyOn(window, 'alert').mockImplementation(() => {});
     });
 
@@ -64,16 +56,22 @@ describe('Contact information block inside of the Footer', () => {
     });
 
     it('renders tel phone link with CopyButton', async () => {
-      const phoneSection = screen.getByText(contacts.phone).closest('div');
-      expect(phoneSection).not.toBeNull();
+      const user = userEvent.setup();
 
-      const copyButton = within(phoneSection).getByRole('button', { name: /copy content/i });
+      const writeSpy = jest.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(void 0);
 
-      await act(async () => {
-        fireEvent.click(copyButton);
-      });
+      const phoneLink = screen.getByRole('link', { name: contacts.phone });
+      expect(phoneLink).toBeInTheDocument();
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(contacts.phone);
+      const phoneContainer = phoneLink.parentElement as HTMLElement;
+      const copyButton = within(phoneContainer).getByRole('button', { name: /copy content/i });
+
+      await user.click(copyButton);
+
+      expect(writeSpy).toHaveBeenCalledTimes(1);
+      expect(writeSpy).toHaveBeenCalledWith(contacts.phone);
+
+      writeSpy.mockRestore();
     });
   });
 

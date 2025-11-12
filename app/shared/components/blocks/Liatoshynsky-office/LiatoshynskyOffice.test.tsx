@@ -35,7 +35,8 @@ const mockT = mockTWithTranslations as ReturnType<typeof useTranslations>;
 const mockData = {
   quote: {
     text: 'Текст моєї тестової цитати',
-    author: 'Тестовий Автор'
+    author: 'Тестовий Автор',
+    source: 'Тестове Джерело'
   }
 };
 

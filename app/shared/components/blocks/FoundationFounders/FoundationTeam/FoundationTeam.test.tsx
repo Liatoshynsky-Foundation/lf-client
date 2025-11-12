@@ -6,17 +6,26 @@ const teamData = [
   {
     name: 'Тетяна Гомон',
     description: 'Спадкоємиця композитора',
-    photo: '/images/foundation/team/tetyana-gomon.jpg'
+    photo: {
+      src: '/images/foundation/team/tetyana-gomon.jpg',
+      alt: 'Tetyana Homon'
+    }
   },
   {
     name: 'Іван Коваленко',
     description: 'Дослідник творчості Лятошинського',
-    photo: '/images/foundation/team/ivan-kovalenko.jpg'
+    photo: {
+      src: '/images/foundation/team/ivan-kovalenko.jpg',
+      alt: 'Tetyana Homon'
+    }
   },
   {
     name: 'Марія Петрівна',
     description: 'Куратор проектів фонду',
-    photo: '/images/foundation/team/maria-petryvna.jpg'
+    photo: {
+      src: '/images/foundation/team/maria-petryvna.jpg',
+      alt: 'Tetyana Homon'
+    }
   }
 ];
 

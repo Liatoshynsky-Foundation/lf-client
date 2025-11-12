@@ -5,9 +5,7 @@ import { CookieModalProps } from './modal/CookieModal';
 import { CookiePreferencesModalProps } from './preferances/CookiePreferencesModal';
 
 declare global {
-  interface Window {
-    gtag: (...args: any[]) => void;
-  }
+  var gtag: (...args: unknown[]) => void;
 }
 
 jest.mock('./modal/CookieModal', () => ({
@@ -52,7 +50,7 @@ const expectCookieSet = (expected: 'granted' | 'denied') => {
 describe('CookieModalWrapper', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    window.gtag = jest.fn();
+    globalThis.gtag = jest.fn();
     document.cookie = '';
   });
 
