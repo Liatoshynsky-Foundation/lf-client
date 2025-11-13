@@ -1,5 +1,6 @@
 import { asFunction } from 'awilix';
 
+import { createArchiveService } from '~/services/composed/archive-service/archiveService';
 import { createArtistryService } from '~/services/composed/artistry-service/artistryService';
 import { createFooterService } from '~/services/composed/footer-service/footerService';
 import { createHeaderService } from '~/services/composed/header-service/headerService';
@@ -29,5 +30,7 @@ export const registerComposedServices = () => ({
 
   pagesDataService: asFunction(({ pagesService }) => createPagesDataService(pagesService)).scoped(),
 
-  draftPagesDataService: asFunction(({ draftPagesService }) => createDraftPagesDataService(draftPagesService)).scoped()
+  draftPagesDataService: asFunction(({ draftPagesService }) => createDraftPagesDataService(draftPagesService)).scoped(),
+
+  archiveCaseService: asFunction(({ archiveService }) => createArchiveService({ archiveService })).scoped()
 });

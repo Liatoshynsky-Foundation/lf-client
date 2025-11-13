@@ -1,5 +1,6 @@
 import { asFunction } from 'awilix';
 
+import { archiveRepository } from '~/infrastructure/repositories/archive/archive.repository';
 import { compositionsRepository } from '~/infrastructure/repositories/artistry/сompositions.repository';
 import { foundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
 import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
@@ -11,5 +12,6 @@ export const registerRepositories = () => ({
   navigationRepository: asFunction(() => navigationRepository).scoped(),
   compositionsRepository: asFunction(() => compositionsRepository).scoped(),
   pagesDataRepository: asFunction(() => pagesDataRepository).scoped(),
-  scientificWorksRepository: asFunction(() => scientificWorksRepository).scoped()
+  scientificWorksRepository: asFunction(() => scientificWorksRepository).scoped(),
+  archiveRepository: asFunction(() => archiveRepository).scoped()
 });
