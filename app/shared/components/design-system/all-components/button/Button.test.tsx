@@ -7,14 +7,6 @@ jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
 
-const mockedUseBreakpoints = jest.fn();
-
-mockedUseBreakpoints.mockReturnValue({
-  isMobile: false
-});
-
-jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => () => mockedUseBreakpoints());
-
 describe('Button Component', () => {
   const startIcon = <span data-testid="start-icon">start</span>;
   const endIcon = <span data-testid="end-icon">end</span>;
@@ -92,11 +84,10 @@ describe('Button Component', () => {
     expect(screen.getByTestId('child')).toBeInTheDocument();
   });
 
-  it('should use shortLabel on mobile', () => {
-    mockedUseBreakpoints.mockReturnValue({
-      isMobile: true
-    });
+  it('should render short and full labels when both provided and use the full label as the accessible name', () => {
     render(<Button label="Long Label" shortLabel="Short" />);
     expect(screen.getByText('Short')).toBeInTheDocument();
+    expect(screen.getByText('Long Label')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Long Label' })).toBeInTheDocument();
   });
 });

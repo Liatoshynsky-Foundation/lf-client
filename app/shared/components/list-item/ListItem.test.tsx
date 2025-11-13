@@ -14,11 +14,14 @@ describe('ListItem component', () => {
     render(<ListItem text={mockText} />);
   });
 
-  it('should render the bullet icon with correct alt text and src', () => {
-    const bullet = screen.getByTestId('svg-image');
-    expect(bullet).toBeInTheDocument();
-    expect(bullet).toHaveAttribute('alt', 'bullet');
-    expect(bullet).toHaveAttribute('src', '/icons/bullet-small.svg');
+  it('should render decorative bullet icon(s) with correct src', () => {
+    const bullets = screen.getAllByTestId('svg-image');
+    expect(bullets.length).toBeGreaterThan(0);
+
+    for (const img of bullets) {
+      expect(img).toHaveAttribute('src', expect.stringContaining('/icons/bullet-small.svg'));
+      expect(img).toHaveAttribute('alt', '');
+    }
   });
 
   it('should render the provided text', () => {

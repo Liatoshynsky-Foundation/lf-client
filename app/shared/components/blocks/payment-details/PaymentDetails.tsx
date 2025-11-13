@@ -40,7 +40,7 @@ function PaymentDetails() {
             </Typography>
 
             {isIban ? (
-              <Typography variant="customSemiBold20" sx={styles.iban}>
+              <Typography component="div" variant="customSemiBold20" sx={styles.iban}>
                 <Typography component="span" variant="customSemiBold20" sx={styles.ibanText} ref={ibanRef}>
                   {selectedPaymentDetails[key]}
                 </Typography>
