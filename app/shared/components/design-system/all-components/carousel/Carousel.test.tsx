@@ -25,7 +25,7 @@ jest.mock('~/ds-components/arrow-carousel/ArrowCarousel', () => ({
 
 describe('Carousel', () => {
   const mockImages = [
-    { id: 1, src: '/image1.jpg', alt: 'Image 1' },
+    { id: 1, src: '/image1.jpg', alt: 'Image 1', description: 'Test Carousel Title' },
     { id: 2, src: '/image2.jpg', alt: 'Image 2' },
     { id: 3, src: '/image3.jpg', alt: 'Image 3' }
   ];
@@ -43,12 +43,12 @@ describe('Carousel', () => {
 
   it('should render title when provided', () => {
     const title = 'Test Carousel Title';
-    render(<Carousel images={mockImages} title={title} />);
-    expect(screen.getByText(title)).toBeInTheDocument();
+    render(<Carousel images={mockImages} />);
+    expect(screen.getByTestId('carousel-caption')).toHaveTextContent(title);
   });
 
   it('should not render title when not provided', () => {
-    render(<Carousel images={mockImages} />);
+    render(<Carousel images={mockImages} initialIndex={2} />);
     expect(screen.queryByText('Test Carousel Title')).not.toBeInTheDocument();
   });
 
