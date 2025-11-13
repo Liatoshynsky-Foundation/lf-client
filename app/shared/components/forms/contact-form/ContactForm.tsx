@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import InfoErrorIcon from 'public/icons/info-error.svg';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -12,37 +13,62 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
+import { normalizePhoneNumberFromMask } from '~/lib/utils/normalizePhoneNumberFromMask';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 
 type ContactFormProps = {
-  onSubmit: () => void;
+  onSubmit: (data: { name: string; email: string; message: string; policy: true; phoneNumber?: string }) => void;
 };
 
 function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
   const { isMobile, isTablet } = useBreakpoints();
+  const { handlePhoneInput, hasError } = useHandlePhoneInput();
+  const phoneInputRef = useRef<HTMLInputElement | null>(null);
+
+  const phoneSchema = z
+    .string()
+    .trim()
+    .pipe(
+      z.union([
+        z.literal(''),
+        z.string().transform((value) => {
+          if (hasError) return;
+          return normalizePhoneNumberFromMask(value);
+        })
+      ])
+    );
 
   const schema = z.object({
     name: z.string().min(2, tErrors('nameMinLength')),
-    email: z.string().min(1, tErrors('emailRequired')).email(tErrors('emailInvalid')),
-    phoneNumber: z.string().optional(),
+    email: z.string().email(tErrors('emailInvalid')),
+    phoneNumber: phoneSchema.optional(),
     message: z.string().trim().min(15, tErrors('messageMinLength')),
-    policy: z.boolean().refine((val) => val === true, tErrors('policyRequired'))
+    policy: z.literal(true, { errorMap: () => ({ message: tErrors('policyRequired') }) })
   });
 
-  type ContactFormValues = z.infer<typeof schema>;
+  type ContactFormInput = z.input<typeof schema>;
 
   const {
     register,
-    formState: { errors }
-  } = useForm<ContactFormValues>({
+    formState: { errors },
+    handleSubmit
+  } = useForm<ContactFormInput>({
     resolver: zodResolver(schema),
     mode: 'onChange'
   });
 
+  const phoneField = register('phoneNumber');
+
+  const onValid = (data: ContactFormInput) => {
+    if (hasError) return;
+    onSubmit(data);
+  };
+
   return (
-    <Box component="form">
+    <Box component="form" onSubmit={handleSubmit(onValid)}>
       <Typography variant="customItalic14" sx={styles.formWarning}>
         {t('requiredFields')}
       </Typography>
@@ -54,7 +80,17 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
           error={!!errors.email}
           helperText={errors.email?.message}
         />
-        <TextField label={t('phoneNumber')} {...register('phoneNumber')} />
+        <TextField
+          label={t('phoneNumber')}
+          {...phoneField}
+          inputRef={phoneInputRef}
+          onChange={(e) => {
+            phoneField.onChange(e);
+            handlePhoneInput(e.target.value, phoneInputRef.current);
+          }}
+          error={!!errors.phoneNumber || hasError}
+          helperText={errors.phoneNumber?.message || (hasError ? tErrors('phoneNumberInvalid') : '')}
+        />
         <TextField
           sx={styles.textArea}
           multiline
@@ -96,8 +132,9 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
           />
         </FormControl>
       </Box>
+
       <Button
-        onClick={onSubmit}
+        type="submit"
         size={isMobile || isTablet ? 'medium' : 'large'}
         variant="contained"
         color="tertiary"

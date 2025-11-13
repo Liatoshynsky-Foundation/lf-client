@@ -39,6 +39,7 @@
       "nameMinLength": "The name must contain at least 2 characters",
       "emailRequired": "Please enter your email address",
       "emailInvalid": "Please enter a valid email address",
+      "phoneNumberInvalid": "Check the phone number format",
       "messageMinLength": "Please write a few words in the message",
       "policyRequired": "You must agree to continue"
     }
