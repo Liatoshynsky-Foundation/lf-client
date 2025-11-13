@@ -33,8 +33,14 @@ describe('CollaborationIntro', () => {
   };
 
   it('should render title, subtitle and content', () => {
-    render(<CollaborationIntro title={mockedData.title} subtitle={mockedData.subtitle} content={mockedData.content} />);
-
+    render(
+      <CollaborationIntro
+        title={mockedData.title}
+        subtitle={mockedData.subtitle}
+        content={mockedData.content}
+        contentAbove={{ type: TipTapNodeTypes.doc, content: [] }}
+      />
+    );
     const title = screen.getByText(mockedData.title);
     const subtitle = screen.getByText(mockedData.subtitle);
     const paragraph1 = screen.getByText(mockedData.content.content[0].content[0].text);
