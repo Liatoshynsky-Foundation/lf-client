@@ -4,7 +4,7 @@ import { ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { WorkTableFilters } from './filters/Filters';
+import { YearNumericFilter } from './filters/YearNumericFilter';
 import { getWorkTableColumnWidths } from './getColumnWidth';
 import {
   RenderActionCell,
@@ -18,6 +18,8 @@ import {
 import { WorkTable } from '~/types/types/enhancedTable';
 
 import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
+import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
+import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -90,6 +92,7 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
   const bp = useBreakpoints();
 
   const t = useTranslations('table.work');
+  const tFilters = useTranslations('table.work.filters');
 
   useEffect(() => {
     getAuthorsList().then(setAuthorsList);
@@ -105,11 +108,14 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
   const minYear = 1900;
   const maxYear = new Date().getFullYear();
 
-  const currentAuthorFilter = (columnFilters.find((f) => f.id === 'author')?.value as string[]) || [];
-  const currentYearFilter = (columnFilters.find((f) => f.id === 'year')?.value as [number, number]) || [
-    minYear,
-    maxYear
-  ];
+  const currentAuthorFilter = useMemo(
+    () => (columnFilters.find((f) => f.id === 'author')?.value as string[]) || [],
+    [columnFilters]
+  );
+  const currentYearFilter = useMemo(
+    () => (columnFilters.find((f) => f.id === 'year')?.value as [number, number]) || [minYear, maxYear],
+    [columnFilters, minYear, maxYear]
+  );
 
   const isYearActive = currentYearFilter[0] !== minYear || currentYearFilter[1] !== maxYear;
 
@@ -194,6 +200,51 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
 
   const tableKey = (bp.isMobile && 'mobile') || (bp.isTablet && 'tablet') || 'desktop';
 
+  const filters = useMemo(
+    () => [
+      {
+        id: 'author',
+        isActive: currentAuthorFilter.length > 0,
+        element: (
+          <FilterSelect
+            label={tFilters('author')}
+            options={authorsList.map((a) => ({ value: a.value, label: a.label }))}
+            defaultValues={currentAuthorFilter}
+            variant="filled"
+            maxSelections={10}
+            onAdd={(v, l, all) => handleAuthorFilterChange(all)}
+            onRemove={(v, l, all) => handleAuthorFilterChange(all)}
+          />
+        )
+      },
+      {
+        id: 'year',
+        isActive: isYearActive,
+        isStatic: true,
+        element: (
+          <YearNumericFilter
+            label={tFilters('yearLabel')}
+            value={currentYearFilter}
+            onChange={handleYearFilterChange}
+            onChangeCommitted={handleYearFilterChange}
+            minYear={minYear}
+            maxYear={maxYear}
+          />
+        )
+      }
+    ],
+    [
+      currentAuthorFilter,
+      tFilters,
+      authorsList,
+      isYearActive,
+      currentYearFilter,
+      handleYearFilterChange,
+      maxYear,
+      handleAuthorFilterChange
+    ]
+  );
+
   return (
     <EnhancedTable
       key={tableKey}
@@ -205,14 +256,7 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
       itemsPerPage={10}
       tableName={t('name')}
       Filters={
-        <WorkTableFilters
-          authors={authorsList}
-          authorFilter={currentAuthorFilter}
-          onAuthorFilterChange={handleAuthorFilterChange}
-          yearFilter={currentYearFilter}
-          onYearFilterChange={handleYearFilterChange}
-          onClearAllFilters={onClearAllFilters}
-        />
+        <TableFilters isAnyFilterActive={isFiltersActive} onClearAllFilters={onClearAllFilters} filters={filters} />
       }
       isFiltersActive={isFiltersActive}
       activeFiltersCount={activeFiltersCount}
