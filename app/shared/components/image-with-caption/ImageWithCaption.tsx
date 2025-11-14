@@ -40,8 +40,6 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
 }) => {
   const sizesAttribute = generateSizesAttribute(sizes);
 
-  console.log(src);
-
   return (
     <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']} data-testid={dataTestId}>
       <Box sx={{ ...styles.imageContainer(sizes), ...imageSx } as BoxProps['sx']}>

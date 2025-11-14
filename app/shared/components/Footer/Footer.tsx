@@ -26,9 +26,8 @@ export default async function Footer() {
     .resolve('footerService')
     .getFooterData(locale);
 
-  const contactUsLink = navigation?.[1]?.links?.find(
-    (link: { label: string; href: string }) => link.href === '/contacts'
-  )?.href;
+  const contactUsLink =
+    navigation?.[1]?.links?.find((link: { label: string; href: string }) => link.href === '/contacts')?.href ?? '';
 
   return (
     <Box component="footer" sx={styles.footerContainer} id="footer">
