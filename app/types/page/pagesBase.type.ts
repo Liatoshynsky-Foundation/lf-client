@@ -6,9 +6,19 @@ import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.sche
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 
-export type AboutUsPage = ExcludeDBFields<Localize<z.infer<typeof AboutUsPageSchema>>>;
-export type PrivacyPolicyPage = ExcludeDBFields<Localize<z.infer<typeof PrivacyPolicyPageSchema>>>;
-export type ResearchPage = ExcludeDBFields<Localize<z.infer<typeof ResearchPageSchema>>>;
+export type AboutUsPageBase = ExcludeDBFields<z.infer<typeof AboutUsPageSchema>>;
+export type PrivacyPolicyPageBase = ExcludeDBFields<z.infer<typeof PrivacyPolicyPageSchema>>;
+export type ResearchPageBase = ExcludeDBFields<z.infer<typeof ResearchPageSchema>>;
+
+export interface PageBaseMap {
+  'about-us': AboutUsPageBase;
+  'privacy-policy': PrivacyPolicyPageBase;
+  research: ResearchPageBase;
+}
+
+export type AboutUsPage = Localize<AboutUsPageBase>;
+export type PrivacyPolicyPage = Localize<PrivacyPolicyPageBase>;
+export type ResearchPage = Localize<ResearchPageBase>;
 
 export interface PageDataMap {
   'about-us': AboutUsPage;

@@ -2,12 +2,8 @@ import type { Locale } from 'next-intl';
 
 import { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
 import { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
-import { LocalizeSchema } from '~/validators/constants';
-import {
-  createLocalizedBrandingInfoSchema,
-  createLocalizedContactInfoSchema,
-  createLocalizedPublicInfoSchema
-} from '~/validators/foundationInfo.schema';
+import { ArraySchema, LocalizeSchema, NoSupportButtonLink } from '~/validators/constants';
+import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 import { navigationSchema } from '~/validators/navigation.schema';
 
 interface FooterServiceDeps {
@@ -25,10 +21,10 @@ export const createFooterService = ({ navigationRepo, foundationInfoRepo }: Foot
       navigationRepo.getNavigation()
     ]);
 
-    const addressInfo = createLocalizedContactInfoSchema(locale).parse(contactInfo);
-    const brandingInfo = createLocalizedBrandingInfoSchema(locale).parse(brandingInfoRaw);
-    const publicInfo = createLocalizedPublicInfoSchema(locale).parse(publicInfoRaw);
-    const navigationData = navigationRaw.map((nav: any) => LocalizeSchema(navigationSchema, locale).parse(nav));
+    const addressInfo = LocalizeSchema(contactInfoSchema, locale).parse(contactInfo);
+    const brandingInfo = LocalizeSchema(NoSupportButtonLink(brandingInfoSchema), locale).parse(brandingInfoRaw);
+    const publicInfo = LocalizeSchema(publicInfoSchema, locale).parse(publicInfoRaw);
+    const navigationData = ArraySchema(LocalizeSchema(navigationSchema, locale)).parse(navigationRaw);
 
     return {
       contacts: {

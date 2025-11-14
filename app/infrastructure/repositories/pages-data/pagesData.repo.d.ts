@@ -1,10 +1,8 @@
-import { z } from 'zod';
+import { PageBaseMap } from '~/types/page/pagesBase.type';
 
-import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
-
-export type PageDto = z.infer<typeof PageZodSchema>;
+import { PageSlug } from '~/services/pages-data/schema-factory';
 
 export interface PagesDataRepository {
-  getBySlug: (slug: string) => Promise<PageDto | null>;
-  getDraftBySlug: (slug: string) => Promise<PageDto | null>;
+  getBySlug: <S extends PageSlug>(slug: PageSlug) => Promise<PageBaseMap[S] | null>;
+  getDraftBySlug: <S extends PageSlug>(slug: PageSlug) => Promise<PageBaseMap[S] | null>;
 }

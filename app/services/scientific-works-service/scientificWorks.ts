@@ -7,15 +7,9 @@ export const createScientificWorksService = ({
   scientificWorksRepo: ScientificWorksRepository;
 }) => ({
   async getAllAuthors() {
-    const allAuthors = await scientificWorksRepo.getAllAuthors();
-    if (!allAuthors) return [];
-
-    return allAuthors;
+    return scientificWorksRepo.getAllAuthors() ?? [];
   },
   async getAllScientificWorks(filter: GetAllScientificWorksParams) {
-    const allScientificWorks = await scientificWorksRepo.getAllScientificWorks(filter);
-    if (!allScientificWorks) return [];
-
-    return allScientificWorks;
+    return scientificWorksRepo.getAllScientificWorks(filter) ?? [];
   }
 });

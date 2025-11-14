@@ -2,7 +2,7 @@ import type { Locale } from 'next-intl';
 
 import { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
 import { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
-import { LocalizeSchema } from '~/validators/constants';
+import { ArraySchema, LocalizeSchema } from '~/validators/constants';
 import { LocalizeSchemaWithSingleLink, navigationSchema } from '~/validators/navigation.schema';
 
 interface HeaderServiceDeps {
@@ -18,7 +18,7 @@ export const createHeaderService = ({ navigationRepo, foundationInfoRepo }: Head
       foundationInfoRepo.getSupportButtonLink()
     ]);
 
-    const navigationData = navigationRaw.map((nav: any) => LocalizeSchemaWithSingleLink(locale).parse(nav));
+    const navigationData = ArraySchema(LocalizeSchemaWithSingleLink(locale)).parse(navigationRaw);
     const specialNavigation = specialNavigationData
       ? LocalizeSchema(navigationSchema, locale).parse(specialNavigationData)
       : null;

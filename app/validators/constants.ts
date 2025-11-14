@@ -76,6 +76,12 @@ export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _i
   return schema.omit({ _id: true });
 }
 
+export function NoSupportButtonLink<T extends z.ZodRawShape>(
+  schema: z.ZodObject<T & { supportButtonLink: z.ZodOptional<typeof hrefSchema> }>
+) {
+  return schema.omit({ supportButtonLink: true });
+}
+
 export type Stringifiable = {
   toString: () => string;
 };
