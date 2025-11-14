@@ -13,9 +13,9 @@ import Delete from '~/public/icons/trash-2.svg';
 import TooltipCustom from '~/shared/components/design-system/all-components/tooltip/Tooltip';
 
 interface TableFilterItem {
+  id: string;
   element: React.ReactNode;
   isActive?: boolean;
-  id?: string;
   isStatic?: boolean;
 }
 
@@ -31,7 +31,7 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
   const orderedFilters = (() => {
     const movable = filters.filter((f) => !f.isStatic);
 
-    const sortedMovable = [...movable].sort((a, b) => Number(b.isActive) - Number(a.isActive));
+    const sortedMovable = [...movable].sort((a, b) => Number(Boolean(b.isActive)) - Number(Boolean(a.isActive)));
 
     let i = 0;
     return filters.map((f) => (f.isStatic ? f : sortedMovable[i++]));
@@ -56,6 +56,7 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
                 size="medium"
                 onClick={onClearAllFilters}
                 sx={{ border: 'none', padding: 0 }}
+                aria-label={t('clearAll')}
               >
                 <Delete />
               </IconButton>
