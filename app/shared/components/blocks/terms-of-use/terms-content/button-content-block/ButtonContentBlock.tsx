@@ -13,6 +13,7 @@ type ButtonContentBlockProps = {
   buttonColor?: 'primary' | 'secondary' | 'tertiary';
   content: TipTapDoc;
   sx?: object;
+  containerSx?: object;
   textSx?: object;
   textContainerSx?: object;
   buttonContainerSx?: object;
@@ -23,11 +24,12 @@ const ButtonContentBlock = ({
   buttonColor = 'primary',
   content,
   sx,
+  containerSx,
   textSx,
   textContainerSx = { marginBottom: { xs: '24px', md: '0px' } },
   buttonContainerSx
 }: ButtonContentBlockProps) => (
-  <Box sx={styles.wrapper} data-testid="ButtonContentBlock">
+  <Box sx={{ ...styles.wrapper, ...containerSx }} data-testid="ButtonContentBlock">
     <Box sx={{ ...styles.buttonBox, ...buttonContainerSx }}>
       <Button
         variant="contained"

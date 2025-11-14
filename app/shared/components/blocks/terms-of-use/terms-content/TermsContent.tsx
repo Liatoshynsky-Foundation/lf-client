@@ -38,6 +38,7 @@ const TermsContent = () => {
         buttonText={isMobile ? t('buttons.library.short') : t('buttons.library.full')}
         buttonColor="tertiary"
         content={testDoc[locale]}
+        containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{ maxWidth: { xs: '258px', sm: '308px' }, minWidth: { xs: '258px', sm: '308px' } }}
       />
 
@@ -45,6 +46,7 @@ const TermsContent = () => {
         buttonText={isMobile ? t('buttons.archive.short') : t('buttons.archive.full')}
         buttonColor="tertiary"
         content={archiveDoc[locale]}
+        containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{
           maxWidth: { xs: '220px', sm: '289px' },
           minWidth: { xs: '220px', sm: '289px' },
