@@ -9,18 +9,22 @@ export const styles = {
       xs: '"content" "buttons"',
       md: '"buttons content"'
     },
-    gap: { xs: '20px', sm: '24px', md: '40px' },
+    columnGap: { sm: '20px', md: '40px' },
     alignItems: 'start'
   },
 
   buttonBox: {
     gridArea: 'buttons',
-    display: 'flex',
-    flexDirection: 'column',
+    display: {
+      xs: 'flex',
+      sm: 'block',
+      md: 'flex'
+    },
+    flexDirection: { md: 'column' },
     gap: 2,
     justifySelf: 'start',
-    gridColumn: { xs: '1/9', sm: '1/12', md: '3 / 6' },
-    height: 'calc(100% - 40px)',
+    gridColumn: { xs: '1/-1', sm: '4/-1', md: '3 / 6' },
+    height: '100%',
     justifyContent: 'flex-end',
     width: '100%'
   },
@@ -41,7 +45,7 @@ export const styles = {
 
   contentBox: {
     gridArea: 'content',
-    gridColumn: { xs: '1/9', sm: '1 / 16', md: '1 / 13' },
+    gridColumn: { xs: '1/-1', sm: '1 / 9', md: '1 / 13' },
     width: '100%'
   }
 };

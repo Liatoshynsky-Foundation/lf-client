@@ -7,6 +7,7 @@ import { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import CollaborationInfo from '~/shared/components/blocks/collaboration/collaboration-info/CollaborationInfo';
 import CollaborationIntro from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro';
 import { collaborationIntroPageData } from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro.consts';
 import OfferCollaboration from '~/shared/components/blocks/collaboration/offer-collaboration/OfferCollaboration';
@@ -27,6 +28,7 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
           contentAbove={collaborationIntroPageData[lang].contentAbove}
           content={collaborationIntroPageData[lang].content}
         />
+        <CollaborationInfo />
       </MainLayout>
       <OfferCollaboration />
     </>
