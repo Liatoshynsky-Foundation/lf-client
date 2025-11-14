@@ -36,7 +36,11 @@ const NavigationBar = ({ navLabels, specialNav, scrollDirection, contacts, socia
       {isDesktop ? (
         <DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection={scrollDirection} />
       ) : (
-        <MobileNav navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />
+        <MobileNav
+          navLabels={[...navLabels, ...(specialNav ? [specialNav] : [])]}
+          contacts={contacts}
+          socialLinks={socialLinks}
+        />
       )}
     </>
   );

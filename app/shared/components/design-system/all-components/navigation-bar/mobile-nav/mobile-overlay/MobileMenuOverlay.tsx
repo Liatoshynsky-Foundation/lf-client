@@ -45,19 +45,25 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
   return (
     <Slide direction="down" in={open} mountOnEnter unmountOnExit appear={false} timeout={600}>
       <Box data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`} sx={styles.overlay}>
-        <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
+        <Box sx={styles.overlayContent}>
+          <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 
-        {!isMobile ? (
-          <Box data-testid="MobileMenuOverlay-leftColumn" sx={styles.leftColumn}>
-            <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={isMobile} />
-          </Box>
-        ) : null}
+          {!isMobile && (
+            <Box data-testid="MobileMenuOverlay-leftColumn" sx={styles.leftColumn}>
+              <Box sx={styles.leftColumnInner}>
+                <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={false} />
+              </Box>
+            </Box>
+          )}
 
-        <Box data-testid="MobileMenuOverlay-rightColumn" sx={styles.rightColumn}>
-          <NavAccordion items={navItems} />
+          <Box data-testid="MobileMenuOverlay-rightColumn" sx={styles.rightColumn}>
+            <NavAccordion items={navItems} sx={styles.rightAccordionWrapper} />
 
-          <Box data-testid="MobileMenuOverlay-contacts" sx={styles.contactsContainer}>
-            {isMobile && <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={isMobile} />}
+            {isMobile && (
+              <Box sx={styles.mobileContactsWrapper} data-testid="MobileMenuOverlay-contacts">
+                <ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={true} />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
