@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
-import type { TipTapDoc } from '~/types/types/common.types';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
   const ParagraphRenderer = (children: React.ReactNode) => (

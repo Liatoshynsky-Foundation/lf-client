@@ -7,7 +7,7 @@ import { getItalic, getLink, getUnderline } from '~/components/tip-tap-content/m
 import renderText from '~/components/tip-tap-content/renderText';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
-import { TextNode, TipTapDoc } from '~/types/types/common.types';
+import { TextNode, TipTapDoc } from '~/types/types/tiptap.types';
 
 interface FoundationWasCreatedProps {
   data: TipTapDoc;

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { PolicyContent } from './PolicyContent';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc, TipTapNodeRenderers } from '~/types/types/common.types';
+import { TipTapDoc, TipTapNodeRenderers } from '~/types/types/tiptap.types';
 
 jest.mock('~/components/tip-tap-content/TipTapContent', () => {
   return {

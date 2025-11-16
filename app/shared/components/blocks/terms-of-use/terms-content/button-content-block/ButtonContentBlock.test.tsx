@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 import ButtonContentBlock from './ButtonContentBlock';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('~/shared/components/design-system/all-components/content-block/ContentBlock', () => ({
   __esModule: true,

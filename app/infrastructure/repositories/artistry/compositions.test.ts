@@ -1,4 +1,4 @@
-import { compositionsRepository } from './сompositions.repository';
+import newCompositionsRepository from './compositions.repository';
 
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
@@ -78,6 +78,8 @@ const mockCompositions = [
     genres: mockGenres
   }
 ];
+
+const compositionsRepository = newCompositionsRepository();
 
 describe('compositionsRepository', () => {
   beforeEach(() => {

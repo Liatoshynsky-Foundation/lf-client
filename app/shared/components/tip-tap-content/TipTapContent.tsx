@@ -3,7 +3,7 @@ import { getDoc, getHeading, getParagraph, getText } from '~/components/tip-tap-
 import renderNode from '~/components/tip-tap-content/renderNode';
 
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/common.types';
+import { TipTapDoc, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/tiptap.types';
 
 interface TipTapContentProps {
   data: TipTapDoc;
