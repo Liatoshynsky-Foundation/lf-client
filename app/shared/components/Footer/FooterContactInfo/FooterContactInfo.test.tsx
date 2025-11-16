@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
+
 import FooterContactInfo from './FooterContactInfo';
 
 jest.mock('~/hooks/use-breakpoints/useBreakpoints');
@@ -12,11 +13,11 @@ const contacts = {
   foundationName: 'Test Title',
   address: '123 Test St, Test City, TX 12345',
   phone: '123-456-7890',
-  email: 'test@example.com',
+  email: 'test@example.com'
 };
 
 const labels = {
-  phoneLabel: 'Phone',
+  phoneLabel: 'Phone'
 };
 
 const alertMsg = 'Copied';
