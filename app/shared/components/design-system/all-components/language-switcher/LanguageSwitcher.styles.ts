@@ -29,7 +29,9 @@ export const styles = {
     fontSize: '18px',
     fontWeight: 700,
     lineHeight: '145%',
-    color: isActive ? mainHexPallete.black : 'rgba(65, 43, 33, 0.6)'
+    color: isActive ? mainHexPallete.black : 'rgba(65, 43, 33, 0.6)',
+    background: 'none',
+    border: 'none'
   }),
   mobileWrapper: {
     display: 'flex',

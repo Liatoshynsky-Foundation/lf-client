@@ -29,7 +29,6 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           type="phone"
           label={isMobile ? undefined : t('phoneNumber')}
           value={contacts.phone}
-          isMobile={isMobile}
           direction={isMobile ? 'row' : 'column'}
           icon={isMobile ? PhoneIcon : null}
         />
@@ -39,7 +38,6 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           type="email"
           label={isMobile ? undefined : t('email')}
           value={contacts.email}
-          isMobile={isMobile}
           direction={isMobile ? 'row' : 'column'}
           icon={isMobile ? MailIcon : null}
         />
