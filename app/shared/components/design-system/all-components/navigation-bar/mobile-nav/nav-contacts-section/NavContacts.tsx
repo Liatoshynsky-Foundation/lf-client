@@ -31,6 +31,11 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           value={contacts.phone}
           direction={isMobile ? 'row' : 'column'}
           icon={isMobile ? PhoneIcon : null}
+          iconSx={styles.icon}
+          labelSx={styles.contactLabel}
+          linkSx={styles.contactLink}
+          copyButtonSize="small"
+          iconColor="rgba(65, 43, 33, 0.8)"
         />
 
         <ContactLink
@@ -40,6 +45,11 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           value={contacts.email}
           direction={isMobile ? 'row' : 'column'}
           icon={isMobile ? MailIcon : null}
+          iconSx={styles.icon}
+          labelSx={styles.contactLabel}
+          linkSx={styles.contactLink}
+          copyButtonSize="small"
+          iconColor="rgba(65, 43, 33, 0.8)"
         />
       </Box>
 

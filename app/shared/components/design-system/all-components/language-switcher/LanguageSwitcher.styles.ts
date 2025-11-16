@@ -36,6 +36,7 @@ export const styles = {
   mobileWrapper: {
     display: 'flex',
     alignItems: 'center',
-    gap: '14px'
+    gap: '14px',
+    height: '40px'
   }
 };

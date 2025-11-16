@@ -7,7 +7,11 @@ const columnBase = {
   height: '100%',
   overflowY: 'auto',
   scrollBehavior: 'smooth',
-  flexGrow: 1
+  flexGrow: 1,
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none'
+  }
 };
 
 export const styles = {
@@ -57,7 +61,7 @@ export const styles = {
     },
     gap: { xs: '64px', sm: 0 },
     pb: { xs: '24px', sm: 0 },
-    pt: { xs: '6rem', sm: 0 },
+    pt: { xs: '6.2rem', sm: 0 },
     justifyContent: { xs: 'space-between', sm: 'unset' }
   },
 
@@ -74,7 +78,8 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: { sm: '240px', md: '320px' }
+    height: { sm: '240px', md: '320px' },
+    py: { sm: '4px', md: '8px' }
   },
 
   rightAccordionWrapper: {
@@ -90,6 +95,7 @@ export const styles = {
     height: '212px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px'
+    gap: '24px',
+    justifyContent: 'space-between'
   }
 };
