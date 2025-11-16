@@ -11,7 +11,6 @@ import { styles } from './FAQ.styles';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 type FaqItemProps = {
   title: string;
@@ -30,7 +29,6 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
   const { contacts, faq } = data;
 
   const t = useTranslations('supportUs.faq');
-  const { isMobile } = useBreakpoints();
 
   const faqItems = faq.map((item) => {
     return <FaqAccordion key={item.title} title={item.title} content={item.content} />;
@@ -57,7 +55,6 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
               type="phone"
               icon={PhoneIcon}
               value={contacts.phone}
-              isMobile={isMobile}
               alertMsg={t('phoneCopiedAlert')}
               dataTestid="Faq-phoneLink"
             />
