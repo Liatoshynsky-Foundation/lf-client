@@ -14,11 +14,11 @@ import { HeaderData } from '~/types/types/header.type';
 import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
-interface HeaderProps {
+type HeaderProps = Readonly<{
   contacts: contactsData;
   socialLinks: LinkIcon[];
   headerData: HeaderData;
-}
+}>;
 
 export default function Header({ headerData, contacts, socialLinks }: HeaderProps) {
   const scrollDirection = useScrollDirection(100);

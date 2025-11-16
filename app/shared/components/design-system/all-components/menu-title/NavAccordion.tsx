@@ -18,7 +18,19 @@ interface NavItem {
   dropdown?: { label: string; href: string }[];
 }
 
-export function NavAccordion({ items, sx }: { items: NavItem[]; sx?: object }) {
+interface NavAccordionProps {
+  items: NavItem[];
+  sx?: object;
+}
+
+interface AccordionItemProps {
+  item: NavItem;
+  pathname: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+export function NavAccordion({ items, sx }: Readonly<NavAccordionProps>) {
   const pathname = usePathname().replace(/^\/[a-z]{2}(?=\/)/, '');
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
@@ -39,24 +51,14 @@ export function NavAccordion({ items, sx }: { items: NavItem[]; sx?: object }) {
   );
 }
 
-function AccordionItem({
-  item,
-  pathname,
-  isOpen,
-  onToggle
-}: {
-  item: NavItem;
-  pathname: string;
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
+function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<AccordionItemProps>) {
   const isActive =
     (item.href && pathname.startsWith(item.href)) || item.dropdown?.some((child) => pathname.startsWith(child.href));
 
   const iconColor = isActive ? mainHexPallete.burgundy[700] : mainHexPallete.brown[900];
   const hasDropdown = item.dropdown && item.dropdown.length > 1;
 
-  const baseTestId = `NavAccordion-item-${item.label.replace(/\s+/g, '')}`;
+  const baseTestId = `NavAccordion-item-${item.label.replaceAll(' ', '')}`;
 
   if (!hasDropdown) {
     return (

@@ -1,5 +1,5 @@
-import { MessageChannel } from 'worker_threads';
-(global as any).MessageChannel = MessageChannel;
+import { MessageChannel } from 'node:worker_threads';
+(globalThis as any).MessageChannel = MessageChannel;
 
 import { getLocale } from 'next-intl/server';
 import React from 'react';

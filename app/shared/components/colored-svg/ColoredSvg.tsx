@@ -57,7 +57,9 @@ export const Svg = ({ Component, alt, color, fill, stroke, width, height, sx }: 
   }
 
   if (width && height && !validateSvgSize(width, height)) {
-    throw new Error(`Invalid size values: width=${width}, height=${height}`);
+    const widthStr = typeof width === 'string' ? width : JSON.stringify(width);
+    const heightStr = typeof height === 'string' ? height : JSON.stringify(height);
+    throw new Error(`Invalid size values: width=${widthStr}, height=${heightStr}`);
   }
 
   const dynamicStyles = {
