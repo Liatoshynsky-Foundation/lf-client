@@ -62,8 +62,9 @@ const testData: IFoundationFounders = {
   members: [
     {
       photo: {
-        src: '/api/blob-url?folderName=photos&blobName=Tetyana-Homon',
+        src: 'Tetyana-Homon',
         alt: 'Tetyana Gomon',
+        generatedSrc: '/api/blob-url?folderName=photos&blobName=Tetyana-Homon',
         caption: null
       },
       name: 'Tetyana Gomon',
@@ -71,8 +72,9 @@ const testData: IFoundationFounders = {
     },
     {
       photo: {
-        src: '/api/blob-url?folderName=photos&blobName=Iryna-Tykova',
+        src: 'Iryna-Tykova',
         alt: 'Iryna Tukova',
+        generatedSrc: '/api/blob-url?folderName=photos&blobName=Iryna-Tykova',
         caption: null
       },
       name: 'Iryna Tukova',
@@ -80,8 +82,9 @@ const testData: IFoundationFounders = {
     },
     {
       photo: {
-        src: '/api/blob-url?folderName=photos&blobName=Maria-Hurska',
+        src: 'Maria-Hurska',
         alt: 'Maria Hurska',
+        generatedSrc: '/api/blob-url?folderName=photos&blobName=Maria-Hurska',
         caption: null
       },
       name: 'Maria Hurska',

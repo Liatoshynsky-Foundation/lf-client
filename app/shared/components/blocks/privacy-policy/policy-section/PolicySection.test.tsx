@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { SxProps, Theme } from '@mui/material';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
@@ -10,13 +11,7 @@ const makeParagraph = (text: string) => ({ type: 'paragraph', content: [makeText
 const makeDoc = (text: string): TipTapDoc => ({ type: 'doc', content: [makeParagraph(text)] }) as TipTapDoc;
 
 jest.mock('../policy-content/PolicyContent', () => ({
-  PolicyContent: ({
-    doc,
-    paragraphSx
-  }: {
-    doc: import('~/types/types/common.types').TipTapDoc;
-    paragraphSx?: import('@mui/material').SxProps<import('@mui/material').Theme>;
-  }) => (
+  PolicyContent: ({ doc, paragraphSx }: { doc: TipTapDoc; paragraphSx?: SxProps<Theme> }) => (
     <div
       data-testid="policy-content"
       data-grid={
