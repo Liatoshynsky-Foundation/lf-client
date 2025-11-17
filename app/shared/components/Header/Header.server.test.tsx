@@ -29,15 +29,20 @@ describe('HeaderServer', () => {
     jest.clearAllMocks();
 
     (getLocale as jest.Mock).mockResolvedValue('en');
+
     mockHeaderService.getHeaderData.mockResolvedValue({ title: 'HeaderData' });
     mockFooterService.getFooterData.mockResolvedValue({
       contacts: { phone: '+380990000000' },
       socialLinks: [{ link: 'https://insta.com', icon: 'inst.svg' }]
     });
 
-    (createRequestContainer as jest.Mock)
-      .mockReturnValueOnce({ resolve: (key: string) => (key === 'headerService' ? mockHeaderService : null) })
-      .mockReturnValueOnce({ resolve: (key: string) => (key === 'footerService' ? mockFooterService : null) });
+    (createRequestContainer as jest.Mock).mockReturnValue({
+      resolve: (key: string) => {
+        if (key === 'headerService') return mockHeaderService;
+        if (key === 'footerService') return mockFooterService;
+        return null;
+      }
+    });
   });
 
   it('should fetch required data and return valid React element', async () => {
@@ -57,6 +62,6 @@ describe('HeaderServer', () => {
 
   it('should create new containers when loading data', async () => {
     await HeaderServer();
-    expect(createRequestContainer).toHaveBeenCalledTimes(2);
+    expect(createRequestContainer).toHaveBeenCalledTimes(1);
   });
 });

@@ -16,14 +16,17 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 const mockUseBreakpoints = useBreakpoints as jest.Mock;
 
-jest.mock('../nav-contacts-section/NavContacts', () => ({
-  __esModule: true,
-  ContactsSection: (props: any) => (
-    <div data-testid="mock-contacts-section">{props.isMobile ? 'Mobile' : 'Desktop'}</div>
-  )
-}));
+jest.mock(
+  '~/shared/components/design-system/all-components/navigation-bar/mobile-nav/mobile-overlay/nav-contacts/NavContactsSection',
+  () => ({
+    __esModule: true,
+    ContactsSection: (props: any) => (
+      <div data-testid="mock-contacts-section">{props.isMobile ? 'Mobile' : 'Desktop'}</div>
+    )
+  })
+);
 
-jest.mock('../../../menu-title/NavAccordion', () => ({
+jest.mock('~/shared/components/design-system/all-components/navigation-accordion/NavAccordion', () => ({
   __esModule: true,
   NavAccordion: ({ items }: any) => (
     <div data-testid="mock-nav-accordion">

@@ -60,9 +60,6 @@ export const styles = {
     transition: 'color 0.2s ease',
     color: isActive ? textStates.active : 'inherit'
   }),
-
-  // activeTitle: textStates.active,
-
   submenuItem: {
     fontSize: { xs: '22px', md: '28px' },
     fontFamily: 'Oswald',

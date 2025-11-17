@@ -15,7 +15,7 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => () => ({
   isMobile: true
 }));
 
-jest.mock('./mobile-overlay/MobileMenuOverlay', () => ({
+jest.mock('./mobile-overlay/MobileOverlay', () => ({
   __esModule: true,
   default: () => <div data-testid="mobile-menu-overlay" />
 }));
