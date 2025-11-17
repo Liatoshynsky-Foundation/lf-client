@@ -55,11 +55,13 @@ export function HeroSection() {
           description={heroBiographyDoc[locale]}
           containerSx={heroSectionStyles.biographyContainer}
           textSx={heroSectionStyles.biographyText}
+          dataTestId="HeroSection-biographyContainer-contentBlock"
         />
         <ContentBlock
           description={heroNoteDoc[locale]}
           containerSx={heroSectionStyles.noteContainer}
           textSx={heroSectionStyles.noteText}
+          dataTestId="HeroSection-noteContainer-contentBlock"
         />
       </Box>
     </Box>
