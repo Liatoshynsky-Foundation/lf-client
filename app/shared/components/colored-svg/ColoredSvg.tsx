@@ -2,9 +2,9 @@ import { Box, SxProps, Theme } from '@mui/material';
 import React from 'react';
 
 import { styles } from './ColoredSvg.styles';
-import { validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
+import { VALID_BREAKPOINTS, validateSvgColor, validateSvgSize } from './ColoredSvg.validations';
 
-export type ResponsiveSize = string | Record<string, string>;
+export type ResponsiveSize = string | Partial<Record<(typeof VALID_BREAKPOINTS)[number], string>>;
 
 type SvgProps = {
   Component: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -48,11 +48,9 @@ export const Svg = ({ Component, alt, color, fill, stroke, width, height, sx }: 
     color = 'none';
   }
 
-  const colorSettings = { color, fill, stroke };
-
-  for (const [key, value] of Object.entries(colorSettings)) {
+  for (const value of [color, fill, stroke]) {
     if (value && !validateSvgColor(value)) {
-      throw new Error(`Invalid color value for ${key}: ${value}`);
+      throw new Error(`Invalid color value: ${value}`);
     }
   }
 

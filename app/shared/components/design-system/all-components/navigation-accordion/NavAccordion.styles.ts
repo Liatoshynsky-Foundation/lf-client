@@ -38,14 +38,14 @@ export const styles = {
 
     '&:hover': {
       ...textStates.hover,
-      '& > div > svg': {
+      '& svg *': {
         stroke: mainHexPallete.burgundy[700]
       }
     },
 
     '&:active': {
       ...textStates.pressed,
-      '& > div > svg': {
+      '& svg *': {
         stroke: mainHexPallete.burgundy[900]
       }
     }
