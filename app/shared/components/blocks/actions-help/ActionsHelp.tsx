@@ -6,7 +6,7 @@ import ButtonCard from '~/ds-components/button-card/ButtonCard';
 import TextCard from '~/ds-components/text-card/TextCard';
 
 import { styles } from './ActionsHelp.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 interface ActionsHelpProps {
   title: string;

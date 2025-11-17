@@ -1,5 +1,5 @@
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 export const actionsHelpPageData = {
   title: 'Допомогти справами',

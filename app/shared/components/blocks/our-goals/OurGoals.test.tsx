@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import OurGoals from './OurGoals';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IOurGoals } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('~/components/title-with-description/TitleWithDescription', () => ({
   __esModule: true,

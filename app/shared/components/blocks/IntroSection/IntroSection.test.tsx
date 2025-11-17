@@ -29,6 +29,7 @@ const mockData: IIntroSection = {
   image: {
     src: '/images/intro-section.jpg',
     alt: 'Intro image',
+    generatedSrc: '/images/intro-section.jpg',
     caption: 'Intro caption'
   }
 };

@@ -18,7 +18,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
       <Box sx={styles.photoContainer} data-testid="IntroSection-photoContainer">
         {image && (
           <ImageWithCaption
-            src={image.src}
+            src={image.generatedSrc}
             alt={image.alt}
             caption={image.caption ?? ''}
             sizes={{

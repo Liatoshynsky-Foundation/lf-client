@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 
 import ContentBlock from '../content-block/ContentBlock';
 import { styles } from './TitleContentBlock.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type RichContent = string | TipTapDoc;
 

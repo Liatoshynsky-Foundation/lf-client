@@ -1,7 +1,7 @@
 import { Link } from '@mui/material';
 
 import { TipTapMarkType } from '~/types/enums/common.enums';
-import { TipTapMarkRenderers } from '~/types/types/common.types';
+import { TipTapMarkRenderers } from '~/types/types/tiptap.types';
 
 export const getBold: TipTapMarkRenderers[TipTapMarkType.bold] = (children) => <strong>{children}</strong>;
 export const getItalic: TipTapMarkRenderers[TipTapMarkType.italic] = (children) => <em>{children}</em>;

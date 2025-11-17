@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -25,7 +26,12 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
 
   const pageService = createRequestContainer().resolve('pagesDataService');
   const page = await pageService.getPageData('privacy-policy', lang);
-  const blocks = page?.blocks ?? {};
+
+  if (!page) {
+    return <Box />;
+  }
+
+  const blocks = page.blocks ?? {};
 
   if (Object.keys(blocks).length === 0) {
     return <></>;
