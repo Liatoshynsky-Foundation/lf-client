@@ -23,7 +23,10 @@ export const styles = {
     height: '107vh',
     backgroundColor: mainHexPallete.yellow[500],
     zIndex: 900,
-    clipPath: 'polygon(0 0, 100% 0, 100% 95%, 0 100%)'
+    clipPath: {
+      xs: 'polygon(0 0, 100% 0, 100% 98%, 0 100%)',
+      sm: 'polygon(0 0, 100% 0, 100% 94%, 0 100%)'
+    }
   },
 
   overlayContent: {

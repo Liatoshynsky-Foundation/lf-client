@@ -70,7 +70,7 @@ describe('NavAccordion', () => {
     fireEvent.click(toggleButton);
 
     expect(screen.getByTestId('NavAccordion-item-Section1-toggle--open')).toBeInTheDocument();
-    expect(screen.getByText('Open list')).toBeInTheDocument();
+    expect(screen.getByText('Collapse list')).toBeInTheDocument();
   });
 
   test('should render "active" title when pathname matches', () => {

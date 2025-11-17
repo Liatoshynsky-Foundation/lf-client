@@ -1,7 +1,7 @@
 import { Box, Slide } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 
-import { NavAccordion } from '../../../menu-title/NavAccordion';
+import { NavAccordion, NavItem } from '../../../menu-title/NavAccordion';
 import { ContactsSection } from '../nav-contacts-section/NavContacts';
 import { styles } from './MobileNavOverlay.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
@@ -27,17 +27,23 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
     };
   }, [open]);
 
-  const navItems = useMemo(() => {
+  const navItems = useMemo<NavItem[]>(() => {
     return navLabels.map((group) => {
       const dropdown = group.links.map((link) => ({
         label: link.label,
         href: link.href
       }));
 
+      if (dropdown.length === 1) {
+        return {
+          label: group.title,
+          href: dropdown[0].href
+        };
+      }
+
       return {
         label: group.title,
-        dropdown: dropdown.length > 1 ? dropdown : undefined,
-        href: dropdown.length === 1 ? dropdown[0].href : undefined
+        dropdown
       };
     });
   }, [navLabels]);
