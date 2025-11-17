@@ -1,13 +1,13 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import LanguageSwitcher from '../../../language-switcher/LanguageSwitcher';
-import { styles } from './NavContacts.styles';
+import { styles } from './NavContactsSection.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone-call.svg';
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
+import LanguageSwitcher from '~/shared/components/design-system/all-components/language-switcher/LanguageSwitcher';
 import FooterSocialMedia from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 
 interface ContactsSectionProps {

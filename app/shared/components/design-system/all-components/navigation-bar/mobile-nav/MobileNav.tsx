@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import MobileMenuOverlay from './mobile-overlay/MobileMenuOverlay';
+import MobileMenuOverlay from './mobile-overlay/MobileOverlay';
 import { styles } from './MobileNav.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 

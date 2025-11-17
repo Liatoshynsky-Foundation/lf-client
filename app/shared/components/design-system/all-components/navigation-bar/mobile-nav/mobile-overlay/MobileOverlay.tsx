@@ -1,13 +1,16 @@
 import { Box, Slide } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 
-import { NavAccordion, NavItem } from '../../../menu-title/NavAccordion';
-import { ContactsSection } from '../nav-contacts-section/NavContacts';
-import { styles } from './MobileNavOverlay.styles';
+import { styles } from './MobileOverlay.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { ColumnGuides } from '~/shared/components/column-guides/ColumnGuides';
+import {
+  NavAccordion,
+  NavItem
+} from '~/shared/components/design-system/all-components/navigation-accordion/NavAccordion';
+import { ContactsSection } from '~/shared/components/design-system/all-components/navigation-bar/mobile-nav/mobile-overlay/nav-contacts/NavContactsSection';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MobileMenuOverlayProps {

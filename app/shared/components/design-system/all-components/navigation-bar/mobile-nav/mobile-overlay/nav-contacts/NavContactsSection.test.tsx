@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-import { ContactsSection } from './NavContacts';
+import { ContactsSection } from './NavContactsSection';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 jest.mock('~/shared/components/design-system/all-components/language-switcher/LanguageSwitcher', () => ({

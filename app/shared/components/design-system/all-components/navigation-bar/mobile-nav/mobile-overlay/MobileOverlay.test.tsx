@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-import MobileMenuOverlay from './MobileMenuOverlay';
+import MobileMenuOverlay from './MobileOverlay';
 
 jest.mock('@mui/material/Slide', () => {
   const MockSlide = (props: any) => <div>{props.children}</div>;

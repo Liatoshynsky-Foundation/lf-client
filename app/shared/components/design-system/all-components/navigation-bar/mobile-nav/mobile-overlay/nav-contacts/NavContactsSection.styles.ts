@@ -1,6 +1,5 @@
-import { mainHexPallete } from '../../../theme/colors';
-
 import { AppTypography } from '~/constants';
+import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 
 export const styles = {
   links: {
