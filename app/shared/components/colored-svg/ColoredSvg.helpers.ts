@@ -6,7 +6,7 @@ export function isSize(size: string) {
 }
 
 export function isColor(color: string) {
-  const wslessColor = color.replace(/\s+/g, '');
+  const wslessColor = color.replaceAll(/\s+/g, '');
 
   const hexPattern = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
   if (hexPattern.test(wslessColor)) {
@@ -18,7 +18,7 @@ export function isColor(color: string) {
     const rgbaValues = rgbaPattern.exec(wslessColor);
     if (rgbaValues) {
       const rgbParts = rgbaValues[0]
-        .replace(/rgba?\(|\)/g, '')
+        .replaceAll(/rgba?\(|\)/g, '')
         .split(',')
         .map(Number);
       return rgbParts.every((value) => value >= 0 && value <= 255);
