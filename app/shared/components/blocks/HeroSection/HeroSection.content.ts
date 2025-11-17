@@ -38,18 +38,18 @@ export const heroBiographyDoc: LocalizedTipTapDoc = {
     normalText('Борис Лятошинський є одним із '),
     boldText('провідних українських композиторів ХХ століття.'),
     normalText(
-      ' Більша частина написаних ним творів уже мають статус класичних. \
-        Сформована Лятошинським композиторська школа є найвпливовішою в Україні \
-        в другій половині минулого і нашому сторіччі.'
+      ' Більша частина написаних ним творів уже мають статус класичних. ' +
+        'Сформована Лятошинським композиторська школа є найвпливовішою в Україні ' +
+        'в другій половині минулого і нашому сторіччі.'
     )
   ]),
   en: makeDoc([
     normalText('Borys Lyatoshynsky is one of '),
     boldText('the leading Ukrainian composers of the 20th century.'),
     normalText(
-      ' The majority of his works have already attained the status of classics. \
-        The compositional school formed by Lyatoshynsky is the most influential in Ukraine \
-        in the second half of the last century and in our own.'
+      ' The majority of his works have already attained the status of classics. ' +
+        'The compositional school formed by Lyatoshynsky is the most influential in Ukraine ' +
+        'in the second half of the last century and in our own.'
     )
   ])
 };
@@ -57,19 +57,19 @@ export const heroBiographyDoc: LocalizedTipTapDoc = {
 export const heroNoteDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      '*Життєпис створено на основі документів, що зберігаються у приватному архіві Кабінету-музею Бориса Лятошинського; \
-        особовій справі Бориса Лятошинського, що велася в Київській консерваторії \
-        від 28 лютого 1945 року до 25 квітня 1968 року (ДАмК. Фонд Р-810, опис 2, № 184); \
-        ЦДАВО України. Фонд 166, опис 12 ос, справа 4539.'
+      '*Життєпис створено на основі документів, що зберігаються у приватному архіві Кабінету-музею Бориса Лятошинського; ' +
+        'особовій справі Бориса Лятошинського, що велася в Київській консерваторії ' +
+        'від 28 лютого 1945 року до 25 квітня 1968 року (ДАмК. Фонд Р-810, опис 2, № 184); ' +
+        'ЦДАВО України. Фонд 166, опис 12 ос, справа 4539.'
     )
   ]),
   en: makeDoc([
     normalText(
-      '*This life story has been compiled on the basis of documents preserved in the private archive of the Borys Lyatoshynsky Memorial Studio-Museum; \
-        the personal file of Borys Lyatoshynsky kept at the Kyiv Conservatory \
-        from 28 February 1945 to 25 April 1968 (DAMK. Collection R-810, inventory 2, no. 184); \
-        and the Central State Archive of Supreme Bodies of Power and Government of Ukraine (TsDAVO). \
-        Collection 166, inventory 12 os, file 4539.'
+      '*This life story has been compiled on the basis of documents preserved in the private archive of the Borys Lyatoshynsky Memorial Studio-Museum; ' +
+        'the personal file of Borys Lyatoshynsky kept at the Kyiv Conservatory ' +
+        'from 28 February 1945 to 25 April 1968 (DAMK. Collection R-810, inventory 2, no. 184); ' +
+        'and the Central State Archive of Supreme Bodies of Power and Government of Ukraine (TsDAVO). ' +
+        'Collection 166, inventory 12 os, file 4539.'
     )
   ])
 };
