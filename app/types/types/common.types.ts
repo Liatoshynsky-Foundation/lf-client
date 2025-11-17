@@ -1,7 +1,6 @@
 import { Breakpoint } from '@mui/material';
-import { ReactNode } from 'react';
 
-import { SocialMediaTypes, TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
+import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 export interface ElementSizes {
   width: Partial<Record<Breakpoint, number>>;
