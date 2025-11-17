@@ -1,25 +1,36 @@
-import { Button, ButtonProps, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 import { linkStyles } from './CustomLink.styles';
 import { NextLinkComposed } from './NextLink';
 
-export interface CustomLinkProps extends ButtonProps {
+import { sxToArray } from '~/lib/utils/sxToArray';
+
+export interface CustomLinkProps {
   children: React.ReactNode;
   path: string;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  sx?: SxProps<Theme>;
+  labelSx?: SxProps<Theme>;
 }
-const CustomLink = ({ path, children, startIcon, endIcon }: CustomLinkProps) => {
+
+const CustomLink: React.FC<CustomLinkProps> = ({ path, children, startIcon, endIcon, sx, labelSx }) => {
+  const buttonSx = [linkStyles.button, ...sxToArray(sx)];
+  const typoSx = [linkStyles.typography, ...sxToArray(labelSx)];
+
   return (
     <Button
       startIcon={startIcon}
       endIcon={endIcon}
       size="small"
-      sx={linkStyles.button}
+      sx={buttonSx}
       component={NextLinkComposed}
       disableElevation
       disableRipple
       to={{ pathname: path }}
     >
-      <Typography sx={linkStyles.typography}>{children}</Typography>
+      <Typography sx={typoSx}>{children}</Typography>
     </Button>
   );
 };
