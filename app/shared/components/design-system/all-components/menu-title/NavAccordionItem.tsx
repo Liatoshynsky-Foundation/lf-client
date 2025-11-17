@@ -24,8 +24,14 @@ function isLinkItem(item: NavItem): item is NavLinkItem {
   return 'href' in item && !('dropdown' in item);
 }
 
-function normalizePath(path: string) {
-  return path.replace(/\/+$/, '');
+function normalizePath(path: string): string {
+  let end = path.length;
+
+  while (end > 1 && path[end - 1] === '/') {
+    end--;
+  }
+
+  return path.slice(0, end);
 }
 
 export function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<AccordionItemProps>) {
