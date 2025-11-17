@@ -29,12 +29,12 @@ export const styles = {
     textDecoration: 'underline',
     height: { xs: '34px', sm: '20px', md: '24px' },
     display: 'flex',
-    alignItems: 'center',
-    ml: { xs: '4px', sm: 0 }
+    alignItems: 'center'
   },
   icon: {
     width: '20px',
     height: '20px',
-    background: 'none'
+    background: 'none',
+    mr: '8px'
   }
 };
