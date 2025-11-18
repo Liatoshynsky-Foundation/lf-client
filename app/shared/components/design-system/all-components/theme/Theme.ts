@@ -229,10 +229,10 @@ export const theme = createTheme({
     },
     h4: {
       fontFamily: oswald.style.fontFamily,
-      fontSize: '28px',
-      fontWeight: 700,
-      lineHeight: 'normal',
-      letterSpacing: '0px'
+      fontWeight: 600,
+      lineHeight: '120%',
+      marginRight: '5px',
+      letterSpacing: '0%'
     },
     h5: {
       fontSize: '24px',
