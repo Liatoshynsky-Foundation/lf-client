@@ -1,3 +1,5 @@
+import { colors } from '@mui/material';
+
 const styles = {
   container: {
     display: 'flex',
@@ -13,15 +15,26 @@ const styles = {
   },
   image: {
     position: 'relative',
-    width: { xs: 169, md: 248 },
-    height: { xs: 112, md: 165 },
-    mt: '30px'
+    width: { xs: 171, sm: 171, md: 248, lg: 248, xl: 248 },
+    height: { xs: 114, sm: 114, md: 180, lg: 180, xl: 180 },
+    mt: { md: '55px', lg: '80px', xl: '70px' },
+    mr: { xl: '20px' },
+    ml: { sm: '10px', md: '75px', lg: '140px', xl: '0px' }
   },
   description: {
     mt: 2,
     width: { xs: 272, sm: 350, md: 460 },
     height: { xs: 72, sm: 48 },
-    fontSize: '18px'
+    ml: { sm: '10px', md: '90px', lg: '140px', xl: '0px' },
+    lineHeight: '150%',
+    color: colors.brown[800],
+    letterSpacing: '0%',
+    fontWeight: 500,
+    fontSize: '16px'
+  },
+  h4: {
+    fontSize: { xs: 40, sm: 40, md: 48, lg: 48, xl: 48 },
+    ml: { sm: '40px', md: '90px', lg: '160px', xl: '0px' }
   }
 };
 
