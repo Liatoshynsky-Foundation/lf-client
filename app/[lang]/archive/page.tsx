@@ -58,12 +58,27 @@ const styles = {
   }
 };
 
-const getColumnPaddingTop = (columnNum: number) => ({
-  xs: '0px',
-  sm: columnNum === 1 ? '40px' : '0px',
-  md: columnNum === 1 ? '80px' : columnNum === 2 ? '40px' : '0px',
-  lg: columnNum === 1 ? '120px' : columnNum === 2 ? '80px' : columnNum === 3 ? '40px' : '0px'
-});
+const getColumnPaddingTop = (columnNum: number) => {
+  const paddingMap = {
+    sm: columnNum === 1 ? '40px' : '0px',
+    md: (() => {
+      if (columnNum === 1) return '80px';
+      if (columnNum === 2) return '40px';
+      return '0px';
+    })(),
+    lg: (() => {
+      if (columnNum === 1) return '120px';
+      if (columnNum === 2) return '80px';
+      if (columnNum === 3) return '40px';
+      return '0px';
+    })()
+  };
+
+  return {
+    xs: '0px',
+    ...paddingMap
+  };
+};
 
 export default function Archive() {
   const theme = useTheme();
@@ -106,7 +121,14 @@ export default function Archive() {
     setSearchQuery(query);
   };
 
-  const numColumns = isMobile ? 1 : isSmallTablet ? 2 : isBigTablet ? 3 : 4;
+  const getNumColumns = () => {
+    if (isMobile) return 1;
+    if (isSmallTablet) return 2;
+    if (isBigTablet) return 3;
+    return 4;
+  };
+
+  const numColumns = getNumColumns();
 
   const fundsByColumn: Record<number, FundDTO[]> = {};
   for (let i = 1; i <= numColumns; i++) {

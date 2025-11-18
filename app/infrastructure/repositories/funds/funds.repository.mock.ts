@@ -1,7 +1,6 @@
 import type { FundDTO } from '~/domain/dto/funds.dto';
 import type { FundsRepository } from '~/domain/repositories/funds.repository';
 
-// TODO: Delete when real implementation is ready
 const MOCK_FUNDS: FundDTO[] = [
   { id: 1, number: 'Фонд 1', title: 'АУДІОЗАПИСИ' },
   { id: 2, number: 'Фонд 2', title: 'ОСОБИСТІ ДОКУМЕНТИ' },

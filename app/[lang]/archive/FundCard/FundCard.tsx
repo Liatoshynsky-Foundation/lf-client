@@ -14,9 +14,9 @@ export interface FundCardProps {
 export default function FundCard({ id, number, title, dataTestId }: Readonly<FundCardProps>) {
   return (
     <Box
+      component="article"
       sx={styles.card}
       data-testid={dataTestId || `FundCard-${id}`}
-      role="article"
       aria-label={`${number}: ${title}`}
     >
       <Typography sx={styles.fundNumber} data-testid={`${dataTestId || `FundCard-${id}`}-number`}>
