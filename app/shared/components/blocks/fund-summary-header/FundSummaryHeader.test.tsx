@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { useLocale } from 'next-intl';
 import React from 'react';
 
+import { mockFundSummaryData } from './__fixtures__/fundSummaryHeader.fixtures';
 import FundSummaryHeader, { FundSummaryHeaderProps } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
@@ -56,79 +57,7 @@ describe('FundSummaryHeader', () => {
     backLinkUrl: '/support-us',
     backLinkText: 'Back to Support Us',
     title: 'Fund Summary',
-    data: {
-      items: [
-        {
-          title: { uk: 'Назва фонду', en: 'Fund Name' },
-          description: {
-            uk: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Опис українською' }]
-                }
-              ]
-            },
-            en: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Description in English' }]
-                }
-              ]
-            }
-          }
-        },
-        {
-          title: { uk: 'Ціль фонду', en: 'Fund Purpose' },
-          description: {
-            uk: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Опис цілі українською' }]
-                }
-              ]
-            },
-            en: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Purpose description in English' }]
-                }
-              ]
-            }
-          }
-        },
-        {
-          title: { uk: 'Бенефіціари', en: 'Beneficiaries' },
-          description: {
-            uk: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Опис бенефіціарів українською' }]
-                }
-              ]
-            },
-            en: {
-              type: TipTapNodeTypes.doc,
-              content: [
-                {
-                  type: TipTapNodeTypes.paragraph,
-                  content: [{ type: TipTapNodeTypes.text, text: 'Beneficiaries description in English' }]
-                }
-              ]
-            }
-          }
-        }
-      ]
-    }
+    data: mockFundSummaryData
   };
 
   beforeEach(() => {
@@ -199,7 +128,7 @@ describe('FundSummaryHeader', () => {
     const singleItemData = {
       ...mockData,
       data: {
-        items: [mockData.data.items[0]]
+        items: [mockFundSummaryData.items[0]]
       }
     };
 
