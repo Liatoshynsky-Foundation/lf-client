@@ -97,7 +97,6 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     '& .MuiOutlinedInput-root': {
       borderRadius: '7px',
-      backgroundColor: mainHexPallete.white,
       fontFamily: 'Mulish, sans-serif',
       fontSize: '16px',
       height: '40px',
