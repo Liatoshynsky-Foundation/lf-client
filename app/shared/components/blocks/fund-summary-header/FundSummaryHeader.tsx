@@ -7,7 +7,8 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import CustomLink from '~/ds-components/link/CustomLink';
 
-import { styles, TITLE_GRID_COLUMN, TITLE_SX } from './FundSummary.styles';
+import { styles, TITLE_GRID_COLUMN, TITLE_SX } from './FundSummaryHeader.styles';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type Locale = 'uk' | 'en';
@@ -32,6 +33,12 @@ export interface FundSummaryHeaderProps {
 
 const ARROW_BACK_ICON = <Image src="/icons/arrow-left.svg" alt="" width={24} height={24} aria-hidden="true" />;
 
+const customParagraphRenderer = (children: React.ReactNode) => (
+  <Typography variant="body2" sx={{ fontSize: '16px' }}>
+    {children}
+  </Typography>
+);
+
 const splitIntoColumns = <T,>(items: T[]) => ({
   leftColumn: items.filter((_, index) => index % 2 === 0),
   rightColumn: items.filter((_, index) => index % 2 === 1)
@@ -53,7 +60,10 @@ const ContentItem: React.FC<ContentItemProps> = React.memo(({ item, locale, inde
     <Typography variant="h6" sx={styles.itemTitle}>
       {item.title[locale]}:
     </Typography>
-    <TipTapContent data={item.description[locale]} />
+    <TipTapContent
+      data={item.description[locale]}
+      nodeRenderers={{ [TipTapNodeTypes.paragraph]: customParagraphRenderer }}
+    />
   </Box>
 ));
 
@@ -67,7 +77,7 @@ const FundSummaryHeader: React.FC<FundSummaryHeaderProps> = ({ backLinkUrl, back
   return (
     <Box sx={styles.container}>
       <Box sx={styles.backLink}>
-        <CustomLink path={backLinkUrl} startIcon={ARROW_BACK_ICON}>
+        <CustomLink path={backLinkUrl} startIcon={ARROW_BACK_ICON} labelSx={{ fontSize: '16px' }}>
           {backLinkText}
         </CustomLink>
       </Box>

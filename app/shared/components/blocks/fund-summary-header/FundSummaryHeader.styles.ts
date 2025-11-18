@@ -1,7 +1,12 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
 export const TITLE_GRID_COLUMN = { xs: '1 / -1', sm: '1 / -1', md: '1 / -1' } as const;
-export const TITLE_SX = { '& h2': { fontSize: { xxl: '56px' } } } as const;
+export const TITLE_SX = {
+  '& h2': {
+    fontSize: { xs: '24px', sm: '40px', md: '56px' },
+    maxWidth: { xs: '80%', sm: 'none' }
+  }
+} as const;
 
 export const styles = {
   container: {
@@ -32,7 +37,11 @@ export const styles = {
     },
     justifySelf: 'start',
     textAlign: 'left',
-    mb: '64px',
+    mb: {
+      xs: '16px',
+      sm: '40px',
+      md: '64px'
+    },
     '& > div': {
       mb: 0
     }
@@ -56,16 +65,20 @@ export const styles = {
   column: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '24px',
+    gap: {
+      xs: '12px',
+      sm: '16px',
+      md: '24px'
+    },
     gridColumn: {
-      xs: '2 / -1',
-      sm: '1 / 5',
+      xs: '1 / -1',
+      sm: '1 / 4',
       md: '2 / 6'
     },
     '&:last-child': {
       gridColumn: {
-        xs: '2 / -1',
-        sm: '5 / -1',
+        xs: '1 / -1',
+        sm: '4 / -1',
         md: '6 / -1'
       }
     }
@@ -79,6 +92,7 @@ export const styles = {
   },
 
   itemTitle: {
+    fontSize: '16px',
     color: mainHexPallete.brown[600]
   }
 };
