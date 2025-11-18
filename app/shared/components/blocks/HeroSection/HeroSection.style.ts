@@ -84,7 +84,8 @@ export const heroSectionStyles = {
     fontSize: '14px',
     lineHeight: '140%',
     letterSpacing: '0px',
-    alignSelf: 'end'
+    alignSelf: 'end',
+    whiteSpace: { sm: 'pre-line' }
   },
 
   bottomContainer: {
@@ -99,7 +100,7 @@ export const heroSectionStyles = {
   biographyContainer: {
     gridColumn: '1 / -1',
     gridTemplateColumns: 'none',
-    width: { xs: '100%', sm: '61%', md: '56%', lg: '57%', xxl: '52%' },
+    width: { xs: '100%', sm: '61%', md: '56%', lg: '57%' },
     alignSelf: 'end'
   },
 
@@ -110,7 +111,7 @@ export const heroSectionStyles = {
     lineHeight: '160%',
     letterSpacing: '0px',
     verticalAlign: 'middle',
-    textIndent: { xs: '27%', sm: '58%', md: '46%', lg: '46%', xl: '45%', xxl: '39%' }
+    textIndent: { xs: '27%', sm: '58%', md: '46%', lg: '46%', xl: '45%', xxl: '45%' }
   },
 
   noteContainer: {

@@ -28,8 +28,8 @@ export const heroTexts = {
   },
 
   imageCaption: {
-    uk: 'Борис Лятошинський з котами на дачі в Ворзелі. 1960-ті роки',
-    en: 'Borys Lyatoshynsky with cats at his dacha in Vorzel. 1960s'
+    uk: 'Борис Лятошинський з котами на дачі в Ворзелі.\n1960-ті роки',
+    en: 'Borys Lyatoshynsky with cats at his dacha in Vorzel.\n1960s'
   } satisfies LocalizedString
 } as const;
 
