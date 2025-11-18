@@ -2,7 +2,7 @@ import type { SxProps, Theme } from '@mui/material/styles';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
-export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
+export const styles: Record<string, SxProps<Theme>> = {
   headerContainer: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
@@ -10,10 +10,10 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridTemplateRows: 'min-content',
     alignContent: 'start',
     marginBottom: {
-      xs: '32px',
-      sm: '56px',
-      md: '32px',
-      lg: '8px'
+      xs: '56px',
+      sm: '50px',
+      md: '0px',
+      lg: '0px'
     }
   },
 
@@ -21,7 +21,7 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridColumn: {
       xs: '1 / -1',
       sm: '1 / -1',
-      md: '1 / 8',
+      md: '1 / 9',
       lg: '1 / 8'
     }
   },
@@ -29,19 +29,16 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   title: {
     fontFamily: 'Oswald',
     fontWeight: 600,
-    fontSize: '64px',
+    fontSize: {
+      xs: '40px',
+      sm: '40px',
+      md: '64px',
+      lg: '64px'
+    },
     lineHeight: '120%',
     letterSpacing: '0%',
-    color: '#190D03',
-    marginBottom: {
-      xs: '16px',
-      sm: '20px',
-      md: '24px',
-      lg: '8px'
-    },
-    [theme.breakpoints.down('md')]: {
-      fontSize: '40px'
-    }
+    color: mainHexPallete.black,
+    marginBottom: '8px'
   },
 
   description: {
@@ -50,11 +47,13 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     fontSize: '16px',
     lineHeight: '150%',
     letterSpacing: '0px',
-    color: '#000000',
+    color: mainHexPallete.black,
     maxWidth: {
-      xs: '100%',
-      md: '500px',
-      lg: '630px'
+      xs: '272px',
+      sm: '343px',
+      md: '449px',
+      lg: '515px',
+      xl: '637px'
     }
   },
 
@@ -62,7 +61,7 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridColumn: {
       xs: '1 / -1',
       sm: '1 / -1',
-      md: '1 / -1',
+      md: '9 / -1',
       lg: '9 / -1'
     },
     display: 'flex',
@@ -75,19 +74,26 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     marginTop: {
       xs: '32px',
       sm: '32px',
-      md: '32px',
+      md: '24px',
       lg: '0px'
     },
     paddingTop: {
       lg: '24px'
+    },
+    width: {
+      md: '344px',
+      lg: '352px',
+      xl: '501px'
     }
   },
 
   searchInput: {
     width: {
-      xs: '100%',
-      md: '360px',
-      lg: '500px'
+      xs: '272px',
+      sm: '344px',
+      md: '344px',
+      lg: '351px',
+      xl: '501px'
     },
     '& .MuiOutlinedInput-root': {
       borderRadius: '7px',
@@ -96,14 +102,14 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
       fontSize: '16px',
       height: '40px',
       '& fieldset': {
-        borderColor: '#63666E !important',
+        borderColor: `${mainHexPallete.blue[700]} !important`,
         borderWidth: '1px'
       },
       '&:hover fieldset': {
-        borderColor: '#63666E'
+        borderColor: mainHexPallete.blue[700]
       },
       '&.Mui-focused fieldset': {
-        borderColor: '#63666E'
+        borderColor: mainHexPallete.blue[700]
       }
     },
     '& .MuiInputBase-input': {
@@ -112,13 +118,13 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
       fontSize: '16px',
       lineHeight: '24px',
       letterSpacing: '0.15px',
-      color: '#63666E',
-      '-webkit-text-fill-color': '#63666E',
+      color: mainHexPallete.blue[700],
+      WebkitTextFillColor: mainHexPallete.blue[700],
       padding: '8px 16px',
       '&::placeholder': {
-        color: '#63666E',
+        color: mainHexPallete.blue[700],
         opacity: 1,
-        '-webkit-text-fill-color': '#63666E',
+        WebkitTextFillColor: mainHexPallete.blue[700],
         fontFamily: 'Mulish, sans-serif',
         fontSize: '16px',
         fontWeight: 500
@@ -127,7 +133,7 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     '& .MuiInputAdornment-root svg': {
       width: '18px',
       height: '18px',
-      color: '#63666E'
+      color: mainHexPallete.blue[700]
     }
   }
-});
+};

@@ -9,7 +9,6 @@ import { Svg } from '~/components/colored-svg/ColoredSvg';
 import { styles } from './ArchiveHeader.styles';
 
 import SearchIcon from '~/public/icons/search-static.svg';
-import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
 
 export interface ArchiveHeaderProps {
   onSearch?: (query: string) => void;
@@ -27,12 +26,12 @@ export default function ArchiveHeader({ onSearch, dataTestId = 'ArchiveHeader' }
   };
 
   return (
-    <Box sx={styles(theme).headerContainer} data-testid={dataTestId}>
-      <Box sx={styles(theme).contentWrapper} data-testid={`${dataTestId}-content`}>
+    <Box sx={styles.headerContainer} data-testid={dataTestId}>
+      <Box sx={styles.contentWrapper} data-testid={`${dataTestId}-content`}>
         <Typography
           variant="h1"
           sx={{
-            ...styles(theme).title
+            ...styles.title
           }}
           data-testid={`${dataTestId}-title`}
         >
@@ -41,7 +40,7 @@ export default function ArchiveHeader({ onSearch, dataTestId = 'ArchiveHeader' }
 
         <Typography
           sx={{
-            ...styles(theme).description
+            ...styles.description
           }}
           data-testid={`${dataTestId}-description`}
         >
@@ -49,13 +48,13 @@ export default function ArchiveHeader({ onSearch, dataTestId = 'ArchiveHeader' }
         </Typography>
       </Box>
 
-      <Box sx={styles(theme).searchWrapper} data-testid={`${dataTestId}-searchWrapper`}>
+      <Box sx={styles.searchWrapper} data-testid={`${dataTestId}-searchWrapper`}>
         <TextField
           placeholder={t('searchPlaceholder')}
           value={searchQuery}
           onChange={handleSearchChange}
           sx={{
-            ...styles(theme).searchInput
+            ...styles.searchInput
           }}
           data-testid={`${dataTestId}-searchInput`}
           InputProps={{

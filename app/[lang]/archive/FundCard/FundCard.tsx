@@ -23,11 +23,11 @@ export default function FundCard({ id, number, title, dataTestId }: Readonly<Fun
         {number}
       </Typography>
 
-      <Typography sx={styles.fundTitle} data-testid={`${dataTestId || `FundCard-${id}`}-title`}>
+      <Typography className="fundTitle" sx={styles.fundTitle} data-testid={`${dataTestId || `FundCard-${id}`}-title`}>
         {title}
       </Typography>
 
-      <Box className="fund-line" sx={styles.fundLine} data-testid={`${dataTestId || `FundCard-${id}`}-line`} />
+      <Box className="fundLine" sx={styles.fundLine} data-testid={`${dataTestId || `FundCard-${id}`}-line`} />
     </Box>
   );
 }
