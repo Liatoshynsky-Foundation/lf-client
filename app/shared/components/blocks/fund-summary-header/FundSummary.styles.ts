@@ -1,3 +1,5 @@
+import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
+
 export const styles = {
   container: {
     display: 'grid',
@@ -51,14 +53,16 @@ export const styles = {
   },
 
   contentItem: {
+    fontSize: '16px',
+    lineHeight: '150%',
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: 1,
     gridColumn: {
       xs: '2 / -1',
       sm: '2 / -1',
       md: '2 / 6'
     },
+    alignSelf: 'start',
     '&:nth-of-type(even)': {
       gridColumn: {
         xs: '2 / -1',
@@ -69,6 +73,6 @@ export const styles = {
   },
 
   itemTitle: {
-    fontWeight: 600
+    color: mainHexPallete.brown[600]
   }
 };

@@ -17,7 +17,6 @@ export const fundSummaryTitle: LocalizedString = {
 
 export const fundSummaryContent: FundSummaryHeaderData = {
   items: [
-    // Column 1 items
     {
       title: {
         uk: 'Кількість описів',
@@ -232,6 +231,5 @@ export const fundSummaryContent: FundSummaryHeaderData = {
         }
       }
     }
-    // Column 2 items are interleaved via styles
   ]
 };

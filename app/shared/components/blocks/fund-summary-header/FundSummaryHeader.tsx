@@ -54,7 +54,7 @@ const FundSummaryHeader: React.FC<Props> = ({ backLinkUrl, backLinkText, title, 
         {data.items.map((item, index) => (
           <Box key={`${item.title}-${index}`} sx={styles.contentItem}>
             <Typography variant="h6" sx={styles.itemTitle}>
-              {item.title[locale]}
+              {item.title[locale]}:
             </Typography>
             <TipTapContent data={item.description[locale]} />
           </Box>
