@@ -38,7 +38,7 @@ export const heroSectionStyles = {
   quoteContainer: {
     maxWidth: { xl: '408px' },
     width: '100%',
-    gap: '24px!important'
+    gap: '24px'
   },
 
   title: {
@@ -77,7 +77,7 @@ export const heroSectionStyles = {
 
   caption: {
     width: '100%',
-    margin: '0!important',
+    margin: '0',
     fontFamily: 'Mulish',
     fontWeight: 400,
     fontStyle: 'Italic',
@@ -89,7 +89,7 @@ export const heroSectionStyles = {
 
   bottomContainer: {
     fontFamily: 'Mulish',
-    gridColumn: '1 / -1!important',
+    gridColumn: '1 / -1',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
