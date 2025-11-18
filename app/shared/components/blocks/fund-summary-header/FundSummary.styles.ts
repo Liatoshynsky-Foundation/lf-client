@@ -1,0 +1,73 @@
+export const styles = {
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'subgrid',
+    gridColumn: '1 / -1'
+  },
+
+  backLink: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / -1',
+      md: '1 / 6'
+    },
+    mb: '24px',
+    justifySelf: 'start',
+    alignSelf: 'start',
+    '& .MuiButton-root': {
+      px: 0
+    }
+  },
+
+  title: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / -1',
+      md: '1 / -1'
+    },
+    justifySelf: 'start',
+    textAlign: 'left',
+    mb: '64px',
+    '& > div': {
+      mb: 0
+    }
+  },
+
+  contentGrid: {
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
+    gridColumn: '1 / -1',
+    rowGap: 3
+  },
+
+  contentItem: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 1,
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '2 / -1',
+      md: '2 / 6'
+    },
+    '&:nth-of-type(2)': {
+      gridColumn: {
+        xs: '2 / -1',
+        sm: '2 / -1',
+        md: '6 / 10'
+      }
+    }
+  },
+
+  itemTitle: {
+    fontWeight: 600
+  }
+};

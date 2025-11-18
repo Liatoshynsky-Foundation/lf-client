@@ -7,6 +7,7 @@ import SectionTitle from '~/components/section-title/SectionTitle';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import CustomLink from '~/ds-components/link/CustomLink';
 
+import { styles } from './FundSummary.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type Locale = 'uk' | 'en';
@@ -35,31 +36,24 @@ const FundSummaryHeader: React.FC<Props> = ({ backLinkUrl, backLinkText, title, 
   const locale = useLocale() as Locale;
 
   return (
-    <Box>
-      <Box>
+    <Box sx={styles.container}>
+      <Box sx={styles.backLink}>
         <CustomLink path={backLinkUrl} startIcon={arrowBackIcon}>
           {backLinkText}
         </CustomLink>
       </Box>
-      <SectionTitle title={title} />
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-          gap: 3,
-          mt: 4
-        }}
-      >
+      <Box sx={styles.title}>
+        <SectionTitle
+          title={title}
+          icon={false}
+          gridColumn={{ xs: '1 / -1', sm: '1 / -1', md: '1 / -1' }}
+          sx={{ '& h2': { fontSize: { xxl: '56px' } } }}
+        />
+      </Box>
+      <Box sx={styles.contentGrid}>
         {data.items.map((item, index) => (
-          <Box
-            key={`${item.title}-${index}`}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          <Box key={`${item.title}-${index}`} sx={styles.contentItem}>
+            <Typography variant="h6" sx={styles.itemTitle}>
               {item.title[locale]}
             </Typography>
             <TipTapContent data={item.description[locale]} />
