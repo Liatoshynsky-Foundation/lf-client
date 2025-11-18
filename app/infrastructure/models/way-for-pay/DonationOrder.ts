@@ -10,7 +10,7 @@ export interface IDonationOrder {
   language: 'UA' | 'EN';
   paidAt?: Date | null;
   paymentProvider?: 'WayForPay';
-  providerTxnId?: string | null; // authCode
+  providerTxnId?: string | null;
   reasonCode?: string | number | null;
   reason?: string | null;
   productName: string[];
