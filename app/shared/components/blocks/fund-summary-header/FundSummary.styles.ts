@@ -47,29 +47,32 @@ export const styles = {
       sm: '24px',
       md: '40px'
     },
-    gridColumn: '1 / -1',
-    rowGap: '24px',
-    gridTemplateRows: 'auto'
+    gridColumn: '1 / -1'
+  },
+
+  column: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '24px',
+    gridColumn: {
+      xs: '2 / -1',
+      sm: '1 / 5',
+      md: '2 / 6'
+    },
+    '&:last-child': {
+      gridColumn: {
+        xs: '2 / -1',
+        sm: '5 / -1',
+        md: '6 / -1'
+      }
+    }
   },
 
   contentItem: {
     fontSize: '16px',
     lineHeight: '150%',
     display: 'flex',
-    flexDirection: 'column' as const,
-    gridColumn: {
-      xs: '2 / -1',
-      sm: '2 / -1',
-      md: '2 / 6'
-    },
-    alignSelf: 'start',
-    '&:nth-of-type(even)': {
-      gridColumn: {
-        xs: '2 / -1',
-        sm: '2 / -1',
-        md: '6 / -1'
-      }
-    }
+    flexDirection: 'column' as const
   },
 
   itemTitle: {

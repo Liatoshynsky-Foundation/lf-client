@@ -35,6 +35,9 @@ const arrowBackIcon = <Image src="/icons/arrow-left.svg" alt="" width={24} heigh
 const FundSummaryHeader: React.FC<Props> = ({ backLinkUrl, backLinkText, title, data }) => {
   const locale = useLocale() as Locale;
 
+  const leftColumnItems = data.items.filter((_, index) => index % 2 === 0);
+  const rightColumnItems = data.items.filter((_, index) => index % 2 === 1);
+
   return (
     <Box sx={styles.container}>
       <Box sx={styles.backLink}>
@@ -51,14 +54,26 @@ const FundSummaryHeader: React.FC<Props> = ({ backLinkUrl, backLinkText, title, 
         />
       </Box>
       <Box sx={styles.contentGrid}>
-        {data.items.map((item, index) => (
-          <Box key={`${item.title}-${index}`} sx={styles.contentItem}>
-            <Typography variant="h6" sx={styles.itemTitle}>
-              {item.title[locale]}:
-            </Typography>
-            <TipTapContent data={item.description[locale]} />
-          </Box>
-        ))}
+        <Box sx={styles.column}>
+          {leftColumnItems.map((item, index) => (
+            <Box key={`${item.title}-${index * 2}`} sx={styles.contentItem}>
+              <Typography variant="h6" sx={styles.itemTitle}>
+                {item.title[locale]}:
+              </Typography>
+              <TipTapContent data={item.description[locale]} />
+            </Box>
+          ))}
+        </Box>
+        <Box sx={{ ...styles.column, display: { xs: 'none', sm: 'flex' } }}>
+          {rightColumnItems.map((item, index) => (
+            <Box key={`${item.title}-${index * 2 + 1}`} sx={styles.contentItem}>
+              <Typography variant="h6" sx={styles.itemTitle}>
+                {item.title[locale]}:
+              </Typography>
+              <TipTapContent data={item.description[locale]} />
+            </Box>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
