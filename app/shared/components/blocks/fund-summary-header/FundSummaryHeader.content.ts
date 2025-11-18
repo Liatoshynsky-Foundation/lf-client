@@ -1,10 +1,33 @@
 import { FundSummaryHeaderData } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
+import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+
 type Locale = 'uk' | 'en';
 type LocalizedString = Record<Locale, string>;
 
-export const fundSummaryBacklinkUrl: string = '/archive';
+export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
+  const navigationRepo = newNavigationRepository();
+  const navigations = await navigationRepo.getNavigation();
+
+  for (const nav of navigations) {
+    const archiveLink = nav.links.find(
+      (link) =>
+        link.href === '/archive' ||
+        link.label.uk.toLowerCase().includes('архів') ||
+        link.label.en.toLowerCase().includes('archive')
+    );
+
+    if (archiveLink) {
+      return archiveLink.href;
+    }
+  }
+
+  return '/archive';
+}
+
+export const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
+
 export const fundSummaryBacklinkText: LocalizedString = {
   uk: 'Повернутись до архіву',
   en: 'Back to archive'

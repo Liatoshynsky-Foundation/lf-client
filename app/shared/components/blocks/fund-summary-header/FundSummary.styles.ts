@@ -1,5 +1,8 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
+export const TITLE_GRID_COLUMN = { xs: '1 / -1', sm: '1 / -1', md: '1 / -1' } as const;
+export const TITLE_SX = { '& h2': { fontSize: { xxl: '56px' } } } as const;
+
 export const styles = {
   container: {
     display: 'grid',
