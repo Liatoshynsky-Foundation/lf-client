@@ -46,7 +46,8 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    rowGap: 3
+    rowGap: '24px',
+    gridTemplateRows: 'auto'
   },
 
   contentItem: {
@@ -58,11 +59,11 @@ export const styles = {
       sm: '2 / -1',
       md: '2 / 6'
     },
-    '&:nth-of-type(2)': {
+    '&:nth-of-type(even)': {
       gridColumn: {
         xs: '2 / -1',
         sm: '2 / -1',
-        md: '6 / 10'
+        md: '6 / -1'
       }
     }
   },

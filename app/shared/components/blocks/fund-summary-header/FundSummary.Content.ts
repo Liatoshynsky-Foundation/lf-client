@@ -17,6 +17,7 @@ export const fundSummaryTitle: LocalizedString = {
 
 export const fundSummaryContent: FundSummaryHeaderData = {
   items: [
+    // Column 1 items
     {
       title: {
         uk: 'Кількість описів',
@@ -30,80 +31,6 @@ export const fundSummaryContent: FundSummaryHeaderData = {
         en: {
           type: TipTapNodeTypes.doc,
           content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '2' }] }]
-        }
-      }
-    },
-    {
-      title: {
-        uk: 'Кількість справ',
-        en: 'Number of cases'
-      },
-      description: {
-        uk: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '9' }] }]
-        },
-        en: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '9' }] }]
-        }
-      }
-    },
-    {
-      title: {
-        uk: 'Форма упорядкування',
-        en: 'Form of arrangement'
-      },
-      description: {
-        uk: {
-          type: TipTapNodeTypes.doc,
-          content: [
-            {
-              type: TipTapNodeTypes.paragraph,
-              content: [{ type: TipTapNodeTypes.text, text: 'тематико-хронологічна' }]
-            }
-          ]
-        },
-        en: {
-          type: TipTapNodeTypes.doc,
-          content: [
-            {
-              type: TipTapNodeTypes.paragraph,
-              content: [{ type: TipTapNodeTypes.text, text: 'thematic-chronological' }]
-            }
-          ]
-        }
-      }
-    },
-    {
-      title: {
-        uk: 'Дата утворення документів',
-        en: 'Date of document creation'
-      },
-      description: {
-        uk: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
-        },
-        en: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
-        }
-      }
-    },
-    {
-      title: {
-        uk: 'Хронологічні межі',
-        en: 'Chronological boundaries'
-      },
-      description: {
-        uk: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
-        },
-        en: {
-          type: TipTapNodeTypes.doc,
-          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
         }
       }
     },
@@ -130,6 +57,22 @@ export const fundSummaryContent: FundSummaryHeaderData = {
               content: [{ type: TipTapNodeTypes.text, text: 'mainly Russian, partially Ukrainian, Polish' }]
             }
           ]
+        }
+      }
+    },
+    {
+      title: {
+        uk: 'Кількість справ',
+        en: 'Number of cases'
+      },
+      description: {
+        uk: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '9' }] }]
+        },
+        en: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '9' }] }]
         }
       }
     },
@@ -164,6 +107,32 @@ export const fundSummaryContent: FundSummaryHeaderData = {
                   text: 'Documents about education, work activity, awards, autobiographical materials, military service, membership in organizations, trips abroad, etc.'
                 }
               ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      title: {
+        uk: 'Форма упорядкування',
+        en: 'Form of arrangement'
+      },
+      description: {
+        uk: {
+          type: TipTapNodeTypes.doc,
+          content: [
+            {
+              type: TipTapNodeTypes.paragraph,
+              content: [{ type: TipTapNodeTypes.text, text: 'тематико-хронологічна' }]
+            }
+          ]
+        },
+        en: {
+          type: TipTapNodeTypes.doc,
+          content: [
+            {
+              type: TipTapNodeTypes.paragraph,
+              content: [{ type: TipTapNodeTypes.text, text: 'thematic-chronological' }]
             }
           ]
         }
@@ -207,6 +176,22 @@ export const fundSummaryContent: FundSummaryHeaderData = {
     },
     {
       title: {
+        uk: 'Дата утворення документів',
+        en: 'Date of document creation'
+      },
+      description: {
+        uk: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
+        },
+        en: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
+        }
+      }
+    },
+    {
+      title: {
         uk: 'Відомості про укладача',
         en: 'Information about the compiler'
       },
@@ -230,6 +215,23 @@ export const fundSummaryContent: FundSummaryHeaderData = {
           ]
         }
       }
+    },
+    {
+      title: {
+        uk: 'Хронологічні межі',
+        en: 'Chronological boundaries'
+      },
+      description: {
+        uk: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
+        },
+        en: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: '1895-1971' }] }]
+        }
+      }
     }
+    // Column 2 items are interleaved via styles
   ]
 };
