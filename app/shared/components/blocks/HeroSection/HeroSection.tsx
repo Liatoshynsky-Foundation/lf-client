@@ -4,8 +4,8 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import ContentBlock from '~/components/design-system/all-components/content-block/ContentBlock';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
+import QuoteBlock from '~/components/Quote/Quote';
 
-import QuoteBlock from '../../Quote/Quote';
 import { heroBiographyDoc, heroNoteDoc, heroTexts } from './HeroSection.content';
 import { heroSectionStyles } from './HeroSection.style';
 
