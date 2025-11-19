@@ -45,22 +45,13 @@ describe('ColoredSvg component', () => {
     );
   });
 
-  it('should throw error if invalid color is provided', () => {
-    expect(() => render(<Svg Component={MockSvg} alt={testAlt} color="not-a-color" />)).toThrow(
-      'Invalid color value for color: not-a-color'
-    );
-  });
-
-  it('should throw error if invalid fill is provided', () => {
-    expect(() => render(<Svg Component={MockSvg} alt={testAlt} fill="not-a-color" />)).toThrow(
-      'Invalid color value for fill: not-a-color'
-    );
-  });
-
-  it('shold throw error if invalid stroke is provided', () => {
-    expect(() => render(<Svg Component={MockSvg} alt={testAlt} stroke="not-a-color" />)).toThrow(
-      'Invalid color value for stroke: not-a-color'
-    );
+  it.each([
+    { prop: 'color', value: 'not-a-color' },
+    { prop: 'fill', value: 'not-a-color' },
+    { prop: 'stroke', value: 'not-a-color' }
+  ])('should throw error if invalid $prop is provided', ({ prop, value }) => {
+    const props = { Component: MockSvg, alt: testAlt, [prop]: value } as const;
+    expect(() => render(<Svg {...props} />)).toThrow(`Invalid color value: ${value}`);
   });
 
   it('should throw error if invalid width/height is provided', () => {

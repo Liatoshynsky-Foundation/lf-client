@@ -8,7 +8,6 @@ import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
 
 import Footer from '~/components/Footer/Footer';
-import Header from '~/components/Header/Header';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { styles } from './layout.styles';
@@ -17,6 +16,7 @@ import { routing } from '~/i18n/routing';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import ConsentScript from '~/shared/components/google-tracking/ConsentScript';
+import Header from '~/shared/components/Header/Header.server';
 import { AudioPlayerProvider } from '~/shared/context/AudioPlayerContext';
 import QueryProvider from '~/shared/providers/QueryProvider';
 

@@ -1,5 +1,7 @@
 import { Breakpoint } from '@mui/material';
 
+import { SocialMediaTypes } from '~/types/enums/common.enums';
+
 export interface ElementSizes {
   width: Partial<Record<Breakpoint, number>>;
   height: Partial<Record<Breakpoint, number>>;
@@ -28,3 +30,15 @@ export type ButtonData = {
 
 export type Currency = 'UAH' | 'USD' | 'EUR' | 'GBP';
 export type DonateType = 'donation' | 'subscription';
+
+export type LinkIcon = {
+  icon: string | SocialMediaTypes;
+  link: string;
+};
+
+export type contactsData = {
+  foundationName: string;
+  address: string;
+  phone: string;
+  email: string;
+};

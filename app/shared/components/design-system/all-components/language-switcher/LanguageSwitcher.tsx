@@ -1,6 +1,6 @@
 'use client';
 
-import { MenuItem } from '@mui/material';
+import { Box, MenuItem } from '@mui/material';
 import { useLocale } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
@@ -18,7 +18,7 @@ const locales = ['uk', 'en'] as const;
 type Locale = (typeof locales)[number];
 
 export interface LanguageSwitcherProps {
-  variant: 'icon' | 'toggle';
+  variant: 'icon' | 'toggle' | 'mobile';
   scrollDirection?: ScrollDirection;
 }
 
@@ -76,6 +76,30 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
       >
         {currentLocale === 'uk' ? 'In English' : 'Українською'}
       </Button>
+    );
+  }
+
+  if (variant === 'mobile') {
+    return (
+      <Box sx={styles.mobileWrapper}>
+        <button
+          style={styles.item(currentLocale === 'en')}
+          onClick={() => handleLanguageChange('en')}
+          aria-current={currentLocale === 'en' ? 'true' : undefined}
+        >
+          EN
+        </button>
+
+        <span style={styles.item(false)}>/</span>
+
+        <button
+          style={styles.item(currentLocale === 'uk')}
+          onClick={() => handleLanguageChange('uk')}
+          aria-current={currentLocale === 'uk' ? 'true' : undefined}
+        >
+          UA
+        </button>
+      </Box>
     );
   }
 
