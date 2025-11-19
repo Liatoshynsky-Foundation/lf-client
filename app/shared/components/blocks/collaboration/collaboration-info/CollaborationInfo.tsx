@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
+import ButtonContentBlock from '../../terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import { infoDoc, partnersDoc, partnershipDoc, supportDoc } from './collaboration.const';
 import { styles } from './CollaborationInfo.styles';
 
-import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import TitleContentBlock from '~/shared/components/design-system/all-components/title-content-block/TittleContentBlock';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
 
