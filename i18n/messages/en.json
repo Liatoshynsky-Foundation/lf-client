@@ -269,6 +269,25 @@
     "description": "Original documents are stored in the private archive of the Borys Lyatoshynsky Cabinet-Museum (Kyiv, Ukraine)",
     "searchPlaceholder": "Search"
   },
+  "archiveCase": {
+    "pageTitle": "Employment history",
+    "back": "Go back",
+    "meta": {
+      "code": "Reference code",
+      "dates": "Case dates",
+      "sheets": "Sheets"
+    },
+    "documents": {
+      "ariaLabel": "Case documents"
+    },
+    "navigation": {
+      "prev": "Previous case",
+      "next": "Next case"
+    },
+    "buttons": {
+      "viewPdf": "View PDF"
+    }
+  },
   "biography": {
     "heroSection": {
       "title": "Lyatoshynsky’s Life Story"
