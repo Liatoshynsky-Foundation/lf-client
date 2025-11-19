@@ -1,20 +1,20 @@
 import { Box } from '@mui/material';
-import { useLocale, useTranslations } from 'next-intl';
 
-import ButtonContentBlock from '../../terms-of-use/terms-content/button-content-block/ButtonContentBlock';
-import { infoDoc, partnersDoc, partnershipDoc, supportDoc } from './collaboration.const';
+//import { useLocale, useTranslations } from 'next-intl';
+//import ButtonContentBlock from '../../terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+//import { infoDoc, partnersDoc, partnershipDoc, supportDoc } from './collaboration.const';
 import { styles } from './CollaborationInfo.styles';
 
-import TitleContentBlock from '~/shared/components/design-system/all-components/title-content-block/TittleContentBlock';
-import SectionTitle from '~/shared/components/section-title/SectionTitle';
+//import TitleContentBlock from '~/shared/components/design-system/all-components/title-content-block/TittleContentBlock';
+//import SectionTitle from '~/shared/components/section-title/SectionTitle';
 
 export default function CollaborationInfo() {
-  const t = useTranslations('collaboration.collaborationInfo');
-  const locale = useLocale();
+  //const t = useTranslations('collaboration.collaborationInfo');
+  //const locale = useLocale();
 
   return (
     <Box sx={styles.mainContainer}>
-      <SectionTitle
+      {/* <SectionTitle
         icon={true}
         title={t('title')}
         mb={0}
@@ -44,7 +44,7 @@ export default function CollaborationInfo() {
         containerSx={{ mt: { xs: '56px', sm: '96px', md: '112px' } }}
         title={t('partnershipTitle')}
         content={partnershipDoc[locale]}
-      />
+      /> */}
     </Box>
   );
 }
