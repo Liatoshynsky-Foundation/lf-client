@@ -12,9 +12,10 @@ export type LinkIcon = {
 
 interface FooterSocialMediaProps {
   media: LinkIcon[];
+  containerSx?: object;
 }
 
-const FooterSocialMedia = ({ media }: FooterSocialMediaProps) => {
+const FooterSocialMedia = ({ media, containerSx }: FooterSocialMediaProps) => {
   const socialMedias = media.map((item) => {
     if (typeof item.icon === 'string') {
       item.icon = sanitizeSocialMediaType(item.icon);
@@ -22,6 +23,6 @@ const FooterSocialMedia = ({ media }: FooterSocialMediaProps) => {
     return <SocialMediaIcon key={item.icon} icon={item.icon as SocialMediaTypes} href={item.link} />;
   });
 
-  return <Box sx={styles.container}>{socialMedias}</Box>;
+  return <Box sx={{ ...styles.container, ...containerSx }}>{socialMedias}</Box>;
 };
 export default FooterSocialMedia;
