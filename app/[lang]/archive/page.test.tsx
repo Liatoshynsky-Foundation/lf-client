@@ -40,9 +40,10 @@ jest.mock('./FundCard/FundCard', () => ({
 
 const mockGetFunds = jest.fn();
 jest.mock('~/infrastructure/repositories/funds/funds.repository.mock', () => ({
-  fundsRepositoryMock: {
-    getFunds: () => mockGetFunds()
-  }
+  __esModule: true,
+  default: jest.fn(() => ({
+    getFunds: mockGetFunds
+  }))
 }));
 
 describe('Archive Page', () => {
