@@ -4,7 +4,7 @@ import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationI
 import { PublicInfo } from '~/infrastructure/models/foundation-info/foundationInfoPublic';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 
-export const foundationInfoRepository = {
+const foundationInfoRepository = {
   async getContactInfo() {
     await dbConnect();
 
@@ -57,3 +57,9 @@ export const foundationInfoRepository = {
     };
   }
 };
+
+function newFoundationInfoRepo(): typeof foundationInfoRepository {
+  return foundationInfoRepository;
+}
+
+export default newFoundationInfoRepo;

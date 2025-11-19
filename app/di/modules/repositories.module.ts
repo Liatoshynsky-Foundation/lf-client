@@ -1,15 +1,25 @@
-import { asFunction } from 'awilix';
+import { asFunction, AwilixContainer } from 'awilix';
 
-import { compositionsRepository } from '~/infrastructure/repositories/artistry/сompositions.repository';
-import { foundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
-import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
-import { pagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repository';
-import { scientificWorksRepository } from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
+import newCompositionsRepo from '~/infrastructure/repositories/artistry/compositions.repository';
+import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
+import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
+import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
 
-export const registerRepositories = () => ({
-  foundationInfoRepository: asFunction(() => foundationInfoRepository).scoped(),
-  navigationRepository: asFunction(() => navigationRepository).scoped(),
-  compositionsRepository: asFunction(() => compositionsRepository).scoped(),
-  pagesDataRepository: asFunction(() => pagesDataRepository).scoped(),
-  scientificWorksRepository: asFunction(() => scientificWorksRepository).scoped()
-});
+export type RepositoriesModule = {
+  foundationInfoRepo: ReturnType<typeof newFoundationInfoRepo>;
+  navigationRepo: ReturnType<typeof newNavigationRepository>;
+  compositionsRepo: ReturnType<typeof newCompositionsRepo>;
+  pagesDataRepo: ReturnType<typeof newPagesDataRepo>;
+  scientificWorksRepo: ReturnType<typeof newScientificWorksRepo>;
+};
+
+export const registerRepositoriesFor = (container: AwilixContainer) => {
+  return container.register({
+    foundationInfoRepo: asFunction(newFoundationInfoRepo).scoped(),
+    navigationRepo: asFunction(newNavigationRepository).scoped(),
+    compositionsRepo: asFunction(newCompositionsRepo).scoped(),
+    pagesDataRepo: asFunction(newPagesDataRepo).scoped(),
+    scientificWorksRepo: asFunction(newScientificWorksRepo).scoped()
+  });
+};

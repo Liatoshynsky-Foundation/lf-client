@@ -1,6 +1,6 @@
 import { boldText, boldUnderlineText, linkText, makeDoc, normalText, TipTapTextNode } from './tiptapHelpers';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 describe('tiptap.utils', () => {
   describe('normalText', () => {

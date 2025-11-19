@@ -97,12 +97,14 @@ const testData: IOurMission = {
   smallImage: {
     src: 'test',
     alt: 'Tetiana Homon',
-    caption: 'Tетяна Гомон'
+    caption: 'Tетяна Гомон',
+    generatedSrc: '/api/blob-url?folderName=photos&blobName=test'
   },
   bigImage: {
     src: 'test',
     alt: 'Tetiana Homon',
-    caption: 'Tетяна Гомон'
+    caption: 'Tетяна Гомон',
+    generatedSrc: '/api/blob-url?folderName=photos&blobName=test'
   }
 };
 

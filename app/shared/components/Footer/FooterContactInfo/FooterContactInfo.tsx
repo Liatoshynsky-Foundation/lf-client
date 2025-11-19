@@ -3,9 +3,8 @@
 import { Box, Typography } from '@mui/material';
 import React, { FC } from 'react';
 
-import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
+import { ContactLink } from '~/components/contact-link/ContactLink';
 
-import { ContactLink } from '../../contact-link/ContactLink';
 import { styles } from './FooterContactInfo.styles';
 
 interface FooterContactInfoProps {
@@ -22,8 +21,6 @@ interface FooterContactInfoProps {
 }
 
 const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alertMsg }) => {
-  const isMobile = useIsMobile();
-
   return (
     <Box sx={styles.container}>
       <Box sx={styles.titleAndAddressCont}>
@@ -38,7 +35,6 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
           value={contacts.phone}
           label={labels.phoneLabel}
           alertMsg={alertMsg}
-          isMobile={isMobile}
           linkSx={{ fontWeight: 400 }}
         />
         <ContactLink

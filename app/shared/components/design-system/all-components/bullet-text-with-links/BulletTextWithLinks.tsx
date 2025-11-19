@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Button from '../button/Button';
 import ContentBlock from '../content-block/ContentBlock';
 import { styles } from './BulletTextWithLinks.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import ArrowUpRight from '~/public/icons/arrow-up-right.svg';

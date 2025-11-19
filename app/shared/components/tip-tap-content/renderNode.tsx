@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from 'react';
 
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapNode, TipTapNodeRenderers } from '~/types/types/common.types';
+import { TipTapNode, TipTapNodeRenderers } from '~/types/types/tiptap.types';
 
 type RenderNode = (renderers: TipTapNodeRenderers, node: TipTapNode) => ReactNode;
 

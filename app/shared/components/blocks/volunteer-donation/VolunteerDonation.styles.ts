@@ -37,6 +37,38 @@ export const styles = {
       md: '24px'
     }
   },
+  paymentMethodContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  },
+  label: {
+    fontFamily: 'Mulish, Sans-serif',
+    color: mainHexPallete.brown[700],
+    letterSpacing: '0px',
+    whiteSpace: 'pre-line',
+    fontSize: { xs: '16px', sm: '16px' }
+  },
+  valueContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  },
+  value: {
+    fontFamily: 'Mulish, Sans-serif',
+    fontSize: '16px',
+    fontWeight: 600,
+    lineHeight: '110%',
+    color: mainHexPallete.black,
+    transition: 'color 0.2s ease',
+    '&:hover': {
+      color: mainHexPallete.burgundy[800],
+      cursor: 'pointer'
+    },
+    '&:active': {
+      color: mainHexPallete.black
+    }
+  },
   img: {
     gridColumn: {
       xs: '2 / -1',

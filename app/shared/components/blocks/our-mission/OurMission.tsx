@@ -24,7 +24,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
 
       {smallImage && (
         <ImageWithCaption
-          src={smallImage.src}
+          src={smallImage.generatedSrc}
           alt={smallImage.alt}
           caption={smallImage.caption ?? ''}
           captionSx={styles.smallCaptionSx}
@@ -40,7 +40,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
 
       {bigImage && (
         <ImageWithCaption
-          src={bigImage.src}
+          src={bigImage.generatedSrc}
           alt={bigImage.alt}
           caption={bigImage.caption ?? ''}
           captionSx={styles.bigCaptionSx}

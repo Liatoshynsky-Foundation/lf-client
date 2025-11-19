@@ -1,4 +1,4 @@
-import { type TipTapDoc } from '~/types/types/common.types';
+import { type TipTapDoc } from '~/types/types/tiptap.types';
 
 export function getDocKey(doc?: TipTapDoc): string | undefined {
   const maybeText = doc?.content?.[0]?.content?.[0]?.text ?? (doc as { text?: string })?.text;

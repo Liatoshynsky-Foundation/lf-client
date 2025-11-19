@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 import { styles } from './CollaborationIntro.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 

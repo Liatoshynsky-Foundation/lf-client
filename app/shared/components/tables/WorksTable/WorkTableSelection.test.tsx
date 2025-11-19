@@ -55,23 +55,29 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
   return { __esModule: true, EnhancedTable };
 });
 
-type WorkTableFiltersProps = {
-  onAuthorFilterChange: (authors: string[]) => void;
-  onClearAllFilters: () => void;
-};
-jest.mock('./filters/Filters', () => {
-  const WorkTableFilters = (props: WorkTableFiltersProps) => (
-    <div data-testid="work-table-filters">
-      <button data-testid="mock-apply-author-filter" onClick={() => props.onAuthorFilterChange(['1'])}>
-        Apply Author Filter
+jest.mock('~/ds-components/selector/FilterSelect', () => ({
+  FilterSelect: ({ label, onAdd, onRemove, defaultValues = [] }: any) => (
+    <div data-testid={`FilterSelect-${label}`}>
+      <button data-testid={'mock-apply-author-filter'} onClick={() => onAdd(null, null, ['1'])}>
+        add
       </button>
-      <button data-testid="mock-clear-filters" onClick={() => props.onClearAllFilters()}>
-        Clear Filters
+      <button data-testid={'mock-clear-filters'} onClick={() => onRemove(null, null, [])}>
+        remove
       </button>
+      <span>{defaultValues.join(',')}</span>
     </div>
-  );
-  return { __esModule: true, WorkTableFilters };
-});
+  )
+}));
+
+jest.mock('~/shared/components/design-system/all-components/tooltip/Tooltip', () => ({
+  __esModule: true,
+  default: ({ children }: any) => <>{children}</>
+}));
+
+jest.mock('~/public/icons/trash-2.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="delete-icon" />
+}));
 
 import { WorkTableSection } from './WorkTableSelection';
 
