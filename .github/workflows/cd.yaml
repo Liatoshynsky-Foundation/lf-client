@@ -11,6 +11,7 @@ jobs:
   build:
     name: Build container image
     runs-on: "ubuntu-latest"
+    timeout-minutes: 30
     permissions:
       contents: read
       packages: write
@@ -38,6 +39,15 @@ jobs:
       - name: Set lowercase repository owner
         run: echo "REPO_OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
+      - name: Set image tag based on branch
+        id: set-tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "tag=stage" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push container image to registries
         uses: docker/build-push-action@v6
         with:
@@ -46,14 +56,17 @@ jobs:
           tags: |
             lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38 }}/lf-stage-client:${{ github.sha }}
             ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:${{ github.sha }}
-            ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:latest
+            ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:${{ steps.set-tag.outputs.tag }}
           file: ./Dockerfile
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy-azure:
     name: Deploy to Azure Web App
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/develop'
+    timeout-minutes: 15
     environment:
       name: "production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -67,92 +80,3 @@ jobs:
           slot-name: "production"
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_33658204638a4070adadb0337bf888b8 }}
           images: "lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38 }}/lf-stage-client:${{ github.sha }}"
-
-  deploy-vps:
-    name: Deploy to VPS
-    runs-on: ubuntu-latest
-    needs: build
-    if: startsWith(github.ref, 'refs/heads/release/')
-    environment:
-      name: "production"
-      url: ${{ steps.set-vps-url.outputs.vps-url }}
-
-    steps:
-      - name: Set lowercase repository owner
-        run: echo "REPO_OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-      - name: Deploy to VPS with Docker Compose
-        id: deploy-to-vps
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT || 22 }}
-          script: |
-            set -e
-
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-            cd /root/docker/lf-prj
-
-            docker pull ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:${{ github.sha }}
-
-            docker tag ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:${{ github.sha }} ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client:latest
-
-            docker-compose stop client client-tailscale
-
-            docker-compose rm -f client client-tailscale
-
-            docker-compose up -d client client-tailscale
-
-            sleep 15
-
-            docker-compose ps client client-tailscale
-
-            echo "Performing health checks..."
-            for i in {1..3}; do
-              if docker exec lf-client wget -q -O- http://localhost:3000/ >/dev/null 2>&1; then
-                echo "Client health check passed (attempt $i)"
-                break
-              else
-                echo "Client health check failed (attempt $i)"
-                if [ $i -eq 3 ]; then
-                  echo "All health checks failed, rolling back..."
-                  docker-compose stop client client-tailscale
-                  docker-compose up -d client client-tailscale
-                  exit 1
-                fi
-                sleep 15
-              fi
-            done
-
-            echo "Checking logs for errors..."
-            if docker-compose logs client | tail -20 | grep -i "error\|fatal\|exception"; then
-              echo "Errors found in client logs"
-              docker-compose logs client
-              exit 1
-            fi
-
-            echo "Checking Tailscale connection..."
-            if docker exec client-tailscale tailscale status | grep -q "client"; then
-              echo "Tailscale connection successful"
-
-              echo "Testing client accessibility via Tailscale..."
-              sleep 5
-              if curl -f https://client.tail6afd63.ts.net/ >/dev/null 2>&1; then
-                echo "Client accessible via Tailscale at https://client.tail6afd63.ts.net"
-              else
-                echo "Client not accessible via Tailscale (DNS propagation may take time)"
-              fi
-            else
-              echo "Tailscale connection issue"
-              docker-compose logs client-tailscale
-            fi
-
-            echo "Cleaning up old images..."
-            docker image prune -f
-            docker images ghcr.io/${{ env.REPO_OWNER_LOWER }}/lf-client --format "table {{.Tag}}\t{{.CreatedAt}}" | tail -n +4 | awk '{print $1}' | xargs -r docker rmi || true
-
-      - name: Set VPS deployment URL
-        id: set-vps-url
-        run: echo "vps-url=https://client.tail6afd63.ts.net" >> $GITHUB_OUTPUT
