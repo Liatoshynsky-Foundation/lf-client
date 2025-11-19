@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import WhatWeDo from './WhatWeDo';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IWhatWeDo } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 const createDescription = (text: string): TipTapDoc => ({
   type: TipTapNodeTypes.doc,

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Mark, TextNode, TipTapMarkRenderers } from '~/types/types/common.types';
+import { Mark, TextNode, TipTapMarkRenderers } from '~/types/types/tiptap.types';
 
 type RenderText = (renderers: TipTapMarkRenderers, node: TextNode) => ReactNode;
 

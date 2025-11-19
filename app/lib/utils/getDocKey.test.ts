@@ -1,6 +1,6 @@
 import { getDocKey } from './getDocKey';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import type { ParagraphNode, TextNode, TipTapDoc } from '~/types/types/common.types';
+import type { ParagraphNode, TextNode, TipTapDoc } from '~/types/types/tiptap.types';
 
 const makeTextNode = (text: string): TextNode => ({
   type: TipTapNodeTypes.text,

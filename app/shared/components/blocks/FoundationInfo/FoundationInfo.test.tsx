@@ -14,6 +14,7 @@ const mockDataWithImage: IFoundationInfo = {
   image: {
     src: '/images/foundation-photo.jpg',
     alt: 'Фото команди фонду',
+    generatedSrc: '/images/foundation-photo.jpg',
     caption: 'підпис під фото'
   },
   ourOrganisation: {

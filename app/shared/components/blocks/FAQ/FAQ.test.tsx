@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import Faq from './FAQ';
@@ -18,6 +18,10 @@ jest.mock('next-intl', () => ({
 
     return translations[key] || key;
   }
+}));
+
+jest.mock('~/shared/hooks/is-mounted/useIsMounted', () => ({
+  useIsMounted: () => true
 }));
 
 Object.assign(navigator, {
@@ -83,8 +87,8 @@ describe('FAQ component', () => {
 
   it('should copy phone when clicking CopyButton', async () => {
     render(<Faq data={mockFaqData} />);
-    const phoneBlock = screen.getByText(mockFaqData.contacts.phone).closest('div')!;
-    const copyButton = within(phoneBlock).getByRole('button', { name: /copy content/i });
+
+    const copyButton = screen.getAllByTestId('CopyButton')[0];
 
     await act(async () => {
       fireEvent.click(copyButton);
@@ -100,9 +104,19 @@ describe('FAQ component', () => {
     expect(phoneLink.closest('a')).toHaveAttribute('href', `tel:${mockFaqData.contacts.phone}`);
   });
 
-  it('should render email link', () => {
+  it('should render email as mailto link on desktop', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
     render(<Faq data={mockFaqData} />);
-    const emailLink = screen.getByText(mockFaqData.contacts.email);
-    expect(emailLink.closest('a')).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
+
+    const emailLink = screen.getByRole('link', { name: mockFaqData.contacts.email });
+    expect(emailLink).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
+  });
+
+  it('should render email as link on mobile', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
+    render(<Faq data={mockFaqData} />);
+    const emailLink = screen.getByText(mockFaqData.contacts.email).closest('a');
+    expect(emailLink).not.toBeNull();
+    expect(emailLink).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
   });
 });

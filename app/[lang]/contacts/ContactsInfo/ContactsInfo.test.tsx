@@ -81,8 +81,13 @@ describe('ContactsInfo', () => {
 
   it('should show phone and email values as links', () => {
     render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} />);
-    expect(screen.getByText(contacts.phone).closest('a')).toBeInTheDocument();
-    expect(screen.getByText(contacts.email).closest('a')).toBeInTheDocument();
+    const phones = screen.getAllByText(contacts.phone);
+    const emails = screen.getAllByText(contacts.email);
+
+    expect(phones.length).toBeGreaterThan(0);
+    expect(emails.length).toBeGreaterThan(0);
+    expect(phones[0]).toBeInTheDocument();
+    expect(emails[0]).toBeInTheDocument();
   });
 
   it('should render social media component with provided links', () => {

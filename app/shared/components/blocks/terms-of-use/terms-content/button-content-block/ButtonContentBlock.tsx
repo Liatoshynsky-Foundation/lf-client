@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
 import { styles } from './ButtonContentBlock.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';

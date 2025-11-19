@@ -75,7 +75,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
       <Box sx={styles.bodyImage} data-testid="FoundationInfo-bodyImage">
         {image && (
           <Image
-            src={image.src}
+            src={image.generatedSrc}
             alt={image.alt}
             fill={false}
             width={410}

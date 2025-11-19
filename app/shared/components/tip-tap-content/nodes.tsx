@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import renderText from '~/components/tip-tap-content/renderText';
 
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TextNode, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/common.types';
+import { TextNode, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/tiptap.types';
 
 export const getDoc: TipTapNodeRenderers[TipTapNodeTypes.doc] = (children) => children;
 

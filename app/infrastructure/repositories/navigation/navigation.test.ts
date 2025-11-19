@@ -1,5 +1,5 @@
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
-import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
+import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -12,6 +12,8 @@ jest.mock('~/infrastructure/models/navigation/navigation', () => ({
     findOne: jest.fn()
   }
 }));
+
+const navigationRepository = newNavigationRepository();
 
 describe('navigationRepository', () => {
   afterEach(() => {
