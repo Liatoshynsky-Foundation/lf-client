@@ -3,8 +3,7 @@ export const styles = {
     display: 'grid',
     height: '0%',
     gridColumn: '1 / -1',
-    mt: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
-    mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
+    my: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
       sm: 'repeat(8, 1fr)',
