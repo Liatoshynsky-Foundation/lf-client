@@ -2,7 +2,7 @@ import { asFunction, AwilixContainer } from 'awilix';
 
 import newCompositionsRepo from '~/infrastructure/repositories/artistry/compositions.repository';
 import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
-import { fundsRepositoryMock } from '~/infrastructure/repositories/funds/funds.repository.mock';
+import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository.mock';
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
@@ -13,7 +13,7 @@ export type RepositoriesModule = {
   compositionsRepo: ReturnType<typeof newCompositionsRepo>;
   pagesDataRepo: ReturnType<typeof newPagesDataRepo>;
   scientificWorksRepo: ReturnType<typeof newScientificWorksRepo>;
-  fundsRepository: typeof fundsRepositoryMock;
+  fundsRepository: ReturnType<typeof newFundsRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -23,6 +23,6 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     compositionsRepo: asFunction(newCompositionsRepo).scoped(),
     pagesDataRepo: asFunction(newPagesDataRepo).scoped(),
     scientificWorksRepo: asFunction(newScientificWorksRepo).scoped(),
-    fundsRepository: asFunction(() => fundsRepositoryMock).scoped()
+    fundsRepository: asFunction(newFundsRepository).scoped()
   });
 };

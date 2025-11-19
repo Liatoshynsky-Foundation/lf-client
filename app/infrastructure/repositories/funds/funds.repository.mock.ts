@@ -14,9 +14,13 @@ const MOCK_FUNDS: FundDTO[] = [
   { id: 10, number: 'Фонд 10', title: 'ПРОГРАМКИ КОНЦЕРТІВ' }
 ];
 
-export const fundsRepositoryMock: FundsRepository = {
-  async getFunds() {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return MOCK_FUNDS;
-  }
-};
+function newFundsRepository(): FundsRepository {
+  return {
+    async getFunds() {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      return MOCK_FUNDS;
+    }
+  };
+}
+
+export default newFundsRepository;

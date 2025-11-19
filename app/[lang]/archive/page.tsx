@@ -7,6 +7,7 @@ import ArchiveHeader from './ArchiveHeader/ArchiveHeader';
 import FundCard from './FundCard/FundCard';
 
 import { FundDTO } from '~/domain/dto/funds.dto';
+import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository.mock';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
 const styles = {
@@ -94,8 +95,7 @@ export default function Archive() {
   useEffect(() => {
     const loadFunds = async () => {
       try {
-        const { fundsRepositoryMock } = await import('~/infrastructure/repositories/funds/funds.repository.mock');
-        const data = await fundsRepositoryMock.getFunds();
+        const data = await newFundsRepository().getFunds();
         setFunds(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');

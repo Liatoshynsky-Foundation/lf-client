@@ -1,4 +1,4 @@
-import type { FundDTO } from '../dto/funds.dto';
+import type { FundDTO } from '~/domain/dto/funds.dto';
 
 export type FundsRepository = {
   getFunds(): Promise<FundDTO[]>;
