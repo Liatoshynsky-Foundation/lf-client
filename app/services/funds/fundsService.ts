@@ -1,4 +1,4 @@
-import type { FundsRepository } from '~/domain/repositories/funds.repository';
+import type { FundsRepository } from '~/infrastructure/repositories/funds/funds.repo';
 
 export const createFundsService = (repo: FundsRepository) => ({
   getFunds: () => repo.getFunds()

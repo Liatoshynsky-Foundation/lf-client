@@ -1,5 +1,6 @@
+import type { FundsRepository } from './funds.repo';
+
 import type { FundDTO } from '~/domain/dto/funds.dto';
-import type { FundsRepository } from '~/domain/repositories/funds.repository';
 
 const MOCK_FUNDS: FundDTO[] = [
   { id: 1, number: 'Фонд 1', title: 'АУДІОЗАПИСИ' },
