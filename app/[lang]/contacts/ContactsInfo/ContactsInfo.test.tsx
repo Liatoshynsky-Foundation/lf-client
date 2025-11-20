@@ -23,6 +23,16 @@ jest.mock('~/shared/components/forms/contact-form/ContactForm', () => ({
   default: () => <div data-testid="contact-form" />
 }));
 
+jest.mock('~/components/forms/offer-collaboration-form/OfferCollaborationForm', () => ({
+  __esModule: true,
+  default: ({ formTitle, formSubtitle, sx }: any) => (
+    <div data-testid="OfferCollaborationForm" data-sx={JSON.stringify(sx)}>
+      <h5>{formTitle}</h5>
+      <div>{formSubtitle}</div>
+    </div>
+  )
+}));
+
 type FooterProps = { media?: LinkIcon[] };
 
 jest.mock('~/shared/components/Footer/footer-social-media/FooterSocialMedia', () => {
@@ -97,6 +107,7 @@ describe('ContactsInfo', () => {
 
   it('should render the contact form', () => {
     render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} />);
-    expect(screen.getByTestId('contact-form')).toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 5, name: 'Contact form' })).toBeInTheDocument();
   });
 });

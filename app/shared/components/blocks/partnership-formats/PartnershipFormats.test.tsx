@@ -3,6 +3,29 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key
+}));
+jest.mock('next-intl/navigation', () => ({
+  createNavigation: () => {
+    const nav = {
+      Link: ({ children, href }: any) => React.createElement('a', { href }, children),
+      redirect: () => undefined,
+      usePathname: () => '/',
+      useRouter: () => ({}),
+      getPathname: () => '/'
+    };
+
+    const _refLink = nav.Link;
+
+    const _refGetPath = nav.getPathname;
+    return nav;
+  }
+}));
+jest.mock('next-intl/routing', () => ({
+  defineRouting: (c: any) => c
+}));
+
 import PartnershipFormats from './PartnershipFormats';
 
 jest.mock('~/components/modal-component/ModalComponent', () => {
@@ -58,8 +81,7 @@ jest.mock('~/ds-components/image-with-border/ImageWithBorder', () => {
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    // eslint-disable-next-line jsx-a11y/alt-text
-    return <img {...props} />;
+    return <img alt={props.alt ?? ''} {...props} />;
   }
 }));
 
@@ -142,7 +164,10 @@ describe('PartnershipFormats', () => {
     },
     descriptionText: 'We value every collaboration and support — financial, informational, expert, or technical.',
     actionButtonText: 'Offer Help',
-    modalContent: <div data-testid="modal-content">Modal Content</div>
+    modalContent: {
+      formTitle: 'Запропонувати співпрацю',
+      formSubtitle: 'Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів'
+    }
   };
 
   afterEach(() => {
@@ -257,8 +282,11 @@ describe('PartnershipFormats', () => {
     const actionButton = screen.getByTestId('action-button');
     await user.click(actionButton);
 
-    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
-    expect(screen.getByTestId('modal-content')).toHaveTextContent('Modal Content');
+    expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm-formTitle')).toHaveTextContent(mockData.modalContent!.formTitle);
+    expect(screen.getByTestId('OfferCollaborationForm-formSubtitle')).toHaveTextContent(
+      mockData.modalContent!.formSubtitle
+    );
   });
 
   it('should render modal with fallback content when modalContent is not provided', async () => {
@@ -269,7 +297,8 @@ describe('PartnershipFormats', () => {
     const actionButton = screen.getByTestId('action-button');
     await user.click(actionButton);
 
-    expect(screen.getByText('Modal Content')).toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm-formTitle').textContent).toBeFalsy();
   });
 
   it('should not render cards that are not provided', () => {

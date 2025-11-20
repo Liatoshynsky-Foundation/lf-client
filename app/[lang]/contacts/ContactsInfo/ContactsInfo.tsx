@@ -1,13 +1,14 @@
 'use client';
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import React from 'react';
+
+import OfferCollaborationForm from '~/components/forms/offer-collaboration-form/OfferCollaborationForm';
 
 import { styles } from './ContactsInfo.styles';
 
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
 import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
-import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
-import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface IContactInfoProps {
@@ -65,15 +66,11 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
             <FooterSocialMedia media={socialLinks} />
           </Box>
         </Box>
-        <PaperComponent sx={styles.formWrapper} data-testid="ContactsInfo-formWrapper">
-          <Typography sx={styles.formTitle} variant="h5" data-testid="ContactsInfo-formTitle">
-            {formTitle ?? t('formTitle')}
-          </Typography>
-          <Typography sx={styles.formSubtitle} variant="subtitle1" data-testid="ContactsInfo-formSubtitle">
-            {t('formSubtitle')}
-          </Typography>
-          <ContactForm onSubmit={() => {}} />
-        </PaperComponent>
+        <OfferCollaborationForm
+          sx={styles.formWrapper}
+          formTitle={formTitle ?? t('formTitle')}
+          formSubtitle={t('formSubtitle')}
+        />
       </Box>
     </Box>
   );

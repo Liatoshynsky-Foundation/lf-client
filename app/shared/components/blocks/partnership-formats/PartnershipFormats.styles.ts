@@ -388,15 +388,23 @@ export const styles = {
     }
   },
   modalContent: {
-    p: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
+    padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '75px 96px' },
+    margin: { xs: '0px -24px', sm: 'unset' },
+    maxWidth: { sm: '400px', md: '496px', lg: '646px', xl: '744px' }
+  },
+  closeIcon: {
+    position: 'absolute',
+    width: '30px',
+    height: '30px',
+    zIndex: '100',
+    top: {
+      xs: '10px',
+      lg: '16px'
     },
-    maxWidth: {
-      xs: '90vw',
-      sm: '600px',
-      md: '800px'
+    right: {
+      xs: '23px',
+      md: '35px',
+      lg: '50px'
     }
   }
 };

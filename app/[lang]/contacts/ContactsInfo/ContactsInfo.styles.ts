@@ -1,5 +1,4 @@
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
-import { oswald } from '~/shared/components/design-system/all-components/theme/Theme';
 
 export const styles = {
   root: {
@@ -69,20 +68,5 @@ export const styles = {
     margin: { xs: '0px -24px', sm: 'unset' },
     maxWidth: { sm: '400px', md: '496px', lg: '646px', xl: '744px' },
     width: { xs: '100vw', sm: '100%' }
-  },
-
-  formTitle: {
-    fontFamily: oswald.style.fontFamily,
-    color: mainHexPallete.brown[900],
-    textTransform: 'uppercase',
-    mb: '8px',
-    fontSize: { xs: '20px', md: '28px' }
-  },
-
-  formSubtitle: {
-    color: mainHexPallete.brown[700],
-    textIndent: { xs: '70px', md: '240px' },
-    mb: '24px',
-    fontSize: { xs: '16px', md: '18px' }
   }
 };
