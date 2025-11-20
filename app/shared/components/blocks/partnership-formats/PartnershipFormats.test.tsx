@@ -3,30 +3,25 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import PartnershipFormats from './PartnershipFormats';
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 jest.mock('next-intl/navigation', () => ({
   createNavigation: () => {
-    const nav = {
+    return {
       Link: ({ children, href }: any) => React.createElement('a', { href }, children),
       redirect: () => undefined,
       usePathname: () => '/',
       useRouter: () => ({}),
       getPathname: () => '/'
     };
-
-    const _refLink = nav.Link;
-
-    const _refGetPath = nav.getPathname;
-    return nav;
   }
 }));
 jest.mock('next-intl/routing', () => ({
   defineRouting: (c: any) => c
 }));
-
-import PartnershipFormats from './PartnershipFormats';
 
 jest.mock('~/components/modal-component/ModalComponent', () => {
   return jest.fn(({ children, open, onClose }: any) => (
@@ -283,9 +278,9 @@ describe('PartnershipFormats', () => {
     await user.click(actionButton);
 
     expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
-    expect(screen.getByTestId('OfferCollaborationForm-formTitle')).toHaveTextContent(mockData.modalContent!.formTitle);
+    expect(screen.getByTestId('OfferCollaborationForm-formTitle')).toHaveTextContent(mockData.modalContent.formTitle);
     expect(screen.getByTestId('OfferCollaborationForm-formSubtitle')).toHaveTextContent(
-      mockData.modalContent!.formSubtitle
+      mockData.modalContent.formSubtitle
     );
   });
 
