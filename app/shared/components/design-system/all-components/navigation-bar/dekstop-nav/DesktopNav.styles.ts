@@ -29,6 +29,7 @@ export const styles = {
   buttonGroupBackground: {
     backgroundColor: backgroundColors.white,
     borderRadius: '999px',
+    border: `6px solid ${backgroundColors.white}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
