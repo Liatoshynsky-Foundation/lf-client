@@ -13,8 +13,7 @@ concurrency:
 
 jobs:
   # Main CI job using reusable workflow from lf-devops
-  # This job calls reusable-ci.yml which contains: lint, type-check, tests, build-docker, security-scan
-  # Note: run-build is false for lf-client as it doesn't have a build step
+  # This job calls reusable-ci.yml which contains: lint, type-check, build, tests, build-docker, security-scan
   ci:
     uses: Liatoshynsky-Foundation/lf-devops/.github/workflows/reusable-ci.yml@feat/0/rework-ci-cd
     with:
@@ -25,6 +24,5 @@ jobs:
       run-tests: true
       run-security-scan: true
       security-scan-on-main-only: true
-      mongodb-connection-string: "mongodb://admin:password@mongodb:27017/mongodb"
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
