@@ -1,5 +1,5 @@
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
-import { navigationRepository } from '~/infrastructure/repositories/navigation/navigation.repository';
+import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -8,9 +8,12 @@ jest.mock('~/infrastructure/db/connect', () => ({
 
 jest.mock('~/infrastructure/models/navigation/navigation', () => ({
   Navigation: {
-    find: jest.fn()
+    find: jest.fn(),
+    findOne: jest.fn()
   }
 }));
+
+const navigationRepository = newNavigationRepository();
 
 describe('navigationRepository', () => {
   afterEach(() => {
@@ -62,6 +65,52 @@ describe('navigationRepository', () => {
       })
     });
 
-    await expect(navigationRepository.getNavigation()).rejects.toThrowError();
+    await expect(navigationRepository.getNavigation()).rejects.toThrow();
+  });
+
+  it('should return special navigation data with raw translations', async () => {
+    const mockDoc = {
+      title: { uk: 'Спеціальна', en: 'Special' },
+      links: [{ label: { uk: 'Спеціальна посилання', en: 'Special Link' }, href: '/special', visibility: true }],
+      order: -1
+    };
+
+    (Navigation.findOne as jest.Mock).mockReturnValue({
+      lean: jest.fn().mockResolvedValue(mockDoc)
+    });
+
+    const result = await navigationRepository.getSpecialNavigation();
+
+    expect(result).toEqual({
+      title: mockDoc.title,
+      links: mockDoc.links
+    });
+
+    expect(Navigation.findOne).toHaveBeenCalled();
+  });
+
+  it('should return null if no special navigation found', async () => {
+    (Navigation.findOne as jest.Mock).mockReturnValue({
+      lean: jest.fn().mockResolvedValue(null)
+    });
+
+    const result = await navigationRepository.getSpecialNavigation();
+
+    expect(result).toBeNull();
+    expect(Navigation.findOne).toHaveBeenCalled();
+  });
+
+  it('should throw if special navigation data does not match schema', async () => {
+    const invalidDoc = {
+      title: { uk: 'Спеціальна' },
+      links: [{ label: { uk: 'Спеціальна посилання', en: 'Special Link' }, href: '/special', visibility: true }],
+      order: -1
+    };
+
+    (Navigation.findOne as jest.Mock).mockReturnValue({
+      lean: jest.fn().mockResolvedValue(invalidDoc)
+    });
+
+    await expect(navigationRepository.getSpecialNavigation()).rejects.toThrow();
   });
 });

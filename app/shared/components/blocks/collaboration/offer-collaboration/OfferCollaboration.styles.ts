@@ -2,9 +2,7 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 
 export const styles = {
   mainContainer: {
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
+    position: 'relative',
     width: '100%',
     height: { sm: '889px', md: '939px', lg: '921px' }
   },

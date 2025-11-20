@@ -20,6 +20,7 @@ export const collapsibleRowStyles = {
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none',
+    backgroundColor: mainHexPallete.blue[75],
     borderBottom: `2px solid ${borderWithOpacity}`,
     '& .MuiTableCell-root': {
       borderBottom: 'none',

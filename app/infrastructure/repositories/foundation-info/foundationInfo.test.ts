@@ -1,4 +1,4 @@
-import { foundationInfoRepository } from './foundationInfo.repository';
+import newFoundationInfoRepo from './foundationInfo.repository';
 
 import { BrandingInfo } from '~/infrastructure/models/foundation-info/foundationInfoBranding';
 import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationInfoContact';
@@ -61,6 +61,8 @@ const mockPublicData = {
     { label: { uk: 'Умови', en: 'Terms' }, href: '/terms' }
   ]
 };
+
+const foundationInfoRepository = newFoundationInfoRepo();
 
 describe('foundationInfoRepository', () => {
   afterEach(() => {

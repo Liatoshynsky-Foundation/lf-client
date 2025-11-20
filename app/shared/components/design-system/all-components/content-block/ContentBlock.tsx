@@ -2,7 +2,7 @@ import { Theme } from '@emotion/react';
 import { Box, SxProps, Typography } from '@mui/material';
 
 import { styles } from './ContentBlock.styles';
-import type { TipTapDoc } from '~/types/types/common.types';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
@@ -23,6 +23,7 @@ type ContentBlockProps = Readonly<{
   additionalDescription?: RichContent;
   textSx?: SxProps<Theme>;
   containerSx?: SxProps<Theme>;
+  dataTestId?: string;
 }>;
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
@@ -101,10 +102,11 @@ export default function ContentBlock({
   list,
   additionalDescription,
   textSx,
-  containerSx
+  containerSx,
+  dataTestId
 }: ContentBlockProps) {
   return (
-    <Box sx={{ ...styles.container, ...containerSx }}>
+    <Box sx={{ ...styles.container, ...containerSx }} data-testid={dataTestId}>
       {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '2/ -1', sm: '4/ -1', md: '6/-1' }} />}
       {renderTextBlock(description, textSx)}
       {renderList(list, textSx)}

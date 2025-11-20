@@ -11,7 +11,7 @@ describe('Social media icon buttons', () => {
   const mockData = [
     {
       icon: SocialMediaTypes.Instagram,
-      href: 'https://www.instagram.com/'
+      link: 'https://www.instagram.com/'
     }
   ];
   it('should render an image based on the type', () => {

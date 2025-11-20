@@ -24,7 +24,7 @@ const getIconStyle = (isMobile: boolean, focused: boolean) => {
   let borderRadius;
 
   if (isMobile) {
-    width = 230;
+    width = 270;
     borderRadius = '8px';
   } else if (focused) {
     width = 280;
@@ -136,7 +136,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       />
     );
   };
-  function renderOptionFn({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode {
+
+  const renderOption = useCallback(({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => {
     return (
       <div {...props} key={key}>
         <ListItem disableGutters>
@@ -146,9 +147,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
         </ListItem>
       </div>
     );
-  }
+  }, []);
 
-  const renderOption = useMemo(() => renderOptionFn, [renderOptionFn]);
   const getOptionLabel = (option: T) => {
     if (typeof option.title === 'string') {
       return option.title;
@@ -157,6 +157,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     }
     return '';
   };
+
   return (
     <Autocomplete<T, false, false, false>
       data-testid="music-search"

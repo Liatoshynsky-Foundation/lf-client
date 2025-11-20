@@ -27,15 +27,16 @@ const TitleWithQuote = ({
 }: TitleWithQuoteProps) => {
   const styles = getStyles(color);
   return (
-    <Box sx={styles.mainContainer}>
+    <Box sx={styles.mainContainer} data-testid="TitleWithQuote">
       <Box sx={styles.titleSection}>
-        <Typography variant="h2" sx={styles.titleText}>
+        <Typography variant="h2" sx={styles.titleText} data-testid="TitleWithQuote-title">
           {title}
         </Typography>
       </Box>
 
-      <Box sx={[styles.quoteSection, ...sxToArray(quoteSectionSx)]}>
+      <Box sx={[styles.quoteSection, ...sxToArray(quoteSectionSx)]} data-testid="TitleWithQuote-quoteBlock">
         <QuoteBlock
+          dataTestId="Quote"
           width={quoteWidth}
           sx={quoteBlockSx}
           quoteIconColor={'burgundy'}

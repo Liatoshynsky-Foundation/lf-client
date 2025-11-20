@@ -24,6 +24,7 @@ jest.mock('next-intl', () => ({
       nameMinLength: 'Імʼя має містити щонайменше 2 символи',
       emailRequired: 'Будь ласка, вкажіть вашу електронну адресу',
       emailInvalid: 'Введіть коректну email-адресу',
+      phoneNumberInvalid: 'Перевірте формат номера телефону',
       messageMinLength: 'Напишіть кілька слів у повідомленні',
       policyRequired: 'Щоб продовжити, потрібно дати згоду'
     };
@@ -89,23 +90,69 @@ describe('ContactForm', () => {
   it('should show errors when incorrect inputs', async () => {
     fillInput('Імя', 'A');
     fillInput('Електронна адреса (email) *', 'test@');
+    fillInput('Номер телефону', '531632');
     fillInput('Ваше повідомлення *', 'Привіт');
     submitForm();
 
     await waitFor(() => {
       expect(screen.getByText('Імʼя має містити щонайменше 2 символи')).toBeInTheDocument();
       expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
+      expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
     });
   });
 
-  it('should call onSubmit callback when submit button is clicked', () => {
-    const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
-    if (!submit) {
-      throw new Error('Expected a submit button to be present.');
-    }
+  it('should call onSubmit callback when submit button is clicked', async () => {
+    fillInput('Імя', 'Vlad');
+    fillInput('Електронна адреса (email) *', 'v@mail.com');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
 
-    fireEvent.click(submit);
-    expect(onSubmit).toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+  });
+
+  it('should normalize when mask chars already present', async () => {
+    const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
+    const form = submitBtn.closest('form') as HTMLFormElement;
+    if (!form) throw new Error('Form element not found');
+
+    fillInput('Імя', 'Kate');
+    fillInput('Електронна адреса (email) *', 'k@mail.com');
+    fillInput('Номер телефону', '+380 (63) 116-4627');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect((screen.getByLabelText('Номер телефону') as HTMLInputElement).value).toBe('+380 (63) 116-4627');
+    });
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    const payload = (onSubmit as jest.Mock).mock.calls[0][0];
+    expect(payload.phoneNumber).toBe('+380631164627');
+  });
+
+  it('should NOT call onSubmit when phone number is incomplete but not empty', async () => {
+    const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
+    const form = submitBtn.closest('form') as HTMLFormElement;
+    if (!form) throw new Error('Form element not found');
+
+    fillInput('Імя', 'Kate');
+    fillInput('Електронна адреса (email) *', 'k@mail.com');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    fillInput('Номер телефону', '+380 (63) 116-46');
+
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
+    });
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(0));
   });
 });

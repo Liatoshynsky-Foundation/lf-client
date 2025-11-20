@@ -29,7 +29,7 @@ export const sections = [
     links: [
       { label: 'Про нас', href: '/about-us' },
       { label: 'Новини', href: '/news' },
-      { label: 'ЗМІ про нас', href: '/media-about-us' }
+      { label: 'Ми у ЗМІ', href: '/media-about-us' }
     ]
   },
   {
@@ -41,7 +41,7 @@ export const sections = [
   },
   {
     title: 'МУЗЕЙ',
-    links: [{ label: 'Кабінет-архів', href: '/museum' }]
+    links: [{ label: 'Архів', href: '/museum' }]
   }
 ];
 

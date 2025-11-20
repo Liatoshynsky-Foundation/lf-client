@@ -1,12 +1,16 @@
 import type { Theme } from '@mui/material';
 
 export const enhancedTableStyles = {
-  root: (theme: Theme) => ({
+  root: {
     display: 'flex',
     flexDirection: 'column',
     py: 20,
     gap: 4,
-    gridColumn: '1 / -1',
+    gridColumn: '1 / -1'
+  },
+  container: (theme: Theme) => ({
+    boxShadow: 'none',
+    border: 'none',
 
     marginLeft: `-${theme.spacing(2.5)}`,
     marginRight: `-${theme.spacing(2.5)}`,
@@ -25,12 +29,6 @@ export const enhancedTableStyles = {
     }
   }),
 
-  container: {
-    width: '100%',
-    boxShadow: 'none',
-    border: 'none'
-  },
-
   paginationWrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -39,11 +37,6 @@ export const enhancedTableStyles = {
     gap: { xs: 3, md: 4 },
     alignItems: 'center'
   },
-
-  title: {
-    pl: 9
-  },
-
   loaderBox: {
     display: 'flex',
     justifyContent: 'center',

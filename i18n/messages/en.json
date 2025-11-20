@@ -9,7 +9,7 @@
     "contactUsButton": "Contact us",
     "opentechLabel": "Developed by",
     "phoneLabel": "Phone",
-    "phoneCopiedAlert": "Phone number copied to clipboard"
+    "phoneCopiedAlert": "Copied"
   },
   "header": {
     "supportButton": "Support",
@@ -21,8 +21,8 @@
       "foundation": "Foundation",
       "foundationHome": "About the foundation",
       "news": "News",
-      "mediaAboutUs": "Media about us",
-      "archive": "Cabinet-Archive",
+      "mediaAboutUs": "Our media work",
+      "archive": "Archive",
       "collaboration": "Cooperation"
     }
   },
@@ -39,12 +39,14 @@
       "nameMinLength": "The name must contain at least 2 characters",
       "emailRequired": "Please enter your email address",
       "emailInvalid": "Please enter a valid email address",
+      "phoneNumberInvalid": "Check the phone number format",
       "messageMinLength": "Please write a few words in the message",
       "policyRequired": "You must agree to continue"
     }
   },
   "donationForm": {
     "donationTitle": "QUICK DONATION:",
+    "donationDescription": "Choose an amount to support the Foundation",
     "subscribeTitle": "SUBSCRIBE:",
     "donationSwitch": "Donation",
     "subscribeSwitch": "Subscription",
@@ -65,7 +67,8 @@
       "errorMessage": "The page you are looking for does not exist, search again on the main page"
     },
     "goHome": "Return to home",
-    "viewMore": "View More"
+    "viewMore": "View More",
+    "copied": "Copied"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -114,8 +117,8 @@
         "full": "View the sheet music library"
       },
       "archive": {
-        "short": "View the archive",
-        "full": "View the Archive Cabinet"
+        "short": "View the Archive",
+        "full": "View the Archive"
       }
     },
     "seeMore": "See more"
@@ -131,7 +134,7 @@
         "question": "Didn't find the answer you were looking for?",
         "answer": "Contact us in a way convenient for you:"
       },
-      "phoneCopiedAlert": "Phone number copied to clipboard"
+      "phoneCopiedAlert": "Copied"
     }
   },
   "collaboration": {
@@ -151,10 +154,14 @@
       "filters": {
         "category": "Category",
         "genre": "Genre",
-        "year": "Year"
+        "year": "Year of composition"
       },
       "name": {
         "composition": "All compositions"
+      },
+      "notFound": {
+        "title": "OoPs! NoThinG HeRe",
+        "description": "Our archivist cat has searched every drawer. Try another query"
       }
     },
     "buttons": {
@@ -209,7 +216,8 @@
       "onlyNumbers": "Only numeric values are allowed"
     },
     "selected": "selected",
-    "clear": "Clear filter"
+    "clear": "Clear filter",
+    "clearAll": "Clear all filters"
   },
   "search": {
     "notFound": "Not found",
@@ -225,19 +233,19 @@
   },
   "getNotes": {
     "notesList": {
-      "title": "Notes:",
+      "title": "NoTeS:",
       "subtitle": "All notes",
       "freeNotesButton": "View",
       "paidNotesButton": "Contact us"
     },
     "form": {
-      "title": "Form",
-      "subtitle": "List of all notes"
+      "title": "Sheet Music Request",
+      "subtitle": "Send your request and we will contact you within a few business days"
     },
     "confirmation": {
-      "title": "Confirmation",
-      "subtitle": "Thank you for your request for sheet music materials",
-      "btnText": "Закрити"
+      "title": "ThAnK YoU",
+      "subtitle": "For submitting a request to receive the sheet music",
+      "btnText": "Close"
     }
   },
   "error": {
@@ -248,5 +256,12 @@
     "title": "PaGe UnDeR CoNsTrUcTiOn",
     "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
     "button": "Return to home"
+  },
+  "warSupport": {
+    "title": "RUSSIA'S WAR AGAINST UKRAINIANS",
+    "ourPartners": {
+      "title": "OUR PARTNERS:",
+      "description": "The Lyatoshynsky Foundation is sincerely open to partnership and appreciates any support. We believe that cooperation based on trust and mutual respect will help us develop Ukrainian musical culture together. We invite those who share our mission and seek to participate in preserving the legacy of Borys Lyatoshynsky and supporting contemporary musical initiatives to partner with us."
+    }
   }
 }

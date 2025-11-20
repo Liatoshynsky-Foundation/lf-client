@@ -3,7 +3,6 @@ import { type ColumnDef, ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { MusicTableFilters } from './filters/MusicTableFilters';
 import { getCompositionColumnWidths } from './getColumnWidth';
 import {
   RenderActionsCell,
@@ -20,14 +19,18 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './MusicTableCells';
+import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 
 import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
+import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
+import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import GetNotesModal from '~/shared/components/get-notes-modal/GetNotesModal';
 import { Search } from '~/shared/components/search/Search';
+import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
 import { useSearch } from '~/shared/hooks/use-search/UseSearch';
@@ -85,10 +88,13 @@ export default function MusicTableSection() {
     [isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove]
   );
 
-  const handleGenreChange = (values: string[]) => {
-    setGenreFilter(values);
-    debouncedSetFilterParam('genre', values);
-  };
+  const handleGenreChange = useCallback(
+    (values: string[]) => {
+      setGenreFilter(values);
+      debouncedSetFilterParam('genre', values);
+    },
+    [debouncedSetFilterParam]
+  );
 
   const handleCategoryChange = useCallback(
     (values: string[]) => {
@@ -145,7 +151,7 @@ export default function MusicTableSection() {
       setCategoryOptions(staticFilters.categories ?? []);
       setYearOptions([defaultMinYear, defaultMaxYear]);
     }
-  }, [staticFilters]);
+  }, [staticFilters, defaultMinYear, defaultMaxYear]);
 
   const handleOpenModal = ({ composition, notes }: CompositionWithNotes) => {
     setCompositionName(composition);
@@ -189,6 +195,74 @@ export default function MusicTableSection() {
     []
   );
 
+  const minYear = yearOptions?.[0];
+  const maxYear = yearOptions?.[1];
+
+  const isYearActive = yearFilter[0] > (minYear ?? defaultMinYear) || yearFilter[1] < (maxYear ?? defaultMaxYear);
+
+  const filters = useMemo(
+    () => [
+      {
+        id: 'category',
+        isActive: categoryFilter.length > 0,
+        element: (
+          <FilterSelect
+            label={tFilters('category')}
+            options={categoryOptions.map((c) => ({ value: c.key, label: c.name }))}
+            defaultValues={categoryFilter}
+            variant="filled"
+            onAdd={(v, l, all) => handleCategoryChange(all)}
+            onRemove={(v, l, all) => handleCategoryChange(all)}
+          />
+        )
+      },
+      {
+        id: 'genre',
+        isActive: genreFilter.length > 0,
+        element: (
+          <FilterSelect
+            label={tFilters('genre')}
+            options={genresOptions.map((g) => ({ value: g.key, label: g.name }))}
+            defaultValues={genreFilter}
+            variant="filled"
+            onAdd={(v, l, all) => handleGenreChange(all)}
+            onRemove={(v, l, all) => handleGenreChange(all)}
+          />
+        )
+      },
+      {
+        id: 'year',
+        isActive: isYearActive,
+        isStatic: true,
+        element: (
+          <YearNumericFilter
+            label={tFilters('year')}
+            value={yearFilter}
+            onChange={handleYearChangeForInput}
+            onChangeCommitted={handleYearChangeForParams}
+            minYear={minYear}
+            maxYear={maxYear}
+          />
+        )
+      }
+    ],
+    [
+      categoryFilter,
+      genreFilter,
+      yearFilter,
+      minYear,
+      maxYear,
+      isYearActive,
+      handleCategoryChange,
+      handleGenreChange,
+      handleYearChangeForInput,
+      handleYearChangeForParams,
+      categoryOptions,
+      genresOptions,
+      tFilters
+    ]
+  );
+
   const hiddenOnSmall = useMemo(() => new Set(['opus', 'year', 'genre', 'play']), []);
   const columns: ColumnDef<Music>[] = useMemo(
     () => (bp.isTablet || bp.isMobile ? baseColumns.filter((c) => !hiddenOnSmall.has(String(c.id))) : baseColumns),
@@ -197,15 +271,8 @@ export default function MusicTableSection() {
 
   const tableKey: TableKey = (bp.isMobile && 'mobile') || (bp.isTablet && 'tablet') || 'desktop';
 
-  const minYear = yearOptions?.[0];
-  const maxYear = yearOptions?.[1];
-
-  const isGenreActive = genreFilter.length > 0;
-  const isCategoryActive = categoryFilter.length > 0;
-  const isYearActive = yearFilter[0] > (minYear ?? defaultMinYear) || yearFilter[1] < (maxYear ?? defaultMaxYear);
-
-  const isAnyFilterActive = isGenreActive || isYearActive || isCategoryActive;
-  const activeFiltersCount = Number(isGenreActive) + Number(isYearActive) + Number(isCategoryActive);
+  const activeFiltersCount = genreFilter.length + categoryFilter.length + (isYearActive ? 1 : 0);
+  const isAnyFilterActive = activeFiltersCount > 0;
 
   return (
     <>
@@ -219,6 +286,7 @@ export default function MusicTableSection() {
         onColumnFiltersChange={setColumnFilters}
         columnWidths={columnWidths}
         itemsPerPage={10}
+        noResults={<TableNoResultsFound />}
         tableName={t('name.composition')}
         Search={
           <Search<TitlesDTO>
@@ -229,24 +297,7 @@ export default function MusicTableSection() {
           />
         }
         Filters={
-          <MusicTableFilters
-            labelGenre={tFilters('genre')}
-            genreFilter={genreFilter}
-            genresOptions={genresOptions}
-            onGenresChange={handleGenreChange}
-            labelCategory={tFilters('category')}
-            categoryFilter={categoryFilter}
-            categoriesOptions={categoryOptions}
-            onCategoriesChange={handleCategoryChange}
-            yearLabel={tFilters('year')}
-            yearFilter={yearFilter}
-            onYearChange={handleYearChangeForInput}
-            onYearChangeCommitted={handleYearChangeForParams}
-            onClearAllFilters={clearAllFilters}
-            isAnyFilterActive={isAnyFilterActive}
-            minYear={minYear ?? defaultMinYear}
-            maxYear={maxYear ?? defaultMaxYear}
-          />
+          <TableFilters isAnyFilterActive={isAnyFilterActive} onClearAllFilters={clearAllFilters} filters={filters} />
         }
         isFiltersActive={isAnyFilterActive}
         activeFiltersCount={activeFiltersCount}

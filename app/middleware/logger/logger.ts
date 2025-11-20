@@ -1,6 +1,7 @@
 import type { TransformableInfo } from 'logform';
 import { createLogger, format, transports } from 'winston';
 import { MongoDB } from 'winston-mongodb';
+import type Transport from 'winston-transport';
 
 import { mongoUrl } from '~/config';
 import { SEVEN_DAYS_IN_SECONDS } from '~/constants';
@@ -24,22 +25,28 @@ const logFormat = printf((info: TransformableInfo): string => {
   return `🕒 ${timestamp} ${level}: ${message}${metaBlock}${formatStack(stack)}`;
 });
 
-const logger = createLogger({
-  format: combine(errors({ stack: true }), timestamp(), logFormat),
-  transports: [
-    new transports.Console({
-      format: combine(format.colorize(), logFormat),
-      handleExceptions: true
-    }),
+const transportsList: Transport[] = [
+  new transports.Console({
+    format: combine(format.colorize(), logFormat),
+    handleExceptions: true
+  })
+];
 
+if (mongoUrl) {
+  transportsList.push(
     new MongoDB({
       level: 'error',
-      db: mongoUrl,
+      db: mongoUrl as string,
       collection: 'logger',
       expireAfterSeconds: SEVEN_DAYS_IN_SECONDS,
       format: combine(errors({ stack: true }), timestamp(), json())
     })
-  ]
+  );
+}
+
+const logger = createLogger({
+  format: combine(errors({ stack: true }), timestamp(), logFormat),
+  transports: transportsList
 });
 
 export default logger;

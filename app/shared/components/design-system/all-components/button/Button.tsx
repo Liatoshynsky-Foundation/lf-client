@@ -4,8 +4,9 @@ import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } 
 import { styled } from '@mui/material/styles';
 import { forwardRef, ReactNode } from 'react';
 
+import { ButtonLabel } from './ButtonLabel';
+
 import { Link } from '~/i18n/navigation';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 const CustomButton = styled(MuiButton)({});
 
@@ -20,6 +21,7 @@ type BaseButtonProps = {
   label?: string;
   shortLabel?: string;
   link?: string;
+  externalLink?: boolean;
 } & (
   | {
       color?: 'primary' | 'secondary';
@@ -33,11 +35,8 @@ type BaseButtonProps = {
 export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ label, shortLabel, link, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
+  ({ label, shortLabel, link, externalLink, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
     const isDisabled = disabled ?? loading;
-
-    const { isMobile } = useBreakpoints();
-    label = isMobile && shortLabel ? shortLabel : label;
 
     const content = (
       <CustomButton
@@ -47,11 +46,27 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         endIcon={!loading ? endIcon : undefined}
         {...props}
       >
-        {loading ? <CircularProgress color="inherit" size={25} data-testid="loader" /> : (label ?? children)}
+        {loading ? (
+          <CircularProgress color="inherit" size={25} data-testid="loader" />
+        ) : (
+          <ButtonLabel label={label} shortLabel={shortLabel}>
+            {children}
+          </ButtonLabel>
+        )}
       </CustomButton>
     );
 
-    return link ? <Link href={link}>{content}</Link> : content;
+    if (!link) return content;
+
+    if (externalLink) {
+      return (
+        <a href={link} target="_blank" rel="noopener noreferrer">
+          {content}
+        </a>
+      );
+    }
+
+    return <Link href={link}>{content}</Link>;
   }
 );
 

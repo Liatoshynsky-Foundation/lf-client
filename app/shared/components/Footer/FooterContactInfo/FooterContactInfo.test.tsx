@@ -1,9 +1,13 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import FooterContactInfo from './FooterContactInfo';
+
+jest.mock('~/hooks/use-breakpoints/useBreakpoints');
+const mockedUseBreakpoints = useBreakpoints as jest.Mock;
 
 const contacts = {
   foundationName: 'Test Title',
@@ -18,36 +22,23 @@ const labels = {
 
 const alertMsg = 'Copied';
 
-jest.mock('~/shared/hooks/is-mobile/useIsMobile', () => ({
-  useIsMobile: jest.fn()
-}));
+describe('FooterContactInfo', () => {
+  beforeAll(() => {
+    jest.spyOn(window, 'alert').mockImplementation(() => {});
+  });
 
-describe('Contact information block inside of the Footer', () => {
-  describe('Contact information on desktop', () => {
-    beforeAll(() => {
-      (useIsMobile as jest.Mock).mockReturnValue(false);
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
 
-      Object.defineProperties(navigator, {
-        clipboard: {
-          value: {
-            writeText: jest.fn()
-          }
-        }
-      });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-      jest.spyOn(window, 'alert').mockImplementation(() => {});
-    });
-
-    afterAll(() => {
-      (useIsMobile as jest.Mock).mockRestore();
-    });
-
+  describe('on desktop', () => {
     beforeEach(() => {
+      mockedUseBreakpoints.mockReturnValue({ isMobile: false });
       render(<FooterContactInfo labels={labels} contacts={contacts} alertMsg={alertMsg} />);
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
     });
 
     it('renders all contact information', () => {
@@ -63,42 +54,40 @@ describe('Contact information block inside of the Footer', () => {
       expect(emailLink).toHaveAttribute('href', `mailto:${contacts.email}`);
     });
 
-    it('renders tel phone link with onClick handler', () => {
-      const phoneLink = screen.getByRole('link', { name: contacts.phone });
-      expect(phoneLink).toHaveAttribute('href', '#');
+    it('copies phone on CopyButton click', async () => {
+      const user = userEvent.setup();
+      const writeSpy = jest.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 
-      fireEvent.click(phoneLink);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(contacts.phone);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-      expect(window.alert).toHaveBeenCalledWith(alertMsg);
+      const phoneLink = screen.getByRole('link', { name: contacts.phone });
+      const phoneContainer = phoneLink.parentElement as HTMLElement;
+
+      const copyButton = within(phoneContainer).getByRole('button', { name: /copy content/i });
+
+      await user.click(copyButton);
+
+      expect(writeSpy).toHaveBeenCalledWith(contacts.phone);
+      writeSpy.mockRestore();
     });
   });
 
-  describe('Contact information on mobile', () => {
-    beforeAll(() => {
-      (useIsMobile as jest.Mock).mockReturnValue(true);
-    });
-
-    afterAll(() => {
-      (useIsMobile as jest.Mock).mockRestore();
-    });
-
+  describe('on mobile', () => {
     beforeEach(() => {
-      render(<FooterContactInfo contacts={contacts} labels={labels} alertMsg={alertMsg} />);
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
+      mockedUseBreakpoints.mockReturnValue({ isMobile: true });
+      render(<FooterContactInfo labels={labels} contacts={contacts} alertMsg={alertMsg} />);
     });
 
     it('renders mailto email link with correct href', () => {
-      const emailLink = screen.getByRole('link', { name: contacts.email });
+      const emailLink = screen.getByRole('link', { name: `Email: ${contacts.email}` });
       expect(emailLink).toHaveAttribute('href', `mailto:${contacts.email}`);
     });
 
-    it('renders tel phone link with href', () => {
-      const phoneLink = screen.getByRole('link', { name: contacts.phone });
+    it('renders tel phone link with correct href', () => {
+      const phoneLink = screen.getByRole('link', { name: `Phone: ${contacts.phone}` });
       expect(phoneLink).toHaveAttribute('href', `tel:${contacts.phone}`);
+    });
+
+    it('does not render copy button on mobile', () => {
+      expect(screen.queryByRole('button', { name: /copy content/i })).toBeNull();
     });
   });
 });

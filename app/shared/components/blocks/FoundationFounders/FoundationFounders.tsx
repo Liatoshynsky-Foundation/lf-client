@@ -12,11 +12,11 @@ const FoundationFounders = ({ data }: { data: IFoundationFounders }) => {
   const { titleText, listTitle, members } = data;
 
   return (
-    <Box sx={styles.container}>
-      <ColumnGuides lineColor="rgba(252, 252, 252, 1)" />
-      <Box sx={styles.contentContainer}>
-        <FoundationWasCreated data={titleText} />
-        <FoundationTeam title={listTitle} team={members} />
+    <Box sx={styles.container} data-testid="FoundationFounders">
+      <ColumnGuides lineColor="rgba(252, 252, 252, 1)" dataTestId="FoundationFounders-guides" />
+      <Box sx={styles.contentContainer} data-testid="FoundationFounders-contentContainer">
+        <FoundationWasCreated data={titleText} dataTestId="FoundationFounders-titleText" />
+        <FoundationTeam title={listTitle} team={members} dataTestId="FoundationFounders-listTitle" />
       </Box>
     </Box>
   );

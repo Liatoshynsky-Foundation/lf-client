@@ -21,7 +21,8 @@ export const styles = {
     px: {
       xs: '24px',
       sm: '56px',
-      md: '72px'
+      lg: '67px',
+      xl: '72px'
     },
     pointerEvents: 'auto'
   }),
@@ -34,10 +35,11 @@ export const styles = {
     transform: {
       xs: 'translate(-17px)',
       sm: 'translate(-22px)'
-    }
+    },
+    zIndex: 1000
   },
   navigationContainer: {
-    marginRight: { lg: '31px', xl: '35px', xxl: '70px' },
+    marginRight: { xl: '35px', xxl: '70px' },
     fontSize: { md: '15px', lg: '16px' }
   },
   rightActionsContainer: {
@@ -48,7 +50,8 @@ export const styles = {
     display: 'flex',
     justifyContent: 'end',
     alignItems: 'center',
-    gap: '20px'
+    gap: '20px',
+    zIndex: 1000
   },
   navWrapper: {
     display: 'flex',

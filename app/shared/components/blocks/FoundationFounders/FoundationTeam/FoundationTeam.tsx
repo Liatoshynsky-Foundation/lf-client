@@ -10,6 +10,7 @@ import { IImageBlock } from '~/types/page/about-us.types';
 interface FoundationTeamProps {
   title: string;
   team: Teammate[];
+  dataTestId?: string;
 }
 
 interface Teammate {
@@ -18,7 +19,7 @@ interface Teammate {
   photo: IImageBlock;
 }
 
-const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
+const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team, dataTestId }) => {
   const fallback = (
     <Box sx={styles.logo}>
       <SvgImage src="/images/light-logo.svg" width={210} height={78} alt="logo" />
@@ -26,7 +27,7 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
   );
 
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.container} data-testid={dataTestId}>
       <Box sx={styles.titleWrapper}>
         <Typography sx={styles.title}>{title}</Typography>
       </Box>
@@ -34,7 +35,7 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team }) => {
         {team.map((member, index) => (
           <React.Fragment key={member.name}>
             {index === 0 && fallback}
-            <PersonCard name={member.name} description={member.description} imgURL={member.photo.src} />
+            <PersonCard name={member.name} description={member.description} imgURL={member.photo.generatedSrc} />
             {(index + 1) % 2 === 0 && fallback}
           </React.Fragment>
         ))}

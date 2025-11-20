@@ -11,12 +11,14 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
   const { title, image, quote } = data;
 
   return (
-    <Box sx={styles.container}>
-      <Typography sx={styles.title}>{title}</Typography>
-      <Box sx={styles.photoContainer}>
+    <Box sx={styles.container} data-testid="IntroSection">
+      <Typography sx={styles.title} data-testid="IntroSection-title">
+        {title}
+      </Typography>
+      <Box sx={styles.photoContainer} data-testid="IntroSection-photoContainer">
         {image && (
           <ImageWithCaption
-            src={image.src}
+            src={image.generatedSrc}
             alt={image.alt}
             caption={image.caption ?? ''}
             sizes={{
@@ -33,10 +35,12 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             }}
             containerSx={styles.imageContainer}
             captionSx={styles.imageCaption}
+            imageSx={{ width: { xs: '80vw', sm: '60vw', xxl: '980px' } }}
+            dataTestId="IntroSection-imageCaption"
           />
         )}
       </Box>
-      <Box sx={styles.quote}>
+      <Box sx={styles.quote} data-testid="IntroSection-quote">
         {quote && (
           <QuoteBlock
             quoteText={quote.text}
@@ -45,6 +49,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             mainTextColor="burgundy"
             alignRight={false}
             sx={styles.quoteBlock}
+            dataTestId="IntroSection-quoteBlock"
           />
         )}
       </Box>

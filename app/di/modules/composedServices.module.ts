@@ -1,33 +1,36 @@
-import { asFunction } from 'awilix';
+import { asFunction, AwilixContainer } from 'awilix';
 
-import { createArtistryService } from '~/services/composed/artistry-service/artistryService';
-import { createFooterService } from '~/services/composed/footer-service/footerService';
-import { createHeaderService } from '~/services/composed/header-service/headerService';
-import {
-  createDraftPagesDataService,
-  createPagesDataService
-} from '~/services/composed/pages-data-service/pagesDataService';
-import { createScientificWorksService } from '~/services/composed/scientific-works-service/scientificWorks';
-import { createAzureStorageService } from '~/services/composed/upload-service/upload';
+import { createArtistryService } from '~/services/artistry/artistryService';
+import { createFooterService } from '~/services/footer/footerService';
+import { createHeaderService } from '~/services/header/headerService';
+import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
+import { createScientificWorksService } from '~/services/scientific-works-service/scientificWorks';
+import { createAzureStorageService } from '~/services/upload/upload';
 
-export const registerComposedServices = () => ({
-  headerService: asFunction(({ foundationInfoService, navigationService }) =>
-    createHeaderService({ foundationInfoService, navigationService })
-  ).scoped(),
+export type ComposedServicesModule = {
+  headerService: ReturnType<typeof createHeaderService>;
+  footerService: ReturnType<typeof createFooterService>;
+  artistryService: ReturnType<typeof createArtistryService>;
+  scientificService: ReturnType<typeof createScientificWorksService>;
+  uploadService: ReturnType<typeof createAzureStorageService>;
+  pagesDataService: ReturnType<typeof createPagesDataService>;
+  draftPagesDataService: ReturnType<typeof createDraftPagesDataService>;
+};
 
-  footerService: asFunction(({ foundationInfoService, navigationService }) =>
-    createFooterService({ foundationInfoService, navigationService })
-  ).scoped(),
+export const registerComposedServicesFor = (container: AwilixContainer) => {
+  container.register({
+    headerService: asFunction(createHeaderService).scoped(),
 
-  artistryService: asFunction(({ compositionService }) => createArtistryService({ compositionService })).scoped(),
+    footerService: asFunction(createFooterService).scoped(),
 
-  scientificService: asFunction(({ scientificWorksService }) =>
-    createScientificWorksService({ scientificWorksService })
-  ).scoped(),
+    artistryService: asFunction(createArtistryService).scoped(),
 
-  uploadService: asFunction(createAzureStorageService).singleton(),
+    scientificService: asFunction(createScientificWorksService).scoped(),
 
-  pagesDataService: asFunction(({ pagesService }) => createPagesDataService(pagesService)).scoped(),
+    uploadService: asFunction(createAzureStorageService).singleton(),
 
-  draftPagesDataService: asFunction(({ draftPagesService }) => createDraftPagesDataService(draftPagesService)).scoped()
-});
+    pagesDataService: asFunction(createPagesDataService).scoped(),
+
+    draftPagesDataService: asFunction(createDraftPagesDataService).scoped()
+  });
+};

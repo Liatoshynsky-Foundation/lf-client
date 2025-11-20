@@ -57,8 +57,8 @@ Common scopes in our project:
 
 The description should:
 
-- Be written in imperative mood ("Add feature" not "Added feature")
-- Start with a capital letter
+- Be written in imperative mood ("add feature" not "added feature")
+- Start with a lowercase letter
 - Not end with a period
 - Be concise but descriptive
 
@@ -106,7 +106,6 @@ Related to #456
 
 | ❌ Bad Example          | ✅ Good Example                                  |
 | ----------------------- | ------------------------------------------------ |
-| ❌ `Added new feature`  | ✅ `feat: add new feature`                       |
 | ❌ `Added new feature`  | ✅ `feat: add new feature`                       |
 | ❌ `fixed bug in login` | ✅ `fix(auth): handle null username in login`    |
 | ❌ `update readme`      | ✅ `docs(readme): add installation instructions` |

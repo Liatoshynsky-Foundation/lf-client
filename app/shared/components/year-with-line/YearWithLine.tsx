@@ -40,7 +40,7 @@ const YearWithLine = ({ year }: { year: number }) => {
   }, [numberStr, isTablet, isMobile]);
 
   return (
-    <Box sx={Styles.container}>
+    <Box sx={Styles.container} id={`year-${year}`}>
       <Box ref={textRef} sx={Styles.yearBlock}>
         <Box sx={Styles.line(offset)} />
         <Box sx={Styles.year}>{numberStr}</Box>

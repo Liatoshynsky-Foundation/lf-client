@@ -1,11 +1,29 @@
 import { z } from 'zod';
 
-import { createLocalizedAboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
-import { createLocalizedPrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
-import { createLocalizedResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
+import { PageSlug } from '~/services/pages-data/schema-factory';
+import { ExcludeDBFields, Localize } from '~/validators/constants';
+import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
+import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 
-export type AboutUsPage = z.infer<ReturnType<typeof createLocalizedAboutUsPageSchema>>;
-export type PrivacyPolicyPage = z.infer<ReturnType<typeof createLocalizedPrivacyPolicyPageSchema>>;
-export type ResearchPage = z.infer<ReturnType<typeof createLocalizedResearchPageSchema>>;
+export type AboutUsPageBase = ExcludeDBFields<z.infer<typeof AboutUsPageSchema>>;
+export type PrivacyPolicyPageBase = ExcludeDBFields<z.infer<typeof PrivacyPolicyPageSchema>>;
+export type ResearchPageBase = ExcludeDBFields<z.infer<typeof ResearchPageSchema>>;
 
-export type PageData = AboutUsPage | PrivacyPolicyPage | ResearchPage;
+export interface PageBaseMap {
+  'about-us': AboutUsPageBase;
+  'privacy-policy': PrivacyPolicyPageBase;
+  research: ResearchPageBase;
+}
+
+export type AboutUsPage = Localize<AboutUsPageBase>;
+export type PrivacyPolicyPage = Localize<PrivacyPolicyPageBase>;
+export type ResearchPage = Localize<ResearchPageBase>;
+
+export interface PageDataMap {
+  'about-us': AboutUsPage;
+  'privacy-policy': PrivacyPolicyPage;
+  research: ResearchPage;
+}
+
+export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;

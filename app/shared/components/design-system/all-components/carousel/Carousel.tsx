@@ -5,22 +5,27 @@ import React, { useCallback, useState } from 'react';
 
 import ArrowCarousel from '~/ds-components/arrow-carousel/ArrowCarousel';
 
-import { SIZES, styles } from './Carousel.styles';
+import { styles } from './Carousel.styles';
 
 interface Image {
   id: number;
   src: string;
   alt: string;
+  description?: string;
 }
 
 interface CarouselProps {
   images: Image[];
-  title?: string;
   initialIndex?: number;
 }
 
-const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
+const Carousel = ({ images, initialIndex = 0 }: CarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
+  // NOSONAR_START
+  // const [isDragging, setIsDragging] = useState(false);
+  // const [touchStartX, setTouchStartX] = useState(0);
+  // const [dragOffset, setDragOffset] = useState(0);
+  // NOSONAR_END
 
   const goToNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % images.length);
@@ -45,6 +50,52 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
   const isFirstSlide = activeIndex === 0;
   const isLastSlide = activeIndex === images.length - 1;
 
+  // NOSONAR_START
+  // const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+  //   setTouchStartX(e.touches[0].clientX || 0);
+  //   setIsDragging(true);
+  // };
+  // NOSONAR_END
+
+  // NOSONAR_START
+  // const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+  //   if (!isDragging) return;
+  //   const currentX = e.touches[0].clientX || 0;
+  //   setDragOffset(currentX - touchStartX);
+  // };
+  // NOSONAR_END
+
+  // NOSONAR_START
+  // const handleTouchEnd = () => {
+  //   if (Math.abs(dragOffset) > 50) {
+  //     if (dragOffset > 0) {
+  //       if (infiniteLoop || !isFirstSlide) goToPrev();
+  //     } else {
+  //       if (infiniteLoop || !isLastSlide) goToNext();
+  //     }
+  //   }
+  //   setIsDragging(false);
+  //   setDragOffset(0);
+  // };
+  // NOSONAR_END
+
+  // NOSONAR_START
+  // const handleKey = useCallback(
+  //   (e: { key: string }) => {
+  //     if (e.key === 'ArrowRight') goToNext();
+  //     if (e.key === 'ArrowLeft') goToPrev();
+  //   },
+  //   [goToNext, goToPrev]
+  // );
+  // NOSONAR_END
+
+  // NOSONAR_START
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKey);
+  //   return () => document.removeEventListener('keydown', handleKey);
+  // }, [handleKey]);
+  // NOSONAR_END
+
   return (
     <Box sx={{ gridColumn: '1 / -1', position: 'relative' }}>
       <Box sx={styles.fullWidthContainerStyles}>
@@ -59,8 +110,13 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
                     key={image.id}
                     data-testid={`carousel-image-${index}`}
                     data-active={isActive}
-                    sx={styles.getImageContainerStyles(isActive, index, activeIndex)}
                     onClick={() => handleImageClick(index)}
+                    // NOSONAR_START
+                    // onTouchStart={handleTouchStart}
+                    // onTouchMove={handleTouchMove}
+                    // onTouchEnd={handleTouchEnd}
+                    // NOSONAR_END
+                    sx={styles.getImageContainerStyles(isActive, index, activeIndex)}
                   >
                     <Box
                       sx={{
@@ -68,21 +124,16 @@ const Carousel = ({ images, title, initialIndex = 0 }: CarouselProps) => {
                         ...styles.styledImageStyles
                       }}
                     >
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        sizes={isActive ? `${SIZES.activeWidth}px` : `${SIZES.inactiveWidth}px`}
-                      />
+                      <Image src={image.src} alt={image.alt} loading="lazy" fill />
                     </Box>
                   </Box>
                 );
               })}
             </Box>
 
-            {title && (
-              <Box sx={styles.getCaptionStyles()}>
-                <Typography variant="caption">{title}</Typography>
+            {images[activeIndex]?.description && (
+              <Box key={images[activeIndex].description} sx={styles.getCaptionStyles()} data-testid="carousel-caption">
+                <Typography variant="caption">{images[activeIndex].description}</Typography>
               </Box>
             )}
 

@@ -7,10 +7,11 @@ import { getItalic, getLink, getUnderline } from '~/components/tip-tap-content/m
 import renderText from '~/components/tip-tap-content/renderText';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
-import { TextNode, TipTapDoc } from '~/types/types/common.types';
+import { TextNode, TipTapDoc } from '~/types/types/tiptap.types';
 
 interface FoundationWasCreatedProps {
   data: TipTapDoc;
+  dataTestId?: string;
 }
 
 const descriptionParagraph = (children: React.ReactNode) => <Typography sx={styles.description}>{children}</Typography>;
@@ -35,9 +36,9 @@ const boldTitleWrapper = (node: TextNode) => (
   </Typography>
 );
 
-const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data }) => {
+const FoundationWasCreated: React.FC<FoundationWasCreatedProps> = ({ data, dataTestId }) => {
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.container} data-testid={dataTestId}>
       <Box sx={styles.ellipseWrapper}>
         <SvgImage src="/icons/ellipse.svg" alt="ellipse" width={22} height={20} />
       </Box>

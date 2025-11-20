@@ -94,22 +94,30 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
       invisible={activeFiltersCount === 0}
       sx={ControlPanelStyles.filtersBadge}
     >
-      <Button variant="outlined" size="medium" onClick={toggleFilters} startIcon={<Filter />}>
-        {t('controls.filters')}
+      <Button
+        variant="outlined"
+        size="medium"
+        onClick={toggleFilters}
+        startIcon={<Filter width="28px" height="28px" />}
+        sx={ControlPanelStyles.filterButton}
+      >
+        <span className="filtersLabel">{t('controls.filters')}</span>
       </Button>
     </Badge>
   );
 
   return (
-    <Box sx={ControlPanelStyles.root(theme)}>
-      <Box sx={ControlPanelStyles.header}>
-        <Typography variant={isLessThan405 ? 'customBold25' : 'customBold32'}>{tableName}</Typography>
-        <Box sx={ControlPanelStyles.headerRight}>
+    <Box sx={ControlPanelStyles.root} data-testid="ControlPanel">
+      <Box sx={ControlPanelStyles.header} data-testid="ControlPanel-header">
+        <Typography variant={isLessThan405 ? 'customBold25' : 'customBold32'} data-testid="ControlPanel-tableName">
+          {tableName}
+        </Typography>
+        <Box sx={ControlPanelStyles.headerRight} data-testid="ControlPanel-header--right">
           {isMobile ? searchIconButton : Search}
           {isMobile ? filtersIconButton : filtersDesktop}
         </Box>
       </Box>
-      <Box sx={ControlPanelStyles.controlsColumn}>
+      <Box sx={ControlPanelStyles.controlsColumn} data-testid="ControlPanel-controlsColumn">
         {isMobile && searchActive ? <Box>{Search}</Box> : null}
         {filtersActive ? <Box sx={ControlPanelStyles.filtersContainer}>{Filters}</Box> : null}
       </Box>

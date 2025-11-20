@@ -13,11 +13,12 @@ interface ButtonCardProps {
   text: string;
   link?: string;
   sx?: SxProps<Theme>;
+  dataTestId?: string;
 }
 
-const ButtonCard = ({ text, link, sx }: ButtonCardProps) => {
+const ButtonCard = ({ text, link, sx, dataTestId }: ButtonCardProps) => {
   const cardContent = (
-    <Box sx={[styles.container, ...sxToArray(sx)]}>
+    <Box sx={[styles.container, ...sxToArray(sx)]} data-testid={dataTestId}>
       <Box sx={styles.background} className="background" />
       <Box sx={styles.content}>
         <Typography variant="customBold20">{text}</Typography>

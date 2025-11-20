@@ -6,7 +6,7 @@ import ButtonCard from '~/ds-components/button-card/ButtonCard';
 import TextCard from '~/ds-components/text-card/TextCard';
 
 import { styles } from './ActionsHelp.styles';
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 interface ActionsHelpProps {
   title: string;
@@ -25,7 +25,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
   const { title, subtitle, paperItems, paperButton } = data;
 
   const renderSubtitle = (children: React.ReactNode) => (
-    <Typography variant="body2" sx={styles.typography}>
+    <Typography variant="body2" sx={styles.typography} data-testid="ActionsHelp-subtitle">
       {children}
     </Typography>
   );
@@ -35,17 +35,27 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
   });
 
   return (
-    <Box sx={styles.gridContainer}>
-      <SectionTitle title={title} mb={52} />
+    <Box sx={styles.gridContainer} data-testid="ActionsHelp">
+      <SectionTitle
+        title={title}
+        mb={52}
+        gridColumn={{ xs: '2 ', sm: '4 / -1', md: '6 / -1', lg: '5 / -1', xl: '6 / -1' }}
+        dataTestId="ActionsHelp-titleContainer"
+      />
       <TipTapContent
         data={subtitle}
         nodeRenderers={{
           paragraph: renderSubtitle
         }}
       />
-      <Box sx={styles.papersContainer}>
+      <Box sx={styles.papersContainer} data-testid="ActionsHelp-papersContainer">
         {paperComponents}
-        <ButtonCard sx={styles.paper(paperComponents.length)} text={paperButton.text} link={paperButton.link} />
+        <ButtonCard
+          sx={styles.paper(paperComponents.length)}
+          text={paperButton.text}
+          link={paperButton.link}
+          dataTestId="ActionsHelp-buttonCard"
+        />
       </Box>
     </Box>
   );

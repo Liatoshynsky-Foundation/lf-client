@@ -1,8 +1,9 @@
 'use client';
-import { Box, Link, Typography } from '@mui/material';
+
+import { Box, Typography } from '@mui/material';
 import React, { FC } from 'react';
 
-import { useIsMobile } from '~/hooks/is-mobile/useIsMobile';
+import { ContactLink } from '~/components/contact-link/ContactLink';
 
 import { styles } from './FooterContactInfo.styles';
 
@@ -20,15 +21,6 @@ interface FooterContactInfoProps {
 }
 
 const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alertMsg }) => {
-  const isMobile = useIsMobile();
-
-  const copyPhoneToClipboard = () => {
-    navigator.clipboard.writeText(contacts.phone);
-    alert(alertMsg);
-  };
-
-  const telLinkProps = isMobile ? { href: `tel:${contacts.phone}` } : { onClick: copyPhoneToClipboard, href: '#' };
-
   return (
     <Box sx={styles.container}>
       <Box sx={styles.titleAndAddressCont}>
@@ -38,18 +30,20 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
         </Box>
       </Box>
       <Box>
-        <Box sx={styles.linkContainer} style={{ marginBottom: '4px' }}>
-          <Typography sx={styles.weakText}>{labels.phoneLabel}:</Typography>
-          <Link sx={styles.link} {...telLinkProps}>
-            {contacts.phone}
-          </Link>
-        </Box>
-        <Box sx={styles.linkContainer}>
-          <Typography sx={styles.weakText}>Email: </Typography>
-          <Link sx={styles.link} href={`mailto:${contacts.email}`}>
-            {contacts.email}
-          </Link>
-        </Box>
+        <ContactLink
+          type="phone"
+          value={contacts.phone}
+          label={labels.phoneLabel}
+          alertMsg={alertMsg}
+          linkSx={{ fontWeight: 400 }}
+        />
+        <ContactLink
+          type="email"
+          value={contacts.email}
+          label="Email"
+          alertMsg={alertMsg}
+          linkSx={{ fontWeight: 400 }}
+        />
       </Box>
     </Box>
   );

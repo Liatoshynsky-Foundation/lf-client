@@ -1,5 +1,5 @@
 import { Locale } from 'next-intl';
-import { z, ZodTypeAny } from 'zod';
+import { z } from 'zod';
 
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
@@ -15,18 +15,29 @@ export const translatedLinkSchema = z.object({
   href: hrefSchema
 });
 
-export function ArraySchema(schema: ZodTypeAny) {
+export function ArraySchema<T extends z.ZodTypeAny>(schema: T): z.ZodArray<T> {
   return z.array(schema);
 }
 
-function isTranslatedField(value: unknown, locale: Locale): value is Record<Locale, string> {
-  return typeof value === 'object' && value !== null && locale in value;
+type TranslatedField<T> = Record<Locale, T>;
+
+export type Localize<T> =
+  T extends Record<Locale, infer U>
+    ? U
+    : T extends Array<infer A>
+      ? Array<Localize<A>>
+      : T extends object
+        ? { [K in keyof T]: Localize<T[K]> }
+        : T;
+
+function isTranslatedField(value: unknown, locale: Locale): value is TranslatedField<unknown> {
+  return typeof value === 'object' && value !== null && locale in (value as any);
 }
 
-export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, locale: Locale) {
+export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale) {
   function localizeValue(value: unknown): unknown {
     if (isTranslatedField(value, locale)) {
-      return value[locale];
+      return (value as Record<string, string>)[locale];
     }
     if (Array.isArray(value)) {
       return value.map(localizeValue);
@@ -41,11 +52,34 @@ export function LocalizeSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T>, 
     return value;
   }
 
-  return z.union([z.array(schema), schema]).transform(localizeValue);
+  return z.union([z.array(schema), schema]).transform(localizeValue) as unknown as z.ZodType<Localize<z.infer<S>>>;
 }
 
-export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _id: any }>) {
+export type ExcludeDBFields<S> = Omit<S, 'pageType' | '_id' | 'createdAt' | 'updatedAt'>;
+
+export function NoTime<T extends z.ZodRawShape>(
+  schema: z.ZodObject<
+    T & {
+      createdAt: z.ZodOptional<z.ZodDate>;
+      updatedAt: z.ZodOptional<z.ZodDate>;
+    }
+  >
+) {
+  return schema.omit({ createdAt: true, updatedAt: true });
+}
+
+export function NoPageType<T extends z.ZodRawShape>(schema: z.ZodObject<T & { pageType: z.ZodLiteral<string> }>) {
+  return schema.omit({ pageType: true });
+}
+
+export function NoIDSchema<T extends z.ZodRawShape>(schema: z.ZodObject<T & { _id: typeof mongoObjectIdSchema }>) {
   return schema.omit({ _id: true });
+}
+
+export function NoSupportButtonLink<T extends z.ZodRawShape>(
+  schema: z.ZodObject<T & { supportButtonLink: z.ZodOptional<typeof hrefSchema> }>
+) {
+  return schema.omit({ supportButtonLink: true });
 }
 
 export type Stringifiable = {

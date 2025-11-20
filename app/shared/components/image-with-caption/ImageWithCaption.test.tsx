@@ -9,6 +9,8 @@ const sizes: ElementSizes = {
   height: { xs: 200, sm: 400, md: 600 }
 };
 
+jest.mock('next/image');
+
 describe('ImageWithCaption', () => {
   it('should render image with caption', () => {
     render(<ImageWithCaption src="/test.jpg" alt="Test image" sizes={sizes} caption="Test Caption" />);
@@ -21,6 +23,7 @@ describe('ImageWithCaption', () => {
     render(<ImageWithCaption src="/test.jpg" alt="Test image" sizes={sizes} caption="Test Caption" />);
 
     const img = screen.getByAltText('Test image');
+
     expect(img).toHaveAttribute('sizes');
     expect(img.getAttribute('sizes')).toContain('300px');
   });
