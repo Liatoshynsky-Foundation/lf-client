@@ -5,15 +5,13 @@ import ContactForm from '~/components/forms/contact-form/ContactForm';
 import PaperComponent from '../../paper-component/PaperComponent';
 import { styles } from './OfferCollaborationForm.styles';
 
-export default function OfferCollaborationForm({
-  formTitle,
-  formSubtitle,
-  sx
-}: {
+interface OfferCollaborationFormProps {
   formTitle?: string;
   formSubtitle?: string;
   sx?: SxProps<Theme>;
-}) {
+}
+
+export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: Readonly<OfferCollaborationFormProps>) {
   return (
     <PaperComponent sx={{ ...sx }} data-testid="OfferCollaborationForm">
       <Typography sx={styles.formTitle} variant="h5" data-testid="OfferCollaborationForm-formTitle">
