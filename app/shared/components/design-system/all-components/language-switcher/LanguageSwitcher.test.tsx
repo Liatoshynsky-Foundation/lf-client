@@ -84,6 +84,32 @@ describe('LanguageSwitcher', () => {
     });
   });
 
+  describe('mobile variant', () => {
+    it('should render mobile layout and switch to EN when clicking EN', () => {
+      (useLocale as jest.Mock).mockReturnValue('uk');
+      render(<LanguageSwitcher variant="mobile" />);
+
+      const enSpan = screen.getByText('EN');
+      const uaSpan = screen.getByText('UA');
+
+      expect(enSpan).toBeInTheDocument();
+      expect(uaSpan).toBeInTheDocument();
+
+      fireEvent.click(enSpan);
+      expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'en', scroll: false });
+    });
+
+    it('should render mobile layout and switch to UA when clicking UA', () => {
+      (useLocale as jest.Mock).mockReturnValue('en');
+      render(<LanguageSwitcher variant="mobile" />);
+
+      const uaSpan = screen.getByText('UA');
+      fireEvent.click(uaSpan);
+
+      expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'uk', scroll: false });
+    });
+  });
+
   it('should close menu after selecting a language', async () => {
     (useLocale as jest.Mock).mockReturnValue('uk');
     render(<LanguageSwitcher variant="icon" />);

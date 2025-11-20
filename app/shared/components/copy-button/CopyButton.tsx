@@ -8,20 +8,17 @@ import { IconButton } from '~/ds-components/icon-button/IconButton';
 import TooltipCustom from '~/ds-components/tooltip/Tooltip';
 
 import { styles } from './CopyButton.styles';
+import { iconSizes } from '~/constants/design';
 
 import { useIsMounted } from '~/shared/hooks/is-mounted/useIsMounted';
+
+export type CopyButtonIconSize = keyof typeof iconSizes;
 
 type CopyButtonPropsType<T extends HTMLElement = HTMLElement> = {
   targetRef: RefObject<T | null>;
   delay?: number;
   hint?: string;
-  iconSize?: 'small' | 'medium' | 'large';
-};
-
-const iconSizes = {
-  small: 16,
-  medium: 20,
-  large: 24
+  iconSize?: CopyButtonIconSize;
 };
 
 export const CopyButton = <T extends HTMLElement = HTMLElement>({
@@ -48,7 +45,12 @@ export const CopyButton = <T extends HTMLElement = HTMLElement>({
   };
 
   const button = (
-    <IconButton customStyles={styles.iconButton} onClick={handleCopy} aria-label="Copy content">
+    <IconButton
+      data-testid="CopyButton"
+      customStyles={styles.iconButton}
+      onClick={handleCopy}
+      aria-label="Copy content"
+    >
       <SvgImage
         src="/icons/content-copy.svg"
         alt="content copy"

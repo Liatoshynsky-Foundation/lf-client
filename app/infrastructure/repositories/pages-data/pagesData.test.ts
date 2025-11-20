@@ -2,7 +2,7 @@ import { PageStatus } from '~/types/enums/common.enums';
 
 import DraftPageModel from '~/infrastructure/models/pages/draftPages.model';
 import PageModel from '~/infrastructure/models/pages/pages';
-import { pagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repository';
+import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
 
 jest.mock('~/infrastructure/db/connect', () => ({
@@ -28,6 +28,8 @@ jest.mock('~/validators/pagesSchemas/pages', () => ({
 const mockedParse = PageZodSchema.parse as jest.Mock;
 const mockedFindOnePublished = (PageModel as unknown as { findOne: jest.Mock }).findOne;
 const mockedFindOneDraft = (DraftPageModel as unknown as { findOne: jest.Mock }).findOne;
+
+const pagesDataRepository = newPagesDataRepo();
 
 describe('pagesDataRepository', () => {
   const slug = 'about-us';

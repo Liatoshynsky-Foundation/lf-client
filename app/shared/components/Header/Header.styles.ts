@@ -35,7 +35,8 @@ export const styles = {
     transform: {
       xs: 'translate(-17px)',
       sm: 'translate(-22px)'
-    }
+    },
+    zIndex: 1000
   },
   navigationContainer: {
     marginRight: { xl: '35px', xxl: '70px' },
@@ -49,7 +50,8 @@ export const styles = {
     display: 'flex',
     justifyContent: 'end',
     alignItems: 'center',
-    gap: '20px'
+    gap: '20px',
+    zIndex: 1000
   },
   navWrapper: {
     display: 'flex',

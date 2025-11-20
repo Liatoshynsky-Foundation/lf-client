@@ -1,13 +1,16 @@
+'use client';
+
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import { ContactLink } from '~/components/contact-link/ContactLink';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import SectionTitle from '~/components/section-title/SectionTitle';
 
+import { PaymentMethodItem } from './PaymentMethodItem';
 import { imageSizes, styles } from './VolunteerDonation.styles';
 
-interface PaymentMethod {
+export interface PaymentMethod {
   label: string;
   value: string;
 }
@@ -20,6 +23,8 @@ interface Props {
 }
 
 const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption }) => {
+  const t = useTranslations('common');
+
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle
@@ -31,9 +36,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
 
       <Box sx={styles.contentWrapper}>
         {paymentMethods.map((method, idx) => (
-          <Box key={`${method.label}-${idx}`} sx={styles.card}>
-            <ContactLink type="phone" value={method.value} label={method.label} />
-          </Box>
+          <PaymentMethodItem key={`${method.label}-${idx}`} method={method} hint={t('copied')} />
         ))}
       </Box>
 

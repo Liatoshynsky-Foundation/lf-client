@@ -5,6 +5,7 @@ import { errorResponse } from '~/utils/apiResponse';
 import { validateWithZod } from '~/utils/validateRequestData';
 
 import { createRequestContainer } from '~/di/container';
+import { isPageSlug } from '~/services/pages-data/schema-factory';
 import { zPageQuerySchema } from '~/validators/queryParams.schema';
 
 export async function GET(request: Request) {
@@ -18,7 +19,12 @@ export async function GET(request: Request) {
   );
   if (!validationResult.valid) return errorResponse(validationResult.errors);
   const { pageName, lang } = validationResult.value;
-  const pagesDataService = createRequestContainer().resolve('pageService');
+
+  if (!isPageSlug(pageName)) {
+    return errorResponse([errors.NOT_FOUND], 404);
+  }
+
+  const pagesDataService = createRequestContainer().resolve('pagesDataService');
   const pageData = await pagesDataService.getPageData(pageName, lang);
   if (!pageData) return errorResponse([errors.NOT_FOUND], 404);
   return NextResponse.json(pageData);

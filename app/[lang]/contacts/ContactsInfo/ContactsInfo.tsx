@@ -9,7 +9,6 @@ import { styles } from './ContactsInfo.styles';
 
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
 import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface IContactInfoProps {
   title?: string;
@@ -23,7 +22,6 @@ interface IContactInfoProps {
 
 export default function ContactsInfo({ title, formTitle, contacts, socialLinks }: Readonly<IContactInfoProps>) {
   const t = useTranslations('contactsInfoPage');
-  const { isMobile } = useBreakpoints();
 
   return (
     <Box sx={styles.root} data-testid="ContactsInfo">
@@ -44,7 +42,6 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
                 type="phone"
                 label={t('phoneNumber')}
                 value={contacts.phone}
-                isMobile={isMobile}
                 direction="column"
                 data-testid="ContactsInfo-phoneLink"
               />

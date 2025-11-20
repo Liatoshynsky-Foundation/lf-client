@@ -5,11 +5,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
+import { parseLocale } from '~/lib/utils/translation/parseLocale';
 
 export async function GET(req: NextRequest) {
   try {
     const params = req.nextUrl.searchParams;
-    const locale = params.get('locale') || 'uk';
+    const locale = parseLocale(params);
 
     const container = createRequestContainer();
     const artistryService = container.resolve('artistryService');

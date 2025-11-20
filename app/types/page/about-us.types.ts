@@ -1,8 +1,9 @@
-import { TipTapDoc } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 export interface IImageBlock {
   src: string;
   alt: string;
+  generatedSrc: string;
   caption?: string | null;
 }
 

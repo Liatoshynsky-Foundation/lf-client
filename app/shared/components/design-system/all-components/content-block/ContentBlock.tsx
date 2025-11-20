@@ -2,7 +2,7 @@ import { Theme } from '@emotion/react';
 import { Box, SxProps, Typography } from '@mui/material';
 
 import { styles } from './ContentBlock.styles';
-import type { TipTapDoc } from '~/types/types/common.types';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';

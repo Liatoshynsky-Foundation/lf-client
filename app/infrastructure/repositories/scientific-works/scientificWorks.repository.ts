@@ -53,3 +53,9 @@ export const scientificWorksRepository = {
     return scientificWorksSchema.parse(scientificWorks);
   }
 };
+
+function newScientificWorksRepo(): typeof scientificWorksRepository {
+  return scientificWorksRepository;
+}
+
+export default newScientificWorksRepo;

@@ -84,45 +84,6 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
   return { __esModule: true, EnhancedTable };
 });
 
-type MusicTableFiltersProps = {
-  onGenresChange: (values: string[]) => void;
-  onYearChange: (v: [number, number]) => void;
-  onCategoriesChange: (values: string[]) => void;
-  onYearChangeCommitted: (v: [number, number]) => void;
-  onClearAllFilters: () => void;
-  minYear: number;
-  maxYear: number;
-};
-
-jest.mock('./filters/MusicTableFilters', () => {
-  const MusicTableFilters = (props: MusicTableFiltersProps) => (
-    <div data-testid="music-table-filters">
-      <span data-testid="min-year">{String(props.minYear)}</span>
-      <span data-testid="max-year">{String(props.maxYear)}</span>
-      <button data-testid="mock-apply-genre-filter" onClick={() => props.onGenresChange(['рок'])}>
-        Apply Genre Filter
-      </button>
-
-      <button data-testid="mock-apply-year-filter" onClick={() => props.onYearChange([1990, 2000])}>
-        Apply Year Filter
-      </button>
-
-      <button data-testid="mock-apply-category-filter" onClick={() => props.onCategoriesChange(['класика'])}>
-        Apply Category Filter
-      </button>
-
-      <button data-testid="mock-apply-year-committed" onClick={() => props.onYearChangeCommitted([1990, 2000])}>
-        Apply Year Committed
-      </button>
-
-      <button data-testid="mock-clear-filters" onClick={() => props.onClearAllFilters()}>
-        Clear Filters
-      </button>
-    </div>
-  );
-  return { __esModule: true, MusicTableFilters };
-});
-
 type GetNotesModalProps = {
   opened: boolean;
   handleClose: () => void;
@@ -140,6 +101,45 @@ jest.mock('~/shared/components/get-notes-modal/GetNotesModal', () => ({
   )
 }));
 
+jest.mock('~/ds-components/selector/FilterSelect', () => ({
+  FilterSelect: ({ label, onAdd, onRemove, defaultValues = [] }: any) => (
+    <div data-testid={`FilterSelect-${label}`}>
+      <button
+        data-testid={`mock-apply-${label}-filter`}
+        onClick={() => (label === 'genre' ? onAdd(null, null, ['рок']) : onAdd(null, null, ['класика']))}
+      >
+        add
+      </button>
+      <button data-testid={`FilterSelect-${label}-remove`} onClick={() => onRemove(null, null, [])}>
+        remove
+      </button>
+      <span>{defaultValues.join(',')}</span>
+    </div>
+  )
+}));
+
+jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () => ({
+  YearNumericFilter: ({ minYear, maxYear, onChangeCommitted }: any) => (
+    <div data-testid="YearNumericFilter">
+      <span data-testid="min-year">{String(minYear)}</span>
+      <span data-testid="max-year">{String(maxYear)}</span>
+      <button data-testid="mock-apply-year-committed" onClick={() => onChangeCommitted([1990, 2000])}>
+        commit
+      </button>
+    </div>
+  )
+}));
+
+jest.mock('~/shared/components/design-system/all-components/tooltip/Tooltip', () => ({
+  __esModule: true,
+  default: ({ children }: any) => <>{children}</>
+}));
+
+jest.mock('~/public/icons/trash-2.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="delete-icon" />
+}));
+
 import MusicTableSection from './MusicTableSelection';
 
 describe('MusicTableSection', () => {
@@ -153,7 +153,7 @@ describe('MusicTableSection', () => {
 
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
 
-    expect(screen.getByTestId('music-table-filters')).toBeInTheDocument();
+    expect(screen.getByTestId('TableFilters')).toBeInTheDocument();
   });
 
   it('should correctly render EnhancedTable props', () => {
@@ -186,8 +186,11 @@ describe('MusicTableSection', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-genre-filter'));
     fireEvent.click(screen.getByTestId('mock-apply-category-filter'));
-    fireEvent.click(screen.getByTestId('mock-apply-year-filter'));
-    fireEvent.click(screen.getByTestId('mock-clear-filters'));
+    fireEvent.click(screen.getByTestId('mock-apply-year-committed'));
+
+    const clearBtn = screen.getByTestId('TableFilters-clearButton');
+    fireEvent.click(clearBtn);
+
     expect(useSearchMockReturn.setFilterParam).toHaveBeenCalledWith(
       expect.objectContaining({ genre: [], yearFrom: null, yearTo: null })
     );
@@ -195,7 +198,7 @@ describe('MusicTableSection', () => {
 
   it('should not call setFilterParam when no filters are active', () => {
     render(<MusicTableSection />);
-    fireEvent.click(screen.getByTestId('mock-clear-filters'));
+    expect(screen.queryByTestId('TableFilters-clearButton')).not.toBeInTheDocument();
     expect(useSearchMockReturn.setFilterParam).not.toHaveBeenCalled();
   });
 
@@ -224,7 +227,7 @@ describe('MusicTableSection', () => {
     expect(screen.getByTestId('max-year')).toHaveTextContent('2025');
   });
 
-  it('should pass yearRange values from staticFilters into MusicTableFilters (min/max)', () => {
+  it('should pass yearRange values from staticFilters', () => {
     (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({ data: staticFiltersData });
 
     render(<MusicTableSection />);
