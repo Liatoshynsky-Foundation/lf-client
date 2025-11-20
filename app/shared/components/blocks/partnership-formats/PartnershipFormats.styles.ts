@@ -388,9 +388,29 @@ export const styles = {
     }
   },
   modalContent: {
-    padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '75px 96px' },
-    margin: { xs: '0px -24px', sm: 'unset' },
-    maxWidth: { sm: '400px', md: '496px', lg: '646px', xl: '744px' }
+    maxHeight: '95vh',
+    maxWidth: {
+      xs: '100vw',
+      sm: '482px',
+      md: '744px',
+      xl: '1024px'
+    },
+    minWidth: {
+      xs: '95vw',
+      sm: 'min(90vw, 482px)',
+      md: 'min(70vw, 744px)',
+      xl: 'min(70vw, 1024px)'
+    },
+    padding: {
+      xs: '40px 24px',
+      sm: '24px 30px',
+      md: '24px 56px',
+      xl: '37px 60px'
+    },
+    '@media (max-width: 480px)': {
+      height: 'calc(100vh - 24px)',
+      width: '100vw'
+    }
   },
   closeIcon: {
     position: 'absolute',
