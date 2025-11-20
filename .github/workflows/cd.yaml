@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    uses: Liatoshynsky-Foundation/lf-devops/.github/workflows/reusable-cd.yml@feat/0/rework-ci-cd
+    uses: Liatoshynsky-Foundation/lf-devops/.github/workflows/reusable-cd.yml@main
     with:
       project-name: lf-client
       azure-registry: https://lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/

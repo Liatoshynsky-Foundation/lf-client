@@ -15,7 +15,7 @@ jobs:
   # Main CI job using reusable workflow from lf-devops
   # This job calls reusable-ci.yml which contains: lint, type-check, build, tests, build-docker, security-scan
   ci:
-    uses: Liatoshynsky-Foundation/lf-devops/.github/workflows/reusable-ci.yml@feat/0/rework-ci-cd
+    uses: Liatoshynsky-Foundation/lf-devops/.github/workflows/reusable-ci.yml@main
     with:
       project-name: lf-client
       node-version: "22"
