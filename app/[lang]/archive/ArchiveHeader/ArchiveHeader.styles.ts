@@ -10,15 +10,13 @@ export const styles = {
     marginBottom: {
       xs: '56px',
       sm: '50px',
-      md: '0px',
-      lg: '0px'
+      md: '0px'
     }
   },
 
   contentWrapper: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '1 / -1',
       md: '1 / 9',
       lg: '1 / 8'
     }
@@ -29,9 +27,7 @@ export const styles = {
     fontWeight: 600,
     fontSize: {
       xs: '40px',
-      sm: '40px',
-      md: '64px',
-      lg: '64px'
+      md: '64px'
     },
     lineHeight: '120%',
     letterSpacing: '0%',
@@ -58,20 +54,16 @@ export const styles = {
   searchWrapper: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '1 / -1',
-      md: '9 / -1',
-      lg: '9 / -1'
+      md: '9 / -1'
     },
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: {
       xs: 'flex-start',
-      md: 'flex-start',
       lg: 'flex-end'
     },
     marginTop: {
       xs: '32px',
-      sm: '32px',
       md: '24px',
       lg: '0px'
     },
@@ -89,7 +81,6 @@ export const styles = {
     width: {
       xs: '272px',
       sm: '344px',
-      md: '344px',
       lg: '351px',
       xl: '501px'
     },

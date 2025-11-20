@@ -1,8 +1,6 @@
-import type { SxProps, Theme } from '@mui/material/styles';
-
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
-export const styles: Record<string, SxProps<Theme>> = {
+export const styles = {
   card: {
     position: 'relative',
     cursor: 'pointer',
@@ -12,8 +10,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     minHeight: {
       xs: 'auto',
       sm: '94px',
-      md: '140px',
-      lg: '140px'
+      md: '140px'
     },
     '&:hover': {
       '& .fundLine': {
@@ -30,15 +27,11 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontFamily: 'Mulish',
     fontWeight: {
       xs: 500,
-      sm: 500,
-      md: 600,
-      lg: 600
+      md: 600
     },
     fontSize: {
       xs: '16px',
-      sm: '16px',
-      md: '18px',
-      lg: '18px'
+      md: '18px'
     },
     lineHeight: '130%',
     letterSpacing: '0px',
@@ -50,21 +43,15 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontFamily: 'Oswald',
     fontWeight: {
       xs: 700,
-      sm: 700,
-      md: 600,
-      lg: 600
+      md: 600
     },
     fontSize: {
       xs: '20px',
-      sm: '20px',
-      md: '24px',
-      lg: '24px'
+      md: '24px'
     },
     lineHeight: {
       xs: '130%',
-      sm: '130%',
-      md: '120%',
-      lg: '120%'
+      md: '120%'
     },
     letterSpacing: '0%',
     textTransform: 'uppercase',
@@ -81,19 +68,15 @@ export const styles: Record<string, SxProps<Theme>> = {
     width: '100%',
     height: {
       xs: '4px',
-      sm: '4px',
-      md: '5px',
-      lg: '5px'
+      md: '5px'
     },
     marginTop: {
       xs: '6px',
-      sm: '6px',
       md: '9.5px',
       lg: '8px'
     },
     marginBottom: {
       xs: '6px',
-      sm: '6px',
       md: '9.5px',
       lg: '8px'
     },

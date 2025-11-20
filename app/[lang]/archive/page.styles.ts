@@ -18,7 +18,6 @@ export const styles = {
     paddingTop: {
       xs: '80px',
       sm: '89px',
-      md: '89px',
       lg: '95px',
       xl: '97px'
     }
