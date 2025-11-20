@@ -20,5 +20,3 @@ jobs:
       azure-app-name: lf-client-stage
       azure-publish-profile-secret: AzureAppService_PublishProfile_33658204638a4070adadb0337bf888b8
       azure-slot-name: production
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
