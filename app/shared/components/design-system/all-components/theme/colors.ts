@@ -64,7 +64,7 @@ export const mainHexPallete = {
 };
 
 export const backgroundColors = {
-  white: '#FFFFFF',
+  white: '#FCFCFC',
   offWhite: '#EAE9E8',
   lightGray: '#D0CECC'
 };
