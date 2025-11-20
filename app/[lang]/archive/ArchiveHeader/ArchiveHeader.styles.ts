@@ -1,8 +1,6 @@
-import type { SxProps, Theme } from '@mui/material/styles';
-
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
-export const styles: Record<string, SxProps<Theme>> = {
+export const styles = {
   headerContainer: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',

@@ -1,63 +1,17 @@
 'use client';
 
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import ArchiveHeader from './ArchiveHeader/ArchiveHeader';
 import FundCard from './FundCard/FundCard';
+import { styles } from './page.styles';
 
 import { FundDTO } from '~/domain/dto/funds.dto';
 import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository.mock';
 import MainLayout from '~/layouts/main-layout/MainLayout';
-
-const styles = {
-  pageWrapper: {
-    display: 'grid',
-    gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    rowGap: 0,
-    alignItems: 'start',
-    gridAutoRows: 'min-content',
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
-    paddingTop: {
-      xs: '80px',
-      sm: '89px',
-      md: '89px',
-      lg: '95px',
-      xl: '97px'
-    }
-  },
-  fundsGrid: {
-    gridColumn: '1 / -1',
-    display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(1, 1fr)',
-      sm: 'repeat(2, 1fr)',
-      md: 'repeat(3, 1fr)',
-      lg: 'repeat(4, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '32px',
-      lg: '40px'
-    },
-    paddingBottom: {
-      xs: '80px',
-      sm: '96px',
-      md: '80px',
-      lg: '96px'
-    }
-  }
-};
 
 const getColumnPaddingTop = (columnNum: number) => {
   const paddingMap = {
@@ -82,10 +36,7 @@ const getColumnPaddingTop = (columnNum: number) => {
 };
 
 export default function Archive() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isSmallTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const isBigTablet = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+  const { isMobile, isTablet, isLaptop, isDesktop } = useBreakpoints();
   const [error, setError] = useState<string | null>(null);
 
   const [funds, setFunds] = useState<FundDTO[]>([]);
@@ -108,7 +59,7 @@ export default function Archive() {
   }, []);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    throw new Error(error);
   }
 
   const filteredFunds = funds.filter((fund) => {
@@ -122,10 +73,18 @@ export default function Archive() {
   };
 
   const getNumColumns = () => {
-    if (isMobile) return 1;
-    if (isSmallTablet) return 2;
-    if (isBigTablet) return 3;
-    return 4;
+    switch (true) {
+      case isMobile:
+        return 1;
+      case isTablet:
+        return 2;
+      case isLaptop:
+        return 3;
+      case isDesktop:
+        return 4;
+      default:
+        return 4;
+    }
   };
 
   const numColumns = getNumColumns();
@@ -162,7 +121,7 @@ export default function Archive() {
                 paddingTop: getColumnPaddingTop(columnNum)
               }}
             >
-              {(fundsByColumn[columnNum] || []).map((fund) => (
+              {(fundsByColumn[columnNum] ?? []).map((fund) => (
                 <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
               ))}
             </Box>
