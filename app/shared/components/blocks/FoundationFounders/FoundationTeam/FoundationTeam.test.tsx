@@ -8,7 +8,8 @@ const teamData = [
     description: 'Спадкоємиця композитора',
     photo: {
       src: '/images/foundation/team/tetyana-gomon.jpg',
-      alt: 'Tetyana Homon'
+      alt: 'Tetyana Homon',
+      generatedSrc: 'test-image'
     }
   },
   {
@@ -16,7 +17,8 @@ const teamData = [
     description: 'Дослідник творчості Лятошинського',
     photo: {
       src: '/images/foundation/team/ivan-kovalenko.jpg',
-      alt: 'Tetyana Homon'
+      alt: 'Tetyana Homon',
+      generatedSrc: 'test-image'
     }
   },
   {
@@ -24,7 +26,8 @@ const teamData = [
     description: 'Куратор проектів фонду',
     photo: {
       src: '/images/foundation/team/maria-petryvna.jpg',
-      alt: 'Tetyana Homon'
+      alt: 'Tetyana Homon',
+      generatedSrc: 'test-image'
     }
   }
 ];
