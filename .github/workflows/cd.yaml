@@ -13,10 +13,11 @@ jobs:
     with:
       project-name: lf-client
       azure-registry: https://lfacrstage-bkg7bmd7gacxh9e5.azurecr.io/
-      azure-username-secret: AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38
-      azure-password-secret: AzureAppService_ContainerPassword_f3693858f44448dcae56c7ae9296ed93
       azure-image-name: lf-stage-client
       deploy-azure: ${{ github.ref == 'refs/heads/develop' }}
       azure-app-name: lf-client-stage
-      azure-publish-profile-secret: AzureAppService_PublishProfile_33658204638a4070adadb0337bf888b8
       azure-slot-name: production
+    secrets:
+      azure-username: ${{ secrets.AzureAppService_ContainerUsername_b9f545afba4f47a2a25a9fb5462ebe38 }}
+      azure-password: ${{ secrets.AzureAppService_ContainerPassword_f3693858f44448dcae56c7ae9296ed93 }}
+      azure-publish-profile: ${{ secrets.AzureAppService_PublishProfile_33658204638a4070adadb0337bf888b8 }}
