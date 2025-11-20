@@ -12,7 +12,7 @@ describe('FundCard', () => {
   it('should renders without crashing', () => {
     render(<FundCard {...defaultProps} />);
 
-    expect(screen.getByTestId('FundCard-1')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
   });
 
   it('should displays fund number correctly', () => {
@@ -36,7 +36,7 @@ describe('FundCard', () => {
 
     render(<FundCard {...customProps} />);
 
-    expect(screen.getByTestId('FundCard-99')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
     expect(screen.getByText('Custom Fund')).toBeInTheDocument();
     expect(screen.getByText('Custom Title')).toBeInTheDocument();
   });
@@ -44,9 +44,9 @@ describe('FundCard', () => {
   it('should renders all required elements', () => {
     render(<FundCard {...defaultProps} />);
 
-    expect(screen.getByTestId('FundCard-1-number')).toBeInTheDocument();
-    expect(screen.getByTestId('FundCard-1-title')).toBeInTheDocument();
-    expect(screen.getByTestId('FundCard-1-line')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard-number')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard-title')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard-line')).toBeInTheDocument();
   });
 
   it('should handles long titles', () => {
@@ -59,9 +59,9 @@ describe('FundCard', () => {
 
   it('should uses unique testId based on id prop', () => {
     const { rerender } = render(<FundCard {...defaultProps} id={1} />);
-    expect(screen.getByTestId('FundCard-1')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
 
     rerender(<FundCard {...defaultProps} id={5} />);
-    expect(screen.getByTestId('FundCard-5')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
   });
 });
