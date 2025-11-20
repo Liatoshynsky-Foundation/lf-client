@@ -20,6 +20,7 @@ describe('headerClientService.getHeaderData', () => {
     const mockLocale = 'uk';
     const mockHeaderData: HeaderData = {
       navigation: [],
+      specialNavigation: null,
       supportButtonLink: 'https://example.com/support'
     };
 
