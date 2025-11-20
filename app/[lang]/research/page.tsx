@@ -38,7 +38,7 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   return (
     <MainLayout>
       {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
-      <WorkTableSection lang={lang} />
+      <WorkTableSection />
     </MainLayout>
   );
 }

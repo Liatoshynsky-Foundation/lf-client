@@ -17,7 +17,6 @@ import {
 } from './WorkTableCells';
 import { WorkTable } from '~/types/types/enhancedTable';
 
-import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -31,52 +30,45 @@ export type AuthorFilterOption = {
 type Props = {
   lang: string;
 };
-
 const getAuthorsList = async (): Promise<AuthorFilterOption[]> => {
   const authorsRes = await fetch('/api/scientific-authors');
-  const authors: AuthorDTO[] = await authorsRes.json();
-  return authors.map((author) => ({
-    label: `${author.name || ''} ${author.surname || ''}`,
-    value: author._id.toString()
+  const authors = await authorsRes.json();
+
+  return authors.map((a: { key: string; name: string }) => ({
+    value: a.key,
+    label: a.name
   }));
 };
 
+// NEW — fetch from new data endpoint
 const getWorks = async (lang: string, columnFilters: ColumnFiltersState): Promise<WorkTable[]> => {
   const params = new URLSearchParams();
 
   const currentAuthorFilter = (columnFilters.find((f) => f.id === 'author')?.value as string[]) || [];
   const currentYearFilter = (columnFilters.find((f) => f.id === 'year')?.value as [number, number]) || [];
-  const currentTitleFilter = (columnFilters.find((f) => f.id === 'name')?.value as string) || '';
 
   if (currentAuthorFilter.length > 0) {
     params.append('authorIds', currentAuthorFilter.join(','));
   }
+
   if (currentYearFilter.length === 2) {
     params.append('years', currentYearFilter.join(','));
   }
-  if (currentTitleFilter) {
-    params.append('title', currentTitleFilter);
-  }
 
-  const worksRes = await fetch(`/api/scientific-works?lang=${lang}&${params.toString()}`);
-
-  const worksJson: ScientificWorkDTO[] = await worksRes.json();
+  const worksRes = await fetch(`/api/scientific-works/data?lang=${lang}&${params.toString()}`);
+  const worksJson = await worksRes.json();
 
   return worksJson.map(mapScientificWorkToWorkTable);
 };
 
-const mapScientificWorkToWorkTable = (w: ScientificWorkDTO): WorkTable => {
-  let yearDisplay: string | number = w.startYear;
-  if (w.endYear) {
-    yearDisplay = `${w.startYear}-${w.endYear}`;
-  }
-
-  const authorsJoined = w.authors.map((a) => `${a.name || ''} ${a.surname || ''}`).join(', ');
+// NEW — mapping matches new API shape
+const mapScientificWorkToWorkTable = (w: any): WorkTable => {
+  const yearDisplay = w.endYear ? `${w.startYear}-${w.endYear}` : w.startYear;
 
   return {
-    id: w._id.toString(),
+    id: w.id || w._id,
     name: w.title,
-    author: authorsJoined,
+    author: Array.isArray(w.authors) ? w.authors.join(', ') : w.authors,
     year: yearDisplay,
     sortableYear: w.startYear,
     url: w.url,

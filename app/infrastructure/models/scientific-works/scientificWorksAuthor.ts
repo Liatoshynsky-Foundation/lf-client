@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 
+import { translatedFieldSchema } from '../commonSchemas';
+
 const scientificWorksAuthorSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  surname: { type: String, required: true }
+  name: { type: translatedFieldSchema, required: true },
+  surname: { type: translatedFieldSchema, required: true }
 });
 
 export const ScientificWorksAuthor =
