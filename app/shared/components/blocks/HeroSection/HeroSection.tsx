@@ -13,6 +13,8 @@ export function HeroSection() {
   const locale = useLocale();
   const t = useTranslations('biography.heroSection');
 
+  const caption = `${heroTexts.imageCaption.mainText[locale]}\n${heroTexts.imageCaption.yearText[locale]}`;
+
   return (
     <Box sx={heroSectionStyles.mainContainer} data-testid="HeroSection">
       <Box sx={heroSectionStyles.topContainer} data-testid="HeroSection-topContainer">
@@ -38,7 +40,7 @@ export function HeroSection() {
             <ImageWithCaption
               src={heroTexts.image.src}
               alt={heroTexts.image.alt[locale]}
-              caption={heroTexts.imageCaption[locale]}
+              caption={caption}
               sizes={heroSectionStyles.imageSizes}
               containerSx={heroSectionStyles.imageWithCaptionContainer}
               imageSx={{ width: '100%' }}

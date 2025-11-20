@@ -24,13 +24,19 @@ export const heroTexts = {
     alt: {
       uk: 'Борис Лятошинський з котами на дачі в Ворзелі',
       en: 'Borys Lyatoshynsky with cats at his dacha in Vorzel'
-    } as LocalizedString
+    } satisfies LocalizedString
   },
 
   imageCaption: {
-    uk: 'Борис Лятошинський з котами на дачі в Ворзелі.\n1960-ті роки',
-    en: 'Borys Lyatoshynsky with cats at his dacha in Vorzel.\n1960s'
-  } satisfies LocalizedString
+    mainText: {
+      uk: 'Борис Лятошинський з котами на дачі в Ворзелі.',
+      en: 'Borys Lyatoshynsky with cats at his dacha in Vorzel.'
+    } satisfies LocalizedString,
+    yearText: {
+      uk: '1960-ті роки',
+      en: '1960s'
+    } satisfies LocalizedString
+  }
 } as const;
 
 export const heroBiographyDoc: LocalizedTipTapDoc = {
