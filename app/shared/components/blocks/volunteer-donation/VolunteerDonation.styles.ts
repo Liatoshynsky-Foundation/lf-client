@@ -6,9 +6,9 @@ export const styles = {
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     mb: {
-      xs: '16px',
-      sm: '74px',
-      md: '100px'
+      xs: '80px',
+      sm: '96px',
+      md: '180px'
     }
   },
   title: {
