@@ -23,7 +23,11 @@ const schema = new Schema<IDonationOrder>(
     orderReference: { type: String, required: true, unique: true, index: true },
     amount: { type: Number, required: true, min: 1 },
     currency: { type: String, required: true },
-    status: { type: String, enum: ['Pending', 'Paid', 'Declined', 'Expired', 'InProcessing'], default: 'Pending' },
+    status: {
+      type: String,
+      enum: ['Pending', 'Paid', 'Declined', 'Expired', 'InProcessing'],
+      default: 'Pending'
+    },
     language: { type: String, enum: ['UA', 'EN'], required: true },
     paidAt: { type: Date, default: null },
     paymentProvider: { type: String, default: 'WayForPay' },

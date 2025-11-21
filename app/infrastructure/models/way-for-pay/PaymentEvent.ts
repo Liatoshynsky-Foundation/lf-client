@@ -1,11 +1,37 @@
 import { model, models, Schema } from 'mongoose';
 
+export interface IWayforPayCallbackPayload {
+  merchantAccount: string;
+  orderReference: string;
+  merchantSignature: string;
+  amount: number | string;
+  currency: string;
+  transactionStatus: string;
+  reasonCode: string | number;
+  reason?: string;
+
+  authCode?: string;
+  cardPan?: string;
+  email?: string;
+  phone?: string;
+  createdDate?: number;
+  processingDate?: number;
+  cardType?: string;
+  issuerBankCountry?: string;
+  issuerBankName?: string;
+  recToken?: string;
+  fee?: number;
+  paymentSystem?: string;
+  repayUrl?: string;
+  [key: string]: unknown;
+}
+
 export interface IPaymentEvent {
   orderReference: string;
   transactionStatus: string;
   authCode: string;
   reasonCode: string | number | null;
-  payload: any;
+  payload: IWayforPayCallbackPayload;
 }
 
 const schema = new Schema<IPaymentEvent>(

@@ -5,7 +5,9 @@ import crypto from 'node:crypto';
 
 import { WayForPay } from '~/config';
 import dbConnect from '~/infrastructure/db/connect';
+import type { IDonationOrder, TDonationOrderStatus } from '~/infrastructure/models/way-for-pay/DonationOrder';
 import { DonationOrder } from '~/infrastructure/models/way-for-pay/DonationOrder';
+import type { IWayforPayCallbackPayload } from '~/infrastructure/models/way-for-pay/PaymentEvent';
 import { PaymentEvent } from '~/infrastructure/models/way-for-pay/PaymentEvent';
 
 export const runtime = 'nodejs';
@@ -14,29 +16,29 @@ function hmacMd5(base: string, key: string) {
   return crypto.createHmac('md5', key).update(base, 'utf8').digest('hex');
 }
 
-type WayforPayCallback = {
-  merchantAccount: string;
-  orderReference: string;
-  merchantSignature: string;
-  amount: number | string;
-  currency: string;
-  authCode?: string;
-  cardPan?: string;
-  transactionStatus: string;
-  reasonCode: string | number;
-  reason?: string;
-  [k: string]: any;
-};
+type MongoErrorWithCode = { code: number };
+
+function isDuplicateKeyError(error: unknown): error is MongoErrorWithCode {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    typeof (error as { code: unknown }).code === 'number' &&
+    (error as { code: number }).code === 11000
+  );
+}
 
 export async function POST(req: NextRequest) {
   if (!req.headers.get('content-type')?.includes('application/json')) {
     return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
   }
+
   if (!WayForPay.MERCHANT_SECRET_KEY) {
     return NextResponse.json({ error: 'server misconfigured' }, { status: 500 });
   }
 
-  const body = (await req.json()) as WayforPayCallback;
+  const body = (await req.json()) as IWayforPayCallbackPayload;
+
   const {
     merchantAccount,
     orderReference,
@@ -79,7 +81,9 @@ export async function POST(req: NextRequest) {
   }
 
   await dbConnect();
-  const order = await DonationOrder.findOne({ orderReference }).lean();
+
+  const order = await DonationOrder.findOne({ orderReference }).lean<IDonationOrder>();
+
   if (!order) {
     return NextResponse.json({ error: 'order not found' }, { status: 500 });
   }
@@ -89,9 +93,11 @@ export async function POST(req: NextRequest) {
   }
 
   const session = await startSession();
+
   try {
     await session.withTransaction(async () => {
       let isNewEvent = true;
+
       try {
         await PaymentEvent.create(
           [
@@ -105,36 +111,37 @@ export async function POST(req: NextRequest) {
           ],
           { session }
         );
-      } catch (e: any) {
-        if (e?.code === 11000) {
+      } catch (error: unknown) {
+        if (isDuplicateKeyError(error)) {
           isNewEvent = false;
         } else {
-          throw e;
+          throw error;
         }
       }
 
       if (isNewEvent) {
-        const map: Record<string, 'Paid' | 'Declined' | 'Expired' | 'InProcessing' | 'Pending'> = {
+        const map: Record<string, TDonationOrderStatus> = {
           Approved: 'Paid',
           Declined: 'Declined',
           Expired: 'Expired',
           InProcessing: 'InProcessing'
         };
-        const nextStatus = map[String(transactionStatus)] ?? 'Pending';
 
-        const update: any = {
+        const nextStatus: TDonationOrderStatus = map[String(transactionStatus)] ?? 'Pending';
+
+        const update: Partial<IDonationOrder> & { status: TDonationOrderStatus } = {
           status: nextStatus,
           reasonCode: reasonCode ?? null,
           reason: reason ?? null
         };
+
         if (nextStatus === 'Paid') {
           update.paidAt = new Date();
           update.paymentProvider = 'WayForPay';
           update.providerTxnId = authCode ?? null;
         }
 
-        const res = await DonationOrder.updateOne({ orderReference }, { $set: update }, { session });
-        updated = res.modifiedCount > 0;
+        await DonationOrder.updateOne({ orderReference }, { $set: update }, { session });
       }
     });
   } finally {
