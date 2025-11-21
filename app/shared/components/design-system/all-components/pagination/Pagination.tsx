@@ -32,6 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({ visiblePages, renderItem, page,
           renderItem(item)
         ) : (
           <PaginationItem
+            data-testid={`Pagination-${item.type}-${item.page}`}
             {...item}
             selected={page != null && isSelectedPage(item, page, visiblePages)}
             sx={paginationStyles.item[item.type as PaginationItemType] ?? {}}

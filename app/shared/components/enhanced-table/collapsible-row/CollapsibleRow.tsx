@@ -49,10 +49,9 @@ export const CollapsibleRow = <T extends RowData>({
 
   const factoryIndexes = useMemo(() => getFactoryIndexes(columns), [columns]);
   let coveredUntil = -1;
-
   return (
     <>
-      <TableRow sx={styles.row(collapsed)}>
+      <TableRow sx={styles.row(collapsed)} data-testid="CollapsibleRow-mainOpus">
         {columns.map((col, idx) => {
           if (idx <= coveredUntil) return null;
 
@@ -71,6 +70,7 @@ export const CollapsibleRow = <T extends RowData>({
                     variant={IconButtonColorVariant.Secondary}
                     disableRipple
                     sx={{ bgcolor: 'none' }}
+                    data-testid="CollapsibleRow-mainOpus-toggle"
                   >
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
@@ -97,12 +97,13 @@ export const CollapsibleRow = <T extends RowData>({
             return (
               <TableCell key={cellKey} colSpan={colSpan} sx={styles.cell}>
                 <Box sx={styles.cellInner}>
-                  <Box sx={{ width: '100%' }}>{normalized}</Box>
+                  <Box sx={{ width: '100%' }} data-testid={`CollapsibleRow-mainOpus-${cellKey}`}>
+                    {normalized}
+                  </Box>
                 </Box>
               </TableCell>
             );
           }
-
           return (
             <TableCell key={cellKey} sx={styles.cell}>
               <Box sx={styles.cellInner} />
