@@ -1,3 +1,5 @@
+import { createElement, ReactNode } from 'react';
+
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: () => false
 }));
@@ -14,8 +16,7 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
-    Link: ({ children, href }: { children: React.ReactNode; href?: string }) =>
-      React.createElement('a', { href }, children),
+    Link: ({ children, href }: { children: ReactNode; href?: string }) => createElement('a', { href }, children),
     redirect: () => undefined,
     usePathname: () => '/',
     useRouter: () => ({}),

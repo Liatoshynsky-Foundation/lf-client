@@ -5,24 +5,6 @@ import React from 'react';
 
 import PartnershipFormats from './PartnershipFormats';
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
-}));
-jest.mock('next-intl/navigation', () => ({
-  createNavigation: () => {
-    return {
-      Link: ({ children, href }: any) => React.createElement('a', { href }, children),
-      redirect: () => undefined,
-      usePathname: () => '/',
-      useRouter: () => ({}),
-      getPathname: () => '/'
-    };
-  }
-}));
-jest.mock('next-intl/routing', () => ({
-  defineRouting: (c: any) => c
-}));
-
 jest.mock('~/components/modal-component/ModalComponent', () => {
   return jest.fn(({ children, open, onClose }: any) => (
     <div data-testid="modal-component" data-open={open}>
