@@ -1,7 +1,6 @@
 export const styles = {
   carouselSectionContainer: {
     gridColumn: '1 / -1',
-    marginTop: '230px',
-    marginBottom: '60px'
+    my: { xs: '80px', md: '96px' }
   }
 };
