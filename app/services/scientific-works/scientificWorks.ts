@@ -28,7 +28,8 @@ export const createScientificWorksService = ({
 
   async getAllScientificWorks(
     locale: Locale,
-    filters?: { authorIds?: string[]; years?: { min?: number; max?: number } }
+    filters?: { authorIds?: string[]; years?: { min?: number; max?: number } },
+    search?: string
   ) {
     const works = await scientificWorksRepo.getAllScientificWorks({
       authorIds: filters?.authorIds,
@@ -36,7 +37,7 @@ export const createScientificWorksService = ({
         filters?.years && filters.years.min !== undefined && filters.years.max !== undefined
           ? [filters.years.min, filters.years.max]
           : undefined,
-      title: '',
+      search,
       locale
     });
 

@@ -9,7 +9,7 @@ export interface ScientificWorksRepository {
   getAllScientificWorks(params: {
     years?: number[];
     authorIds?: string[];
-    title?: string;
+    search?: string;
     locale: string;
   }): Promise<ScientificWorkDTO[]>;
 }

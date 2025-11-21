@@ -9,8 +9,8 @@ import LogOut from 'public/icons/log-out.svg';
 import Button from '~/ds-components/button/Button';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import { WorkTableUI } from './WorkTableSelection';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
-import type { WorkTable } from '~/types/types/enhancedTable';
 
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
@@ -56,7 +56,7 @@ export const RenderYearHeader = () => {
   );
 };
 
-export const renderNameCell = (info: CellContext<WorkTable, unknown>) => (
+export const renderNameCell = (info: CellContext<WorkTableUI, unknown>) => (
   <Typography
     variant="customMedium16"
     sx={{
@@ -73,7 +73,7 @@ export const renderNameCell = (info: CellContext<WorkTable, unknown>) => (
   </Typography>
 );
 
-export const renderAuthorCell = (info: CellContext<WorkTable, unknown>) => (
+export const renderAuthorCell = (info: CellContext<WorkTableUI, unknown>) => (
   <Typography variant="customMedium16" sx={{ maxWidth: '192px' }}>
     {info.getValue<string>()}
   </Typography>
@@ -85,7 +85,7 @@ export const renderYearCell = (value: string | number) => (
   </Typography>
 );
 
-export const RenderActionCell = (info: CellContext<WorkTable, unknown>) => {
+export const RenderActionCell = (info: CellContext<WorkTableUI, unknown>) => {
   const t = useTranslations('table.work.buttons');
   const row = info.row.original;
   const { isMobile, isTablet } = useBreakpoints();
