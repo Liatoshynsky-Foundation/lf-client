@@ -67,7 +67,7 @@ describe('DesktopNav', () => {
   });
 
   it('should render all top-level navigation labels', () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
 
     expect(screen.getByText('Фундація')).toBeInTheDocument();
     expect(screen.getByText('Архів')).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe('DesktopNav', () => {
   });
 
   it('should open dropdown when clicking on a group with multiple links', () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
 
     fireEvent.click(screen.getByText('Фундація'));
 
@@ -86,7 +86,7 @@ describe('DesktopNav', () => {
   });
 
   it('should close dropdown when clicking on a dropdown item', async () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
     fireEvent.click(screen.getByText('Фундація'));
 
     fireEvent.click(screen.getByText('Про Фундацію'));
@@ -97,7 +97,7 @@ describe('DesktopNav', () => {
   });
 
   it('should assign correct href to single-link navigation items', () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
 
     const archiveLink = screen.getByText('Архів').closest('a');
     const collabLink = screen.getByText('Співпраця').closest('a');
@@ -107,7 +107,7 @@ describe('DesktopNav', () => {
   });
 
   it('dropdown items have correct hrefs', () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
     fireEvent.click(screen.getByText('Фундація'));
 
     expect(screen.getByText('Новини').closest('a')).toHaveAttribute('href', '/news');
@@ -115,7 +115,7 @@ describe('DesktopNav', () => {
   });
 
   it('should not show special navigation if specialNav is null', () => {
-    render(<DesktopNav navLabels={navLabels} specialNav={null} />);
+    render(<DesktopNav navLabels={navLabels} specialNav={null} scrollDirection="up" />);
 
     expect(screen.queryByText('Спеціальна')).not.toBeInTheDocument();
   });
