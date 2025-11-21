@@ -1,10 +1,9 @@
+import { Locale } from 'next-intl';
+
 import { FundSummaryHeaderData } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
-
-type Locale = 'uk' | 'en';
-type LocalizedString = Record<Locale, string>;
 
 function createDescriptionText(ukText: string, enText: string) {
   return {
@@ -61,12 +60,12 @@ export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
 
 export const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
 
-export const fundSummaryBacklinkText: LocalizedString = {
+export const fundSummaryBacklinkText: Record<Locale, string> = {
   uk: 'Повернутись до архіву',
   en: 'Back to archive'
 };
 
-export const fundSummaryTitle: LocalizedString = {
+export const fundSummaryTitle: Record<Locale, string> = {
   uk: 'Фонд 2. Особисті документи',
   en: 'Fund 2. Personal Documents'
 };

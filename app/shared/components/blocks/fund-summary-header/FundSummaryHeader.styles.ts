@@ -1,6 +1,6 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
-export const TITLE_GRID_COLUMN = { xs: '1 / -1', sm: '1 / -1', md: '1 / -1' } as const;
+export const TITLE_GRID_COLUMN = { xs: '1 / -1' } as const;
 export const TITLE_SX = {
   '& h2': {
     fontSize: { xs: '24px', sm: '40px', md: '56px' },
@@ -18,7 +18,6 @@ export const styles = {
   backLink: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '1 / -1',
       md: '1 / 6'
     },
     mb: '24px',
@@ -31,9 +30,7 @@ export const styles = {
 
   title: {
     gridColumn: {
-      xs: '1 / -1',
-      sm: '1 / -1',
-      md: '1 / -1'
+      xs: '1 / -1'
     },
     justifySelf: 'start',
     textAlign: 'left',
