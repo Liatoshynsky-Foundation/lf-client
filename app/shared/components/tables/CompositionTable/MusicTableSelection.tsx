@@ -33,7 +33,7 @@ import { Search } from '~/shared/components/search/Search';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
-import { useSearch } from '~/shared/hooks/use-search/UseSearch';
+import { useSearch } from '~/shared/hooks/use-search/useSearch';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
 
@@ -42,6 +42,14 @@ type StaticFiltersType = {
   genres?: GenreNameDTO[];
   categories?: CategoryNameDTO[];
   yearRange?: { minYear?: number; maxYear?: number };
+};
+
+type Filters = {
+  search: string;
+  genre?: string[];
+  category?: string[];
+  yearFrom?: number | null;
+  yearTo?: number | null;
 };
 
 export default function MusicTableSection() {
@@ -60,15 +68,17 @@ export default function MusicTableSection() {
   const t = useTranslations('table.composition');
   const tFilters = useTranslations('table.composition.filters');
   const {
-    search,
-    setSearch,
     data = [],
-    loadingData = false,
-    setFilterParam,
-    debouncedSetFilterParam
-  } = useSearch<Music>({
-    dataEndpoint: ApiRoutes.COMPOSITION_DATA
+    isLoading: loadingData,
+    params,
+    updateParams,
+    debouncedUpdateParam,
+    resetParams
+  } = useSearch<Music, Filters>({
+    dataEndpoint: ApiRoutes.COMPOSITION_DATA,
+    initialParams: { search: '' }
   });
+
   const { data: staticFilters } = useFetchStaticFilters<StaticFiltersType>(ApiRoutes.COMPOSITION_FILTERS ?? null);
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
@@ -91,17 +101,17 @@ export default function MusicTableSection() {
   const handleGenreChange = useCallback(
     (values: string[]) => {
       setGenreFilter(values);
-      debouncedSetFilterParam('genre', values);
+      debouncedUpdateParam('genre', values);
     },
-    [debouncedSetFilterParam]
+    [debouncedUpdateParam]
   );
 
   const handleCategoryChange = useCallback(
     (values: string[]) => {
       setCategoryFilter(values);
-      debouncedSetFilterParam('category', values);
+      debouncedUpdateParam('category', values);
     },
-    [debouncedSetFilterParam]
+    [debouncedUpdateParam]
   );
 
   const handleYearChangeForInput = useCallback(
@@ -113,9 +123,9 @@ export default function MusicTableSection() {
   const handleYearChangeForParams = useCallback(
     (v: [number, number]) => {
       setYearFilter(v);
-      setFilterParam({ yearFrom: v[0], yearTo: v[1] });
+      resetParams();
     },
-    [setFilterParam]
+    [resetParams]
   );
   const clearAllFilters = useCallback(() => {
     const paramsToClear: Record<string, string | string[] | number | null> = {};
@@ -141,8 +151,11 @@ export default function MusicTableSection() {
 
     if (Object.keys(paramsToClear).length === 0) return;
 
-    setFilterParam(paramsToClear);
-  }, [setFilterParam, genreFilter, categoryFilter, yearFilter, yearOptions, defaultMinYear, defaultMaxYear]);
+    updateParams((prev) => ({
+      ...prev,
+      ...paramsToClear
+    }));
+  }, [updateParams, genreFilter, categoryFilter, yearFilter, yearOptions, defaultMinYear, defaultMaxYear]);
 
   useEffect(() => {
     if (staticFilters) {
@@ -289,11 +302,16 @@ export default function MusicTableSection() {
         noResults={<TableNoResultsFound />}
         tableName={t('name.composition')}
         Search={
-          <Search<TitlesDTO>
-            search={search}
-            setSearch={setSearch}
+          <Search
+            search={params.search}
+            setSearch={(v) => debouncedUpdateParam('search', v)}
             options={titleOptions}
-            setFilterParams={setFilterParam}
+            setFilterParams={(obj) =>
+              updateParams((prev) => ({
+                ...prev,
+                ...obj
+              }))
+            }
           />
         }
         Filters={

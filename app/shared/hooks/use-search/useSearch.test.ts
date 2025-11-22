@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 
-import { useSearch } from './UseSearch';
+import { useSearch } from './useSearch';
 
 import { tableClientService } from '~/services/client/tableService';
 import useQuery from '~/shared/hooks/query/useQuery';

@@ -23,7 +23,7 @@ import { Search } from '~/shared/components/search/Search';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
-import { useSearch } from '~/shared/hooks/use-search/UseSearch';
+import { useSearch } from '~/shared/hooks/use-search/useSearch';
 
 export type WorkTableUI = {
   id: string;
@@ -33,6 +33,13 @@ export type WorkTableUI = {
   year: string | number;
   url?: string;
   isPreview?: boolean;
+};
+
+type Filters = {
+  search: string;
+  authorIds?: string[];
+  yearFrom?: number | null;
+  yearTo?: number | null;
 };
 
 export type ScientificFiltersType = {
@@ -56,8 +63,19 @@ export const WorkTableSection = () => {
   const t = useTranslations('table.work');
   const tFilters = useTranslations('table.work.filters');
 
-  const { data, loadingData, setFilterParam, debouncedSetFilterParam, search, setSearch } = useSearch<WorkTable>({
-    dataEndpoint: '/api/scientific-works/data'
+  const {
+    data,
+    isLoading: loadingData,
+    params,
+    updateParams,
+    debouncedUpdateParam,
+    resetParams
+  } = useSearch<WorkTable, Filters>({
+    dataEndpoint: '/api/scientific-works/data',
+    initialParams: {
+      search: '',
+      authorIds: []
+    }
   });
 
   const { data: staticFilters } = useFetchStaticFilters<ScientificFiltersType>('/api/scientific-works/filters');
@@ -74,29 +92,31 @@ export const WorkTableSection = () => {
   const handleAuthorChange = useCallback(
     (values: string[]) => {
       setAuthorFilter(values);
-      debouncedSetFilterParam('authorIds', values);
+
+      debouncedUpdateParam('authorIds', values);
     },
-    [debouncedSetFilterParam]
+    [debouncedUpdateParam]
   );
 
   const handleYearChangeCommitted = useCallback(
     (v: [number, number]) => {
       setYearFilter(v);
-      setFilterParam({ yearFrom: v[0], yearTo: v[1] });
+
+      updateParams((prev) => ({
+        ...prev,
+        yearFrom: v[0],
+        yearTo: v[1]
+      }));
     },
-    [setFilterParam]
+    [updateParams]
   );
 
   const clearAllFilters = useCallback(() => {
     setAuthorFilter([]);
     setYearFilter([defaultMinYear, defaultMaxYear]);
 
-    setFilterParam({
-      authorIds: [],
-      yearFrom: null,
-      yearTo: null
-    });
-  }, [setFilterParam, defaultMinYear, defaultMaxYear]);
+    resetParams();
+  }, [resetParams, defaultMinYear, defaultMaxYear]);
 
   const columnWidths = useMemo(
     () =>
@@ -198,10 +218,15 @@ export const WorkTableSection = () => {
       tableName={t('name')}
       Search={
         <Search
-          search={search}
-          setSearch={setSearch}
+          search={params.search}
+          setSearch={(value) => debouncedUpdateParam('search', value)}
           options={staticFilters?.titles ?? []}
-          setFilterParams={setFilterParam}
+          setFilterParams={(next) =>
+            updateParams((prev) => ({
+              ...prev,
+              ...next
+            }))
+          }
         />
       }
       Filters={
