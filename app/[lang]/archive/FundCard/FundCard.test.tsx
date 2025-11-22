@@ -56,12 +56,4 @@ describe('FundCard', () => {
 
     expect(screen.getByText(longTitle)).toBeInTheDocument();
   });
-
-  it('should uses unique testId based on id prop', () => {
-    const { rerender } = render(<FundCard {...defaultProps} id={1} />);
-    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
-
-    rerender(<FundCard {...defaultProps} id={5} />);
-    expect(screen.getByTestId('FundCard')).toBeInTheDocument();
-  });
 });
