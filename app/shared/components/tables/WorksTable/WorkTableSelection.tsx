@@ -14,8 +14,9 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './WorkTableCells';
-import { WorkTable } from '~/types/types/enhancedTable';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 
+import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -25,16 +26,6 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
 import { useSearch } from '~/shared/hooks/use-search/useSearch';
 
-export type WorkTableUI = {
-  id: string;
-  name: string;
-  author: string;
-  sortableYear: number;
-  year: string | number;
-  url?: string;
-  isPreview?: boolean;
-};
-
 type Filters = {
   search: string;
   authorIds?: string[];
@@ -42,22 +33,11 @@ type Filters = {
   yearTo?: number | null;
 };
 
-export type ScientificFiltersType = {
+type ScientificFiltersType = {
   titles?: { _id: string; title: string }[];
   authors?: { key: string; name: string }[];
   yearRange?: { minYear?: number; maxYear?: number };
 };
-
-// TODO: remove after backend UI-mapping refactor
-const mapToUI = (w: any): WorkTableUI => ({
-  id: w._id,
-  name: w.title,
-  author: w.authors.join(', '),
-  sortableYear: w.startYear,
-  year: w.endYear ? `${w.startYear}-${w.endYear}` : w.startYear,
-  url: w.url,
-  isPreview: w.isPreview
-});
 
 export const WorkTableSection = () => {
   const t = useTranslations('table.work');
@@ -70,16 +50,15 @@ export const WorkTableSection = () => {
     updateParams,
     debouncedUpdateParam,
     resetParams
-  } = useSearch<WorkTable, Filters>({
-    dataEndpoint: '/api/scientific-works/data',
+  } = useSearch<ScientificWorkTableRow, Filters>({
+    dataEndpoint: ApiRoutes.SCIENTIFIC_WORKS_DATA,
     initialParams: {
       search: '',
       authorIds: []
     }
   });
 
-  const { data: staticFilters } = useFetchStaticFilters<ScientificFiltersType>('/api/scientific-works/filters');
-  const tableData = data.map(mapToUI);
+  const { data: staticFilters } = useFetchStaticFilters<ScientificFiltersType>(ApiRoutes.SCIENTIFIC_WORKS_FILTERS);
 
   const bp = useBreakpoints();
 
@@ -92,7 +71,6 @@ export const WorkTableSection = () => {
   const handleAuthorChange = useCallback(
     (values: string[]) => {
       setAuthorFilter(values);
-
       debouncedUpdateParam('authorIds', values);
     },
     [debouncedUpdateParam]
@@ -101,7 +79,6 @@ export const WorkTableSection = () => {
   const handleYearChangeCommitted = useCallback(
     (v: [number, number]) => {
       setYearFilter(v);
-
       updateParams((prev) => ({
         ...prev,
         yearFrom: v[0],
@@ -114,7 +91,6 @@ export const WorkTableSection = () => {
   const clearAllFilters = useCallback(() => {
     setAuthorFilter([]);
     setYearFilter([defaultMinYear, defaultMaxYear]);
-
     resetParams();
   }, [resetParams, defaultMinYear, defaultMaxYear]);
 
@@ -130,7 +106,7 @@ export const WorkTableSection = () => {
     [bp]
   );
 
-  const columns: ColumnDef<WorkTableUI>[] = [
+  const columns: ColumnDef<ScientificWorkTableRow>[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -171,7 +147,10 @@ export const WorkTableSection = () => {
         element: (
           <FilterSelect
             label={tFilters('author')}
-            options={(staticFilters?.authors ?? []).map((a) => ({ value: a.key, label: a.name }))}
+            options={(staticFilters?.authors ?? []).map((a) => ({
+              value: a.key,
+              label: a.name
+            }))}
             defaultValues={authorFilter}
             onAdd={(v, l, all) => handleAuthorChange(all)}
             onRemove={(v, l, all) => handleAuthorChange(all)}
@@ -209,8 +188,8 @@ export const WorkTableSection = () => {
   );
 
   return (
-    <EnhancedTable<WorkTableUI>
-      data={tableData}
+    <EnhancedTable<ScientificWorkTableRow>
+      data={data}
       loading={loadingData}
       columns={columns}
       columnWidths={columnWidths}

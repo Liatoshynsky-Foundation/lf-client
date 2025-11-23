@@ -13,11 +13,19 @@ export const createScientificWorksService = ({
   async getAllAuthors(locale: Locale) {
     const authors = await scientificWorksRepo.getAllAuthors();
 
-    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(authors);
+    const normalized = authors.map((a) => ({
+      key: a._id.toString(),
+      name: {
+        uk: `${a.surname.uk} ${a.name.uk}`,
+        en: `${a.surname.en} ${a.name.en}`
+      }
+    }));
+
+    return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(normalized);
   },
 
   async getAllScientificTitles(locale: Locale) {
-    const titles = await scientificWorksRepo.getAllScientificTitles(locale);
+    const titles = await scientificWorksRepo.getAllScientificTitles();
 
     return ArraySchema(LocalizeSchema(scientificWorkTitleSchema, locale)).parse(titles);
   },
@@ -34,19 +42,18 @@ export const createScientificWorksService = ({
     const works = await scientificWorksRepo.getAllScientificWorks({
       authorIds: filters?.authorIds,
       years:
-        filters?.years && filters.years.min !== undefined && filters.years.max !== undefined
+        filters?.years && filters?.years.min !== undefined && filters?.years.max !== undefined
           ? [filters.years.min, filters.years.max]
           : undefined,
-      search,
-      locale
+      search
     });
 
     return works.map((w) => ({
-      _id: w._id.toString(),
-      title: w.title[locale],
-      authors: w.authors.map((a: any) => `${a.name[locale]} ${a.surname[locale]}`.trim()),
-      startYear: w.startYear,
-      endYear: w.endYear,
+      id: w._id.toString(),
+      name: w.title[locale],
+      author: w.authors.map((a) => `${a.surname[locale]} ${a.name[locale]}`).join(', '),
+      sortableYear: w.startYear,
+      year: w.endYear ? `${w.startYear}-${w.endYear}` : String(w.startYear),
       url: w.url,
       isPreview: w.isPreview
     }));

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { translatedFieldSchema } from '../commonSchemas';
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
 
 const scientificWorksSchema = new mongoose.Schema({
   authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ScientificWorksAuthor', index: true }],

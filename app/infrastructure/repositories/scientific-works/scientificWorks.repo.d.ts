@@ -1,15 +1,14 @@
-import { AuthorDTO, ScientificWorkDTO } from '~/domain/dto/scientificWorks.dto';
+import { AuthorDb, ScientificWorkDb, ScientificWorkTitleDb } from '~/types/types/scientificWorks.types';
 
 export type YearRange = { minYear: number; maxYear: number };
 
 export interface ScientificWorksRepository {
-  getAllAuthors(): Promise<AuthorDTO[]>;
-  getAllScientificTitles(locale: string): Promise<{ _id: string; title: string }[]>;
+  getAllAuthors(): Promise<AuthorDb[]>;
+  getAllScientificTitles(): Promise<ScientificWorkTitleDb[]>;
   getScientificWorksYearRange(): Promise<YearRange>;
   getAllScientificWorks(params: {
-    years?: number[];
+    years?: [number, number];
     authorIds?: string[];
     search?: string;
-    locale: string;
-  }): Promise<ScientificWorkDTO[]>;
+  }): Promise<ScientificWorkDb[]>;
 }

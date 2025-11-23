@@ -1,13 +1,13 @@
 export type AuthorDTO = {
   _id: string;
-  key: string;
   name: string;
+  surname: string;
 };
 
 export type ScientificWorkDTO = {
   _id: string;
-  authors: AuthorDTO[];
   title: string;
+  authors: AuthorDTO[];
   startYear: number;
   endYear: number | null;
   url: string | null;
@@ -19,8 +19,18 @@ export type ScientificWorkTitlesDTO = {
   title: string;
 };
 
+export type ScientificWorkTableRow = {
+  id: string;
+  name: string;
+  author: string;
+  sortableYear: number;
+  year: string;
+  url: string | null;
+  isPreview: boolean;
+};
+
 export type Condition =
-  | { $or: Record<string, any>[] }
+  | { $or: Array<Record<string, unknown>> }
   | { authors: { $in: string[] } }
   | { startYear: { $gte: number; $lte: number } };
 

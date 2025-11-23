@@ -1,5 +1,3 @@
-// app/api/scientific-works/data/route.ts
-
 'use server';
 import { NextRequest, NextResponse } from 'next/server';
 
