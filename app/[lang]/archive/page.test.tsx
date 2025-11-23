@@ -38,21 +38,21 @@ jest.mock('./FundCard/FundCard', () => ({
   )
 }));
 
-const mockGetFunds = jest.fn();
-jest.mock('~/infrastructure/repositories/funds/funds.repository.mock', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    getFunds: mockGetFunds
-  }))
-}));
+global.fetch = jest.fn();
 
 describe('Archive Page', () => {
   beforeEach(() => {
-    mockGetFunds.mockResolvedValue([
-      { id: 1, number: 'Fund 1', title: 'Audio Records' },
-      { id: 2, number: 'Fund 2', title: 'Personal Documents' },
-      { id: 3, number: 'Fund 3', title: 'Letters' }
-    ]);
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        data: [
+          { id: 1, number: 'Fund 1', title: 'Audio Records' },
+          { id: 2, number: 'Fund 2', title: 'Personal Documents' },
+          { id: 3, number: 'Fund 3', title: 'Letters' }
+        ]
+      })
+    });
   });
 
   afterEach(() => {
@@ -181,11 +181,11 @@ describe('Archive Page', () => {
     });
   });
 
-  it('should calls repository to fetch funds', async () => {
+  it('should calls API to fetch funds', async () => {
     renderWithTheme(<Archive />);
 
     await waitFor(() => {
-      expect(mockGetFunds).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith('/api/funds');
     });
   });
 });
