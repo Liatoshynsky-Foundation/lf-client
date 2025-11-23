@@ -26,7 +26,7 @@ export default function EnhancedTableHeader<T>({ table, columnWidths = {} }: Rea
                 cursor: header.column.getCanSort() ? 'pointer' : 'default'
               }}
             >
-              <Box display="flex" alignItems="center" gap="2px">
+              <Box display="flex" alignItems="center" gap="2px" data-testid={`EnhancedTableHeader-${header.id}`}>
                 {flexRender(header.column.columnDef.header, header.getContext())}
                 {header.column.getCanSort() && (
                   <>

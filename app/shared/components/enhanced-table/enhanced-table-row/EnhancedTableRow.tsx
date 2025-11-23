@@ -16,9 +16,13 @@ export default function EnhancedTableRow<T extends { id: string }>({
   if (!row) return null;
 
   return (
-    <TableRow>
+    <TableRow data-testid="EnhancedTableRow-mainNoOpus">
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} sx={styles.cell}>
+        <TableCell
+          key={cell.id}
+          sx={styles.cell}
+          data-testid={`EnhancedTableRow-mainNoOpus-${cell.id.split('_').at(1)}`}
+        >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
