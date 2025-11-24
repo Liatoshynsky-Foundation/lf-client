@@ -55,8 +55,8 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
         pdfUrl={archiveCase.pdfUrl}
         documents={documents}
         fundHref={fundHref}
-        prevCase={archiveCase.prev}
-        nextCase={archiveCase.next}
+        prevCase={archiveCase.prev ?? undefined}
+        nextCase={archiveCase.next ?? undefined}
         labels={labels}
       />
     </MainLayout>

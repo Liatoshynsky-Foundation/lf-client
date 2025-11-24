@@ -5,8 +5,8 @@ import NavItem from './NavItem';
 import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 export type NavigationProps = {
-  prevCase?: ArchiveAdjacentCase | null;
-  nextCase?: ArchiveAdjacentCase | null;
+  prevCase?: ArchiveAdjacentCase;
+  nextCase?: ArchiveAdjacentCase;
   prevLabel: string;
   nextLabel: string;
 };

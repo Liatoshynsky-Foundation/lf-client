@@ -28,7 +28,7 @@ const Meta = ({ index, dateRange, sheetsCount, labels }: Readonly<MetaProps>) =>
         <Typography sx={styles.metaValue}>{dateRange}</Typography>
       </Box>
 
-      {typeof sheetsCount === 'number' && (
+      {sheetsCount !== undefined && (
         <Box sx={styles.metaBlock}>
           <Typography sx={styles.metaLabel}>{labels.sheets}</Typography>
           <Typography sx={styles.metaValue}>{sheetsCount}</Typography>

@@ -32,8 +32,8 @@ export interface ArchiveCaseDetailsProps {
   pdfUrl: string;
   documents: ArchiveCaseDocument[];
   fundHref: string;
-  prevCase?: ArchiveAdjacentCase | null;
-  nextCase?: ArchiveAdjacentCase | null;
+  prevCase?: ArchiveAdjacentCase;
+  nextCase?: ArchiveAdjacentCase;
   labels: ArchiveCaseDetailsLabels;
 }
 

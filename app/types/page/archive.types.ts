@@ -23,6 +23,6 @@ export interface ArchiveCaseDetail {
   documents: ArchiveCaseDocument[];
   pdfUrl: string;
 
-  prev?: ArchiveAdjacentCase | null;
-  next?: ArchiveAdjacentCase | null;
+  prev: ArchiveAdjacentCase | null;
+  next: ArchiveAdjacentCase | null;
 }

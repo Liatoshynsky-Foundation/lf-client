@@ -84,7 +84,7 @@ describe('ArchiveCaseDetails', () => {
   });
 
   it('hides navigation when both prevCase and nextCase are null', () => {
-    render(<ArchiveCaseDetails {...baseProps} prevCase={null} nextCase={null} />);
+    render(<ArchiveCaseDetails {...baseProps} prevCase={undefined} nextCase={undefined} />);
 
     expect(screen.queryByTestId('ArchiveCaseDetails-navigation')).toBeNull();
   });
