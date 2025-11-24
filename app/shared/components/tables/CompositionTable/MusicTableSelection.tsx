@@ -33,7 +33,7 @@ import { Search } from '~/shared/components/search/Search';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
-import { useSearch } from '~/shared/hooks/use-search/useSearch';
+import { useSearch } from '~/shared/hooks/use-search/useSearchh';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
 

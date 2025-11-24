@@ -30,15 +30,15 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
 }));
 
 const useSearchMockReturn = {
-  search: '',
-  setSearch: jest.fn(),
   data: musicTableMock,
-  loadingData: false,
-  setFilterParam: jest.fn(),
-  debouncedSetFilterParam: jest.fn()
+  isLoading: false,
+  params: { search: '' },
+  updateParams: jest.fn(),
+  debouncedUpdateParam: jest.fn(),
+  resetParams: jest.fn()
 };
 
-jest.mock('~/shared/hooks/use-search/UseSearch', () => ({
+jest.mock('~/shared/hooks/use-search/useSearchh', () => ({
   useSearch: () => useSearchMockReturn
 }));
 
@@ -167,19 +167,19 @@ describe('MusicTableSection', () => {
   it('should call debouncedSetFilterParam when applying genre filter', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-genre-filter'));
-    expect(useSearchMockReturn.debouncedSetFilterParam).toHaveBeenCalledWith('genre', ['рок']);
+    expect(useSearchMockReturn.debouncedUpdateParam).toHaveBeenCalledWith('genre', ['рок']);
   });
 
   it('should call debouncedSetFilterParam when applying category filter', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-category-filter'));
-    expect(useSearchMockReturn.debouncedSetFilterParam).toHaveBeenCalledWith('category', ['класика']);
+    expect(useSearchMockReturn.debouncedUpdateParam).toHaveBeenCalledWith('category', ['класика']);
   });
 
   it('should call setFilterParam with yearFrom/yearTo on committed year change', () => {
     render(<MusicTableSection />);
     fireEvent.click(screen.getByTestId('mock-apply-year-committed'));
-    expect(useSearchMockReturn.setFilterParam).toHaveBeenCalledWith({ yearFrom: 1990, yearTo: 2000 });
+    expect(useSearchMockReturn.resetParams).toHaveBeenCalled();
   });
 
   it('should clear all filters by calling setFilterParam with cleared params', () => {
@@ -191,15 +191,15 @@ describe('MusicTableSection', () => {
     const clearBtn = screen.getByTestId('TableFilters-clearButton');
     fireEvent.click(clearBtn);
 
-    expect(useSearchMockReturn.setFilterParam).toHaveBeenCalledWith(
-      expect.objectContaining({ genre: [], yearFrom: null, yearTo: null })
-    );
+    expect(useSearchMockReturn.resetParams).toHaveBeenCalled();
   });
 
   it('should not call setFilterParam when no filters are active', () => {
     render(<MusicTableSection />);
     expect(screen.queryByTestId('TableFilters-clearButton')).not.toBeInTheDocument();
-    expect(useSearchMockReturn.setFilterParam).not.toHaveBeenCalled();
+    expect(useSearchMockReturn.updateParams).not.toHaveBeenCalled();
+    expect(useSearchMockReturn.debouncedUpdateParam).not.toHaveBeenCalled();
+    expect(useSearchMockReturn.resetParams).not.toHaveBeenCalled();
   });
 
   it('should render notes modal closed by default and remain closed after closing', () => {

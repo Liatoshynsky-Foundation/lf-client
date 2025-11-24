@@ -17,7 +17,7 @@ import useQuery from '~/shared/hooks/query/useQuery';
  *   WorkTable,
  *   { search: string; yearFrom?: number; authorIds: string[] }
  * >({
- *   dataEndpoint: '/api/some-api',
+ *   dataEndpoint: '/api/data/some-api',
  *   initialParams: { search: '', authorIds: [] }
  * });
  */

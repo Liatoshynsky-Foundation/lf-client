@@ -48,6 +48,6 @@ describe('parseFilters - years parsing', () => {
   it('should return empty filters object when neither year nor other filters are present', () => {
     const params = new URLSearchParams('');
     const res = parseFilters(params);
-    expect(res).toEqual({ categories: [], genres: [], years: { min: 1900, max: currentYear } });
+    expect(res).toEqual({ categories: [], genres: [], authorIds: [], years: { min: 1900, max: currentYear } });
   });
 });
