@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
     }
 
     if (fundId) {
-      const id = parseInt(fundId, 10);
+      const id = Number.parseInt(fundId, 10);
 
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         return NextResponse.json({ success: false, error: errors.VALIDATION_ERROR }, { status: 400 });
       }
 

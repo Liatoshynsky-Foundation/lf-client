@@ -38,11 +38,11 @@ jest.mock('./FundCard/FundCard', () => ({
   )
 }));
 
-global.fetch = jest.fn();
+globalThis.fetch = jest.fn();
 
 describe('Archive Page', () => {
   beforeEach(() => {
-    (global.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
@@ -185,7 +185,7 @@ describe('Archive Page', () => {
     renderWithTheme(<Archive />);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('/api/funds');
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
     });
   });
 });
