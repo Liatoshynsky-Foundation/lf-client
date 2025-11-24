@@ -76,17 +76,25 @@ export default function BulletTextWithLinks({
       </Box>
       <Box sx={styles.buttonsBox} data-testid="BulletTextWithLinks-buttonsBox">
         {buttons.map((button) => (
-          <Button key={button.shortText} link={button.link} externalLink={true} variant="outlined" size="medium">
+          <Button
+            key={button.shortText}
+            link={button.link}
+            externalLink={true}
+            variant="outlined"
+            size="medium"
+            startIcon={
+              <Svg
+                Component={FacebookIcon}
+                fill="none"
+                alt="icon"
+                color="#000"
+                width="24px"
+                height="24px"
+                sx={styles.icon}
+              />
+            }
+          >
             {isMobile ? button.shortText : button.fullText}
-            <Svg
-              Component={FacebookIcon}
-              fill="none"
-              alt="icon"
-              color="#000"
-              width="20px"
-              height="20px"
-              sx={styles.icon}
-            />
           </Button>
         ))}
       </Box>
