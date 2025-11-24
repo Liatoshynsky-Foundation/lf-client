@@ -4,8 +4,6 @@ import React from 'react';
 
 import ArrowCarousel from './ArrowCarousel';
 
-jest.mock('next/image');
-
 jest.mock('~/ds-components/icon-button/IconButton', () => ({
   IconButton: ({
     children,
@@ -25,6 +23,16 @@ jest.mock('~/ds-components/icon-button/IconButton', () => ({
   )
 }));
 
+jest.mock('~/public/icons/chevron-left.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="mock-left-svg" />
+}));
+
+jest.mock('~/public/icons/chevron-right.svg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="mock-right-svg" />
+}));
+
 describe('ArrowCarousel', () => {
   const mockOnClick = jest.fn();
 
@@ -36,28 +44,29 @@ describe('ArrowCarousel', () => {
     render(<ArrowCarousel direction="left" onClick={mockOnClick} />);
 
     const button = screen.getByRole('button', { name: 'Previous slide' });
-    const image = screen.getByAltText('Previous');
+    const svgWrapper = screen.getByLabelText('Previous');
 
     expect(button).toBeInTheDocument();
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', '/icons/chevron-left.svg');
+    expect(svgWrapper).toBeInTheDocument();
+
+    expect(svgWrapper.querySelector('svg')).toBeInTheDocument();
   });
 
   it('should render right arrow correctly', () => {
     render(<ArrowCarousel direction="right" onClick={mockOnClick} />);
 
     const button = screen.getByRole('button', { name: 'Next slide' });
-    const image = screen.getByAltText('Next');
+    const svgWrapper = screen.getByLabelText('Next');
 
     expect(button).toBeInTheDocument();
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', '/icons/chevron-right.svg');
+    expect(svgWrapper).toBeInTheDocument();
+    expect(svgWrapper.querySelector('svg')).toBeInTheDocument();
   });
 
   it('should call onClick when button is clicked', () => {
     render(<ArrowCarousel direction="left" onClick={mockOnClick} />);
 
-    const button = screen.getByRole('button');
+    const button = screen.getByRole('button', { name: 'Previous slide' });
     fireEvent.click(button);
 
     expect(mockOnClick).toHaveBeenCalledTimes(1);
@@ -66,7 +75,8 @@ describe('ArrowCarousel', () => {
   it('should render disabled state correctly', () => {
     render(<ArrowCarousel direction="left" onClick={mockOnClick} disabled={true} />);
 
-    const button = screen.getByRole('button');
+    const button = screen.getByRole('button', { name: 'Previous slide' });
+
     expect(button).toBeDisabled();
   });
 });

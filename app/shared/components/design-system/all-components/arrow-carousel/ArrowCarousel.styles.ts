@@ -10,6 +10,9 @@ export const styles = {
     },
     '&:active': {
       backgroundColor: 'rgba(25, 13, 3, 1)'
+    },
+    '& svg': {
+      viewBox: '0 0 15 27'
     }
   }
 };
