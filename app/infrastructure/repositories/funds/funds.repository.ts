@@ -1,3 +1,5 @@
+import '~/infrastructure/models/archive/Document';
+
 import type { FundsRepository } from './funds.repo';
 
 import type { CaseDetailsDTO, CaseDTO, DocumentDTO, FundDetailsDTO, FundDTO } from '~/domain/dto/funds.dto';

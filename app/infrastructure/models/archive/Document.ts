@@ -14,11 +14,13 @@ const documentSchema = new Schema<IDocument>(
     caseId: {
       type: Schema.Types.ObjectId,
       ref: 'Case',
-      required: true
+      required: true,
+      index: true
     },
     order: {
       type: Number,
-      required: true
+      required: true,
+      index: true
     },
     text: {
       type: String,
@@ -30,8 +32,5 @@ const documentSchema = new Schema<IDocument>(
     collection: 'documents'
   }
 );
-
-documentSchema.index({ caseId: 1 });
-documentSchema.index({ order: 1 });
 
 export const Document = models.Document ?? model<IDocument>('Document', documentSchema);

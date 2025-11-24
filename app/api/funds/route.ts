@@ -40,8 +40,7 @@ export async function GET(req: NextRequest) {
 
     const funds = await fundsService.getFunds();
     return NextResponse.json({ success: true, data: funds });
-  } catch (error) {
-    console.error('Error in funds API:', error);
+  } catch {
     return NextResponse.json({ success: false, error: errors.FUNDS_FETCH_FAILED }, { status: 500 });
   }
 }

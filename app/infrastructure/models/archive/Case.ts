@@ -19,7 +19,8 @@ const caseSchema = new Schema<ICase>(
     fundId: {
       type: Schema.Types.ObjectId,
       ref: 'Fund',
-      required: true
+      required: true,
+      index: true
     },
     cipher: {
       type: String,
@@ -47,7 +48,8 @@ const caseSchema = new Schema<ICase>(
     },
     order: {
       type: Number,
-      default: 0
+      default: 0,
+      index: true
     }
   },
   {
@@ -57,9 +59,6 @@ const caseSchema = new Schema<ICase>(
     toObject: { virtuals: true }
   }
 );
-
-caseSchema.index({ fundId: 1 });
-caseSchema.index({ order: 1 });
 
 caseSchema.virtual('documents', {
   ref: 'Document',
