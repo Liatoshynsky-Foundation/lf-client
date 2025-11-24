@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import type { Locale } from 'next-intl';
 import { useLocale } from 'next-intl';
 import React, { useMemo } from 'react';
 
@@ -11,7 +12,6 @@ import { styles, TITLE_GRID_COLUMN, TITLE_SX } from './FundSummaryHeader.styles'
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-type Locale = 'uk' | 'en';
 type LocalizedString = Record<Locale, string>;
 type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
 
@@ -29,6 +29,7 @@ export interface FundSummaryHeaderProps {
   backLinkText: string;
   title: string;
   data: FundSummaryHeaderData;
+  dataTestId?: string;
 }
 
 const ARROW_BACK_ICON = <Image src="/icons/arrow-left.svg" alt="" width={24} height={24} aria-hidden="true" />;
@@ -55,8 +56,8 @@ interface ContentItemProps {
   index: number;
 }
 
-const ContentItem: React.FC<ContentItemProps> = React.memo(({ item, locale, index }) => (
-  <Box key={getItemKey(item, locale, index)} sx={styles.contentItem}>
+const ContentItem: React.FC<ContentItemProps> = React.memo(({ item, locale }) => (
+  <Box sx={styles.contentItem}>
     <Typography variant="h6" sx={styles.itemTitle}>
       {item.title[locale]}:
     </Typography>
@@ -69,13 +70,19 @@ const ContentItem: React.FC<ContentItemProps> = React.memo(({ item, locale, inde
 
 ContentItem.displayName = 'ContentItem';
 
-const FundSummaryHeader: React.FC<FundSummaryHeaderProps> = ({ backLinkUrl, backLinkText, title, data }) => {
+const FundSummaryHeader: React.FC<FundSummaryHeaderProps> = ({
+  backLinkUrl,
+  backLinkText,
+  title,
+  data,
+  dataTestId
+}) => {
   const locale = useLocale() as Locale;
 
   const { leftColumn, rightColumn } = useMemo(() => splitIntoColumns(data.items), [data.items]);
 
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.container} data-testid={dataTestId}>
       <Box sx={styles.backLink}>
         <CustomLink path={backLinkUrl} startIcon={ARROW_BACK_ICON} labelSx={{ fontSize: '16px' }}>
           {backLinkText}

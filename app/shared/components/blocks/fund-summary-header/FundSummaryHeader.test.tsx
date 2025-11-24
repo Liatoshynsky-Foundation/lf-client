@@ -159,7 +159,7 @@ describe('FundSummaryHeader', () => {
     expect(tipTapContents.length).toBeGreaterThan(0);
   });
 
-  it('should generate unique keys for content items', () => {
+  it('should mount component without errors', () => {
     const { container } = render(<FundSummaryHeader {...mockData} />);
 
     expect(container).toBeInTheDocument();
