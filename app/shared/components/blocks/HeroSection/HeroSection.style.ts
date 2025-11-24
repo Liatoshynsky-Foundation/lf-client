@@ -9,8 +9,7 @@ export const heroSectionStyles = {
   },
 
   topContainer: {
-    display: 'contents',
-    gap: { xs: '64px', sm: '24px', md: '40px', xl: '124px', xxl: '244px' }
+    display: 'contents'
   },
 
   titleWithQuoteContainer: {
@@ -27,11 +26,7 @@ export const heroSectionStyles = {
     flexDirection: 'column',
     gap: {
       xs: '72px',
-      sm: '72px',
-      md: '124px',
-      lg: '124px',
-      xl: '124px',
-      xxl: '124px'
+      md: '124px'
     }
   },
 
@@ -45,7 +40,6 @@ export const heroSectionStyles = {
     width: '100%',
     fontFamily: 'Oswald',
     fontWeight: 600,
-    fontStyle: 'SemiBold',
     fontSize: { xs: '40px', md: '64px' },
     lineHeight: '120%',
     letterSpacing: { xs: '-2%', md: '0%' },
