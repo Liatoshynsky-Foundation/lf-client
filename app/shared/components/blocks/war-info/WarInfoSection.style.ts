@@ -2,8 +2,7 @@ export const style = {
   gridContainer: {
     display: { sm: 'grid' },
     gridColumn: '1 / -1',
-    gridTemplateColumns: 'subgrid',
-    maxHeight: { sm: '266px', md: '520px', lg: '280px' }
+    gridTemplateColumns: 'subgrid'
   },
 
   textBlockContainer: {
@@ -15,7 +14,8 @@ export const style = {
       xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
     },
     alignSelf: { md: 'end', lg: 'end' },
-    paddingTop: { sm: '40px', md: '24px', lg: '140px' },
+    marginTop: { sm: '40px', lg: '155px' },
+    marginBottom: { xs: '80px', lg: '96px' },
     maxWidth: '910px'
   },
 
@@ -52,6 +52,6 @@ export const style = {
   contentText: {
     gridColumn: '1 / -1',
     maxWidth: { md: '907px' },
-    pt: { md: '120px' }
+    pt: { md: '230px', lg: '120px' }
   }
 };
