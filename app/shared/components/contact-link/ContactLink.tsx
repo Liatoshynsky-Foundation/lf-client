@@ -73,7 +73,7 @@ export const ContactLink = ({
   return (
     <Box sx={styles.wrapper} data-testid={dataTestid}>
       <Box sx={getContentBoxStyle(direction)}>
-        {icon && (
+        {!isMobile && icon && (
           <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]}>
             <Svg
               Component={icon}
@@ -89,7 +89,19 @@ export const ContactLink = ({
 
         <Box sx={styles.valueBox}>
           {isMobile ? (
-            <Link ref={linkRef} {...linkProps} sx={[styles.link, ...sxToArray(linkSx)]}>
+            <Link ref={linkRef} {...linkProps} sx={[styles.link, styles.valueBox, ...sxToArray(linkSx)]}>
+              {icon && (
+                <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]}>
+                  <Svg
+                    Component={icon}
+                    stroke={iconColor ?? mainHexPallete.black}
+                    width={`${iconSizes[iconSize]}px`}
+                    height={`${iconSizes[iconSize]}px`}
+                    alt={`${type} icon`}
+                  />
+                </Box>
+              )}
+
               {label && (
                 <Typography component="span" sx={[styles.weakTextSmall, ...sxToArray(labelSx)]}>
                   {label}:

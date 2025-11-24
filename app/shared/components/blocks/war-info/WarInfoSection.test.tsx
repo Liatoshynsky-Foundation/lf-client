@@ -3,11 +3,11 @@ import { render, screen } from '@testing-library/react';
 import WarInfoSection from './WarInfoSection';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => {
-    if (key === 'warSupport') {
-      return (subKey: string) => (subKey === 'title' ? 'Support the War Effort' : '');
-    }
-    return () => '';
+  useTranslations: () => (subKey: string) => {
+    const dict: Record<string, string> = {
+      title: 'Support the War Effort'
+    };
+    return dict[subKey];
   },
   useLocale: () => 'en'
 }));
@@ -17,7 +17,7 @@ jest.mock('../../design-system/all-components/content-block/ContentBlock', () =>
   default: ({ description }: { description: string }) => <div data-testid="content-block">{description}</div>
 }));
 
-jest.mock('./war.const', () => ({
+jest.mock('../../../../[lang]/war-in-ukraine/war.const', () => ({
   warSupportDoc: {
     en: 'Support Ukraine by donating or volunteering.',
     uk: 'Підтримай Україну, зроби внесок або долучись волонтером.'

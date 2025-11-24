@@ -209,7 +209,13 @@ export const EnhancedTable = <T extends RowData>({
 
           <Box sx={styles.paginationWrapper} data-testid="EnhancedTable-paginationWrapper">
             {hasMore && (
-              <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
+              <Button
+                data-testid="Pagination-loadMore"
+                variant="contained"
+                size="large"
+                onClick={handleLoadMore}
+                sx={styles.loadMoreButton}
+              >
                 {t('viewMore')}
               </Button>
             )}

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const partnershipFormatsData = {
   title: 'Формати партнерства:',
   firstRowFirstCard: {
@@ -40,11 +38,8 @@ export const partnershipFormatsData = {
   descriptionText:
     'Ми цінуємо кожну співпрацю та підтримку — фінансову, інформаційну, експертну чи технічну. І, звісно, відкриті до нових ідей та форматів. Вище — перелік наших пропозицій та потреб, за відгук на які ми завжди щиро вдячні. Напишіть нам, навіть якщо хочете долучитися у форматі, який тут не вказано. Можливості є завжди.',
   actionButtonText: 'Запропонувати допомогу',
-  modalContent: React.createElement(
-    'div',
-    { style: { padding: '20px' } },
-    React.createElement('h2', null, 'Форма заявки на партнерство'),
-    // prettier-ignore
-    React.createElement('p', null, 'Заповніть форму і ми зв\'яжемося з вами найближчим часом.')
-  )
+  modalContent: {
+    formTitle: 'Запропонувати співпрацю',
+    formSubtitle: 'Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів'
+  }
 };

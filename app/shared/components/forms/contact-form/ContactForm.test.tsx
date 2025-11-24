@@ -77,7 +77,7 @@ describe('ContactForm', () => {
     if (!link) {
       throw new Error('Expected a privacy policy link to be present.');
     }
-    expect(link).toHaveAttribute('href', '#');
+    expect(link).toHaveAttribute('href', '/privacy-policy');
   });
 
   it('should render a submit button', () => {

@@ -1,22 +1,133 @@
-import { Typography } from '@mui/material';
-import React from 'react';
+'use client';
 
-import UnderDevelopment from '~/components/under-development/UnderDevelopment';
+import { Box } from '@mui/material';
+import { useEffect, useState } from 'react';
 
-import { isProductionMode } from '~/utils/isProductionMode';
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
+import ArchiveHeader from './ArchiveHeader/ArchiveHeader';
+import FundCard from './FundCard/FundCard';
+import { styles } from './page.styles';
+
+import { FundDTO } from '~/domain/dto/funds.dto';
+import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository.mock';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
-const Archive = () => {
-  if (isProductionMode()) {
-    return <UnderDevelopment />;
+const getColumnPaddingTop = (columnNum: number) => {
+  const paddingMap = {
+    sm: columnNum === 1 ? '40px' : '0px',
+    md: (() => {
+      if (columnNum === 1) return '80px';
+      if (columnNum === 2) return '40px';
+      return '0px';
+    })(),
+    lg: (() => {
+      if (columnNum === 1) return '120px';
+      if (columnNum === 2) return '80px';
+      if (columnNum === 3) return '40px';
+      return '0px';
+    })()
+  };
+
+  return {
+    xs: '0px',
+    ...paddingMap
+  };
+};
+
+export default function Archive() {
+  const { isMobile, isTablet, isLaptop, isDesktop } = useBreakpoints();
+  const [error, setError] = useState<string | null>(null);
+
+  const [funds, setFunds] = useState<FundDTO[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadFunds = async () => {
+      try {
+        const data = await newFundsRepository().getFunds();
+        setFunds(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadFunds();
+  }, []);
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  const filteredFunds = funds.filter((fund) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return fund.number.toLowerCase().includes(query) || fund.title.toLowerCase().includes(query);
+  });
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const getNumColumns = () => {
+    switch (true) {
+      case isMobile:
+        return 1;
+      case isTablet:
+        return 2;
+      case isLaptop:
+        return 3;
+      case isDesktop:
+        return 4;
+      default:
+        return 4;
+    }
+  };
+
+  const numColumns = getNumColumns();
+
+  const fundsByColumn: Record<number, FundDTO[]> = {};
+  for (let i = 1; i <= numColumns; i++) {
+    fundsByColumn[i] = [];
+  }
+
+  filteredFunds.forEach((fund, index) => {
+    const columnIndex = (index % numColumns) + 1;
+    if (fundsByColumn[columnIndex]) {
+      fundsByColumn[columnIndex].push(fund);
+    }
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <MainLayout>
-      <Typography variant="h1">Archive</Typography>
+    <MainLayout withLines={!isMobile}>
+      <Box sx={styles.pageWrapper} data-testid="ArchivePage">
+        <ArchiveHeader onSearch={handleSearch} />
+
+        <Box sx={styles.fundsGrid} data-testid="ArchivePage-fundsGrid">
+          {Array.from({ length: numColumns }, (_, i) => i + 1).map((columnNum) => (
+            <Box
+              key={`column-${columnNum}`}
+              sx={{
+                display: 'grid',
+                gridAutoRows: 'min-content',
+                rowGap: '16px',
+                paddingTop: getColumnPaddingTop(columnNum)
+              }}
+            >
+              {(fundsByColumn[columnNum] ?? []).map((fund) => (
+                <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
+              ))}
+            </Box>
+          ))}
+        </Box>
+      </Box>
     </MainLayout>
   );
-};
-
-export default Archive;
+}

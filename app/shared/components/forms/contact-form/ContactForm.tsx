@@ -119,7 +119,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
             label={
               <Box>
                 <Typography variant="customItalic14" sx={styles.confidentialPolicyText}>
-                  {t('policyText')} <Link href="#">{t('policyLink')}</Link>
+                  {t('policyText')} <Link href="/privacy-policy">{t('policyLink')}</Link>
                 </Typography>
                 {errors.policy && (
                   <FormHelperText sx={styles.checkboxError}>

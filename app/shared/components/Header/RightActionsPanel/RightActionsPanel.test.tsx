@@ -25,7 +25,7 @@ const mockedSupportButtonData = {
 
 describe('RightActionsPanel', () => {
   it('should render all components with correct data', () => {
-    render(<RightActionsPanel supportButtonData={mockedSupportButtonData} />);
+    render(<RightActionsPanel supportButtonData={mockedSupportButtonData} scrollDirection="up" />);
 
     const player = screen.getByTestId('audio-player');
     const switcher = screen.getByTestId('language-switcher');
