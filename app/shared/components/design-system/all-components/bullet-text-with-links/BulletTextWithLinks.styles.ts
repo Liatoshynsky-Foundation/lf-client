@@ -17,12 +17,14 @@ export const styles = {
     gridArea: 'buttons',
     display: 'flex',
     flexDirection: 'column',
-    gap: 2,
+    gap: { xs: '8px', sm: '16px' },
     justifySelf: 'end',
     gridColumn: { xs: '1/ -1', sm: '1/4', md: '1 / 6' },
     justifyContent: 'space-between',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    marginBottom: { xs: '10px', sm: 0 },
+    marginTop: { xs: '4px', sm: 0 }
   },
 
   button: {
@@ -59,6 +61,6 @@ export const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    gap: 2
+    gap: { xs: '8px', md: '16px' }
   }
 };
