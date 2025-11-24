@@ -21,7 +21,15 @@ export const biographyContentStyles = {
   },
 
   chronologyListColumn: {
-    width: { xs: '100%', sm: '400px', md: '496px', lg: '646px', xl: '744px', xxl: '906px' },
+    width: '100%',
+    maxWidth: {
+      xs: '100%',
+      sm: '400px',
+      md: '496px',
+      lg: '646px',
+      xl: '744px',
+      xxl: '906px'
+    },
     gridColumn: {
       xs: '1 / -1',
       sm: '7 / -1'
@@ -58,11 +66,11 @@ export const biographyContentStyles = {
   onlyImageRight: {
     gridColumn: {
       xs: '2 / -1',
-      sm: '7 / -1',
-      md: '7 / -1',
-      lg: '7 / -1',
-      xl: '7 / -1',
-      xxl: '7 / -1'
+      sm: '4 / -1',
+      md: '6 / -1',
+      lg: '6 / -1',
+      xl: '6 / -1',
+      xxl: '6 / -1'
     },
     alignSelf: 'end'
   },
