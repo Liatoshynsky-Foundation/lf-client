@@ -268,5 +268,10 @@
     "title": "ArcHive",
     "description": "Original documents are stored in the private archive of the Borys Lyatoshynsky Cabinet-Museum (Kyiv, Ukraine)",
     "searchPlaceholder": "Search"
+  },
+  "biography": {
+    "heroSection": {
+      "title": "Lyatoshynsky’s Life Story"
+    }
   }
 }
