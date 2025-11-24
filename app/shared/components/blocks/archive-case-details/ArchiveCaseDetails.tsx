@@ -5,6 +5,7 @@ import BackLink from './back-link/BackLink';
 import Documents from './documents/Documents';
 import Meta from './meta/Meta';
 import Navigation from './navigation/Navigation';
+import PdfButton from './pdf-button/PdfButton';
 import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 export interface ArchiveCaseDocument {
@@ -61,15 +62,18 @@ const ArchiveCaseDetails = ({
           index={index}
           dateRange={dateRange}
           sheetsCount={sheetsCount}
-          pdfUrl={pdfUrl}
           labels={{
             code: labels.metaCode,
             dates: labels.metaDates,
-            sheets: labels.metaSheets,
-            viewPdf: labels.viewPdf
+            sheets: labels.metaSheets
           }}
         />
-        <Documents documents={documents} ariaLabel={labels.documentsAria} pdfUrl={pdfUrl} pdfLabel={labels.viewPdf} />
+
+        <Box sx={styles.pdfButtonWrapper} data-testid="ArchiveCaseDetails-pdfButtonSticky">
+          <PdfButton href={pdfUrl} label={labels.viewPdf} dataTestId="ArchiveCaseDetails-pdfButton" />
+        </Box>
+
+        <Documents documents={documents} ariaLabel={labels.documentsAria} />
       </Box>
 
       <Navigation prevCase={prevCase} nextCase={nextCase} prevLabel={labels.prevCase} nextLabel={labels.nextCase} />

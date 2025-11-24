@@ -8,18 +8,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1'
-    }
-  },
-
-  pdfButtonMobileWrapper: {
-    display: {
-      xs: 'block',
-      sm: 'none'
     },
-    position: 'sticky',
-    top: '24px',
-    marginBottom: '56px',
-    zIndex: 1
+    gridRow: {
+      xs: 'auto',
+      sm: '3 / 6'
+    }
   },
 
   list: {

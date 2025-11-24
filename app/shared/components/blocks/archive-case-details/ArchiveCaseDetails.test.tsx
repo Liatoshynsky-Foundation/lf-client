@@ -52,7 +52,7 @@ describe('ArchiveCaseDetails', () => {
     labels
   };
 
-  it('renders main layout and title', () => {
+  it('renders main layout, title and PDF button', () => {
     render(<ArchiveCaseDetails {...baseProps} />);
 
     expect(screen.getByTestId('ArchiveCaseDetails')).toBeInTheDocument();
@@ -61,6 +61,16 @@ describe('ArchiveCaseDetails', () => {
     expect(screen.getByTestId('ArchiveCaseDetails-back')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveCaseDetails-meta')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveCaseDetails-documentsColumn')).toBeInTheDocument();
+
+    const pdfWrapper = screen.getByTestId('ArchiveCaseDetails-pdfButtonSticky');
+    expect(pdfWrapper).toBeInTheDocument();
+
+    const pdfButton = screen.getByTestId('ArchiveCaseDetails-pdfButton');
+    expect(pdfButton).toBeInTheDocument();
+    expect(pdfButton).toHaveAttribute('href', baseProps.pdfUrl);
+    expect(pdfButton).toHaveAttribute('target', '_blank');
+    expect(pdfButton).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(pdfButton).toHaveTextContent(labels.viewPdf);
   });
 
   it('renders navigation when prevCase / nextCase are provided', () => {

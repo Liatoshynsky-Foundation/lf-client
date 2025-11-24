@@ -8,9 +8,7 @@ describe('Documents', () => {
       { id: 'doc-1', title: 'Документ А' },
       { id: 'doc-2', title: 'Документ Б' }
     ],
-    ariaLabel: 'Документи справи',
-    pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
-    pdfLabel: 'Переглянути PDF'
+    ariaLabel: 'Документи справи'
   };
 
   it('renders wrapper and ordered list with data-testids', () => {
@@ -32,22 +30,9 @@ describe('Documents', () => {
   });
 
   it('renders no items when documents array is empty', () => {
-    render(
-      <Documents documents={[]} ariaLabel="Документи справи" pdfUrl={baseProps.pdfUrl} pdfLabel={baseProps.pdfLabel} />
-    );
+    render(<Documents documents={[]} ariaLabel="Документи справи" />);
 
     const list = screen.getByTestId('ArchiveCaseDetails-documentsList');
     expect(list.childElementCount).toBe(0);
-  });
-
-  it('renders mobile pdf button', () => {
-    render(<Documents {...baseProps} />);
-
-    const wrapper = screen.getByTestId('ArchiveCaseDetails-pdfButtonMobile');
-    expect(wrapper).toBeInTheDocument();
-
-    const link = screen.getByRole('link', { name: baseProps.pdfLabel });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', baseProps.pdfUrl);
   });
 });

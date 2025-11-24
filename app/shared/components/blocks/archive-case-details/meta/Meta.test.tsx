@@ -6,17 +6,15 @@ const defaultProps: MetaProps = {
   index: 'Ф. 2, оп. 1, спр. 3',
   dateRange: '1895–1955',
   sheetsCount: 26,
-  pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
   labels: {
     code: 'Шифр',
     dates: 'Дати справи',
-    sheets: 'Аркушів',
-    viewPdf: 'Переглянути PDF'
+    sheets: 'Аркушів'
   }
 };
 
 describe('Meta', () => {
-  it('renders basic meta info and PDF button', () => {
+  it('renders basic meta info', () => {
     render(<Meta {...defaultProps} />);
 
     const root = screen.getByTestId('ArchiveCaseDetails-meta');
@@ -29,26 +27,11 @@ describe('Meta', () => {
     expect(screen.getByText(defaultProps.index)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.dateRange)).toBeInTheDocument();
     expect(screen.getByText(String(defaultProps.sheetsCount))).toBeInTheDocument();
-
-    const pdfButtonSticky = screen.getByTestId('ArchiveCaseDetails-pdfButtonSticky');
-    expect(pdfButtonSticky).toBeInTheDocument();
-
-    const pdfButton = screen.getByTestId('ArchiveCaseDetails-pdfButton');
-    expect(pdfButton).toBeInTheDocument();
-    expect(pdfButton).toHaveAttribute('href', defaultProps.pdfUrl);
-    expect(pdfButton).toHaveAttribute('target', '_blank');
-    expect(pdfButton).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(pdfButton).toHaveTextContent(defaultProps.labels.viewPdf);
   });
 
   it('does not render sheets count block when sheetsCount is undefined', () => {
     const { queryByText } = render(
-      <Meta
-        index={defaultProps.index}
-        dateRange={defaultProps.dateRange}
-        pdfUrl={defaultProps.pdfUrl}
-        labels={defaultProps.labels}
-      />
+      <Meta index={defaultProps.index} dateRange={defaultProps.dateRange} labels={defaultProps.labels} />
     );
 
     expect(queryByText(defaultProps.labels.sheets)).not.toBeInTheDocument();
@@ -60,7 +43,6 @@ describe('Meta', () => {
         index={defaultProps.index}
         dateRange={defaultProps.dateRange}
         sheetsCount={0}
-        pdfUrl={defaultProps.pdfUrl}
         labels={defaultProps.labels}
       />
     );

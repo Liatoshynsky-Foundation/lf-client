@@ -6,8 +6,8 @@ export const styles: Record<string, SxProps<Theme>> = {
   root: {
     gridColumn: '1 / -1',
     marginTop: {
-      xs: '48px',
-      md: '72px'
+      xs: '32px',
+      md: '40px'
     },
     display: 'flex',
     alignItems: 'center',

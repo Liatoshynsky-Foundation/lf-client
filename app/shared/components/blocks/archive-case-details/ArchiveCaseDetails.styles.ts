@@ -3,11 +3,7 @@ import type { SxProps, Theme } from '@mui/material/styles';
 export const styles: Record<string, SxProps<Theme>> = {
   gridContainer: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: '1fr',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
+    gridTemplateColumns: 'subgrid',
     columnGap: {
       xs: '16px',
       sm: '24px',
@@ -44,14 +40,33 @@ export const styles: Record<string, SxProps<Theme>> = {
       sm: '8px',
       md: '32px'
     },
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '1 / -1'
-    }
+    gridColumn: '1 / -1'
   },
 
   contentGrid: {
     gridColumn: '1 / -1',
     display: 'contents'
+  },
+
+  pdfButtonWrapper: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '1 / 4',
+      md: '2 / 4',
+      lg: '2 / 5'
+    },
+    gridRow: '4',
+    position: 'sticky',
+    top: {
+      xs: '24px',
+      sm: '48px'
+    },
+    mt: {
+      xs: '8px',
+      md: 0
+    },
+    mb: '40px',
+    alignSelf: 'flex-start',
+    zIndex: 1
   }
 };
