@@ -11,13 +11,15 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     gridRow: {
       xs: 'auto',
-      sm: '3 / 6'
+      sm: '1 / 4'
     }
   },
 
   list: {
-    margin: 0,
-    padding: 0,
+    mt: {
+      xs: '40px',
+      sm: '0'
+    },
     listStyle: 'none',
     counterReset: 'docs-counter',
     display: 'flex',

@@ -10,11 +10,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       md: '2 / 4',
       lg: '2 / 5'
     },
-    gridRow: '3',
+    gridRow: '1',
     display: 'flex',
     flexDirection: 'column',
     '& > * + *': {
-      marginTop: {
+      mt: {
         xs: '24px',
         md: '32px'
       }

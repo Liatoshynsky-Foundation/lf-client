@@ -12,15 +12,15 @@ export const styles: Record<string, SxProps<Theme>> = {
     gridColumn: '1 / -1',
     mt: {
       xs: '32px',
-      md: '88px'
+      sm: '88px'
     },
     mb: {
       xs: '96px',
-      md: '104px'
+      sm: '104px'
     },
     rowGap: {
       xs: '16px',
-      md: '24px'
+      sm: '24px'
     }
   },
 
@@ -37,15 +37,16 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     textTransform: 'uppercase',
     mb: {
-      sm: '8px',
+      xs: '0',
       md: '32px'
     },
     gridColumn: '1 / -1'
   },
 
   contentGrid: {
+    display: 'grid',
     gridColumn: '1 / -1',
-    display: 'contents'
+    gridTemplateColumns: 'subgrid'
   },
 
   pdfButtonWrapper: {
@@ -55,17 +56,13 @@ export const styles: Record<string, SxProps<Theme>> = {
       md: '2 / 4',
       lg: '2 / 5'
     },
-    gridRow: '4',
+    gridRow: '2',
     position: 'sticky',
     top: {
       xs: '24px',
       sm: '48px'
     },
-    mt: {
-      xs: '8px',
-      md: 0
-    },
-    mb: '40px',
+    mt: '24px',
     alignSelf: 'flex-start',
     zIndex: 1
   }
