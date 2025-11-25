@@ -1,4 +1,3 @@
-// BiographyHero.consts.ts (або в тому ж файлі, де й biographyContentData)
 import type { BiographyHeroData } from '~/types/page/biography.types';
 
 import { boldText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
