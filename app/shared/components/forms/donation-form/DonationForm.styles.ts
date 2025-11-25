@@ -4,12 +4,17 @@ import { mulish } from '../../design-system/all-components/theme/Theme';
 export const style = {
   paper: {
     background: mainHexPallete.brown[100],
-    width: { xs: '92vw', sm: '100%' },
+    width: { xs: '100vw', sm: '490px' },
+    height: '100%',
     borderLeft: `4px solid ${mainHexPallete.yellow[500]}`,
-    gridColumn: '1/-1'
+    gridColumn: '1/-1',
+    ml: { xs: '-24px', sm: 0 }
   },
   paperChildren: {
-    padding: { xs: '20px 12px', sm: '32px 32px', md: '42px 60px' }
+    padding: { xs: '42px 23px', sm: '54px 43px' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: { xs: '6rem', sm: '64px' }
   },
   btnGroup: {
     overflow: { xs: 'hidden', sm: 'visible' },
@@ -32,7 +37,6 @@ export const style = {
     fontSize: { xs: '14px', sm: '18px' }
   },
   sumInputs: {
-    margin: '10px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'end',
@@ -44,12 +48,14 @@ export const style = {
   },
   moneyInput: {
     verticalAlign: 'bottom',
-    fontSize: '72px',
+    fontSize: { xs: '56px', sm: '72px' },
     fontWeight: 600,
     lineHeight: '90%',
     letterSpacing: '0px',
     color: mainHexPallete.brown[700],
     fontFamily: mulish.style.fontFamily,
+    maxHeight: { xs: '66px', sm: '81px' },
+    pb: '15px',
     '& input[type=number]': {
       MozAppearance: 'textfield'
     },
@@ -81,13 +87,28 @@ export const style = {
   },
   addBtns: {
     display: 'flex',
-    gap: '8px',
-    margin: '32px 0'
+    justifyContent: 'space-between',
+    gap: '8px'
   },
   turnstileWidget: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: '24px'
+  },
+  headerTexts: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px'
+  },
+  formContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: { xs: '3rem', sm: '40px' }
+  },
+  amountSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px'
   }
 };
