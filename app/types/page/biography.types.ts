@@ -62,6 +62,27 @@ export interface BiographyContentProps {
   data: BiographyContentBlock[];
 }
 
+interface HeroImageCaption {
+  mainText: LocalizedTipTapDoc;
+  yearText: LocalizedTipTapDoc;
+}
+interface HeroImage {
+  src: string;
+  alt: LocalizedTipTapDoc;
+  caption: HeroImageCaption;
+}
+export interface BiographyHeroData {
+  quote: BaseQuoteBlock;
+  image: HeroImage;
+  biographyText: LocalizedTipTapDoc;
+  noteText: LocalizedTipTapDoc;
+}
+
+export interface BiographyHeroProps {
+  data: BiographyHeroData;
+  years: string[];
+}
+
 export function tiptapToPlainText(value?: TipTapDoc): string {
   if (!value) return '';
   return value.content?.map((el) => el.content?.map((child) => child.text ?? '').join('')).join(' ') ?? '';
