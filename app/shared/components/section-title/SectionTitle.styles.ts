@@ -19,7 +19,7 @@ export const styles = {
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
-    gap: {
+    columnGap: {
       xs: '16px',
       sm: '24px',
       md: '40px'

@@ -1,7 +1,6 @@
 export const styles = {
   mainContainer: {
     display: 'grid',
-    height: '0%',
     gridColumn: '1 / -1',
     my: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
     gridTemplateColumns: {

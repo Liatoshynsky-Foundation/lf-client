@@ -17,9 +17,15 @@ export default function CollaborationInfo() {
       <SectionTitle
         icon={true}
         title={t('title')}
-        mb={0}
         gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
-        sx={{ mb: { xs: '16px' } }}
+        sx={{
+          mb: { xs: '16px' },
+          gap: {
+            xs: '16px',
+            sm: '24px',
+            md: '40px'
+          }
+        }}
       />
       <ButtonContentBlock
         content={infoDoc[locale]}
