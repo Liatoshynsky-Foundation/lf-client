@@ -24,7 +24,7 @@ export const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({ method, hi
             {method.value}
           </Typography>
 
-          <CopyButton targetRef={textRef} hint={hint} iconSize="medium" />
+          <CopyButton targetRef={textRef} hint={hint} iconSize="large" />
         </Box>
       </Box>
     </Box>
