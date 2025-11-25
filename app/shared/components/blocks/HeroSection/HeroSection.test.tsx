@@ -3,10 +3,23 @@ import React from 'react';
 
 import { biographyHeroData } from '../../../../[lang]/biography/data/HeroSection.consts';
 import { HeroSection } from './HeroSection';
-(global as any).ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+
+const mockResizeObserverObserve = jest.fn();
+const mockResizeObserverUnobserve = jest.fn();
+const mockResizeObserverDisconnect = jest.fn();
+
+(globalThis as any).ResizeObserver = class {
+  observe(...args: unknown[]) {
+    mockResizeObserverObserve(...args);
+  }
+
+  unobserve(...args: unknown[]) {
+    mockResizeObserverUnobserve(...args);
+  }
+
+  disconnect(...args: unknown[]) {
+    mockResizeObserverDisconnect(...args);
+  }
 };
 
 jest.mock('next-intl', () => ({

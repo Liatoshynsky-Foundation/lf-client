@@ -18,7 +18,7 @@ import ExcerptBlock from '~/shared/components/excerpt-block/ExcerptBlock';
 import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCaption';
 import YearWithLine from '~/shared/components/year-with-line/YearWithLine';
 
-export function BiographyContent({ data }: BiographyContentProps) {
+export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
   const locale = useLocale();
 
   function renderChrolologyList(item: ChronologyList, key: string): ReactNode {
@@ -41,16 +41,20 @@ export function BiographyContent({ data }: BiographyContentProps) {
         )}
 
         <Box sx={biographyContentStyles.chronologyListColumn} data-testid="BiographyContent-chronologyList">
-          {item.listItems.map((listItem, index) => (
-            <Box key={index} sx={{ width: '100' }}>
-              <ContentBlock
-                containerSx={biographyContentStyles.chronologyItemContainer}
-                textSx={biographyContentStyles.ChronologyListItemText}
-                description={listItem.description[locale]}
-                dataTestId="BiographyContent-chronologyListItem"
-              />
-            </Box>
-          ))}
+          {item.listItems.map((listItem, index) => {
+            const itemKey = tiptapToPlainText(listItem.description[locale]);
+
+            return (
+              <Box key={`${index}${itemKey}`} sx={{ width: '100%' }}>
+                <ContentBlock
+                  containerSx={biographyContentStyles.chronologyItemContainer}
+                  textSx={biographyContentStyles.ChronologyListItemText}
+                  description={listItem.description[locale]}
+                  dataTestId="BiographyContent-chronologyListItem"
+                />
+              </Box>
+            );
+          })}
         </Box>
       </Fragment>
     );

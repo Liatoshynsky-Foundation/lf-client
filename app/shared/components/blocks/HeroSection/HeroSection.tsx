@@ -10,7 +10,7 @@ import YearTabs from '~/components/year-tabs/YearTabs';
 import { heroSectionStyles } from './HeroSection.style';
 import { BiographyHeroProps, tiptapToPlainText } from '~/types/page/biography.types';
 
-export function HeroSection({ data, years }: BiographyHeroProps) {
+export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
   const locale = useLocale();
   const t = useTranslations('biography.heroSection');
 

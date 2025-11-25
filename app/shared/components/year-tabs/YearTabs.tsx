@@ -13,7 +13,7 @@ interface Data {
   years: string[];
 }
 
-export default function YearTabs({ years }: Data) {
+export default function YearTabs({ years }: Readonly<Data>) {
   const { isMobile } = useBreakpoints();
   const [year, setYear] = useState<string>(years[0] ?? '');
   const [isVisible, setIsVisible] = useState<boolean>(true);
