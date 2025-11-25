@@ -1,4 +1,5 @@
 import '~/infrastructure/models/archive/Document';
+import { Types } from 'mongoose';
 
 import type { FundsRepository } from './funds.repo';
 
@@ -71,11 +72,21 @@ export const fundsRepository: FundsRepository = {
 
     const fund = await Fund.findById(caseDoc.fundId).lean<IFund>();
 
-    const allCases = await Case.find({ fundId: caseDoc.fundId }).sort({ order: 1 }).lean<ICase[]>();
-    const currentIndex = allCases.findIndex((c) => c._id.toString() === caseId);
+    const prevCase = await Case.findOne({
+      fundId: caseDoc.fundId,
+      order: { $lt: caseDoc.order }
+    })
+      .sort({ order: -1 })
+      .select({ _id: 1, name: 1, cipher: 1 })
+      .lean<{ _id: Types.ObjectId; name: string; cipher: string }>();
 
-    const prevCase = currentIndex > 0 ? allCases[currentIndex - 1] : null;
-    const nextCase = currentIndex < allCases.length - 1 ? allCases[currentIndex + 1] : null;
+    const nextCase = await Case.findOne({
+      fundId: caseDoc.fundId,
+      order: { $gt: caseDoc.order }
+    })
+      .sort({ order: 1 })
+      .select({ _id: 1, name: 1, cipher: 1 })
+      .lean<{ _id: Types.ObjectId; name: string; cipher: string }>();
 
     const documents = caseDoc.documents || [];
 
@@ -99,8 +110,8 @@ export const fundsRepository: FundsRepository = {
             text: d.text
           })
         ),
-      prevCase: prevCase ? { _id: prevCase._id.toString(), name: prevCase.name } : null,
-      nextCase: nextCase ? { _id: nextCase._id.toString(), name: nextCase.name } : null
+      prevCase: prevCase ? { _id: prevCase._id.toString(), name: prevCase.name, cipher: prevCase.cipher } : null,
+      nextCase: nextCase ? { _id: nextCase._id.toString(), name: nextCase.name, cipher: nextCase.cipher } : null
     };
   }
 };

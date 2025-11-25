@@ -43,8 +43,8 @@ export type CaseDetailsDTO = {
   fundNumber: string;
   fundTitle: string;
   documents?: DocumentDTO[];
-  prevCase?: { _id: string; name: string } | null;
-  nextCase?: { _id: string; name: string } | null;
+  prevCase?: { _id: string; name: string; cipher: string } | null;
+  nextCase?: { _id: string; name: string; cipher: string } | null;
 };
 
 export type DocumentDTO = {
