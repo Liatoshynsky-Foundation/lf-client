@@ -11,6 +11,38 @@ export const biographyContentStyles = {
     marginTop: { xs: '96px', md: '128px', lg: '144px', ultra: '80px' }
   },
 
+  imageAccentRectangle: {
+    position: 'absolute',
+    top: {
+      xs: '-16px',
+      sm: '-26px',
+      md: '-38px',
+      lg: '-40px',
+      xl: '-36px'
+    },
+    left: {
+      xs: '-16px',
+      sm: '-24px',
+      md: '-40px'
+    },
+    width: {
+      xs: '32px',
+      sm: '48px',
+      md: '80px'
+    },
+    height: {
+      xs: '122px',
+      sm: '198px',
+      md: '252px',
+      lg: '336px'
+    },
+    backgroundImage: 'url(/icons/rectangleYellow.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    zIndex: -1,
+    pointerEvents: 'none'
+  },
+
   leftImageVertical: {
     gridColumn: {
       xs: '1 / -1',
@@ -63,6 +95,7 @@ export const biographyContentStyles = {
   },
 
   onlyImageRight: {
+    position: 'relative',
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
@@ -97,8 +130,8 @@ export const biographyContentStyles = {
   },
 
   bigHorizontal: {
-    width: { xs: 199, sm: 400, md: 496, lg: 646, xl: 744, xxl: 744 },
-    height: { xs: 120, sm: 244, md: 302, lg: 394, xl: 454, xxl: 490 }
+    width: { xs: 199, sm: 400, md: 496, lg: 646, xl: 744 },
+    height: { xs: 150, sm: 280, md: 350, lg: 452, xl: 506, xxl: 560 }
   },
 
   fullWidth: {

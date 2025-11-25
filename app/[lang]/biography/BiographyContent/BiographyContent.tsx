@@ -26,6 +26,8 @@ export function BiographyContent({ data }: BiographyContentProps) {
       <Fragment key={key}>
         {item.additionalImage && (
           <Box sx={imageLeftPossition(item.additionalImage.size)}>
+            {item.additionalImage.rectangleTopLeftCorner && <Box sx={biographyContentStyles.imageAccentRectangle} />}
+
             <ImageWithCaption
               src={item.additionalImage.src}
               alt={tiptapToPlainText(item.additionalImage.alt[locale])}
@@ -83,6 +85,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
           </Box>
 
           <Box sx={biographyContentStyles.onlyImageRight} data-testid="BiographyContent-onlyImageBlock-right">
+            {item.mainImage.rectangleTopLeftCorner && <Box sx={biographyContentStyles.imageAccentRectangle} />}
             <ImageWithCaption
               src={item.mainImage.src}
               alt={tiptapToPlainText(item.mainImage.alt[locale])}
@@ -100,6 +103,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
 
     return (
       <Box key={key} sx={biographyContentStyles.onlyImageRight} data-testid="BiographyContent-onlyImageBlock-single">
+        {item.mainImage.rectangleTopLeftCorner && <Box sx={biographyContentStyles.imageAccentRectangle} />}
         <ImageWithCaption
           src={item.mainImage.src}
           alt={tiptapToPlainText(item.mainImage.alt[locale])}

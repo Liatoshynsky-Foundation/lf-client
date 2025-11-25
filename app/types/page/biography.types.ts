@@ -17,6 +17,7 @@ export enum ImagesSizes {
   BigVertical = 'bigVertical',
   BigHorizontal = 'bigHorizontal'
 }
+
 interface ChrolologyListItem {
   description: LocalizedTipTapDoc;
 }
@@ -28,6 +29,7 @@ interface BaseImage {
 
 interface AdvancedImage extends BaseImage {
   size: ImagesSizes;
+  rectangleTopLeftCorner?: boolean;
 }
 interface BaseQuoteBlock {
   quoteText: LocalizedTipTapDoc;

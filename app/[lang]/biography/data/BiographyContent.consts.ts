@@ -158,6 +158,7 @@ export const biographyContentData: BiographyContentBlock[] = [
         mainImage: {
           src: '/images/liatoshynsky-1910.png',
           size: ImagesSizes.BigHorizontal,
+          rectangleTopLeftCorner: true,
           alt: {
             uk: makeDoc([normalText('')]),
             en: makeDoc([normalText('Borys Lyatoshynsky. 1910s')])
@@ -580,6 +581,7 @@ export const biographyContentData: BiographyContentBlock[] = [
         mainImage: {
           src: '/images/liatoshynsky-1930.png',
           size: ImagesSizes.BigHorizontal,
+          rectangleTopLeftCorner: true,
           alt: {
             uk: makeDoc([normalText('')]),
             en: makeDoc([normalText('Borys Lyatoshynsky. 1930s')])
