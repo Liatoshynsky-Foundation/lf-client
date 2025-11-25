@@ -31,7 +31,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
               alt={tiptapToPlainText(item.additionalImage.alt[locale])}
               caption={tiptapToPlainText(item.additionalImage.caption[locale])}
               containerSx={biographyContentStyles.imageContainer}
-              captionSx={biographyContentStyles.imageCaption}
+              captionSx={biographyContentStyles.leftImageCaption}
               sizes={biographyContentStyles[item.additionalImage.size]}
               dataTestId="BiographyContent-chronologyList-imageWithCaption"
             />
@@ -70,7 +70,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
               src={item.additionalImage.src}
               alt={tiptapToPlainText(item.additionalImage.alt[locale])}
               caption={tiptapToPlainText(item.additionalImage.caption[locale])}
-              captionSx={biographyContentStyles.imageCaption}
+              captionSx={biographyContentStyles.leftImageCaption}
               containerSx={biographyContentStyles.imageContainer}
               sizes={biographyContentStyles[item.additionalImage.size]}
               dataTestId="BiographyContent-OnlyImageBlock-additionalImage"
@@ -82,7 +82,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
               src={item.mainImage.src}
               alt={tiptapToPlainText(item.mainImage.alt[locale])}
               caption={tiptapToPlainText(item.mainImage.caption[locale])}
-              captionSx={biographyContentStyles.imageCaption}
+              captionSx={biographyContentStyles.rigthImageCaption}
               containerSx={biographyContentStyles.imageContainer}
               imageSx={{ width: '100%' }}
               sizes={biographyContentStyles[item.mainImage.size]}
@@ -101,7 +101,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
           caption={tiptapToPlainText(item.mainImage.caption[locale])}
           containerSx={biographyContentStyles.imageContainer}
           sizes={biographyContentStyles[item.mainImage.size]}
-          captionSx={biographyContentStyles.imageCaption}
+          captionSx={biographyContentStyles.rigthImageCaption}
           imageSx={{ width: '100%' }}
           dataTestId="BiographyContent-OnlyImageBlock-mainImage"
         />
@@ -121,7 +121,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
           sizes={biographyContentStyles.fullWidth}
           containerSx={biographyContentStyles.fullWidthContainer}
           imageSx={biographyContentStyles.fullWidthImage}
-          captionSx={biographyContentStyles.imageCaption}
+          captionSx={biographyContentStyles.rigthImageCaption}
           align="right"
           dataTestId="BiographyContent-fullWidthImage-imageWithCaption"
         />
@@ -133,11 +133,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
     const yearNumber = block.yearTitle && !Number.isNaN(Number(block.yearTitle)) ? Number(block.yearTitle) : null;
 
     return (
-      <Box
-        sx={biographyContentStyles.blockContainer}
-        key={block.yearTitle ?? `block-${blockIndex}`}
-        data-testid="BiographyContent-block"
-      >
+      <Fragment key={block.yearTitle ?? `block-${blockIndex}`}>
         {yearNumber && <YearWithLine year={yearNumber} />}
 
         {block.items.map((item, itemIndex) => {
@@ -156,7 +152,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
               return null;
           }
         })}
-      </Box>
+      </Fragment>
     );
   }
 

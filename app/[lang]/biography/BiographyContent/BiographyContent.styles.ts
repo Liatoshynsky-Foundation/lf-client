@@ -6,12 +6,9 @@ export const biographyContentStyles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    rowGap: { xs: '40px', md: '64px' },
-    marginBottom: '160px'
-  },
-
-  blockContainer: {
-    display: 'contents'
+    rowGap: { xs: '64px', md: '80px' },
+    marginBottom: '160px',
+    marginTop: { xs: '96px', md: '128px', lg: '144px', ultra: '80px' }
   },
 
   leftImageVertical: {
@@ -129,8 +126,19 @@ export const biographyContentStyles = {
     overflow: 'visible'
   },
 
-  imageCaption: {
-    alignSelf: 'end'
+  leftImageCaption: {
+    alignSelf: 'start',
+    textAlign: 'left',
+    fontSize: '16px',
+    fontWeight: 500,
+    lineHeight: '140%'
+  },
+
+  rigthImageCaption: {
+    alignSelf: 'end',
+    fontSize: '14px',
+    fontWeight: 400,
+    lineHeight: '140%'
   }
 } as const;
 
