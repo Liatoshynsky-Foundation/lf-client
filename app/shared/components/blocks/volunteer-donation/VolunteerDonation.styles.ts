@@ -22,44 +22,49 @@ export const styles = {
     gridColumn: {
       xs: '1 / 5',
       sm: '3 / 8',
-      md: '6 / 11',
-      lg: '6 / 12'
+      md: '6 / -1'
     },
     mb: {
-      xs: '40px',
-      md: '60px',
-      xxl: '136px'
+      xs: '57px',
+      sm: '65px',
+      md: '97px'
     }
   },
   card: {
     mb: {
       xs: '16px',
-      md: '24px'
+      sm: '0px',
+      md: '8px'
     }
   },
   paymentMethodContainer: {
     display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    flexDirection: { xs: 'column', sm: 'row' },
+    gap: { xs: '4px', sm: '20px' }
   },
   label: {
     fontFamily: 'Mulish, Sans-serif',
-    color: mainHexPallete.brown[700],
+    color: mainHexPallete.brown[600],
     letterSpacing: '0px',
     whiteSpace: 'pre-line',
-    fontSize: { xs: '16px', sm: '16px' }
+    fontWeight: 600,
+    lineHeight: '150%',
+    fontSize: { xs: '16px', md: '20px' }
   },
   valueContainer: {
     display: 'flex',
-    alignItems: 'center',
+    flexWrap: 'nowrap',
+    alignItems: { xs: 'flex-start', sm: 'center' },
     gap: '8px'
   },
   value: {
     fontFamily: 'Mulish, Sans-serif',
-    fontSize: '16px',
+    fontSize: { xs: '16px', md: '20px' },
     fontWeight: 600,
-    lineHeight: '110%',
+    lineHeight: '150%',
     color: mainHexPallete.black,
+    overflowWrap: 'anywhere',
     transition: 'color 0.2s ease',
     '&:hover': {
       color: mainHexPallete.burgundy[800],
