@@ -12,6 +12,12 @@ jest.mock('~/shared/components/blocks/collaboration/collaboration-intro/Collabor
   return MockCollaborationIntro;
 });
 
+jest.mock('~/shared/components/blocks/collaboration/collaboration-info/CollaborationInfo', () => {
+  const MockCollaborationInfo = () => <div>Collaboration Info</div>;
+  MockCollaborationInfo.displayName = 'MockCollaborationInfo';
+  return MockCollaborationInfo;
+});
+
 jest.mock('~/shared/components/blocks/collaboration/offer-collaboration/OfferCollaboration', () => {
   const MockOfferCollaboration = () => <div>Offer Collaboration</div>;
   MockOfferCollaboration.displayName = 'MockOfferCollaboration';

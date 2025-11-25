@@ -141,6 +141,13 @@
     "offerCollaboration": {
       "title": "We are open to collaboration, inquiries, and dialogue:",
       "formTitle": "Offer collaboration"
+    },
+    "collaborationInfo": {
+      "title": "Charitable donations - for mission development",
+      "supportButton": "Support Foundation",
+      "supportTitle": "Flexible and personalized support",
+      "partnersTitle": "Recognition of partners and patrons",
+      "partnershipTitle": "Join the partnership"
     }
   },
   "table": {
