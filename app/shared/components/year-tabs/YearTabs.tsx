@@ -2,7 +2,6 @@
 import { Box, Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
-import { years } from '~/components/year-tabs/constants';
 import { styles } from '~/components/year-tabs/YearTabs.styles';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -10,7 +9,11 @@ import { useScrollDirection } from '~/hooks/use-scroll-direction/useScrollDirect
 
 const HEADER_OFFSET = 100;
 
-export default function YearTabs() {
+interface Data {
+  years: string[];
+}
+
+export default function YearTabs({ years }: Data) {
   const { isMobile } = useBreakpoints();
   const [year, setYear] = useState<string>(years[0]);
   const [isVisible, setIsVisible] = useState<boolean>(true);
