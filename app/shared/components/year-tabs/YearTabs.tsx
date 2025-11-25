@@ -15,7 +15,7 @@ interface Data {
 
 export default function YearTabs({ years }: Data) {
   const { isMobile } = useBreakpoints();
-  const [year, setYear] = useState<string>(years[0]);
+  const [year, setYear] = useState<string>(years[0] ?? '');
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const isClickScrolling = useRef(false);
   const scrollDirection = useScrollDirection(100);
