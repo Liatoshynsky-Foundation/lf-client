@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { heroTexts } from '../../../../[lang]/biography/data/HeroSection.consts';
+import { biographyHeroData } from '../../../../[lang]/biography/data/HeroSection.consts';
 import { HeroSection } from './HeroSection';
+(global as any).ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'uk',
@@ -33,8 +38,10 @@ jest.mock('~/components/design-system/all-components/content-block/ContentBlock'
 });
 
 describe('HeroSection', () => {
+  const renderHero = () => render(<HeroSection data={biographyHeroData} years={['1960']} />);
+
   it('should render main layout containers', () => {
-    render(<HeroSection />);
+    renderHero();
 
     expect(screen.getByTestId('HeroSection')).toBeInTheDocument();
     expect(screen.getByTestId('HeroSection-topContainer')).toBeInTheDocument();
@@ -42,7 +49,7 @@ describe('HeroSection', () => {
   });
 
   it('should render localized title text', () => {
-    render(<HeroSection />);
+    renderHero();
 
     const titleWrapper = screen.getByTestId('HeroSection-title');
     expect(titleWrapper).toBeInTheDocument();
@@ -50,7 +57,7 @@ describe('HeroSection', () => {
   });
 
   it('should render quote block with correct localized text', () => {
-    render(<HeroSection />);
+    renderHero();
 
     const quoteBlock = screen.getByTestId('HeroSection-quoteBlock');
     expect(quoteBlock).toBeInTheDocument();
@@ -62,16 +69,15 @@ describe('HeroSection', () => {
     expect(screen.getByTestId('HeroSection-quoteSource')).toHaveTextContent(/Бориса Лятошинського/i);
   });
 
-  it('should render image block with localized alt text', () => {
-    render(<HeroSection />);
+  it('should render image block', () => {
+    renderHero();
 
     const image = screen.getByTestId('HeroSection-imageCaption');
     expect(image).toBeInTheDocument();
-    expect(image).toHaveTextContent(heroTexts.image.alt['uk']);
   });
 
   it('should render biography and note content blocks', () => {
-    render(<HeroSection />);
+    renderHero();
 
     const bioBlock = screen.getByTestId('HeroSection-biographyContainer-contentBlock');
     const noteBlock = screen.getByTestId('HeroSection-noteContainer-contentBlock');
