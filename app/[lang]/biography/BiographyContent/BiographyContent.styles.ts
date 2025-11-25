@@ -36,15 +36,17 @@ export const biographyContentStyles = {
     },
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '12px', sm: '16px' },
-    '& *': {
-      fontSize: { xs: '16px', sm: '18px', md: '20px' }
-    },
-    lineHeight: '160%'
+    gap: { xs: '12px', sm: '16px' }
   },
 
-  chronologyListRow: {
-    display: 'flex'
+  chronologyItemContainer: {
+    gridTemplateColumns: 'none',
+    gap: 'none'
+  },
+
+  ChronologyListItemText: {
+    fontSize: { xs: '16px', sm: '18px', md: '20px' },
+    lineHeight: '160%'
   },
 
   excerptBlock: {
@@ -101,7 +103,7 @@ export const biographyContentStyles = {
 
   fullWidth: {
     width: { xs: 205, sm: 400, md: 496, lg: 646, xl: 1510, xxl: 1775, ultra: 1955 },
-    height: { xs: 160, sm: 407, md: 530, lg: 740, xxl: 870, ultra: 870 }
+    height: { xs: 260, sm: 380, md: 500, lg: 650, xl: 730, xxl: 850, ultra: 950 }
   },
 
   fullWidthBlock: {
