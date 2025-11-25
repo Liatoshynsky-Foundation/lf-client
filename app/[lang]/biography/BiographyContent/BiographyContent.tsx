@@ -13,9 +13,9 @@ import type {
 } from '~/types/page/biography.types';
 import { ContentType, tiptapToPlainText } from '~/types/page/biography.types';
 
+import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import ExcerptBlock from '~/shared/components/excerpt-block/ExcerptBlock';
 import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCaption';
-import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
 import YearWithLine from '~/shared/components/year-with-line/YearWithLine';
 
 export function BiographyContent({ data }: BiographyContentProps) {
@@ -40,8 +40,13 @@ export function BiographyContent({ data }: BiographyContentProps) {
 
         <Box sx={biographyContentStyles.chronologyListColumn} data-testid="BiographyContent-chronologyList">
           {item.listItems.map((listItem, index) => (
-            <Box sx={biographyContentStyles.chronologyListRow} key={index}>
-              <TipTapContent data={listItem.description[locale]} />
+            <Box key={index} sx={{ width: '100' }}>
+              <ContentBlock
+                containerSx={biographyContentStyles.chronologyItemContainer}
+                textSx={biographyContentStyles.ChronologyListItemText}
+                description={listItem.description[locale]}
+                dataTestId="BiographyContent-chronologyListItem"
+              />
             </Box>
           ))}
         </Box>
