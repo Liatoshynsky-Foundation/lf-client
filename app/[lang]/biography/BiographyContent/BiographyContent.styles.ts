@@ -1,3 +1,5 @@
+import { ImagesSizes } from '~/types/page/biography.types';
+
 export const biographyContentStyles = {
   mainContainer: {
     width: '100%',
@@ -12,27 +14,28 @@ export const biographyContentStyles = {
     display: 'contents'
   },
 
-  chronologyImageColumn: {
+  leftImageVertical: {
     gridColumn: {
       xs: '1 / -1',
-      md: '1 / 7'
+      md: '2 / 4'
+    },
+    justifySelf: 'start'
+  },
+
+  leftImageHorizontal: {
+    gridColumn: {
+      xs: '1 / -1',
+      md: '1 / 4'
     },
     justifySelf: 'start'
   },
 
   chronologyListColumn: {
     width: '100%',
-    maxWidth: {
-      xs: '100%',
-      sm: '400px',
-      md: '496px',
-      lg: '646px',
-      xl: '744px',
-      xxl: '906px'
-    },
     gridColumn: {
       xs: '1 / -1',
-      sm: '7 / -1'
+      sm: '4 / -1',
+      md: '6 / -1'
     },
     display: 'flex',
     flexDirection: 'column',
@@ -55,10 +58,7 @@ export const biographyContentStyles = {
     gridColumn: {
       xs: '1 / -1',
       sm: '1 / 3',
-      md: '2 / 4',
-      lg: '2 / 4',
-      xl: '2 / 4',
-      xxl: '2 / 4'
+      md: '2 / 4'
     },
     width: 'fit-content'
   },
@@ -67,10 +67,7 @@ export const biographyContentStyles = {
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
-      md: '6 / -1',
-      lg: '6 / -1',
-      xl: '6 / -1',
-      xxl: '6 / -1'
+      md: '6 / -1'
     },
     alignSelf: 'end'
   },
@@ -106,8 +103,8 @@ export const biographyContentStyles = {
   },
 
   fullWidth: {
-    width: { xs: 199, sm: 400, md: 496, lg: 646, xl: 1510, xxl: 1775, ultra: 1955 },
-    height: { xs: 120, sm: 244, md: 302, lg: 394, xl: 741, xxl: 870, ultra: 870 }
+    width: { xs: 205, sm: 400, md: 496, lg: 646, xl: 1510, xxl: 1775, ultra: 1955 },
+    height: { xs: 160, sm: 407, md: 530, lg: 740, xxl: 870, ultra: 870 }
   },
 
   fullWidthBlock: {
@@ -136,3 +133,10 @@ export const biographyContentStyles = {
     alignSelf: 'end'
   }
 } as const;
+
+export function imageLeftPossition(key: ImagesSizes) {
+  if (ImagesSizes.SmallHorizontal === key) {
+    return biographyContentStyles.leftImageHorizontal;
+  }
+  return biographyContentStyles.leftImageVertical;
+}

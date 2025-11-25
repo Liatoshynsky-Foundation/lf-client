@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { useLocale } from 'next-intl';
 import { Fragment, ReactNode } from 'react';
 
-import { biographyContentStyles } from './BiographyContent.styles';
+import { biographyContentStyles, imageLeftPossition } from './BiographyContent.styles';
 import type {
   BiographyContentBlock,
   BiographyContentProps,
@@ -25,7 +25,7 @@ export function BiographyContent({ data }: BiographyContentProps) {
     return (
       <Fragment key={key}>
         {item.additionalImage && (
-          <Box sx={biographyContentStyles.chronologyImageColumn}>
+          <Box sx={imageLeftPossition(item.additionalImage.size)}>
             <ImageWithCaption
               src={item.additionalImage.src}
               alt={tiptapToPlainText(item.additionalImage.alt[locale])}
