@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { heroTexts } from '../../../../[lang]/biography/data/HeroSection.consts';
 import { HeroSection } from './HeroSection';
-import { heroTexts } from './HeroSection.content';
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'uk',

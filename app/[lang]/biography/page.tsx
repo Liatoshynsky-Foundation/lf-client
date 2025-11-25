@@ -3,12 +3,12 @@ import React, { ReactElement } from 'react';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { BiographyContent } from './BiographyContent/BiographyContent';
-import { biographyContentData } from './data/Biography.consts';
+import { biographyContentData } from './data/BiographyContent.consts';
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { biographyHeroData } from '~/[lang]/biography/data/HeroSection.consts';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { HeroSection } from '~/shared/components/blocks/HeroSection/HeroSection';
-import { biographyHeroData } from '~/shared/components/blocks/HeroSection/HeroSection.content';
 
 export default function Biography(): ReactElement {
   if (isProductionMode()) {
