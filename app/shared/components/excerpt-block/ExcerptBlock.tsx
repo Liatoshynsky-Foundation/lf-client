@@ -10,7 +10,7 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 interface ExcerptBlockProps {
   quote: string;
   source: string;
-  dataTestId: string;
+  dataTestId?: string;
 }
 
 export default function ExcerptBlock({ quote, source, dataTestId }: ExcerptBlockProps) {
