@@ -21,6 +21,9 @@ const proposedSum: Record<Currency, number[]> = {
   GBP: [10, 20, 40]
 };
 
+const MIN_DONATION_AMOUNT = 0;
+const isValidDonationAmount = (value: number | ''): boolean => typeof value === 'number' && value > MIN_DONATION_AMOUNT;
+
 function DonationForm() {
   const t = useTranslations('donationForm');
   const lang = useLocale();
@@ -63,7 +66,7 @@ function DonationForm() {
   const handleDonateClick = (amount: number) => {
     setTouched(true);
     const currentAmount = Number(amount);
-    const isInvalid = currentAmount <= 0;
+    const isInvalid = !isValidDonationAmount(currentAmount);
     setHasError(isInvalid);
     if (isInvalid) {
       return;
@@ -102,7 +105,9 @@ function DonationForm() {
       size={isMobile ? 'small' : 'medium'}
       onClick={() => {
         setDonationSum(item);
-        if (touched) setHasError(donationSum === 0);
+        if (touched) {
+          setHasError(!isValidDonationAmount(item));
+        }
       }}
       data-testid={`DonationForm-suggestButton-${item}`}
     >
@@ -122,7 +127,7 @@ function DonationForm() {
     const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
     setDonationSum(val);
     if (touched) {
-      setHasError(val === '' || val === 0);
+      setHasError(!isValidDonationAmount(val));
     }
   };
 
@@ -178,6 +183,7 @@ function DonationForm() {
           variant="contained"
           size={isMobile ? 'medium' : 'large'}
           fullWidth
+          disabled={!isValidDonationAmount(donationSum)}
           onClick={() => handleDonateClick(donationSum as number)}
           data-testid="DonationForm-donateButton"
         >

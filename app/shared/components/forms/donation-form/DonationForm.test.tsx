@@ -3,15 +3,23 @@ import React from 'react';
 
 import DonationForm from './DonationForm';
 
-jest.mock('../../design-system/all-components/button/Button', () => {
-  const MockButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, ...props }) => (
-    <button {...props}>{children}</button>
-  );
+jest.mock('~/ds-components/button/Button', () => {
+  const MockButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { fullWidth?: boolean }> = ({
+    children,
+    fullWidth: _fullWidth,
+    ...props
+  }) => <button {...props}>{children}</button>;
+
   return {
     __esModule: true,
     default: MockButton
   };
 });
+
+jest.mock('~/components/turnstileWidget/TurnstileWidget', () => ({
+  __esModule: true,
+  default: () => <div data-testid="TurnstileWidget-mock" />
+}));
 
 const mockDonate = jest.fn();
 jest.mock('~/hooks/use-donation/useDonation', () => ({
@@ -82,8 +90,10 @@ describe('DonationForm', () => {
     const input = screen.getByRole('spinbutton');
     const button = screen.getByText('Зробити внесок');
 
-    fireEvent.change(input, { target: { value: '0' } });
+    fireEvent.change(input, { target: { value: '100' } });
     fireEvent.click(button);
+
+    fireEvent.change(input, { target: { value: '0' } });
     expect(input).toHaveAttribute('aria-invalid', 'true');
 
     fireEvent.change(input, { target: { value: '100' } });
