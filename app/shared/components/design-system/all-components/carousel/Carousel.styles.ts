@@ -70,9 +70,10 @@ export const styles = {
   },
   carouselFooterStyles: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: { xs: 'column-reverse', sm: 'column' },
     alignItems: 'center',
-    gap: '8px'
+    gap: '8px',
+    mt: { xs: '12px', sm: '0px' }
   },
   captionStyles: {
     width: SIZES.activeWidth,
