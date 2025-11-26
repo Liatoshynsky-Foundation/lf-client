@@ -58,13 +58,14 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
   };
 
   const handleTouchEnd = () => {
-    if (Math.abs(dragOffset) > 50) {
-      if (dragOffset > 0) {
-        if (infiniteLoop || !isFirstSlide) goToPrev();
-      } else {
-        if (infiniteLoop || !isLastSlide) goToNext();
-      }
+    if (Math.abs(dragOffset) < 50) return;
+    if (dragOffset > 0) {
+      if (infiniteLoop || !isFirstSlide) goToPrev();
     }
+    if (dragOffset < 0) {
+      if (infiniteLoop || !isLastSlide) goToNext();
+    }
+
     setDragOffset(0);
   };
 
