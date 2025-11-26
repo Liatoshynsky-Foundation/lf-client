@@ -2,7 +2,7 @@ import { asFunction, AwilixContainer } from 'awilix';
 
 import newCompositionsRepo from '~/infrastructure/repositories/artistry/compositions.repository';
 import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
-import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository.mock';
+import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository';
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
