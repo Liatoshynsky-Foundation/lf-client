@@ -92,24 +92,22 @@ export default function DocumentTableSelection() {
   }
 
   return (
-    <>
-      <EnhancedTable
-        data={docs}
-        columns={baseColumns}
-        columnWidths={columnWidths}
-        itemsPerPage={5}
-        tableName={t('name')}
-        rowSx={{
-          cursor: 'pointer',
-          transition: 'background-color 0.15s ease',
-          '&:hover': {
-            backgroundColor: 'rgba(217, 220, 232, 0.3)',
-            '& .name-cell': {
-              textDecoration: 'underline'
-            }
+    <EnhancedTable
+      data={docs}
+      columns={baseColumns}
+      columnWidths={columnWidths}
+      itemsPerPage={5}
+      tableName={t('name')}
+      rowSx={{
+        cursor: 'pointer',
+        transition: 'background-color 0.15s ease',
+        '&:hover': {
+          backgroundColor: 'rgba(217, 220, 232, 0.3)',
+          '& .name-cell': {
+            textDecoration: 'underline'
           }
-        }}
-      />
-    </>
+        }
+      }}
+    />
   );
 }

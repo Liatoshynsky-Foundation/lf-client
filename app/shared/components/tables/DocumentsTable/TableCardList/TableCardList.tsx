@@ -8,9 +8,10 @@ interface TableCardListProps {
   tableRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function TableCardList({ paginatedData, tableRef }: TableCardListProps) {
+export default function TableCardList({ paginatedData, tableRef }: Readonly<TableCardListProps>) {
   return (
     <Box
+      data-testid="tableCardList"
       ref={tableRef}
       sx={{
         display: 'grid',

@@ -25,7 +25,7 @@ export default function MobileDocumentTable({
   itemsPerPage = 10,
   Search,
   Filters
-}: MobileDocumentTableProps) {
+}: Readonly<MobileDocumentTableProps>) {
   const { isMobile, isTablet } = useBreakpoints();
   const t = useTranslations('common');
   const { hasMore, paginatedData, currentPage, totalPages, visiblePages, handleLoadMore, handlePageChange } =
@@ -62,7 +62,7 @@ export default function MobileDocumentTable({
         activeFiltersCount={0}
       />
       <TableCardList tableRef={tableRef} paginatedData={paginatedData} />
-      <Box sx={styles.paginationWrapper}>
+      <Box data-testid="pagination" sx={styles.paginationWrapper}>
         {hasMore && (
           <Button variant="contained" size="large" onClick={handleLoadMore} sx={styles.loadMoreButton}>
             {t('viewMore')}
