@@ -1,7 +1,7 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import PaperComponent from '~/components/paper-component/PaperComponent';
 import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
@@ -32,16 +32,15 @@ function DonationForm() {
   const [currency, setCurrency] = useState<Currency>('UAH');
   const [openDropdown, setOpenDropdown] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [touched, setTouched] = useState(false);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
     setDonationSum('');
     setHasError(false);
-    setTouched(false);
   };
 
   const onVerificationFailure = useCallback(() => {
@@ -64,11 +63,11 @@ function DonationForm() {
   }, []);
 
   const handleDonateClick = (amount: number) => {
-    setTouched(true);
     const currentAmount = Number(amount);
     const isInvalid = !isValidDonationAmount(currentAmount);
     setHasError(isInvalid);
     if (isInvalid) {
+      amountInputRef.current?.focus();
       return;
     }
     setSelectedAmount(currentAmount);
@@ -105,8 +104,8 @@ function DonationForm() {
       size={isMobile ? 'small' : 'medium'}
       onClick={() => {
         setDonationSum(item);
-        if (touched) {
-          setHasError(!isValidDonationAmount(item));
+        if (hasError) {
+          setHasError(false);
         }
       }}
       data-testid={`DonationForm-suggestButton-${item}`}
@@ -126,8 +125,8 @@ function DonationForm() {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
     setDonationSum(val);
-    if (touched) {
-      setHasError(!isValidDonationAmount(val));
+    if (hasError) {
+      setHasError(false);
     }
   };
 
@@ -147,11 +146,15 @@ function DonationForm() {
             <Input
               disableUnderline
               type="number"
+              inputRef={amountInputRef}
               inputProps={{ 'aria-invalid': hasError }}
               value={donationSum}
               onChange={handleInputChange}
               placeholder="0"
-              sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
+              sx={{
+                ...style.moneyInput,
+                ...(hasError && style.moneyInputError)
+              }}
               data-testid="DonationForm-moneyInput"
             />
             <FormControl variant="standard" sx={style.currencyInput}>
@@ -183,7 +186,6 @@ function DonationForm() {
           variant="contained"
           size={isMobile ? 'medium' : 'large'}
           fullWidth
-          disabled={!isValidDonationAmount(donationSum)}
           onClick={() => handleDonateClick(donationSum as number)}
           data-testid="DonationForm-donateButton"
         >

@@ -86,14 +86,12 @@ describe('DonationForm', () => {
     expect(screen.getByDisplayValue('')).toBeInTheDocument();
   });
 
-  it('should remove error after entering valid value', () => {
+  it('should show error after submitting invalid amount and clear it after changing value', () => {
     const input = screen.getByRole('spinbutton');
     const button = screen.getByText('Зробити внесок');
 
-    fireEvent.change(input, { target: { value: '100' } });
-    fireEvent.click(button);
-
     fireEvent.change(input, { target: { value: '0' } });
+    fireEvent.click(button);
     expect(input).toHaveAttribute('aria-invalid', 'true');
 
     fireEvent.change(input, { target: { value: '100' } });

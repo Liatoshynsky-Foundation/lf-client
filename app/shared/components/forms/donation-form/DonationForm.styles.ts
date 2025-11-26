@@ -73,7 +73,11 @@ export const style = {
     }
   },
   moneyInputError: {
-    color: rgbaTextFieldColors.errorBorderBottom
+    color: rgbaTextFieldColors.errorBorderBottom,
+    '& input::placeholder': {
+      color: rgbaTextFieldColors.errorBorderBottom,
+      opacity: 1
+    }
   },
   currencyInput: {
     minWidth: '90px',
