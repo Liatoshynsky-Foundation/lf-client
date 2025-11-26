@@ -1,17 +1,12 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
-
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import DocumentTableSelection from '~/shared/components/tables/DocumentsTable/DocumentTableSelection';
 
 export default function FundDetailsPage() {
   return (
     <MainLayout>
-      <Box>
-        <Box>
-          <Typography variant="h4">Fund details</Typography>
-        </Box>
-      </Box>
+      <DocumentTableSelection />
     </MainLayout>
   );
 }

@@ -47,6 +47,7 @@ interface EnhancedTableProps<T extends RowData> {
   enableClientSorting?: boolean;
   loading?: boolean;
   noResults?: React.ReactNode;
+  rowSx?: object;
 }
 
 export const EnhancedTable = <T extends RowData>({
@@ -63,7 +64,8 @@ export const EnhancedTable = <T extends RowData>({
   onColumnFiltersChange,
   defaultSorting = [],
   loading = false,
-  noResults
+  noResults,
+  rowSx
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -200,7 +202,7 @@ export const EnhancedTable = <T extends RowData>({
                       columns={getGroupColumns(columns, entry.items)}
                     />
                   ) : (
-                    <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} />
+                    <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} sx={rowSx} />
                   )
                 )}
               </TableBody>
