@@ -11,14 +11,14 @@ export const styles: Record<string, SxProps<Theme>> = {
       sm: '1 / 3',
       md: '1 / 4'
     },
-    marginBottom: {
+    mb: {
       xs: '8px',
-      md: '0px'
+      sm: '0px'
     }
   },
 
   link: {
-    padding: '0px',
+    p: '0px',
     gap: '0px',
     transition: 'border-bottom 0.3s ease-in-out',
     borderBottom: '1px solid transparent',

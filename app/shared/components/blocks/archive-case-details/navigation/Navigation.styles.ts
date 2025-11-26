@@ -5,7 +5,7 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     gridColumn: '1 / -1',
-    marginTop: {
+    mt: {
       xs: '32px',
       md: '40px'
     },
@@ -25,18 +25,12 @@ export const styles: Record<string, SxProps<Theme>> = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
-    textAlign: {
-      xs: 'left',
-      sm: 'right'
-    },
+    textAlign: 'right',
     marginLeft: 'auto'
   },
 
   navButton: {
-    minWidth: {
-      xs: '40px',
-      sm: '100%'
-    },
+    minWidth: '40px',
     justifyContent: {
       xs: 'center',
       sm: 'space-between'
@@ -81,8 +75,8 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   navMetaLeft: {
-    marginTop: '8px',
-    marginLeft: {
+    mt: '8px',
+    ml: {
       xs: '0px',
       sm: '46px'
     },
@@ -90,8 +84,8 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   navMetaRight: {
-    marginTop: '8px',
-    marginRight: {
+    mt: '8px',
+    mr: {
       xs: '0px',
       sm: '46px'
     },
