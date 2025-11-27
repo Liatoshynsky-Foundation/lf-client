@@ -35,6 +35,7 @@ export default function CollaborationInfo() {
         textSx={styles.textStyle}
         textContainerSx={{ marginBottom: { xs: '24px', md: '0px' } }}
         buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
+        link="/support-us"
       />
       <TitleContentBlock
         containerSx={{ mt: { xs: '56px', sm: '96px', md: '112px' } }}

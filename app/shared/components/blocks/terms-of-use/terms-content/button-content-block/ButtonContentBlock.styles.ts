@@ -26,7 +26,8 @@ export const styles = {
     gridColumn: { xs: '1/-1', sm: '4/-1', md: '3 / 6' },
     height: '100%',
     justifyContent: 'flex-end',
-    width: '100%'
+    width: '100%',
+    alignItems: 'flex-end'
   },
 
   button: {
