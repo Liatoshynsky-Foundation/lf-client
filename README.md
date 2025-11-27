@@ -119,7 +119,56 @@ npm run dev
 
 ## Usage
 
-### How to work with swagger UI
+### API Documentation
+
+Documentation is rendered with [Redoc](https://redocly.github.io/redoc/) at `/api-docs`.
+
+#### File Structure
+
+```
+app/
+├── api/
+│   ├── docs/
+│   │   └── route.ts         # Combines all specs and serves OpenAPI JSON
+│   └── [your-endpoint]/
+│       ├── openapi.json     # Endpoint API specification
+│       └── route.ts         # Endpoint API handler
+└── api-docs/
+    ├── layout.tsx           # Isolated layout for docs page
+    └── page.tsx             # Redoc renderer
+```
+
+#### Adding New API Documentation
+
+1. Create `openapi.json` in your endpoint folder:
+
+```
+   app/api/[your-endpoint]/openapi.json
+```
+
+2. Import and merge in `app/api/docs/route.ts`:
+
+```ts
+import newSpec from '../[your-endpoint]/openapi.json';
+
+export async function GET() {
+  return Response.json({
+    // ... info, servers ...
+    paths: {
+      ...existingSpec.paths,
+      ...newSpec.paths
+    },
+    components: {
+      schemas: {
+        ...existingSpec.components?.schemas,
+        ...newSpec.components?.schemas
+      }
+    }
+  });
+}
+```
+
+3. Verify at `/api-docs`
 
 ### How to run tests
 
