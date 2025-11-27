@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import ContentBlock from '~/ds-components/content-block/ContentBlock';
 
 import PartnerLogo from '../../partner-logo/PartnerLogo';
+import SectionTitle from '../../section-title/SectionTitle';
 import { styles } from './OurPartners.styles';
 import PartnerGrid from './partner-grid/PartnerGrid';
 import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
@@ -19,7 +20,13 @@ export default function OurPartners() {
 
   return (
     <Box sx={styles.wrapper}>
-      <ContentBlock title={t('title')} containerSx={styles.titleContainer} />
+      <SectionTitle
+        icon={true}
+        title={t('title')}
+        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
+        sx={styles.titleContainer}
+        mb={43}
+      />
       <ContentBlock textSx={styles.text} description={t('description')} />
 
       <Box sx={styles.xsGrid}>
