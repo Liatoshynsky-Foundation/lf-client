@@ -179,7 +179,8 @@ export const WorkTableSection = ({ lang }: Readonly<Props>) => {
         accessorKey: 'sortableYear',
         header: RenderYearHeader,
         cell: (info) => renderYearCell(info.row.original.year),
-        sortingFn: 'basic'
+        sortingFn: 'basic',
+        sortDescFirst: false
       },
       {
         id: 'actions',
