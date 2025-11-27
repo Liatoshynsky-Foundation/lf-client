@@ -20,13 +20,21 @@ interface ControlPanelProps {
   readonly Filters: ReactNode;
   readonly tableName: string;
   readonly activeFiltersCount: number;
+  readonly sx?: object;
 }
 
-export default function ControlPanel({ tableName, Search, Filters, activeFiltersCount }: Readonly<ControlPanelProps>) {
+export default function ControlPanel({
+  tableName,
+  Search,
+  Filters,
+  activeFiltersCount,
+  sx
+}: Readonly<ControlPanelProps>) {
   const t = useTranslations('table');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
-  const isLessThan405 = useMediaQuery('(max-width:405px)', { noSsr: true });
+  const isLessThan1024 = useMediaQuery('(max-width:1024px)', { noSsr: true });
+  const hasFilters = Boolean(Filters);
 
   const [searchActive, setSearchActive] = useState(false);
   const [filtersActive, setFiltersActive] = useState(false);
@@ -107,14 +115,15 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
   );
 
   return (
-    <Box sx={ControlPanelStyles.root} data-testid="ControlPanel">
+    <Box sx={{ ...ControlPanelStyles.root, ...sx }} data-testid="ControlPanel">
       <Box sx={ControlPanelStyles.header} data-testid="ControlPanel-header">
-        <Typography variant={isLessThan405 ? 'customBold25' : 'customBold32'} data-testid="ControlPanel-tableName">
+        <Typography variant={isLessThan1024 ? 'customBold25' : 'customBold32'} data-testid="ControlPanel-tableName">
           {tableName}
         </Typography>
         <Box sx={ControlPanelStyles.headerRight} data-testid="ControlPanel-header--right">
           {isMobile ? searchIconButton : Search}
-          {isMobile ? filtersIconButton : filtersDesktop}
+          {isMobile && hasFilters ? filtersIconButton : null}
+          {!isMobile && hasFilters ? filtersDesktop : null}
         </Box>
       </Box>
       <Box sx={ControlPanelStyles.controlsColumn} data-testid="ControlPanel-controlsColumn">
