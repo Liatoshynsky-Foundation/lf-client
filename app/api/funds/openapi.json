@@ -1,0 +1,300 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Liatoshynsky Foundation API - Funds",
+    "description": "API для роботи з архівними фондами, справами та документами Фундації Лятошинського",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Liatoshynsky Foundation",
+      "url": "https://liatoshynsky.org.ua",
+      "email": "liatoshynsky@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "API Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Funds",
+      "description": "Архівні фонди, справи та документи"
+    }
+  ],
+  "paths": {
+    "/funds": {
+      "get": {
+        "tags": ["Funds"],
+        "summary": "Get funds, fund details, or case details",
+        "description": "Returns different data based on query parameters:\n\n### Usage examples:\n\n| Scenario | URL | Returns |\n|----------|-----|--------|\n| List all funds | `GET /api/funds` | Array of FundDTO |\n| Fund details | `GET /api/funds?id=2` | FundDetailsDTO with cases |\n| Case details | `GET /api/funds?caseId=69236afae427aafae7051acd` | CaseDetailsDTO with documents |\n\n### Notes:\n- Use only one parameter at a time\n- `id` is numeric (fund ID)\n- `caseId` is MongoDB ObjectId string\n- If both parameters provided, `caseId` takes priority",
+        "operationId": "getFunds",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Fund ID (numeric). Returns fund details with list of cases.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "caseId",
+            "in": "query",
+            "description": "Case ID (MongoDB ObjectId). Returns case details with documents and navigation.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns one of three data types based on parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "array",
+                          "description": "List of all funds (no parameters)",
+                          "items": {
+                            "$ref": "#/components/schemas/FundDTO"
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/FundDetailsDTO"
+                        },
+                        {
+                          "$ref": "#/components/schemas/CaseDetailsDTO"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "fundsList": {
+                    "summary": "List of all funds",
+                    "value": {
+                      "success": true,
+                      "data": [
+                        { "id": 1, "number": "Фонд 1", "title": "АУДІОЗАПИСИ" },
+                        { "id": 2, "number": "Фонд 2", "title": "ОСОБИСТІ ДОКУМЕНТИ" }
+                      ]
+                    }
+                  },
+                  "fundDetails": {
+                    "summary": "Fund details with cases",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "id": 2,
+                        "number": "Фонд 2",
+                        "title": "ОСОБИСТІ ДОКУМЕНТИ",
+                        "numberOfDescriptions": 1,
+                        "numberOfCases": 15,
+                        "organizationForm": "Хронологічний",
+                        "documentCreationDate": "1920-1968",
+                        "chronologicalBoundaries": "1920-1968 рр.",
+                        "documentLanguages": "Українська, російська",
+                        "characterAndContent": "Особисті документи композитора",
+                        "accessConditions": "Вільний доступ",
+                        "compilerInfo": "Упорядник: Фундація Лятошинського",
+                        "cases": [
+                          {
+                            "_id": "69236afae427aafae7051acd",
+                            "cipher": "Ф2-001",
+                            "name": "Свідоцтво про народження",
+                            "dates": "1920",
+                            "sheets": 2,
+                            "contentDescription": "Оригінал документа",
+                            "pdfUrl": "https://storage.blob/doc.pdf",
+                            "order": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "caseDetails": {
+                    "summary": "Case details with documents",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "_id": "69236afae427aafae7051acd",
+                        "cipher": "Ф2-001",
+                        "name": "Свідоцтво про народження",
+                        "dates": "1920",
+                        "sheets": 2,
+                        "contentDescription": "Оригінал документа",
+                        "pdfUrl": "https://storage.blob/doc.pdf",
+                        "fundId": "507f1f77bcf86cd799439011",
+                        "fundNumber": "Фонд 2",
+                        "fundTitle": "ОСОБИСТІ ДОКУМЕНТИ",
+                        "documents": [
+                          {
+                            "_id": "507f1f77bcf86cd799439012",
+                            "order": 1,
+                            "text": "Текст документа"
+                          }
+                        ],
+                        "prevCase": null,
+                        "nextCase": {
+                          "_id": "69236afae427aafae7051ace",
+                          "name": "Атестат"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fund ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fund or Case not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "error": "NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "error": "FUNDS_FETCH_FAILED"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Standard error response",
+        "properties": {
+          "success": { "type": "boolean" },
+          "error": { "type": "string" }
+        }
+      },
+      "FundDTO": {
+        "type": "object",
+        "description": "Basic fund information for list view",
+        "required": ["id", "number", "title"],
+        "properties": {
+          "id": { "type": "integer", "description": "Unique fund identifier" },
+          "number": { "type": "string", "description": "Fund number" },
+          "title": { "type": "string", "description": "Fund title" }
+        }
+      },
+      "FundDetailsDTO": {
+        "type": "object",
+        "description": "Full fund details with cases",
+        "required": ["id", "number", "title"],
+        "properties": {
+          "id": { "type": "integer", "description": "Unique fund identifier" },
+          "number": { "type": "string", "description": "Fund number" },
+          "title": { "type": "string", "description": "Fund title" },
+          "numberOfDescriptions": { "type": "integer", "description": "Number of descriptions" },
+          "numberOfCases": { "type": "integer", "description": "Total cases count" },
+          "organizationForm": { "type": "string", "description": "Organization form" },
+          "documentCreationDate": { "type": "string", "description": "Document creation date range" },
+          "chronologicalBoundaries": { "type": "string", "description": "Chronological boundaries" },
+          "documentLanguages": { "type": "string", "description": "Languages of documents" },
+          "characterAndContent": { "type": "string", "description": "Character and content description" },
+          "accessConditions": { "type": "string", "description": "Access conditions" },
+          "compilerInfo": { "type": "string", "description": "Compiler information" },
+          "cases": {
+            "type": "array",
+            "description": "List of cases in this fund",
+            "items": { "$ref": "#/components/schemas/CaseDTO" }
+          }
+        }
+      },
+      "CaseDTO": {
+        "type": "object",
+        "description": "Case (справа) within a fund",
+        "required": ["_id", "cipher", "name", "order"],
+        "properties": {
+          "_id": { "type": "string", "description": "MongoDB ObjectId" },
+          "cipher": { "type": "string", "description": "Case cipher/code" },
+          "name": { "type": "string", "description": "Case name" },
+          "dates": { "type": "string", "description": "Date range" },
+          "sheets": { "type": "integer", "nullable": true, "description": "Number of sheets" },
+          "contentDescription": { "type": "string", "description": "Content description" },
+          "pdfUrl": { "type": "string", "nullable": true, "description": "PDF document URL" },
+          "order": { "type": "integer", "description": "Sort order" }
+        }
+      },
+      "CaseDetailsDTO": {
+        "type": "object",
+        "description": "Full case details with documents and navigation",
+        "required": ["_id", "cipher", "name", "fundId", "fundNumber", "fundTitle"],
+        "properties": {
+          "_id": { "type": "string", "description": "MongoDB ObjectId" },
+          "cipher": { "type": "string", "description": "Case cipher/code" },
+          "name": { "type": "string", "description": "Case name" },
+          "dates": { "type": "string", "description": "Date range" },
+          "sheets": { "type": "integer", "nullable": true, "description": "Number of sheets" },
+          "contentDescription": { "type": "string", "description": "Content description" },
+          "pdfUrl": { "type": "string", "nullable": true, "description": "PDF document URL" },
+          "fundId": { "type": "string", "description": "Parent fund MongoDB ObjectId" },
+          "fundNumber": { "type": "string", "description": "Parent fund number" },
+          "fundTitle": { "type": "string", "description": "Parent fund title" },
+          "documents": {
+            "type": "array",
+            "description": "List of documents in this case",
+            "items": { "$ref": "#/components/schemas/DocumentDTO" }
+          },
+          "prevCase": { "type": "object", "nullable": true, "description": "Previous case { _id, name } or null" },
+          "nextCase": { "type": "object", "nullable": true, "description": "Next case { _id, name } or null" }
+        }
+      },
+      "DocumentDTO": {
+        "type": "object",
+        "description": "Document within a case",
+        "required": ["_id", "order", "text"],
+        "properties": {
+          "_id": { "type": "string", "description": "MongoDB ObjectId" },
+          "order": { "type": "integer", "description": "Sort order" },
+          "text": { "type": "string", "description": "Document text content" }
+        }
+      }
+    }
+  }
+}
