@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
+import type { ArchiveAdjacentCase } from '../ArchiveCaseDetails';
 import Navigation from './Navigation';
-import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ alt }: { alt: string }) => <span data-testid="svg-mock" aria-label={alt} />
@@ -9,14 +9,12 @@ jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
 
 describe('Navigation', () => {
   const prevCase: ArchiveAdjacentCase = {
-    id: 'prev-id',
     href: '/uk/archive/fund/2/case/op1-spr2',
     indexLabel: 'Ф. 2, оп. 1, спр. 2',
     title: 'Попередня справа'
   };
 
   const nextCase: ArchiveAdjacentCase = {
-    id: 'next-id',
     href: '/uk/archive/fund/2/case/op1-spr4',
     indexLabel: 'Ф. 2, оп. 1, спр. 4',
     title: 'Наступна справа'
@@ -55,5 +53,12 @@ describe('Navigation', () => {
 
     expect(screen.getByTestId('ArchiveCaseDetails-prevCase')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveCaseDetails-nextCase')).toBeInTheDocument();
+  });
+
+  it('passes href to prev link', () => {
+    render(<Navigation prevCase={prevCase} prevLabel={prevLabel} nextLabel={nextLabel} />);
+
+    const link = screen.getByTestId('ArchiveCaseDetails-prevCase');
+    expect(link).toHaveAttribute('href', prevCase.href);
   });
 });

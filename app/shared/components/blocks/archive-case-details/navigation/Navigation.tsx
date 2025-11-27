@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 
+import type { ArchiveAdjacentCase } from '../ArchiveCaseDetails';
 import { styles } from './Navigation.styles';
 import NavItem from './NavItem';
-import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 export type NavigationProps = {
   prevCase?: ArchiveAdjacentCase;

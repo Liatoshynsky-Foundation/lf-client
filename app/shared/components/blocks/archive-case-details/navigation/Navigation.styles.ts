@@ -30,26 +30,31 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   navButton: {
-    minWidth: '40px',
+    minWidth: 0,
+    width: {
+      xs: '40px',
+      sm: 'auto'
+    },
+    height: {
+      xs: '40px',
+      sm: 'auto'
+    },
     justifyContent: {
       xs: 'center',
       sm: 'space-between'
     },
-    borderRadius: '28px',
-    paddingInline: {
-      xs: '5px',
-      sm: '16px'
-    },
-    paddingBlock: {
-      xs: '5px',
-      sm: '8px'
-    },
-    borderColor: mainHexPallete.black,
     color: mainHexPallete.black,
+    borderRadius: '28px',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: mainHexPallete.black,
+    padding: {
+      xs: '0',
+      sm: '8px 20px'
+    },
 
-    '& .MuiButton-startIcon, & .MuiButton-endIcon': {
-      marginLeft: 0,
-      marginRight: 0
+    '&:hover': {
+      background: mainHexPallete.blue[100]
     }
   },
 
@@ -71,7 +76,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       sm: 'inline'
     },
     fontSize: '16px',
-    lineHeight: '150%'
+    lineHeight: '150%',
+
+    '&:hover': {
+      border: '0'
+    }
   },
 
   navMetaLeft: {

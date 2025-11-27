@@ -13,9 +13,20 @@ export interface CustomLinkProps {
   endIcon?: React.ReactNode;
   sx?: SxProps<Theme>;
   labelSx?: SxProps<Theme>;
+  dataTestId?: string;
+  ariaLabel?: string;
 }
 
-const CustomLink: React.FC<CustomLinkProps> = ({ path, children, startIcon, endIcon, sx, labelSx }) => {
+const CustomLink: React.FC<CustomLinkProps> = ({
+  path,
+  children,
+  startIcon,
+  endIcon,
+  sx,
+  labelSx,
+  dataTestId,
+  ariaLabel
+}) => {
   const buttonSx = [linkStyles.button, ...sxToArray(sx)];
   const typoSx = [linkStyles.typography, ...sxToArray(labelSx)];
 
@@ -29,6 +40,8 @@ const CustomLink: React.FC<CustomLinkProps> = ({ path, children, startIcon, endI
       disableElevation
       disableRipple
       to={{ pathname: path }}
+      data-testid={dataTestId}
+      aria-label={ariaLabel}
     >
       <Typography sx={typoSx}>{children}</Typography>
     </Button>
