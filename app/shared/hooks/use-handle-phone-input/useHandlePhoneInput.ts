@@ -12,6 +12,50 @@ type CountryMeta = {
   operatorCodeLength?: number;
 };
 
+function countDigits(text: string) {
+  return text.match(/\d/g)?.length ?? 0;
+}
+
+function getDigitIndexBeforeCaret(rawValue: string, caretPos: number, addedDigitsOffset: number) {
+  const safePos = caretPos < 0 ? 0 : caretPos;
+  const digitsBeforeCaret = countDigits(rawValue.slice(0, safePos));
+  return digitsBeforeCaret > 0 ? digitsBeforeCaret + addedDigitsOffset : 0;
+}
+
+function caretHandler(
+  inputElement: HTMLInputElement | null,
+  nextMaskedValue: string,
+  prevRawValue: string,
+  prevCaretPos: number,
+  addedDigitsOffset = 0
+) {
+  if (!inputElement) return;
+
+  const targetDigitIndex = getDigitIndexBeforeCaret(prevRawValue, prevCaretPos, addedDigitsOffset);
+
+  if (targetDigitIndex <= 0) {
+    const pos = nextMaskedValue.startsWith('+') ? 1 : 0;
+    inputElement.setSelectionRange(pos, pos);
+    return;
+  }
+
+  let seenDigits = 0;
+  let nextCaretPos = nextMaskedValue.length;
+
+  for (let i = 0; i < nextMaskedValue.length; i++) {
+    const ch = nextMaskedValue[i];
+    if (ch >= '0' && ch <= '9') {
+      seenDigits++;
+      if (seenDigits === targetDigitIndex) {
+        nextCaretPos = i + 1;
+        break;
+      }
+    }
+  }
+
+  inputElement.setSelectionRange(nextCaretPos, nextCaretPos);
+}
+
 function resetState(
   setHasError: (value: boolean) => void,
   prevInputLengthRef: { current: number },
@@ -46,22 +90,31 @@ function adjustForBackspace(
   prevInputLengthRef: { current: number },
   cleanedWithPlus: string,
   countryCode: string | null,
-  previousDigits: string
+  previousDigits: string,
+  caretPos: number,
+  addedDigitsOffset: number
 ) {
-  const isBackspace = rawValue.length < prevInputLengthRef.current;
   const currentDigits = cleanedWithPlus.slice(1);
+  const isBackspace = rawValue.length < prevInputLengthRef.current;
 
-  if (!isBackspace || !countryCode || currentDigits !== previousDigits || currentDigits.length === 0) {
+  if (!isBackspace || !countryCode || currentDigits.length === 0) {
     return { cleanedWithPlus, countryCode };
   }
 
-  const countryDigits = countryCode.slice(1);
-  const nationalDigits = currentDigits.slice(countryDigits.length);
+  if (currentDigits !== previousDigits) {
+    return { cleanedWithPlus, countryCode };
+  }
 
-  if (nationalDigits.length === 0) return { cleanedWithPlus: '', countryCode: null };
-  if (nationalDigits.length === 1) return { cleanedWithPlus: countryCode, countryCode };
+  const targetDigitIndex = getDigitIndexBeforeCaret(rawValue, caretPos, addedDigitsOffset);
+  const deleteIndex = targetDigitIndex - 1;
 
-  return { cleanedWithPlus: `+${currentDigits.slice(0, -1)}`, countryCode };
+  if (deleteIndex < 0) return { cleanedWithPlus, countryCode };
+
+  const newDigits = currentDigits.slice(0, deleteIndex) + currentDigits.slice(deleteIndex + 1);
+  const newCleanedWithPlus = `+${newDigits}`;
+  const newCountryCode = findCountryCodePrefix(newCleanedWithPlus);
+
+  return { cleanedWithPlus: newCleanedWithPlus, countryCode: newCountryCode };
 }
 
 function applyMaskToInput(
@@ -94,6 +147,8 @@ export function useHandlePhoneInput() {
   const prevDigitsRef = useRef('');
 
   const handlePhoneInput = (rawValue: string, inputElement: HTMLInputElement | null) => {
+    const prevCaretPos = inputElement?.selectionStart ?? rawValue.length;
+
     if (rawValue.trim() === '') {
       resetState(setHasError, prevInputLengthRef, prevDigitsRef);
       return;
@@ -106,6 +161,8 @@ export function useHandlePhoneInput() {
       return;
     }
 
+    const addedDigitsOffset = digitsOnly.startsWith('0') ? 2 : 0;
+
     let cleanedWithPlus = normalizeLeadingCharacters(digitsOnly);
     const previousDigits = prevDigitsRef.current;
 
@@ -116,7 +173,9 @@ export function useHandlePhoneInput() {
       prevInputLengthRef,
       cleanedWithPlus,
       countryCode,
-      previousDigits
+      previousDigits,
+      prevCaretPos,
+      addedDigitsOffset
     ));
 
     if (!countryCode) {
@@ -124,12 +183,16 @@ export function useHandlePhoneInput() {
       prevInputLengthRef.current = cleanedWithPlus.length;
       prevDigitsRef.current = cleanedWithPlus.slice(1);
       if (inputElement && inputElement.value !== cleanedWithPlus) inputElement.value = cleanedWithPlus;
+
+      caretHandler(inputElement, cleanedWithPlus, rawValue, prevCaretPos, addedDigitsOffset);
       return;
     }
 
     const meta = PHONE_COUNTRY_CODES[countryCode] as CountryMeta;
     const nationalNumber = cleanedWithPlus.slice(countryCode.length);
     const masked = applyMaskToInput(inputElement, countryCode, nationalNumber, meta.operatorCodeLength ?? 0);
+
+    caretHandler(inputElement, masked, rawValue, prevCaretPos, addedDigitsOffset);
 
     const totalDigitsWithoutPlus = cleanedWithPlus.length - 1;
     const nextError = computeNextError(meta, totalDigitsWithoutPlus);
