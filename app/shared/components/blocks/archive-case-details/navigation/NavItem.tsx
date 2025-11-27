@@ -1,13 +1,14 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import type { ArchiveAdjacentCase } from '../ArchiveCaseDetails';
 import { styles } from './Navigation.styles';
-import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 import ArrowLeft from '~/public/icons/arrow-left.svg';
 import ArrowRight from '~/public/icons/arrow-right.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
+import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
 export type NavItemDirection = 'prev' | 'next';
 
@@ -35,19 +36,16 @@ const NavItem = ({ direction, caseLink, label }: Readonly<NavItemProps>) => {
 
   return (
     <Box sx={containerSx}>
-      <Button
-        variant="outlined"
-        color="inherit"
-        href={caseLink.href}
+      <CustomLink
+        path={caseLink.href}
         sx={styles.navButton}
-        aria-label={ariaLabel}
-        data-testid={testId}
+        labelSx={styles.navButtonLabel}
+        dataTestId={testId}
+        ariaLabel={ariaLabel}
         {...iconProps}
       >
-        <Typography component="span" sx={styles.navButtonLabel}>
-          {buttonLabel}
-        </Typography>
-      </Button>
+        {buttonLabel}
+      </CustomLink>
 
       <Box sx={metaSx}>
         <Typography component="p" sx={styles.navCaseIndex}>

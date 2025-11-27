@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import ArchiveCaseDetails, { type ArchiveCaseDetailsLabels, type ArchiveCaseDocument } from './ArchiveCaseDetails';
-import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
+import ArchiveCaseDetails, {
+  type ArchiveAdjacentCase,
+  type ArchiveCaseDetailsLabels,
+  type ArchiveCaseDocument
+} from './ArchiveCaseDetails';
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: () => <span data-testid="SvgMock" />
@@ -15,14 +18,12 @@ describe('ArchiveCaseDetails', () => {
   ];
 
   const prevCase: ArchiveAdjacentCase = {
-    id: 'case-prev',
     href: '/uk/archive/2/op1-spr2',
     indexLabel: 'Ф. 2, оп. 1, спр. 2',
     title: 'Попередня справа'
   };
 
   const nextCase: ArchiveAdjacentCase = {
-    id: 'case-next',
     href: '/uk/archive/2/op1-spr4',
     indexLabel: 'Ф. 2, оп. 1, спр. 4',
     title: 'Наступна справа'
