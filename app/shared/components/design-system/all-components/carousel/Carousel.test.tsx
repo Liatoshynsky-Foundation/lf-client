@@ -98,4 +98,54 @@ describe('Carousel', () => {
     fireEvent.click(prevArrow);
     expect(screen.getByAltText('Image 1')).toBeInTheDocument();
   });
+
+  it('should navigate to the next image with swipe', () => {
+    render(<Carousel images={mockImages} />);
+    const firstImage = screen.getByTestId('carousel-image-0');
+    fireEvent.touchStart(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { touches: [{ clientX: 100, clientY: 0 }] });
+    fireEvent.touchEnd(firstImage);
+    expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
+  });
+
+  it('should not navigate to the next image with small swipe', () => {
+    render(<Carousel images={mockImages} />);
+    const firstImage = screen.getByTestId('carousel-image-0');
+    fireEvent.touchStart(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { touches: [{ clientX: 280, clientY: 0 }] });
+    fireEvent.touchEnd(firstImage);
+    expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'false');
+  });
+
+  it('should be no infinite loop when it is not enabled', () => {
+    render(<Carousel images={mockImages} />);
+    const firstImage = screen.getByTestId('carousel-image-0');
+    fireEvent.touchStart(firstImage, { touches: [{ clientX: 200, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchEnd(firstImage);
+    expect(firstImage).toHaveAttribute('data-active', 'true');
+  });
+
+  it('should be infinite loop when it is enabled', () => {
+    render(<Carousel images={mockImages} infiniteLoop />);
+    const firstImage = screen.getByTestId('carousel-image-0');
+    fireEvent.touchStart(firstImage, { touches: [{ clientX: 200, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchEnd(firstImage);
+    expect(screen.getByTestId('carousel-image-2')).toHaveAttribute('data-active', 'true');
+  });
+
+  it('should navigate to the next image with right arrow key', () => {
+    render(<Carousel images={mockImages} />);
+    const carousel = screen.getByTestId('carousel');
+    fireEvent.keyDown(carousel, { key: 'ArrowRight' });
+    expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
+  });
+
+  it('should navigate to the previous image with left arrow key', () => {
+    render(<Carousel images={mockImages} initialIndex={1} />);
+    const carousel = screen.getByTestId('carousel');
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' });
+    expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+  });
 });

@@ -191,6 +191,21 @@
         "goto": "Перейти"
       }
     },
+    "documents": {
+      "name": "Усі справи",
+      "columns": {
+        "code": "Шифр",
+        "name": "Назва справи",
+        "date": "Дати",
+        "sheets": "Аркуші",
+        "content": "Склад і зміст документів"
+      },
+      "buttons": {
+        "view": "Переглянути PDF",
+        "shortView": "PDF",
+        "mobileView": "Переглянути"
+      }
+    },
     "controls": {
       "filters": "Фільтри"
     }
@@ -277,7 +292,6 @@
     "searchPlaceholder": "Пошук"
   },
   "archiveCase": {
-    "pageTitle": "Трудова діяльність",
     "back": "Повернутись",
     "meta": {
       "code": "Шифр",

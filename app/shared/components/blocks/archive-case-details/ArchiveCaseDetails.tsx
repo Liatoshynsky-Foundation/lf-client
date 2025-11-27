@@ -6,12 +6,17 @@ import Documents from './documents/Documents';
 import Meta from './meta/Meta';
 import Navigation from './navigation/Navigation';
 import PdfButton from './pdf-button/PdfButton';
-import type { ArchiveAdjacentCase } from '~/types/page/archive.types';
 
 export interface ArchiveCaseDocument {
   id: string;
   title: string;
 }
+
+export type ArchiveAdjacentCase = {
+  href: string;
+  indexLabel: string;
+  title: string;
+};
 
 export type ArchiveCaseDetailsLabels = {
   back: string;

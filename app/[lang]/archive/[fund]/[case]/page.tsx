@@ -1,10 +1,12 @@
+import { notFound } from 'next/navigation';
 import type { Locale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { MOCK_ARCHIVE_CASE } from './archiveCase.mock';
-
+import { createRequestContainer } from '~/di/container';
+import type { CaseDetailsDTO } from '~/domain/dto/funds.dto';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import ArchiveCaseDetails, {
+  type ArchiveAdjacentCase,
   type ArchiveCaseDetailsLabels,
   type ArchiveCaseDocument
 } from '~/shared/components/blocks/archive-case-details/ArchiveCaseDetails';
@@ -20,19 +22,47 @@ type ArchiveCasePageProps = {
 };
 
 export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePageProps>) {
-  const { lang, fund } = await params;
+  const { lang, fund, case: caseId } = await params;
 
   setRequestLocale(lang);
 
   const t = await getTranslations({ locale: lang, namespace: 'archiveCase' });
 
-  const archiveCase = MOCK_ARCHIVE_CASE;
+  const container = createRequestContainer();
+  const fundsService = container.resolve('fundsService') as {
+    getCaseById: (caseId: string) => Promise<CaseDetailsDTO | null>;
+  };
+
+  const caseDetails = await fundsService.getCaseById(caseId);
+
+  if (!caseDetails) {
+    notFound();
+  }
+
   const fundHref = `/${lang}/archive/${fund}`;
 
-  const documents: ArchiveCaseDocument[] = archiveCase.documents.map((doc) => ({
-    id: `${archiveCase.id}-${doc.order}`,
-    title: doc.text
-  }));
+  const documents: ArchiveCaseDocument[] =
+    caseDetails.documents?.map((doc) => ({
+      id: doc._id,
+      title: doc.text
+    })) ?? [];
+
+  const buildCaseHref = (id: string) => `/${lang}/archive/${fund}/${id}`;
+
+  const mapAdjacentCase = (caseItem: CaseDetailsDTO['prevCase']): ArchiveAdjacentCase | undefined => {
+    if (!caseItem?._id) {
+      return undefined;
+    }
+
+    return {
+      href: buildCaseHref(caseItem._id),
+      indexLabel: caseItem.cipher,
+      title: caseItem.name
+    };
+  };
+
+  const prevCase = mapAdjacentCase(caseDetails.prevCase ?? null);
+  const nextCase = mapAdjacentCase(caseDetails.nextCase ?? null);
 
   const labels: ArchiveCaseDetailsLabels = {
     back: t('back'),
@@ -48,15 +78,15 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
   return (
     <MainLayout withLines>
       <ArchiveCaseDetails
-        title={t('pageTitle')}
-        index={archiveCase.code}
-        dateRange={archiveCase.dates}
-        sheetsCount={archiveCase.sheetsCount}
-        pdfUrl={archiveCase.pdfUrl}
+        title={caseDetails.name}
+        index={caseDetails.cipher}
+        dateRange={caseDetails.dates}
+        sheetsCount={caseDetails.sheets ?? undefined}
+        pdfUrl={caseDetails.pdfUrl ?? '#'}
         documents={documents}
         fundHref={fundHref}
-        prevCase={archiveCase.prev ?? undefined}
-        nextCase={archiveCase.next ?? undefined}
+        prevCase={prevCase}
+        nextCase={nextCase}
         labels={labels}
       />
     </MainLayout>

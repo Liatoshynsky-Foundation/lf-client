@@ -4,6 +4,38 @@ const fadeIn = keyframes`from {opacity: 0;} to {opacity: 1;}`;
 
 export const SIZES = {
   activeWidth: {
+    xs: 271,
+    sm: 484,
+    md: 724,
+    lg: 938,
+    xl: 1080
+  },
+  activeHeight: {
+    xs: 188,
+    sm: 334,
+    md: 500,
+    lg: 648,
+    xl: 744
+  },
+  inactiveWidth: {
+    xs: 218,
+    sm: 369,
+    md: 415
+  },
+  inactiveHeight: {
+    xs: 150,
+    sm: 254,
+    md: 286
+  },
+  gap: {
+    xs: 8,
+    sm: 24,
+    md: 40
+  }
+};
+
+export const SIZES_PX = {
+  activeWidth: {
     xs: '271px',
     sm: '484px',
     md: '724px',
@@ -26,132 +58,69 @@ export const SIZES = {
     xs: '150px',
     sm: '254px',
     md: '286px'
-  },
-  containerWidth: 2900,
-  containerHeight: {
-    xs: '255px',
-    sm: '387px',
-    md: '703px',
-    lg: '818px'
-  },
-  photoGap: {
-    xs: '20px',
-    sm: '30px',
-    md: '40px'
   }
 };
 
-const trackCenter = {
-  xs: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.xs) / 2,
-  sm: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.sm) / 2,
-  md: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.md) / 2,
-  lg: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.lg) / 2,
-  xl: SIZES.containerWidth / 2 - Number.parseInt(SIZES.activeWidth.xl) / 2
-};
-
 export const styles = {
-  fullWidthContainerStyles: {
-    width: '100vw',
-    height: SIZES.containerHeight,
-    marginLeft: 'calc(-50vw + 50%)',
-    marginRight: 'calc(-50vw + 50%)',
-    overflow: 'hidden'
-  },
-
-  centeredCarouselWrapperStyles: {
-    position: 'absolute',
-    left: '50%',
-    top: 0,
-    transform: 'translateX(-50%)',
-    height: '100%'
-  },
-  carouselContainerStyles: {
+  carouselTrackStyles: {
     position: 'relative',
-    width: `${SIZES.containerWidth}px`,
-    height: SIZES.containerHeight,
-    overflow: 'hidden'
+    display: 'flex',
+    justifyContent: 'center',
+    height: SIZES_PX.activeHeight
   },
-
-  getCarouselTrackStyles: (activeIndex: number) => {
-    const trackPosition = { xs: 0, sm: 0, md: 0 };
-
-    for (let i = 0; i < activeIndex; i++) {
-      trackPosition.xs += Number.parseInt(SIZES.inactiveWidth.xs) + Number.parseInt(SIZES.photoGap.xs);
-      trackPosition.sm += Number.parseInt(SIZES.inactiveWidth.sm) + Number.parseInt(SIZES.photoGap.sm);
-      trackPosition.md += Number.parseInt(SIZES.inactiveWidth.md) + Number.parseInt(SIZES.photoGap.md);
-    }
-
-    const translateX = {
-      xs: `translateX(${trackCenter.xs - trackPosition.xs}px)`,
-      sm: `translateX(${trackCenter.sm - trackPosition.sm}px)`,
-      md: `translateX(${trackCenter.md - trackPosition.md}px)`,
-      lg: `translateX(${trackCenter.lg - trackPosition.md}px)`,
-      xl: `translateX(${trackCenter.xl - trackPosition.md}px)`
+  carouselFooterStyles: {
+    display: 'flex',
+    flexDirection: { xs: 'column-reverse', sm: 'column' },
+    alignItems: 'center',
+    gap: '8px',
+    mt: { xs: '12px', sm: '0px' }
+  },
+  captionStyles: {
+    width: SIZES.activeWidth,
+    color: 'rgba(99, 102, 110, 1)',
+    textAlign: 'end',
+    opacity: 0,
+    animation: `${fadeIn} 1s ease forwards`
+  },
+  dotsContainerStyles: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '12px'
+  },
+  getImageWrapperStyles: (index: number, activeIndex: number, isActive: boolean) => {
+    const offset = index - activeIndex;
+    const direction = offset >= 0 ? 1 : -1;
+    const positionObjectSX = {
+      xs: `calc(50% + ${(SIZES.activeWidth.lg / 30) * direction + offset * (SIZES.inactiveWidth.xs + SIZES.gap.xs)}px)`,
+      sm: `calc(50% + ${(SIZES.activeWidth.sm / 9) * direction + offset * (SIZES.inactiveWidth.sm + SIZES.gap.sm)}px)`,
+      md: `calc(50% + ${(SIZES.activeWidth.md / 5) * direction + offset * (SIZES.inactiveWidth.md + SIZES.gap.md)}px)`,
+      lg: `calc(50% + ${(SIZES.activeWidth.lg / 3.8) * direction + offset * (SIZES.inactiveWidth.md + SIZES.gap.md)}px)`,
+      xl: `calc(50% + ${(SIZES.activeWidth.xl / 3.2) * direction + offset * (SIZES.inactiveWidth.md + SIZES.gap.md)}px)`
     };
+    const positionY = isActive ? '50%' : `calc(50% - ${offset * 17}px)`;
+    const positionX = isActive ? '50%' : positionObjectSX;
 
     return {
       position: 'absolute',
-      top: 0,
-      left: 0,
-      height: '100%',
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: SIZES.photoGap,
-      transform: translateX,
-      transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+      width: isActive ? SIZES_PX.activeWidth : SIZES_PX.inactiveWidth,
+      height: isActive ? SIZES_PX.activeHeight : SIZES_PX.inactiveHeight,
+      top: positionY,
+      left: positionX,
+      transform: 'translate(-50% , -50%)',
+      transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+      clipPath: 'polygon(0 5%, 100% 0%, 100% 95%, 0% 100%)'
     };
   },
-
-  getImageContainerStyles: (isActive: boolean, index: number, activeIndex: number, isDragging: boolean = false) => {
-    const offset = index - activeIndex;
-    let translateY = 0;
-
-    if (index > activeIndex) {
-      const distance = Math.abs(offset);
-      const multiplier = 17 * distance;
-      translateY = 241 - multiplier;
-    }
-
-    if (index < activeIndex) {
-      const distance = Math.abs(offset);
-      const multiplier = 17 * distance;
-      translateY = 241 + multiplier;
-    }
-
-    return {
-      position: 'relative',
-      width: isActive ? SIZES.activeWidth : SIZES.inactiveWidth,
-      height: isActive ? SIZES.activeHeight : SIZES.inactiveHeight,
-      transform: `translateY(${translateY}px) scale(1)`,
-      transition: isDragging ? 'none' : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-    };
-  },
-
-  styledImageStyles: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover'
-  },
-
   getArrowContainerStyles: (direction: 'left' | 'right', disabled = false) => ({
+    display: { xs: 'none', sm: 'block' },
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    [direction]: { sm: '1082px', md: '782px' },
+    [direction]: '0px',
     zIndex: 1,
     transition: 'opacity 0.5s linear',
     opacity: disabled ? 0 : 1
   }),
-
-  dotsContainerStyles: {
-    position: 'absolute',
-    bottom: { xs: '10px', md: '30px' },
-    left: '50%',
-    transform: 'translateX(-50%)',
-    display: 'flex',
-    gap: '12px'
-  },
-
   getDotStyles: (isActive: boolean) => ({
     width: '8px',
     height: '8px',
@@ -162,19 +131,5 @@ export const styles = {
     '&:hover': {
       transform: 'scale(1.2)'
     }
-  }),
-
-  getCaptionStyles: () => ({
-    position: 'absolute',
-    bottom: { xs: '30px', md: '50px' },
-    left: trackCenter,
-    width: SIZES.activeWidth,
-    height: '22px',
-    color: 'rgba(99, 102, 110, 1)',
-    textAlign: 'end',
-    display: 'flex',
-    justifyContent: 'end',
-    opacity: 0,
-    animation: `${fadeIn} 1s ease forwards`
   })
 };

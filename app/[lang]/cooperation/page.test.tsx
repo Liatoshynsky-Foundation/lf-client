@@ -6,6 +6,12 @@ jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
 }));
 
+let counter = 0;
+
+jest.mock('uuid', () => ({
+  v4: () => `mock-uuid-${counter++}`
+}));
+
 jest.mock('~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro', () => {
   const MockCollaborationIntro = () => <div>Collaboration Intro</div>;
   MockCollaborationIntro.displayName = 'MockCollaborationIntro';

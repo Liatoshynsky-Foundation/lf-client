@@ -191,6 +191,21 @@
         "goto": "Visit"
       }
     },
+    "documents": {
+      "name": "All files",
+      "columns": {
+        "code": "Code",
+        "name": "File name",
+        "date": "Dates",
+        "sheets": "Sheet",
+        "content": "Composition and Content of Documents"
+      },
+      "buttons": {
+        "view": "View PDF",
+        "shortView": "PDF",
+        "mobileView": "View"
+      }
+    },
     "controls": {
       "filters": "Filters"
     }
@@ -277,7 +292,6 @@
     "searchPlaceholder": "Search"
   },
   "archiveCase": {
-    "pageTitle": "Employment history",
     "back": "Go back",
     "meta": {
       "code": "Reference code",
