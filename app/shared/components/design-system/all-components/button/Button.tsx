@@ -66,7 +66,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    return <Link href={link}>{content}</Link>;
+    return (
+      <Link style={{ width: 'fit-content' }} href={link}>
+        {content}
+      </Link>
+    );
   }
 );
 

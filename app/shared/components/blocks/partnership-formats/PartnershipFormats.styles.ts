@@ -2,20 +2,13 @@ export const styles = {
   container: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
-    gridColumn: '1 / -1',
-    mb: {
-      xs: '16px',
-      sm: '74px',
-      md: '100px'
-    }
+    gridColumn: '1 / -1'
   },
   title: {
-    marginBottom: {
-      xs: '30px',
-      sm: '40px',
-      md: '40px',
-      lg: '50px',
-      xl: '15px'
+    gap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
     }
   },
   mobileSlider: {
@@ -338,7 +331,16 @@ export const styles = {
   },
   descriptionContainer: {
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     gridColumn: '1 / -1',
     mt: {
       md: '40px',
@@ -347,17 +349,14 @@ export const styles = {
     },
     mb: {
       xs: '24px',
-      sm: '32px',
-      md: '40px'
+      sm: '32px'
     }
   },
   descriptionText: {
     textIndent: {
-      sm: '15em',
-      md: '21em',
-      lg: '21em',
-      xl: '21em',
-      xxl: '17em'
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
     gridColumn: {
       xs: '1 / -1',
@@ -370,21 +369,25 @@ export const styles = {
     fontSize: { xs: '16px', md: '18px' }
   },
   buttonContainer: {
-    display: 'flex',
-    justifyContent: {
-      xs: 'center',
-      sm: 'flex-start'
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
     },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
+    gridColumn: '1 / -1'
+  },
+  button: {
     gridColumn: {
       xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
-      lg: '6 / -1'
-    },
-    mb: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
+      lg: '6 / 13'
     }
   },
   modalContent: {

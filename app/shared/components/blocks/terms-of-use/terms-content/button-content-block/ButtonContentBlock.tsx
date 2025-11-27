@@ -17,6 +17,7 @@ type ButtonContentBlockProps = {
   textSx?: object;
   textContainerSx?: object;
   buttonContainerSx?: object;
+  link?: string;
 };
 
 const ButtonContentBlock = ({
@@ -27,11 +28,13 @@ const ButtonContentBlock = ({
   containerSx,
   textSx,
   textContainerSx = { marginBottom: { xs: '24px', md: '0px' } },
-  buttonContainerSx
+  buttonContainerSx,
+  link
 }: ButtonContentBlockProps) => (
   <Box sx={{ ...styles.wrapper, ...containerSx }} data-testid="ButtonContentBlock">
     <Box sx={{ ...styles.buttonBox, ...buttonContainerSx }}>
       <Button
+        link={link}
         variant="contained"
         color={buttonColor}
         fullWidth
