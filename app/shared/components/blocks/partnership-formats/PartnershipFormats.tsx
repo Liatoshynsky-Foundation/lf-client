@@ -90,7 +90,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
   return (
     <Box sx={styles.container}>
-      <SectionTitle title={data.title} sx={styles.title} />
+      <SectionTitle
+        icon={true}
+        title={data.title}
+        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
+        sx={styles.title}
+        mb={43}
+      />
 
       <Box sx={styles.mobileSlider}>
         <PartnershipSlider slides={mobileSlides} />
@@ -123,15 +129,17 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
       {data.actionButtonText && (
         <Box sx={styles.buttonContainer}>
-          <Button
-            variant="contained"
-            size="medium"
-            onClick={handleOpenModal}
-            color="tertiary"
-            endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} aria-hidden="true" />}
-          >
-            {data.actionButtonText}
-          </Button>
+          <Box sx={styles.button}>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={handleOpenModal}
+              color="tertiary"
+              endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} aria-hidden="true" />}
+            >
+              {data.actionButtonText}
+            </Button>
+          </Box>
         </Box>
       )}
 
