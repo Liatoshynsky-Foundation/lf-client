@@ -17,7 +17,7 @@ function countDigits(text: string) {
 }
 
 function getDigitIndexBeforeCaret(rawValue: string, caretPos: number, addedDigitsOffset: number) {
-  const safePos = caretPos < 0 ? 0 : caretPos;
+  const safePos = Math.max(0, caretPos);
   const digitsBeforeCaret = countDigits(rawValue.slice(0, safePos));
   return digitsBeforeCaret > 0 ? digitsBeforeCaret + addedDigitsOffset : 0;
 }
