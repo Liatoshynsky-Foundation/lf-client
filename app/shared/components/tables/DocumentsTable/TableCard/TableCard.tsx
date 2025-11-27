@@ -20,8 +20,8 @@ export default function TableCard({ id, code, name, date, sheets, content }: Rea
         <Box>
           <Box sx={{ mb: '4px' }}>
             <Typography sx={styles.label} component="span">
-              {t('columns.date') + ': '}:
-            </Typography>{' '}
+              {t('columns.date') + ': '}
+            </Typography>
             <Typography sx={styles.labelValue} component="span">
               {date}
             </Typography>
@@ -29,7 +29,7 @@ export default function TableCard({ id, code, name, date, sheets, content }: Rea
           <Box>
             <Typography sx={styles.label} component="span">
               {t('columns.sheets') + ': '}
-            </Typography>{' '}
+            </Typography>
             <Typography sx={styles.labelValue} component="span">
               {sheets}
             </Typography>

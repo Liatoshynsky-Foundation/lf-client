@@ -6,6 +6,7 @@ import { ArchiveRecord } from './documents.conts';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
 
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
+import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -21,6 +22,7 @@ export const RenderCodeHeader = () => {
         }
       }}
       variant="customBold16"
+      color={mainHexPallete.blue[700]}
     >
       {t('code')}
     </Typography>
@@ -44,7 +46,11 @@ export const RenderCodeCell = (info: CellContext<ArchiveRecord, unknown>) => (
 
 export const RenderNameHeader = () => {
   const t = useTranslations('table.documents.columns');
-  return <Typography variant="customBold16">{t('name')}</Typography>;
+  return (
+    <Typography color={mainHexPallete.blue[700]} variant="customBold16">
+      {t('name')}
+    </Typography>
+  );
 };
 
 export const RenderNameCell = (info: CellContext<ArchiveRecord, unknown>) => (
@@ -55,7 +61,11 @@ export const RenderNameCell = (info: CellContext<ArchiveRecord, unknown>) => (
 
 export const RenderDateHeader = () => {
   const t = useTranslations('table.documents.columns');
-  return <Typography variant="customBold16">{t('date')}</Typography>;
+  return (
+    <Typography color={mainHexPallete.blue[700]} variant="customBold16">
+      {t('date')}
+    </Typography>
+  );
 };
 
 export const RenderDateCell = (info: CellContext<ArchiveRecord, unknown>) => (
@@ -64,7 +74,11 @@ export const RenderDateCell = (info: CellContext<ArchiveRecord, unknown>) => (
 
 export const RenderSheetHeader = () => {
   const t = useTranslations('table.documents.columns');
-  return <Typography variant="customBold16">{t('sheets')}</Typography>;
+  return (
+    <Typography color={mainHexPallete.blue[700]} variant="customBold16">
+      {t('sheets')}
+    </Typography>
+  );
 };
 
 export const RenderSheetCell = (info: CellContext<ArchiveRecord, unknown>) => (
@@ -73,7 +87,11 @@ export const RenderSheetCell = (info: CellContext<ArchiveRecord, unknown>) => (
 
 export const RenderContentHeader = () => {
   const t = useTranslations('table.documents.columns');
-  return <Typography variant="customBold16">{t('content')}</Typography>;
+  return (
+    <Typography color={mainHexPallete.blue[700]} variant="customBold16">
+      {t('content')}
+    </Typography>
+  );
 };
 
 export const RenderContentCell = (info: CellContext<ArchiveRecord, unknown>) => (
