@@ -62,7 +62,7 @@ export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
           dataTestId="HeroSection-biographyContainer-contentBlock"
         />
         <ContentBlock
-          description={data.biographyText[locale]}
+          description={data.noteText[locale]}
           containerSx={heroSectionStyles.noteContainer}
           textSx={heroSectionStyles.noteText}
           dataTestId="HeroSection-noteContainer-contentBlock"
