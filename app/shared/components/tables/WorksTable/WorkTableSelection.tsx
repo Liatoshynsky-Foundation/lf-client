@@ -159,6 +159,8 @@ export const WorkTableSection = () => {
     ]
   );
 
+  const titleOptions = useMemo(() => staticFilters?.titles ?? [], [staticFilters]);
+
   return (
     <EnhancedTable<ScientificWorkTableRow>
       data={data}
@@ -171,7 +173,7 @@ export const WorkTableSection = () => {
         <Search
           search={params.search}
           setSearch={(value) => debouncedSetParam('search', value)}
-          options={staticFilters?.titles ?? []}
+          options={titleOptions}
         />
       }
       Filters={

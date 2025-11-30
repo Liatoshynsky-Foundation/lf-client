@@ -42,9 +42,7 @@ export const createScientificWorksService = ({
     const works = await scientificWorksRepo.getAllScientificWorks({
       authorIds: filters?.authorIds,
       years:
-        filters?.years && filters?.years.min !== undefined && filters?.years.max !== undefined
-          ? [filters.years.min, filters.years.max]
-          : undefined,
+        filters?.years?.min != null && filters?.years?.max != null ? [filters.years.min, filters.years.max] : undefined,
       search
     });
 

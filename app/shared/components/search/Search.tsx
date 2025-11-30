@@ -29,10 +29,21 @@ interface SearchProps<T> {
 }
 
 function getIconStyle(isMobile: boolean, focused: boolean) {
+  let width = 40;
+  let borderRadius = '60px';
+
+  if (isMobile) {
+    width = 270;
+    borderRadius = '8px';
+  } else if (focused) {
+    width = 280;
+    borderRadius = '10px';
+  }
+
   return {
     ...SearchStyles.icon,
-    width: isMobile ? 270 : focused ? 280 : 40,
-    borderRadius: isMobile ? '8px' : focused ? '10px' : '60px'
+    width,
+    borderRadius
   };
 }
 
@@ -95,18 +106,18 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
   const renderOption = useCallback(
     (props: React.HTMLAttributes<HTMLLIElement>, option: T) => (
       <li {...props}>
-        <ListItem
-          disableGutters
-          sx={{
-            padding: '8px 12px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: 'block', // VERY important!
-            width: '100%', // ensures full control,
-            height: '64px'
-          }}
-        >
-          <Typography variant="customMedium16">
+        <ListItem disableGutters>
+          <Typography
+            variant="customMedium16"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              wordBreak: 'break-word'
+            }}
+          >
             {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
           </Typography>
         </ListItem>

@@ -24,8 +24,7 @@ export async function GET(req: NextRequest) {
       yearRange,
       authors
     });
-  } catch (err) {
-    console.error(err);
+  } catch {
     return NextResponse.json(errors.FILTERS_FETCH_FAILED, { status: 500 });
   }
 }

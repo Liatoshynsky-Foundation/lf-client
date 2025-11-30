@@ -73,7 +73,13 @@ const scientificWorksRepository = {
       conditions.push({ startYear: { $gte: min, $lte: max } });
     }
 
-    const query = conditions.length === 1 ? conditions[0] : conditions.length > 1 ? { $and: conditions } : {};
+    let query = {};
+
+    if (conditions.length === 1) {
+      query = conditions[0];
+    } else if (conditions.length > 1) {
+      query = { $and: conditions };
+    }
 
     const works = await ScientificWorks.find(query).populate('authors').lean();
 

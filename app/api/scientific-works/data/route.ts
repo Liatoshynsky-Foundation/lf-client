@@ -18,8 +18,7 @@ export async function GET(req: NextRequest) {
     const data = await scientificWorksService.getAllScientificWorks(locale, filters, search);
 
     return NextResponse.json(data);
-  } catch (err) {
-    console.error('[SCIENTIFIC_WORKS_ERROR]', err);
+  } catch {
     return NextResponse.json({ message: errors.COMPOSITION_FETCH_FAILED }, { status: 500 });
   }
 }

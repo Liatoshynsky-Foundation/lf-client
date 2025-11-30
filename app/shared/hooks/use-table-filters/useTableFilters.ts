@@ -28,22 +28,12 @@ export function useTableFilters<P extends TableParams>(initialParams: P) {
       if (Array.isArray(current)) {
         const parsed = rawValue.split(',') as Extract<P[typeof typedKey], Primitive[]>;
         result[typedKey] = parsed;
-        return;
-      }
-
-      if (typeof current === 'number') {
+      } else if (typeof current === 'number') {
         result[typedKey] = Number(rawValue) as P[typeof typedKey];
-        return;
-      }
-
-      if (current === null) {
+      } else if (current === null) {
         result[typedKey] = (rawValue === '' ? null : Number(rawValue)) as P[typeof typedKey];
-        return;
-      }
-
-      if (typeof current === 'string') {
+      } else if (typeof current === 'string') {
         result[typedKey] = rawValue as P[typeof typedKey];
-        return;
       }
     });
 
