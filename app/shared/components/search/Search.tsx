@@ -2,7 +2,10 @@
 
 import {
   Autocomplete,
+  AutocompleteChangeDetails,
+  AutocompleteChangeReason,
   AutocompleteRenderInputParams,
+  Box,
   InputAdornment,
   ListItem,
   Typography,
@@ -17,144 +20,104 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
-import { CustomBorderTextField, SearchStyles } from './SearchStyles';
-
-const getIconStyle = (isMobile: boolean, focused: boolean) => {
-  let width;
-  let borderRadius;
-
-  if (isMobile) {
-    width = 270;
-    borderRadius = '8px';
-  } else if (focused) {
-    width = 280;
-    borderRadius = '10px';
-  } else {
-    width = 40;
-    borderRadius = '60px';
-  }
-
-  return {
-    ...SearchStyles.icon,
-    width,
-    borderRadius
-  };
-};
+import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
 
 interface SearchProps<T> {
-  setSearch: (value: string) => void;
   search: string;
+  setSearch: (value: string) => void;
   options: T[];
-  setFilterParams: (params: Record<string, string | number | string[] | null>) => void;
+}
+
+function getIconStyle(isMobile: boolean, focused: boolean) {
+  return {
+    ...SearchStyles.icon,
+    width: isMobile ? 270 : focused ? 280 : 40,
+    borderRadius: isMobile ? '8px' : focused ? '10px' : '60px'
+  };
 }
 
 export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
   search,
   setSearch,
-  options,
-  setFilterParams
+  options
 }: SearchProps<T>) => {
-  const [value, setValue] = useState<T | null>(null);
-  const [focused, setFocused] = useState(false);
-  const [opened, setOpened] = useState(false);
-  const [inputValue, setInputValue] = useState(search);
-  const inputRef = useRef<HTMLInputElement>(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
-  const DEBOUNCE_TIME_MS = 800;
   const t = useTranslations('search');
 
-  const debouncedInputChange = useMemo(
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+
+  const [focused, setFocused] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [value, setValue] = useState<T | null>(null);
+  const [inputValue, setInputValue] = useState(search);
+
+  const debouncedInput = useMemo(
     () =>
-      debounce((value: string) => {
-        setSearch(value);
-        setFilterParams({ search: value });
-      }, DEBOUNCE_TIME_MS),
-    [setFilterParams, setSearch]
+      debounce((v: string) => {
+        setInputValue(v);
+      }, 200),
+    []
   );
 
   const handleInputChange = useCallback(
-    (event: SyntheticEvent, value: string) => {
-      if (!opened) {
-        setOpened(true);
-      }
-      setInputValue(value);
-      setSearch(value);
-      setFilterParams({ search: value });
-      debouncedInputChange(value);
+    (_: SyntheticEvent, v: string) => {
+      if (!opened) setOpened(true);
+
+      setInputValue(v);
+      debouncedInput(v);
     },
-    [debouncedInputChange, opened, setFilterParams, setSearch]
+    [opened, debouncedInput]
   );
 
-  const handleIconClick = () => {
-    inputRef.current?.focus();
-  };
+  const handleSelect = useCallback(
+    (_: SyntheticEvent, v: T | null, __: AutocompleteChangeReason, ___: AutocompleteChangeDetails<T> | undefined) => {
+      setValue(v);
 
-  const handleClear = () => {
-    setSearch('');
-    setInputValue('');
-    setValue(null);
-    setOpened(false);
-    setFilterParams({ search: '' });
-  };
+      const label = typeof v?.title === 'string' ? v.title : v?.title?.en || v?.title?.uk || '';
 
-  const renderInput = (params: AutocompleteRenderInputParams): React.ReactNode => {
-    return (
-      <CustomBorderTextField
-        {...params}
-        variant="outlined"
-        size="small"
-        sx={{ borderColor: `${mainHexPallete.black} !important` }}
-        inputRef={inputRef}
-        onFocus={() => setFocused(true)}
-        onBlur={() => {
-          setOpened(false);
-          setFocused(false);
-        }}
-        slotProps={{
-          input: {
-            ...params.InputProps,
-            startAdornment: (
-              <InputAdornment position="start" sx={{ cursor: 'pointer' }}>
-                <SvgImage
-                  src={'/icons/search-static.svg'}
-                  alt="search"
-                  width={24}
-                  height={24}
-                  onClick={handleIconClick}
-                />
-              </InputAdornment>
-            ),
-            style: getIconStyle(isMobile, focused),
-            endAdornment: (
-              <InputAdornment position="end" sx={{ cursor: 'pointer' }}>
-                <SvgImage src={'/icons/close-icon.svg'} alt="close" width={24} height={24} onClick={handleClear} />
-              </InputAdornment>
-            )
-          }
-        }}
-      />
-    );
-  };
+      setSearch(label);
+      setOpened(false);
+    },
+    [setSearch]
+  );
 
-  const renderOption = useCallback(({ key, ...props }: object & { key: React.Key }, option: T): React.ReactNode => {
-    return (
-      <div {...props} key={key}>
-        <ListItem disableGutters>
+  const handleEnter = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        setSearch(inputValue);
+        setOpened(false);
+      }
+    },
+    [inputValue, setSearch]
+  );
+
+  const renderOption = useCallback(
+    (props: React.HTMLAttributes<HTMLLIElement>, option: T) => (
+      <li {...props}>
+        <ListItem
+          disableGutters
+          sx={{
+            padding: '8px 12px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block', // VERY important!
+            width: '100%', // ensures full control,
+            height: '64px'
+          }}
+        >
           <Typography variant="customMedium16">
             {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
           </Typography>
         </ListItem>
-      </div>
-    );
-  }, []);
+      </li>
+    ),
+    []
+  );
 
   const getOptionLabel = (option: T) => {
-    if (typeof option.title === 'string') {
-      return option.title;
-    } else if (option.title && typeof option.title === 'object') {
-      return option.title.en || option.title.uk || '';
-    }
+    if (typeof option.title === 'string') return option.title;
+    if (typeof option.title === 'object') return option.title.en || option.title.uk || '';
     return '';
   };
 
@@ -163,28 +126,69 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       data-testid="music-search"
       options={options}
       value={value}
-      onChange={(event, value) => {
-        setValue(value);
-        setSearch(value ? getOptionLabel(value) : '');
-      }}
+      onChange={handleSelect}
       inputValue={inputValue}
       onInputChange={handleInputChange}
-      renderInput={renderInput}
       renderOption={renderOption}
       getOptionLabel={getOptionLabel}
-      clearOnBlur={false}
       popupIcon={null}
       clearIcon={false}
-      loadingText={<Typography variant="customMedium16">{t('loading')}</Typography>}
-      noOptionsText={<Typography variant="customMedium16">{t('notFound')}</Typography>}
+      clearOnBlur={false}
+      disableListWrap
       open={!!opened}
-      disableListWrap={true}
+      noOptionsText={<Typography>{t('notFound')}</Typography>}
+      loadingText={<Typography>{t('loading')}</Typography>}
       slotProps={{
         listbox: {
           style: SearchStyles.listbox,
           component: VirtualizedListbox
         }
       }}
+      renderInput={(params: AutocompleteRenderInputParams) => (
+        <CustomBorderTextField
+          {...params}
+          variant="outlined"
+          size="small"
+          sx={{ borderColor: `${mainHexPallete.black} !important` }}
+          inputRef={inputRef}
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            setOpened(false);
+            setFocused(false);
+          }}
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              style: getIconStyle(isMobile, focused),
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Box sx={iconStyles} onClick={() => inputRef.current?.focus()}>
+                    <SvgImage src="/icons/search-static.svg" width={24} height={24} alt="search" />
+                  </Box>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  {(inputValue.trim().length > 0 || value !== null) && (
+                    <Box
+                      sx={iconStyles}
+                      onClick={() => {
+                        setValue(null);
+                        setInputValue('');
+                        setSearch('');
+                        setOpened(false);
+                      }}
+                    >
+                      <SvgImage src="/icons/close-icon.svg" width={24} height={24} alt="clear" />
+                    </Box>
+                  )}
+                </InputAdornment>
+              ),
+              onKeyDown: handleEnter
+            }
+          }}
+        />
+      )}
     />
   );
 };

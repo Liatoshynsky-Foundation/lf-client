@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { getWorkTableColumnWidths } from './getColumnWidth';
 import {
@@ -15,6 +15,7 @@ import {
   RenderYearHeader
 } from './WorkTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
+import { ScientificFiltersType, WorkTableFilters } from '~/types/types/tableFilters';
 
 import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
@@ -23,76 +24,32 @@ import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable'
 import { Search } from '~/shared/components/search/Search';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
-import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
-import { useSearch } from '~/shared/hooks/use-search/useSearchh';
-
-type Filters = {
-  search: string;
-  authorIds?: string[];
-  yearFrom?: number | null;
-  yearTo?: number | null;
-};
-
-type ScientificFiltersType = {
-  titles?: { _id: string; title: string }[];
-  authors?: { key: string; name: string }[];
-  yearRange?: { minYear?: number; maxYear?: number };
-};
+import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
+import { useTableData } from '~/shared/hooks/use-table-data/useTableData';
+import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 
 export const WorkTableSection = () => {
   const t = useTranslations('table.work');
   const tFilters = useTranslations('table.work.filters');
 
-  const {
-    data,
-    isLoading: loadingData,
-    params,
-    updateParams,
-    debouncedUpdateParam,
-    resetParams
-  } = useSearch<ScientificWorkTableRow, Filters>({
-    dataEndpoint: ApiRoutes.SCIENTIFIC_WORKS_DATA,
-    initialParams: {
-      search: '',
-      authorIds: []
-    }
+  const { params, setParam, debouncedSetParam, resetFilters } = useTableFilters<WorkTableFilters>({
+    search: '',
+    authorIds: [],
+    yearFrom: null,
+    yearTo: null
   });
 
   const { data: staticFilters } = useFetchStaticFilters<ScientificFiltersType>(ApiRoutes.SCIENTIFIC_WORKS_FILTERS);
 
-  const bp = useBreakpoints();
-
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
 
-  const [authorFilter, setAuthorFilter] = useState<string[]>([]);
-  const [yearFilter, setYearFilter] = useState<[number, number]>([defaultMinYear, defaultMaxYear]);
-
-  const handleAuthorChange = useCallback(
-    (values: string[]) => {
-      setAuthorFilter(values);
-      debouncedUpdateParam('authorIds', values);
-    },
-    [debouncedUpdateParam]
+  const { data, isLoading } = useTableData<ScientificWorkTableRow, WorkTableFilters>(
+    ApiRoutes.SCIENTIFIC_WORKS_DATA,
+    params
   );
 
-  const handleYearChangeCommitted = useCallback(
-    (v: [number, number]) => {
-      setYearFilter(v);
-      updateParams((prev) => ({
-        ...prev,
-        yearFrom: v[0],
-        yearTo: v[1]
-      }));
-    },
-    [updateParams]
-  );
-
-  const clearAllFilters = useCallback(() => {
-    setAuthorFilter([]);
-    setYearFilter([defaultMinYear, defaultMaxYear]);
-    resetParams();
-  }, [resetParams, defaultMinYear, defaultMaxYear]);
+  const bp = useBreakpoints();
 
   const columnWidths = useMemo(
     () =>
@@ -104,6 +61,14 @@ export const WorkTableSection = () => {
         isLaptopAndAbove: bp.isLaptopAndAbove
       }),
     [bp]
+  );
+
+  const handleYearChange = useCallback(
+    (v: [number, number]) => {
+      setParam('yearFrom', v[0]);
+      setParam('yearTo', v[1]);
+    },
+    [setParam]
   );
 
   const columns: ColumnDef<ScientificWorkTableRow>[] = [
@@ -135,15 +100,20 @@ export const WorkTableSection = () => {
     }
   ];
 
-  const isYearActive = yearFilter[0] > defaultMinYear || yearFilter[1] < defaultMaxYear;
-  const activeFiltersCount = authorFilter.length + (isYearActive ? 1 : 0);
+  const isYearActive =
+    (params.yearFrom !== null && params.yearFrom !== defaultMinYear) ||
+    (params.yearTo !== null && params.yearTo !== defaultMaxYear);
+
+  const isAuthorActive = params.authorIds.length > 0;
+
+  const activeFiltersCount = params.authorIds.length + (isYearActive ? 1 : 0);
   const isAnyFilterActive = activeFiltersCount > 0;
 
   const filters = useMemo(
     () => [
       {
         id: 'author',
-        isActive: authorFilter.length > 0,
+        isActive: isAuthorActive,
         element: (
           <FilterSelect
             label={tFilters('author')}
@@ -151,9 +121,9 @@ export const WorkTableSection = () => {
               value: a.key,
               label: a.name
             }))}
-            defaultValues={authorFilter}
-            onAdd={(v, l, all) => handleAuthorChange(all)}
-            onRemove={(v, l, all) => handleAuthorChange(all)}
+            defaultValues={params.authorIds}
+            onAdd={(v, l, all) => setParam('authorIds', all)}
+            onRemove={(v, l, all) => setParam('authorIds', all)}
             variant="filled"
           />
         )
@@ -165,9 +135,9 @@ export const WorkTableSection = () => {
         element: (
           <YearNumericFilter
             label={tFilters('yearLabel')}
-            value={yearFilter}
-            onChange={setYearFilter}
-            onChangeCommitted={handleYearChangeCommitted}
+            value={[params.yearFrom ?? defaultMinYear, params.yearTo ?? defaultMaxYear]}
+            onChange={handleYearChange}
+            onChangeCommitted={handleYearChange}
             minYear={defaultMinYear}
             maxYear={defaultMaxYear}
           />
@@ -175,22 +145,24 @@ export const WorkTableSection = () => {
       }
     ],
     [
-      authorFilter,
-      yearFilter,
-      staticFilters,
-      handleAuthorChange,
-      handleYearChangeCommitted,
+      isAuthorActive,
       tFilters,
+      staticFilters?.authors,
+      params.authorIds,
+      params.yearFrom,
+      params.yearTo,
+      isYearActive,
       defaultMinYear,
       defaultMaxYear,
-      isYearActive
+      handleYearChange,
+      setParam
     ]
   );
 
   return (
     <EnhancedTable<ScientificWorkTableRow>
       data={data}
-      loading={loadingData}
+      loading={isLoading}
       columns={columns}
       columnWidths={columnWidths}
       itemsPerPage={10}
@@ -198,22 +170,16 @@ export const WorkTableSection = () => {
       Search={
         <Search
           search={params.search}
-          setSearch={(value) => debouncedUpdateParam('search', value)}
+          setSearch={(value) => debouncedSetParam('search', value)}
           options={staticFilters?.titles ?? []}
-          setFilterParams={(next) =>
-            updateParams((prev) => ({
-              ...prev,
-              ...next
-            }))
-          }
         />
       }
       Filters={
-        <TableFilters isAnyFilterActive={isAnyFilterActive} onClearAllFilters={clearAllFilters} filters={filters} />
+        <TableFilters isAnyFilterActive={isAnyFilterActive} onClearAllFilters={resetFilters} filters={filters} />
       }
       isFiltersActive={isAnyFilterActive}
       activeFiltersCount={activeFiltersCount}
-      onClearFilters={clearAllFilters}
+      onClearFilters={resetFilters}
     />
   );
 };

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { useFetchStaticFilters } from '~/shared/hooks/use-search/useFetchStaticFilters';
+import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 
 const musicTableMock = [
   { id: '1', name: 'Composition 1', year: 2000, genre: ['Романс', 'Джаз'] },
@@ -37,10 +37,6 @@ const useSearchMockReturn = {
   debouncedUpdateParam: jest.fn(),
   resetParams: jest.fn()
 };
-
-jest.mock('~/shared/hooks/use-search/useSearchh', () => ({
-  useSearch: () => useSearchMockReturn
-}));
 
 const staticFiltersData = {
   genres: [{ name: 'rock' }],
