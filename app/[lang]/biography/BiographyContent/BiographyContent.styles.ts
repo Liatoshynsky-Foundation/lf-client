@@ -135,7 +135,7 @@ export const biographyContentStyles = {
   },
 
   fullWidth: {
-    width: { xs: 205, sm: 400, md: 496, lg: 646, xl: 1510, xxl: 1775, ultra: 1955 },
+    width: { xs: 205, sm: 400, md: 496, lg: 646, xl: 1510, xxl: 1775, ultra: 2000 },
     height: { xs: 260, sm: 380, md: 500, lg: 650, xl: 730, xxl: 850, ultra: 950 }
   },
 
@@ -153,10 +153,10 @@ export const biographyContentStyles = {
     position: 'relative',
     left: '53%',
     right: '53%',
-    marginLeft: '-53vw',
-    marginRight: '-53vw',
-    width: '103vw',
-    maxWidth: '103vw',
+    marginLeft: '-55vw',
+    marginRight: '-55vw',
+    width: '105vw',
+    maxWidth: '105vw',
     transform: 'rotate(-2deg)',
     overflow: 'visible'
   },
