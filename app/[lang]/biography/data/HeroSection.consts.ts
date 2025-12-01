@@ -33,7 +33,7 @@ export const biographyHeroData: BiographyHeroData = {
     caption: {
       mainText: {
         uk: makeDoc([normalText('Борис Лятошинський з котами на дачі в Ворзелі.')]),
-        en: makeDoc([normalText('Borys Lyatoshynsky with cats at his dacha in Vorzel.'), normalText('\n1960s')])
+        en: makeDoc([normalText('Borys Lyatoshynsky with cats at his dacha in Vorzel.')])
       },
       yearText: {
         uk: makeDoc([normalText('1960-ті роки')]),
