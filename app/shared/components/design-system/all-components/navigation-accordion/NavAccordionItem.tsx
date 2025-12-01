@@ -5,6 +5,7 @@ import { mainHexPallete } from '../theme/colors';
 import { NavDropdownItem, NavItem, NavLinkItem } from './NavAccordion';
 import { styles } from './NavAccordion.styles';
 
+import { isPathWithin } from '~/lib/utils/navPath';
 import MinusIconSvg from '~/public/icons/minus.svg';
 import PlusIconSvg from '~/public/icons/plus.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
@@ -24,22 +25,9 @@ function isLinkItem(item: NavItem): item is NavLinkItem {
   return 'href' in item && !('dropdown' in item);
 }
 
-function normalizePath(path: string): string {
-  let end = path.length;
-
-  while (end > 1 && path[end - 1] === '/') {
-    end--;
-  }
-
-  return path.slice(0, end);
-}
-
 export function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<AccordionItemProps>) {
-  const normalizedPath = normalizePath(pathname);
-
-  const isLinkActive = isLinkItem(item) && normalizePath(item.href) === normalizedPath;
-  const isDropdownActive =
-    isDropdownItem(item) && item.dropdown.some((child) => normalizePath(child.href) === normalizedPath);
+  const isLinkActive = isLinkItem(item) && isPathWithin(item.href, pathname);
+  const isDropdownActive = isDropdownItem(item) && item.dropdown.some((child) => isPathWithin(child.href, pathname));
 
   const isActive = isLinkActive || isDropdownActive;
   const iconColor = isActive ? mainHexPallete.burgundy[700] : mainHexPallete.brown[900];
