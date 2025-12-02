@@ -5,18 +5,20 @@ import { useLocale, useTranslations } from 'next-intl';
 import ContentBlock from '~/components/design-system/all-components/content-block/ContentBlock';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import QuoteBlock from '~/components/Quote/Quote';
+import YearTabs from '~/components/year-tabs/YearTabs';
 
-import { heroBiographyDoc, heroNoteDoc, heroTexts } from './HeroSection.content';
 import { heroSectionStyles } from './HeroSection.style';
+import { BiographyHeroProps, tiptapToPlainText } from '~/types/page/biography.types';
 
-export function HeroSection() {
+export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
   const locale = useLocale();
   const t = useTranslations('biography.heroSection');
 
-  const caption = `${heroTexts.imageCaption.mainText[locale]}\n${heroTexts.imageCaption.yearText[locale]}`;
+  const caption = `${tiptapToPlainText(data.image.caption.mainText[locale])}\n${tiptapToPlainText(data.image.caption.yearText[locale])}`;
 
   return (
     <Box sx={heroSectionStyles.mainContainer} data-testid="HeroSection">
+      <YearTabs years={years} />
       <Box sx={heroSectionStyles.topContainer} data-testid="HeroSection-topContainer">
         <Box sx={heroSectionStyles.titleWithQuoteContainer} data-testid="HeroSection-titleWithQuoteContainer">
           <Box data-testid="HeroSection-title">
@@ -24,8 +26,8 @@ export function HeroSection() {
           </Box>
 
           <QuoteBlock
-            quoteText={heroTexts.quoteText[locale]}
-            sourceText={heroTexts.sourceText[locale]}
+            quoteText={tiptapToPlainText(data.quote.quoteText[locale])}
+            sourceText={tiptapToPlainText(data.quote.sourceText[locale])}
             quoteIconColor="burgundy"
             mainTextColor="burgundy"
             alignRight={false}
@@ -36,10 +38,10 @@ export function HeroSection() {
         </Box>
 
         <Box sx={heroSectionStyles.photoContainer} data-testid="HeroSection-photoContainer">
-          {heroTexts.image && (
+          {data.image && (
             <ImageWithCaption
-              src={heroTexts.image.src}
-              alt={heroTexts.image.alt[locale]}
+              src={data.image.src}
+              alt={tiptapToPlainText(data.image.alt[locale])}
               caption={caption}
               sizes={heroSectionStyles.imageSizes}
               containerSx={heroSectionStyles.imageWithCaptionContainer}
@@ -54,13 +56,13 @@ export function HeroSection() {
 
       <Box sx={heroSectionStyles.bottomContainer} data-testid="HeroSection-bottomContainer">
         <ContentBlock
-          description={heroBiographyDoc[locale]}
+          description={data.biographyText[locale]}
           containerSx={heroSectionStyles.biographyContainer}
           textSx={heroSectionStyles.biographyText}
           dataTestId="HeroSection-biographyContainer-contentBlock"
         />
         <ContentBlock
-          description={heroNoteDoc[locale]}
+          description={data.noteText[locale]}
           containerSx={heroSectionStyles.noteContainer}
           textSx={heroSectionStyles.noteText}
           dataTestId="HeroSection-noteContainer-contentBlock"

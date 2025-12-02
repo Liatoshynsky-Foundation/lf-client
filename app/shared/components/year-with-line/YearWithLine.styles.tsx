@@ -10,12 +10,11 @@ export const styles = (theme: Theme) => ({
     position: 'relative',
     width: '100%',
     maxWidth: '1656px',
-    height: '260px',
     margin: '0 auto'
   },
   line: (offset: number) => ({
     position: 'absolute',
-    top: '47%',
+    top: '50%',
     left: `${offset - 34}px`,
     height: '8px',
     width: `calc(100vw - ${offset}px)`,
@@ -25,11 +24,9 @@ export const styles = (theme: Theme) => ({
     transformOrigin: 'left center',
     zIndex: 0,
     [theme.breakpoints.down('md')]: {
-      top: '27%',
       left: `${offset - 25}px`
     },
     [theme.breakpoints.down('sm')]: {
-      top: '23%',
       left: `${offset - 18}px`
     }
   }),
