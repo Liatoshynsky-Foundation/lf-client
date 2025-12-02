@@ -24,7 +24,7 @@ import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
-import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters';
+import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters.types';
 
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';

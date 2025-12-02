@@ -69,7 +69,6 @@ const columns: ColumnDef<TestRow>[] = [
 ];
 
 const mockSetSearch = jest.fn();
-const mockSetFilterParams = jest.fn();
 
 beforeEach(() => {
   globalThis.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -84,7 +83,7 @@ describe('EnhancedTable', () => {
         tableName="Test Table"
         groupByKey="group"
         itemsPerPage={2}
-        Search={<Search setSearch={mockSetSearch} setFilterParams={mockSetFilterParams} search="" options={[]} />}
+        Search={<Search setSearch={mockSetSearch} search="" options={[]} />}
         Filters={<FilterSelect label="" options={[]} />}
       />
     );

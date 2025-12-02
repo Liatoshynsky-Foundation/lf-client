@@ -2,7 +2,7 @@ import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto
 
 export type WorkTableFilters = {
   search: string;
-  authorIds: string[];
+  author: string[];
   yearFrom: number | null;
   yearTo: number | null;
 };

@@ -54,7 +54,7 @@ jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
   useTableFilters: () => ({
     params: {
       search: '',
-      authorIds: [],
+      author: [],
       yearFrom: null,
       yearTo: null
     },

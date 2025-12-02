@@ -116,7 +116,6 @@ jest.mock('~/shared/components/design-system/all-components/table-filters/TableF
   )
 }));
 
-// ----- YearNumericFilter MOCK -----
 jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () => ({
   YearNumericFilter: ({ minYear, maxYear, onChangeCommitted }: any) => (
     <div data-testid="year-filter">
@@ -129,7 +128,6 @@ jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () 
   )
 }));
 
-// ----- FilterSelect MOCK -----
 jest.mock('~/ds-components/selector/FilterSelect', () => ({
   FilterSelect: ({ label, onAdd }: any) => (
     <button data-testid={`add-${label}`} onClick={() => onAdd(null, null, ['test'])}>
@@ -138,7 +136,6 @@ jest.mock('~/ds-components/selector/FilterSelect', () => ({
   )
 }));
 
-// ----- Modal MOCK -----
 jest.mock('~/shared/components/get-notes-modal/GetNotesModal', () => ({
   __esModule: true,
   default: ({ opened }: any) => <div data-testid="notes-open">{String(opened)}</div>

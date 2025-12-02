@@ -10,12 +10,18 @@ import { parseLocale } from '~/lib/utils/translation/parseLocale';
 export async function GET(req: NextRequest) {
   try {
     const params = req.nextUrl.searchParams;
-    const search = params.get('search') || '';
     const locale = parseLocale(params);
-    const filters = parseFilters(params);
+    const rawFilters = parseFilters(params);
+
+    const filters = {
+      search: rawFilters.search,
+      author: rawFilters.author,
+      yearFrom: rawFilters.years?.min ?? null,
+      yearTo: rawFilters.years?.max ?? null
+    };
 
     const scientificWorksService = createRequestContainer().resolve('scientificService');
-    const data = await scientificWorksService.getAllScientificWorks(locale, filters, search);
+    const data = await scientificWorksService.getAllScientificWorks(locale, filters);
 
     return NextResponse.json(data);
   } catch {

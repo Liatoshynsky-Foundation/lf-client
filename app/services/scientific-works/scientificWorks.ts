@@ -1,5 +1,7 @@
 import { Locale } from 'next-intl';
 
+import { WorkTableFilters } from '~/types/types/tableFilters.types';
+
 import { ScientificWorksRepository } from '~/infrastructure/repositories/scientific-works/scientificWorks.repo';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema, LocalizeSchema, NoIDSchema } from '~/validators/constants';
@@ -34,16 +36,11 @@ export const createScientificWorksService = ({
     return scientificWorksRepo.getScientificWorksYearRange();
   },
 
-  async getAllScientificWorks(
-    locale: Locale,
-    filters?: { authorIds?: string[]; years?: { min?: number; max?: number } },
-    search?: string
-  ) {
+  async getAllScientificWorks(locale: Locale, filters: WorkTableFilters) {
     const works = await scientificWorksRepo.getAllScientificWorks({
-      authorIds: filters?.authorIds,
-      years:
-        filters?.years?.min != null && filters?.years?.max != null ? [filters.years.min, filters.years.max] : undefined,
-      search
+      author: filters.author,
+      years: filters.yearFrom != null && filters.yearTo != null ? [filters.yearFrom, filters.yearTo] : undefined,
+      search: filters.search
     });
 
     return works.map((w) => ({

@@ -15,7 +15,7 @@ import {
   RenderYearHeader
 } from './WorkTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
-import { ScientificFiltersType, WorkTableFilters } from '~/types/types/tableFilters';
+import { ScientificFiltersType, WorkTableFilters } from '~/types/types/tableFilters.types';
 
 import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
@@ -34,7 +34,7 @@ export const WorkTableSection = () => {
 
   const { params, setParam, debouncedSetParam, resetFilters } = useTableFilters<WorkTableFilters>({
     search: '',
-    authorIds: [],
+    author: [],
     yearFrom: null,
     yearTo: null
   });
@@ -71,42 +71,35 @@ export const WorkTableSection = () => {
     [setParam]
   );
 
-  const columns: ColumnDef<ScientificWorkTableRow>[] = [
-    {
-      id: 'name',
-      accessorKey: 'name',
-      header: RenderNameHeader,
-      cell: renderNameCell,
-      sortingFn: 'alphanumeric'
-    },
-    {
-      id: 'author',
-      accessorKey: 'author',
-      header: RenderAuthorHeader,
-      cell: renderAuthorCell,
-      sortingFn: 'alphanumeric'
-    },
-    {
-      id: 'sortableYear',
-      accessorKey: 'sortableYear',
-      header: RenderYearHeader,
-      cell: (info) => renderYearCell(info.row.original.year),
-      sortingFn: 'basic'
-    },
-    {
-      id: 'actions',
-      header: '',
-      cell: RenderActionCell
-    }
-  ];
+  const columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
+    () => [
+      { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: renderNameCell, sortingFn: 'alphanumeric' },
+      {
+        id: 'author',
+        accessorKey: 'author',
+        header: RenderAuthorHeader,
+        cell: renderAuthorCell,
+        sortingFn: 'alphanumeric'
+      },
+      {
+        id: 'sortableYear',
+        accessorKey: 'sortableYear',
+        header: RenderYearHeader,
+        cell: (info) => renderYearCell(info.row.original.year),
+        sortingFn: 'basic'
+      },
+      { id: 'actions', header: '', cell: RenderActionCell }
+    ],
+    []
+  );
 
   const isYearActive =
     (params.yearFrom !== null && params.yearFrom !== defaultMinYear) ||
     (params.yearTo !== null && params.yearTo !== defaultMaxYear);
 
-  const isAuthorActive = params.authorIds.length > 0;
+  const isAuthorActive = params.author.length > 0;
 
-  const activeFiltersCount = params.authorIds.length + (isYearActive ? 1 : 0);
+  const activeFiltersCount = params.author.length + (isYearActive ? 1 : 0);
   const isAnyFilterActive = activeFiltersCount > 0;
 
   const filters = useMemo(
@@ -121,9 +114,9 @@ export const WorkTableSection = () => {
               value: a.key,
               label: a.name
             }))}
-            defaultValues={params.authorIds}
-            onAdd={(v, l, all) => setParam('authorIds', all)}
-            onRemove={(v, l, all) => setParam('authorIds', all)}
+            defaultValues={params.author}
+            onAdd={(v, l, all) => setParam('author', all)}
+            onRemove={(v, l, all) => setParam('author', all)}
             variant="filled"
           />
         )
@@ -148,7 +141,7 @@ export const WorkTableSection = () => {
       isAuthorActive,
       tFilters,
       staticFilters?.authors,
-      params.authorIds,
+      params.author,
       params.yearFrom,
       params.yearTo,
       isYearActive,

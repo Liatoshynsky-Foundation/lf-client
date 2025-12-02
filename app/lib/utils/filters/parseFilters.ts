@@ -3,18 +3,25 @@ export function parseFilters(params: URLSearchParams) {
 
   const genres = params.getAll('genre');
   const categories = params.getAll('category');
-  const authorIds = params.getAll('authorIds');
+  const author = params.getAll('author');
+
   const yearFrom = params.get('yearFrom');
   const yearTo = params.get('yearTo');
+
+  const search = params.get('search') ?? '';
+
   const filters = {
     categories: [] as string[],
     genres: [] as string[],
-    authorIds: [] as string[],
-    years: { min: 1900, max: currentYear }
+    author: [] as string[],
+    years: { min: 1900, max: currentYear },
+    search
   };
+
   if (genres.length) filters.genres = genres;
   if (categories.length) filters.categories = categories;
-  if (authorIds.length) filters.authorIds = authorIds;
+  if (author.length) filters.author = author;
+
   if (yearFrom || yearTo) {
     const parsedFrom = yearFrom ? Number(yearFrom) : undefined;
     const parsedTo = yearTo ? Number(yearTo) : undefined;
@@ -27,5 +34,6 @@ export function parseFilters(params: URLSearchParams) {
 
     filters.years = { min: finalMin, max: finalMax };
   }
+
   return filters;
 }

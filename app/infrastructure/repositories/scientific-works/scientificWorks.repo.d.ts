@@ -8,7 +8,7 @@ export interface ScientificWorksRepository {
   getScientificWorksYearRange(): Promise<YearRange>;
   getAllScientificWorks(params: {
     years?: [number, number];
-    authorIds?: string[];
+    author?: string[];
     search?: string;
   }): Promise<ScientificWorkDb[]>;
 }

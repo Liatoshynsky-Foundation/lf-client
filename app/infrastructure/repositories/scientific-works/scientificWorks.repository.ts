@@ -45,11 +45,11 @@ const scientificWorksRepository = {
   },
 
   async getAllScientificWorks({
-    authorIds,
+    author,
     years,
     search = ''
   }: {
-    authorIds?: string[];
+    author?: string[];
     years?: [number, number];
     search?: string;
   }) {
@@ -64,8 +64,8 @@ const scientificWorksRepository = {
       });
     }
 
-    if (authorIds?.length) {
-      conditions.push({ authors: { $in: authorIds } });
+    if (author?.length) {
+      conditions.push({ authors: { $in: author } });
     }
 
     if (years) {
