@@ -1,8 +1,8 @@
 'use client';
 
 import debounce from 'lodash.debounce';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Primitive = string | number | null;
 type ParamValue = Primitive | Primitive[];
@@ -14,31 +14,12 @@ type SetParamType<P extends TableParams> = <K extends keyof P>(key: K, value: P[
 export function useTableFilters<P extends TableParams>(initialParams: P) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  const [params, setParams] = useState<P>(() => {
-    const result = { ...initialParams };
+  const [params, setParams] = useState<P>(initialParams);
 
-    searchParams.forEach((rawValue, key) => {
-      if (!(key in result)) return;
-
-      const typedKey = key as keyof P;
-      const current = result[typedKey];
-
-      if (Array.isArray(current)) {
-        const parsed = rawValue.split(',') as Extract<P[typeof typedKey], Primitive[]>;
-        result[typedKey] = parsed;
-      } else if (typeof current === 'number') {
-        result[typedKey] = Number(rawValue) as P[typeof typedKey];
-      } else if (current === null) {
-        result[typedKey] = (rawValue === '' ? null : Number(rawValue)) as P[typeof typedKey];
-      } else if (typeof current === 'string') {
-        result[typedKey] = rawValue as P[typeof typedKey];
-      }
-    });
-
-    return result;
-  });
+  useEffect(() => {
+    router.replace(pathname, { scroll: false });
+  }, [pathname, router]);
 
   const syncUrl = useCallback(
     (nextParams: P) => {
