@@ -88,6 +88,21 @@ describe('CollapsibleRow', () => {
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
+  it('should call action on row click', () => {
+    const onToggle = jest.fn();
+
+    render(
+      <table>
+        <tbody>
+          <CollapsibleRow data={mockData} collapsed={false} action={onToggle} columns={columns} />
+        </tbody>
+      </table>
+    );
+
+    fireEvent.click(screen.getByTestId('CollapsibleRow-mainOpus-name'));
+    expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
   it('should render internal rows via CollapsibleDataRow when collapsed=true', () => {
     render(
       <table>

@@ -51,7 +51,14 @@ export const CollapsibleRow = <T extends RowData>({
   let coveredUntil = -1;
   return (
     <>
-      <TableRow sx={styles.row(collapsed)} data-testid="CollapsibleRow-mainOpus">
+      <TableRow
+        sx={styles.row(collapsed)}
+        data-testid="CollapsibleRow-mainOpus"
+        onClick={(e) => {
+          e.preventDefault();
+          action();
+        }}
+      >
         {columns.map((col, idx) => {
           if (idx <= coveredUntil) return null;
 
@@ -65,6 +72,7 @@ export const CollapsibleRow = <T extends RowData>({
                     aria-label="toggle row"
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       action();
                     }}
                     variant={IconButtonColorVariant.Secondary}
