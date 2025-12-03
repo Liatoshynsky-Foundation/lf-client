@@ -32,7 +32,7 @@ describe('CustomTabs', () => {
     tabs.forEach((tab) => {
       const element = screen.getByTestId(`TestTabs-tab-${tab.id}`);
       expect(element).toBeInTheDocument();
-      expect(element).toHaveTextContent(tab.label as string);
+      expect(element).toHaveTextContent(String(tab.label));
     });
   });
 
