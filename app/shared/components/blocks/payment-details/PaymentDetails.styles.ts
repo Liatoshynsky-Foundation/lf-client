@@ -60,7 +60,6 @@ export const styles = {
 
   iban: {
     display: 'flex',
-    pr: '24px',
     gap: '8px'
   },
 
