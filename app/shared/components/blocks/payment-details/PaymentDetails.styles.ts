@@ -5,17 +5,19 @@ export const styles = {
     backgroundColor: mainHexPallete.brown[50],
     p: '4px',
 
+    width: { xs: '100%', sm: 'fit-content' },
+
     div: {
       p: '0px',
-      m: '0px'
+      m: '0px',
+      width: { xs: '100%', sm: 'auto' },
+      display: 'flex'
     },
-
     button: {
-      width: '67px'
+      width: { xs: 'auto', sm: '67px' },
+      flex: { xs: 1, sm: 'unset' }
     },
-
     '& [aria-label="indicator"]': {
-      width: '66px',
       height: 'calc(100% - 8px)',
       top: 4
     }
