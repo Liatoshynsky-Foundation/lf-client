@@ -57,13 +57,21 @@ export const styles: Record<string, SxProps<Theme>> = {
       lg: '2 / 5'
     },
     gridRow: '2',
-    position: 'sticky',
+
+    position: {
+      xs: 'static',
+      sm: 'sticky'
+    },
+
     top: {
-      xs: '24px',
       sm: '48px'
     },
+
     mt: '24px',
     alignSelf: 'flex-start',
-    zIndex: 1
+
+    zIndex: {
+      sm: 1
+    }
   }
 };
