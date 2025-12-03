@@ -176,7 +176,7 @@
       "downloadMusic": "Завантажити"
     },
     "work": {
-      "name": "Усі твори",
+      "name": "Усі документи",
       "filters": {
         "author": "Автор",
         "yearLabel": "Рік написання"

@@ -1,12 +1,10 @@
-import { useMediaQuery } from '@mui/material';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import ControlPanel from './ControlPanel';
 
-jest.mock('@mui/material', () => ({
-  ...jest.requireActual('@mui/material'),
-  useMediaQuery: jest.fn(() => false)
-}));
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints');
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
@@ -45,7 +43,9 @@ jest.mock('~/ds-components/icon-button/IconButton', () => ({
 
 const MockSearch = () => <div data-testid="search-component">Search Component</div>;
 const MockFilters = () => <div data-testid="filters-component">Filters Component</div>;
-const mockedUseMediaQuery = useMediaQuery as jest.Mock;
+
+const mockedUseBreakpoints = useBreakpoints as jest.Mock;
+
 const tableName = 'Test Table';
 const activeFiltersCount = 3;
 
@@ -56,9 +56,22 @@ const defaultProps = {
   Filters: <MockFilters />
 };
 
+const desktopBreakpoints = {
+  isDesktop: false,
+  isLaptopAndAbove: false,
+  isLaptop: false,
+  isTablet: false,
+  isMobile: false
+};
+
+const mobileBreakpoints = {
+  ...desktopBreakpoints,
+  isMobile: true
+};
+
 describe('ControlPanel', () => {
   beforeEach(() => {
-    mockedUseMediaQuery.mockReturnValue(false);
+    mockedUseBreakpoints.mockReturnValue(desktopBreakpoints);
   });
 
   describe('Desktop View', () => {
@@ -92,17 +105,22 @@ describe('ControlPanel', () => {
     });
 
     it('should not display the badge count when activeFiltersCount is 0 (desktop)', () => {
-      render(<ControlPanel {...defaultProps} activeFiltersCount={0} />);
+      const { container } = render(<ControlPanel {...defaultProps} activeFiltersCount={0} />);
 
       expect(screen.getByText('controls.filters')).toBeInTheDocument();
       expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
+
       expect(screen.queryByText('0')).not.toBeInTheDocument();
+
+      const badge = container.querySelector('.MuiBadge-badge') as HTMLElement | null;
+      expect(badge).not.toBeNull();
+      expect(badge).toHaveClass('MuiBadge-invisible');
     });
   });
 
   describe('Mobile View', () => {
     beforeEach(() => {
-      mockedUseMediaQuery.mockReturnValue(true);
+      mockedUseBreakpoints.mockReturnValue(mobileBreakpoints);
     });
 
     it('should toggle filters visibility on mobile button click', () => {
