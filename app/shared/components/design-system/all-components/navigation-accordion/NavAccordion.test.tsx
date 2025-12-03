@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { usePathname } from 'next/navigation';
 
 import { NavAccordion } from './NavAccordion';
 
@@ -90,5 +91,14 @@ describe('NavAccordion', () => {
     render(<NavAccordion items={items} />);
     const submenuLinks = screen.getAllByTestId('mock-link-/section/page-a')[0];
     expect(submenuLinks).toHaveAttribute('href', '/section/page-a');
+  });
+
+  test('marks dropdown as active for localized nested path', () => {
+    (usePathname as jest.Mock).mockReturnValue('/uk/section/page-a');
+
+    render(<NavAccordion items={items} />);
+
+    const activeTitle = screen.getByTestId('NavAccordion-item-Section1--title--active');
+    expect(activeTitle).toHaveTextContent('Section 1');
   });
 });
