@@ -58,9 +58,7 @@ export const styles = {
 
   iban: {
     display: 'flex',
-    flexWrap: { xs: 'wrap', md: 'nowrap' },
-    alignItems: 'center',
-    pr: '16px',
+    pr: '24px',
     gap: '8px'
   },
 
