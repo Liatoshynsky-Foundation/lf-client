@@ -83,7 +83,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   );
 
   return (
-    <ModalComponent open={opened} sx={styles.backdrop}>
+    <ModalComponent open={opened} onClose={handleClose} sx={styles.backdrop} disableRestoreFocus>
       <Box sx={{ position: 'relative' }}>
         <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="large" onClick={handleClose}>
           <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
