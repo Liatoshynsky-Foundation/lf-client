@@ -30,7 +30,7 @@ function PaymentDetails() {
   }, []);
 
   return (
-    <Box sx={{ 'margin-right': '24px' }} data-testid="PaymentDetails">
+    <Box sx={{ mr: '24px' }} data-testid="PaymentDetails">
       <ButtonGroup
         sx={switcherSx}
         defaultActiveButton={0}
