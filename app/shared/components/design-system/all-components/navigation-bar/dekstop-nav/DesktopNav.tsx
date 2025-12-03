@@ -166,7 +166,7 @@ const DesktopNav = ({
           activeButton={activeButton !== undefined ? activeButton : -1}
           buttons={renderedNavButtons}
           size="big"
-          animateIndicator={animateIndicator}
+          animateIndicator={animateIndicator && activeButton !== undefined}
         />
         {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
           <Button
