@@ -11,7 +11,8 @@ export const collapsibleRowStyles = {
     py: collapsed ? 'auto' : 0,
     overflow: 'hidden',
     transition: 'height 400ms ease',
-    backgroundColor: collapsed ? mainHexPallete.blue[75] : 'transparent'
+    backgroundColor: collapsed ? mainHexPallete.blue[75] : 'transparent',
+    cursor: 'pointer'
   }),
 
   cell: {
