@@ -53,6 +53,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       sm: '8px 20px'
     },
 
+    '& .MuiButton-icon': {
+      marginLeft: 0,
+      marginRight: 0
+    },
+
     '&:hover': {
       background: mainHexPallete.blue[100]
     }

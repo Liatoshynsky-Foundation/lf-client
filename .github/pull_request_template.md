@@ -24,6 +24,7 @@
 
 ## Checklist
 
+- [ ] PR name follows the naming convention
 - [ ] Code compiles and runs correctly
 - [ ] Tests pass successfully
 - [ ] Linting checks are clean
