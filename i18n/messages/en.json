@@ -176,7 +176,7 @@
       "downloadMusic": "Download"
     },
     "work": {
-      "name": "All works",
+      "name": "All documents",
       "filters": {
         "author": "Author",
         "yearLabel": "Year written"
