@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Badge, Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
@@ -14,19 +14,26 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 
 import Filter from '~/public/icons/filter.svg';
 import SearchIcon from '~/public/icons/search.svg';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface ControlPanelProps {
   readonly Search: ReactNode;
   readonly Filters: ReactNode;
   readonly tableName: string;
   readonly activeFiltersCount: number;
+  readonly sx?: object;
 }
 
-export default function ControlPanel({ tableName, Search, Filters, activeFiltersCount }: Readonly<ControlPanelProps>) {
+export default function ControlPanel({
+  tableName,
+  Search,
+  Filters,
+  activeFiltersCount,
+  sx
+}: Readonly<ControlPanelProps>) {
   const t = useTranslations('table');
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
-  const isLessThan405 = useMediaQuery('(max-width:405px)', { noSsr: true });
+  const { isMobile } = useBreakpoints();
+  const hasFilters = Boolean(Filters);
 
   const [searchActive, setSearchActive] = useState(false);
   const [filtersActive, setFiltersActive] = useState(false);
@@ -107,14 +114,24 @@ export default function ControlPanel({ tableName, Search, Filters, activeFilters
   );
 
   return (
-    <Box sx={ControlPanelStyles.root} data-testid="ControlPanel">
+    <Box sx={{ ...ControlPanelStyles.root, ...sx }} data-testid="ControlPanel">
       <Box sx={ControlPanelStyles.header} data-testid="ControlPanel-header">
-        <Typography variant={isLessThan405 ? 'customBold25' : 'customBold32'} data-testid="ControlPanel-tableName">
+        <Typography
+          variant="customBold25"
+          data-testid="ControlPanel-tableName"
+          sx={{
+            fontSize: {
+              xs: '25px',
+              md: '32px'
+            }
+          }}
+        >
           {tableName}
         </Typography>
         <Box sx={ControlPanelStyles.headerRight} data-testid="ControlPanel-header--right">
           {isMobile ? searchIconButton : Search}
-          {isMobile ? filtersIconButton : filtersDesktop}
+          {isMobile && hasFilters ? filtersIconButton : null}
+          {!isMobile && hasFilters ? filtersDesktop : null}
         </Box>
       </Box>
       <Box sx={ControlPanelStyles.controlsColumn} data-testid="ControlPanel-controlsColumn">

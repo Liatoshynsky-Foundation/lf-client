@@ -41,7 +41,8 @@ export const styles = {
 
   donationFormWrapper: {
     pt: '43px',
-    gridColumn: { xs: '1', md: '1 / 11', lg: '1/6' }
+    gridColumn: { xs: '1', md: '1 / 11', lg: '1/6' },
+    height: '565px'
   },
 
   infoSection: {

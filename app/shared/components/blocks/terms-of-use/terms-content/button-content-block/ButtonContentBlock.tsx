@@ -13,12 +13,28 @@ type ButtonContentBlockProps = {
   buttonColor?: 'primary' | 'secondary' | 'tertiary';
   content: TipTapDoc;
   sx?: object;
+  containerSx?: object;
+  textSx?: object;
+  textContainerSx?: object;
+  buttonContainerSx?: object;
+  link?: string;
 };
 
-const ButtonContentBlock = ({ buttonText, buttonColor = 'primary', content, sx }: ButtonContentBlockProps) => (
-  <Box sx={styles.wrapper} data-testid="ButtonContentBlock">
-    <Box sx={styles.buttonBox}>
+const ButtonContentBlock = ({
+  buttonText,
+  buttonColor = 'primary',
+  content,
+  sx,
+  containerSx,
+  textSx,
+  textContainerSx = { marginBottom: { xs: '24px', md: '0px' } },
+  buttonContainerSx,
+  link
+}: ButtonContentBlockProps) => (
+  <Box sx={{ ...styles.wrapper, ...containerSx }} data-testid="ButtonContentBlock">
+    <Box sx={{ ...styles.buttonBox, ...buttonContainerSx }}>
       <Button
+        link={link}
         variant="contained"
         color={buttonColor}
         fullWidth
@@ -31,7 +47,7 @@ const ButtonContentBlock = ({ buttonText, buttonColor = 'primary', content, sx }
     </Box>
 
     <Box sx={styles.contentBox} data-testid="ButtonContentBlock-content">
-      <ContentBlock description={content} containerSx={{ marginBottom: { xs: '32px', md: '40px' } }} />
+      <ContentBlock textSx={textSx} description={content} containerSx={textContainerSx} />
     </Box>
   </Box>
 );

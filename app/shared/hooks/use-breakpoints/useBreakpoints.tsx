@@ -1,25 +1,39 @@
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+'use client';
 
-const useBreakpoints = () => {
+import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+
+type BreakpointsState = {
+  isDesktop: boolean;
+  isLaptopAndAbove: boolean;
+  isLaptop: boolean;
+  isTablet: boolean;
+  isMobile: boolean;
+};
+
+const useBreakpoints = (): BreakpointsState => {
   const theme = useTheme();
 
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), { noSsr: true });
-  const isLaptopAndAbove = useMediaQuery(theme.breakpoints.up('md'), {
-    noSsr: true
-  });
+  const [width, setWidth] = useState<number | null>(null);
 
-  const isLaptop = useMediaQuery(theme.breakpoints.between('md', 'lg'), {
-    noSsr: true
-  });
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(globalThis.innerWidth);
+    };
 
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'), {
-    noSsr: true
-  });
+    handleResize();
+    globalThis.addEventListener('resize', handleResize);
 
-  const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'), {
-    noSsr: true
-  });
+    return () => globalThis.removeEventListener('resize', handleResize);
+  }, []);
+
+  const values = theme.breakpoints.values;
+
+  const isDesktop = width !== null && width >= values.lg;
+  const isLaptopAndAbove = width !== null && width >= values.md;
+  const isLaptop = width !== null && width >= values.md && width < values.lg;
+  const isTablet = width !== null && width >= values.sm && width < values.md;
+  const isMobile = width !== null && width < values.sm;
 
   return { isDesktop, isLaptopAndAbove, isLaptop, isTablet, isMobile };
 };

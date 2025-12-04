@@ -16,6 +16,7 @@ export const styles = {
     },
     gridColumn: '1 / -1',
     mt: '120px',
+    mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
     gridTemplateRows: 'auto auto'
   },
   subtitle: {
@@ -26,12 +27,13 @@ export const styles = {
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   },
   textAbove: {
+    lineHeight: '160%',
     gridColumn: '1 / -1',
     textIndent: {
       xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
       sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
       md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
     mt: { xs: '16px', md: '32px' }
   },
@@ -47,6 +49,7 @@ export const styles = {
   },
   textContainer: {
     gridColumn: { xs: '1 / -1', sm: '4 / 9', md: '6 / 13' },
-    mt: '16px'
+    pt: { md: '10px' },
+    mt: '32px'
   }
 };

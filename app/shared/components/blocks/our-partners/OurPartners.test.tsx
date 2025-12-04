@@ -15,11 +15,17 @@ jest.mock('next-intl', () => ({
 }));
 
 jest.mock('~/ds-components/content-block/ContentBlock', () => {
-  const MockContentBlock = ({ title, description }: { title?: string; description?: string }) => (
-    <div data-testid={title ? 'content-block-title' : 'content-block-description'}>{title || description}</div>
+  const MockContentBlock = ({ description }: { description?: string }) => (
+    <div data-testid="content-block-description">{description}</div>
   );
   MockContentBlock.displayName = 'ContentBlock';
   return MockContentBlock;
+});
+
+jest.mock('../../section-title/SectionTitle', () => {
+  const MockSectionTitle = ({ title }: { title: string }) => <h2 data-testid="section-title">{title}</h2>;
+  MockSectionTitle.displayName = 'SectionTitle';
+  return MockSectionTitle;
 });
 
 jest.mock('../../partner-logo/PartnerLogo', () => {
@@ -35,9 +41,9 @@ jest.mock('./partner-grid/PartnerGrid', () => {
 });
 
 describe('OurPartners', () => {
-  it('should render translated title', () => {
+  it('should render translated title using SectionTitle', () => {
     render(<OurPartners />);
-    expect(screen.getByTestId('content-block-title')).toHaveTextContent('title');
+    expect(screen.getByTestId('section-title')).toHaveTextContent('title');
   });
 
   it('should render translated description', () => {

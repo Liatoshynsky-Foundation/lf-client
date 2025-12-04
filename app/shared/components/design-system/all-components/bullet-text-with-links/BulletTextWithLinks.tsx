@@ -1,6 +1,7 @@
 'use client';
-import { Box } from '@mui/material';
+import { Box, type BoxProps } from '@mui/material';
 import Image from 'next/image';
+import React from 'react';
 
 import Button from '../button/Button';
 import ContentBlock from '../content-block/ContentBlock';
@@ -8,6 +9,7 @@ import { styles } from './BulletTextWithLinks.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
+import { sxToArray } from '~/lib/utils/sxToArray';
 import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
 import FacebookIcon from '~/public/icons/facebook.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
@@ -21,7 +23,7 @@ type ButtonItem = {
 
 type RichContent = string | TipTapDoc;
 
-type IconButtonContentBlockProps = {
+type IconButtonContentBlockProps = BoxProps & {
   description?: RichContent;
   buttons: ButtonItem[];
   buttonText: string;
@@ -41,7 +43,9 @@ const imageSizes = {
 export default function BulletTextWithLinks({
   description,
   buttons,
-  buttonText
+  buttonText,
+  sx,
+  ...props
 }: Readonly<IconButtonContentBlockProps>) {
   const { isMobile } = useBreakpoints();
   const sizesAttribute = generateSizesAttribute(imageSizes);
@@ -53,7 +57,7 @@ export default function BulletTextWithLinks({
   );
 
   return (
-    <Box sx={styles.wrapper} data-testid="BulletTextWithLinks">
+    <Box sx={[styles.wrapper, ...sxToArray(sx)]} data-testid="BulletTextWithLinks" {...props}>
       {isMobile && imageBox}
       <Box sx={styles.buttonBox} data-testid="BulletTextWithLinks-buttonBox">
         {!isMobile && imageBox}
@@ -72,17 +76,25 @@ export default function BulletTextWithLinks({
       </Box>
       <Box sx={styles.buttonsBox} data-testid="BulletTextWithLinks-buttonsBox">
         {buttons.map((button) => (
-          <Button key={button.shortText} link={button.link} externalLink={true} variant="outlined" size="medium">
+          <Button
+            key={button.shortText}
+            link={button.link}
+            externalLink={true}
+            variant="outlined"
+            size="medium"
+            startIcon={
+              <Svg
+                Component={FacebookIcon}
+                fill="none"
+                alt="icon"
+                color="#000"
+                width="24px"
+                height="24px"
+                sx={styles.icon}
+              />
+            }
+          >
             {isMobile ? button.shortText : button.fullText}
-            <Svg
-              Component={FacebookIcon}
-              fill="none"
-              alt="icon"
-              color="#000"
-              width="20px"
-              height="20px"
-              sx={styles.icon}
-            />
           </Button>
         ))}
       </Box>

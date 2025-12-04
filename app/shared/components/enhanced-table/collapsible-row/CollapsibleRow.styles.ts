@@ -11,7 +11,8 @@ export const collapsibleRowStyles = {
     py: collapsed ? 'auto' : 0,
     overflow: 'hidden',
     transition: 'height 400ms ease',
-    backgroundColor: collapsed ? mainHexPallete.blue[50] : 'transparent'
+    backgroundColor: collapsed ? mainHexPallete.blue[75] : 'transparent',
+    cursor: 'pointer'
   }),
 
   cell: {
@@ -20,7 +21,6 @@ export const collapsibleRowStyles = {
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none',
-    backgroundColor: mainHexPallete.blue[75],
     borderBottom: `2px solid ${borderWithOpacity}`,
     '& .MuiTableCell-root': {
       borderBottom: 'none',

@@ -7,6 +7,8 @@ import { useCallback, useState } from 'react';
 import { styles } from './NavAccordion.styles';
 import { AccordionItem } from './NavAccordionItem';
 
+import { normalizePath } from '~/lib/utils/navPath';
+
 export interface NavLinkItem {
   label: string;
   href: string;
@@ -25,7 +27,7 @@ interface NavAccordionProps {
 }
 
 export function NavAccordion({ items, sx }: Readonly<NavAccordionProps>) {
-  const pathname = usePathname().replace(/^\/[a-z]{2}(?=\/)/, '');
+  const pathname = normalizePath(usePathname());
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   const toggle = useCallback((label: string) => {

@@ -43,6 +43,7 @@ export const styles = {
     position: 'absolute',
     bottom: 0,
     textAlign: 'right',
+    justifySelf: 'end',
     fontSize: '14px'
   }),
   quoteText: {

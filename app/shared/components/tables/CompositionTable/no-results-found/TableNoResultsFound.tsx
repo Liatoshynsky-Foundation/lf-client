@@ -13,7 +13,7 @@ export default function TableNoResultsFound() {
           <Box sx={styles.image} data-testid="TableNoResultsFound-image">
             <Image src="/images/cat-no-results-found.svg" alt="No results found" fill />
           </Box>
-          <Typography variant="h4" fontWeight="bold" data-testid="TableNoResultsFound-title">
+          <Typography variant="h4" sx={styles.h4} fontWeight="bold" data-testid="TableNoResultsFound-title">
             {t('title')}
           </Typography>
           <Typography

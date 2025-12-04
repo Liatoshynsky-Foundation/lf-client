@@ -4,14 +4,18 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
+import OfferCollaborationForm from '~/components/forms/offer-collaboration-form/OfferCollaborationForm';
 import ModalComponent from '~/components/modal-component/ModalComponent';
 import SectionTitle from '~/components/section-title/SectionTitle';
+import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 import CardWithText from '~/ds-components/card-with-text/CardWithText';
+import { IconButton } from '~/ds-components/icon-button/IconButton';
 import ImageWithBorder from '~/ds-components/image-with-border/ImageWithBorder';
 
 import { styles } from './PartnershipFormats.styles';
 import PartnershipSlider from './PartnershipSlider';
+import { IconButtonVariant } from '~/types/enums/common.enums';
 
 interface PartnershipCard {
   icon?: string;
@@ -38,7 +42,10 @@ interface PartnershipFormatsProps {
     secondRowSecondCard?: PartnershipCard;
     descriptionText?: string;
     actionButtonText?: string;
-    modalContent?: React.ReactNode;
+    modalContent?: {
+      formTitle?: string;
+      formSubtitle?: string;
+    };
   };
 }
 
@@ -83,7 +90,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
   return (
     <Box sx={styles.container}>
-      <SectionTitle title={data.title} sx={styles.title} />
+      <SectionTitle
+        icon={true}
+        title={data.title}
+        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
+        sx={styles.title}
+        mb={43}
+      />
 
       <Box sx={styles.mobileSlider}>
         <PartnershipSlider slides={mobileSlides} />
@@ -116,20 +129,35 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
       {data.actionButtonText && (
         <Box sx={styles.buttonContainer}>
-          <Button
-            variant="contained"
-            size="medium"
-            onClick={handleOpenModal}
-            color="tertiary"
-            endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} aria-hidden="true" />}
-          >
-            {data.actionButtonText}
-          </Button>
+          <Box sx={styles.button}>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={handleOpenModal}
+              color="tertiary"
+              endIcon={<Image src="/icons/arrow-up-right.svg" alt="" width={24} height={24} aria-hidden="true" />}
+            >
+              {data.actionButtonText}
+            </Button>
+          </Box>
         </Box>
       )}
 
-      <ModalComponent open={isModalOpen} onClose={handleCloseModal}>
-        <Box sx={styles.modalContent}>{data.modalContent || <Typography variant="h4">Modal Content</Typography>}</Box>
+      <ModalComponent
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Box sx={{ position: 'relative' }}>
+          <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="large" onClick={handleCloseModal}>
+            <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
+          </IconButton>
+          <OfferCollaborationForm
+            sx={styles.modalContent}
+            formTitle={data.modalContent?.formTitle}
+            formSubtitle={data.modalContent?.formSubtitle}
+          />
+        </Box>
       </ModalComponent>
     </Box>
   );

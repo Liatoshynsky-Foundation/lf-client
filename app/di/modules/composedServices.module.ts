@@ -2,6 +2,7 @@ import { asFunction, AwilixContainer } from 'awilix';
 
 import { createArtistryService } from '~/services/artistry/artistryService';
 import { createFooterService } from '~/services/footer/footerService';
+import { createFundsService } from '~/services/funds/fundsService';
 import { createHeaderService } from '~/services/header/headerService';
 import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
 import { createScientificWorksService } from '~/services/scientific-works/scientificWorks';
@@ -15,6 +16,7 @@ export type ComposedServicesModule = {
   uploadService: ReturnType<typeof createAzureStorageService>;
   pagesDataService: ReturnType<typeof createPagesDataService>;
   draftPagesDataService: ReturnType<typeof createDraftPagesDataService>;
+  fundsService: ReturnType<typeof createFundsService>;
 };
 
 export const registerComposedServicesFor = (container: AwilixContainer) => {
@@ -31,6 +33,8 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
 
     pagesDataService: asFunction(createPagesDataService).scoped(),
 
-    draftPagesDataService: asFunction(createDraftPagesDataService).scoped()
+    draftPagesDataService: asFunction(createDraftPagesDataService).scoped(),
+
+    fundsService: asFunction(createFundsService).scoped()
   });
 };

@@ -2,20 +2,13 @@ export const styles = {
   container: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
-    gridColumn: '1 / -1',
-    mb: {
-      xs: '16px',
-      sm: '74px',
-      md: '100px'
-    }
+    gridColumn: '1 / -1'
   },
   title: {
-    marginBottom: {
-      xs: '30px',
-      sm: '40px',
-      md: '40px',
-      lg: '50px',
-      xl: '15px'
+    gap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
     }
   },
   mobileSlider: {
@@ -338,7 +331,16 @@ export const styles = {
   },
   descriptionContainer: {
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
     gridColumn: '1 / -1',
     mt: {
       md: '40px',
@@ -347,17 +349,14 @@ export const styles = {
     },
     mb: {
       xs: '24px',
-      sm: '32px',
-      md: '40px'
+      sm: '32px'
     }
   },
   descriptionText: {
     textIndent: {
-      sm: '15em',
-      md: '21em',
-      lg: '21em',
-      xl: '21em',
-      xxl: '17em'
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
     gridColumn: {
       xs: '1 / -1',
@@ -370,33 +369,65 @@ export const styles = {
     fontSize: { xs: '16px', md: '18px' }
   },
   buttonContainer: {
-    display: 'flex',
-    justifyContent: {
-      xs: 'center',
-      sm: 'flex-start'
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
     },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
+    gridColumn: '1 / -1'
+  },
+  button: {
     gridColumn: {
       xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
-      lg: '6 / -1'
-    },
-    mb: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
+      lg: '6 / 13'
     }
   },
   modalContent: {
-    p: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
-    },
+    maxHeight: '95vh',
     maxWidth: {
-      xs: '90vw',
-      sm: '600px',
-      md: '800px'
+      xs: '100vw',
+      sm: '482px',
+      md: '744px',
+      xl: '1024px'
+    },
+    minWidth: {
+      xs: '95vw',
+      sm: 'min(90vw, 482px)',
+      md: 'min(70vw, 744px)',
+      xl: 'min(70vw, 1024px)'
+    },
+    padding: {
+      xs: '40px 24px',
+      sm: '24px 30px',
+      md: '24px 56px',
+      xl: '37px 60px'
+    },
+    '@media (max-width: 480px)': {
+      height: 'calc(100vh - 24px)',
+      width: '100vw'
+    }
+  },
+  closeIcon: {
+    position: 'absolute',
+    width: '30px',
+    height: '30px',
+    zIndex: '100',
+    top: {
+      xs: '10px',
+      lg: '16px'
+    },
+    right: {
+      xs: '23px',
+      md: '35px',
+      lg: '50px'
     }
   }
 };

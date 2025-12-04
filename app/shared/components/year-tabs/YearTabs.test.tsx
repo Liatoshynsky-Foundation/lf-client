@@ -84,14 +84,14 @@ describe('YearTabs', () => {
 
   it('should render null on mobile devices', () => {
     mockUseBreakpoints.mockReturnValue({ isMobile: true });
-    const { container } = render(<YearTabs />);
+    const { container } = render(<YearTabs years={MOCK_YEARS} />);
 
     expect(container.firstChild).toBeNull();
     expect(screen.queryByTestId('YearTabs')).not.toBeInTheDocument();
   });
 
   it('should render correctly on desktop with default values', () => {
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
 
     expect(screen.getByTestId('YearTabs')).toBeInTheDocument();
 
@@ -108,7 +108,7 @@ describe('YearTabs', () => {
   });
 
   it('should hide on scroll down and show on scroll up', () => {
-    const { rerender } = render(<YearTabs />);
+    const { rerender } = render(<YearTabs years={MOCK_YEARS} />);
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%)');
@@ -118,7 +118,7 @@ describe('YearTabs', () => {
       mockUseScrollDirection.mockReturnValue('down');
     });
 
-    rerender(<YearTabs />);
+    rerender(<YearTabs years={MOCK_YEARS} />);
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%, calc(100% + 5vh))');
 
@@ -127,7 +127,7 @@ describe('YearTabs', () => {
       mockUseScrollDirection.mockReturnValue('up');
     });
 
-    rerender(<YearTabs />);
+    rerender(<YearTabs years={MOCK_YEARS} />);
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%)');
   });
@@ -139,7 +139,7 @@ describe('YearTabs', () => {
     targetElement.getBoundingClientRect = jest.fn(() => ({ top: 500 }) as DOMRect);
     globalThis.pageYOffset = 100;
 
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
 
     const button2024 = screen.getByText(targetYear);
@@ -159,7 +159,7 @@ describe('YearTabs', () => {
 
   it('should not call scrollTo if the year element is not found', () => {
     mockGetElementById.mockReturnValue(null);
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
 
     const button = screen.getByText(MOCK_YEARS[1]);
     fireEvent.click(button);
@@ -171,7 +171,7 @@ describe('YearTabs', () => {
   });
 
   it('should update active year when IntersectionObserver fires', () => {
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '0');
@@ -196,7 +196,7 @@ describe('YearTabs', () => {
   });
 
   it('should not update year from IntersectionObserver during click-scrolling', () => {
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
     const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
 
     fireEvent.click(screen.getByText(MOCK_YEARS[1]));
@@ -227,23 +227,23 @@ describe('YearTabs', () => {
 
   it('should not create IntersectionObserver if no elements are found', () => {
     mockQuerySelectorAll.mockReturnValue([]);
-    render(<YearTabs />);
+    render(<YearTabs years={MOCK_YEARS} />);
 
     expect(globalThis.IntersectionObserver).not.toHaveBeenCalled();
   });
 
   it('should remove scroll event listener on unmount', () => {
     const mockRemoveEventListener = jest.fn();
-    globalThis.removeEventListener = mockRemoveEventListener;
+    globalThis.removeEventListener = mockRemoveEventListener as any;
 
-    const { unmount } = render(<YearTabs />);
+    const { unmount } = render(<YearTabs years={MOCK_YEARS} />);
     unmount();
 
     expect(mockRemoveEventListener).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 
   it('should disconnect IntersectionObserver on unmount', () => {
-    const { unmount } = render(<YearTabs />);
+    const { unmount } = render(<YearTabs years={MOCK_YEARS} />);
 
     expect(globalThis.IntersectionObserver).toHaveBeenCalled();
 

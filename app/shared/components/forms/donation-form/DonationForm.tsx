@@ -1,7 +1,7 @@
 'use client';
 import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import PaperComponent from '~/components/paper-component/PaperComponent';
 import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
@@ -11,6 +11,8 @@ import { useDonation } from '~/hooks/use-donation/useDonation';
 import { style } from './DonationForm.styles';
 import { Currency } from '~/types/types/common.types';
 
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP'];
 const proposedSum: Record<Currency, number[]> = {
   UAH: [200, 500, 700],
@@ -19,23 +21,26 @@ const proposedSum: Record<Currency, number[]> = {
   GBP: [10, 20, 40]
 };
 
+const MIN_DONATION_AMOUNT = 0;
+const isValidDonationAmount = (value: number | ''): boolean => typeof value === 'number' && value > MIN_DONATION_AMOUNT;
+
 function DonationForm() {
   const t = useTranslations('donationForm');
   const lang = useLocale();
+  const { isMobile } = useBreakpoints();
   const [donationSum, setDonationSum] = useState<number | ''>('');
   const [currency, setCurrency] = useState<Currency>('UAH');
   const [openDropdown, setOpenDropdown] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [touched, setTouched] = useState(false);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleCurrencySwitch = (event: { target: { value: string } }) => {
     setCurrency(event.target.value as Currency);
     setDonationSum('');
     setHasError(false);
-    setTouched(false);
   };
 
   const onVerificationFailure = useCallback(() => {
@@ -58,11 +63,11 @@ function DonationForm() {
   }, []);
 
   const handleDonateClick = (amount: number) => {
-    setTouched(true);
     const currentAmount = Number(amount);
-    const isInvalid = currentAmount <= 0;
+    const isInvalid = !isValidDonationAmount(currentAmount);
     setHasError(isInvalid);
     if (isInvalid) {
+      amountInputRef.current?.focus();
       return;
     }
     setSelectedAmount(currentAmount);
@@ -96,10 +101,14 @@ function DonationForm() {
       key={item}
       id={item.toString()}
       variant="outlined"
+      size={isMobile ? 'small' : 'medium'}
       onClick={() => {
         setDonationSum(item);
-        if (touched) setHasError(donationSum === 0);
+        if (hasError) {
+          setHasError(false);
+        }
       }}
+      data-testid={`DonationForm-suggestButton-${item}`}
     >
       <Typography variant="customSemiBold18">{item}</Typography>
       <Typography variant="customMedium16" sx={style.currencySuggestion}>
@@ -116,62 +125,73 @@ function DonationForm() {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === '' || +e.target.value < 0 ? '' : Number(e.target.value);
     setDonationSum(val);
-    if (touched) {
-      setHasError(val === '' || val === 0);
+    if (hasError) {
+      setHasError(false);
     }
   };
 
   return (
     <PaperComponent sx={style.paper} childrenSx={style.paperChildren} square data-testid="DonationForm">
-      <Typography data-testid="DonationForm-title" variant="h4">
-        {t('donationTitle')}
-      </Typography>
-      <Typography data-testid="DonationForm-description" variant="customSemiBold18">
-        {t('donationDescription')}
-      </Typography>
-      <Box sx={{ ...style.sumInputs, ...(hasError && style.errorBorder) }}>
-        <Input
-          disableUnderline
-          type="number"
-          inputProps={{ 'aria-invalid': hasError }}
-          value={donationSum}
-          onChange={handleInputChange}
-          placeholder="0"
-          sx={{ ...style.moneyInput, ...(hasError && style.moneyInputError) }}
-          data-testid="DonationForm-moneyInput"
-        />
-        <FormControl variant="standard" sx={style.currencyInput}>
-          <Select
-            open={openDropdown}
-            onOpen={() => setOpenDropdown(true)}
-            onClose={() => setOpenDropdown(false)}
-            disableUnderline
-            value={currency}
-            onChange={handleCurrencySwitch}
-            data-testid="DonationForm-currencySelect"
-          >
-            {currencyItems}
-          </Select>
-        </FormControl>
+      <Box sx={style.headerTexts}>
+        <Typography data-testid="DonationForm-title" variant="h4">
+          {t('donationTitle')}
+        </Typography>
+        <Typography data-testid="DonationForm-description" variant="customSemiBold18">
+          {t('donationDescription')}
+        </Typography>
       </Box>
-      <Box sx={style.addBtns} data-testid="DonationForm-suggestButtonsContainer">
-        {suggestButtons}
-      </Box>
-
-      {showCaptcha && (
-        <Box sx={style.turnstileWidget}>
-          <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
+      <Box sx={style.formContent}>
+        <Box sx={style.amountSection}>
+          <Box sx={{ ...style.sumInputs, ...(hasError && style.errorBorder) }}>
+            <Input
+              disableUnderline
+              type="number"
+              inputRef={amountInputRef}
+              inputProps={{ 'aria-invalid': hasError }}
+              value={donationSum}
+              onChange={handleInputChange}
+              placeholder="0"
+              sx={{
+                ...style.moneyInput,
+                ...(hasError && style.moneyInputError)
+              }}
+              data-testid="DonationForm-moneyInput"
+            />
+            <FormControl variant="standard" sx={style.currencyInput}>
+              <Select
+                open={openDropdown}
+                onOpen={() => setOpenDropdown(true)}
+                onClose={() => setOpenDropdown(false)}
+                disableUnderline
+                value={currency}
+                onChange={handleCurrencySwitch}
+                data-testid="DonationForm-currencySelect"
+              >
+                {currencyItems}
+              </Select>
+            </FormControl>
+          </Box>
+          <Box sx={style.addBtns} data-testid="DonationForm-suggestButtonsContainer">
+            {suggestButtons}
+          </Box>
         </Box>
-      )}
-      <Button
-        color="primary"
-        variant="contained"
-        fullWidth
-        onClick={() => handleDonateClick(donationSum as number)}
-        data-testid="DonationForm-donateButton"
-      >
-        <Typography variant="customSemiBold18">{t('donationButton')}</Typography>
-      </Button>
+
+        {showCaptcha && (
+          <Box sx={style.turnstileWidget}>
+            <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
+          </Box>
+        )}
+        <Button
+          color="primary"
+          variant="contained"
+          size={isMobile ? 'medium' : 'large'}
+          fullWidth
+          onClick={() => handleDonateClick(donationSum as number)}
+          data-testid="DonationForm-donateButton"
+        >
+          <Typography variant="customSemiBold18">{t('donationButton')}</Typography>
+        </Button>
+      </Box>
     </PaperComponent>
   );
 }

@@ -6,19 +6,25 @@ import { enhancedTableRowStyles as styles } from './EnhancedTableRow.styles';
 interface EnhancedTableRowProps<T extends { id: string }> {
   data: T;
   table: Table<T>;
+  sx?: object;
 }
 
 export default function EnhancedTableRow<T extends { id: string }>({
   data,
-  table
+  table,
+  sx
 }: Readonly<EnhancedTableRowProps<T>>) {
   const row = table.getRowModel().rows.find((row) => row.original.id === data.id);
   if (!row) return null;
 
   return (
-    <TableRow>
+    <TableRow data-testid="EnhancedTableRow-mainNoOpus" sx={sx}>
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} sx={styles.cell}>
+        <TableCell
+          key={cell.id}
+          sx={styles.cell}
+          data-testid={`EnhancedTableRow-mainNoOpus-${cell.id.split('_').at(1)}`}
+        >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}

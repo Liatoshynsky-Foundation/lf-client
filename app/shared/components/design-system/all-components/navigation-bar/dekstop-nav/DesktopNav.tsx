@@ -14,6 +14,7 @@ import type { ScrollDirection } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { usePathname } from '~/i18n/navigation';
+import { isPathWithin, normalizePath } from '~/lib/utils/navPath';
 import ChevronDown from '~/public/icons/chevron-down.svg';
 import ChevronUp from '~/public/icons/chevron-up.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
@@ -48,6 +49,7 @@ const DesktopNav = ({
   }, [navLabels]);
 
   const pathname = usePathname();
+  const normalizedPath = normalizePath(pathname);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [openDropdownState, setOpenDropdownState] = useState<{ label: string; items: DropdownItem[] } | null>(null);
@@ -55,7 +57,8 @@ const DesktopNav = ({
   const [animateIndicator, setAnimateIndicator] = useState(true);
 
   const prevActiveButtonRef = useRef<number | undefined>(undefined);
-  const isSpecialActive = pathname === specialNav?.links[0].href;
+
+  const isSpecialActive = !!specialNav?.links?.[0] && isPathWithin(specialNav.links[0].href, normalizedPath);
 
   useEffect(() => {
     if (scrollDirection === 'down' && anchorEl) {
@@ -64,23 +67,23 @@ const DesktopNav = ({
   }, [scrollDirection, anchorEl]);
 
   useEffect(() => {
-    if (pathname === specialNav?.links[0].href) {
+    const currentPath = normalizedPath;
+
+    if (specialNav?.links?.[0] && isPathWithin(specialNav.links[0].href, currentPath)) {
       setActiveButton(undefined);
       return;
     }
 
-    const index = NAV_ITEMS.findIndex(
-      (item) => item.href === pathname || item.dropdown?.some((dropdownItem) => dropdownItem.href === pathname)
-    );
+    const groupIndex = navLabels.findIndex((group) => group.links.some((link) => isPathWithin(link.href, currentPath)));
 
-    if (index !== -1) {
-      setActiveButton(index);
-    } else if (pathname === '/') {
+    if (groupIndex !== -1) {
+      setActiveButton(groupIndex);
+    } else if (currentPath === '/') {
       setActiveButton(1);
     } else {
       setActiveButton(undefined);
     }
-  }, [pathname, NAV_ITEMS, specialNav?.links]);
+  }, [normalizedPath, navLabels, specialNav]);
 
   useEffect(() => {
     const becameDefined = prevActiveButtonRef.current === undefined && activeButton !== undefined;
@@ -163,7 +166,7 @@ const DesktopNav = ({
           activeButton={activeButton !== undefined ? activeButton : -1}
           buttons={renderedNavButtons}
           size="big"
-          animateIndicator={animateIndicator}
+          animateIndicator={animateIndicator && activeButton !== undefined}
         />
         {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
           <Button

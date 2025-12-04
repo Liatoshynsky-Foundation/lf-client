@@ -13,9 +13,13 @@ interface CollapsibleDataRowProps<T extends RowData> {
 
 function CollapsibleDataRowComponent<T extends RowData>({ row, collapsed }: Readonly<CollapsibleDataRowProps<T>>) {
   return (
-    <TableRow>
+    <TableRow data-testid={collapsed ? 'CollapsibleDataRow-expanded' : 'CollapsibleDataRow-expanded-empty'}>
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} sx={styles.collapsedCell(collapsed)}>
+        <TableCell
+          key={cell.id}
+          sx={styles.collapsedCell(collapsed)}
+          data-testid={`CollapsibleDataRow-expanded-${cell.id.split('_').at(1)}`}
+        >
           <Collapse in={collapsed} timeout={300} unmountOnExit>
             <Box>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Box>
           </Collapse>

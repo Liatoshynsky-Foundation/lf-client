@@ -1,15 +1,14 @@
 export const styles = {
   wrapper: {
-    gridColumn: '1 / -1'
+    gridColumn: '1 / -1',
+    mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
   },
 
   titleContainer: {
-    mb: '43px',
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '1 / 5',
-      md: '1 / 8',
-      lg: '1 / 9'
+    gap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
     }
   },
 
@@ -18,7 +17,7 @@ export const styles = {
       xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
       sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
       md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
     gridColumn: { xs: '1 / -1', sm: '4 / -1', md: '6 / -1', xl: '6 / -1' },
     mb: { xs: '43px', sm: '104px' },
