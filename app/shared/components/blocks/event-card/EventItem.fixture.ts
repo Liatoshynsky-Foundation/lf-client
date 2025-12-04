@@ -1,0 +1,37 @@
+import type { EventItemProps } from './EventItem';
+
+export interface EventItemFixture {
+  id: string;
+  props: EventItemProps;
+}
+
+export const MOCK_EVENT_ITEMS: Readonly<EventItemFixture[]> = [
+  {
+    id: 'festival-weekend-1',
+    props: {
+      date: {
+        startDate: '2024-02-29',
+        endDate: '2024-03-02'
+      },
+      title: 'У Києві стартує фестиваль музики Бориса Лятошинського. Чому варто відвідати',
+      publishedAtLabel: 'Опубліковано: 05.05.25',
+      description:
+        'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968)',
+      image: {
+        src: '/images/events/festival-lyatoshynsky.png',
+        alt: 'Виконавці на сцені фестивалю Бориса Лятошинського'
+      },
+      href: '/uk/media/festival-borysa-lyatoshynskoho',
+      actions: [
+        {
+          label: 'Переглянути',
+          href: '/uk/media/festival-borysa-lyatoshynskoho'
+        },
+        {
+          label: 'Реєстрація',
+          href: '/uk/media/festival-borysa-lyatoshynskoho/registration'
+        }
+      ]
+    }
+  }
+];
