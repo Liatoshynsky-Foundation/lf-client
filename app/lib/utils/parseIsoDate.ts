@@ -20,3 +20,11 @@ export const parseIsoDate = (isoDate: string | null | undefined): ParsedIsoDate 
 
   return { day, month, year };
 };
+
+export const formatIsoDateToDdMmYy = (isoDate: string | null | undefined): string | null => {
+  const parsed = parseIsoDate(isoDate);
+  if (!parsed) return null;
+
+  const shortYear = parsed.year.slice(-2);
+  return `${parsed.day}.${parsed.month}.${shortYear}`;
+};

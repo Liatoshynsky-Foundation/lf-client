@@ -4,6 +4,17 @@ import React from 'react';
 import EventItem, { type EventItemProps } from './EventItem';
 import { MOCK_EVENT_ITEMS } from './EventItem.fixture';
 
+jest.mock('next-intl', () => ({
+  __esModule: true,
+  useTranslations: () => (key: string) => {
+    if (key === 'publishedAtLabel') {
+      return 'Опубліковано:';
+    }
+
+    return key;
+  }
+}));
+
 describe('EventItem', () => {
   const { props: baseProps } = MOCK_EVENT_ITEMS[0];
 
@@ -40,9 +51,9 @@ describe('EventItem', () => {
       })
     ).toBeInTheDocument();
 
-    expect(screen.getByText(baseProps.publishedAtLabel)).toBeInTheDocument();
-    expect(screen.getByText(baseProps.description)).toBeInTheDocument();
+    expect(screen.getByTestId('EventItem-publishedAt')).toHaveTextContent('Опубліковано: 05.05.25');
 
+    expect(screen.getByText(baseProps.description)).toBeInTheDocument();
     expect(screen.getByAltText(baseProps.image.alt)).toBeInTheDocument();
   });
 

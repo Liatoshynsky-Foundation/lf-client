@@ -1,4 +1,4 @@
-import { parseIsoDate } from './parseIsoDate';
+import { formatIsoDateToDdMmYy, parseIsoDate } from './parseIsoDate';
 
 describe('parseIsoDate', () => {
   it('returns day, month, year for a plain ISO date', () => {
@@ -75,5 +75,34 @@ describe('parseIsoDate', () => {
       month: '07',
       year: '2023'
     });
+  });
+});
+
+describe('formatIsoDateToDdMmYy', () => {
+  it('formats a plain ISO date to dd.MM.yy', () => {
+    const result = formatIsoDateToDdMmYy('2025-05-05');
+
+    expect(result).toBe('05.05.25');
+  });
+
+  it('formats an ISO date with time to dd.MM.yy', () => {
+    const result = formatIsoDateToDdMmYy('2025-05-05T10:15:30Z');
+
+    expect(result).toBe('05.05.25');
+  });
+
+  it('trims whitespace before formatting', () => {
+    const result = formatIsoDateToDdMmYy('  2024-01-09  ');
+
+    expect(result).toBe('09.01.24');
+  });
+
+  it('returns null for invalid date strings', () => {
+    expect(formatIsoDateToDdMmYy('not-a-date')).toBeNull();
+    expect(formatIsoDateToDdMmYy('2025-02')).toBeNull();
+    expect(formatIsoDateToDdMmYy('')).toBeNull();
+    expect(formatIsoDateToDdMmYy('   ')).toBeNull();
+    expect(formatIsoDateToDdMmYy(null)).toBeNull();
+    expect(formatIsoDateToDdMmYy(undefined)).toBeNull();
   });
 });

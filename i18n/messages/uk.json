@@ -313,5 +313,8 @@
     "heroSection": {
       "title": "ЖиТтєПиС ЛятОшИнсьКогО"
     }
+  },
+  "news": {
+    "publishedAtLabel": "Опубліковано:"
   }
 }

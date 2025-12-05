@@ -4,10 +4,11 @@ import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { styles } from './EventItem.styles';
 
-import { parseIsoDate } from '~/lib/utils/parseIsoDate';
+import { formatIsoDateToDdMmYy, parseIsoDate } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
@@ -25,7 +26,7 @@ export type EventItemProps = {
   date?: EventItemDate;
   statusLabel?: string;
   title: string;
-  publishedAtLabel: string;
+  publishedAt: string;
   description: string;
   image: { src: string; alt: string };
   href: string;
@@ -62,13 +63,15 @@ const EventItem = ({
   date,
   statusLabel,
   title,
-  publishedAtLabel,
+  publishedAt,
   description,
   image,
   href,
   actions,
   sx
 }: Readonly<EventItemProps>) => {
+  const t = useTranslations('news');
+
   const hasStatus = Boolean(statusLabel);
   const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date) : null;
   const startDateTime = date?.startDate ?? '';
@@ -79,6 +82,7 @@ const EventItem = ({
   const secondaryAction = actions?.[1];
 
   const rootSx: SxProps<Theme> = [styles.root, ...sxToArray(sx)];
+  const formattedPublishedAt = formatIsoDateToDdMmYy(publishedAt) ?? publishedAt;
 
   return (
     <Box component="article" sx={rootSx} data-testid="EventItem-root">
@@ -119,8 +123,8 @@ const EventItem = ({
           {title}
         </Typography>
 
-        <Typography component="p" sx={styles.publishedAt}>
-          {publishedAtLabel}
+        <Typography component="p" sx={styles.publishedAt} data-testid="EventItem-publishedAt">
+          {t('publishedAtLabel')} {formattedPublishedAt}
         </Typography>
 
         <Typography component="p" sx={styles.description}>
