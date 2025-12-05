@@ -7,8 +7,24 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 
-jest.mock('~/components/copy-button/CopyButton', () => ({
-  CopyButton: ({ hint }: { hint: string }) => <button aria-label="Copy content">{hint}</button>
+jest.mock('~/ds-components/copy-link/CopyLink', () => ({
+  __esModule: true,
+  default: ({ value, hint }: { value: string; hint?: string }) => {
+    const handleClick = () => {
+      navigator.clipboard.writeText(value);
+    };
+    return (
+      <div aria-disabled="false" onClick={handleClick} data-testid="mock-copy-link">
+        <span>{value}</span>
+        <button aria-label="Copy content">{hint}</button>
+      </div>
+    );
+  }
+}));
+
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="colored-svg" />
 }));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({

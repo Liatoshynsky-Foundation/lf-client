@@ -6,6 +6,38 @@ import ContactsInfo from './ContactsInfo';
 
 import type { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
+}));
+
+const mockIsMobile = false;
+
+jest.mock('~/ds-components/copy-link/CopyLink', () => ({
+  __esModule: true,
+  default: ({ value, hrefType, disabled }: { value: string | number; hrefType?: string; disabled?: boolean }) => {
+    const handleClick = () => {
+      if (!disabled && !mockIsMobile) {
+        navigator.clipboard.writeText(String(value));
+      }
+    };
+
+    if (mockIsMobile && hrefType) {
+      const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
+      return (
+        <a href={href} data-testid="mock-copy-link">
+          {value}
+        </a>
+      );
+    }
+
+    return (
+      <div aria-disabled={disabled ? 'true' : 'false'} onClick={handleClick} data-testid="mock-copy-link">
+        <span>{value}</span>
+      </div>
+    );
+  }
+}));
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) =>
     ({

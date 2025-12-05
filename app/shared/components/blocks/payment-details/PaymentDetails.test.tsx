@@ -10,6 +10,20 @@ jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => (
   default: ({ buttons }: { buttons: React.ReactNode[] }) => <div data-testid="mock-button-group">{buttons}</div>
 }));
 
+jest.mock('../../design-system/all-components/copy-link/CopyLink', () => ({
+  __esModule: true,
+  default: ({ value }: { value: string | number; hint?: string }) => {
+    const handleClick = () => {
+      navigator.clipboard.writeText(String(value));
+    };
+    return (
+      <div aria-disabled="false" onClick={handleClick} data-testid="mock-copy-link">
+        <span>{value}</span>
+      </div>
+    );
+  }
+}));
+
 jest.mock('../../svg-image/SvgImage', () => ({
   SvgImage: (props: React.ComponentProps<'img'>) => <img data-testid="svg-image" {...props} alt="content copy icon" />
 }));
@@ -94,12 +108,16 @@ describe('PaymentDetails', () => {
     expect(screen.getByText('UA28-E-U-R')).toBeInTheDocument();
   });
 
-  it('should copy IBAN to clipboard when CopyButton clicked', async () => {
+  it('should copy IBAN to clipboard when IBAN is clicked', async () => {
     render(<PaymentDetails />);
-    const copyBtn = screen.getByRole('button', { name: /copy content/i });
+
+    const ibanElements = screen.getAllByText('UA28-U-A-H');
+    const copyLinkContainer = ibanElements[0].closest('div[aria-disabled]');
 
     await act(async () => {
-      fireEvent.click(copyBtn);
+      if (copyLinkContainer) {
+        fireEvent.click(copyLinkContainer);
+      }
     });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-A-H');

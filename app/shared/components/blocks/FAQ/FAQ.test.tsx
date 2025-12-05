@@ -7,6 +7,34 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => jest.fn());
 
+let mockIsMobile = false;
+
+jest.mock('~/ds-components/copy-link/CopyLink', () => ({
+  __esModule: true,
+  default: ({ value, hrefType, disabled }: { value: string | number; hrefType?: string; disabled?: boolean }) => {
+    const handleClick = () => {
+      if (!disabled && !mockIsMobile) {
+        navigator.clipboard.writeText(String(value));
+      }
+    };
+
+    if (mockIsMobile && hrefType) {
+      const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
+      return (
+        <a href={href} data-testid="mock-copy-link">
+          {value}
+        </a>
+      );
+    }
+
+    return (
+      <div aria-disabled={disabled ? 'true' : 'false'} onClick={handleClick} data-testid="mock-copy-link">
+        <span>{value}</span>
+      </div>
+    );
+  }
+}));
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
@@ -62,6 +90,7 @@ const mockFaqData = {
 
 describe('FAQ component', () => {
   beforeEach(() => {
+    mockIsMobile = false;
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
     jest.spyOn(window.navigator.clipboard, 'writeText').mockResolvedValue();
     jest.spyOn(window, 'alert').mockImplementation(() => {});
@@ -85,34 +114,38 @@ describe('FAQ component', () => {
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
-  it('should copy phone when clicking CopyButton', async () => {
+  it('should copy phone when clicking CopyLink', async () => {
     render(<Faq data={mockFaqData} />);
 
-    const copyButton = screen.getAllByTestId('CopyButton')[0];
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    const phoneCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.phone);
 
     await act(async () => {
-      fireEvent.click(copyButton);
+      fireEvent.click(phoneCopyLink!);
     });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.phone);
   });
 
   it('should use tel: link when on mobile', () => {
+    mockIsMobile = true;
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
     render(<Faq data={mockFaqData} />);
     const phoneLink = screen.getByText(mockFaqData.contacts.phone);
     expect(phoneLink.closest('a')).toHaveAttribute('href', `tel:${mockFaqData.contacts.phone}`);
   });
 
-  it('should render email as mailto link on desktop', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
+  it('should render email as copyable element on desktop', () => {
     render(<Faq data={mockFaqData} />);
 
-    const emailLink = screen.getByRole('link', { name: mockFaqData.contacts.email });
-    expect(emailLink).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    const emailCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.email);
+    expect(emailCopyLink).toBeInTheDocument();
+    expect(emailCopyLink).toHaveTextContent(mockFaqData.contacts.email);
   });
 
   it('should render email as link on mobile', () => {
+    mockIsMobile = true;
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
     render(<Faq data={mockFaqData} />);
     const emailLink = screen.getByText(mockFaqData.contacts.email).closest('a');
