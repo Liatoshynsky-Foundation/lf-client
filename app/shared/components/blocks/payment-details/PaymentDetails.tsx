@@ -1,18 +1,16 @@
 'use client';
 import { Box, Button, Typography } from '@mui/material';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
+import CopyLink from '~/ds-components/copy-link/CopyLink';
 
 import { currencyList, currencyType, paymentDetails, paymentFields } from './constants';
 import { styles } from './PaymentDetails.styles';
 
-import { CopyButton } from '~/shared/components/copy-button/CopyButton';
-
 function PaymentDetails() {
   const [currency, setCurrency] = useState<currencyType>('uah');
   const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
-  const ibanRef = useRef<HTMLSpanElement>(null);
 
   return (
     <Box data-testid="PaymentDetails">
@@ -40,12 +38,7 @@ function PaymentDetails() {
             </Typography>
 
             {isIban ? (
-              <Typography component="div" variant="customSemiBold20" sx={styles.iban}>
-                <Typography component="span" variant="customSemiBold20" sx={styles.ibanText} ref={ibanRef}>
-                  {selectedPaymentDetails[key]}
-                </Typography>
-                <CopyButton targetRef={ibanRef} hint="IBAN is copied" iconSize="large" />
-              </Typography>
+              <CopyLink hint="IBAN is copied" size="large" value={selectedPaymentDetails[key]} />
             ) : (
               <Typography variant="customSemiBold20">{selectedPaymentDetails[key]}</Typography>
             )}
