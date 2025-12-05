@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete, rgbButtonColors } from '../../design-system/all-components/theme/colors';
+import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
 
 export const styles: Record<string, SxProps<Theme>> = {
   root: {

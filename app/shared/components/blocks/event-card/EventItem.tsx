@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 import { styles } from './EventItem.styles';
 
+import { parseIsoDate } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
@@ -15,43 +16,46 @@ export type EventItemDate = {
   endDate?: string;
 };
 
-export type EventItemImage = { src: string; alt: string };
-
 export type EventItemAction = {
   label: string;
   href: string;
 };
 
-export interface EventItemProps {
+export type EventItemProps = {
   date?: EventItemDate;
   statusLabel?: string;
   title: string;
   publishedAtLabel: string;
   description: string;
-  image: EventItemImage;
+  image: { src: string; alt: string };
   href: string;
-  actions?: Readonly<EventItemAction[]>;
+  actions?: ReadonlyArray<EventItemAction>;
   sx?: SxProps<Theme>;
-}
-
-const parseIsoToDayMonthYear = (iso: string) => {
-  const [year, month, day] = iso.split('-');
-
-  if (!year || !month || !day) {
-    return { dayMonth: iso, year: '' };
-  }
-
-  return { dayMonth: `${day}.${month}`, year };
 };
 
-const buildEventItemDateLabels = (date: EventItemDate) => {
-  const { dayMonth: startLabel, year } = parseIsoToDayMonthYear(date.startDate);
-  const endLabel = date.endDate ? parseIsoToDayMonthYear(date.endDate).dayMonth : undefined;
+type EventItemDateLabels = {
+  rangeLabel: string;
+  yearLabel: string;
+  ariaLabel: string;
+};
+
+const buildEventItemDateLabels = (date: EventItemDate): EventItemDateLabels | null => {
+  const start = parseIsoDate(date.startDate);
+  if (!start) return null;
+
+  const startLabel = `${start.day}.${start.month}`;
+
+  const endParsed = date.endDate ? parseIsoDate(date.endDate) : null;
+  const endLabel = endParsed ? `${endParsed.day}.${endParsed.month}` : undefined;
 
   const rangeLabel = endLabel ? `${startLabel} – ${endLabel}` : startLabel;
-  const ariaLabel = year ? `${rangeLabel} ${year}` : rangeLabel;
+  const ariaLabel = `${rangeLabel} ${start.year}`.trim();
 
-  return { rangeLabel, yearLabel: year, ariaLabel };
+  return {
+    rangeLabel,
+    yearLabel: start.year,
+    ariaLabel
+  };
 };
 
 const EventItem = ({
@@ -66,11 +70,10 @@ const EventItem = ({
   sx
 }: Readonly<EventItemProps>) => {
   const hasStatus = Boolean(statusLabel);
-  const hasDate = Boolean(date?.startDate);
+  const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date) : null;
+  const startDateTime = date?.startDate ?? '';
 
-  const dateLabels = hasDate && date ? buildEventItemDateLabels(date) : null;
-
-  const groupAriaLabel = hasStatus ? statusLabel : (dateLabels?.ariaLabel ?? undefined);
+  const groupAriaLabel = hasStatus ? statusLabel : dateLabels?.ariaLabel;
 
   const primaryAction = actions?.[0];
   const secondaryAction = actions?.[1];
@@ -87,14 +90,17 @@ const EventItem = ({
             </Typography>
           )}
 
-          {!hasStatus && hasDate && dateLabels && (
+          {!hasStatus && dateLabels && (
             <>
               <Typography component="p" sx={styles.dateRange} data-testid="EventItem-dateRange">
-                <time dateTime={date!.startDate}>{dateLabels.rangeLabel}</time>
+                <time dateTime={startDateTime}>{dateLabels.rangeLabel}</time>
               </Typography>
-              <Typography component="span" sx={styles.yearLabel} data-testid="EventItem-year">
-                <time dateTime={date!.startDate}>{dateLabels.yearLabel}</time>
-              </Typography>
+
+              {dateLabels.yearLabel && (
+                <Typography component="span" sx={styles.yearLabel} data-testid="EventItem-year">
+                  <time dateTime={startDateTime}>{dateLabels.yearLabel}</time>
+                </Typography>
+              )}
             </>
           )}
         </Box>

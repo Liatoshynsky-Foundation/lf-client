@@ -7,6 +7,27 @@ import { MOCK_EVENT_ITEMS } from './EventItem.fixture';
 describe('EventItem', () => {
   const { props: baseProps } = MOCK_EVENT_ITEMS[0];
 
+  const assertTwoTimeElementsWithDate = (expectedDate: string) => {
+    const dateBlock = screen.getByTestId('EventItem-dateBlock');
+    expect(dateBlock).toBeInTheDocument();
+
+    const timeElements = dateBlock.querySelectorAll('time');
+    expect(timeElements).toHaveLength(2);
+    timeElements.forEach((element) => {
+      expect(element).toHaveAttribute('dateTime', expectedDate);
+    });
+
+    return dateBlock;
+  };
+
+  const expectNoStatusOrDates = (dateBlock: HTMLElement) => {
+    expect(screen.queryByTestId('EventItem-status')).toBeNull();
+    expect(screen.queryByTestId('EventItem-dateRange')).toBeNull();
+    expect(screen.queryByTestId('EventItem-year')).toBeNull();
+    expect(dateBlock.querySelectorAll('time')).toHaveLength(0);
+    expect(dateBlock).not.toHaveAttribute('aria-label');
+  };
+
   it('renders main content for an active event with a date range', () => {
     render(<EventItem {...baseProps} />);
 
@@ -22,16 +43,58 @@ describe('EventItem', () => {
     expect(screen.getByText(baseProps.publishedAtLabel)).toBeInTheDocument();
     expect(screen.getByText(baseProps.description)).toBeInTheDocument();
 
-    const dateBlock = screen.getByTestId('EventItem-dateBlock');
-    expect(dateBlock).toBeInTheDocument();
-
-    const timeElements = dateBlock.querySelectorAll('time');
-    expect(timeElements).toHaveLength(2);
-    timeElements.forEach((element) => {
-      expect(element).toHaveAttribute('dateTime', baseProps.date!.startDate);
-    });
-
     expect(screen.getByAltText(baseProps.image.alt)).toBeInTheDocument();
+  });
+
+  it('renders a multi-day date range in the correct format', () => {
+    const props: EventItemProps = {
+      ...baseProps,
+      statusLabel: undefined,
+      date: {
+        startDate: '2025-02-29',
+        endDate: '2025-03-01'
+      }
+    };
+
+    render(<EventItem {...props} />);
+
+    const dateBlock = assertTwoTimeElementsWithDate('2025-02-29');
+
+    expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent('29.02 – 01.03');
+    expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2025');
+    expect(dateBlock).toHaveAttribute('aria-label', '29.02 – 01.03 2025');
+  });
+
+  it('renders a single-day date correctly when endDate is not provided', () => {
+    const props: EventItemProps = {
+      ...baseProps,
+      statusLabel: undefined,
+      date: {
+        startDate: '2024-03-05'
+      }
+    };
+
+    render(<EventItem {...props} />);
+
+    const dateBlock = assertTwoTimeElementsWithDate('2024-03-05');
+
+    expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent('05.03');
+    expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2024');
+    expect(dateBlock).toHaveAttribute('aria-label', '05.03 2024');
+  });
+
+  it('renders no date or status when neither is provided', () => {
+    const props: EventItemProps = {
+      ...baseProps,
+      date: undefined,
+      statusLabel: undefined
+    };
+
+    render(<EventItem {...props} />);
+
+    const dateBlock = screen.getByTestId('EventItem-dateBlock');
+
+    expectNoStatusOrDates(dateBlock);
   });
 
   it('wraps the image in a link pointing to href', () => {
@@ -87,49 +150,49 @@ describe('EventItem', () => {
     expect(screen.queryByTestId('EventItem-secondaryCta')).toBeNull();
   });
 
-  it('renders a single-day date correctly when endDate is not provided', () => {
-    const singleDayProps: EventItemProps = {
-      ...baseProps,
-      date: {
-        startDate: '2024-03-05'
-      }
-    };
-
-    render(<EventItem {...singleDayProps} />);
-
-    const dateBlock = screen.getByTestId('EventItem-dateBlock');
-    expect(dateBlock).toBeInTheDocument();
-
-    const timeElements = dateBlock.querySelectorAll('time');
-    expect(timeElements).toHaveLength(2);
-    timeElements.forEach((element) => {
-      expect(element).toHaveAttribute('dateTime', '2024-03-05');
-    });
-  });
-
   it('renders status instead of date when statusLabel is provided', () => {
     const statusProps: EventItemProps = {
       ...baseProps,
-      date: undefined,
+      date: {
+        startDate: '2024-03-05',
+        endDate: '2024-03-06'
+      },
       statusLabel: 'Завершена подія'
     };
 
     render(<EventItem {...statusProps} />);
 
-    const leftBlock = screen.getByTestId('EventItem-left');
-    expect(leftBlock).toBeInTheDocument();
+    const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expect(screen.getByTestId('EventItem-status')).toHaveTextContent('Завершена подія');
 
-    const timeElements = screen.getByTestId('EventItem-dateBlock').querySelectorAll('time');
-    expect(timeElements).toHaveLength(0);
+    expect(dateBlock.querySelectorAll('time')).toHaveLength(0);
+    expect(screen.queryByTestId('EventItem-dateRange')).toBeNull();
+    expect(screen.queryByTestId('EventItem-year')).toBeNull();
+
+    expect(dateBlock).toHaveAttribute('aria-label', 'Завершена подія');
   });
 
   it('does not make the left date/status block clickable', () => {
     render(<EventItem {...baseProps} />);
 
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
-
     expect(dateBlock.querySelector('a')).toBeNull();
+  });
+
+  it('does not render dates when startDate is invalid ISO', () => {
+    const props: EventItemProps = {
+      ...baseProps,
+      statusLabel: undefined,
+      date: {
+        startDate: 'not-a-date'
+      }
+    };
+
+    render(<EventItem {...props} />);
+
+    const dateBlock = screen.getByTestId('EventItem-dateBlock');
+
+    expectNoStatusOrDates(dateBlock);
   });
 });

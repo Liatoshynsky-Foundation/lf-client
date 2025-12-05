@@ -1,10 +1,11 @@
+import { Typography } from '@mui/material';
+import React from 'react';
+
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
-import EventItem from '~/shared/components/blocks/event-card/EventItem';
-import { MOCK_EVENT_ITEMS } from '~/shared/components/blocks/event-card/EventItem.fixture';
 
 const News = () => {
   if (isProductionMode()) {
@@ -12,10 +13,8 @@ const News = () => {
   }
 
   return (
-    <MainLayout withLines>
-      {MOCK_EVENT_ITEMS.map(({ id, props }) => (
-        <EventItem key={id} {...props} />
-      ))}
+    <MainLayout>
+      <Typography variant="h1">News</Typography>
     </MainLayout>
   );
 };
