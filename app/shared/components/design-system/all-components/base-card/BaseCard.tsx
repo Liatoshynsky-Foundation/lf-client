@@ -2,6 +2,7 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import Button from '~/ds-components/button/Button';
 
@@ -21,10 +22,10 @@ export interface BaseCardProps {
   dataTestId?: string;
 }
 
-const BUTTON_CONFIG: Record<Variant, { label: string; showIcon: boolean }> = {
-  news: { label: 'Переглянути', showIcon: false },
-  press: { label: 'Перейти', showIcon: true }
-};
+const BUTTON_CONFIG = {
+  news: { showIcon: false },
+  press: { showIcon: true }
+} as const;
 
 export default function BaseCard({
   image,
@@ -35,6 +36,7 @@ export default function BaseCard({
   variant,
   dataTestId = 'BaseCard'
 }: Readonly<BaseCardProps>) {
+  const t = useTranslations('news');
   const buttonConfig = BUTTON_CONFIG[variant];
 
   return (
@@ -50,7 +52,7 @@ export default function BaseCard({
           </Typography>
 
           <Typography sx={styles.date} data-testid={`${dataTestId}-date`}>
-            Опубліковано: {publicationDate}
+            {t('publishedAtLabel')} {publicationDate}
           </Typography>
 
           <Typography sx={styles.description} data-testid={`${dataTestId}-description`}>
@@ -70,7 +72,7 @@ export default function BaseCard({
               }
               data-testid={`${dataTestId}-button`}
             >
-              {buttonConfig.label}
+              {variant === 'news' ? t('viewButton') : t('goToButton')}
             </Button>
           </Box>
         </Box>

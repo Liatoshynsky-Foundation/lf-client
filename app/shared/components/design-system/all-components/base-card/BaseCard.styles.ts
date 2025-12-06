@@ -45,8 +45,8 @@ export const styles = {
   content: {
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '8px', sm: '5px', md: '8px', lg: '12px' },
-    marginTop: { xs: '25px', sm: '22px', md: '26px', lg: '23px' },
+    gap: { xs: '8px', sm: '5px', md: '8px' },
+    marginTop: { xs: '25px', sm: '22px', md: '26px', lg: '25px', xl: '23px' },
     flex: 1
   },
 
@@ -59,7 +59,7 @@ export const styles = {
     color: mainHexPallete.black,
     ...ellipsisStyles,
     WebkitLineClamp: 2,
-    marginBottom: { sm: '6px', md: '8px', lg: '6px' }
+    marginBottom: { sm: '6px', md: '8px', lg: '9px', xxl: '6px' }
   },
 
   date: {
@@ -73,7 +73,7 @@ export const styles = {
     color: mainHexPallete.black,
     ...ellipsisStyles,
     WebkitLineClamp: 3,
-    marginBottom: { xs: '8px', sm: '11px', md: '9px', lg: '4px' }
+    marginBottom: { xs: '8px', sm: '11px', md: '9px', lg: '8px', xl: '10px' }
   },
 
   buttonWrapper: {
