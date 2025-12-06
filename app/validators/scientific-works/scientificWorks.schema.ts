@@ -1,6 +1,7 @@
 import z from 'zod';
 
 import { mongoObjectIdSchema, translatedFieldSchema } from '../constants';
+import { AuthorDb } from '~/types/types/scientificWorks.types';
 
 export const authorSchema = z.object({
   _id: mongoObjectIdSchema,
@@ -22,7 +23,7 @@ export const scientificWorkTableReadySchema = (localizedSchema: z.ZodSchema) =>
   localizedSchema.transform((w) => ({
     id: w._id,
     title: w.title,
-    authors: w.authors.map((a: any) => `${a.name} ${a.surname}`),
+    authors: w.authors.map((a: AuthorDb) => `${a.name} ${a.surname}`),
     sortableYear: w.startYear,
     year: w.endYear ? `${w.startYear}-${w.endYear}` : w.startYear,
     url: w.url,

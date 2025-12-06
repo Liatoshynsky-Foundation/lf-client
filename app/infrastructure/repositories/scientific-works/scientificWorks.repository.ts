@@ -4,21 +4,27 @@ import { ScientificWorks } from '~/infrastructure/models/scientific-works/scient
 import { searchHelper } from '~/lib/utils/searchAndFiltersHelpers';
 import {
   authorsSchema,
-  scientificWorkSchema,
-  scientificWorkTitleSchema
+  scientificWorksSchema,
+  scientificWorkTitlesSchema
 } from '~/validators/scientific-works/scientificWorks.schema';
 
 const scientificWorksRepository = {
-  async getAllAuthors() {
+  async getAllAuthors(fields?: string[]) {
     await dbConnect();
-    const authors = await ScientificWorksAuthor.find().lean();
-    return authorsSchema.parse(authors);
+
+    const query = ScientificWorksAuthor.find();
+
+    if (fields?.length) {
+      query.select(fields.join(' '));
+    }
+
+    return authorsSchema.parse(await query.lean());
   },
 
   async getAllScientificTitles() {
     await dbConnect();
     const titles = await ScientificWorks.find().select({ _id: 1, title: 1 }).lean();
-    return titles.map((t) => scientificWorkTitleSchema.parse(t));
+    return scientificWorkTitlesSchema.parse(titles);
   },
 
   async getScientificWorksYearRange() {
@@ -85,7 +91,7 @@ const scientificWorksRepository = {
 
     if (!works || works.length === 0) return [];
 
-    return works.map((w) => scientificWorkSchema.parse(w));
+    return scientificWorksSchema.parse(works);
   }
 };
 

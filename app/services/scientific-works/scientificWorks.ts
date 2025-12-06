@@ -13,13 +13,13 @@ export const createScientificWorksService = ({
   scientificWorksRepo: ScientificWorksRepository;
 }) => ({
   async getAllAuthors(locale: Locale) {
-    const authors = await scientificWorksRepo.getAllAuthors();
+    const authors = await scientificWorksRepo.getAllAuthors(['name', 'surname']);
 
-    const normalized = authors.map((a) => ({
-      key: a._id.toString(),
+    const normalized = authors.map(({ _id, surname, name }) => ({
+      key: _id.toString(),
       name: {
-        uk: `${a.surname.uk} ${a.name.uk}`,
-        en: `${a.surname.en} ${a.name.en}`
+        uk: `${surname.uk} ${name.uk}`,
+        en: `${surname.en} ${name.en}`
       }
     }));
 
@@ -37,20 +37,32 @@ export const createScientificWorksService = ({
   },
 
   async getAllScientificWorks(locale: Locale, filters: WorkTableFilters) {
+    const { author, yearFrom, yearTo, search } = filters;
+
+    const years: [number, number] | undefined = yearFrom != null && yearTo != null ? [yearFrom, yearTo] : undefined;
+
     const works = await scientificWorksRepo.getAllScientificWorks({
-      author: filters.author,
-      years: filters.yearFrom != null && filters.yearTo != null ? [filters.yearFrom, filters.yearTo] : undefined,
-      search: filters.search
+      author,
+      years,
+      search
     });
 
-    return works.map((w) => ({
-      id: w._id.toString(),
-      name: w.title[locale],
-      author: w.authors.map((a) => `${a.surname[locale]} ${a.name[locale]}`).join(', '),
-      sortableYear: w.startYear,
-      year: w.endYear ? `${w.startYear}-${w.endYear}` : String(w.startYear),
-      url: w.url,
-      isPreview: w.isPreview
-    }));
+    return works.map((work) => {
+      const { _id, title, authors, startYear, endYear, url, isPreview } = work;
+
+      const localizedTitle = title[locale];
+
+      const localizedAuthors = authors.map(({ name, surname }) => `${surname[locale]} ${name[locale]}`).join(', ');
+
+      return {
+        id: _id.toString(),
+        name: localizedTitle,
+        author: localizedAuthors,
+        sortableYear: startYear,
+        year: endYear ? `${startYear}-${endYear}` : String(startYear),
+        url,
+        isPreview
+      };
+    });
   }
 });

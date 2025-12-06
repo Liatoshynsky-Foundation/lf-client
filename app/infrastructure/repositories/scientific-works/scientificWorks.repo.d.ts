@@ -3,7 +3,7 @@ import { AuthorDb, ScientificWorkDb, ScientificWorkTitleDb } from '~/types/types
 export type YearRange = { minYear: number; maxYear: number };
 
 export interface ScientificWorksRepository {
-  getAllAuthors(): Promise<AuthorDb[]>;
+  getAllAuthors(fields?: string[]): Promise<AuthorDb[]>;
   getAllScientificTitles(): Promise<ScientificWorkTitleDb[]>;
   getScientificWorksYearRange(): Promise<YearRange>;
   getAllScientificWorks(params: {
