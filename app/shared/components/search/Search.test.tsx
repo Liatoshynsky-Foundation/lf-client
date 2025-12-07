@@ -29,14 +29,7 @@ describe('Search', () => {
 
   const renderSearch = (opts = options, initialSearch = '') => {
     const setSearch = jest.fn();
-    render(
-      <Search<{ _id: string; title: string }>
-        search={initialSearch}
-        setSearch={setSearch}
-        options={opts}
-        setFilterParams={jest.fn()}
-      />
-    );
+    render(<Search<{ _id: string; title: string }> search={initialSearch} setSearch={setSearch} options={opts} />);
     const input = screen.getByRole('combobox');
     const searchIcon = screen.queryByAltText('search');
     return { setSearch, input, searchIcon };
@@ -53,14 +46,35 @@ describe('Search', () => {
     });
   });
 
-  it('should call setSearch on input change', async () => {
+  it('should NOT call setSearch on input change', async () => {
     const { setSearch, input } = renderSearch();
-    input.focus();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
+
+    await waitFor(() => {
+      expect(setSearch).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should call setSearch when Enter is pressed', async () => {
+    const { setSearch, input } = renderSearch();
+    fireEvent.change(input, { target: { value: 'Bohemian' } });
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
 
     await waitFor(() => {
       expect(setSearch).toHaveBeenCalledWith('Bohemian');
     });
+  });
+
+  it('should call setSearch when option is selected', async () => {
+    const { setSearch, input } = renderSearch();
+    input.focus();
+    fireEvent.change(input, { target: { value: 'Test' } });
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByText('Test Song'));
+    });
+
+    expect(setSearch).toHaveBeenCalledWith('Test Song');
   });
 
   it('should display no options text when no results', async () => {
