@@ -1,56 +1,97 @@
-import { Types } from 'mongoose';
-
 import dbConnect from '~/infrastructure/db/connect';
 import { ScientificWorksAuthor } from '~/infrastructure/models/scientific-works/scientificWorksAuthor';
 import { ScientificWorks } from '~/infrastructure/models/scientific-works/scientificWorksTableData';
-import { authorsSchema, scientificWorksSchema } from '~/validators/scientific-works/scientificWorks.schema';
+import { searchHelper } from '~/lib/utils/searchAndFiltersHelpers';
+import {
+  authorsSchema,
+  scientificWorksSchema,
+  scientificWorkTitlesSchema
+} from '~/validators/scientific-works/scientificWorks.schema';
 
-export type GetAllScientificWorksParams = {
-  years?: number[];
-  authorIds?: string[];
-  title?: string;
-};
-
-export const scientificWorksRepository = {
-  async getAllAuthors() {
+const scientificWorksRepository = {
+  async getAllAuthors(fields?: string[]) {
     await dbConnect();
 
-    const authors = await ScientificWorksAuthor.find().lean();
-    return authorsSchema.parse(authors);
+    const query = ScientificWorksAuthor.find();
+
+    if (fields?.length) {
+      query.select(fields.join(' '));
+    }
+
+    return authorsSchema.parse(await query.lean());
   },
 
-  async getAllScientificWorks(params: GetAllScientificWorksParams = {}) {
+  async getAllScientificTitles() {
+    await dbConnect();
+    const titles = await ScientificWorks.find().select({ _id: 1, title: 1 }).lean();
+    return scientificWorkTitlesSchema.parse(titles);
+  },
+
+  async getScientificWorksYearRange() {
     await dbConnect();
 
-    const { years, authorIds, title } = params;
-    const filter: Record<string, unknown> = {};
-
-    if (years && years.length > 0) {
-      const [minUserYear, maxUserYear] = years;
-
-      filter.$and = [
-        { startYear: { $lte: maxUserYear } },
-        {
-          $or: [{ endYear: { $gte: minUserYear } }, { $and: [{ endYear: null }, { startYear: { $gte: minUserYear } }] }]
+    const agg = await ScientificWorks.aggregate([
+      { $match: { startYear: { $exists: true, $ne: null } } },
+      {
+        $group: {
+          _id: null,
+          minYear: { $min: '$startYear' },
+          maxYear: { $max: '$startYear' }
         }
-      ];
+      }
+    ]);
+
+    const row = agg?.[0];
+    const now = new Date().getFullYear();
+
+    return {
+      minYear: row?.minYear ?? 1900,
+      maxYear: row?.maxYear ?? now
+    };
+  },
+
+  async getAllScientificWorks({
+    author,
+    years,
+    search = ''
+  }: {
+    author?: string[];
+    years?: [number, number];
+    search?: string;
+  }) {
+    await dbConnect();
+
+    const conditions: Record<string, unknown>[] = [];
+
+    if (search) {
+      const pattern = searchHelper(search);
+      conditions.push({
+        $or: [{ 'title.uk': { $regex: pattern, $options: 'i' } }, { 'title.en': { $regex: pattern, $options: 'i' } }]
+      });
     }
 
-    if (authorIds && authorIds.length > 0) {
-      filter.authors = {
-        $in: authorIds.filter((id) => Types.ObjectId.isValid(id)).map((id) => new Types.ObjectId(id))
-      };
+    if (author?.length) {
+      conditions.push({ authors: { $in: author } });
     }
 
-    if (title && title.trim() !== '') {
-      filter.title = {
-        $regex: title.trim(),
-        $options: 'i'
-      };
+    if (years) {
+      const [min, max] = years;
+      conditions.push({ startYear: { $gte: min, $lte: max } });
     }
 
-    const scientificWorks = await ScientificWorks.find(filter).populate('authors').lean();
-    return scientificWorksSchema.parse(scientificWorks);
+    let query = {};
+
+    if (conditions.length === 1) {
+      query = conditions[0];
+    } else if (conditions.length > 1) {
+      query = { $and: conditions };
+    }
+
+    const works = await ScientificWorks.find(query).populate('authors').lean();
+
+    if (!works || works.length === 0) return [];
+
+    return scientificWorksSchema.parse(works);
   }
 };
 

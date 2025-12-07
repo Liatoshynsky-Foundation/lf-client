@@ -1,219 +1,195 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-const workTableMock = [
-  { id: '1', name: 'Work 1', actionType: 'pdf', isPreview: true, url: null },
-  { id: '2', name: 'Work 2', actionType: 'url', isPreview: false, url: 'http://example.com/work2' }
+import { WorkTableSection } from './WorkTableSelection';
+
+import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
+
+const tableMock = [
+  { id: '1', name: 'Work 1', author: 'A', sortableYear: 2000, year: 2000 },
+  { id: '2', name: 'Work 2', author: 'B', sortableYear: 1980, year: 1980 }
 ];
+
+const staticFiltersData = {
+  authors: [{ key: 'a1', name: 'Author1' }],
+  titles: [{ title: 'Some title' }],
+  yearRange: { minYear: 1900, maxYear: 2024 }
+};
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 
 jest.mock('~/i18n/navigation', () => ({
-  Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
+  Link: ({ children, href = '#' }: any) => <a href={href}>{children}</a>,
+  useRouter: () => ({ push: jest.fn() }),
+  usePathname: () => '/',
+  useLocale: () => 'en'
 }));
 
-const mockUseBreakpoints = jest.fn().mockReturnValue({
-  isMobile: false,
-  isTablet: false,
-  isLaptop: true,
-  isDesktop: true,
-  isLaptopAndAbove: true
-});
+jest.mock('~/i18n/routing', () => ({
+  defineRouting: () => ({})
+}));
+
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
   __esModule: true,
-  default: () => mockUseBreakpoints()
+  default: () => ({
+    isMobile: false,
+    isTablet: false,
+    isLaptop: true,
+    isDesktop: true,
+    isLaptopAndAbove: true
+  })
 }));
 
-type RowLike = { id?: string; _id?: string; title?: string; name?: string; isPreview?: boolean; url?: string | null };
+jest.mock('~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters', () => ({
+  useFetchStaticFilters: jest.fn()
+}));
 
-type EnhancedTableProps = {
-  data?: RowLike[];
-  tableName?: string;
-  Filters?: React.ReactNode;
-};
+const setParam = jest.fn();
+const debouncedSetParam = jest.fn();
+const resetFilters = jest.fn();
 
-jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
-  const EnhancedTable = ({ data = [], tableName, Filters }: EnhancedTableProps) => {
+jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
+  useTableFilters: () => ({
+    params: {
+      search: '',
+      author: [],
+      yearFrom: null,
+      yearTo: null
+    },
+    setParam,
+    debouncedSetParam,
+    resetFilters
+  })
+}));
+
+jest.mock('~/shared/hooks/use-table-data/useTableData', () => ({
+  useTableData: () => ({
+    data: tableMock,
+    isLoading: false
+  })
+}));
+
+jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => ({
+  __esModule: true,
+  EnhancedTable: ({ data, tableName, Filters, Search }: any) => {
+    const FiltersRendered = typeof Filters === 'function' ? <Filters /> : Filters;
+    const SearchRendered = typeof Search === 'function' ? <Search /> : Search;
+
     return (
       <div data-testid="enhanced-table">
-        {tableName && <div data-testid="table-name">{tableName}</div>}
-        {Filters && <div data-testid="filters-prop">{Filters}</div>}
-        {Array.isArray(data) &&
-          data.map((item) => (
-            <div key={(item._id ?? item.id) as string} data-testid="row">
-              {item.title ?? item.name}
-              {item.isPreview && <button>Preview</button>}
-              {item.url && <a href={item.url}>Visit</a>}
-            </div>
-          ))}
-        <button aria-label="Go to next page">Next</button>
+        <div data-testid="table-name">{tableName}</div>
+        <div data-testid="search-prop">{SearchRendered}</div>
+        <div data-testid="filters-prop">{FiltersRendered}</div>
+
+        {data.map((r: any) => (
+          <div key={r.id} data-testid="row">
+            {r.name}
+          </div>
+        ))}
       </div>
     );
-  };
-  return { __esModule: true, EnhancedTable };
-});
+  }
+}));
 
-jest.mock('~/ds-components/selector/FilterSelect', () => ({
-  FilterSelect: ({ label, onAdd, onRemove, defaultValues = [] }: any) => (
-    <div data-testid={`FilterSelect-${label}`}>
-      <button data-testid={'mock-apply-author-filter'} onClick={() => onAdd(null, null, ['1'])}>
-        add
+jest.mock('~/shared/components/design-system/all-components/table-filters/TableFilters', () => ({
+  TableFilters: ({ filters, onClearAllFilters }: any) => (
+    <div data-testid="table-filters">
+      {filters?.map((f: any) => (
+        <div key={f.id} data-testid={`filter-${f.id}`}>
+          {f.element}
+        </div>
+      ))}
+      <button data-testid="clear-all" onClick={onClearAllFilters}>
+        clear
       </button>
-      <button data-testid={'mock-clear-filters'} onClick={() => onRemove(null, null, [])}>
-        remove
-      </button>
-      <span>{defaultValues.join(',')}</span>
     </div>
   )
 }));
 
-jest.mock('~/shared/components/design-system/all-components/tooltip/Tooltip', () => ({
-  __esModule: true,
-  default: ({ children }: any) => <>{children}</>
+jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () => ({
+  YearNumericFilter: ({
+    minYear,
+    maxYear,
+    onChangeCommitted
+  }: {
+    minYear: number;
+    maxYear: number;
+    onChangeCommitted: (v: [number, number]) => void;
+  }) => (
+    <div data-testid="year-filter">
+      <span data-testid="min-year">{minYear}</span>
+      <span data-testid="max-year">{maxYear}</span>
+
+      <button data-testid="commit-year" onClick={() => onChangeCommitted([1995, 2005])}>
+        commit-year
+      </button>
+    </div>
+  )
 }));
 
-jest.mock('~/public/icons/trash-2.svg', () => ({
-  __esModule: true,
-  default: () => <svg data-testid="delete-icon" />
+jest.mock('~/shared/components/design-system/all-components/selector/FilterSelect', () => ({
+  FilterSelect: ({ label, onAdd }: { label: string; onAdd: (v: any, l: any, all: string[]) => void }) => (
+    <button data-testid={`add-${label}`} onClick={() => onAdd(null, null, ['a1'])}>
+      add-{label}
+    </button>
+  )
 }));
-
-import { WorkTableSection } from './WorkTableSelection';
 
 describe('WorkTableSection', () => {
-  let originalFetch: typeof fetch;
-
   beforeEach(() => {
     jest.clearAllMocks();
-
-    originalFetch = globalThis.fetch;
-
-    globalThis.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => [{ _id: '1', name: 'John', surname: 'Doe' }]
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () =>
-          workTableMock.map((w) => ({
-            _id: w.id,
-            title: w.name,
-            authors: [{ name: 'John', surname: 'Doe' }],
-            startYear: 2000,
-            endYear: null,
-            url: w.url,
-            isPreview: w.isPreview
-          }))
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () =>
-          workTableMock
-            .filter((w) => w.id === '1')
-            .map((w) => ({
-              _id: w.id,
-              title: w.name,
-              authors: [{ name: 'John', surname: 'Doe' }],
-              startYear: 2000,
-              endYear: null,
-              url: w.url,
-              isPreview: w.isPreview
-            }))
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () =>
-          workTableMock.map((w) => ({
-            _id: w.id,
-            title: w.name,
-            authors: [{ name: 'John', surname: 'Doe' }],
-            startYear: 2000,
-            endYear: null,
-            url: w.url,
-            isPreview: w.isPreview
-          }))
-      } as Response) as unknown as typeof fetch;
+    (useFetchStaticFilters as jest.Mock).mockReturnValue({
+      data: staticFiltersData,
+      isLoading: false
+    });
   });
 
-  afterEach(() => {
-    globalThis.fetch = originalFetch;
-  });
+  it('renders table + search + filters', () => {
+    render(<WorkTableSection />);
 
-  it('should render correct number of rows', async () => {
-    render(<WorkTableSection lang="en" />);
-    const rows = await screen.findAllByTestId('row');
-    expect(rows.length).toBe(workTableMock.length);
-  });
-
-  it('should render pagination button', async () => {
-    render(<WorkTableSection lang="en" />);
-    expect(await screen.findByLabelText('Go to next page')).toBeInTheDocument();
-  });
-
-  it('should render table name and filters', async () => {
-    render(<WorkTableSection lang="en" />);
-    expect(await screen.findByTestId('enhanced-table')).toBeInTheDocument();
+    expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
+    expect(screen.getByTestId('search-prop')).toBeInTheDocument();
     expect(screen.getByTestId('filters-prop')).toBeInTheDocument();
-    expect(screen.getByTestId('table-name')).toHaveTextContent('name');
   });
 
-  it('should render action buttons correctly', async () => {
-    render(<WorkTableSection lang="en" />);
-
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: 'Visit' })).toBeInTheDocument();
-    });
-
-    const visitLink = screen.getByRole('link', { name: 'Visit' });
-    expect(visitLink).toHaveAttribute('href', 'http://example.com/work2');
+  it('renders rows', () => {
+    render(<WorkTableSection />);
+    expect(screen.getAllByTestId('row').length).toBe(2);
   });
 
-  it('should request filtered data when author filter is applied', async () => {
-    render(<WorkTableSection lang="en" />);
+  it('year filter commit triggers setParam twice', () => {
+    render(<WorkTableSection />);
 
-    await screen.findAllByTestId('row');
+    fireEvent.click(screen.getByTestId('commit-year'));
 
-    fireEvent.click(screen.getByTestId('mock-apply-author-filter'));
-
-    await waitFor(() => {
-      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(3);
-    });
-
-    const lastCallArg = (globalThis.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
-    expect(lastCallArg).toContain('/api/scientific-works');
-    expect(lastCallArg).toContain('authorIds=1');
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('row')).toHaveLength(1);
-    });
+    expect(setParam).toHaveBeenCalledWith('yearFrom', 1995);
+    expect(setParam).toHaveBeenCalledWith('yearTo', 2005);
   });
 
-  it('should request unfiltered data after clearing filters', async () => {
-    render(<WorkTableSection lang="en" />);
+  it('clear all triggers resetFilters', () => {
+    render(<WorkTableSection />);
+    fireEvent.click(screen.getByTestId('clear-all'));
 
-    await screen.findAllByTestId('row');
-    fireEvent.click(screen.getByTestId('mock-apply-author-filter'));
+    expect(resetFilters).toHaveBeenCalled();
+  });
 
-    await waitFor(() => {
-      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(3);
+  it('year filter uses provided values', () => {
+    render(<WorkTableSection />);
+
+    expect(screen.getByTestId('min-year')).toHaveTextContent('1900');
+    expect(screen.getByTestId('max-year')).toHaveTextContent('2024');
+  });
+
+  it('year filter defaults when static yearRange missing', () => {
+    (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({
+      data: { ...staticFiltersData, yearRange: undefined }
     });
 
-    fireEvent.click(screen.getByTestId('mock-clear-filters'));
+    render(<WorkTableSection />);
 
-    await waitFor(() => {
-      expect((globalThis.fetch as jest.Mock).mock.calls.length).toBe(4);
-    });
-
-    const lastCallArg = (globalThis.fetch as jest.Mock).mock.calls.at(-1)?.[0] as string;
-    expect(lastCallArg).toContain('/api/scientific-works');
-    expect(lastCallArg).not.toContain('authorIds=');
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('row')).toHaveLength(workTableMock.length);
-    });
+    expect(screen.getByTestId('min-year')).toHaveTextContent('1900');
+    expect(screen.getByTestId('max-year')).toHaveTextContent(new Date().getFullYear().toString());
   });
 });
