@@ -11,7 +11,6 @@ describe('baseService.request', () => {
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
     jest.useRealTimers();
     global.fetch = originalFetch;
     jest.clearAllMocks();
@@ -84,6 +83,7 @@ describe('baseService.request', () => {
     });
 
     jest.advanceTimersByTime(200);
+
     await expect(promise).rejects.toEqual(new ResponseError(errors.REQUEST_TIMEOUT));
   });
 
