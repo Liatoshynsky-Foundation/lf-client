@@ -53,6 +53,13 @@ function CopyLink({
       setIsCopied(false);
     }
   };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleCopy();
+    }
+  };
   const variant = size === 'small' || size === 'medium' ? 'customSemiBold16' : 'customSemiBold20';
   const iconSize = iconSizes[size];
   const copyLinkStyles = getCopyLinkStyles(type);
@@ -97,6 +104,9 @@ function CopyLink({
       component="div"
       variant={variant}
       onClick={handleCopy}
+      onKeyDown={handleKeyDown}
+      tabIndex={disabled ? -1 : 0}
+      role="button"
       aria-disabled={disabled}
       data-testid="CopyLink"
       sx={{
