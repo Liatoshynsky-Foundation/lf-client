@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { biographyHeroData } from '../../../../[lang]/biography/data/HeroSection.consts';
 import { HeroSection } from './HeroSection';
 
 const mockResizeObserverObserve = jest.fn();
@@ -50,6 +49,36 @@ jest.mock('~/components/design-system/all-components/content-block/ContentBlock'
   };
 });
 
+const makeTipTapDoc = (text: string) =>
+  ({
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [{ type: 'text', text }]
+      }
+    ]
+  }) as any;
+
+const biographyHeroData = {
+  title: 'ЖиТтєПиС ЛятОшИнсьКогО',
+  quote: {
+    text: '..мене завжди цікавило і цікавить минуле людства. Цілі епохи, колись сповнені руху і життя, сповнені подій і думок людства',
+    source: 'З листа Бориса Лятошинського до Валерія Польового від 23 січня 1965 року'
+  },
+  image: {
+    src: '/images/liatoshynsky-hero-section.png',
+    alt: 'Борис Лятошинський з котами на дачі в Ворзелі',
+    caption: {
+      mainText: 'Борис Лятошинський з котами на дачі в Ворзелі.',
+      yearText: '1960-ті роки'
+    }
+  },
+  biographyText: makeTipTapDoc('Борис Лятошинський є одним із провідних українських композиторів ХХ століття.'),
+  noteText:
+    '*Життєпис створено на основі документів, що зберігаються у приватному архіві Кабінету-музею Бориса Лятошинського;'
+} as any;
+
 describe('HeroSection', () => {
   const renderHero = () => render(<HeroSection data={biographyHeroData} years={['1960']} />);
 
@@ -61,41 +90,31 @@ describe('HeroSection', () => {
     expect(screen.getByTestId('HeroSection-bottomContainer')).toBeInTheDocument();
   });
 
-  it('should render localized title text', () => {
+  it('should render title text', () => {
     renderHero();
 
-    const titleWrapper = screen.getByTestId('HeroSection-title');
-    expect(titleWrapper).toBeInTheDocument();
+    expect(screen.getByTestId('HeroSection-title')).toBeInTheDocument();
     expect(screen.getByText('ЖиТтєПиС ЛятОшИнсьКогО')).toBeInTheDocument();
   });
 
-  it('should render quote block with correct localized text', () => {
+  it('should render quote block with correct text', () => {
     renderHero();
 
-    const quoteBlock = screen.getByTestId('HeroSection-quoteBlock');
-    expect(quoteBlock).toBeInTheDocument();
-
-    expect(screen.getByTestId('HeroSection-quoteText')).toHaveTextContent(
-      /мене завжди цікавило і цікавить минуле людства/i
-    );
-
-    expect(screen.getByTestId('HeroSection-quoteSource')).toHaveTextContent(/Бориса Лятошинського/i);
+    expect(screen.getByTestId('HeroSection-quoteBlock')).toBeInTheDocument();
+    expect(screen.getByTestId('HeroSection-quoteText')).toHaveTextContent(/мене завжди цікавило/i);
+    expect(screen.getByTestId('HeroSection-quoteSource')).toHaveTextContent(/Лятошинського/i);
   });
 
   it('should render image block', () => {
     renderHero();
 
-    const image = screen.getByTestId('HeroSection-imageCaption');
-    expect(image).toBeInTheDocument();
+    expect(screen.getByTestId('HeroSection-imageCaption')).toBeInTheDocument();
   });
 
   it('should render biography and note content blocks', () => {
     renderHero();
 
-    const bioBlock = screen.getByTestId('HeroSection-biographyContainer-contentBlock');
-    const noteBlock = screen.getByTestId('HeroSection-noteContainer-contentBlock');
-
-    expect(bioBlock).toBeInTheDocument();
-    expect(noteBlock).toBeInTheDocument();
+    expect(screen.getByTestId('HeroSection-biographyContainer-contentBlock')).toBeInTheDocument();
+    expect(screen.getByTestId('HeroSection-noteContainer-contentBlock')).toBeInTheDocument();
   });
 });
