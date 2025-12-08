@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import EventItem, { type EventItemProps } from './EventItem';
@@ -106,16 +106,6 @@ describe('EventItem', () => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expectNoStatusOrDates(dateBlock);
-  });
-
-  it('wraps the image in a link pointing to href', () => {
-    render(<EventItem {...baseProps} />);
-
-    const imageLink = screen.getByRole('link', { name: baseProps.title });
-    expect(imageLink).toHaveAttribute('href', baseProps.href);
-
-    const imageInsideLink = within(imageLink).getByAltText(baseProps.image.alt);
-    expect(imageInsideLink).toBeInTheDocument();
   });
 
   it('renders primary and secondary CTAs when two actions are provided', () => {

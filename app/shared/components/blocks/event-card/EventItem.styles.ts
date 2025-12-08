@@ -5,8 +5,17 @@ import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     display: 'grid',
-    gridTemplateColumns: 'subgrid',
-    gridColumn: '1 / -1',
+    gridTemplateColumns: {
+      xs: '1fr',
+      sm: 'subgrid'
+    },
+    gridColumn: {
+      xs: 'auto',
+      sm: '1 / -1'
+    },
+    width: {
+      xs: '100%'
+    },
     columnGap: {
       xs: '0',
       sm: '24px',
@@ -38,7 +47,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     gap: {
       xs: '8px',
-      sm: '24px',
+      md: '24px',
       lg: '0'
     },
     width: '100%'
@@ -111,22 +120,27 @@ export const styles: Record<string, SxProps<Theme>> = {
       lg: 'auto'
     },
     py: {
-      xs: '5px',
+      xs: '10px',
+      sm: '5px',
       lg: '0px'
     },
-    overflow: 'hidden'
+    overflow: 'hidden',
+    width: {
+      xs: '100%',
+      sm: 'auto'
+    }
   },
 
   imageFrame: {
     position: 'relative',
     width: {
-      xs: '272px',
-      sm: '223px',
+      xs: '100%',
+      sm: '230px',
       md: '251px',
       lg: '295px'
     },
+    aspectRatio: '272 / 173',
     height: {
-      xs: '173px',
       sm: '161px',
       md: '182px',
       lg: '214px'
@@ -193,8 +207,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 2,
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    textAlign: 'justify'
+    textOverflow: 'ellipsis'
   },
 
   actions: {

@@ -3,7 +3,6 @@
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { styles } from './EventItem.styles';
@@ -29,7 +28,6 @@ export type EventItemProps = {
   publishedAt: string;
   description: string;
   image: { src: string; alt: string };
-  href: string;
   actions?: ReadonlyArray<EventItemAction>;
   sx?: SxProps<Theme>;
 };
@@ -66,7 +64,6 @@ const EventItem = ({
   publishedAt,
   description,
   image,
-  href,
   actions,
   sx
 }: Readonly<EventItemProps>) => {
@@ -110,11 +107,9 @@ const EventItem = ({
         </Box>
 
         <Box sx={styles.imageWrapper}>
-          <Link href={href} aria-label={title} style={{ display: 'block' }}>
-            <Box sx={styles.imageFrame}>
-              <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
-            </Box>
-          </Link>
+          <Box sx={styles.imageFrame}>
+            <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
+          </Box>
         </Box>
       </Box>
 
