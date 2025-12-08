@@ -4,7 +4,7 @@ export const heroSectionStyles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    paddingTop: '48px',
+    paddingTop: '80px',
     rowGap: { xs: '64px', sm: '72px' }
   },
 
@@ -45,7 +45,8 @@ export const heroSectionStyles = {
     letterSpacing: { xs: '-2%', md: '0%' },
     verticalAlign: 'middle',
     textTransform: 'capitalize',
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
+    mt: { lg: '48px' }
   },
 
   photoContainer: {
