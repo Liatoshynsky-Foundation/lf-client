@@ -74,10 +74,9 @@ export const style = {
     color: 'black',
     whiteSpace: 'pre-line',
     mt: {
-      xs: '160px',
-      sm: '172px',
-      md: '224px',
-      lg: '236px'
+      xs: '80px',
+      sm: '108px',
+      md: '156px'
     },
     mb: { xs: '44px', sm: '0px' },
     fontSize: {

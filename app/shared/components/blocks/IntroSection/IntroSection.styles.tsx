@@ -6,7 +6,7 @@ export const styles = {
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     margin: {
-      xs: '90px 0 64px',
+      xs: '80px 0 64px',
       sm: '105px 0 66px',
       md: '132px 0 52px',
       lg: '140px 0 54px'

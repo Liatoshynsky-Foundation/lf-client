@@ -12,7 +12,7 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mt: '120px'
+    mt: { xs: '80px', sm: '108px', md: '156px', lg: '121px' }
   },
 
   sectionTitle: {
