@@ -59,6 +59,23 @@ function CopyLink({
 
   if (isMobile) {
     const href = hrefType === 'phone' ? `tel:${value}` : hrefType === 'email' ? `mailto:${value}` : '';
+
+    if (!href) {
+      return (
+        <Typography
+          variant={variant}
+          data-testid="CopyLink--mobile"
+          sx={{
+            ...copyLinkStyles,
+            ...sxToArray(sx),
+            ...(disabled && getMobileDisabledStyles())
+          }}
+        >
+          {value}
+        </Typography>
+      );
+    }
+
     return (
       <Link
         variant={variant}

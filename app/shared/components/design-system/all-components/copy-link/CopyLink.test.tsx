@@ -170,10 +170,11 @@ describe('CopyLink', () => {
       expect(link).toHaveAttribute('href', 'tel:+1234567890');
     });
 
-    it('should render empty href when hrefType is not provided', () => {
+    it('should render as Typography when hrefType is not provided', () => {
       render(<CopyLink value="test" />);
-      const link = screen.getByText('test').closest('a');
-      expect(link).toHaveAttribute('href', '');
+      const text = screen.getByText('test');
+      expect(text).toBeInTheDocument();
+      expect(screen.queryByRole('link')).not.toBeInTheDocument();
     });
 
     it('should not copy to clipboard on mobile when clicked', async () => {
@@ -309,8 +310,9 @@ describe('CopyLink', () => {
     it('should handle unknown hrefType gracefully', () => {
       mockedUseBreakpoints.mockReturnValue({ isMobile: true });
       render(<CopyLink value="test" hrefType="unknown" />);
-      const link = screen.getByText('test').closest('a');
-      expect(link).toHaveAttribute('href', '');
+      const text = screen.getByText('test');
+      expect(text).toBeInTheDocument();
+      expect(screen.queryByRole('link')).not.toBeInTheDocument();
     });
   });
 });
