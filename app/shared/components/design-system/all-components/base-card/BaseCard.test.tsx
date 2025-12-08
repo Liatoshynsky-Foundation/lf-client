@@ -158,23 +158,16 @@ describe('BaseCard', () => {
 
   describe('Accessibility', () => {
     it('should render as semantic article element', () => {
-      const { container } = render(<BaseCard {...defaultProps} />);
+      render(<BaseCard {...defaultProps} />);
 
-      expect(container.querySelector('article')).toBeInTheDocument();
+      expect(screen.getByRole('article')).toBeInTheDocument();
     });
 
     it('should have aria-label with card title', () => {
       render(<BaseCard {...defaultProps} />);
 
-      const article = screen.getByTestId('BaseCard');
+      const article = screen.getByRole('article');
       expect(article).toHaveAttribute('aria-label', defaultProps.title);
-    });
-
-    it('should have proper component structure', () => {
-      render(<BaseCard {...defaultProps} />);
-
-      const article = screen.getByTestId('BaseCard');
-      expect(article.tagName).toBe('ARTICLE');
     });
   });
 
