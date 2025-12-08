@@ -37,9 +37,9 @@ export const style = {
     color: 'black',
     whiteSpace: 'pre-line',
     mt: {
-      xs: '104px',
-      md: '164px',
-      lg: '153px'
+      xs: '80px',
+      md: '108px',
+      lg: '156px'
     },
     mb: { xs: '40px', sm: '0px' },
     fontSize: {

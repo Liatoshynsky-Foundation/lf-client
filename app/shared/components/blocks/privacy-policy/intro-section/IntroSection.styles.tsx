@@ -14,7 +14,8 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridColumnStart: '1',
     gridColumnEnd: '5',
     alignSelf: 'center',
-    marginTop: '75px',
+    marginTop: { sm: '108px', md: '156px' },
+    marginBottom: { sm: '40px', md: '56px' },
     gridRow: '1',
     [theme.breakpoints.down('md')]: {
       fontSize: '40px'
@@ -22,7 +23,7 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     [theme.breakpoints.down('sm')]: {
       gridColumn: '1/-1',
       marginBottom: '60px',
-      marginTop: '159px',
+      marginTop: { xs: '80px' },
       fontSize: '40px'
     }
   },
