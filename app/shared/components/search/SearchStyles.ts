@@ -37,3 +37,8 @@ export const SearchStyles = {
     maxHeight: 'none'
   }
 };
+
+export const iconStyles = {
+  height: '24px',
+  cursor: 'pointer'
+};

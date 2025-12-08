@@ -62,6 +62,8 @@ import {
   RenderYearHeader
 } from './WorkTableCells';
 
+import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
+
 const setDesktop = () =>
   mockUseBreakpoints.mockReturnValue({
     isMobile: false,
@@ -89,17 +91,19 @@ const setMobile = () =>
     isLaptopAndAbove: false
   });
 
-const createMockCellContext = <T,>(value: T): CellContext<WorkTable, unknown> =>
+const createMockCellContext = <T,>(value: T): CellContext<ScientificWorkTableRow, unknown> =>
   ({
     getValue: jest.fn().mockReturnValue(value),
     row: { original: {} as WorkTable }
-  }) as unknown as CellContext<WorkTable, unknown>;
+  }) as unknown as CellContext<ScientificWorkTableRow, unknown>;
 
-const createMockActionCellContext = (original: Partial<WorkTable>): CellContext<WorkTable, unknown> =>
+const createMockActionCellContext = (
+  original: Partial<ScientificWorkTableRow>
+): CellContext<ScientificWorkTableRow, unknown> =>
   ({
     getValue: jest.fn(),
-    row: { original: original as WorkTable }
-  }) as unknown as CellContext<WorkTable, unknown>;
+    row: { original: original as ScientificWorkTableRow }
+  }) as unknown as CellContext<ScientificWorkTableRow, unknown>;
 
 describe('WorkTable Components', () => {
   beforeEach(() => {
