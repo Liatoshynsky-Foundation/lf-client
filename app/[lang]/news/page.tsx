@@ -14,7 +14,7 @@ const News = () => {
 
   return (
     <MainLayout>
-      <Typography variant="h1">News</Typography>
+      <Typography variant="h1">News, Events & Media</Typography>
     </MainLayout>
   );
 };
