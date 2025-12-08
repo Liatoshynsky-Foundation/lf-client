@@ -12,10 +12,25 @@ function PaymentDetails() {
   const [currency, setCurrency] = useState<currencyType>('uah');
   const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
 
+  const switcherSx = useMemo(() => {
+    const buttonsCount = currencyList.length;
+
+    return {
+      ...styles.buttonGroup,
+      '& [aria-label="indicator"]': {
+        ...styles.buttonGroup['& [aria-label="indicator"]'],
+        width: {
+          xs: `calc((100% - 8px) / ${buttonsCount})`,
+          sm: '66px'
+        }
+      }
+    };
+  }, []);
+
   return (
-    <Box data-testid="PaymentDetails">
+    <Box sx={{ mr: '24px' }} data-testid="PaymentDetails">
       <ButtonGroup
-        sx={styles.buttonGroup}
+        sx={switcherSx}
         defaultActiveButton={0}
         buttons={currencyList.map((currency) => (
           <Button

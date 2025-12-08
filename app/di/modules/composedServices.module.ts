@@ -5,7 +5,7 @@ import { createFooterService } from '~/services/footer/footerService';
 import { createFundsService } from '~/services/funds/fundsService';
 import { createHeaderService } from '~/services/header/headerService';
 import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
-import { createScientificWorksService } from '~/services/scientific-works-service/scientificWorks';
+import { createScientificWorksService } from '~/services/scientific-works/scientificWorks';
 import { createAzureStorageService } from '~/services/upload/upload';
 
 export type ComposedServicesModule = {
