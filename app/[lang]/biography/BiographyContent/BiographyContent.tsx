@@ -38,20 +38,16 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
         )}
 
         <Box sx={biographyContentStyles.chronologyListColumn} data-testid="BiographyContent-chronologyList">
-          {item.listItems.map((listItem, index) => {
-            const itemKey = listItem.description;
-
-            return (
-              <Box key={`${index}${itemKey}`} sx={{ width: '100%' }}>
-                <ContentBlock
-                  containerSx={biographyContentStyles.chronologyItemContainer}
-                  textSx={biographyContentStyles.ChronologyListItemText}
-                  description={listItem.description}
-                  dataTestId="BiographyContent-chronologyListItem"
-                />
-              </Box>
-            );
-          })}
+          {item.listItems.map((listItem, index) => (
+            <Box key={`${key}-item-${index}`} sx={{ width: '100%' }}>
+              <ContentBlock
+                containerSx={biographyContentStyles.chronologyItemContainer}
+                textSx={biographyContentStyles.ChronologyListItemText}
+                description={listItem.description}
+                dataTestId="BiographyContent-chronologyListItem"
+              />
+            </Box>
+          ))}
         </Box>
       </Fragment>
     );
