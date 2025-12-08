@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 import ContentBlock from '~/components/design-system/all-components/content-block/ContentBlock';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
@@ -8,13 +8,12 @@ import QuoteBlock from '~/components/Quote/Quote';
 import YearTabs from '~/components/year-tabs/YearTabs';
 
 import { heroSectionStyles } from './HeroSection.style';
-import { BiographyHeroProps, tiptapToPlainText } from '~/types/page/biography.types';
+import { BiographyHeroProps } from '~/types/page/biography.types';
 
 export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
-  const locale = useLocale();
   const t = useTranslations('biography.heroSection');
 
-  const caption = `${tiptapToPlainText(data.image.caption.mainText[locale])}\n${tiptapToPlainText(data.image.caption.yearText[locale])}`;
+  const caption = `${data.image.caption.mainText}\n${data.image.caption.yearText}`;
 
   return (
     <Box sx={heroSectionStyles.mainContainer} data-testid="HeroSection">
@@ -26,8 +25,8 @@ export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
           </Box>
 
           <QuoteBlock
-            quoteText={tiptapToPlainText(data.quote.quoteText[locale])}
-            sourceText={tiptapToPlainText(data.quote.sourceText[locale])}
+            quoteText={data.quote.text}
+            sourceText={data.quote.source}
             quoteIconColor="burgundy"
             mainTextColor="burgundy"
             alignRight={false}
@@ -41,7 +40,7 @@ export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
           {data.image && (
             <ImageWithCaption
               src={data.image.src}
-              alt={tiptapToPlainText(data.image.alt[locale])}
+              alt={data.image.alt}
               caption={caption}
               sizes={heroSectionStyles.imageSizes}
               containerSx={heroSectionStyles.imageWithCaptionContainer}
@@ -56,13 +55,13 @@ export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
 
       <Box sx={heroSectionStyles.bottomContainer} data-testid="HeroSection-bottomContainer">
         <ContentBlock
-          description={data.biographyText[locale]}
+          description={data.biographyText}
           containerSx={heroSectionStyles.biographyContainer}
           textSx={heroSectionStyles.biographyText}
           dataTestId="HeroSection-biographyContainer-contentBlock"
         />
         <ContentBlock
-          description={data.noteText[locale]}
+          description={data.noteText}
           containerSx={heroSectionStyles.noteContainer}
           textSx={heroSectionStyles.noteText}
           dataTestId="HeroSection-noteContainer-contentBlock"

@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { useLocale } from 'next-intl';
 import { Fragment, ReactNode } from 'react';
 
 import { biographyContentStyles, imageLeftPossition } from './BiographyContent.styles';
@@ -11,7 +10,7 @@ import type {
   FullWidthImage,
   OnlyImageBlock
 } from '~/types/page/biography.types';
-import { ContentType, tiptapToPlainText } from '~/types/page/biography.types';
+import { ContentType } from '~/types/page/biography.types';
 
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import ExcerptBlock from '~/shared/components/excerpt-block/ExcerptBlock';
@@ -19,8 +18,6 @@ import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCa
 import YearWithLine from '~/shared/components/year-with-line/YearWithLine';
 
 export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
-  const locale = useLocale();
-
   function renderChrolologyList(item: ChronologyList, key: string): ReactNode {
     return (
       <Fragment key={key}>
@@ -30,8 +27,8 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
 
             <ImageWithCaption
               src={item.additionalImage.src}
-              alt={tiptapToPlainText(item.additionalImage.alt[locale])}
-              caption={tiptapToPlainText(item.additionalImage.caption[locale])}
+              alt={item.additionalImage.alt}
+              caption={item.additionalImage.caption ?? ''}
               containerSx={biographyContentStyles.imageContainer}
               captionSx={biographyContentStyles.leftImageCaption}
               sizes={biographyContentStyles[item.additionalImage.size]}
@@ -42,14 +39,14 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
 
         <Box sx={biographyContentStyles.chronologyListColumn} data-testid="BiographyContent-chronologyList">
           {item.listItems.map((listItem, index) => {
-            const itemKey = tiptapToPlainText(listItem.description[locale]);
+            const itemKey = listItem.description;
 
             return (
               <Box key={`${index}${itemKey}`} sx={{ width: '100%' }}>
                 <ContentBlock
                   containerSx={biographyContentStyles.chronologyItemContainer}
                   textSx={biographyContentStyles.ChronologyListItemText}
-                  description={listItem.description[locale]}
+                  description={listItem.description}
                   dataTestId="BiographyContent-chronologyListItem"
                 />
               </Box>
@@ -63,11 +60,7 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
   function renderExcerptBlock(item: ExcerptBlockItem, key: string): ReactNode {
     return (
       <Box key={key} sx={biographyContentStyles.excerptBlock} data-testid="BiographyContent-excerptBlockItem">
-        <ExcerptBlock
-          quote={tiptapToPlainText(item.quote.quoteText[locale])}
-          source={tiptapToPlainText(item.quote.sourceText[locale])}
-          dataTestId="BiographyContent-excerptBlock"
-        />
+        <ExcerptBlock quote={item.quote.text} source={item.quote.source} dataTestId="BiographyContent-excerptBlock" />
       </Box>
     );
   }
@@ -79,8 +72,8 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
           <Box sx={biographyContentStyles.onlyImageLeft} data-testid="BiographyContent-onlyImageBlock-left">
             <ImageWithCaption
               src={item.additionalImage.src}
-              alt={tiptapToPlainText(item.additionalImage.alt[locale])}
-              caption={tiptapToPlainText(item.additionalImage.caption[locale])}
+              alt={item.additionalImage.alt}
+              caption={item.additionalImage.caption ?? ''}
               captionSx={biographyContentStyles.leftImageCaption}
               containerSx={biographyContentStyles.imageContainer}
               sizes={biographyContentStyles[item.additionalImage.size]}
@@ -92,8 +85,8 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
             {item.mainImage.rectangleTopLeftCorner && <Box sx={biographyContentStyles.imageAccentRectangle} />}
             <ImageWithCaption
               src={item.mainImage.src}
-              alt={tiptapToPlainText(item.mainImage.alt[locale])}
-              caption={tiptapToPlainText(item.mainImage.caption[locale])}
+              alt={item.mainImage.alt}
+              caption={item.mainImage.caption ?? ''}
               captionSx={biographyContentStyles.rigthImageCaption}
               containerSx={biographyContentStyles.imageContainer}
               imageSx={{ width: '100%' }}
@@ -110,8 +103,8 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
         {item.mainImage.rectangleTopLeftCorner && <Box sx={biographyContentStyles.imageAccentRectangle} />}
         <ImageWithCaption
           src={item.mainImage.src}
-          alt={tiptapToPlainText(item.mainImage.alt[locale])}
-          caption={tiptapToPlainText(item.mainImage.caption[locale])}
+          alt={item.mainImage.alt}
+          caption={item.mainImage.caption ?? ''}
           containerSx={biographyContentStyles.imageContainer}
           sizes={biographyContentStyles[item.mainImage.size]}
           captionSx={biographyContentStyles.rigthImageCaption}
@@ -129,8 +122,8 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
       <Box key={key} sx={biographyContentStyles.fullWidthBlock} data-testid="BiographyContent-fullWidthImage">
         <ImageWithCaption
           src={item.image.src}
-          alt={tiptapToPlainText(item.image.alt[locale])}
-          caption={tiptapToPlainText(item.image.caption[locale])}
+          alt={item.image.alt}
+          caption={item.image.caption ?? ''}
           sizes={biographyContentStyles.fullWidth}
           containerSx={biographyContentStyles.fullWidthContainer}
           imageSx={biographyContentStyles.fullWidthImage}
