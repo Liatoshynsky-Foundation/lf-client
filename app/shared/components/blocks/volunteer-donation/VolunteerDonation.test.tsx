@@ -13,11 +13,19 @@ jest.mock('~/ds-components/copy-link/CopyLink', () => ({
     const handleClick = () => {
       navigator.clipboard.writeText(value);
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleClick();
+      }
+    };
+
     return (
-      <div aria-disabled="false" onClick={handleClick} data-testid="mock-copy-link">
+      <button type="button" onClick={handleClick} onKeyDown={handleKeyDown} data-testid="mock-copy-link">
         <span>{value}</span>
         <button aria-label="Copy content">{hint}</button>
-      </div>
+      </button>
     );
   }
 }));

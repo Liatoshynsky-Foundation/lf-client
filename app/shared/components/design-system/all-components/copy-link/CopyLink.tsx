@@ -35,7 +35,7 @@ function CopyLink({
   hrefType,
   disabled = false,
   sx
-}: CopyLinkProps) {
+}: Readonly<CopyLinkProps>) {
   const { isMobile } = useBreakpoints();
   const [isCopied, setIsCopied] = useState(false);
 
@@ -65,7 +65,12 @@ function CopyLink({
   const copyLinkStyles = getCopyLinkStyles(type);
 
   if (isMobile) {
-    const href = hrefType === 'phone' ? `tel:${value}` : hrefType === 'email' ? `mailto:${value}` : '';
+    let href = '';
+    if (hrefType === 'phone') {
+      href = `tel:${value}`;
+    } else if (hrefType === 'email') {
+      href = `mailto:${value}`;
+    }
 
     if (!href) {
       return (

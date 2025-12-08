@@ -16,10 +16,18 @@ jest.mock('../../design-system/all-components/copy-link/CopyLink', () => ({
     const handleClick = () => {
       navigator.clipboard.writeText(String(value));
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleClick();
+      }
+    };
+
     return (
-      <div aria-disabled="false" onClick={handleClick} data-testid="mock-copy-link">
+      <button type="button" onClick={handleClick} onKeyDown={handleKeyDown} data-testid="mock-copy-link">
         <span>{value}</span>
-      </div>
+      </button>
     );
   }
 }));
@@ -111,12 +119,12 @@ describe('PaymentDetails', () => {
   it('should copy IBAN to clipboard when IBAN is clicked', async () => {
     render(<PaymentDetails />);
 
-    const ibanElements = screen.getAllByText('UA28-U-A-H');
-    const copyLinkContainer = ibanElements[0].closest('div[aria-disabled]');
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    const ibanCopyButton = copyLinks.find((link) => link.textContent?.includes('UA28-U-A-H'));
 
     await act(async () => {
-      if (copyLinkContainer) {
-        fireEvent.click(copyLinkContainer);
+      if (ibanCopyButton) {
+        fireEvent.click(ibanCopyButton);
       }
     });
 

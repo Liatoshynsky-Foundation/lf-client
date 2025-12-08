@@ -18,6 +18,13 @@ jest.mock('~/ds-components/copy-link/CopyLink', () => ({
       }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleClick();
+      }
+    };
+
     if (mockIsMobile && hrefType) {
       const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
       return (
@@ -28,9 +35,15 @@ jest.mock('~/ds-components/copy-link/CopyLink', () => ({
     }
 
     return (
-      <div aria-disabled={disabled ? 'true' : 'false'} onClick={handleClick} data-testid="mock-copy-link">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        data-testid="mock-copy-link"
+      >
         <span>{value}</span>
-      </div>
+      </button>
     );
   }
 }));
@@ -121,7 +134,9 @@ describe('FAQ component', () => {
     const phoneCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.phone);
 
     await act(async () => {
-      fireEvent.click(phoneCopyLink!);
+      if (phoneCopyLink) {
+        fireEvent.click(phoneCopyLink);
+      }
     });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.phone);
