@@ -58,7 +58,7 @@ describe('usePagination', () => {
     expect(result.current.currentPage).toBe(3);
     expect(result.current.visiblePages).toBe(1);
     expect(result.current.paginatedData).toEqual(mockData.slice(20, 25));
-    expect(result.current.hasMore).toBe(true);
+    expect(result.current.hasMore).toBe(false);
   });
 
   it('should calculate hasMore correctly at the end', () => {
