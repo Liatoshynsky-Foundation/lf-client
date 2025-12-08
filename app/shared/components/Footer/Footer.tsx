@@ -15,9 +15,10 @@ import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndS
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 import { createRequestContainer } from '~/di/container';
+import { mapFooterNavigation } from '~/lib/utils/footerNavigationMapper';
 
 export default async function Footer() {
-  const t = await getTranslations('footer');
+  const tFooter = await getTranslations('footer');
   const locale = await getLocale();
 
   const svgImagePath = '/images/footer-img.svg';
@@ -28,6 +29,8 @@ export default async function Footer() {
 
   const contactUsLink =
     navigation?.[1]?.links?.find((link: { label: string; href: string }) => link.href === '/contacts')?.href ?? '';
+
+  const enhancedNavigation = await mapFooterNavigation(navigation);
 
   return (
     <Box component="footer" sx={styles.footerContainer} id="footer">
@@ -44,10 +47,10 @@ export default async function Footer() {
 
         <Box sx={styles.contactInfoWrapper}>
           <FooterContactInfo
-            alertMsg={t('phoneCopiedAlert')}
+            alertMsg={tFooter('phoneCopiedAlert')}
             contacts={contacts}
             labels={{
-              phoneLabel: t('phoneLabel')
+              phoneLabel: tFooter('phoneLabel')
             }}
           />
         </Box>
@@ -55,12 +58,12 @@ export default async function Footer() {
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport
             contact={{
-              text: t('contactUsButton'),
+              text: tFooter('contactUsButton'),
               link: contactUsLink
             }}
             donation={{
-              text: t('donationButton'),
-              shortText: t('donationButtonShort'),
+              text: tFooter('donationButton'),
+              shortText: tFooter('donationButtonShort'),
               link: supportButtonLink
             }}
           />
@@ -71,7 +74,7 @@ export default async function Footer() {
         </Box>
 
         <Box sx={styles.navigationWrapper}>
-          <FooterNavigation sections={navigation} />
+          <FooterNavigation sections={enhancedNavigation} />
         </Box>
 
         <Box sx={styles.copyrightWrapper}>
@@ -80,7 +83,7 @@ export default async function Footer() {
       </Box>
 
       <Box sx={styles.openTechWrapper}>
-        <OpenTechLogo label={t('opentechLabel')} />
+        <OpenTechLogo label={tFooter('opentechLabel')} />
       </Box>
 
       <Box sx={styles.svgContainer}>
