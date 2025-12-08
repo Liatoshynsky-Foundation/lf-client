@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
-import CopyLink from '~/ds-components/copy-link/CopyLink';
+import CopyLink, { CopyIconSize } from '~/ds-components/copy-link/CopyLink';
 import { mainHexPallete } from '~/ds-components/theme/colors';
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
@@ -29,7 +29,7 @@ interface ContactLinkProps {
   disabled?: boolean;
   labelSx?: SxProps<Theme>;
   iconSx?: SxProps<Theme>;
-  copyLinkSize?: 'medium' | 'large';
+  copyLinkSize?: CopyIconSize;
   direction?: ContactLinkDirection;
   dataTestid?: string;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Link, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -11,11 +13,12 @@ import { iconSizes } from '~/constants/design';
 import { sxToArray } from '~/utils/sxToArray';
 
 import CopyIcon from '~/public/icons/copy-icon.svg';
+export type CopyIconSize = keyof typeof iconSizes;
 
 interface CopyLinkProps {
   hrefType?: string;
   value: string | number;
-  size?: 'medium' | 'large';
+  size?: CopyIconSize;
   type?: 'primary' | 'secondary';
   disabled?: boolean;
   hint?: string;
@@ -50,8 +53,7 @@ function CopyLink({
       setIsCopied(false);
     }
   };
-
-  const variant = size === 'medium' ? 'customSemiBold16' : 'customSemiBold20';
+  const variant = size === 'small' || size === 'medium' ? 'customSemiBold16' : 'customSemiBold20';
   const iconSize = iconSizes[size];
   const copyLinkStyles = getCopyLinkStyles(type);
 
@@ -61,6 +63,7 @@ function CopyLink({
       <Link
         variant={variant}
         href={href}
+        data-testid="CopyLink--mobile"
         sx={{
           ...copyLinkStyles,
           ...sxToArray(sx),
@@ -78,23 +81,25 @@ function CopyLink({
       variant={variant}
       onClick={handleCopy}
       aria-disabled={disabled}
+      data-testid="CopyLink"
       sx={{
         ...styles.wrapper,
         ...copyLinkStyles,
         ...sxToArray(sx)
       }}
     >
-      <Typography component="span" variant={variant}>
+      <Typography component="span" variant={variant} data-testid="CopyLink-text">
         {value}
       </Typography>
       <TooltipCustom title={isCopied ? finalHint : ''} showArrow open={isCopied}>
-        <Box sx={styles.iconWrapper}>
+        <Box sx={styles.iconWrapper} data-testid="CopyLink-iconWrapper">
           <Svg
             width={`${iconSize}px`}
             height={`${iconSize}px`}
             Component={CopyIcon}
             alt="Copy"
             stroke={getIconStroke(type, disabled)}
+            data-testid="CopyLink-icon"
           />
         </Box>
       </TooltipCustom>

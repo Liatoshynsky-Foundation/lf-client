@@ -18,7 +18,7 @@ jest.mock('next-intl', () => ({
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ alt, Component, ...props }: any) => (
-    <svg data-testid="copy-icon" aria-label={alt} {...props}>
+    <svg data-testid="CopyLink-icon" aria-label={alt} {...props}>
       {Component?.name || 'CopyIcon'}
     </svg>
   )
@@ -27,7 +27,7 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
 jest.mock('~/ds-components/tooltip/Tooltip', () => ({
   __esModule: true,
   default: ({ children, title, open }: any) => (
-    <div data-testid="tooltip" data-title={title} data-open={open}>
+    <div data-testid="CopyLink-tooltip" data-title={title} data-open={open}>
       {children}
     </div>
   )
@@ -75,7 +75,7 @@ describe('CopyLink', () => {
 
     it('should render copy icon', () => {
       render(<CopyLink value="test" />);
-      expect(screen.getByTestId('copy-icon')).toBeInTheDocument();
+      expect(screen.getByTestId('CopyLink-icon')).toBeInTheDocument();
     });
 
     it('should have aria-disabled attribute when disabled', () => {
@@ -90,41 +90,48 @@ describe('CopyLink', () => {
       expect(element).toHaveAttribute('aria-disabled', 'false');
     });
 
+    it('should render with small size', () => {
+      render(<CopyLink value="test" size="small" />);
+      const icon = screen.getByTestId('CopyLink-icon');
+      expect(icon).toHaveAttribute('width', '16px');
+      expect(icon).toHaveAttribute('height', '16px');
+    });
+
     it('should render with medium size by default', () => {
       render(<CopyLink value="test" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('width', '20px');
       expect(icon).toHaveAttribute('height', '20px');
     });
 
     it('should render with large size', () => {
       render(<CopyLink value="test" size="large" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('width', '24px');
       expect(icon).toHaveAttribute('height', '24px');
     });
 
     it('should render with primary type by default', () => {
       render(<CopyLink value="test" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('stroke', '#190d03');
     });
 
     it('should render with secondary type', () => {
       render(<CopyLink value="test" type="secondary" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('stroke', '#52545A');
     });
 
     it('should render with disabled styling for primary type', () => {
       render(<CopyLink value="test" disabled type="primary" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('stroke', '#9D9FA9');
     });
 
     it('should render with disabled styling for secondary type', () => {
       render(<CopyLink value="test" disabled type="secondary" />);
-      const icon = screen.getByTestId('copy-icon');
+      const icon = screen.getByTestId('CopyLink-icon');
       expect(icon).toHaveAttribute('stroke', '#9D9FA9');
     });
 
@@ -136,7 +143,7 @@ describe('CopyLink', () => {
 
     it('should render tooltip component', () => {
       render(<CopyLink value="test" />);
-      expect(screen.getByTestId('tooltip')).toBeInTheDocument();
+      expect(screen.getByTestId('CopyLink-tooltip')).toBeInTheDocument();
     });
   });
 
@@ -177,12 +184,18 @@ describe('CopyLink', () => {
 
     it('should not render copy icon on mobile', () => {
       render(<CopyLink value="test@example.com" hrefType="email" />);
-      expect(screen.queryByTestId('copy-icon')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('CopyLink-icon')).not.toBeInTheDocument();
     });
 
     it('should not render tooltip on mobile', () => {
       render(<CopyLink value="test@example.com" hrefType="email" />);
-      expect(screen.queryByTestId('tooltip')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('CopyLink-tooltip')).not.toBeInTheDocument();
+    });
+
+    it('should render with small size on mobile', () => {
+      render(<CopyLink value="test" hrefType="email" size="small" />);
+      const link = screen.getByRole('link');
+      expect(link).toHaveClass('MuiTypography-customSemiBold16');
     });
 
     it('should render with medium size on mobile', () => {
@@ -222,6 +235,12 @@ describe('CopyLink', () => {
       mockedUseBreakpoints.mockReturnValue({ isMobile: false });
     });
 
+    it('should use customSemiBold16 variant for small size', () => {
+      render(<CopyLink value="test" size="small" />);
+      const element = screen.getByText('test').parentElement;
+      expect(element).toHaveClass('MuiTypography-customSemiBold16');
+    });
+
     it('should use customSemiBold16 variant for medium size', () => {
       render(<CopyLink value="test" size="medium" />);
       const element = screen.getByText('test').parentElement;
@@ -258,7 +277,7 @@ describe('CopyLink', () => {
 
     it('should render with empty string value', () => {
       render(<CopyLink value="" />);
-      expect(screen.getByTestId('copy-icon')).toBeInTheDocument();
+      expect(screen.getByTestId('CopyLink-icon')).toBeInTheDocument();
     });
 
     it('should render with custom hint prop', () => {
