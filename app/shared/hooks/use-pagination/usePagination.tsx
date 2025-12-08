@@ -22,8 +22,17 @@ export function usePagination<T>({ data, itemsPerPage }: UsePaginationOptions<T>
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    setVisiblePages(1);
+    if (page > currentPage) {
+      if (visiblePages > 1) {
+        setCurrentPage(currentPage + visiblePages);
+        setVisiblePages(1);
+      } else {
+        setCurrentPage(page);
+      }
+    } else {
+      setCurrentPage(page);
+      setVisiblePages(1);
+    }
   };
 
   const hasMore = (currentPage - 1 + visiblePages) * itemsPerPage < data.length;
