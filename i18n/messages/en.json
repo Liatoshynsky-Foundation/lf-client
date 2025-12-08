@@ -314,5 +314,10 @@
     "heroSection": {
       "title": "Lyatoshynsky’s Life Story"
     }
+  },
+  "news": {
+    "publishedAtLabel": "Published:",
+    "viewButton": "View",
+    "goToButton": "Go to"
   }
 }
