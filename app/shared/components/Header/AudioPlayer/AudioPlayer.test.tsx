@@ -57,7 +57,7 @@ describe('AudioPlayer', () => {
 
     HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
     HTMLMediaElement.prototype.pause = jest.fn();
-    HTMLMediaElement.prototype.load = jest.fn(); // Додано виправлення тут
+    HTMLMediaElement.prototype.load = jest.fn();
   });
 
   beforeEach(() => {
