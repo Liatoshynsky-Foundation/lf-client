@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { BiographyContent } from './BiographyContent/BiographyContent';
 import { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
@@ -31,7 +32,7 @@ export default async function Biography({ params }: Readonly<Language>): Promise
   const page = await pageService.getPageData('biography', lang);
 
   if (!page) {
-    return <></>;
+    return <PageNotFound />;
   }
 
   const years = page.blocks.biographyContent.map((year) => year.yearTitle).filter((year) => year !== null);
