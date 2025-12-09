@@ -9,8 +9,8 @@ jest.mock('~/shared/components/tables/DocumentsTable/TableCard/TableCard', () =>
 }));
 
 const mockData = [
-  { id: '1', code: 'C1', name: 'Name1', date: '2020', sheets: 1, content: 'Content1', action: 'PDF' },
-  { id: '2', code: 'C2', name: 'Name2', date: '2021', sheets: 2, content: 'Content2', action: 'PDF' }
+  { id: '1', cipher: 'C1', name: 'Name1', dates: '2020', sheets: 1, contentDescription: 'Content1', pdfUrl: null },
+  { id: '2', cipher: 'C2', name: 'Name2', dates: '2021', sheets: 2, contentDescription: 'Content2', pdfUrl: null }
 ];
 
 describe('TableCardList', () => {

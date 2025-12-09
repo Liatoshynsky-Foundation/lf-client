@@ -12,21 +12,21 @@ jest.mock('~/i18n/navigation', () => ({
 
 const mockRecord = {
   id: '1',
-  code: 'Ф. 2, оп. 1, спр. 1',
+  cipher: 'Ф. 2, оп. 1, спр. 1',
   name: 'Документи про освіту',
-  date: '1895–1955',
+  dates: '1895–1955',
   sheets: 11,
-  content: 'Метричні виписки, довідки'
+  contentDescription: 'Метричні виписки, довідки'
 };
 
 describe('TableCard', () => {
   test('should render all data passed as props', () => {
     render(<TableCard {...mockRecord} />);
 
-    expect(screen.getByText(mockRecord.code)).toBeInTheDocument();
+    expect(screen.getByText(mockRecord.cipher)).toBeInTheDocument();
     expect(screen.getByText(mockRecord.name)).toBeInTheDocument();
-    expect(screen.getByText(mockRecord.date)).toBeInTheDocument();
+    expect(screen.getByText(mockRecord.dates)).toBeInTheDocument();
     expect(screen.getByText(mockRecord.sheets.toString())).toBeInTheDocument();
-    expect(screen.getByText(mockRecord.content)).toBeInTheDocument();
+    expect(screen.getByText(mockRecord.contentDescription)).toBeInTheDocument();
   });
 });

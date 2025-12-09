@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { ArchiveRecord } from '../documents.conts';
 import MobileDocumentTable from './MobileDocumentTable';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import { usePagination } from '~/shared/hooks/use-pagination/usePagination';
 
@@ -12,7 +12,7 @@ jest.mock('~/shared/components/tables/DocumentsTable/TableCardList/TableCardList
     paginatedData,
     tableRef
   }: {
-    paginatedData: ArchiveRecord[];
+    paginatedData: DocumentRecord[];
     tableRef?: React.RefObject<HTMLDivElement>;
   }) => (
     <div ref={tableRef as any} data-testid="table-card-list">
@@ -40,13 +40,13 @@ jest.mock('~/shared/components/design-system/all-components/pagination/Paginatio
 const handlePageChangeMock = jest.fn();
 const handleLoadMoreMock = jest.fn();
 
-const mockData: ArchiveRecord[] = [
-  { id: '1', code: 'C1', name: 'Name1', date: '2020', sheets: 1, content: 'Content1', action: 'PDF' },
-  { id: '2', code: 'C2', name: 'Name2', date: '2021', sheets: 2, content: 'Content2', action: 'PDF' },
-  { id: '3', code: 'C3', name: 'Name3', date: '2022', sheets: 3, content: 'Content3', action: 'PDF' },
-  { id: '4', code: 'C4', name: 'Name4', date: '2023', sheets: 4, content: 'Content4', action: 'PDF' },
-  { id: '5', code: 'C5', name: 'Name5', date: '2024', sheets: 5, content: 'Content5', action: 'PDF' },
-  { id: '6', code: 'C6', name: 'Name6', date: '2025', sheets: 6, content: 'Content6', action: 'PDF' }
+const mockData: DocumentRecord[] = [
+  { id: '1', cipher: 'C1', name: 'Name1', dates: '2020', sheets: 1, contentDescription: 'Content1', pdfUrl: null },
+  { id: '2', cipher: 'C2', name: 'Name2', dates: '2021', sheets: 2, contentDescription: 'Content2', pdfUrl: null },
+  { id: '3', cipher: 'C3', name: 'Name3', dates: '2022', sheets: 3, contentDescription: 'Content3', pdfUrl: null },
+  { id: '4', cipher: 'C4', name: 'Name4', dates: '2023', sheets: 4, contentDescription: 'Content4', pdfUrl: null },
+  { id: '5', cipher: 'C5', name: 'Name5', dates: '2024', sheets: 5, contentDescription: 'Content5', pdfUrl: null },
+  { id: '6', cipher: 'C6', name: 'Name6', dates: '2025', sheets: 6, contentDescription: 'Content6', pdfUrl: null }
 ];
 
 jest.mock('~/shared/hooks/use-pagination/usePagination', () => ({
