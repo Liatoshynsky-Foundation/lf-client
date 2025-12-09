@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, type SxProps, type Theme, Typography } from '@mui/material';
 import Image from 'next/image';
 import type { Locale } from 'next-intl';
 import { useLocale } from 'next-intl';
@@ -11,6 +11,7 @@ import CustomLink from '~/ds-components/link/CustomLink';
 import { styles, TITLE_GRID_COLUMN, TITLE_SX } from './FundSummaryHeader.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
+import { sxToArray } from '~/utils/sxToArray';
 
 type LocalizedString = Record<Locale, string>;
 type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
@@ -30,6 +31,7 @@ export interface FundSummaryHeaderProps {
   title: string;
   data: FundSummaryHeaderData;
   dataTestId?: string;
+  sx?: SxProps<Theme>;
 }
 
 const ARROW_BACK_ICON = <Image src="/icons/arrow-left.svg" alt="" width={24} height={24} aria-hidden="true" />;
@@ -75,14 +77,15 @@ const FundSummaryHeader: React.FC<FundSummaryHeaderProps> = ({
   backLinkText,
   title,
   data,
-  dataTestId
+  dataTestId,
+  sx
 }) => {
   const locale = useLocale() as Locale;
 
   const { leftColumn, rightColumn } = useMemo(() => splitIntoColumns(data.items), [data.items]);
 
   return (
-    <Box sx={styles.container} data-testid={dataTestId}>
+    <Box sx={[styles.container, ...sxToArray(sx)]} data-testid={dataTestId}>
       <Box sx={styles.backLink}>
         <CustomLink path={backLinkUrl} startIcon={ARROW_BACK_ICON} labelSx={{ fontSize: '16px' }}>
           {backLinkText}
