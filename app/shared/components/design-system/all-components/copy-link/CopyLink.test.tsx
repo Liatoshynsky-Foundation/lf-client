@@ -206,22 +206,14 @@ describe('CopyLink', () => {
       });
     });
 
-    it('should copy when Enter key is pressed', async () => {
+    it.each([
+      { key: 'Enter', code: 'Enter', description: 'Enter key' },
+      { key: ' ', code: 'Space', description: 'Space key' }
+    ])('should copy when $description is pressed', async ({ key, code }) => {
       render(<CopyLink value="test@example.com" />);
       const button = screen.getByTestId('CopyLink');
 
-      fireEvent.keyDown(button, { key: 'Enter', code: 'Enter' });
-
-      await waitFor(() => {
-        expect(mockWriteText).toHaveBeenCalledWith('test@example.com');
-      });
-    });
-
-    it('should copy when Space key is pressed', async () => {
-      render(<CopyLink value="test@example.com" />);
-      const button = screen.getByTestId('CopyLink');
-
-      fireEvent.keyDown(button, { key: ' ', code: 'Space' });
+      fireEvent.keyDown(button, { key, code });
 
       await waitFor(() => {
         expect(mockWriteText).toHaveBeenCalledWith('test@example.com');

@@ -7,76 +7,66 @@ const commonCopyLinkBaseStyles = {
   textDecoration: 'none'
 };
 
-const getPrimaryCopyLinkStates = (palette = mainHexPallete) => ({
-  color: palette.black,
-  cursor: 'pointer',
-  '& svg *': {
-    stroke: palette.black,
-    transition: 'stroke 0.2s ease'
-  },
-  '&:hover': {
-    color: palette.burgundy[800],
-    textDecoration: 'underline',
-    textDecorationColor: palette.burgundy[800],
-    '& svg *': {
-      stroke: palette.burgundy[800]
-    }
-  },
+interface ColorConfig {
+  defaultColor: string;
+  hoverColor: string;
+  activeColor: string;
+  disabledColor: string;
+}
 
-  '&:active': {
-    color: palette.black,
-    '& svg *': {
-      stroke: palette.black
-    }
-  },
-
-  '&[aria-disabled="true"]': {
-    color: palette.blue[500],
-    pointerEvents: 'none',
-    cursor: 'not-allowed',
-    textDecoration: 'none',
-    '& svg *': {
-      stroke: palette.blue[500]
-    }
+const getColorConfig = (type: 'primary' | 'secondary', palette = mainHexPallete): ColorConfig => {
+  if (type === 'primary') {
+    return {
+      defaultColor: palette.black,
+      hoverColor: palette.burgundy[800],
+      activeColor: palette.black,
+      disabledColor: palette.blue[500]
+    };
   }
-});
 
-const getSecondaryCopyLinkStates = (palette = mainHexPallete) => ({
-  color: palette.blue[800],
+  return {
+    defaultColor: palette.blue[800],
+    hoverColor: palette.black,
+    activeColor: palette.blue[800],
+    disabledColor: palette.blue[500]
+  };
+};
+
+const getCopyLinkStates = (config: ColorConfig) => ({
+  color: config.defaultColor,
   cursor: 'pointer',
   '& svg *': {
-    stroke: palette.blue[800],
+    stroke: config.defaultColor,
     transition: 'stroke 0.2s ease'
   },
   '&:hover': {
-    color: palette.black,
+    color: config.hoverColor,
     textDecoration: 'underline',
-    textDecorationColor: palette.black,
+    textDecorationColor: config.hoverColor,
     '& svg *': {
-      stroke: palette.black
+      stroke: config.hoverColor
     }
   },
-
   '&:active': {
-    color: palette.blue[800],
+    color: config.activeColor,
     '& svg *': {
-      stroke: palette.blue[800]
+      stroke: config.activeColor
     }
   },
-
   '&[aria-disabled="true"]': {
-    color: palette.blue[500],
+    color: config.disabledColor,
     pointerEvents: 'none',
     cursor: 'not-allowed',
     textDecoration: 'none',
     '& svg *': {
-      stroke: palette.blue[500]
+      stroke: config.disabledColor
     }
   }
 });
 
 export const getCopyLinkStyles = (type: 'primary' | 'secondary' = 'primary') => {
-  const stateStyles = type === 'primary' ? getPrimaryCopyLinkStates() : getSecondaryCopyLinkStates();
+  const colorConfig = getColorConfig(type);
+  const stateStyles = getCopyLinkStates(colorConfig);
 
   return {
     ...commonCopyLinkBaseStyles,
@@ -102,14 +92,6 @@ export const getMobileDisabledStyles = (palette = mainHexPallete) => ({
   color: palette.blue[500],
   pointerEvents: 'none',
   cursor: 'not-allowed'
-});
-
-export const getMobileLinkStyles = () => ({
-  padding: '8px 0',
-  margin: '-8px 0',
-  minHeight: '44px',
-  display: 'inline-flex',
-  alignItems: 'center'
 });
 
 export const styles = {

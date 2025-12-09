@@ -77,11 +77,7 @@ function CopyLink({
         <Typography
           variant={variant}
           data-testid="CopyLink--mobile"
-          sx={{
-            ...copyLinkStyles,
-            ...sxToArray(sx),
-            ...(disabled && getMobileDisabledStyles())
-          }}
+          sx={[copyLinkStyles, ...sxToArray(sx), ...(disabled ? [getMobileDisabledStyles()] : [])]}
         >
           {value}
         </Typography>
@@ -93,11 +89,7 @@ function CopyLink({
         variant={variant}
         href={href}
         data-testid="CopyLink--mobile"
-        sx={{
-          ...copyLinkStyles,
-          ...sxToArray(sx),
-          ...(disabled && getMobileDisabledStyles())
-        }}
+        sx={[copyLinkStyles, ...sxToArray(sx), ...(disabled ? [getMobileDisabledStyles()] : [])]}
       >
         {value}
       </Link>
