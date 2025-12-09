@@ -223,6 +223,7 @@ export const EnhancedTable = <T extends RowData>({
             )}
             {totalPages > 1 && (
               <Pagination
+                hasMore={hasMore}
                 count={totalPages}
                 siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
                 page={currentPage}
