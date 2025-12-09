@@ -15,7 +15,7 @@ export const styles = {
       md: '40px'
     },
     gridColumn: '1 / -1',
-    mt: '120px',
+    mt: { xs: '80px', md: '172px', lg: '180px' },
     mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
     gridTemplateRows: 'auto auto'
   },

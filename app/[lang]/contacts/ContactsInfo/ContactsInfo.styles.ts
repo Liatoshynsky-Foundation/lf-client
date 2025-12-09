@@ -30,7 +30,7 @@ export const styles = {
   },
 
   contactsInfoWrapper: {
-    pt: '56px'
+    pt: { xs: '80px', lg: '116px' }
   },
 
   contactsDetails: {

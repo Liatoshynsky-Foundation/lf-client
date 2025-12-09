@@ -29,7 +29,7 @@ export const getStyles = (color: 'black' | 'brown') => ({
     color: colorText[color],
     whiteSpace: 'pre-line',
     mt: {
-      xs: '95px',
+      xs: '80px',
       sm: '60px',
       md: '44px'
     },
