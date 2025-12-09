@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Primitive = string | number | null;
 type ParamValue = Primitive | Primitive[];
-
 export type TableParams = Record<string, ParamValue>;
 
 type SetParamType<P extends TableParams> = <K extends keyof P>(key: K, value: P[K]) => void;
@@ -19,7 +18,7 @@ export function useTableFilters<P extends TableParams>(initialParams: P) {
 
   useEffect(() => {
     router.replace(pathname, { scroll: false });
-  }, [pathname, router]);
+  }, [router, pathname]);
 
   const syncUrl = useCallback(
     (nextParams: P) => {
@@ -46,25 +45,23 @@ export function useTableFilters<P extends TableParams>(initialParams: P) {
 
   const setParam: SetParamType<P> = useCallback(
     (key, value) => {
-      setParams((prev) => {
-        const next = { ...prev, [key]: value };
-        syncUrl(next);
-        return next;
-      });
+      const next = { ...params, [key]: value };
+
+      setParams(next);
+      syncUrl(next);
     },
-    [syncUrl]
+    [params, syncUrl]
   );
 
   const debouncedSetParam = useMemo(
     () =>
       debounce(<K extends keyof P>(key: K, value: P[K]) => {
-        setParams((prev) => {
-          const next = { ...prev, [key]: value };
-          syncUrl(next);
-          return next;
-        });
+        const next = { ...params, [key]: value };
+
+        setParams(next);
+        syncUrl(next);
       }, 400),
-    [syncUrl]
+    [params, syncUrl]
   );
 
   const resetFilters = useCallback(() => {
