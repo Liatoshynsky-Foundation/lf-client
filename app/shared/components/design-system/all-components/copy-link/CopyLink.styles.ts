@@ -104,11 +104,25 @@ export const getMobileDisabledStyles = (palette = mainHexPallete) => ({
   cursor: 'not-allowed'
 });
 
+export const getMobileLinkStyles = () => ({
+  padding: '8px 0',
+  margin: '-8px 0',
+  minHeight: '44px',
+  display: 'inline-flex',
+  alignItems: 'center'
+});
+
 export const styles = {
   wrapper: {
     display: 'flex',
     alignItems: 'center',
-    gap: '4px'
+    gap: '4px',
+    border: 'none',
+    background: 'none',
+    padding: 0,
+    margin: 0,
+    font: 'inherit',
+    outline: 'none'
   },
 
   iconWrapper: {

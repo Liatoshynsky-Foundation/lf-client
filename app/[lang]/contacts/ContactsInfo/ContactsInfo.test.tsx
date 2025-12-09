@@ -10,46 +10,7 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
 }));
 
-const mockIsMobile = false;
-
-jest.mock('~/ds-components/copy-link/CopyLink', () => ({
-  __esModule: true,
-  default: ({ value, hrefType, disabled }: { value: string | number; hrefType?: string; disabled?: boolean }) => {
-    const handleClick = () => {
-      if (!disabled && !mockIsMobile) {
-        navigator.clipboard.writeText(String(value));
-      }
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleClick();
-      }
-    };
-
-    if (mockIsMobile && hrefType) {
-      const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
-      return (
-        <a href={href} data-testid="mock-copy-link">
-          {value}
-        </a>
-      );
-    }
-
-    return (
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        data-testid="mock-copy-link"
-      >
-        <span>{value}</span>
-      </button>
-    );
-  }
-}));
+jest.mock('~/ds-components/copy-link/CopyLink');
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) =>

@@ -10,27 +10,7 @@ jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => (
   default: ({ buttons }: { buttons: React.ReactNode[] }) => <div data-testid="mock-button-group">{buttons}</div>
 }));
 
-jest.mock('../../design-system/all-components/copy-link/CopyLink', () => ({
-  __esModule: true,
-  default: ({ value }: { value: string | number; hint?: string }) => {
-    const handleClick = () => {
-      navigator.clipboard.writeText(String(value));
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleClick();
-      }
-    };
-
-    return (
-      <button type="button" onClick={handleClick} onKeyDown={handleKeyDown} data-testid="mock-copy-link">
-        <span>{value}</span>
-      </button>
-    );
-  }
-}));
+jest.mock('../../design-system/all-components/copy-link/CopyLink');
 
 jest.mock('../../svg-image/SvgImage', () => ({
   SvgImage: (props: React.ComponentProps<'img'>) => <img data-testid="svg-image" {...props} alt="content copy icon" />

@@ -12,11 +12,11 @@ import { getCopyLinkStyles, getIconStroke, getMobileDisabledStyles, styles } fro
 import { iconSizes } from '~/constants/design';
 import { sxToArray } from '~/utils/sxToArray';
 
-import CopyIcon from '~/public/icons/copy-icon.svg';
+import CopyIcon from '~/public/icons/content-copy.svg';
 export type CopyIconSize = keyof typeof iconSizes;
 
 interface CopyLinkProps {
-  hrefType?: string;
+  hrefType?: 'phone' | 'email';
   value: string | number;
   size?: CopyIconSize;
   type?: 'primary' | 'secondary';
@@ -61,7 +61,7 @@ function CopyLink({
     }
   };
   const variant = size === 'small' || size === 'medium' ? 'customSemiBold16' : 'customSemiBold20';
-  const iconSize = iconSizes[size];
+  const copyIconSize = iconSizes[size];
   const copyLinkStyles = getCopyLinkStyles(type);
 
   if (isMobile) {
@@ -105,29 +105,23 @@ function CopyLink({
   }
 
   return (
-    <Typography
-      component="div"
-      variant={variant}
+    <Box
+      component="button"
       onClick={handleCopy}
       onKeyDown={handleKeyDown}
       tabIndex={disabled ? -1 : 0}
-      role="button"
       aria-disabled={disabled}
       data-testid="CopyLink"
-      sx={{
-        ...styles.wrapper,
-        ...copyLinkStyles,
-        ...sxToArray(sx)
-      }}
+      sx={[styles.wrapper, copyLinkStyles, ...sxToArray(sx)]}
     >
       <Typography component="span" variant={variant} data-testid="CopyLink-text">
         {value}
       </Typography>
-      <TooltipCustom title={isCopied ? finalHint : ''} showArrow open={isCopied}>
+      <TooltipCustom title={finalHint} isOpen={isCopied} showArrow>
         <Box sx={styles.iconWrapper} data-testid="CopyLink-iconWrapper">
           <Svg
-            width={`${iconSize}px`}
-            height={`${iconSize}px`}
+            width={`${copyIconSize}px`}
+            height={`${copyIconSize}px`}
             Component={CopyIcon}
             alt="Copy"
             stroke={getIconStroke(type, disabled)}
@@ -135,7 +129,7 @@ function CopyLink({
           />
         </Box>
       </TooltipCustom>
-    </Typography>
+    </Box>
   );
 }
 

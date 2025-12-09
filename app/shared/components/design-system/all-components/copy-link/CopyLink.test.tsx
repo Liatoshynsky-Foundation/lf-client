@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -26,8 +26,8 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
 
 jest.mock('~/ds-components/tooltip/Tooltip', () => ({
   __esModule: true,
-  default: ({ children, title, open }: any) => (
-    <div data-testid="CopyLink-tooltip" data-title={title} data-open={open}>
+  default: ({ children, title, isOpen }: any) => (
+    <div data-testid="CopyLink-tooltip" data-title={title} data-open={isOpen}>
       {children}
     </div>
   )
@@ -39,6 +39,7 @@ describe('CopyLink', () => {
   let mockWriteText: jest.Mock;
 
   beforeAll(() => {
+    jest.useFakeTimers();
     mockWriteText = jest.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', {
       value: {
@@ -47,6 +48,10 @@ describe('CopyLink', () => {
       writable: true,
       configurable: true
     });
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
   });
 
   beforeEach(() => {
@@ -80,14 +85,14 @@ describe('CopyLink', () => {
 
     it('should have aria-disabled attribute when disabled', () => {
       render(<CopyLink value="test" disabled />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toHaveAttribute('aria-disabled', 'true');
+      const button = screen.getByTestId('CopyLink');
+      expect(button).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('should not have aria-disabled="true" when not disabled', () => {
       render(<CopyLink value="test" />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toHaveAttribute('aria-disabled', 'false');
+      const button = screen.getByTestId('CopyLink');
+      expect(button).toHaveAttribute('aria-disabled', 'false');
     });
 
     it('should render with small size', () => {
@@ -137,13 +142,122 @@ describe('CopyLink', () => {
 
     it('should apply custom sx styles', () => {
       render(<CopyLink value="test" sx={{ color: 'red', fontSize: '24px' }} />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toBeInTheDocument();
+      const button = screen.getByTestId('CopyLink');
+      expect(button).toBeInTheDocument();
     });
 
     it('should render tooltip component', () => {
       render(<CopyLink value="test" />);
       expect(screen.getByTestId('CopyLink-tooltip')).toBeInTheDocument();
+    });
+
+    it('should copy to clipboard when clicked', async () => {
+      render(<CopyLink value="test@example.com" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(mockWriteText).toHaveBeenCalledWith('test@example.com');
+        expect(mockWriteText).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it('should show tooltip when copied', async () => {
+      render(<CopyLink value="test" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        const tooltip = screen.getByTestId('CopyLink-tooltip');
+        expect(tooltip).toHaveAttribute('data-open', 'true');
+      });
+    });
+
+    it('should hide tooltip after delay', async () => {
+      render(<CopyLink value="test" delay={1000} />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        const tooltip = screen.getByTestId('CopyLink-tooltip');
+        expect(tooltip).toHaveAttribute('data-open', 'true');
+      });
+
+      jest.advanceTimersByTime(1000);
+
+      await waitFor(() => {
+        const tooltip = screen.getByTestId('CopyLink-tooltip');
+        expect(tooltip).toHaveAttribute('data-open', 'false');
+      });
+    });
+
+    it('should show custom hint message', async () => {
+      render(<CopyLink value="test" hint="Custom copied!" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        const tooltip = screen.getByTestId('CopyLink-tooltip');
+        expect(tooltip).toHaveAttribute('data-title', 'Custom copied!');
+      });
+    });
+
+    it('should copy when Enter key is pressed', async () => {
+      render(<CopyLink value="test@example.com" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.keyDown(button, { key: 'Enter', code: 'Enter' });
+
+      await waitFor(() => {
+        expect(mockWriteText).toHaveBeenCalledWith('test@example.com');
+      });
+    });
+
+    it('should copy when Space key is pressed', async () => {
+      render(<CopyLink value="test@example.com" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.keyDown(button, { key: ' ', code: 'Space' });
+
+      await waitFor(() => {
+        expect(mockWriteText).toHaveBeenCalledWith('test@example.com');
+      });
+    });
+
+    it('should not copy when other keys are pressed', async () => {
+      render(<CopyLink value="test@example.com" />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.keyDown(button, { key: 'a', code: 'KeyA' });
+
+      expect(mockWriteText).not.toHaveBeenCalled();
+    });
+
+    it('should not copy to clipboard when disabled', async () => {
+      render(<CopyLink value="test@example.com" disabled />);
+      const button = screen.getByTestId('CopyLink');
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(mockWriteText).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should have tabIndex -1 when disabled', () => {
+      render(<CopyLink value="test" disabled />);
+      const button = screen.getByTestId('CopyLink');
+      expect(button).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('should have tabIndex 0 when not disabled', () => {
+      render(<CopyLink value="test" />);
+      const button = screen.getByTestId('CopyLink');
+      expect(button).toHaveAttribute('tabIndex', '0');
     });
   });
 
@@ -175,11 +289,12 @@ describe('CopyLink', () => {
       const text = screen.getByText('test');
       expect(text).toBeInTheDocument();
       expect(screen.queryByRole('link')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
 
-    it('should not copy to clipboard on mobile when clicked', async () => {
+    it('should not have copy functionality on mobile', () => {
       render(<CopyLink value="test@example.com" hrefType="email" />);
-
+      expect(screen.queryByTestId('CopyLink')).not.toBeInTheDocument();
       expect(mockWriteText).not.toHaveBeenCalled();
     });
 
@@ -238,20 +353,20 @@ describe('CopyLink', () => {
 
     it('should use customSemiBold16 variant for small size', () => {
       render(<CopyLink value="test" size="small" />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toHaveClass('MuiTypography-customSemiBold16');
+      const text = screen.getByTestId('CopyLink-text');
+      expect(text).toHaveClass('MuiTypography-customSemiBold16');
     });
 
     it('should use customSemiBold16 variant for medium size', () => {
       render(<CopyLink value="test" size="medium" />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toHaveClass('MuiTypography-customSemiBold16');
+      const text = screen.getByTestId('CopyLink-text');
+      expect(text).toHaveClass('MuiTypography-customSemiBold16');
     });
 
     it('should use customSemiBold20 variant for large size', () => {
       render(<CopyLink value="test" size="large" />);
-      const element = screen.getByText('test').parentElement;
-      expect(element).toHaveClass('MuiTypography-customSemiBold20');
+      const text = screen.getByTestId('CopyLink-text');
+      expect(text).toHaveClass('MuiTypography-customSemiBold20');
     });
   });
 
@@ -305,14 +420,6 @@ describe('CopyLink', () => {
       render(<CopyLink value="123456" type="secondary" hrefType="phone" />);
       const link = screen.getByRole('link');
       expect(link).toHaveAttribute('href', 'tel:123456');
-    });
-
-    it('should handle unknown hrefType gracefully', () => {
-      mockedUseBreakpoints.mockReturnValue({ isMobile: true });
-      render(<CopyLink value="test" hrefType="unknown" />);
-      const text = screen.getByText('test');
-      expect(text).toBeInTheDocument();
-      expect(screen.queryByRole('link')).not.toBeInTheDocument();
     });
   });
 });

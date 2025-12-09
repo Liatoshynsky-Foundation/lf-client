@@ -7,28 +7,7 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 
-jest.mock('~/ds-components/copy-link/CopyLink', () => ({
-  __esModule: true,
-  default: ({ value, hint }: { value: string; hint?: string }) => {
-    const handleClick = () => {
-      navigator.clipboard.writeText(value);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleClick();
-      }
-    };
-
-    return (
-      <button type="button" onClick={handleClick} onKeyDown={handleKeyDown} data-testid="mock-copy-link">
-        <span>{value}</span>
-        <button aria-label="Copy content">{hint}</button>
-      </button>
-    );
-  }
-}));
+jest.mock('~/ds-components/copy-link/CopyLink');
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   __esModule: true,
@@ -95,10 +74,10 @@ describe('VolunteerDonation', () => {
   it('should render copy buttons for each payment method', () => {
     render(<VolunteerDonation {...mockProps} />);
 
-    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    const copyButtons = screen.getAllByTestId('mock-copy-link');
     expect(copyButtons).toHaveLength(2);
-    expect(copyButtons[0]).toHaveTextContent('copied');
-    expect(copyButtons[1]).toHaveTextContent('copied');
+    expect(copyButtons[0]).toHaveTextContent('paypal@example.com');
+    expect(copyButtons[1]).toHaveTextContent('bank@example.com');
   });
 
   it('should render image with caption', () => {
@@ -136,7 +115,7 @@ describe('VolunteerDonation', () => {
 
     expect(screen.getByText('PayPal:')).toBeInTheDocument();
     expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
-    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    const copyButtons = screen.getAllByTestId('mock-copy-link');
     expect(copyButtons).toHaveLength(1);
   });
 

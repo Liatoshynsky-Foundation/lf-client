@@ -12,46 +12,7 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
 }));
 
-let mockIsMobile = false;
-
-jest.mock('~/ds-components/copy-link/CopyLink', () => ({
-  __esModule: true,
-  default: ({ value, hrefType, disabled }: { value: string | number; hrefType?: string; disabled?: boolean }) => {
-    const handleClick = () => {
-      if (!disabled && !mockIsMobile) {
-        navigator.clipboard.writeText(String(value));
-      }
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleClick();
-      }
-    };
-
-    if (mockIsMobile && hrefType) {
-      const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
-      return (
-        <a href={href} data-testid="mock-copy-link">
-          {value}
-        </a>
-      );
-    }
-
-    return (
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        data-testid="mock-copy-link"
-      >
-        <span>{value}</span>
-      </button>
-    );
-  }
-}));
+jest.mock('~/ds-components/copy-link/CopyLink');
 
 const mockedUseBreakpoints = useBreakpoints as jest.Mock;
 
@@ -83,7 +44,9 @@ describe('FooterContactInfo', () => {
 
   describe('on desktop', () => {
     beforeEach(() => {
-      mockIsMobile = false;
+      const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
+      setMockIsMobile(false);
+
       mockedUseBreakpoints.mockReturnValue({ isMobile: false });
       render(<FooterContactInfo labels={labels} contacts={contacts} alertMsg={alertMsg} />);
     });
@@ -122,7 +85,8 @@ describe('FooterContactInfo', () => {
 
   describe('on mobile', () => {
     beforeEach(() => {
-      mockIsMobile = true;
+      const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
+      setMockIsMobile(true);
       mockedUseBreakpoints.mockReturnValue({ isMobile: true });
       render(<FooterContactInfo labels={labels} contacts={contacts} alertMsg={alertMsg} />);
     });

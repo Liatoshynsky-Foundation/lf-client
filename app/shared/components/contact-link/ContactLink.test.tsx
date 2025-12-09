@@ -12,38 +12,14 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
 }));
 
-let mockIsMobile = false;
-
-jest.mock('~/ds-components/copy-link/CopyLink', () => ({
-  __esModule: true,
-  default: ({ value, hrefType, disabled }: { value: string | number; hrefType?: string; disabled?: boolean }) => {
-    const handleClick = () => {
-      if (!disabled && !mockIsMobile) {
-        navigator.clipboard.writeText(String(value));
-      }
-    };
-
-    if (mockIsMobile && hrefType) {
-      const href = hrefType === 'phone' ? `tel:${value}` : `mailto:${value}`;
-      return (
-        <a href={href} data-testid="mock-copy-link">
-          {value}
-        </a>
-      );
-    }
-
-    return (
-      <div aria-disabled={disabled ? 'true' : 'false'} onClick={handleClick} data-testid="mock-copy-link">
-        <span>{value}</span>
-      </div>
-    );
-  }
-}));
+jest.mock('~/ds-components/copy-link/CopyLink');
+const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
 
 const mockedUseBreakpoints = useBreakpoints as jest.Mock;
 
 beforeEach(() => {
-  mockIsMobile = false;
+  setMockIsMobile(false);
+
   mockedUseBreakpoints.mockReturnValue({ isMobile: false });
 });
 
@@ -65,7 +41,7 @@ describe('ContactLink component', () => {
   });
 
   it('should render mailto link on mobile', () => {
-    mockIsMobile = true;
+    setMockIsMobile(true);
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
     render(<ContactLink type="email" value="mobile@example.com" label="Email" />);
@@ -75,7 +51,7 @@ describe('ContactLink component', () => {
   });
 
   it('should render phone link with tel: on mobile', () => {
-    mockIsMobile = true;
+    setMockIsMobile(true);
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
     render(<ContactLink type="phone" value="+380123456789" />);
@@ -135,7 +111,7 @@ describe('ContactLink component', () => {
   });
 
   it('should not render copy button on mobile', () => {
-    mockIsMobile = true;
+    setMockIsMobile(true);
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
     render(<ContactLink type="email" value="mobile@example.com" />);
