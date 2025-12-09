@@ -22,16 +22,16 @@ export default async function Biography({ params }: Readonly<Language>): Promise
   const { lang } = await params;
   setRequestLocale(lang);
 
+  if (isProductionMode()) {
+    return <UnderDevelopment />;
+  }
+
   const pageService = await createRequestContainer().resolve('pagesDataService');
 
   const page = await pageService.getPageData('biography', lang);
 
   if (!page) {
     return <></>;
-  }
-
-  if (isProductionMode()) {
-    return <UnderDevelopment />;
   }
 
   const years = page.blocks.biographyContent.map((year) => year.yearTitle).filter((year) => year !== null);

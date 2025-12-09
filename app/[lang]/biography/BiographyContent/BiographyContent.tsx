@@ -18,7 +18,7 @@ import ImageWithCaption from '~/shared/components/image-with-caption/ImageWithCa
 import YearWithLine from '~/shared/components/year-with-line/YearWithLine';
 
 export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
-  function renderChrolologyList(item: ChronologyList, key: string): ReactNode {
+  function renderChronologyList(item: ChronologyList, key: string): ReactNode {
     return (
       <Fragment key={key}>
         {item.additionalImage && (
@@ -143,7 +143,7 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
 
           switch (item.type) {
             case ContentType.ChronologyList:
-              return renderChrolologyList(item, key);
+              return renderChronologyList(item, key);
             case ContentType.ExcerptBlockItem:
               return renderExcerptBlock(item, key);
             case ContentType.OnlyImageBlock:
