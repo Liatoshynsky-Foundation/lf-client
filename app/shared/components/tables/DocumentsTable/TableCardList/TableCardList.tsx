@@ -1,10 +1,11 @@
 import { Box } from '@mui/material';
 
-import { ArchiveRecord } from '~/shared/components/tables/DocumentsTable/documents.conts';
+import { DocumentRecord } from '~/types/types/document.types';
+
 import TableCard from '~/shared/components/tables/DocumentsTable/TableCard/TableCard';
 
 interface TableCardListProps {
-  paginatedData: ReadonlyArray<Readonly<ArchiveRecord>>;
+  paginatedData: ReadonlyArray<Readonly<DocumentRecord>>;
   tableRef: React.RefObject<HTMLDivElement | null>;
 }
 

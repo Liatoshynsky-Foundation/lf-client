@@ -4,7 +4,6 @@ import { CellContext } from '@tanstack/react-table';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { ArchiveRecord } from './documents.conts';
 import {
   RenderActionCell,
   RenderCodeCell,
@@ -18,6 +17,7 @@ import {
   RenderSheetCell,
   RenderSheetHeader
 } from './DocumentTableCells';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -45,14 +45,14 @@ jest.mock('@mui/material', () => {
 });
 const mockUseMediaQuery = useMediaQuery as jest.Mock;
 
-const mockRecord: ArchiveRecord = {
+const mockRecord: DocumentRecord = {
   id: '1',
-  code: 'F.1',
+  cipher: 'F.1',
   name: 'Document 1',
-  date: '2020',
+  dates: '2020',
   sheets: 3,
-  content: 'Some content',
-  action: 'PDF'
+  contentDescription: 'Some content',
+  pdfUrl: null
 };
 
 describe('DocumentsTableCells', () => {
@@ -72,7 +72,7 @@ describe('DocumentsTableCells', () => {
         </>
       );
 
-      expect(screen.getByText('code')).toBeInTheDocument();
+      expect(screen.getByText('cipher')).toBeInTheDocument();
       expect(screen.getByText('name')).toBeInTheDocument();
       expect(screen.getByText('date')).toBeInTheDocument();
       expect(screen.getByText('sheets')).toBeInTheDocument();
@@ -81,30 +81,30 @@ describe('DocumentsTableCells', () => {
   });
 
   describe('Cell renderers', () => {
-    it('should render code, name, date, sheets, content cells', () => {
-      const codeCell = RenderCodeCell({ getValue: () => mockRecord.code } as CellContext<ArchiveRecord, unknown>);
-      const nameCell = RenderNameCell({ getValue: () => mockRecord.name } as CellContext<ArchiveRecord, unknown>);
-      const dateCell = RenderDateCell({ getValue: () => mockRecord.date } as CellContext<ArchiveRecord, unknown>);
-      const sheetCell = RenderSheetCell({ getValue: () => mockRecord.sheets } as CellContext<ArchiveRecord, unknown>);
-      const contentCell = RenderContentCell({ getValue: () => mockRecord.content } as CellContext<
-        ArchiveRecord,
+    it('should render cipher, name, dates, sheets, contentDescription cells', () => {
+      const cipherCell = RenderCodeCell({ getValue: () => mockRecord.cipher } as CellContext<DocumentRecord, unknown>);
+      const nameCell = RenderNameCell({ getValue: () => mockRecord.name } as CellContext<DocumentRecord, unknown>);
+      const datesCell = RenderDateCell({ getValue: () => mockRecord.dates } as CellContext<DocumentRecord, unknown>);
+      const sheetCell = RenderSheetCell({ getValue: () => mockRecord.sheets } as CellContext<DocumentRecord, unknown>);
+      const contentCell = RenderContentCell({ getValue: () => mockRecord.contentDescription } as CellContext<
+        DocumentRecord,
         unknown
       >);
 
       render(
         <>
-          {codeCell}
+          {cipherCell}
           {nameCell}
-          {dateCell}
+          {datesCell}
           {sheetCell}
           {contentCell}
         </>
       );
 
-      expect(screen.getByText(mockRecord.code)).toBeInTheDocument();
+      expect(screen.getByText(mockRecord.cipher)).toBeInTheDocument();
       expect(screen.getByText(mockRecord.name)).toBeInTheDocument();
-      expect(screen.getByText(mockRecord.date)).toBeInTheDocument();
-      expect(screen.getByText(mockRecord.content)).toBeInTheDocument();
+      expect(screen.getByText(mockRecord.dates)).toBeInTheDocument();
+      expect(screen.getByText(mockRecord.contentDescription)).toBeInTheDocument();
     });
   });
 
@@ -114,7 +114,7 @@ describe('DocumentsTableCells', () => {
       mockUseMediaQuery.mockReturnValue(false);
 
       const record = { ...mockRecord, sheets: null };
-      const cell = RenderActionCell({ row: { original: record } } as CellContext<ArchiveRecord, unknown>);
+      const cell = RenderActionCell({ row: { original: record } } as CellContext<DocumentRecord, unknown>);
       const { container } = render(<>{cell}</>);
       expect(container).toBeEmptyDOMElement();
     });
@@ -123,7 +123,7 @@ describe('DocumentsTableCells', () => {
       mockUseBreakpoints.mockReturnValue({ isLaptop: false });
       mockUseMediaQuery.mockReturnValueOnce(false).mockReturnValueOnce(true);
 
-      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<ArchiveRecord, unknown>);
+      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
       expect(screen.getByText('view')).toBeInTheDocument();
     });
@@ -132,7 +132,7 @@ describe('DocumentsTableCells', () => {
       mockUseBreakpoints.mockReturnValue({ isLaptop: false });
       mockUseMediaQuery.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
-      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<ArchiveRecord, unknown>);
+      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
       expect(screen.getByText('shortView')).toBeInTheDocument();
     });
@@ -141,7 +141,7 @@ describe('DocumentsTableCells', () => {
       mockUseBreakpoints.mockReturnValue({ isLaptop: true });
       mockUseMediaQuery.mockReturnValue(false);
 
-      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<ArchiveRecord, unknown>);
+      const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
       expect(screen.getByText('menu')).toBeInTheDocument();
     });

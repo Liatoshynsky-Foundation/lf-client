@@ -3,18 +3,18 @@ import { useTranslations } from 'next-intl';
 
 import { styles } from './TableCard.styles';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
-import { ArchiveRecord } from '~/shared/components/tables/DocumentsTable/documents.conts';
 
-export default function TableCard({ id, code, name, date, sheets, content }: Readonly<ArchiveRecord>) {
+export default function TableCard({ id, cipher, name, dates, sheets, contentDescription }: Readonly<DocumentRecord>) {
   const t = useTranslations('table.documents');
   return (
     <Box key={id} sx={styles.card}>
       <Box sx={styles.contentBox}>
         <Box>
-          <Typography sx={styles.code}>{code}</Typography>
+          <Typography sx={styles.code}>{cipher}</Typography>
           <Typography sx={styles.name}>{name}</Typography>
         </Box>
         <Box>
@@ -23,7 +23,7 @@ export default function TableCard({ id, code, name, date, sheets, content }: Rea
               {t('columns.date') + ': '}
             </Typography>
             <Typography sx={styles.labelValue} component="span">
-              {date}
+              {dates}
             </Typography>
           </Box>
           <Box>
@@ -36,7 +36,7 @@ export default function TableCard({ id, code, name, date, sheets, content }: Rea
           </Box>
         </Box>
         <Box>
-          <Typography sx={styles.content}>{content}</Typography>
+          <Typography sx={styles.content}>{contentDescription}</Typography>
         </Box>
       </Box>
       <Box sx={styles.buttonsBox}>

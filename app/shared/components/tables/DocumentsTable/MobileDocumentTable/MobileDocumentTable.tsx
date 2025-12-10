@@ -3,16 +3,16 @@ import { useTranslations } from 'next-intl';
 import { useLayoutEffect, useRef } from 'react';
 
 import { styles } from './MobileDocumentTable.styles';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import Pagination from '~/shared/components/design-system/all-components/pagination/Pagination';
 import ControlPanel from '~/shared/components/enhanced-table/control-panel/ControlPanel';
-import { ArchiveRecord } from '~/shared/components/tables/DocumentsTable/documents.conts';
 import TableCardList from '~/shared/components/tables/DocumentsTable/TableCardList/TableCardList';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { usePagination } from '~/shared/hooks/use-pagination/usePagination';
 
 interface MobileDocumentTableProps {
-  data: ArchiveRecord[];
+  data: DocumentRecord[];
   tableName: string;
   itemsPerPage?: number;
   Search?: React.ReactNode;
