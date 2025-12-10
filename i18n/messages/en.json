@@ -195,7 +195,7 @@
     "documents": {
       "name": "All files",
       "columns": {
-        "code": "Code",
+        "cipher": "Code",
         "name": "File name",
         "date": "Dates",
         "sheets": "Sheet",

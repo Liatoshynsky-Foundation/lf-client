@@ -195,7 +195,7 @@
     "documents": {
       "name": "Усі справи",
       "columns": {
-        "code": "Шифр",
+        "cipher": "Шифр",
         "name": "Назва справи",
         "date": "Дати",
         "sheets": "Аркуші",
