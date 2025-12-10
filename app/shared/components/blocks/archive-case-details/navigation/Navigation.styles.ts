@@ -10,7 +10,6 @@ export const styles: Record<string, SxProps<Theme>> = {
       md: '40px'
     },
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'flex-start',
     gap: '16px'
   },
@@ -18,7 +17,9 @@ export const styles: Record<string, SxProps<Theme>> = {
   navItemLeft: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    flex: '1 1 0',
+    minWidth: 0
   },
 
   navItemRight: {
@@ -26,7 +27,8 @@ export const styles: Record<string, SxProps<Theme>> = {
     flexDirection: 'column',
     alignItems: 'flex-end',
     textAlign: 'right',
-    marginLeft: 'auto'
+    flex: '1 1 0',
+    minWidth: 0
   },
 
   navButton: {
