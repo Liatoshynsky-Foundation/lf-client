@@ -7,8 +7,8 @@ export const styles: Record<string, SxProps<Theme>> = {
     display: 'block',
     overflowX: 'auto',
     whiteSpace: 'nowrap',
-    width: `calc(100% + ${gutter})`,
-    marginRight: `-${gutter}`,
+    width: { xs: `calc(100% + ${gutter})`, sm: '100%' },
+    mr: { xs: `-${gutter}`, sm: 0 },
     scrollbarWidth: 'none',
     '&::-webkit-scrollbar': { display: 'none' }
   },

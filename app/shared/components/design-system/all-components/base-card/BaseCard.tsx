@@ -10,7 +10,7 @@ import { styles } from './BaseCard.styles';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-type Variant = 'news' | 'press';
+export type Variant = 'news' | 'press';
 
 export interface BaseCardProps {
   image: string;

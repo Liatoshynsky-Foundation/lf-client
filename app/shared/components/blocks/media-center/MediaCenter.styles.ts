@@ -13,6 +13,5 @@ export const styles = {
   },
   tabsBox: {
     gridColumn: { sm: '4/ -1', md: '6/-1' }
-    //whiteSpace: { xs: 'nowrap', sm: 'normal' }
   }
 };
