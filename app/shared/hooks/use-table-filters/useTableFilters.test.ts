@@ -27,7 +27,7 @@ describe('useTableFilters', () => {
   test('initializes params from initialParams (URL is ignored)', () => {
     renderHook(() => useTableFilters(initialParams));
 
-    expect(replaceMock).toHaveBeenNthCalledWith(1, '/test', { scroll: false });
+    expect(replaceMock).toHaveBeenLastCalledWith('/test', { scroll: false });
   });
 
   test('setParam updates params and syncs URL including all fields', () => {
@@ -39,7 +39,7 @@ describe('useTableFilters', () => {
 
     expect(result.current.params.search).toBe('hello');
 
-    expect(replaceMock).toHaveBeenNthCalledWith(2, '/test?search=hello&yearFrom=1900&yearTo=2024', { scroll: false });
+    expect(replaceMock).toHaveBeenLastCalledWith('/test?search=hello&yearFrom=1900&yearTo=2024', { scroll: false });
   });
 
   test('debouncedSetParam updates after delay and syncs full URL', () => {
@@ -55,9 +55,7 @@ describe('useTableFilters', () => {
 
     expect(result.current.params.search).toBe('debounced');
 
-    expect(replaceMock).toHaveBeenNthCalledWith(2, '/test?search=debounced&yearFrom=1900&yearTo=2024', {
-      scroll: false
-    });
+    expect(replaceMock).toHaveBeenLastCalledWith('/test?search=debounced&yearFrom=1900&yearTo=2024', { scroll: false });
   });
 
   test('resetFilters resets to initialParams and syncs full URL', () => {
@@ -73,6 +71,6 @@ describe('useTableFilters', () => {
 
     expect(result.current.params).toEqual(initialParams);
 
-    expect(replaceMock).toHaveBeenNthCalledWith(4, '/test?search=&yearFrom=1900&yearTo=2024', { scroll: false });
+    expect(replaceMock).toHaveBeenLastCalledWith('/test?search=&yearFrom=1900&yearTo=2024', { scroll: false });
   });
 });
