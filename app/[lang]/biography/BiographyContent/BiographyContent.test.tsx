@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { BiographyContent } from './BiographyContent';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import type { BiographyContentBlock } from '~/types/page/biography.types';
 import { ContentType, ImagesSizes } from '~/types/page/biography.types';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
@@ -45,16 +46,20 @@ jest.mock('~/shared/components/year-with-line/YearWithLine', () => {
 
 const t = (uk: string, _en: string) => uk;
 
-const makeTipTapDoc = (text: string): TipTapDoc =>
-  ({
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: [{ type: 'text', text }]
-      }
-    ]
-  }) as TipTapDoc;
+const makeTipTapDoc = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [
+        {
+          type: TipTapNodeTypes.text,
+          text
+        }
+      ]
+    }
+  ]
+});
 
 const makeAdvancedImage = (args: {
   src: string;

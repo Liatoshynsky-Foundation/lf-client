@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { HeroSection } from './HeroSection';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 const mockResizeObserverObserve = jest.fn();
 const mockResizeObserverUnobserve = jest.fn();
@@ -49,16 +51,20 @@ jest.mock('~/components/design-system/all-components/content-block/ContentBlock'
   };
 });
 
-const makeTipTapDoc = (text: string) =>
-  ({
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: [{ type: 'text', text }]
-      }
-    ]
-  }) as any;
+const makeTipTapDoc = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [
+        {
+          type: TipTapNodeTypes.text,
+          text
+        }
+      ]
+    }
+  ]
+});
 
 const biographyHeroData = {
   title: 'ЖиТтєПиС ЛятОшИнсьКогО',
