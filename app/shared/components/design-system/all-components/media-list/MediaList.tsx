@@ -12,30 +12,31 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { usePagination } from '~/shared/hooks/use-pagination/usePagination';
 
 interface MediaListProps {
-  data: newsPressCardItem[];
+  mediaData: newsPressCardItem[];
   itemsPerPage?: number;
   variant: Variant;
   dataTestId: string;
 }
 
-function MediaList({ data, itemsPerPage = 9, variant, dataTestId }: Readonly<MediaListProps>) {
-  const { isMobile, isTablet } = useBreakpoints();
-  const t = useTranslations('common');
-
+function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonly<MediaListProps>) {
   const { hasMore, paginatedData, currentPage, totalPages, visiblePages, handlePageChange, handleLoadMore } =
     usePagination({
-      data,
+      data: mediaData,
       itemsPerPage
     });
 
-  const tableRef = useRef<HTMLDivElement | null>(null);
+  const { isMobile, isTablet } = useBreakpoints();
+
+  const listRef = useRef<HTMLDivElement | null>(null);
   const shouldScrollRef = useRef(false);
+
+  const t = useTranslations('common');
 
   useLayoutEffect(() => {
     if (!shouldScrollRef.current) return;
     shouldScrollRef.current = false;
 
-    const el = tableRef.current;
+    const el = listRef.current;
     if (el && typeof el.scrollIntoView === 'function') {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -51,7 +52,7 @@ function MediaList({ data, itemsPerPage = 9, variant, dataTestId }: Readonly<Med
         data-testid={`${dataTestId}List`}
         role="list"
         aria-label="Список медіаматеріалів"
-        ref={tableRef}
+        ref={listRef}
         sx={styles.cardsContainer}
       >
         {paginatedData.map((newsItem) => (

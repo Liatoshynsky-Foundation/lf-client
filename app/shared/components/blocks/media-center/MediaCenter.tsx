@@ -57,10 +57,12 @@ function MediaCenter() {
           onTabChange={setSelectedTab}
         />
       </Box>
-      {selectedTab === 'news' && <MediaList dataTestId={selectedTab[0].toUpperCase()} data={news} variant="news" />}
+      {selectedTab === 'news' && (
+        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={news} variant="news" />
+      )}
 
       {selectedTab === 'press' && press && (
-        <MediaList dataTestId={selectedTab[0].toUpperCase()} data={press} variant="press" />
+        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={press} variant="press" />
       )}
     </Box>
   );

@@ -77,7 +77,7 @@ describe('MediaList Component', () => {
   });
 
   it('should render list of cards correctly', () => {
-    render(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
     const listContainer = screen.getByTestId('newsList');
     expect(listContainer).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe('MediaList Component', () => {
       handleLoadMore: handleLoadMoreMock
     });
 
-    render(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
     const button = screen.getByText('Переглянути більше');
     expect(button).toBeInTheDocument();
@@ -112,18 +112,18 @@ describe('MediaList Component', () => {
       hasMore: false
     });
 
-    render(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
     expect(screen.queryByText('Переглянути більше')).not.toBeInTheDocument();
   });
 
   it('should adjust siblingCount based on breakpoints', () => {
     mockUsePagination.mockReturnValue({ ...mockUsePagination(), totalPages: 5 });
-    const { rerender } = render(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    const { rerender } = render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
     expect(screen.getByTestId('pagination-component')).toHaveAttribute('data-sibling-count', '1');
 
     mockUseBreakpoints.mockReturnValue({ isMobile: true, isTablet: false });
-    rerender(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    rerender(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
     expect(screen.getByTestId('pagination-component')).toHaveAttribute('data-sibling-count', '0');
   });
 
@@ -141,7 +141,7 @@ describe('MediaList Component', () => {
       handleLoadMore: handleLoadMoreMock
     });
 
-    const { rerender } = render(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    const { rerender } = render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
     const listElement = screen.getByTestId('newsList');
     listElement.scrollIntoView = jest.fn();
@@ -159,7 +159,7 @@ describe('MediaList Component', () => {
       handleLoadMore: handleLoadMoreMock
     });
 
-    rerender(<MediaList data={mockData as any} variant="news" dataTestId="news" />);
+    rerender(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
     expect(handlePageChangeMock).toHaveBeenCalledWith(2);
     expect(listElement.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
