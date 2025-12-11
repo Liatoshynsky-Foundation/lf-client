@@ -103,28 +103,38 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     [inputValue, setSearch]
   );
 
-  const renderOption = useCallback(
-    (props: React.HTMLAttributes<HTMLLIElement>, option: T) => (
-      <li {...props}>
-        <ListItem disableGutters>
-          <Typography
-            variant="customMedium16"
-            sx={{
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              wordBreak: 'break-word'
-            }}
-          >
-            {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
-          </Typography>
-        </ListItem>
-      </li>
-    ),
-    []
-  );
+  const renderOption = useCallback((props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
+    const { key, ...rest } = props;
+    return (
+      <ListItem
+        key={key}
+        {...rest}
+        disableGutters
+        sx={{
+          height: 64,
+          padding: 0,
+          display: 'flex',
+          alignItems: 'center',
+          whiteSpace: 'normal'
+        }}
+      >
+        <Typography
+          variant="customMedium16"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            lineHeight: '1.2',
+            wordBreak: 'break-word'
+          }}
+        >
+          {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
+        </Typography>
+      </ListItem>
+    );
+  }, []);
 
   const getOptionLabel = (option: T) => {
     if (typeof option.title === 'string') return option.title;
