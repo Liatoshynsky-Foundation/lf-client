@@ -89,7 +89,14 @@ export const ContactLink = ({
             </Typography>
           )}
 
-          <CopyLink value={value} hrefType={type} size={copyLinkSize} hint={alertMsg} disabled={disabled} />
+          <CopyLink
+            value={value}
+            hrefType={type}
+            size={copyLinkSize}
+            hint={alertMsg}
+            disabled={disabled}
+            sx={isMobile ? styles.mobileStretchedLink : undefined}
+          />
         </Box>
       </Box>
     </Box>
