@@ -59,7 +59,7 @@ describe('MediaList Component', () => {
   const scrollIntoViewMock = jest.fn();
 
   beforeAll(() => {
-    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+    globalThis.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
   });
 
   beforeEach(() => {
