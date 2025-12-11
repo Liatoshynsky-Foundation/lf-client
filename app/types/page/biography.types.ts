@@ -15,7 +15,7 @@ export enum ImagesSizes {
   BigHorizontal = 'bigHorizontal'
 }
 
-interface ChrolologyListItem {
+interface ChronologyListItem {
   description: TipTapDoc;
 }
 interface BaseImage {
@@ -41,7 +41,7 @@ export interface BiographyContentItemBaseProps<T extends ContentType = ContentTy
   type: T;
 }
 export interface ChronologyList extends BiographyContentItemBaseProps<ContentType.ChronologyList> {
-  listItems: ChrolologyListItem[];
+  listItems: ChronologyListItem[];
   additionalImage?: AdvancedImage;
 }
 export interface ExcerptBlockItem extends BiographyContentItemBaseProps<ContentType.ExcerptBlockItem> {
