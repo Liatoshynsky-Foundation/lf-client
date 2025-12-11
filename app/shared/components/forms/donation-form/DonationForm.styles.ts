@@ -8,7 +8,8 @@ export const style = {
     height: '100%',
     borderLeft: `4px solid ${mainHexPallete.yellow[500]}`,
     gridColumn: '1/-1',
-    ml: { xs: '-24px', sm: 0 }
+    ml: { xs: '-24px', sm: 0 },
+    mt: { sm: '40px' }
   },
   paperChildren: {
     padding: { xs: '42px 23px', sm: '54px 43px' },

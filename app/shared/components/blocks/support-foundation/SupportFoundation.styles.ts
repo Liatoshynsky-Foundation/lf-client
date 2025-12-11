@@ -16,7 +16,7 @@ export const styles = {
   },
 
   sectionTitle: {
-    mb: '34px',
+    mb: { xs: '48px', sm: '32px' },
     gridColumn: { xs: '1 / -1', sm: '1 / -1' },
     fontSize: {
       xs: '40px',
@@ -40,7 +40,6 @@ export const styles = {
   },
 
   donationFormWrapper: {
-    pt: '43px',
     gridColumn: { xs: '1', md: '1 / 11', lg: '1/6' },
     height: '565px'
   },
