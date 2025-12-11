@@ -8,9 +8,9 @@ import QuoteBlock from '~/components/Quote/Quote';
 import YearTabs from '~/components/year-tabs/YearTabs';
 
 import { heroSectionStyles } from './HeroSection.style';
-import { BiographyHeroProps } from '~/types/page/biography.types';
+import { HeroSectionProps } from '~/types/page/biography.types';
 
-export function HeroSection({ data, years }: Readonly<BiographyHeroProps>) {
+export function HeroSection({ data, years }: Readonly<HeroSectionProps>) {
   const t = useTranslations('biography.heroSection');
 
   const caption = `${data.image.caption.mainText}\n${data.image.caption.yearText}`;

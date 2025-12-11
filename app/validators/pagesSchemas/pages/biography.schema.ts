@@ -56,7 +56,7 @@ const BiographyContentItemSchema = z.discriminatedUnion('type', [
   FullWidthImageSchema
 ]);
 
-const BiographyContentYearBlockSchema = z.object({
+const BiographyContentBlockSchema = z.object({
   yearTitle: z.string().nullable(),
   items: z.array(BiographyContentItemSchema)
 });
@@ -76,7 +76,6 @@ const HeroImageSchema = z
   }));
 
 const HeroSectionBlockSchema = z.object({
-  title: translatedFieldSchema,
   image: HeroImageSchema,
   quote: QuoteSchema,
   biographyText: LocalizedTipTapDocSchema,
@@ -85,7 +84,7 @@ const HeroSectionBlockSchema = z.object({
 
 const BiographyBlocksSchema = z.object({
   heroSection: HeroSectionBlockSchema,
-  biographyContent: z.array(BiographyContentYearBlockSchema)
+  biographyContent: z.array(BiographyContentBlockSchema)
 });
 
 export const BiographyPageSchema = z.object({

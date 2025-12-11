@@ -75,14 +75,14 @@ interface HeroImage {
   alt: string;
   caption: HeroImageCaption;
 }
-export interface BiographyHeroData {
+export interface HeroSectionBlock {
   quote: BaseQuoteBlock;
   image: HeroImage;
   biographyText: TipTapDoc;
   noteText: string;
 }
 
-export interface BiographyHeroProps {
-  data: BiographyHeroData;
+export interface HeroSectionProps {
+  data: HeroSectionBlock;
   years: string[];
 }
