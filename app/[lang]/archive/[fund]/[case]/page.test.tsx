@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import ArchiveCasePage from './page';
+import ArchiveCasePage, { generateMetadata } from './page';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 
 import type { ArchiveCaseDetailsProps } from '~/shared/components/blocks/archive-case-details/ArchiveCaseDetails';
 
@@ -49,6 +50,13 @@ jest.mock('~/shared/components/blocks/archive-case-details/ArchiveCaseDetails', 
   }
 }));
 
+jest.mock('~/utils/createSeoMeta', () => ({
+  createSeoMeta: jest.fn((config) => config)
+}));
+
+const mockedNotFound = notFound as unknown as jest.Mock;
+const mockedCreateSeoMeta = createSeoMeta as unknown as jest.Mock;
+
 const mockCaseDetails = {
   name: 'Case name from backend',
   cipher: 'Ф. 2, оп. 1, спр. 3',
@@ -71,7 +79,50 @@ const mockCaseDetails = {
   }
 };
 
-const mockedNotFound = notFound as unknown as jest.Mock;
+describe('generateMetadata', () => {
+  beforeEach(() => {
+    mockGetCaseById.mockReset();
+    mockedCreateSeoMeta.mockClear();
+  });
+
+  it('builds Ukrainian SEO metadata for an existing case', async () => {
+    mockGetCaseById.mockResolvedValue(mockCaseDetails);
+
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ lang: 'en', fund: '2', case: 'op1-spr3' })
+    });
+
+    const expectedConfig = {
+      title: `Архівна справа ${mockCaseDetails.cipher} – ${mockCaseDetails.name}`,
+      description: `Архівна справа «${mockCaseDetails.name}» (${mockCaseDetails.cipher}). Дати: ${mockCaseDetails.dates}.`,
+      url: '/archive/2/op1-spr3'
+    };
+
+    expect(mockGetCaseById).toHaveBeenCalledWith('op1-spr3');
+    expect(mockedCreateSeoMeta).toHaveBeenCalledTimes(1);
+    expect(mockedCreateSeoMeta).toHaveBeenCalledWith(expectedConfig);
+    expect(metadata).toEqual(expectedConfig);
+  });
+
+  it('returns a Ukrainian fallback when the case is missing', async () => {
+    mockGetCaseById.mockResolvedValue(null);
+
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ lang: 'en', fund: '2', case: 'missing-id' })
+    });
+
+    const expectedConfig = {
+      title: 'Архівна справа не знайдена',
+      description: 'Запитувану архівну справу не знайдено.',
+      url: '/archive/2/missing-id'
+    };
+
+    expect(mockGetCaseById).toHaveBeenCalledWith('missing-id');
+    expect(mockedCreateSeoMeta).toHaveBeenCalledTimes(1);
+    expect(mockedCreateSeoMeta).toHaveBeenCalledWith(expectedConfig);
+    expect(metadata).toEqual(expectedConfig);
+  });
+});
 
 describe('ArchiveCasePage', () => {
   beforeEach(() => {
