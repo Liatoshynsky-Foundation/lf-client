@@ -10,6 +10,8 @@ jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => (
   default: ({ buttons }: { buttons: React.ReactNode[] }) => <div data-testid="mock-button-group">{buttons}</div>
 }));
 
+jest.mock('../../design-system/all-components/copy-link/CopyLink');
+
 jest.mock('../../svg-image/SvgImage', () => ({
   SvgImage: (props: React.ComponentProps<'img'>) => <img data-testid="svg-image" {...props} alt="content copy icon" />
 }));
@@ -94,12 +96,16 @@ describe('PaymentDetails', () => {
     expect(screen.getByText('UA28-E-U-R')).toBeInTheDocument();
   });
 
-  it('should copy IBAN to clipboard when CopyButton clicked', async () => {
+  it('should copy IBAN to clipboard when IBAN is clicked', async () => {
     render(<PaymentDetails />);
-    const copyBtn = screen.getByRole('button', { name: /copy content/i });
+
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    const ibanCopyButton = copyLinks.find((link) => link.textContent?.includes('UA28-U-A-H'));
 
     await act(async () => {
-      fireEvent.click(copyBtn);
+      if (ibanCopyButton) {
+        fireEvent.click(ibanCopyButton);
+      }
     });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-A-H');
