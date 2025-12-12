@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -102,32 +102,34 @@ export default function Archive() {
     }
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <MainLayout withLines={!isMobile}>
       <Box sx={styles.pageWrapper} data-testid="ArchivePage">
         <ArchiveHeader onSearch={(value) => setParam('search', value)} />
 
-        <Box sx={styles.fundsGrid} data-testid="ArchivePage-fundsGrid">
-          {Array.from({ length: numColumns }, (_, i) => i + 1).map((columnNum) => (
-            <Box
-              key={`column-${columnNum}`}
-              sx={{
-                display: 'grid',
-                gridAutoRows: 'min-content',
-                rowGap: '16px',
-                paddingTop: getColumnPaddingTop(columnNum)
-              }}
-            >
-              {(fundsByColumn[columnNum] ?? []).map((fund) => (
-                <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
-              ))}
-            </Box>
-          ))}
-        </Box>
+        {isLoading ? (
+          <Box sx={styles.loaderBox} data-testid="ArchivePage-loader" aria-label="Loading funds">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box sx={styles.fundsGrid} data-testid="ArchivePage-fundsGrid">
+            {Array.from({ length: numColumns }, (_, i) => i + 1).map((columnNum) => (
+              <Box
+                key={`column-${columnNum}`}
+                sx={{
+                  display: 'grid',
+                  gridAutoRows: 'min-content',
+                  rowGap: '16px',
+                  paddingTop: getColumnPaddingTop(columnNum)
+                }}
+              >
+                {(fundsByColumn[columnNum] ?? []).map((fund) => (
+                  <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
+                ))}
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
     </MainLayout>
   );

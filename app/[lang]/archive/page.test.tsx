@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import Archive from './page';
 
@@ -72,71 +72,43 @@ describe('Archive Page', () => {
     });
   });
 
-  it('should render without crashing', async () => {
+  it('renders the page shell', () => {
     renderWithTheme(<Archive />);
-
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
-
     expect(screen.getByTestId('ArchivePage')).toBeInTheDocument();
+    expect(screen.getByTestId('ArchiveHeader')).toBeInTheDocument();
   });
 
-  it('should display loading state initially', () => {
+  it('shows loader initially and hides it after funds load', async () => {
     renderWithTheme(<Archive />);
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId('ArchivePage-loader')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('ArchivePage-fundsGrid')).not.toBeInTheDocument();
+
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+    expect(screen.queryByTestId('ArchivePage-loader')).not.toBeInTheDocument();
   });
 
-  it('should render ArchiveHeader after loading', async () => {
+  it('loads and displays fund cards', async () => {
     renderWithTheme(<Archive />);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('ArchiveHeader')).toBeInTheDocument();
-    });
+    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard-2')).toBeInTheDocument();
+    expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
   });
 
-  it('should render funds grid after loading', async () => {
+  it('calls API to fetch funds', async () => {
     renderWithTheme(<Archive />);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-    });
+    await screen.findByTestId('ArchivePage-fundsGrid');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
   });
 
-  it('should load and display fund cards', async () => {
+  it('calls setParam when search is triggered', async () => {
     renderWithTheme(<Archive />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('FundCard-1')).toBeInTheDocument();
-      expect(screen.getByTestId('FundCard-2')).toBeInTheDocument();
-      expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
-    });
-  });
-
-  it('should display fund data correctly', async () => {
-    renderWithTheme(<Archive />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Fund 1')).toBeInTheDocument();
-      expect(screen.getByText('Audio Records')).toBeInTheDocument();
-    });
-  });
-
-  it('should call API to fetch funds', async () => {
-    renderWithTheme(<Archive />);
-
-    await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
-    });
-  });
-
-  it('should call setParam when search is triggered', async () => {
-    renderWithTheme(<Archive />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('trigger-search')).toBeInTheDocument();
-    });
 
     screen.getByTestId('trigger-search').click();
 
