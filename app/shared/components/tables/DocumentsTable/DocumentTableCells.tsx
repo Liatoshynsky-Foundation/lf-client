@@ -2,8 +2,8 @@ import { Box, Button, SxProps, Theme, Typography, useMediaQuery } from '@mui/mat
 import { CellContext } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 
-import { ArchiveRecord } from './documents.conts';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
@@ -24,12 +24,12 @@ export const RenderCodeHeader = () => {
       variant="customBold16"
       color={mainHexPallete.blue[700]}
     >
-      {t('code')}
+      {t('cipher')}
     </Typography>
   );
 };
 
-export const RenderCodeCell = (info: CellContext<ArchiveRecord, unknown>) => (
+export const RenderCodeCell = (info: CellContext<DocumentRecord, unknown>) => (
   <Typography
     sx={{
       pl: {
@@ -53,7 +53,7 @@ export const RenderNameHeader = () => {
   );
 };
 
-export const RenderNameCell = (info: CellContext<ArchiveRecord, unknown>) => (
+export const RenderNameCell = (info: CellContext<DocumentRecord, unknown>) => (
   <Typography className="name-cell" style={{ maxWidth: '192px' }} variant="customMedium16">
     {info.getValue<string>()}
   </Typography>
@@ -68,7 +68,7 @@ export const RenderDateHeader = () => {
   );
 };
 
-export const RenderDateCell = (info: CellContext<ArchiveRecord, unknown>) => (
+export const RenderDateCell = (info: CellContext<DocumentRecord, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
@@ -81,7 +81,7 @@ export const RenderSheetHeader = () => {
   );
 };
 
-export const RenderSheetCell = (info: CellContext<ArchiveRecord, unknown>) => (
+export const RenderSheetCell = (info: CellContext<DocumentRecord, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
@@ -94,7 +94,7 @@ export const RenderContentHeader = () => {
   );
 };
 
-export const RenderContentCell = (info: CellContext<ArchiveRecord, unknown>) => (
+export const RenderContentCell = (info: CellContext<DocumentRecord, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
@@ -102,7 +102,7 @@ export const iconButtonSecondaryPlainSx: SxProps<Theme> = {
   bgcolor: 'none'
 };
 
-export const RenderActionCell = (info: CellContext<ArchiveRecord, unknown>) => {
+export const RenderActionCell = (info: CellContext<DocumentRecord, unknown>) => {
   const t = useTranslations('table.documents.buttons');
   const row = info.row.original;
   const { isLaptop } = useBreakpoints();

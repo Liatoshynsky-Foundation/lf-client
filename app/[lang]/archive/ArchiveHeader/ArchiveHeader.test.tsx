@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ArchiveHeader from './ArchiveHeader';
@@ -50,7 +50,12 @@ describe('ArchiveHeader', () => {
     const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'test');
 
-    expect(mockOnSearch).toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(mockOnSearch).toHaveBeenCalled();
+      },
+      { timeout: 1000 }
+    );
   });
 
   it('should updates search input value when user types', async () => {
@@ -81,8 +86,22 @@ describe('ArchiveHeader', () => {
 
     const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'test');
+
+    await waitFor(
+      () => {
+        expect(mockOnSearch).toHaveBeenCalled();
+      },
+      { timeout: 1000 }
+    );
+
+    mockOnSearch.mockClear();
     await user.clear(searchInput);
 
-    expect(mockOnSearch).toHaveBeenCalledWith('');
+    await waitFor(
+      () => {
+        expect(mockOnSearch).toHaveBeenCalledWith('');
+      },
+      { timeout: 1000 }
+    );
   });
 });

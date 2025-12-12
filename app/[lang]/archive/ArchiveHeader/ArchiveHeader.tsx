@@ -1,8 +1,9 @@
 'use client';
 
 import { Box, TextField, Typography } from '@mui/material';
+import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 
@@ -19,10 +20,18 @@ export default function ArchiveHeader({ onSearch, dataTestId = 'ArchiveHeader' }
   const t = useTranslations('archivePage');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const debouncedOnSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        onSearch?.(value);
+      }, 400),
+    [onSearch]
+  );
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchQuery(value);
-    onSearch?.(value);
+    debouncedOnSearch(value);
   };
 
   return (

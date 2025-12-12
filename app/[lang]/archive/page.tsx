@@ -11,6 +11,7 @@ import { styles } from './page.styles';
 
 import { FundDTO } from '~/domain/dto/funds.dto';
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 
 const getColumnPaddingTop = (columnNum: number) => {
   const paddingMap = {
@@ -39,8 +40,8 @@ export default function Archive() {
   const [error, setError] = useState<string | null>(null);
 
   const [funds, setFunds] = useState<FundDTO[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const { params, setParam } = useTableFilters({ search: '' });
 
   useEffect(() => {
     const loadFunds = async () => {
@@ -67,14 +68,10 @@ export default function Archive() {
   }
 
   const filteredFunds = funds.filter((fund) => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
+    if (!params.search) return true;
+    const query = params.search.toLowerCase();
     return fund.number.toLowerCase().includes(query) || fund.title.toLowerCase().includes(query);
   });
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
 
   const getNumColumns = () => {
     switch (true) {
@@ -112,7 +109,7 @@ export default function Archive() {
   return (
     <MainLayout withLines={!isMobile}>
       <Box sx={styles.pageWrapper} data-testid="ArchivePage">
-        <ArchiveHeader onSearch={handleSearch} />
+        <ArchiveHeader onSearch={(value) => setParam('search', value)} />
 
         <Box sx={styles.fundsGrid} data-testid="ArchivePage-fundsGrid">
           {Array.from({ length: numColumns }, (_, i) => i + 1).map((columnNum) => (

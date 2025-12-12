@@ -7,8 +7,11 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 
-jest.mock('~/components/copy-button/CopyButton', () => ({
-  CopyButton: ({ hint }: { hint: string }) => <button aria-label="Copy content">{hint}</button>
+jest.mock('~/ds-components/copy-link/CopyLink');
+
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  __esModule: true,
+  default: () => <svg data-testid="colored-svg" />
 }));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
@@ -71,10 +74,10 @@ describe('VolunteerDonation', () => {
   it('should render copy buttons for each payment method', () => {
     render(<VolunteerDonation {...mockProps} />);
 
-    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    const copyButtons = screen.getAllByTestId('mock-copy-link');
     expect(copyButtons).toHaveLength(2);
-    expect(copyButtons[0]).toHaveTextContent('copied');
-    expect(copyButtons[1]).toHaveTextContent('copied');
+    expect(copyButtons[0]).toHaveTextContent('paypal@example.com');
+    expect(copyButtons[1]).toHaveTextContent('bank@example.com');
   });
 
   it('should render image with caption', () => {
@@ -112,7 +115,7 @@ describe('VolunteerDonation', () => {
 
     expect(screen.getByText('PayPal:')).toBeInTheDocument();
     expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
-    const copyButtons = screen.getAllByRole('button', { name: /copy content/i });
+    const copyButtons = screen.getAllByTestId('mock-copy-link');
     expect(copyButtons).toHaveLength(1);
   });
 

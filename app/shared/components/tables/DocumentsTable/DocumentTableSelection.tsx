@@ -1,9 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-import { ArchiveRecord, archiveRecords } from './documents.conts';
 import {
   RenderActionCell,
   RenderCodeCell,
@@ -19,12 +18,12 @@ import {
 } from './DocumentTableCells';
 import { getDocumentsTableColumnWidths } from './getColumnWidth';
 import MobileDocumentTable from './MobileDocumentTable/MobileDocumentTable';
+import { DocumentRecord } from '~/types/types/document.types';
 
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export default function DocumentTableSelection() {
-  const [docs] = useState<ArchiveRecord[]>(archiveRecords);
+export default function DocumentTableSelection({ documents }: { documents: DocumentRecord[] }) {
   const t = useTranslations('table.documents');
   const bp = useBreakpoints();
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
@@ -41,11 +40,11 @@ export default function DocumentTableSelection() {
     [isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove]
   );
 
-  const baseColumns: ColumnDef<ArchiveRecord>[] = useMemo(
+  const baseColumns: ColumnDef<DocumentRecord>[] = useMemo(
     () => [
       {
-        id: 'code',
-        accessorKey: 'code',
+        id: 'cipher',
+        accessorKey: 'cipher',
         header: RenderCodeHeader,
         cell: RenderCodeCell,
         sortingFn: 'alphanumeric'
@@ -58,8 +57,8 @@ export default function DocumentTableSelection() {
         sortingFn: 'alphanumeric'
       },
       {
-        id: 'date',
-        accessorKey: 'date',
+        id: 'dates',
+        accessorKey: 'dates',
         header: RenderDateHeader,
         cell: RenderDateCell,
         sortingFn: 'alphanumeric'
@@ -72,8 +71,8 @@ export default function DocumentTableSelection() {
         sortingFn: 'alphanumeric'
       },
       {
-        id: 'content',
-        accessorKey: 'content',
+        id: 'contentDescription',
+        accessorKey: 'contentDescription',
         header: RenderContentHeader,
         cell: RenderContentCell,
         sortingFn: 'alphanumeric'
@@ -88,12 +87,12 @@ export default function DocumentTableSelection() {
   );
 
   if (isMobile || isTablet) {
-    return <MobileDocumentTable tableName={t('name')} data={docs} />;
+    return <MobileDocumentTable tableName={t('name')} data={documents} />;
   }
 
   return (
     <EnhancedTable
-      data={docs}
+      data={documents}
       columns={baseColumns}
       columnWidths={columnWidths}
       itemsPerPage={5}

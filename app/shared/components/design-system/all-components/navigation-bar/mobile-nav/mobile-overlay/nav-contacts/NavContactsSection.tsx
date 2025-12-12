@@ -33,8 +33,7 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           icon={isMobile ? PhoneIcon : undefined}
           iconSx={styles.icon}
           labelSx={styles.contactLabel}
-          linkSx={styles.contactLink}
-          copyButtonSize="small"
+          copyLinkSize="small"
           iconColor="rgba(65, 43, 33, 0.8)"
         />
 
@@ -47,8 +46,7 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
           icon={isMobile ? MailIcon : undefined}
           iconSx={styles.icon}
           labelSx={styles.contactLabel}
-          linkSx={styles.contactLink}
-          copyButtonSize="small"
+          copyLinkSize="small"
           iconColor="rgba(65, 43, 33, 0.8)"
         />
       </Box>

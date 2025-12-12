@@ -12,7 +12,7 @@ export const styles = {
       sm: '24px',
       md: '40px'
     },
-    p: '160px 0'
+    m: { xs: '56px 0 96px 0', sm: '104px 0', md: '128px 0 160px 0' }
   },
   contacts: {
     overflow: 'hidden',

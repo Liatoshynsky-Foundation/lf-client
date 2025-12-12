@@ -21,6 +21,7 @@ export const styles = {
       md: '1 / 6'
     },
     mb: '24px',
+    fontWeight: 'medium',
     justifySelf: 'start',
     alignSelf: 'start',
     '& .MuiButton-root': {
@@ -84,12 +85,14 @@ export const styles = {
   contentItem: {
     fontSize: '16px',
     lineHeight: '150%',
+    fontWeight: 'semibold',
     display: 'flex',
     flexDirection: 'column' as const
   },
 
   itemTitle: {
     fontSize: '16px',
+    fontWeight: 'regular',
     color: mainHexPallete.brown[600]
   }
 };
