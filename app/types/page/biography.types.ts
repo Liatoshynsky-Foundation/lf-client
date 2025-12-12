@@ -1,8 +1,5 @@
 import type { TipTapDoc } from '../types/tiptap.types';
 
-type Locale = 'uk' | 'en';
-type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
-
 export enum ContentType {
   ChronologyList = 'chronologyList',
   ExcerptBlockItem = 'excerptBlockItem',
@@ -18,13 +15,13 @@ export enum ImagesSizes {
   BigHorizontal = 'bigHorizontal'
 }
 
-interface ChrolologyListItem {
-  description: LocalizedTipTapDoc;
+interface ChronologyListItem {
+  description: TipTapDoc;
 }
 interface BaseImage {
   src: string;
-  alt: LocalizedTipTapDoc;
-  caption: LocalizedTipTapDoc;
+  alt: string;
+  caption: string | null;
 }
 
 interface AdvancedImage extends BaseImage {
@@ -32,18 +29,23 @@ interface AdvancedImage extends BaseImage {
   rectangleTopLeftCorner?: boolean;
 }
 interface BaseQuoteBlock {
-  quoteText: LocalizedTipTapDoc;
-  sourceText: LocalizedTipTapDoc;
+  text: string;
+  source: string;
+}
+
+interface BaseExpertBlock {
+  text: string;
+  source: string;
 }
 export interface BiographyContentItemBaseProps<T extends ContentType = ContentType> {
   type: T;
 }
 export interface ChronologyList extends BiographyContentItemBaseProps<ContentType.ChronologyList> {
-  listItems: ChrolologyListItem[];
+  listItems: ChronologyListItem[];
   additionalImage?: AdvancedImage;
 }
 export interface ExcerptBlockItem extends BiographyContentItemBaseProps<ContentType.ExcerptBlockItem> {
-  quote: BaseQuoteBlock;
+  quote: BaseExpertBlock;
 }
 export interface OnlyImageBlock extends BiographyContentItemBaseProps<ContentType.OnlyImageBlock> {
   mainImage: AdvancedImage;
@@ -56,7 +58,7 @@ export interface FullWidthImage extends BiographyContentItemBaseProps<ContentTyp
 export type BiographyContentItem = ChronologyList | ExcerptBlockItem | OnlyImageBlock | FullWidthImage;
 
 export interface BiographyContentBlock {
-  yearTitle: string | undefined;
+  yearTitle: string | null;
   items: BiographyContentItem[];
 }
 
@@ -65,27 +67,22 @@ export interface BiographyContentProps {
 }
 
 interface HeroImageCaption {
-  mainText: LocalizedTipTapDoc;
-  yearText: LocalizedTipTapDoc;
+  mainText: string;
+  yearText: string;
 }
 interface HeroImage {
   src: string;
-  alt: LocalizedTipTapDoc;
+  alt: string;
   caption: HeroImageCaption;
 }
-export interface BiographyHeroData {
+export interface HeroSectionBlock {
   quote: BaseQuoteBlock;
   image: HeroImage;
-  biographyText: LocalizedTipTapDoc;
-  noteText: LocalizedTipTapDoc;
+  biographyText: TipTapDoc;
+  noteText: string;
 }
 
-export interface BiographyHeroProps {
-  data: BiographyHeroData;
+export interface HeroSectionProps {
+  data: HeroSectionBlock;
   years: string[];
-}
-
-export function tiptapToPlainText(value?: TipTapDoc): string {
-  if (!value) return '';
-  return value.content?.map((el) => el.content?.map((child) => child.text ?? '').join('')).join(' ') ?? '';
 }
