@@ -35,15 +35,25 @@ export const styles = {
     justifyContent: 'center',
     gap: '8px'
   },
-  warInUkraineButton: {
+  warInUkraineWrapper: {
     backgroundColor: backgroundColors.offWhite,
+    borderRadius: '999px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '4px'
+  },
+  warInUkraineButton: {
+    backgroundColor: 'transparent',
     verticalAlign: 'middle',
     fontWeight: 'normal',
-    marginTop: '-0.2px',
     color: hexButtonGroupColors.primary.buttonTextColor,
-    padding: '0 16px',
     lineHeight: '140%',
     letterSpacing: 0,
+    padding: '0 16px',
+    height: '32px',
+
     '&:hover': {
       backgroundColor: rgbButtonColors.primaryHoveredBackground
     },
@@ -52,7 +62,6 @@ export const styles = {
       color: mainHexPallete.white
     }
   },
-
   warInUkraineButtonActive: {
     backgroundColor: mainHexPallete.black,
     color: mainHexPallete.white,
