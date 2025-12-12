@@ -71,7 +71,7 @@ export const WorkTableSection = () => {
     [setParam]
   );
 
-  const columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
+  let columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
     () => [
       { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: renderNameCell, sortingFn: 'alphanumeric' },
       {
@@ -92,6 +92,13 @@ export const WorkTableSection = () => {
       { id: 'actions', header: '', cell: RenderActionCell }
     ],
     []
+  );
+
+  const hideColumnsOnSmallScreen = useMemo(() => new Set(['author', 'sortableYear']), []);
+
+  columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
+    () => (bp.isTablet || bp.isMobile ? columns.filter((c) => !hideColumnsOnSmallScreen.has(String(c.id))) : columns),
+    [bp.isTablet, bp.isMobile, columns, hideColumnsOnSmallScreen]
   );
 
   const isYearActive =
