@@ -51,7 +51,8 @@ export const styles = {
   wrapper: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px'
+    gap: '8px',
+    position: 'relative'
   },
 
   iconWrapper: {
@@ -85,5 +86,18 @@ export const styles = {
   link: {
     ...commonLinkBaseStyles,
     ...commonLinkStates
+  },
+
+  mobileStretchedLink: {
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      zIndex: 1,
+      cursor: 'pointer'
+    }
   }
 };

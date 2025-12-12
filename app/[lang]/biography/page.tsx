@@ -1,26 +1,46 @@
+import { setRequestLocale } from 'next-intl/server';
 import React, { ReactElement } from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { BiographyContent } from './BiographyContent/BiographyContent';
-import { biographyContentData } from './data/BiographyContent.consts';
+import { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { biographyHeroData } from '~/[lang]/biography/data/HeroSection.consts';
+import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import { HeroSection } from '~/shared/components/blocks/HeroSection/HeroSection';
 
-export default function Biography(): ReactElement {
+export const metadata = createSeoMeta({
+  title: 'ЖиТтєПиС ЛятОшИнсьКогО',
+  description: 'Ознайомтесь з життєписом Бориса Лятошинського.',
+  url: '/biography'
+});
+
+export default async function Biography({ params }: Readonly<Language>): Promise<ReactElement> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
 
-  const years = biographyContentData.map((year) => year.yearTitle).filter((year) => year !== undefined);
+  const pageService = await createRequestContainer().resolve('pagesDataService');
+
+  const page = await pageService.getPageData('biography', lang);
+
+  if (!page) {
+    return <PageNotFound />;
+  }
+
+  const years = page.blocks.biographyContent.map((year) => year.yearTitle).filter((year) => year !== null);
 
   return (
     <MainLayout withLines>
-      <HeroSection data={biographyHeroData} years={years} />
-      <BiographyContent data={biographyContentData} />
+      {page.blocks.heroSection && <HeroSection data={page.blocks.heroSection} years={years} />}
+      {page.blocks.biographyContent && <BiographyContent data={page.blocks.biographyContent} />}
     </MainLayout>
   );
 }

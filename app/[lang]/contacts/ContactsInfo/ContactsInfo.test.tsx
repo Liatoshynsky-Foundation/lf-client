@@ -6,6 +6,12 @@ import ContactsInfo from './ContactsInfo';
 
 import type { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
+}));
+
+jest.mock('~/ds-components/copy-link/CopyLink');
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) =>
     ({
