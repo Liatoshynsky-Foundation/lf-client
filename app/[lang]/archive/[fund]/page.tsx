@@ -24,13 +24,13 @@ interface FundDetailsPageProps {
   }>;
 }
 
-export default async function FundDetailsPage({ params }: FundDetailsPageProps) {
+export default async function FundDetailsPage({ params }: Readonly<FundDetailsPageProps>) {
   const { lang, fund } = await params;
   const locale = lang as Locale;
 
   const fundId = Number(fund);
 
-  if (isNaN(fundId)) {
+  if (Number.isNaN(fundId)) {
     return notFound();
   }
 
