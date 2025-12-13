@@ -23,7 +23,7 @@ import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHa
 const AUTO_HIDE_MESSAGE_TIMEOUT = 3000;
 
 type ContactFormProps = {
-  onSubmit: (data: { name: string; email: string; message: string; policy: true; phoneNumber?: string }) => void;
+  onSubmit: (data: { name: string; email: string; message: string; policy: boolean; phoneNumber?: string }) => void;
 };
 
 function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
@@ -62,7 +62,9 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
       .min(1, tErrors('messageRequired'))
       .min(10, tErrors('messageMinLength'))
       .max(1000, tErrors('messageMaxLength')),
-    policy: z.literal(true, { errorMap: () => ({ message: tErrors('policyRequired') }) })
+    policy: z.boolean().refine((val) => val === true, {
+      message: tErrors('policyRequired')
+    })
   });
 
   type ContactFormInput = z.input<typeof schema>;
@@ -72,10 +74,14 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
     formState: { errors },
     handleSubmit,
     reset,
-    watch
+    watch,
+    setValue
   } = useForm<ContactFormInput>({
     resolver: zodResolver(schema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+      policy: false
+    }
   });
 
   const phoneField = register('phoneNumber');
@@ -122,6 +128,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setValue('policy', false);
     reset();
   };
 
@@ -178,6 +185,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
               control={
                 <Checkbox
                   {...register('policy')}
+                  checked={watch('policy') || false}
                   sx={{
                     color: errors.policy ? 'error.main' : undefined,
                     '&.Mui-checked': {
@@ -215,29 +223,31 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
         </Button>
       </Box>
 
-      <ModalComponent
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <PaperComponent
+      {isModalOpen && (
+        <ModalComponent
+          open={isModalOpen}
+          onClose={handleCloseModal}
           sx={{
-            maxWidth: { xs: '100vw', sm: '400px', md: '500px' },
-            padding: { xs: '40px 24px', md: '60px 50px' }
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <NotesConfirmModal
-            title={tConfirmation('title')}
-            subtitle={tConfirmation('subtitle')}
-            btnText={tConfirmation('btnText')}
-            onSubmit={handleCloseModal}
-          />
-        </PaperComponent>
-      </ModalComponent>
+          <PaperComponent
+            sx={{
+              maxWidth: { xs: '100vw', sm: '400px', md: '500px' },
+              padding: { xs: '40px 24px', md: '60px 50px' }
+            }}
+          >
+            <NotesConfirmModal
+              title={tConfirmation('title')}
+              subtitle={tConfirmation('subtitle')}
+              btnText={tConfirmation('btnText')}
+              onSubmit={handleCloseModal}
+            />
+          </PaperComponent>
+        </ModalComponent>
+      )}
     </>
   );
 }
