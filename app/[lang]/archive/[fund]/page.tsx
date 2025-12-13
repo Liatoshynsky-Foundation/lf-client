@@ -5,9 +5,9 @@ import React from 'react';
 import FundSummaryHeader from '~/components/blocks/fund-summary-header/FundSummaryHeader';
 import {
   fundSummaryBacklinkText,
-  fundSummaryBacklinkUrl,
   fundSummaryContent,
-  fundSummaryTitle
+  fundSummaryTitle,
+  getFundSummaryHeaderBacklinkUrl
 } from '~/components/blocks/fund-summary-header/FundSummaryHeader.content';
 import DocumentTableSelection from '~/components/tables/DocumentsTable/DocumentTableSelection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
@@ -37,6 +37,8 @@ export default async function FundDetailsPage({ params }: Readonly<FundDetailsPa
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
+
+  const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
 
   return (
     <MainLayout withLines>

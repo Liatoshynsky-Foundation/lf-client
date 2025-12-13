@@ -78,8 +78,6 @@ export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
   return '/archive';
 }
 
-export const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
-
 export const fundSummaryBacklinkText: Record<Locale, string> = {
   uk: 'Повернутись до архіву',
   en: 'Back to archive'
