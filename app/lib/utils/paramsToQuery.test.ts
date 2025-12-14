@@ -1,11 +1,11 @@
 import { tableParamsToQuery } from './paramsToQuery';
 
 describe('tableParamsToQuery', () => {
-  it('returns empty string when params is empty', () => {
+  it('should return empty string when params is empty', () => {
     expect(tableParamsToQuery({})).toBe('');
   });
 
-  it('returns empty string when all values are null', () => {
+  it('should returns empt string when all values are null', () => {
     expect(
       tableParamsToQuery({
         a: null,
@@ -14,7 +14,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('');
   });
 
-  it('serializes primitive values', () => {
+  it('should serialize primitive values', () => {
     expect(
       tableParamsToQuery({
         q: 'hello',
@@ -23,7 +23,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?q=hello&page=2');
   });
 
-  it('keeps 0 and empty string (only skips null)', () => {
+  it('should keeps 0 and empty string (only skip null)', () => {
     expect(
       tableParamsToQuery({
         page: 0,
@@ -32,7 +32,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?page=0&q=');
   });
 
-  it('skips empty arrays', () => {
+  it('should skip empty arrays', () => {
     expect(
       tableParamsToQuery({
         tags: [],
@@ -41,7 +41,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?q=x');
   });
 
-  it('expands arrays into repeated query params', () => {
+  it('should expand arrays into repeated query params', () => {
     expect(
       tableParamsToQuery({
         tags: ['a', 'b', 'c']
@@ -49,7 +49,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?tags=a&tags=b&tags=c');
   });
 
-  it('works with mixed primitives and arrays and ignores null fields', () => {
+  it('should work with mixed primitives and arrays and ignores null fields', () => {
     expect(
       tableParamsToQuery({
         q: 'test',
@@ -60,7 +60,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?q=test&page=1&tags=x&tags=y');
   });
 
-  it('URL-encodes keys and values (spaces, &, =, unicode)', () => {
+  it('should URL-encode keys and values (spaces, &, =, unicode)', () => {
     expect(
       tableParamsToQuery({
         'a b': 'x&y=z',
@@ -69,7 +69,7 @@ describe('tableParamsToQuery', () => {
     ).toBe(`?a%20b=${encodeURIComponent('x&y=z')}&city=${encodeURIComponent('Львів')}`);
   });
 
-  it('stringifies array items (numbers, null become strings) based on current implementation', () => {
+  it('should stringify array items (numbers, null become strings) based on current implementation', () => {
     expect(
       tableParamsToQuery({
         ids: [1, 2, 3] as any,
@@ -78,7 +78,7 @@ describe('tableParamsToQuery', () => {
     ).toBe('?ids=1&ids=2&ids=3&weird=null');
   });
 
-  it('returns leading "?" and joins with "&" without trailing separators', () => {
+  it('should return leading "?" and joins with "&" without trailing separators', () => {
     const res = tableParamsToQuery({ a: '1', b: '2' });
     expect(res.startsWith('?')).toBe(true);
     expect(res).toBe('?a=1&b=2');

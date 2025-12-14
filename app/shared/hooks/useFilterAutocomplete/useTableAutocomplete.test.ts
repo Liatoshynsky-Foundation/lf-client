@@ -31,7 +31,7 @@ describe('useFilterAutocomplete', () => {
     jest.clearAllMocks();
   });
 
-  it('does not fetch when enabled=false', () => {
+  it('should not fetch when enabled=false', () => {
     const params = { search: 'a' } as any;
     const select = () => [];
 
@@ -47,7 +47,7 @@ describe('useFilterAutocomplete', () => {
     expect(getTableStaticDataMock).not.toHaveBeenCalled();
   });
 
-  it('fetches via service with locale and params, and sets options', async () => {
+  it('should fetch via service with locale and params, and sets options', async () => {
     const params = { search: 'abc' } as any;
     const select = (json: unknown) => (json as { titles: string[] }).titles;
 
@@ -70,7 +70,7 @@ describe('useFilterAutocomplete', () => {
     });
   });
 
-  it('sets empty options on error', async () => {
+  it('should set empty options on error', async () => {
     const params = { search: 'abc' } as any;
     const select = () => ['should not happen'];
 
@@ -92,7 +92,7 @@ describe('useFilterAutocomplete', () => {
     });
   });
 
-  it('does not set state after unmount (cancellation)', async () => {
+  it('should not set state after unmount (cancellation)', async () => {
     const params = { search: 'abc' } as any;
     const select = (json: unknown) => (json as { titles: string[] }).titles;
 
@@ -112,7 +112,6 @@ describe('useFilterAutocomplete', () => {
     unmount();
     d.resolve({ titles: ['late'] });
 
-    // flush microtasks
     await Promise.resolve();
 
     expect(consoleErrorSpy).not.toHaveBeenCalled();
