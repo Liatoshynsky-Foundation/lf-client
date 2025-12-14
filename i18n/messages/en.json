@@ -41,8 +41,17 @@
       "emailRequired": "Please enter your email address",
       "emailInvalid": "Please enter a valid email address",
       "phoneNumberInvalid": "Check the phone number format",
-      "messageMinLength": "Please write a few words in the message",
-      "policyRequired": "You must agree to continue"
+      "policyRequired": "You must agree to continue",
+      "nameRequired": "This field is required",
+      "nameMaxLength": "The name cannot exceed 50 characters",
+      "messageRequired": "This field is required",
+      "messageMinLength": "The comment must contain at least 10 characters",
+      "messageMaxLength": "The message cannot exceed 1000 characters"
+    },
+    "confirmation": {
+      "title": "ThAnK YoU",
+      "subtitle": "Your request has been sent",
+      "btnText": "Close"
     }
   },
   "donationForm": {
