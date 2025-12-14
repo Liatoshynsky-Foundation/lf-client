@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import InfoErrorIcon from 'public/icons/info-error.svg';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -17,10 +17,9 @@ import { styles } from './ContactForm.styles';
 
 import { Link } from '~/i18n/navigation';
 import { normalizePhoneNumberFromMask } from '~/lib/utils/normalizePhoneNumberFromMask';
+import { useAutoHideMessage } from '~/shared/hooks/use-auto-hide-message/useAutoHideMessage';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
-
-const AUTO_HIDE_MESSAGE_TIMEOUT = 3000;
 
 type ContactFormProps = {
   onSubmit: (data: { name: string; email: string; message: string; policy: boolean; phoneNumber?: string }) => void;
@@ -62,7 +61,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
       .min(1, tErrors('messageRequired'))
       .min(10, tErrors('messageMinLength'))
       .max(1000, tErrors('messageMaxLength')),
-    policy: z.boolean().refine((val) => val === true, {
+    policy: z.boolean().refine((val) => val, {
       message: tErrors('policyRequired')
     })
   });
@@ -92,33 +91,10 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
   const isNameAtMaxLength = nameLength >= 50;
   const isMessageAtMaxLength = messageLength >= 1000;
 
+  const showNameMaxMessage = useAutoHideMessage(isNameAtMaxLength);
+  const showMessageMaxMessage = useAutoHideMessage(isMessageAtMaxLength);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showNameMaxMessage, setShowNameMaxMessage] = useState(false);
-  const [showMessageMaxMessage, setShowMessageMaxMessage] = useState(false);
-
-  useEffect(() => {
-    if (isNameAtMaxLength) {
-      setShowNameMaxMessage(true);
-      const timer = setTimeout(() => {
-        setShowNameMaxMessage(false);
-      }, AUTO_HIDE_MESSAGE_TIMEOUT);
-      return () => clearTimeout(timer);
-    } else {
-      setShowNameMaxMessage(false);
-    }
-  }, [isNameAtMaxLength]);
-
-  useEffect(() => {
-    if (isMessageAtMaxLength) {
-      setShowMessageMaxMessage(true);
-      const timer = setTimeout(() => {
-        setShowMessageMaxMessage(false);
-      }, AUTO_HIDE_MESSAGE_TIMEOUT);
-      return () => clearTimeout(timer);
-    } else {
-      setShowMessageMaxMessage(false);
-    }
-  }, [isMessageAtMaxLength]);
 
   const onValid = (data: ContactFormInput) => {
     if (hasError) return;
