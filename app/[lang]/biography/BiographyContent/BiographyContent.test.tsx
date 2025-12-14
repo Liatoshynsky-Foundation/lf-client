@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { BiographyContent } from './BiographyContent';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import type { BiographyContentBlock } from '~/types/page/biography.types';
-import { ContentType } from '~/types/page/biography.types';
+import { ContentType, ImagesSizes } from '~/types/page/biography.types';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('next-intl', () => ({
@@ -43,14 +44,46 @@ jest.mock('~/shared/components/year-with-line/YearWithLine', () => {
   };
 });
 
-const makeTipTapDoc = (text: string): TipTapDoc =>
-  ({
-    content: [
-      {
-        content: [{ text }]
-      }
-    ]
-  }) as unknown as TipTapDoc;
+const t = (uk: string, _en: string) => uk;
+
+const makeTipTapDoc = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [
+        {
+          type: TipTapNodeTypes.text,
+          text
+        }
+      ]
+    }
+  ]
+});
+
+const makeAdvancedImage = (args: {
+  src: string;
+  altUk: string;
+  altEn: string;
+  captionUk: string;
+  captionEn: string;
+  size: ImagesSizes;
+  rectangleTopLeftCorner?: boolean;
+}) => ({
+  src: args.src,
+  generatedSrc: `/api/blob-url?folderName=photos&blobName=${args.src}`,
+  size: args.size,
+  rectangleTopLeftCorner: args.rectangleTopLeftCorner ?? false,
+  alt: t(args.altUk, args.altEn),
+  caption: t(args.captionUk, args.captionEn)
+});
+
+const makeImage = (args: { src: string; altUk: string; altEn: string; captionUk: string; captionEn: string }) => ({
+  src: args.src,
+  generatedSrc: `/api/blob-url?folderName=photos&blobName=${args.src}`,
+  alt: t(args.altUk, args.altEn),
+  caption: t(args.captionUk, args.captionEn)
+});
 
 const mockBlocks: BiographyContentBlock[] = [
   {
@@ -58,101 +91,72 @@ const mockBlocks: BiographyContentBlock[] = [
     items: [
       {
         type: ContentType.ChronologyList,
-        additionalImage: {
+        additionalImage: makeAdvancedImage({
           src: '/img/additional.png',
-          size: 0 as any,
-          alt: {
-            uk: makeTipTapDoc('alt uk'),
-            en: makeTipTapDoc('alt en')
-          },
-          caption: {
-            uk: makeTipTapDoc('caption uk'),
-            en: makeTipTapDoc('caption en')
-          }
-        },
-        listItems: [
-          { description: { uk: makeTipTapDoc('item 1 uk'), en: makeTipTapDoc('item 1 en') } },
-          { description: { uk: makeTipTapDoc('item 2 uk'), en: makeTipTapDoc('item 2 en') } }
-        ]
+          size: ImagesSizes.SmallVerticalWide,
+          altUk: 'alt uk',
+          altEn: 'alt en',
+          captionUk: 'caption uk',
+          captionEn: 'caption en'
+        }),
+        listItems: [{ description: makeTipTapDoc('item 1 uk') }, { description: makeTipTapDoc('item 2 uk') }]
       },
       {
         type: ContentType.ExcerptBlockItem,
         quote: {
-          quoteText: {
-            uk: makeTipTapDoc('quote text uk'),
-            en: makeTipTapDoc('quote text en')
-          },
-          sourceText: {
-            uk: makeTipTapDoc('source text uk'),
-            en: makeTipTapDoc('source text en')
-          }
+          text: t('quote text uk', 'quote text en'),
+          source: t('source text uk', 'source text en')
         }
       },
       {
         type: ContentType.OnlyImageBlock,
-        mainImage: {
+        mainImage: makeAdvancedImage({
           src: '/img/main.png',
-          size: 0 as any,
-          alt: {
-            uk: makeTipTapDoc('main alt uk'),
-            en: makeTipTapDoc('main alt en')
-          },
-          caption: {
-            uk: makeTipTapDoc('main caption uk'),
-            en: makeTipTapDoc('main caption en')
-          }
-        },
-        additionalImage: {
+          size: ImagesSizes.BigHorizontal,
+          altUk: 'main alt uk',
+          altEn: 'main alt en',
+          captionUk: 'main caption uk',
+          captionEn: 'main caption en'
+        }),
+        additionalImage: makeAdvancedImage({
           src: '/img/left.png',
-          size: 0 as any,
-          alt: {
-            uk: makeTipTapDoc('left alt uk'),
-            en: makeTipTapDoc('left alt en')
-          },
-          caption: {
-            uk: makeTipTapDoc('left caption uk'),
-            en: makeTipTapDoc('left caption en')
-          }
-        }
+          size: ImagesSizes.SmallVerticalThin,
+          altUk: 'left alt uk',
+          altEn: 'left alt en',
+          captionUk: 'left caption uk',
+          captionEn: 'left caption en'
+        })
       },
       {
         type: ContentType.OnlyImageBlock,
-        mainImage: {
+        mainImage: makeAdvancedImage({
           src: '/img/single.png',
-          size: 0 as any,
-          alt: {
-            uk: makeTipTapDoc('single alt uk'),
-            en: makeTipTapDoc('single alt en')
-          },
-          caption: {
-            uk: makeTipTapDoc('single caption uk'),
-            en: makeTipTapDoc('single caption en')
-          }
-        }
+          size: ImagesSizes.BigHorizontal,
+          altUk: 'single alt uk',
+          altEn: 'single alt en',
+          captionUk: 'single caption uk',
+          captionEn: 'single caption en'
+        })
       },
       {
         type: ContentType.FullWidthImage,
-        image: {
+        image: makeImage({
           src: '/img/full.png',
-          alt: {
-            uk: makeTipTapDoc('full alt uk'),
-            en: makeTipTapDoc('full alt en')
-          },
-          caption: {
-            uk: makeTipTapDoc('full caption uk'),
-            en: makeTipTapDoc('full caption en')
-          }
-        }
+          altUk: 'full alt uk',
+          altEn: 'full alt en',
+          captionUk: 'full caption uk',
+          captionEn: 'full caption en'
+        })
       }
     ]
   },
   {
-    yearTitle: undefined,
+    yearTitle: null,
     items: [
       {
         type: ContentType.ChronologyList,
         additionalImage: undefined,
-        listItems: [{ description: { uk: makeTipTapDoc('no-year item uk'), en: makeTipTapDoc('no-year item en') } }]
+        listItems: [{ description: makeTipTapDoc('no-year item uk') }]
       }
     ]
   }
@@ -161,13 +165,11 @@ const mockBlocks: BiographyContentBlock[] = [
 describe('BiographyContent', () => {
   it('should render main container', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     expect(screen.getByTestId('BiographyContent')).toBeInTheDocument();
   });
 
   it('should render year line for blocks with numeric yearTitle', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const year = screen.getByTestId('BiographyContent-yearWithLine');
     expect(year).toBeInTheDocument();
     expect(year).toHaveTextContent('1910');
@@ -175,14 +177,12 @@ describe('BiographyContent', () => {
 
   it('should render chronology list items for each list entry', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const items = screen.getAllByTestId('BiographyContent-chronologyListItem');
     expect(items.length).toBe(3);
   });
 
   it('should render additional image for chronology list when provided', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const image = screen.getByTestId('BiographyContent-chronologyList-imageWithCaption');
     expect(image).toBeInTheDocument();
     expect(image).toHaveTextContent(/alt uk/i);
@@ -190,34 +190,28 @@ describe('BiographyContent', () => {
 
   it('should render excerpt block with quote and source text', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const excerpt = screen.getByTestId('BiographyContent-excerptBlock');
     expect(excerpt).toBeInTheDocument();
-
     expect(screen.getByTestId('BiographyContent-excerpt-quote')).toHaveTextContent(/quote text uk/i);
     expect(screen.getByTestId('BiographyContent-excerpt-source')).toHaveTextContent(/source text uk/i);
   });
 
   it('should render both left and right images for OnlyImageBlock with additionalImage', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const left = screen.getByTestId('BiographyContent-onlyImageBlock-left');
     const right = screen.getByTestId('BiographyContent-onlyImageBlock-right');
-
     expect(left).toBeInTheDocument();
     expect(right).toBeInTheDocument();
   });
 
   it('should render single image block when OnlyImageBlock has no additionalImage', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const single = screen.getByTestId('BiographyContent-onlyImageBlock-single');
     expect(single).toBeInTheDocument();
   });
 
   it('should render full width image block', () => {
     render(<BiographyContent data={mockBlocks} />);
-
     const fullWidth = screen.getByTestId('BiographyContent-fullWidthImage');
     expect(fullWidth).toBeInTheDocument();
     expect(screen.getByText(/full alt uk/i)).toBeInTheDocument();

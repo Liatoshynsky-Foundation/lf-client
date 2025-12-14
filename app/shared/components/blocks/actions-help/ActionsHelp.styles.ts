@@ -14,7 +14,7 @@ export const styles = {
       sm: '24px',
       md: '40px'
     },
-    mt: '160px'
+    mt: { xs: '56px', sm: '104px', md: '128px' }
   },
   typography: {
     textAlign: { xs: 'center', sm: 'right', md: 'left' },

@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { CopyButton } from '~/components/copy-button/CopyButton';
+import CopyLink from '~/ds-components/copy-link/CopyLink';
 
 import { PaymentMethod } from './VolunteerDonation';
 import { styles } from './VolunteerDonation.styles';
@@ -12,20 +12,12 @@ interface PaymentMethodItemProps {
 }
 
 export const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({ method, hint }) => {
-  const textRef = useRef<HTMLSpanElement>(null);
-
   return (
     <Box sx={styles.card}>
       <Box sx={styles.paymentMethodContainer}>
         {method.label && <Typography sx={styles.label}>{method.label}:</Typography>}
 
-        <Box sx={styles.valueContainer}>
-          <Typography component="span" ref={textRef} sx={styles.value}>
-            {method.value}
-          </Typography>
-
-          <CopyButton targetRef={textRef} hint={hint} iconSize="large" />
-        </Box>
+        <CopyLink hint={hint} size="large" value={method.value} />
       </Box>
     </Box>
   );
