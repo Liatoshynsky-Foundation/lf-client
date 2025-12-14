@@ -72,13 +72,13 @@ describe('Archive Page', () => {
     });
   });
 
-  it('renders the page shell', () => {
+  it('should render the page shell', () => {
     renderWithTheme(<Archive />);
     expect(screen.getByTestId('ArchivePage')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveHeader')).toBeInTheDocument();
   });
 
-  it('shows loader initially and hides it after funds load', async () => {
+  it('should show loader initially and hide it after funds load', async () => {
     renderWithTheme(<Archive />);
 
     expect(screen.getByTestId('ArchivePage-loader')).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('Archive Page', () => {
     expect(screen.queryByTestId('ArchivePage-loader')).not.toBeInTheDocument();
   });
 
-  it('loads and displays fund cards', async () => {
+  it('should load and display fund cards', async () => {
     renderWithTheme(<Archive />);
 
     expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe('Archive Page', () => {
     expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
   });
 
-  it('calls API to fetch funds', async () => {
+  it('should call API to fetch funds', async () => {
     renderWithTheme(<Archive />);
 
     await screen.findByTestId('ArchivePage-fundsGrid');
@@ -107,7 +107,7 @@ describe('Archive Page', () => {
     expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
   });
 
-  it('calls setParam when search is triggered', async () => {
+  it('should call setParam when search is triggered', () => {
     renderWithTheme(<Archive />);
 
     screen.getByTestId('trigger-search').click();
