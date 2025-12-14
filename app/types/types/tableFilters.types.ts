@@ -28,4 +28,5 @@ export type CompositionsFilters = {
   yearTo?: number | null;
 };
 
+export type CompositionsTitleFilters = Partial<CompositionsFilters>;
 export type ScientificWorksTitleFilters = Partial<WorkTableFilters>;
