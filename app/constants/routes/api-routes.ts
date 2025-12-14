@@ -5,6 +5,7 @@ export const ApiRoutes = {
   COMPOSITION_DATA: '/api/compositions/data',
   SCIENTIFIC_WORKS_DATA: '/api/scientific-works/data',
   SCIENTIFIC_WORKS_FILTERS: '/api/scientific-works/filters',
+  SCIENTIFIC_WORKS_TITLES: '/api/scientific-works/titles',
   VERIFY: '/api/verify',
   CREATE_INVOICE: '/api/create-invoice',
   TURNSTILE: '/api/config'

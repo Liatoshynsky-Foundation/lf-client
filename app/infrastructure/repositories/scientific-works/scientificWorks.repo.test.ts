@@ -38,7 +38,7 @@ describe('scientificWorksRepository', () => {
 
     const result = await repo.getAllAuthors();
 
-    expect(result).toEqual(mockAuthors); // zod parse returns same data
+    expect(result).toEqual(mockAuthors);
     expect(ScientificWorksAuthor.find).toHaveBeenCalledTimes(1);
   });
 
@@ -50,10 +50,8 @@ describe('scientificWorksRepository', () => {
       }
     ];
 
-    (ScientificWorks.find as any).mockReturnValue({
-      select: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue(mockTitles)
-      })
+    (ScientificWorks.find as jest.Mock).mockReturnValue({
+      lean: jest.fn().mockResolvedValue(mockTitles)
     });
 
     const result = await repo.getAllScientificTitles();

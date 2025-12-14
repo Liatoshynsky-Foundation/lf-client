@@ -17,7 +17,9 @@ const staticFiltersData = {
 };
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  __esModule: true,
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 jest.mock('~/i18n/navigation', () => ({
@@ -44,6 +46,13 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
 
 jest.mock('~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters', () => ({
   useFetchStaticFilters: jest.fn()
+}));
+
+jest.mock('~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete', () => ({
+  useFilterAutocomplete: () => ({
+    options: [],
+    loading: false
+  })
 }));
 
 const setParam = jest.fn();
