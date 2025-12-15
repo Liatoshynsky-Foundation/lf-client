@@ -10,7 +10,7 @@ export type TableParams = Record<string, QueryValue>;
 async function getTableStaticData<T>(pathname: string, locale: Locale, params?: TableParams): Promise<T> {
   const url = getFullUrl({
     pathname,
-    searchParameters: { locale, ...(params ?? {}) }
+    searchParameters: { locale, ...params }
   });
   return baseService.request<T>({
     method: 'GET',
