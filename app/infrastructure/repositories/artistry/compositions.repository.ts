@@ -1,4 +1,8 @@
-import { Condition, Query } from '~/domain/dto/composition.dto';
+import { FilterQuery } from 'mongoose';
+
+import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
+
+import { CompositionDTO, Condition, Query } from '~/domain/dto/composition.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
@@ -42,9 +46,58 @@ const compositionsRepository = {
     };
   },
 
-  async getAllCompositionTitles() {
+  async getAllCompositionTitles(filters: CompositionsTitleFilters = {}) {
     await dbConnect();
-    const titles = await Compositions.find().select({ _id: 1, title: 1 }).lean();
+
+    const { search, category, genre, yearFrom, yearTo } = filters;
+
+    const conditions: FilterQuery<CompositionDTO>[] = [];
+
+    if (search?.trim()) {
+      const pattern = searchHelper(search);
+      conditions.push({
+        $or: [{ 'title.uk': { $regex: pattern, $options: 'i' } }, { 'title.en': { $regex: pattern, $options: 'i' } }]
+      });
+    }
+
+    const categoryKeys = namedFilterHelper(category);
+    if (categoryKeys.length) {
+      const categoryDocs = await Category.find({ key: { $in: categoryKeys } })
+        .select('_id')
+        .lean();
+      const categoryIds = categoryDocs.map((d) => d._id);
+
+      if (categoryIds.length) {
+        conditions.push({ categories: { $in: categoryIds } });
+      } else {
+        return [];
+      }
+    }
+
+    const genreKeys = namedFilterHelper(genre);
+    if (genreKeys.length) {
+      const genreDocs = await Genre.find({ key: { $in: genreKeys } })
+        .select('_id')
+        .lean();
+      const genreIds = genreDocs.map((d) => d._id);
+
+      if (genreIds.length) {
+        conditions.push({ genres: { $in: genreIds } });
+      } else {
+        return [];
+      }
+    }
+
+    const yearCond: { $gte?: number; $lte?: number } = {};
+    if (yearFrom != null) yearCond.$gte = yearFrom;
+    if (yearTo != null) yearCond.$lte = yearTo;
+    if (yearCond.$gte != null || yearCond.$lte != null) {
+      conditions.push({ year: yearCond });
+    }
+
+    const query: FilterQuery<CompositionDTO> = conditions.length ? { $and: conditions } : {};
+
+    const titles = await Compositions.find(query, { title: 1 }).lean();
     return ArraySchema(compositionTitlesSchema).parse(titles);
   },
   async getAllCompositions(

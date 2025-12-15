@@ -27,3 +27,6 @@ export type CompositionsFilters = {
   yearFrom?: number | null;
   yearTo?: number | null;
 };
+
+export type CompositionsTitleFilters = Partial<CompositionsFilters>;
+export type ScientificWorksTitleFilters = Partial<WorkTableFilters>;

@@ -4,6 +4,8 @@ import debounce from 'lodash.debounce';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { tableParamsToQuery } from '~/lib/utils/paramsToQuery';
+
 type Primitive = string | number | null;
 type ParamValue = Primitive | Primitive[];
 export type TableParams = Record<string, ParamValue>;
@@ -23,25 +25,14 @@ export function useTableFilters<P extends TableParams>(initialParams: P) {
 
   const syncUrl = useCallback(
     (nextParams: P) => {
-      const urlParams = new URLSearchParams();
+      const qs = tableParamsToQuery(nextParams);
 
-      Object.entries(nextParams).forEach(([key, value]) => {
-        if (value === null) return;
+      if (!qs) {
+        router.replace(pathname, { scroll: false });
+        return;
+      }
 
-        if (Array.isArray(value)) {
-          if (!value.length) return;
-          for (const v of value) {
-            urlParams.append(key, String(v));
-          }
-          return;
-        }
-
-        urlParams.set(key, String(value));
-      });
-
-      const search = urlParams.toString();
-      const url = search ? `${pathname}?${search}` : pathname;
-
+      const url = qs ? `${pathname}${qs}` : pathname;
       router.replace(url, { scroll: false });
     },
     [router, pathname]

@@ -1,5 +1,7 @@
 import { Locale } from 'next-intl';
 
+import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
+
 import { CompositionRepository } from '~/infrastructure/repositories/artistry/compositions.repo';
 import {
   compositionSchema,
@@ -36,11 +38,10 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
     return ArraySchema(compositionTableReadySchema(LocalizeSchema(compositionSchema, locale))).parse(allSongs);
   },
 
-  async getAllCompositionTitles(locale: Locale) {
-    const allTitles = await compositionsRepo.getAllCompositionTitles();
-    if (!allTitles) return [];
-
-    return ArraySchema(LocalizeSchema(compositionTitlesSchema, locale)).parse(allTitles);
+  async getAllCompositionTitles(locale: Locale, filters: CompositionsTitleFilters = {}) {
+    const titles = await compositionsRepo.getAllCompositionTitles(filters);
+    if (!titles) return [];
+    return ArraySchema(LocalizeSchema(compositionTitlesSchema, locale)).parse(titles);
   },
 
   async getCompositionsYearRange() {

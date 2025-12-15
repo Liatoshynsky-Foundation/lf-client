@@ -11,7 +11,9 @@ const musicTableMock = [
 ];
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  __esModule: true,
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 jest.mock('~/i18n/navigation', () => ({
