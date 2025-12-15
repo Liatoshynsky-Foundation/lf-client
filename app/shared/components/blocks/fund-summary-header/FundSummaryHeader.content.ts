@@ -12,7 +12,17 @@ function createDescriptionText(ukText: string, enText: string) {
       content: [
         {
           type: TipTapNodeTypes.paragraph as const,
-          content: [{ type: TipTapNodeTypes.text as const, text: ukText }]
+          content: [
+            {
+              type: TipTapNodeTypes.text as const,
+              text: ukText,
+              marks: [
+                {
+                  type: 'bold'
+                }
+              ]
+            } as any
+          ]
         }
       ]
     },
@@ -21,7 +31,17 @@ function createDescriptionText(ukText: string, enText: string) {
       content: [
         {
           type: TipTapNodeTypes.paragraph as const,
-          content: [{ type: TipTapNodeTypes.text as const, text: enText }]
+          content: [
+            {
+              type: TipTapNodeTypes.text as const,
+              text: enText,
+              marks: [
+                {
+                  type: 'bold'
+                }
+              ]
+            } as any
+          ]
         }
       ]
     }
@@ -34,7 +54,7 @@ function createFundItem(ukTitle: string, enTitle: string, ukDescription: string,
       uk: ukTitle,
       en: enTitle
     },
-    description: createDescriptionText(ukDescription, enDescription)
+    description: createDescriptionText(ukDescription, enDescription) as any
   };
 }
 
@@ -57,8 +77,6 @@ export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
 
   return '/archive';
 }
-
-export const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
 
 export const fundSummaryBacklinkText: Record<Locale, string> = {
   uk: 'Повернутись до архіву',
