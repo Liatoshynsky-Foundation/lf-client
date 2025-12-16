@@ -39,14 +39,14 @@ const EventsTab = ({ itemsPerPage = 6 }: EventsTabProps) => {
       itemsPerPage
     });
 
-  const tableRef = useRef<HTMLDivElement | null>(null);
+  const tabRef = useRef<HTMLDivElement | null>(null);
   const shouldScrollRef = useRef(false);
 
   useLayoutEffect(() => {
     if (!shouldScrollRef.current) return;
     shouldScrollRef.current = false;
 
-    const el = tableRef.current;
+    const el = tabRef.current;
     if (!el) return;
 
     const OFFSET = 120;
@@ -65,36 +65,34 @@ const EventsTab = ({ itemsPerPage = 6 }: EventsTabProps) => {
   };
 
   return (
-    <>
-      <Box ref={tableRef} sx={styles.container} data-testid="EventsTab">
-        {paginatedData.map(({ id, props }) => (
-          <EventItem key={id} {...props} />
-        ))}
-        <Box sx={styles.paginationWrapper} data-testid="EnhancedTable-paginationWrapper">
-          {hasMore && (
-            <Button
-              data-testid="Pagination-loadMore"
-              variant="contained"
-              size="large"
-              onClick={handleLoadMore}
-              sx={styles.loadMoreButton}
-            >
-              {t('viewMore')}
-            </Button>
-          )}
-          {totalPages > 1 && (
-            <Pagination
-              hasMore={hasMore}
-              count={totalPages}
-              siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
-              page={currentPage}
-              visiblePages={visiblePages}
-              onChange={(_, page) => handlePageChangeWithScroll(page)}
-            />
-          )}
-        </Box>
+    <Box ref={tabRef} sx={styles.container} data-testid="EventsTab">
+      {paginatedData.map(({ id, props }) => (
+        <EventItem key={id} {...props} />
+      ))}
+      <Box sx={styles.paginationWrapper} data-testid="EventsTab-paginationWrapper">
+        {hasMore && (
+          <Button
+            data-testid="EventsTab-loadMore"
+            variant="contained"
+            size="large"
+            onClick={handleLoadMore}
+            sx={styles.loadMoreButton}
+          >
+            {t('viewMore')}
+          </Button>
+        )}
+        {totalPages > 1 && (
+          <Pagination
+            hasMore={hasMore}
+            count={totalPages}
+            siblingCount={breakpoint.isMobile || breakpoint.isTablet ? 0 : 1}
+            page={currentPage}
+            visiblePages={visiblePages}
+            onChange={(_, page) => handlePageChangeWithScroll(page)}
+          />
+        )}
       </Box>
-    </>
+    </Box>
   );
 };
 
