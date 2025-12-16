@@ -174,7 +174,8 @@
     },
     "buttons": {
       "viewSheetMusic": "View sheet music",
-      "downloadMusic": "Download"
+      "downloadMusic": "Download",
+      "listenToComposition": "Listen to the composition"
     },
     "work": {
       "name": "All documents",

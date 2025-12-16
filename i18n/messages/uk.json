@@ -174,7 +174,8 @@
     },
     "buttons": {
       "viewSheetMusic": "Переглянути ноти",
-      "downloadMusic": "Завантажити"
+      "downloadMusic": "Завантажити",
+      "listenToComposition": "Прослухати композицію"
     },
     "work": {
       "name": "Усі документи",
