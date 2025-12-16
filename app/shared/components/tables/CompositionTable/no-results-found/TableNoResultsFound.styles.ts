@@ -1,5 +1,7 @@
 import { colors } from '@mui/material';
 
+import { AppTypography } from '~/constants';
+
 const styles = {
   container: {
     display: 'flex',
@@ -22,15 +24,13 @@ const styles = {
     ml: { sm: '10px', md: '75px', lg: '140px', xl: '0px' }
   },
   description: {
+    ...AppTypography.mulish16Medium,
     mt: 2,
     width: { xs: 272, sm: 350, md: 460 },
     height: { xs: 72, sm: 48 },
     ml: { sm: '10px', md: '90px', lg: '140px', xl: '0px' },
-    lineHeight: '150%',
-    color: colors.brown[800],
     letterSpacing: '0%',
-    fontWeight: 500,
-    fontSize: '16px'
+    color: colors.brown[800]
   },
   h4: {
     fontSize: { xs: 40, sm: 40, md: 48, lg: 48, xl: 48 },
