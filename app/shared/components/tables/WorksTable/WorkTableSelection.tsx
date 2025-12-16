@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 
+import TableNoResultsFound from '../CompositionTable/no-results-found/TableNoResultsFound';
 import { getWorkTableColumnWidths } from './getColumnWidth';
 import {
   RenderActionCell,
@@ -174,6 +175,7 @@ export const WorkTableSection = () => {
   return (
     <EnhancedTable<ScientificWorkTableRow>
       data={data}
+      noResults={<TableNoResultsFound />}
       loading={isLoading}
       columns={columns}
       columnWidths={columnWidths}
