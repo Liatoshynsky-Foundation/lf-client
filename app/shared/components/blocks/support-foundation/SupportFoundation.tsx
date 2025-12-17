@@ -1,10 +1,12 @@
 'use client';
+
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 
-import DonationForm from '../../forms/donation-form/DonationForm';
-import PaymentDetails from '../payment-details/PaymentDetails';
+import PaymentDetails from '~/components/blocks/payment-details/PaymentDetails';
+import DonationForm from '~/components/forms/donation-form/DonationForm';
+
 import { styles } from './SupportFoundation.styles';
 
 function SupportFoundation() {
@@ -17,16 +19,14 @@ function SupportFoundation() {
         {t('title')}
       </Typography>
 
-      <Box sx={styles.donationSection} data-testid="SupportFoundation-donationSection">
-        <Box sx={styles.donationFormWrapper}>
-          <DonationForm />
-        </Box>
-        <Box sx={styles.infoSection} data-testid="SupportFoundation-infoSection">
-          <Typography variant="body2" sx={styles.sectionSubtitle} data-testid="SupportFoundation-infoSection-subtitle">
-            {t.rich('subTitle', { b: bold })}
-          </Typography>
-          <PaymentDetails />
-        </Box>
+      <Box sx={styles.donationFormWrapper}>
+        <DonationForm />
+      </Box>
+      <Box sx={styles.infoSection} data-testid="SupportFoundation-infoSection">
+        <Typography variant="body2" sx={styles.sectionSubtitle} data-testid="SupportFoundation-infoSection-subtitle">
+          {t.rich('subTitle', { b: bold })}
+        </Typography>
+        <PaymentDetails />
       </Box>
     </Box>
   );
