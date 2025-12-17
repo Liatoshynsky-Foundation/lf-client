@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 
+import TableNoResultsFound from '../CompositionTable/no-results-found/TableNoResultsFound';
 import { getWorkTableColumnWidths } from './getColumnWidth';
 import {
   RenderActionCell,
@@ -27,6 +28,7 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 import { useTableData } from '~/shared/hooks/use-table-data/useTableData';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
+import { useFilterAutocomplete } from '~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete';
 
 export const WorkTableSection = () => {
   const t = useTranslations('table.work');
@@ -48,6 +50,16 @@ export const WorkTableSection = () => {
     ApiRoutes.SCIENTIFIC_WORKS_DATA,
     params
   );
+
+  type TitleOption = ScientificFiltersType['titles'][number];
+
+  const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
+
+  const { options: titleOptions } = useFilterAutocomplete<WorkTableFilters, TitleOption>({
+    endpoint: ApiRoutes.SCIENTIFIC_WORKS_TITLES,
+    params,
+    select: selectTitles
+  });
 
   const bp = useBreakpoints();
 
@@ -160,11 +172,10 @@ export const WorkTableSection = () => {
     ]
   );
 
-  const titleOptions = useMemo(() => staticFilters?.titles ?? [], [staticFilters]);
-
   return (
     <EnhancedTable<ScientificWorkTableRow>
       data={data}
+      noResults={<TableNoResultsFound />}
       loading={isLoading}
       columns={columns}
       columnWidths={columnWidths}

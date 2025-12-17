@@ -1,12 +1,13 @@
+import { FilterQuery } from 'mongoose';
+
+import { ScientificWorkDb } from '~/types/types/scientificWorks.types';
+import { ScientificWorksTitleFilters } from '~/types/types/tableFilters.types';
+
 import dbConnect from '~/infrastructure/db/connect';
 import { ScientificWorksAuthor } from '~/infrastructure/models/scientific-works/scientificWorksAuthor';
 import { ScientificWorks } from '~/infrastructure/models/scientific-works/scientificWorksTableData';
 import { searchHelper } from '~/lib/utils/searchAndFiltersHelpers';
-import {
-  authorsSchema,
-  scientificWorksSchema,
-  scientificWorkTitlesSchema
-} from '~/validators/scientific-works/scientificWorks.schema';
+import { authorsSchema, scientificWorksSchema } from '~/validators/scientific-works/scientificWorks.schema';
 
 const scientificWorksRepository = {
   async getAllAuthors(fields?: string[]) {
@@ -21,10 +22,34 @@ const scientificWorksRepository = {
     return authorsSchema.parse(await query.lean());
   },
 
-  async getAllScientificTitles() {
+  async getAllScientificTitles(filters: ScientificWorksTitleFilters = {}) {
     await dbConnect();
-    const titles = await ScientificWorks.find().select({ _id: 1, title: 1 }).lean();
-    return scientificWorkTitlesSchema.parse(titles);
+
+    const { yearFrom, yearTo, author, search } = filters;
+
+    const conditions: FilterQuery<ScientificWorkDb>[] = [];
+
+    if (search?.trim()) {
+      const pattern = searchHelper(search);
+      conditions.push({
+        $or: [{ 'title.uk': { $regex: pattern, $options: 'i' } }, { 'title.en': { $regex: pattern, $options: 'i' } }]
+      });
+    }
+
+    if (author?.length) {
+      conditions.push({ authors: { $in: author } });
+    }
+
+    const yearCond: { $gte?: number; $lte?: number } = {};
+    if (yearFrom != null) yearCond.$gte = yearFrom;
+    if (yearTo != null) yearCond.$lte = yearTo;
+    if (Object.keys(yearCond).length) {
+      conditions.push({ startYear: yearCond });
+    }
+
+    const query = conditions.length ? { $and: conditions } : {};
+
+    return ScientificWorks.find(query, { title: 1 }).lean();
   },
 
   async getScientificWorksYearRange() {

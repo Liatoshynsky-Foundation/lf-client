@@ -169,15 +169,14 @@ const DesktopNav = ({
           animateIndicator={animateIndicator && activeButton !== undefined}
         />
         {specialNav && specialNav.links.length > 0 && specialNav.links[0].visibility && (
-          <Button
-            disableRipple
-            label={specialNav.title}
-            link={specialNav.links[0].href}
-            sx={{
-              ...styles.warInUkraineButton,
-              ...(isSpecialActive && styles.warInUkraineButtonActive)
-            }}
-          />
+          <Box sx={{ ...styles.warInUkraineWrapper }}>
+            <Button
+              disableRipple
+              label={specialNav.title}
+              link={specialNav.links[0].href}
+              sx={{ ...styles.warInUkraineButton, ...(isSpecialActive && styles.warInUkraineButtonActive) }}
+            />
+          </Box>
         )}
       </Box>
 

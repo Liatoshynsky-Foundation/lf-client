@@ -8,13 +8,18 @@ jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/section/page-a')
 }));
 
-jest.mock('next/link', () => ({
+jest.mock('~/../i18n/navigation', () => ({
   __esModule: true,
-  default: ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <a href={href} data-testid={`mock-link-${href}`}>
-      {children}
-    </a>
-  )
+  usePathname: jest.fn(() => '/section/page-a'),
+  useRouter: () => ({ replace: jest.fn(), push: jest.fn(), prefetch: jest.fn() }),
+  Link: ({ href, children, ...props }: any) => {
+    const h = typeof href === 'string' ? href : (href?.pathname ?? '');
+    return (
+      <a href={h} data-testid={`mock-link-${h}`} {...props}>
+        {children}
+      </a>
+    );
+  }
 }));
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
@@ -93,7 +98,7 @@ describe('NavAccordion', () => {
     expect(submenuLinks).toHaveAttribute('href', '/section/page-a');
   });
 
-  test('marks dropdown as active for localized nested path', () => {
+  test('should mark dropdown as active for localized nested path', () => {
     (usePathname as jest.Mock).mockReturnValue('/uk/section/page-a');
 
     render(<NavAccordion items={items} />);

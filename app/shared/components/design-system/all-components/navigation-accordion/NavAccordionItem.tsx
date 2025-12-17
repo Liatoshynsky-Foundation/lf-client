@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
 
 import { mainHexPallete } from '../theme/colors';
 import { NavDropdownItem, NavItem, NavLinkItem } from './NavAccordion';
 import { styles } from './NavAccordion.styles';
 
+import { Link } from '~/i18n/navigation';
 import { isPathWithin } from '~/lib/utils/navPath';
 import MinusIconSvg from '~/public/icons/minus.svg';
 import PlusIconSvg from '~/public/icons/plus.svg';

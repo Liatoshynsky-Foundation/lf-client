@@ -13,14 +13,12 @@ export async function GET(req: NextRequest) {
     const container = createRequestContainer();
     const scientificWorksService = container.resolve('scientificService');
 
-    const [titles, yearRange, authors] = await Promise.all([
-      scientificWorksService.getAllScientificTitles(locale),
+    const [yearRange, authors] = await Promise.all([
       scientificWorksService.getScientificWorksYearRange(),
       scientificWorksService.getAllAuthors(locale)
     ]);
 
     return NextResponse.json({
-      titles,
       yearRange,
       authors
     });

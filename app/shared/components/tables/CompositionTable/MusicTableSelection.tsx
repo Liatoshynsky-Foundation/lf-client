@@ -26,6 +26,7 @@ import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters.types';
 
+import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -36,6 +37,7 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 import { useTableData } from '~/shared/hooks/use-table-data/useTableData';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
+import { useFilterAutocomplete } from '~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
 
@@ -65,6 +67,16 @@ export default function MusicTableSection() {
     ApiRoutes.COMPOSITION_DATA,
     params
   );
+
+  type TitleOption = CompositionTitlesDTO;
+
+  const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
+
+  const { options: titleOptions } = useFilterAutocomplete<CompositionsFilters, TitleOption>({
+    endpoint: ApiRoutes.COMPOSITION_TITLES,
+    params,
+    select: selectTitles
+  });
 
   const bp = useBreakpoints();
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
@@ -254,11 +266,7 @@ export default function MusicTableSection() {
         noResults={<TableNoResultsFound />}
         tableName={t('name.composition')}
         Search={
-          <Search
-            search={params.search}
-            setSearch={(v) => debouncedSetParam('search', v)}
-            options={staticFilters?.titles ?? []}
-          />
+          <Search search={params.search} setSearch={(v) => debouncedSetParam('search', v)} options={titleOptions} />
         }
         Filters={
           <TableFilters isAnyFilterActive={isAnyFilterActive} onClearAllFilters={resetFilters} filters={filters} />

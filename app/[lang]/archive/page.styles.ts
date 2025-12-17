@@ -22,6 +22,13 @@ export const styles = {
       xl: '97px'
     }
   },
+  loaderBox: {
+    gridColumn: '1 / -1',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '240px'
+  },
   fundsGrid: {
     gridColumn: '1 / -1',
     display: 'grid',

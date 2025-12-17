@@ -26,8 +26,8 @@ export const createScientificWorksService = ({
     return ArraySchema(LocalizeSchema(NoIDSchema(namedFilterSchema), locale)).parse(normalized);
   },
 
-  async getAllScientificTitles(locale: Locale) {
-    const titles = await scientificWorksRepo.getAllScientificTitles();
+  async getAllScientificTitles(locale: Locale, filters: WorkTableFilters) {
+    const titles = await scientificWorksRepo.getAllScientificTitles(filters);
 
     return ArraySchema(LocalizeSchema(scientificWorkTitleSchema, locale)).parse(titles);
   },
