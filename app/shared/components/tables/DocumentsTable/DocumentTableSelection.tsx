@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   RenderActionCell,
@@ -21,12 +21,16 @@ import MobileDocumentTable from './MobileDocumentTable/MobileDocumentTable';
 import { DocumentRecord } from '~/types/types/document.types';
 
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
+import { Search } from '~/shared/components/search/Search';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export default function DocumentTableSelection({ documents }: { documents: DocumentRecord[] }) {
   const t = useTranslations('table.documents');
   const bp = useBreakpoints();
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
+
+  const [search, setSearch] = useState('');
+  const searchOptions = useMemo(() => [], []);
 
   const columnWidths = useMemo(
     () =>
@@ -86,14 +90,17 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
     []
   );
 
+  const searchNode = <Search search={search} setSearch={setSearch} options={searchOptions} />;
+
   if (isMobile || isTablet) {
-    return <MobileDocumentTable tableName={t('name')} data={documents} />;
+    return <MobileDocumentTable tableName={t('name')} data={documents} Search={searchNode} />;
   }
 
   return (
     <EnhancedTable
       data={documents}
       columns={baseColumns}
+      Search={searchNode}
       columnWidths={columnWidths}
       itemsPerPage={5}
       tableName={t('name')}
