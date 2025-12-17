@@ -4,7 +4,6 @@ export const styles = {
   buttonGroup: {
     backgroundColor: mainHexPallete.brown[50],
     p: '4px',
-
     width: { xs: '100%', sm: 'fit-content' },
 
     div: {
@@ -27,7 +26,6 @@ export const styles = {
     border: 'none',
     display: 'flex',
     alignItems: 'center',
-
     '&, &:hover': {
       background: 'transparent',
       borderRadius: '28px'
@@ -39,28 +37,36 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
+    width: '100%',
 
     '& h6.MuiTypography-root': {
       lineHeight: '150%',
       color: mainHexPallete.brown[500],
-      width: '115px'
+      width: { xs: '100%', sm: '150px', lg: '180px' },
+      flexShrink: 0
     },
 
     '& p.MuiTypography-root': {
-      lineHeight: '150%'
+      lineHeight: '150%',
+      width: '100%'
     }
   },
 
   paymentDetailsRow: {
     display: 'flex',
-    alignItems: 'center',
-    gap: { xs: '0px', sm: '25px' },
-    flexWrap: { xs: 'wrap', sm: 'nowrap' }
+    flexDirection: { xs: 'column', sm: 'row' },
+    justifyContent: 'flex-start',
+    alignItems: { xs: 'flex-start', sm: 'flex-start' },
+    gap: { xs: '4px', sm: '25px' },
+    width: '100%',
+    py: '4px'
   },
 
   iban: {
     display: 'flex',
-    gap: '8px'
+    gap: '8px',
+    width: '100%',
+    alignItems: 'center'
   },
 
   ibanText: {
