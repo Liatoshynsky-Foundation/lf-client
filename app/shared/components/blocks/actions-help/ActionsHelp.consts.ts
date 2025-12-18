@@ -9,13 +9,15 @@ export const actionsHelpPageData = {
       {
         type: TipTapNodeTypes.paragraph,
         content: [
-          { type: TipTapNodeTypes.text, text: 'Допомагати можна не лише донатами — іноді ' },
-          { type: TipTapNodeTypes.text, text: 'найцінніша', marks: [{ type: TipTapMarkType.bold }] },
           {
             type: TipTapNodeTypes.text,
-            text: ' підтримка — це ваші знання, досвід і час. Навіть кілька годин на місяць можуть стати важливим внеском у розвиток фонду. Долучайтеся до наших ініціатив — '
+            text: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що '
           },
-          { type: TipTapNodeTypes.text, text: 'разом ми зможемо більше.', marks: [{ type: TipTapMarkType.bold }] }
+          { type: TipTapNodeTypes.text, text: 'гучніше й впевненіше', marks: [{ type: TipTapMarkType.bold }] },
+          {
+            type: TipTapNodeTypes.text,
+            text: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.'
+          }
         ]
       }
     ]

@@ -37,9 +37,16 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
   return (
     <Box sx={styles.gridContainer} data-testid="Faq">
       <SectionTitle
+        sx={{
+          gridTemplateColumns: {
+            xs: 'repeat(4, 1fr)',
+            sm: 'repeat(8, 1fr)',
+            md: 'repeat(12, 1fr)'
+          }
+        }}
         title={t('title')}
         mb={48}
-        gridColumn={{ xs: '2 ', sm: '4 / -1', md: '6 / -1', lg: '5 / -1', xl: '6 / -1' }}
+        gridColumn={{ xs: '2/4 ', sm: '4 / -1', md: '6 / -1' }}
         dataTestId="Faq-titleContainer"
       />
       <Box sx={styles.contacts}>
