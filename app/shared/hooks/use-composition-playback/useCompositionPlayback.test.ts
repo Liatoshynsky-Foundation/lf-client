@@ -27,7 +27,7 @@ const makeAudioPlayerMock = (overrides?: Partial<ReturnType<typeof useAudioPlaye
   togglePlay: jest.fn(),
   isPlaying: false,
   src: undefined,
-  ...(overrides ?? {})
+  ...overrides
 });
 
 describe('useCompositionPlayback', () => {

@@ -236,9 +236,9 @@ describe('MusicTableCells', () => {
 
       const notesText = screen.getByText('viewSheetMusic');
       const notesItem = notesText.closest('[role="menuitem"]');
-      expect(notesItem).toBeTruthy();
+      if (!notesItem) throw new Error('Menuitem not found');
 
-      fireEvent.click(notesItem!);
+      fireEvent.click(notesItem);
     });
 
     it('should disable play menu item when canPlay=false', () => {
