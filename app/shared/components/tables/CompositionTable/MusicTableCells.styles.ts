@@ -49,3 +49,14 @@ export const groupLabelRowSx: SxProps<Theme> = {
   justifyContent: 'space-between',
   alignItems: 'center'
 };
+
+export const overflowMenuSx = {
+  menuLabelItemSx: {
+    fontFamily: 'Mulish',
+    fontWeight: '500',
+    fontStyle: 'Medium',
+    fontSize: '16px',
+    lineHeight: '150%',
+    letterSpacing: '0%'
+  }
+};
