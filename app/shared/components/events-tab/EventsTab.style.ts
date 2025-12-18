@@ -6,10 +6,9 @@ export const styles = {
       xs: 'repeat(auto-fit, minmax(200px, 1fr))',
       sm: 'subgrid'
     },
-    columnGap: { xs: '24px' },
-    rowGap: { xs: '40px' },
-    mt: 7,
-    alignContent: 'start'
+    columnGap: { xs: '32px' },
+    rowGap: { xs: '48px', md: '64px' },
+    mt: 7
   },
   paginationWrapper: {
     gridColumn: '1 / -1',
@@ -22,7 +21,8 @@ export const styles = {
     alignItems: 'center'
   },
   loadMoreButton: {
-    p: { xs: '12px 56.5px', sm: '12px 89.5px', md: '16px 48px' },
+    width: { xs: '100%', sm: 'auto' },
+    p: { xs: '8px 24px', md: '16px 48px' },
     fontSize: { xs: '16px', md: '18px' },
     fontWeight: { xs: '500', md: '600' }
   }

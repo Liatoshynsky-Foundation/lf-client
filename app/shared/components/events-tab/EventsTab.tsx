@@ -16,9 +16,10 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface EventsTabProps {
   itemsPerPage?: number;
+  tabSx?: object;
 }
 
-const EventsTab = ({ itemsPerPage = 6 }: EventsTabProps) => {
+const EventsTab = ({ itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const t = useTranslations('common');
   const breakpoint = useBreakpoints();
 
@@ -65,7 +66,7 @@ const EventsTab = ({ itemsPerPage = 6 }: EventsTabProps) => {
   };
 
   return (
-    <Box ref={tabRef} sx={styles.container} data-testid="EventsTab">
+    <Box ref={tabRef} sx={{ ...styles.container, ...tabSx }} data-testid="EventsTab">
       {paginatedData.map(({ id, props }) => (
         <EventItem key={id} {...props} />
       ))}
