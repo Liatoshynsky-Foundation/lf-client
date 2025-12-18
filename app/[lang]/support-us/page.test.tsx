@@ -35,6 +35,10 @@ describe('SupportUs page', () => {
     }
   };
 
+  const mockProps = {
+    params: Promise.resolve({ lang: mockLang as any })
+  };
+
   beforeEach(() => {
     (createRootContainer as jest.Mock).mockReturnValue({
       resolve: jest.fn().mockReturnValue({
@@ -44,14 +48,14 @@ describe('SupportUs page', () => {
   });
 
   it('should render support us page correctly', async () => {
-    render(await SupportUs({ params: { lang: mockLang as any } }));
+    render(await SupportUs(mockProps));
 
     expect(screen.getByText(/Actions Help/i)).toBeInTheDocument();
     expect(screen.getByText(/FAQ/i)).toBeInTheDocument();
   });
 
   it('should render the SupportFoundation component', async () => {
-    render(await SupportUs({ params: { lang: mockLang as any } }));
+    render(await SupportUs(mockProps));
 
     expect(screen.getByText(/Support Foundation/i)).toBeInTheDocument();
   });

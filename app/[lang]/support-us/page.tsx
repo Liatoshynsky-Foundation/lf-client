@@ -21,15 +21,18 @@ export const metadata = createSeoMeta({
   url: '/support-us'
 });
 
-type SupportUsProps = {
-  params: {
+type SupportUsProps = Readonly<{
+  params: Promise<{
     lang: Locale;
-  };
-};
+  }>;
+}>;
 
-export default async function SupportUs({ params: { lang } }: SupportUsProps) {
+export default async function SupportUs({ params }: SupportUsProps) {
+  const { lang } = await params;
+
   const container = createRootContainer();
   const footerService = container.resolve('footerService');
+
   const footerData = await footerService.getFooterData(lang);
 
   const faqData = {
