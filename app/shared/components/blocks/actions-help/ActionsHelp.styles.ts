@@ -17,9 +17,14 @@ export const styles = {
     mt: { xs: '56px', sm: '104px', md: '128px' }
   },
   typography: {
-    textAlign: { xs: 'center', sm: 'right', md: 'left' },
+    textAlign: 'left',
     gridColumn: { xs: '1', sm: '4 / 9', md: '6 / -1' },
-    textIndent: { xs: '7em', sm: '10em', md: '15em' },
+    textIndent: {
+      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
+    },
     color: mainHexPallete.brown[700]
   },
   papersContainer: {
@@ -31,10 +36,10 @@ export const styles = {
       xl: 'repeat(4, 296px)'
     },
     gridColumn: { xs: '1', sm: '1 / -1' },
-    columnGap: { xs: '0px', sm: '40px', md: '25px', lg: '15px', xl: '40px' },
+    columnGap: { xs: '0px', sm: '40px', md: '25px', lg: '16px', xl: '40px' },
     rowGap: { xs: '0px', sm: '45px', md: '35px', lg: '0px' },
-    justifyContent: { xs: 'center', sm: 'end', lg: 'center' },
-    mt: { xs: '64px', md: '132px' }
+    justifyContent: { xs: 'center', sm: 'end' },
+    mt: { xs: '64px', lg: '80px' }
   },
   paper: (index: number) => ({
     position: 'relative',
