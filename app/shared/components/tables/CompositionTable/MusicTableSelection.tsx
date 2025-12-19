@@ -274,6 +274,7 @@ export default function MusicTableSection() {
         isFiltersActive={isAnyFilterActive}
         activeFiltersCount={activeFiltersCount}
         onClearFilters={resetFilters}
+        tableContainerSx={{ mt: { xs: '80px', md: '88px', xl: '152px' }, mb: { xs: '120px', md: '160px' } }}
       />
       <GetNotesModal
         key={modalNotes[0]?.dateUploaded}
