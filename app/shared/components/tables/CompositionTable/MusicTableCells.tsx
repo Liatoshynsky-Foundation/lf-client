@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 
 import Button from '~/ds-components/button/Button';
 
-import OverflowMenu from '../../design-system/all-components/overflow-menu/OverflowMenu';
 import {
   actionsCellContainerSx,
   headerTypographySx,
@@ -24,6 +23,7 @@ import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
+import OverflowMenu from '~/shared/components/design-system/all-components/overflow-menu/OverflowMenu';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
