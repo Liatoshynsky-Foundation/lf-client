@@ -34,6 +34,22 @@ const navigationRepository = {
       title: validated.title,
       links: validated.links
     };
+  },
+  async getFooterNavigation() {
+    await dbConnect();
+
+    const navigations = await Navigation.find({ footerOrder: { $ne: null } })
+      .sort({ footerOrder: 1 })
+      .lean();
+
+    return navigations.map((navigation) => {
+      const validated = navigationSchema.parse(navigation);
+
+      return {
+        title: validated.title,
+        links: validated.links
+      };
+    });
   }
 };
 
