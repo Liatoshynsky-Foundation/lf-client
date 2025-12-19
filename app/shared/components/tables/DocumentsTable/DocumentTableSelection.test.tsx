@@ -12,6 +12,16 @@ jest.mock('~/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
 }));
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn()
+  }),
+  usePathname: () => '/uk/archive/fund-1'
+}));
+
 const mockUseBreakpoints = jest.fn();
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => {
