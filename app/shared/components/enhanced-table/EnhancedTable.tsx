@@ -68,7 +68,7 @@ export const EnhancedTable = <T extends RowData>({
   loading = false,
   noResults,
   rowSx,
-  tableContainerSx
+  tableContainerSx,
   onRowClick
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
