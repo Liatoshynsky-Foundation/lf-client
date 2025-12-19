@@ -1,7 +1,6 @@
 'use client';
 
-import { Theme } from '@emotion/react';
-import { Box, CircularProgress, Paper, SxProps, Table, TableBody, TableContainer } from '@mui/material';
+import { Box, CircularProgress, Paper, SxProps, Table, TableBody, TableContainer, Theme } from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
