@@ -43,20 +43,20 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(() => defaultValues ?? []);
-  const menuAnchorRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setSelectedValues(defaultValues ?? []);
   }, [defaultValues]);
 
   const handleToggleMenu = () => {
-    if (!disabled && menuAnchorRef.current) {
-      setAnchorEl(menuAnchorRef.current);
-    }
+    if (disabled) return;
+    setAnchorEl((prev) => (prev ? null : triggerRef.current));
   };
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
+    requestAnimationFrame(() => triggerRef.current?.focus());
   };
 
   const handleOptionClick = (option: FilterOption) => {
@@ -93,8 +93,8 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 
           return (
             <FilterSelectItem
-              label={option.label}
               key={option.value}
+              label={option.label}
               onClick={() => !isDisabled && handleOptionClick(option)}
               selected={isSelected}
               disabled={isDisabled}
@@ -110,7 +110,15 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
 
   return (
     <Box>
-      <Box ref={menuAnchorRef} sx={filterSelectStyles.root(variant, disabled)} onClick={handleToggleMenu}>
+      <Box
+        ref={triggerRef}
+        sx={filterSelectStyles.root(variant, disabled)}
+        onClick={handleToggleMenu}
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-haspopup="dialog"
+        aria-expanded={Boolean(anchorEl)}
+      >
         <Typography sx={filterSelectStyles.label(disabled)}>{label}</Typography>
         <Box sx={filterSelectStyles.chipContainer}>
           {selectedOptionsCount > 0 && (
@@ -120,6 +128,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
               disabled={disabled}
               onDelete={handleChipDelete}
               size="small"
+              onClick={(e) => e.stopPropagation()}
             />
           )}
           <Box sx={filterSelectStyles.dropdownIcon(disabled)}>
