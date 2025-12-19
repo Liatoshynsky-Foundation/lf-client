@@ -1,14 +1,16 @@
+import { Locale } from 'next-intl';
 import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { createRootContainer } from '~/di/container';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import ActionsHelp from '~/shared/components/blocks/actions-help/ActionsHelp';
 import { actionsHelpPageData } from '~/shared/components/blocks/actions-help/ActionsHelp.consts';
 import Faq from '~/shared/components/blocks/FAQ/FAQ';
-import { contacts, faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
+import { faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/shared/components/blocks/support-foundation/SupportFoundation';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
@@ -19,9 +21,25 @@ export const metadata = createSeoMeta({
   url: '/support-us'
 });
 
-export default function SupportUs() {
+type SupportUsProps = Readonly<{
+  params: Promise<{
+    lang: Locale;
+  }>;
+}>;
+
+export default async function SupportUs({ params }: SupportUsProps) {
+  const { lang } = await params;
+
+  const container = createRootContainer();
+  const footerService = container.resolve('footerService');
+
+  const footerData = await footerService.getFooterData(lang);
+
   const faqData = {
-    contacts,
+    contacts: {
+      phone: footerData.contacts.phone,
+      email: footerData.contacts.email
+    },
     faq: faqItems
   };
 

@@ -49,6 +49,7 @@ interface EnhancedTableProps<T extends RowData> {
   noResults?: React.ReactNode;
   rowSx?: object;
   tableContainerSx?: SxProps<Theme>;
+  onRowClick?: (row: T) => void;
 }
 
 export const EnhancedTable = <T extends RowData>({
@@ -68,6 +69,7 @@ export const EnhancedTable = <T extends RowData>({
   noResults,
   rowSx,
   tableContainerSx
+  onRowClick
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -204,7 +206,13 @@ export const EnhancedTable = <T extends RowData>({
                       columns={getGroupColumns(columns, entry.items)}
                     />
                   ) : (
-                    <EnhancedTableRow key={entry.item.id} data={entry.item} table={headerTable} sx={rowSx} />
+                    <EnhancedTableRow
+                      key={entry.item.id}
+                      data={entry.item}
+                      table={headerTable}
+                      sx={rowSx}
+                      onClick={onRowClick ? () => onRowClick(entry.item) : undefined}
+                    />
                   )
                 )}
               </TableBody>
