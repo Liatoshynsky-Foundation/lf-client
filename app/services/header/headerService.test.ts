@@ -31,7 +31,8 @@ describe('headerService (composed)', () => {
 
   const navigationServiceMock = {
     getNavigation: jest.fn().mockResolvedValue(mockNavigationRaw),
-    getSpecialNavigation: jest.fn().mockResolvedValue(mockSpecialNavigationRaw)
+    getSpecialNavigation: jest.fn().mockResolvedValue(mockSpecialNavigationRaw),
+    getFooterNavigation: jest.fn()
   };
 
   const headerService = createHeaderService({

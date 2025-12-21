@@ -70,7 +70,8 @@ describe('footerService (composed)', () => {
 
   const navigationServiceMock = {
     getNavigation: jest.fn().mockResolvedValue(mockNavigationRaw),
-    getSpecialNavigation: jest.fn().mockResolvedValue(mockSpecialNavigationRaw)
+    getSpecialNavigation: jest.fn().mockResolvedValue(mockSpecialNavigationRaw),
+    getFooterNavigation: jest.fn().mockResolvedValue(mockNavigationRaw)
   };
 
   const footerService = createFooterService({
@@ -116,7 +117,7 @@ describe('footerService (composed)', () => {
     expect(foundationInfoServiceMock.getBrandingInfo).toHaveBeenCalled();
     expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
     expect(foundationInfoServiceMock.getPublicInfo).toHaveBeenCalled();
-    expect(navigationServiceMock.getNavigation).toHaveBeenCalled();
+    expect(navigationServiceMock.getFooterNavigation).toHaveBeenCalled();
   });
 
   it('should return empty socialLinks if not provided', async () => {

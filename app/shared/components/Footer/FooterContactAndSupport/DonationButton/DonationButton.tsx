@@ -20,7 +20,7 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
       label={data.text}
       shortLabel={data.shortText}
       link={data.link}
-      startIcon={<SvgImage src="/icons/donation-button.svg" alt="Donation Button" width={20} height={20} />}
+      startIcon={<SvgImage src="/icons/heart-handshake.svg" alt="Donation Button" width={20} height={20} />}
       sx={{ gap: '0px' }}
     />
   );

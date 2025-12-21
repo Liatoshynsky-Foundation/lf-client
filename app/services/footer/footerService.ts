@@ -18,7 +18,7 @@ export const createFooterService = ({ navigationRepo, foundationInfoRepo }: Foot
       foundationInfoRepo.getBrandingInfo(),
       foundationInfoRepo.getSupportButtonLink(),
       foundationInfoRepo.getPublicInfo(),
-      navigationRepo.getNavigation()
+      navigationRepo.getFooterNavigation()
     ]);
 
     const addressInfo = LocalizeSchema(contactInfoSchema, locale).parse(contactInfo);
