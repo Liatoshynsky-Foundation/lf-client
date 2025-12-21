@@ -32,12 +32,13 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
 
   const handleToggleMenu = useCallback(() => {
     if (buttonRef.current) {
-      setAnchorEl(buttonRef.current);
+      setAnchorEl((prev) => (prev ? null : buttonRef.current));
     }
   }, []);
 
   const handleCloseMenu = useCallback(() => {
     setAnchorEl(null);
+    requestAnimationFrame(() => buttonRef.current?.focus());
   }, []);
 
   const numericFilterElement = useMemo(
@@ -57,7 +58,14 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
 
   return (
     <>
-      <Box ref={buttonRef} sx={{ ...filterSelectStyles.root('filled', false) }} onClick={handleToggleMenu}>
+      <Box
+        component="button"
+        ref={buttonRef}
+        sx={{ ...filterSelectStyles.root('filled', false) }}
+        onClick={handleToggleMenu}
+        aria-haspopup="dialog"
+        aria-expanded={Boolean(anchorEl)}
+      >
         <Typography sx={filterSelectStyles.label(false)}>{label}</Typography>
         <Box sx={filterSelectStyles.dropdownIcon(false)}>
           <Image src="/icons/chevron-down.svg" alt="dropdown" width={16} height={16} />
