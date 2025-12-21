@@ -2,7 +2,7 @@ import { DocumentRecord } from '~/types/types/document.types';
 
 export const mockDocuments: DocumentRecord[] = [
   {
-    id: '1',
+    id: '69236afae427aafae7051acb',
     cipher: 'Ф. 2, оп. 1, спр. 1',
     name: 'Документи про народження і освіту',
     dates: '1895–1955',
@@ -11,7 +11,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '2',
+    id: '69236afae427aafae7051acc',
     cipher: 'Ф. 2, оп. 1, спр. 2',
     name: 'Похвальні листи гімназій',
     dates: '1895–1955',
@@ -20,7 +20,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '3',
+    id: '69236afae427aafae7051acd',
     cipher: 'Ф. 2, оп. 1, спр. 3',
     name: 'Трудова діяльність',
     dates: '1895–1955',
@@ -30,7 +30,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '4',
+    id: '69236afae427aafae7051ace',
     cipher: 'Ф. 2, оп. 1, спр. 4',
     name: 'Нагороди та звання',
     dates: '1895–1955',
@@ -39,7 +39,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '5',
+    id: '69236afae427aafae7051acf',
     cipher: 'Ф. 2, оп. 1, спр. 5',
     name: 'Автобіографії та довідки',
     dates: '1895–1955',
@@ -48,7 +48,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '6',
+    id: '69236afae427aafae7051ad0',
     cipher: 'Ф. 2, оп. 1, спр. 6',
     name: 'Членство в організаціях',
     dates: '1895–1955',
@@ -57,7 +57,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: null
   },
   {
-    id: '7',
+    id: '69236afae427aafae7051ad1',
     cipher: 'Ф. 2, оп. 1, спр. 7',
     name: 'Поїздки за кордон',
     dates: '1959–1966',
@@ -66,7 +66,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: '/files/example.pdf'
   },
   {
-    id: '8',
+    id: '69236afae427aafae7051ad2',
     cipher: 'Ф. 2, оп. 1, спр. 8',
     name: 'Військова служба',
     dates: '1915–1946',
@@ -75,7 +75,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: null
   },
   {
-    id: '9',
+    id: '69236afae427aafae7051ad3',
     cipher: 'Ф. 2, оп. 1, спр. 9',
     name: 'Різне',
     dates: '1955',
@@ -84,7 +84,7 @@ export const mockDocuments: DocumentRecord[] = [
     pdfUrl: null
   },
   {
-    id: '10',
+    id: '6923766fe427aafae7051ae6',
     cipher: 'Ф. 2, оп. 2, спр. 1',
     name: 'Листи-привітання з 50-річчям',
     dates: '1945',

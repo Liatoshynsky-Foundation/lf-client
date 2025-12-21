@@ -1,5 +1,7 @@
 'use client';
+
 import { ColumnDef } from '@tanstack/react-table';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
@@ -26,8 +28,18 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export default function DocumentTableSelection({ documents }: { documents: DocumentRecord[] }) {
   const t = useTranslations('table.documents');
+  const router = useRouter();
+  const pathname = usePathname();
+
   const bp = useBreakpoints();
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
+
+  const handleRowClick = (row: DocumentRecord) => {
+    const caseId = row.id;
+    if (!caseId) return;
+
+    router.push(`${pathname.replace(/\/$/, '')}/${encodeURIComponent(caseId)}`);
+  };
 
   const [search, setSearch] = useState('');
   const searchOptions = useMemo(() => [], []);
@@ -53,20 +65,8 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
         cell: RenderCodeCell,
         sortingFn: 'alphanumeric'
       },
-      {
-        id: 'name',
-        accessorKey: 'name',
-        header: RenderNameHeader,
-        cell: RenderNameCell,
-        sortingFn: 'alphanumeric'
-      },
-      {
-        id: 'dates',
-        accessorKey: 'dates',
-        header: RenderDateHeader,
-        cell: RenderDateCell,
-        sortingFn: 'alphanumeric'
-      },
+      { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: RenderNameCell, sortingFn: 'alphanumeric' },
+      { id: 'dates', accessorKey: 'dates', header: RenderDateHeader, cell: RenderDateCell, sortingFn: 'alphanumeric' },
       {
         id: 'sheets',
         accessorKey: 'sheets',
@@ -81,11 +81,7 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
         cell: RenderContentCell,
         sortingFn: 'alphanumeric'
       },
-      {
-        id: 'actions',
-        header: '',
-        cell: RenderActionCell
-      }
+      { id: 'actions', header: '', cell: RenderActionCell }
     ],
     []
   );
@@ -104,6 +100,7 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
       columnWidths={columnWidths}
       itemsPerPage={5}
       tableName={t('name')}
+      onRowClick={handleRowClick}
       rowSx={{
         cursor: 'pointer',
         transition: 'background-color 0.15s ease',
