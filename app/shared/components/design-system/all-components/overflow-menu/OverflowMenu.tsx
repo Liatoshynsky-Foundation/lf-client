@@ -1,7 +1,8 @@
 'use client';
 
 import { Menu, type SxProps, Theme } from '@mui/material';
-import React, { useId, useMemo, useState } from 'react';
+import type { MouseEvent, ReactElement } from 'react';
+import { cloneElement, Fragment, useId, useMemo, useState } from 'react';
 
 import { overflowMenuSx } from './OverflowMenu.styles';
 import { OverflowMenuItem } from './OverflowMenuItem';
@@ -11,7 +12,7 @@ import { sxToArray } from '~/lib/utils/sxToArray';
 
 interface OverflowMenuProps {
   items: OverflowMenuItemConfig[];
-  trigger: React.ReactElement<TriggerProps>;
+  trigger: ReactElement<TriggerProps>;
   menuContainerSx?: SxProps<Theme>;
   menuListSx?: SxProps<Theme>;
   dataTestId?: string;
@@ -30,22 +31,22 @@ export default function OverflowMenu({
 
   const visibleItems = useMemo(() => items.filter((item) => !item.hidden), [items]);
 
-  const handleOpen = (e: React.MouseEvent<HTMLElement>) => setMenuAnchor(e.currentTarget);
+  const handleOpen = (e: MouseEvent<HTMLElement>) => setMenuAnchor(e.currentTarget);
   const handleClose = () => setMenuAnchor(null);
 
-  const triggerEl = React.cloneElement(trigger, {
+  const triggerEl = cloneElement(trigger, {
     ...trigger.props,
     'aria-haspopup': 'menu',
     'aria-controls': open ? menuId : undefined,
     'aria-expanded': open ? 'true' : undefined,
-    onClick: (e: React.MouseEvent<HTMLElement>) => {
+    onClick: (e: MouseEvent<HTMLElement>) => {
       trigger.props.onClick?.(e);
       handleOpen(e);
     }
   });
 
   return (
-    <React.Fragment>
+    <Fragment>
       {triggerEl}
 
       <Menu
@@ -54,11 +55,11 @@ export default function OverflowMenu({
         open={open}
         onClose={handleClose}
         PaperProps={{
-          sx: menuContainerSx,
+          sx: [overflowMenuSx.menuContainerSx, ...sxToArray(menuContainerSx)],
           'data-testid': dataTestId
         }}
         MenuListProps={{
-          sx: [overflowMenuSx.menuListSx, ...sxToArray(menuListSx)]
+          sx: menuListSx
         }}
       >
         {visibleItems.map((item) => (
@@ -77,6 +78,6 @@ export default function OverflowMenu({
           />
         ))}
       </Menu>
-    </React.Fragment>
+    </Fragment>
   );
 }

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { CellContext, Row } from '@tanstack/react-table';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import {
@@ -35,9 +35,7 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 jest.mock('~/shared/components/design-system/all-components/Ellipsis/Ellipsis', () => {
-  const Ellipsis = ({ text }: { text: string }) => {
-    return <div>{text}</div>;
-  };
+  const Ellipsis = ({ text }: { text: string }) => <div>{text}</div>;
   return { __esModule: true, Ellipsis };
 });
 
@@ -80,6 +78,12 @@ const mockCellContext = {
 describe('MusicTableCells', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseCompositionPlayback.mockReturnValue({
+      canPlay: true,
+      isCurrentTrack: false,
+      isPlaying: false,
+      handlePlayClick: jest.fn()
+    });
   });
 
   describe('Header renderers', () => {
@@ -92,6 +96,7 @@ describe('MusicTableCells', () => {
           <RenderGenreHeader />
         </>
       );
+
       expect(screen.getByText('opus')).toBeInTheDocument();
       expect(screen.getByText('name')).toBeInTheDocument();
       expect(screen.getByText('year')).toBeInTheDocument();
@@ -103,20 +108,22 @@ describe('MusicTableCells', () => {
     it('should render name and year cells with values', () => {
       const nameCell = renderNameCell({ getValue: () => 'Poem about the Forest' } as CellContext<Music, unknown>);
       const yearCell = renderYearCell({ getValue: () => '1918' } as CellContext<Music, unknown>);
+
       const { getByText } = render(
         <>
           {nameCell}
           {yearCell}
         </>
       );
+
       expect(getByText('Poem about the Forest')).toBeInTheDocument();
       expect(getByText('1918')).toBeInTheDocument();
     });
 
     it('should render genre cell joined with commas', () => {
       const genreCell = RenderGenreCell({ getValue: () => ['Classical', 'Romantic'] } as CellContext<Music, unknown>);
-      const { getByText } = render(<>{genreCell}</>);
-      expect(getByText('Classical, Romantic')).toBeInTheDocument();
+      render(<>{genreCell}</>);
+      expect(screen.getByText('Classical, Romantic')).toBeInTheDocument();
     });
 
     it('should render nothing if no genres', () => {
@@ -127,25 +134,7 @@ describe('MusicTableCells', () => {
   });
 
   describe('PlayCell', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-
-      mockUseCompositionPlayback.mockReturnValue({
-        canPlay: true,
-        isCurrentTrack: false,
-        isPlaying: false,
-        handlePlayClick: jest.fn()
-      });
-    });
-
     it('should render play icon when canPlay=true', () => {
-      mockUseCompositionPlayback.mockReturnValue({
-        canPlay: true,
-        isCurrentTrack: false,
-        isPlaying: false,
-        handlePlayClick: jest.fn()
-      });
-
       render(RenderPlayCell(mockCellContext));
       expect(screen.getByTestId('mock-svg')).toBeInTheDocument();
     });
@@ -175,6 +164,7 @@ describe('MusicTableCells', () => {
       });
 
       render(RenderPlayCell(mockCellContext));
+
       fireEvent.click(screen.getByRole('button', { hidden: true }));
       expect(handlePlayClick).toHaveBeenCalled();
     });
@@ -182,24 +172,29 @@ describe('MusicTableCells', () => {
 
   describe('ActionsCell', () => {
     it('should render button when desktop', () => {
-      mockUseBreakpoints.mockReturnValue({
-        isDesktop: true
-      });
+      mockUseBreakpoints.mockReturnValue({ isDesktop: true });
+
       const onAction = jest.fn();
-      const { getByText } = render(RenderActionsCell(mockCellContext, onAction));
-      const desktopBtn = getByText('viewSheetMusic');
+      render(RenderActionsCell(mockCellContext, onAction));
+
+      const desktopBtn = screen.getByText('viewSheetMusic');
       expect(desktopBtn).toBeInTheDocument();
+
       fireEvent.click(desktopBtn);
-      expect(onAction).toHaveBeenCalled();
+      expect(onAction).toHaveBeenCalledTimes(1);
+      expect(onAction).toHaveBeenCalledWith({
+        composition: mockMusic.name,
+        notes: mockMusic.sheetMusic
+      });
     });
 
     it('should render icon button on laptop', () => {
-      mockUseBreakpoints.mockReturnValue({
-        isLaptop: true
-      });
+      mockUseBreakpoints.mockReturnValue({ isLaptop: true });
+
       const onAction = jest.fn();
-      const { getByAltText } = render(RenderActionsCell(mockCellContext, onAction));
-      expect(getByAltText('viewSheetMusic')).toBeInTheDocument();
+      render(RenderActionsCell(mockCellContext, onAction));
+
+      expect(screen.getByAltText('viewSheetMusic')).toBeInTheDocument();
     });
 
     it('should open overflow menu and render play item', () => {
@@ -221,10 +216,11 @@ describe('MusicTableCells', () => {
       expect(screen.getByText('viewSheetMusic')).toBeInTheDocument();
 
       fireEvent.click(screen.getByTestId('Artistry-overflowMenuButton'));
-      expect(screen.queryByRole('menuitem', { name: 'viewSheetMusic' })).not.toBeInTheDocument();
+
+      expect(screen.queryByRole('menuitem', { name: /viewSheetMusic/i })).not.toBeInTheDocument();
     });
 
-    it('should render "viewSheetMusic" in menu on mobile and call onAction', () => {
+    it('should render "viewSheetMusic" in menu on mobile and call onAction', async () => {
       mockUseBreakpoints.mockReturnValue({ isDesktop: false, isLaptop: false });
 
       const onAction = jest.fn();
@@ -233,12 +229,20 @@ describe('MusicTableCells', () => {
       expect(screen.queryByText('viewSheetMusic')).not.toBeInTheDocument();
 
       fireEvent.click(screen.getByTestId('Artistry-overflowMenuButton'));
+      expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      const notesText = screen.getByText('viewSheetMusic');
-      const notesItem = notesText.closest('[role="menuitem"]');
-      if (!notesItem) throw new Error('Menuitem not found');
-
+      const notesItem = screen.getByRole('menuitem', { name: /viewSheetMusic/i });
       fireEvent.click(notesItem);
+
+      expect(onAction).toHaveBeenCalledTimes(1);
+      expect(onAction).toHaveBeenCalledWith({
+        composition: mockMusic.name,
+        notes: mockMusic.sheetMusic
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      });
     });
 
     it('should disable play menu item when canPlay=false', () => {
@@ -261,26 +265,19 @@ describe('MusicTableCells', () => {
 
   describe('Group renderers', () => {
     it('should render opus label', () => {
-      const { getByText } = render(renderOpusGroupLabel([mockMusic]));
-      expect(getByText('op.50')).toBeInTheDocument();
+      render(renderOpusGroupLabel([mockMusic]));
+      expect(screen.getByText('op.50')).toBeInTheDocument();
     });
 
     it('should render opus title label', () => {
-      const { getByText } = render(renderOpusTitleGroupLabel([mockMusic]));
-      expect(getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
+      render(renderOpusTitleGroupLabel([mockMusic]));
+      expect(screen.getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
     });
   });
 
   describe('RenderExpanderCell', () => {
     it('should render expander icon for group rows', () => {
       mockUseBreakpoints.mockReturnValue({ isMobile: true, isTablet: false });
-
-      mockUseCompositionPlayback.mockReturnValue({
-        canPlay: true,
-        isCurrentTrack: false,
-        isPlaying: false,
-        handlePlayClick: jest.fn()
-      });
 
       render(RenderExpanderCell(mockCellContext));
       expect(screen.getByTestId('mock-svg')).toBeInTheDocument();

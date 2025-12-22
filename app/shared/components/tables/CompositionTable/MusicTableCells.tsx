@@ -11,7 +11,7 @@ import {
   headerTypographySx,
   iconButtonSecondaryOutlinedSx,
   iconButtonSecondaryPlainSx,
-  overflowMenuSx,
+  menuLabelItemSx,
   playCellSx
 } from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
@@ -131,7 +131,7 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
         />
       ),
       disabled: !canPlay,
-      labelSx: overflowMenuSx.menuLabelItemSx,
+      labelSx: menuLabelItemSx,
       onClick: handlePlayClick
     },
     {
@@ -140,7 +140,7 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
       icon: <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={24} height={24} />,
       disabled: !rowData.sheetMusic,
       hidden: showNotesInline,
-      labelSx: overflowMenuSx.menuLabelItemSx,
+      labelSx: menuLabelItemSx,
       onClick: handleNotesClick
     }
   ];

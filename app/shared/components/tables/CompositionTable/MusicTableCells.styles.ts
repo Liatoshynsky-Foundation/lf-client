@@ -50,13 +50,10 @@ export const groupLabelRowSx: SxProps<Theme> = {
   alignItems: 'center'
 };
 
-export const overflowMenuSx = {
-  menuLabelItemSx: {
-    fontFamily: 'Mulish',
-    fontWeight: '500',
-    fontStyle: 'Medium',
-    fontSize: '16px',
-    lineHeight: '150%',
-    letterSpacing: '0%'
-  }
+export const menuLabelItemSx: SxProps<Theme> = {
+  fontFamily: 'Mulish',
+  fontWeight: '500',
+  fontSize: '16px',
+  lineHeight: '150%',
+  letterSpacing: '0%'
 };

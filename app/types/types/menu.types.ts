@@ -2,10 +2,12 @@ import { SxProps, Theme } from '@mui/material';
 
 export type IconPosition = Readonly<'left' | 'right'>;
 
+import type { HTMLAttributes, ReactNode } from 'react';
+
 export type OverflowMenuItemConfig = Readonly<{
   id: string;
-  label: React.ReactNode;
-  icon?: React.ReactNode;
+  label: ReactNode;
+  icon?: ReactNode;
   iconPosition?: IconPosition;
   containerSx?: SxProps<Theme>;
   labelSx?: SxProps<Theme>;
@@ -14,6 +16,6 @@ export type OverflowMenuItemConfig = Readonly<{
   onClick: () => void;
 }>;
 
-export type TriggerProps = React.HTMLAttributes<HTMLElement> & {
+export type TriggerProps = HTMLAttributes<HTMLElement> & {
   'data-testid'?: string;
 };
