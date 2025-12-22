@@ -8,9 +8,9 @@ import { BiographyContent } from './BiographyContent/BiographyContent';
 import { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { HeroSection } from '~/shared/components/blocks/HeroSection/HeroSection';
 
 export const metadata = createSeoMeta({
@@ -27,20 +27,20 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     return <UnderDevelopment />;
   }
 
-  const pageService = await createRequestContainer().resolve('pagesDataService');
-
-  const page = await pageService.getPageData('biography', lang);
+  const page = await resolvePageData('biography', lang);
 
   if (!page) {
     return <PageNotFound />;
   }
 
-  const years = page.blocks.biographyContent.map((year) => year.yearTitle).filter((year) => year !== null);
+  const blocks = page.blocks;
+
+  const years = blocks.biographyContent.map((year) => year.yearTitle).filter((year) => year !== null);
 
   return (
     <MainLayout withLines>
-      {page.blocks.heroSection && <HeroSection data={page.blocks.heroSection} years={years} />}
-      {page.blocks.biographyContent && <BiographyContent data={page.blocks.biographyContent} />}
+      {blocks.heroSection && <HeroSection data={blocks.heroSection} years={years} />}
+      {blocks.biographyContent && <BiographyContent data={blocks.biographyContent} />}
     </MainLayout>
   );
 }
