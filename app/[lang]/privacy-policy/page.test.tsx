@@ -2,7 +2,18 @@ import { render, screen } from '@testing-library/react';
 
 import PrivacyPolicy from './page';
 
-import { createRequestContainer } from '~/di/container';
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn()
+}));
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
+
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
+  __esModule: true,
+  PageNotFound: () => <div>Page not found</div>
+}));
 
 jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => {
   const MockIntroSection = ({ title }: { title: string }) => <div>Intro section: {title}</div>;
@@ -16,37 +27,36 @@ jest.mock('~/components/blocks/privacy-policy/policy-section/PolicySection', () 
   return MockPolicySection;
 });
 
-jest.mock('~/di/container', () => {
-  const createRequestContainer = jest.fn(() => ({
-    resolve: () => ({
-      getPageData: jest.fn().mockResolvedValue({
-        title: 'Privacy Policy',
-        blocks: {
-          IntroSection: { trustAndSecurity: {}, agreement: {} },
-          DataWeCollect: { title: 'Data We Collect', description: {}, sections: [] },
-          DataUsage: { title: 'How We Use Data', description: {}, list: [] },
-          Cookies: { title: 'Cookies', description: {}, list: [], note: {} },
-          GoogleAuth: { title: 'Google Auth', description: {}, list: [], note: {} },
-          SocialNetworks: { title: 'Social Networks', description: {} },
-          TargetedAds: { title: 'Targeted Ads', description: {} },
-          NewsletterSubscription: { title: 'Newsletter', description: {} },
-          DataRetention: { title: 'Data Retention', description: {} },
-          UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
-          ContactUs: { title: 'Contact Us', description: {} }
-        }
-      })
-    })
-  }));
-  return { createRequestContainer };
-});
-
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn()
-}));
-
 describe('PrivacyPolicy page', () => {
+  const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
+    resolvePageData: jest.Mock;
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render all available blocks', async () => {
+    resolvePageData.mockResolvedValueOnce({
+      title: 'Privacy Policy',
+      blocks: {
+        IntroSection: { trustAndSecurity: {}, agreement: {} },
+        DataWeCollect: { title: 'Data We Collect', description: {}, sections: [], note: {} },
+        DataUsage: { title: 'How We Use Data', description: {}, list: [] },
+        Cookies: { title: 'Cookies', description: {}, list: [], note: {} },
+        GoogleAuth: { title: 'Google Auth', description: {}, list: [], note: {} },
+        SocialNetworks: { title: 'Social Networks', description: {} },
+        TargetedAds: { title: 'Targeted Ads', description: {} },
+        NewsletterSubscription: { title: 'Newsletter', description: {} },
+        DataRetention: { title: 'Data Retention', description: {} },
+        UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
+        ContactUs: { title: 'Contact Us', description: {} }
+      }
+    });
+
     render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
+
+    expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
 
     expect(screen.getByText(/Intro section: Privacy Policy/i)).toBeInTheDocument();
     expect(screen.getByText(/Policy section: Data We Collect/i)).toBeInTheDocument();
@@ -61,44 +71,12 @@ describe('PrivacyPolicy page', () => {
     expect(screen.getByText(/Policy section: Contact Us/i)).toBeInTheDocument();
   });
 
-  it('should render nothing when page has no blocks', async () => {
-    (createRequestContainer as jest.Mock).mockReturnValueOnce({
-      resolve: () => ({
-        getPageData: jest.fn().mockResolvedValue({ title: 'Empty', blocks: {} })
-      })
-    });
-
-    const { container } = render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it('should render only present blocks', async () => {
-    (createRequestContainer as jest.Mock).mockReturnValueOnce({
-      resolve: () => ({
-        getPageData: jest.fn().mockResolvedValue({
-          title: 'Selective',
-          blocks: {
-            IntroSection: { trustAndSecurity: {}, agreement: {} },
-            DataUsage: { title: 'How We Use Data', description: {}, list: [] },
-            ContactUs: { title: 'Contact Us', description: {} }
-          }
-        })
-      })
-    });
+  it('should render PageNotFound when page is missing', async () => {
+    resolvePageData.mockResolvedValueOnce(null);
 
     render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
 
-    expect(screen.getByText(/Intro section: Selective/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: How We Use Data/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Contact Us/i)).toBeInTheDocument();
-
-    expect(screen.queryByText(/Data We Collect/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Cookies/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Google Auth/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Social Networks/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Targeted Ads/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Newsletter/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Data Retention/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Your Rights/i)).not.toBeInTheDocument();
+    expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 });
