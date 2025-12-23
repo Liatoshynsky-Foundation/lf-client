@@ -11,20 +11,23 @@ import {
   headerTypographySx,
   iconButtonSecondaryOutlinedSx,
   iconButtonSecondaryPlainSx,
+  menuLabelItemSx,
   playCellSx
 } from './MusicTableCells.styles';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
+import type { OverflowMenuItemConfig } from '~/types/types/menu.types';
 
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
+import OverflowMenu from '~/shared/components/design-system/all-components/overflow-menu/OverflowMenu';
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
-import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+import { useCompositionPlayback } from '~/shared/hooks/use-composition-playback/useCompositionPlayback';
 
 type RowProp = Readonly<{ row: Row<Music>; onAction?: (data: CompositionWithNotes) => void }>;
 
@@ -80,23 +83,13 @@ export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
 
 export const PlayCell: React.FC<RowProp> = ({ row }) => {
   const rowData = row.original;
-  const { playTrack, togglePlay, isPlaying, src } = useAudioPlayer();
+  const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(rowData);
 
-  if (!rowData.audioAvailable) return <Box />;
-
-  const trackUrl = `/api/blob-url?blobName=${encodeURIComponent(rowData.name)}&folderName=compositions`;
-  const isCurrentTrack = src?.startsWith(trackUrl);
+  if (!canPlay) return <Box />;
 
   return (
     <Box sx={playCellSx}>
-      <IconButton
-        size="small"
-        type={IconButtonVariant.icon}
-        onClick={() => {
-          if (isCurrentTrack) togglePlay();
-          else playTrack(trackUrl, rowData.name);
-        }}
-      >
+      <IconButton size="small" type={IconButtonVariant.icon} onClick={handlePlayClick}>
         <Svg
           Component={isCurrentTrack && isPlaying ? PauseIcon : PlayIcon}
           alt="play/pause"
@@ -113,25 +106,56 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
   const rowData = row.original;
   const t = useTranslations('table.buttons');
   const { isDesktop, isLaptop } = useBreakpoints();
-  const shouldRender = isDesktop || isLaptop;
 
-  const handleActionClick = () => {
+  const showNotesInline = isDesktop || isLaptop;
+
+  const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(rowData);
+
+  const handleNotesClick = () => {
     if (onAction && rowData.sheetMusic) {
       onAction({ composition: rowData.name, notes: rowData.sheetMusic });
     }
   };
 
+  const menuItems: OverflowMenuItemConfig[] = [
+    {
+      id: 'play',
+      label: t('listenToComposition'),
+      icon: (
+        <Svg
+          Component={isCurrentTrack && isPlaying ? PauseIcon : PlayIcon}
+          alt="play/pause"
+          width="24px"
+          height="24px"
+          color={mainHexPallete.blue[800]}
+        />
+      ),
+      disabled: !canPlay,
+      labelSx: menuLabelItemSx,
+      onClick: handlePlayClick
+    },
+    {
+      id: 'notes',
+      label: t('viewSheetMusic'),
+      icon: <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={24} height={24} />,
+      disabled: !rowData.sheetMusic,
+      hidden: showNotesInline,
+      labelSx: menuLabelItemSx,
+      onClick: handleNotesClick
+    }
+  ];
+
   return (
     <Box sx={actionsCellContainerSx}>
       {rowData.sheetAvailable &&
-        shouldRender &&
+        showNotesInline &&
         (isDesktop ? (
-          <Button onClick={handleActionClick} variant="outlined">
+          <Button onClick={handleNotesClick} variant="outlined">
             {t('viewSheetMusic')}
           </Button>
         ) : (
           <IconButton
-            onClick={handleActionClick}
+            onClick={handleNotesClick}
             size="small"
             variant={IconButtonColorVariant.Secondary}
             sx={iconButtonSecondaryOutlinedSx}
@@ -140,9 +164,20 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
           </IconButton>
         ))}
 
-      <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryPlainSx}>
-        <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
-      </IconButton>
+      <OverflowMenu
+        items={menuItems}
+        trigger={
+          <IconButton
+            size="small"
+            variant={IconButtonColorVariant.Secondary}
+            sx={iconButtonSecondaryPlainSx}
+            data-testid="Artistry-overflowMenuButton"
+          >
+            <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
+          </IconButton>
+        }
+        dataTestId="Artistry-overflowMenu"
+      />
     </Box>
   );
 };
@@ -170,13 +205,5 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => (
     <Typography variant="customBold16" fontWeight={600}>
       {items[0]?.opusTitle}
     </Typography>
-  </Box>
-);
-
-export const renderGroupActions = () => (
-  <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', pr: { xs: '10px', sm: '15px', md: '40px' } }}>
-    <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryPlainSx}>
-      <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
-    </IconButton>
   </Box>
 );
