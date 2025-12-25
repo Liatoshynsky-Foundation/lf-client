@@ -8,7 +8,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   OnChangeFn,
-  Row,
+  type Row,
   SortingState,
   useReactTable
 } from '@tanstack/react-table';
