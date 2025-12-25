@@ -7,20 +7,7 @@ import CardWithText from '~/ds-components/card-with-text/CardWithText';
 import ImageWithBorder from '~/ds-components/image-with-border/ImageWithBorder';
 
 import { sliderStyles } from './PartnershipSlider.styles';
-
-interface PartnershipCard {
-  icon?: string;
-  title: string;
-  list: string[];
-}
-
-interface PartnershipImage {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  borderWidth?: number;
-}
+import { PartnershipCard, PartnershipImage } from '~/types/page/cooperation.types';
 
 interface SlideItem {
   type: 'card' | 'image';

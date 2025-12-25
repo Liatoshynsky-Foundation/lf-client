@@ -3,16 +3,17 @@ import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import CollaborationInfo from '~/shared/components/blocks/collaboration/collaboration-info/CollaborationInfo';
 import CollaborationIntro from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro';
 import { collaborationIntroPageData } from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro.consts';
 import OfferCollaboration from '~/shared/components/blocks/collaboration/offer-collaboration/OfferCollaboration';
 import OurPartners from '~/shared/components/blocks/our-partners/OurPartners';
-import { partnershipFormatsData } from '~/shared/components/blocks/partnership-formats/data';
 import PartnershipFormats from '~/shared/components/blocks/partnership-formats/PartnershipFormats';
 
 export default async function CollaborationPage({ params }: Readonly<Language>) {
@@ -21,6 +22,14 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
 
   if (isProductionMode()) {
     return <UnderDevelopment />;
+  }
+
+  const pageService = await createRequestContainer().resolve('pagesDataService');
+
+  const page = await pageService.getPageData('cooperation', lang);
+
+  if (!page) {
+    return <PageNotFound />;
   }
   return (
     <>
@@ -31,7 +40,7 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
           contentAbove={collaborationIntroPageData[lang].contentAbove}
           content={collaborationIntroPageData[lang].content}
         />
-        <PartnershipFormats data={partnershipFormatsData} />
+        {page.blocks.partnershipFormats && <PartnershipFormats data={page.blocks.partnershipFormats} />}
         <CollaborationInfo />
         <OurPartners />
       </MainLayout>
