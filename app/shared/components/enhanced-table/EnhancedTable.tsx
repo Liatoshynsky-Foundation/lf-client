@@ -1,6 +1,15 @@
 'use client';
 
-import { Box, CircularProgress, Paper, SxProps, Table, TableBody, TableContainer, Theme } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  type SxProps,
+  Table,
+  TableBody,
+  TableContainer,
+  type Theme
+} from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
