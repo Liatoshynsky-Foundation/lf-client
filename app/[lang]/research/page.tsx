@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -6,12 +5,13 @@ import ResearchAndScientificWork from '~/components/research-and-scientific-work
 import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSelection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
 export const metadata = createSeoMeta({
   title: 'Дослідження та наукові роботи - Фундація Лятошинського',
@@ -23,21 +23,21 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = await createRequestContainer().resolve('pagesDataService');
-
-  const page = await pageService.getPageData('research', lang);
-
-  if (!page) {
-    return <Box />;
-  }
-
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
 
+  const page = await resolvePageData('research', lang);
+
+  if (!page) {
+    return <PageNotFound />;
+  }
+
+  const blocks = page.blocks;
+
   return (
     <MainLayout>
-      {page.blocks.HeroSection && <ResearchAndScientificWork data={page.blocks.HeroSection} />}
+      {blocks.HeroSection && <ResearchAndScientificWork data={blocks.HeroSection} />}
       <WorkTableSection />
     </MainLayout>
   );

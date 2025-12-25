@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -6,12 +5,13 @@ import IntroSection from '~/components/blocks/privacy-policy/intro-section/Intro
 import PolicySection from '~/components/blocks/privacy-policy/policy-section/PolicySection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
 export const metadata = createSeoMeta({
   title: 'Політика Конфіденційності',
@@ -24,22 +24,17 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const pageService = createRequestContainer().resolve('pagesDataService');
-  const page = await pageService.getPageData('privacy-policy', lang);
-
-  if (!page) {
-    return <Box />;
-  }
-
-  const blocks = page.blocks ?? {};
-
-  if (Object.keys(blocks).length === 0) {
-    return <></>;
-  }
-
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
+
+  const page = await resolvePageData('privacy-policy', lang);
+
+  if (!page) {
+    return <PageNotFound />;
+  }
+
+  const blocks = page.blocks;
 
   return (
     <MainLayout withLines>
