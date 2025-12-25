@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import MusicTableSection from './MusicTableSelection';
+import MusicTableSection from './MusicTableSection';
 
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 

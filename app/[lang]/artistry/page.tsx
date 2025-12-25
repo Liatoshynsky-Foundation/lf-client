@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSelection';
+import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSection';
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 

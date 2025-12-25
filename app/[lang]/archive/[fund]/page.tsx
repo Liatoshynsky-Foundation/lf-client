@@ -9,7 +9,7 @@ import {
   fundSummaryTitle,
   getFundSummaryHeaderBacklinkUrl
 } from '~/components/blocks/fund-summary-header/FundSummaryHeader.content';
-import DocumentTableSelection from '~/components/tables/DocumentsTable/DocumentTableSelection';
+import DocumentTableSection from '~/components/tables/DocumentsTable/DocumentTableSection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { isProductionMode } from '~/utils/isProductionMode';
@@ -50,7 +50,7 @@ export default async function FundDetailsPage({ params }: Readonly<FundDetailsPa
         sx={{ pt: { xs: '80px', lg: '88px' } }}
       />
 
-      <DocumentTableSelection documents={mockDocuments} />
+      <DocumentTableSection documents={mockDocuments} />
     </MainLayout>
   );
 }
