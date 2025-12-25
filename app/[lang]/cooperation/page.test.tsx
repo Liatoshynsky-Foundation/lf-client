@@ -1,6 +1,17 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import Collaboration from './page';
+
+const mockPageService = {
+  getPageData: jest.fn()
+};
+
+jest.mock('~/di/container', () => ({
+  createRequestContainer: () => ({
+    resolve: async () => mockPageService
+  })
+}));
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
@@ -10,6 +21,41 @@ let counter = 0;
 
 jest.mock('uuid', () => ({
   v4: () => `mock-uuid-${counter++}`
+}));
+
+jest.mock('~/layouts/main-layout/MainLayout', () => {
+  const MockMainLayout = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+  MockMainLayout.displayName = 'MockMainLayout';
+  return MockMainLayout;
+});
+
+jest.mock('~/shared/components/blocks/our-partners/OurPartners', () => {
+  const MockOurPartners = () => <div>Our Partners</div>;
+  MockOurPartners.displayName = 'MockOurPartners';
+  return MockOurPartners;
+});
+
+jest.mock('~/shared/components/blocks/partnership-formats/PartnershipFormats', () => {
+  const MockPartnershipFormats = () => <div>Partnership Formats</div>;
+  MockPartnershipFormats.displayName = 'MockPartnershipFormats';
+  return MockPartnershipFormats;
+});
+
+jest.mock('~/components/under-development/UnderDevelopment', () => {
+  const MockUnderDevelopment = () => <div>Under Development</div>;
+  MockUnderDevelopment.displayName = 'MockUnderDevelopment';
+  return MockUnderDevelopment;
+});
+
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
+  PageNotFound: () => <div>Page Not Found</div>
+}));
+
+jest.mock('~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro.consts', () => ({
+  collaborationIntroPageData: {
+    en: { title: 't', subtitle: 's', contentAbove: 'a', content: 'c' },
+    uk: { title: 't', subtitle: 's', contentAbove: 'a', content: 'c' }
+  }
 }));
 
 jest.mock('~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro', () => {
@@ -32,7 +78,11 @@ jest.mock('~/shared/components/blocks/collaboration/offer-collaboration/OfferCol
 
 describe('Collaboration component', () => {
   it('should render CollaborationIntro component correctly', async () => {
-    render(await Collaboration({ params: Promise.resolve({ lang: 'en' }) }));
+    mockPageService.getPageData.mockResolvedValue({
+      blocks: { partnershipFormats: null }
+    });
+
+    render(await Collaboration({ params: Promise.resolve({ lang: 'en' }) } as any));
     expect(screen.getByText(/Collaboration Intro/i)).toBeInTheDocument();
   });
 });
