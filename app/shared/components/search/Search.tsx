@@ -168,6 +168,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       renderInput={(params: AutocompleteRenderInputParams) => (
         <CustomBorderTextField
           {...params}
+          className={!isMobile && !focused ? 'search-collapsed' : undefined}
           variant="outlined"
           size="small"
           sx={{ borderColor: `${mainHexPallete.black} !important` }}

@@ -64,6 +64,7 @@ const AudioPlayerPopover = ({
 
   return (
     <Popover
+      disableScrollLock
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       onClose={onClose}

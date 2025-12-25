@@ -72,6 +72,7 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
         </Box>
       </Box>
       <DropdownMenu
+        disableScrollLock
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
