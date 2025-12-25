@@ -16,38 +16,12 @@ import ImageWithBorder from '~/ds-components/image-with-border/ImageWithBorder';
 import { styles } from './PartnershipFormats.styles';
 import PartnershipSlider from './PartnershipSlider';
 import { IconButtonVariant } from '~/types/enums/common.enums';
-
-interface PartnershipCard {
-  icon?: string;
-  title: string;
-  list: string[];
-}
-
-interface PartnershipImage {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  borderWidth?: number;
-}
-
-interface PartnershipFormatsProps {
-  data: {
-    title: string;
-    firstRowFirstCard?: PartnershipCard;
-    firstRowSecondCard?: PartnershipCard;
-    firstRowImage?: PartnershipImage;
-    secondRowImage?: PartnershipImage;
-    secondRowFirstCard?: PartnershipCard;
-    secondRowSecondCard?: PartnershipCard;
-    descriptionText?: string;
-    actionButtonText?: string;
-    modalContent?: {
-      formTitle?: string;
-      formSubtitle?: string;
-    };
-  };
-}
+import {
+  PartnershipCard,
+  PartnershipFormatsProps,
+  PartnershipImage,
+  PartnershipImageType
+} from '~/types/page/cooperation.types';
 
 const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,13 +41,16 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
     );
   };
 
-  const renderImage = (image: PartnershipImage | undefined, containerStyles: object, imageWrapperStyles: object) => {
+  const renderImage = (image: PartnershipImage | undefined) => {
     if (!image) return null;
 
+    const mapped = styles.imageByType[image.imageType as PartnershipImageType];
+    if (!mapped) return null;
+
     return (
-      <Box sx={containerStyles}>
-        <Box sx={imageWrapperStyles}>
-          <ImageWithBorder image={image.src} alt={image.alt} borderWidth={8} />
+      <Box sx={mapped.container}>
+        <Box sx={mapped.wrapper}>
+          <ImageWithBorder image={image.src} alt={image.alt} borderWidth={mapped.borderWidth} />
         </Box>
       </Box>
     );
@@ -106,13 +83,13 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
         {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
         <Box sx={styles.emptyColumn} />
         {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
-        {renderImage(data.firstRowImage, styles.firstRowImageContainer, styles.firstRowImageWrapper)}
+        {renderImage(data.firstRowImage)}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCardLg)}
         <Box sx={styles.emptyColumnSecond} />
       </Box>
 
       <Box sx={styles.secondRow}>
-        {renderImage(data.secondRowImage, styles.secondRowImageContainer, styles.secondRowImageWrapper)}
+        {renderImage(data.secondRowImage)}
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
         {renderCard(data.secondRowSecondCard, { ...styles.secondRowSecondCard, ...styles.lastCardInRow })}
       </Box>
