@@ -26,7 +26,7 @@ import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable'
 import { Search } from '~/shared/components/search/Search';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export default function DocumentTableSection({ documents }: { documents: DocumentRecord[] }) {
+export default function DocumentTableSection({ documents }: { readonly documents: DocumentRecord[] }) {
   const t = useTranslations('table.documents');
   const router = useRouter();
   const pathname = usePathname();
