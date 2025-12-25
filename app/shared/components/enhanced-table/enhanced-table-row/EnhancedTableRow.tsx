@@ -1,56 +1,48 @@
 import { TableCell, TableRow } from '@mui/material';
-import { flexRender, Table } from '@tanstack/react-table';
+import { flexRender, type Row } from '@tanstack/react-table';
 
 import { enhancedTableRowStyles as styles } from './EnhancedTableRow.styles';
 
 interface EnhancedTableRowProps<T extends { id: string }> {
-  data: T;
-  table: Table<T>;
+  row: Row<T>;
   sx?: object;
-  onClick?: () => void;
+  onClick?: (row: T) => void;
 }
 
 export default function EnhancedTableRow<T extends { id: string }>({
-  data,
-  table,
+  row,
   sx,
   onClick
 }: Readonly<EnhancedTableRowProps<T>>) {
-  const row = table.getRowModel().rows.find((row) => row.original.id === data.id);
-  if (!row) return null;
-
   const handleRowClick = (e: React.MouseEvent<HTMLElement>) => {
     if (!onClick) return;
 
     const target = e.target as HTMLElement | null;
-
     if (target?.closest('button, a')) return;
 
-    onClick();
+    onClick(row.original);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (!onClick) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      onClick();
+      onClick(row.original);
     }
   };
+
+  const isInteractive = Boolean(onClick);
 
   return (
     <TableRow
       data-testid="EnhancedTableRow-mainNoOpus"
       sx={sx}
-      onClick={onClick ? handleRowClick : undefined}
-      onKeyDown={onClick ? handleKeyDown : undefined}
-      tabIndex={onClick ? 0 : undefined}
+      onClick={isInteractive ? handleRowClick : undefined}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
     >
       {row.getVisibleCells().map((cell) => (
-        <TableCell
-          key={cell.id}
-          sx={styles.cell}
-          data-testid={`EnhancedTableRow-mainNoOpus-${cell.id.split('_').at(1)}`}
-        >
+        <TableCell key={cell.id} sx={styles.cell} data-testid={`EnhancedTableRow-mainNoOpus-${cell.column.id}`}>
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}

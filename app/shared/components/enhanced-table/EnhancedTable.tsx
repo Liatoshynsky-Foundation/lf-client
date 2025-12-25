@@ -8,6 +8,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   OnChangeFn,
+  type Row,
   SortingState,
   useReactTable
 } from '@tanstack/react-table';
@@ -27,7 +28,7 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; item: T };
+type ItemOrGroup<T> = { type: 'group'; label: string; items: T[] } | { type: 'single'; row: Row<T> };
 
 interface EnhancedTableProps<T extends RowData> {
   data: T[];
@@ -110,23 +111,24 @@ export const EnhancedTable = <T extends RowData>({
     manualFiltering: true
   });
 
-  const filteredAndSortedRows = headerTable.getRowModel().rows.map((row) => row.original);
+  const filteredAndSortedRows = headerTable.getRowModel().rows;
 
-  const { groupedItems, flatItems } = useMemo(() => {
+  const { groupedItems, flatRows } = useMemo(() => {
     const grouped = new Map<string, T[]>();
-    const ungrouped: T[] = [];
+    const ungrouped: Row<T>[] = [];
 
-    for (const item of filteredAndSortedRows) {
+    for (const row of filteredAndSortedRows) {
+      const item = row.original;
       const groupKey = groupByKey ? String(item[groupByKey] ?? '') : undefined;
 
       if (groupKey) {
         grouped.set(groupKey, [...(grouped.get(groupKey) ?? []), item]);
       } else {
-        ungrouped.push(item);
+        ungrouped.push(row);
       }
     }
 
-    return { groupedItems: grouped, flatItems: ungrouped };
+    return { groupedItems: grouped, flatRows: ungrouped };
   }, [filteredAndSortedRows, groupByKey]);
 
   const allRows: ItemOrGroup<T>[] = useMemo(
@@ -136,12 +138,12 @@ export const EnhancedTable = <T extends RowData>({
         label,
         items
       })),
-      ...flatItems.map((item) => ({
+      ...flatRows.map((row) => ({
         type: 'single' as const,
-        item
+        row
       }))
     ],
-    [groupedItems, flatItems]
+    [groupedItems, flatRows]
   );
 
   const {
@@ -204,13 +206,7 @@ export const EnhancedTable = <T extends RowData>({
                       columns={getGroupColumns(columns, entry.items)}
                     />
                   ) : (
-                    <EnhancedTableRow
-                      key={entry.item.id}
-                      data={entry.item}
-                      table={headerTable}
-                      sx={rowSx}
-                      onClick={onRowClick ? () => onRowClick(entry.item) : undefined}
-                    />
+                    <EnhancedTableRow key={entry.row.id} row={entry.row} sx={rowSx} onClick={onRowClick} />
                   )
                 )}
               </TableBody>
