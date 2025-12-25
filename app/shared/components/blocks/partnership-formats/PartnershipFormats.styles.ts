@@ -1,4 +1,14 @@
-export const styles = {
+import type { SxProps, Theme } from '@mui/material/styles';
+
+import { PartnershipImageType } from '~/types/page/cooperation.types';
+
+type ImageConfig = {
+  container: SxProps<Theme>;
+  wrapper: SxProps<Theme>;
+  borderWidth: number;
+};
+
+const baseStyles = {
   container: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
@@ -325,7 +335,7 @@ export const styles = {
     transform: 'skewY(-2deg)',
     mb: { sm: '40px', lg: '0', xl: '0' },
     width: '100%',
-    height: { xs: '386px', sm: '386px', md: '386px', lg: '386px', xl: '386px' },
+    height: { xs: '400px', sm: '400px', md: '400px', lg: '400px', xl: '400px' },
     position: 'relative',
     flex: 1
   },
@@ -430,4 +440,22 @@ export const styles = {
       lg: '50px'
     }
   }
+} as const;
+
+const imageByType: Record<PartnershipImageType, ImageConfig> = {
+  [PartnershipImageType.FirstRowImage]: {
+    container: baseStyles.firstRowImageContainer,
+    wrapper: baseStyles.firstRowImageWrapper,
+    borderWidth: 2
+  },
+  [PartnershipImageType.SecondRowImage]: {
+    container: baseStyles.secondRowImageContainer,
+    wrapper: baseStyles.secondRowImageWrapper,
+    borderWidth: 2
+  }
 };
+
+export const styles = {
+  ...baseStyles,
+  imageByType
+} as const;
