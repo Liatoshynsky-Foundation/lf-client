@@ -100,6 +100,7 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
       columnWidths={columnWidths}
       itemsPerPage={5}
       tableName={t('name')}
+      tableContainerSx={{ mt: { md: '80px', lg: '96px' }, mb: { md: '104px', lg: '160px' } }}
       onRowClick={handleRowClick}
       rowSx={{
         cursor: 'pointer',

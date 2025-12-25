@@ -1,6 +1,15 @@
 'use client';
 
-import { Box, CircularProgress, Paper, Table, TableBody, TableContainer } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  type SxProps,
+  Table,
+  TableBody,
+  TableContainer,
+  type Theme
+} from '@mui/material';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -49,6 +58,7 @@ interface EnhancedTableProps<T extends RowData> {
   loading?: boolean;
   noResults?: React.ReactNode;
   rowSx?: object;
+  tableContainerSx?: SxProps<Theme>;
   onRowClick?: (row: T) => void;
 }
 
@@ -68,6 +78,7 @@ export const EnhancedTable = <T extends RowData>({
   loading = false,
   noResults,
   rowSx,
+  tableContainerSx,
   onRowClick
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
@@ -178,7 +189,7 @@ export const EnhancedTable = <T extends RowData>({
   };
 
   return (
-    <Box ref={tableRef} sx={styles.root} data-testid="EnhancedTable">
+    <Box ref={tableRef} sx={{ ...styles.root, ...tableContainerSx }} data-testid="EnhancedTable">
       <ControlPanel
         Search={Search}
         tableName={tableName}

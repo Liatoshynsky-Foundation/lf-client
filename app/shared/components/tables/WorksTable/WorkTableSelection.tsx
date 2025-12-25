@@ -194,6 +194,7 @@ export const WorkTableSection = () => {
       isFiltersActive={isAnyFilterActive}
       activeFiltersCount={activeFiltersCount}
       onClearFilters={resetFilters}
+      tableContainerSx={{ mt: { xs: '80px', md: '88px' }, mb: { xs: '120px', md: '160px' } }}
     />
   );
 };
