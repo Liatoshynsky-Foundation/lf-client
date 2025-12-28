@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import ResearchAndScientificWork from '~/components/research-and-scientific-work/ResearchAndScientificWork';
-import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSelection';
+import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';

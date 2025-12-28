@@ -24,7 +24,7 @@ jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork',
   return { __esModule: true, default: Mock };
 });
 
-jest.mock('~/components/tables/WorksTable/WorkTableSelection', () => {
+jest.mock('~/components/tables/WorksTable/WorkTableSection', () => {
   const MockWorkTable = () => React.createElement('div', { 'data-testid': 'mock-work-table' }, 'Work Table Section');
   MockWorkTable.displayName = 'MockWorkTable';
   return { __esModule: true, WorkTableSection: MockWorkTable };

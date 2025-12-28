@@ -138,6 +138,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
       </Box>
 
       <DropdownMenu
+        disableScrollLock
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}

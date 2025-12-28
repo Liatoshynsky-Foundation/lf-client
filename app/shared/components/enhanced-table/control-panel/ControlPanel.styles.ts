@@ -44,6 +44,9 @@ export const ControlPanelStyles = {
       width: 40,
       height: 40,
       padding: 0
+    },
+    '& .MuiButton-startIcon': {
+      marginRight: '4px'
     }
   },
   controlsColumn: {
