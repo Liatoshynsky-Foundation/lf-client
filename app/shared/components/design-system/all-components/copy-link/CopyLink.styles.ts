@@ -4,7 +4,9 @@ const commonCopyLinkBaseStyles = {
   fontFamily: 'Mulish, Sans-serif',
   transition: 'color 0.2s ease',
   lineHeight: '110%',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  wordBreak: 'break-all',
+  overflowWrap: 'break-word'
 };
 
 interface ColorConfig {
@@ -104,10 +106,13 @@ export const styles = {
     padding: 0,
     margin: 0,
     font: 'inherit',
-    outline: 'none'
+    outline: 'none',
+    maxWidth: '100%',
+    textAlign: 'left'
   },
 
   iconWrapper: {
-    transition: 'stroke 0.2s ease'
+    transition: 'stroke 0.2s ease',
+    flexShrink: 0
   }
 };

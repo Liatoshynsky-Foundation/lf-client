@@ -21,7 +21,7 @@
       "foundation": "Foundation",
       "foundationHome": "About the foundation",
       "news": "News",
-      "mediaAboutUs": "Media About Us",
+      "mediaAboutUs": "Media",
       "events": "Events",
       "archive": "Archive",
       "collaboration": "Cooperation"
@@ -65,9 +65,9 @@
   },
   "home": {
     "liatoshynskyOffice": {
-      "office": "OfFicE",
+      "office": "ArcHive",
       "name": "LIaTosHynSKy",
-      "goToOfficeButton": "Go to the office"
+      "goToOfficeButton": "Go to the archive"
     }
   },
   "common": {
@@ -183,7 +183,8 @@
     },
     "buttons": {
       "viewSheetMusic": "View sheet music",
-      "downloadMusic": "Download"
+      "downloadMusic": "Download",
+      "listenToComposition": "Listen to the composition"
     },
     "work": {
       "name": "All documents",

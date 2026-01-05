@@ -14,6 +14,9 @@ jest.mock('~/validators/pagesSchemas/pages/research.schema', () => ({
 jest.mock('~/validators/pagesSchemas/pages/biography.schema', () => ({
   BiographyPageSchema: { __schema: 'biography' }
 }));
+jest.mock('~/validators/pagesSchemas/pages/cooperation.schema', () => ({
+  CooperationPageSchema: { __schema: 'cooperation' }
+}));
 
 jest.mock('~/validators/constants', () => {
   const NoOp = (s: any) => s;
@@ -28,6 +31,7 @@ jest.mock('~/validators/constants', () => {
 import { LocalizeSchema } from '~/validators/constants';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
+import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 
@@ -38,7 +42,8 @@ describe('SchemaFactory', () => {
     ['about-us', 'about-us', AboutUsPageSchema],
     ['privacy-policy', 'privacy-policy', PrivacyPolicyPageSchema],
     ['research', 'research', ResearchPageSchema],
-    ['biography', 'biography', BiographyPageSchema]
+    ['biography', 'biography', BiographyPageSchema],
+    ['cooperation', 'cooperation', CooperationPageSchema]
   ] as const)('returns schema for slug "%s"', (slug, tag, schemaConst) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 

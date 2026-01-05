@@ -49,3 +49,11 @@ export const groupLabelRowSx: SxProps<Theme> = {
   justifyContent: 'space-between',
   alignItems: 'center'
 };
+
+export const menuLabelItemSx: SxProps<Theme> = {
+  fontFamily: 'Mulish',
+  fontWeight: '500',
+  fontSize: '16px',
+  lineHeight: '150%',
+  letterSpacing: '0%'
+};

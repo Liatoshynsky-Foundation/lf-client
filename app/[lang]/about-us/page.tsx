@@ -1,5 +1,3 @@
-import { Box } from '@mui/material';
-import { draftMode } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -12,11 +10,11 @@ import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
 export const metadata = createSeoMeta({
@@ -25,37 +23,33 @@ export const metadata = createSeoMeta({
   url: '/'
 });
 
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-
-  const { isEnabled } = await draftMode();
-  const container = createRequestContainer();
-
-  const selectedPagesService = isEnabled
-    ? container.resolve('draftPagesDataService')
-    : container.resolve('pagesDataService');
-
-  const [page, t] = await Promise.all([
-    selectedPagesService.getPageData('about-us', lang),
-    getTranslations('home.liatoshynskyOffice')
-  ]);
-
-  if (!page) return <Box />;
 
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
 
+  const [page, t] = await Promise.all([resolvePageData('about-us', lang), getTranslations('home.liatoshynskyOffice')]);
+
+  if (!page) {
+    return <PageNotFound />;
+  }
+
+  const blocks = page.blocks;
+
   return (
     <MainLayout withLines>
-      {page.blocks.IntroSection && <IntroSection data={page.blocks.IntroSection} />}
-      {page.blocks.FoundationInfo && <FoundationInfo data={page.blocks.FoundationInfo} />}
-      {page.blocks.OurMission && <OurMission data={page.blocks.OurMission} />}
-      {page.blocks.OurGoals && <OurGoals data={page.blocks.OurGoals} />}
-      {page.blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={page.blocks.LiatoshynskyOffice} t={t} />}
-      {page.blocks.WhatWeDo && <WhatWeDo data={page.blocks.WhatWeDo} />}
-      {page.blocks.FoundationFounders && <FoundationFounders data={page.blocks.FoundationFounders} />}
+      {blocks.IntroSection && <IntroSection data={blocks.IntroSection} />}
+      {blocks.FoundationInfo && <FoundationInfo data={blocks.FoundationInfo} />}
+      {blocks.OurMission && <OurMission data={blocks.OurMission} />}
+      {blocks.OurGoals && <OurGoals data={blocks.OurGoals} />}
+      {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} />}
+      {blocks.WhatWeDo && <WhatWeDo data={blocks.WhatWeDo} />}
+      {blocks.FoundationFounders && <FoundationFounders data={blocks.FoundationFounders} />}
     </MainLayout>
   );
 }

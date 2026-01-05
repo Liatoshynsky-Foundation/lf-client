@@ -105,7 +105,7 @@ export default function ControlPanel({
         variant="outlined"
         size="medium"
         onClick={toggleFilters}
-        startIcon={<Filter width="28px" height="28px" />}
+        startIcon={<Filter width="20px" height="20px" />}
         sx={ControlPanelStyles.filterButton}
       >
         <span className="filtersLabel">{t('controls.filters')}</span>

@@ -10,7 +10,6 @@ import {
   RenderExpanderCell,
   RenderGenreCell,
   RenderGenreHeader,
-  renderGroupActions,
   renderNameCell,
   RenderNameHeader,
   renderOpusGroupLabel,
@@ -128,8 +127,7 @@ export default function MusicTableSection() {
       {
         id: 'actions',
         header: '',
-        cell: (info) => RenderActionsCell(info, handleOpenModal),
-        meta: { groupLabelContentFactory: renderGroupActions }
+        cell: (info) => RenderActionsCell(info, handleOpenModal)
       }
     ],
     []
@@ -274,6 +272,7 @@ export default function MusicTableSection() {
         isFiltersActive={isAnyFilterActive}
         activeFiltersCount={activeFiltersCount}
         onClearFilters={resetFilters}
+        tableContainerSx={{ mt: { xs: '80px', md: '88px', xl: '152px' }, mb: { xs: '120px', md: '160px' } }}
       />
       <GetNotesModal
         key={modalNotes[0]?.dateUploaded}

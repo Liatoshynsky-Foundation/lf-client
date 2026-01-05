@@ -4,7 +4,6 @@ export const enhancedTableStyles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    py: 20,
     gap: 4,
     gridColumn: '1 / -1'
   },

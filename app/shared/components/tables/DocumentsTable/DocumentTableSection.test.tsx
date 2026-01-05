@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import DocumentTableSelection from './DocumentTableSelection';
+import DocumentTableSection from './DocumentTableSection';
 import { DocumentRecord } from '~/types/types/document.types';
 
 jest.mock('next-intl', () => ({
@@ -10,6 +10,16 @@ jest.mock('next-intl', () => ({
 
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn()
+  }),
+  usePathname: () => '/uk/archive/fund-1'
 }));
 
 const mockUseBreakpoints = jest.fn();
@@ -65,14 +75,14 @@ const mockData: DocumentRecord[] = [
   { id: '6', cipher: 'C6', name: 'Name6', dates: '2025', sheets: 6, contentDescription: 'Content6', pdfUrl: null }
 ];
 
-describe('DocumentTableSelection', () => {
+describe('DocumentTableSection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('should render EnhancedTable on desktop/laptop', () => {
     setBreakpoint({ isDesktop: true, isLaptop: true, isLaptopAndAbove: true });
-    render(<DocumentTableSelection documents={mockData} />);
+    render(<DocumentTableSection documents={mockData} />);
 
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
     expect(screen.queryByTestId('mobile-table')).not.toBeInTheDocument();
@@ -80,7 +90,7 @@ describe('DocumentTableSelection', () => {
 
   test('should render MobileDocumentTable on mobile', () => {
     setBreakpoint({ isMobile: true });
-    render(<DocumentTableSelection documents={mockData} />);
+    render(<DocumentTableSection documents={mockData} />);
 
     expect(screen.getByTestId('mobile-table')).toBeInTheDocument();
     expect(screen.queryByTestId('enhanced-table')).not.toBeInTheDocument();

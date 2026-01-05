@@ -1,19 +1,14 @@
 import type { SxProps, Theme } from '@mui/material';
 
 import { rgbaTabColors } from '~/ds-components/theme/colors';
-
+const gutter = '24px';
 export const styles: Record<string, SxProps<Theme>> = {
   container: {
-    position: 'relative',
     display: 'block',
-
-    left: { xs: '50%', md: 'auto' },
-    right: { xs: '50%', md: 'auto' },
-    marginLeft: { xs: '-50vw', md: 0 },
-    marginRight: { xs: '-50vw', md: 0 },
-    width: { xs: '100vw', md: '100%' },
-
-    overflowX: { xs: 'auto', md: 'visible' },
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
+    width: { xs: `calc(100% + ${gutter})`, sm: '100%' },
+    mr: { xs: `-${gutter}`, sm: 0 },
     scrollbarWidth: 'none',
     '&::-webkit-scrollbar': { display: 'none' }
   },
@@ -24,12 +19,12 @@ export const styles: Record<string, SxProps<Theme>> = {
     '& .MuiTabs-flexContainer': {
       display: {
         xs: 'inline-flex',
-        md: 'flex'
+        sm: 'flex'
       },
 
       width: {
         xs: 'max-content',
-        md: '100%'
+        sm: '100%'
       },
 
       whiteSpace: 'nowrap',
@@ -56,11 +51,12 @@ export const styles: Record<string, SxProps<Theme>> = {
     '& .MuiTab-root': {
       flex: {
         xs: '0 0 auto',
-        md: '1 1 0'
+        sm: '1 1 0'
       },
 
       textTransform: 'none',
       justifyContent: 'center',
+      padding: '12px 28px',
 
       fontFamily: 'Mulish, sans-serif',
       fontSize: { xs: '16px', md: '18px' },

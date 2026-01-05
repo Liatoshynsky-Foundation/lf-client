@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
+import { AppTypography } from '~/constants';
+
 export const TITLE_GRID_COLUMN = { xs: '1 / -1' } as const;
 export const TITLE_SX = {
   '& h2': {
@@ -89,8 +91,7 @@ export const styles = {
   },
 
   itemTitle: {
-    fontSize: '16px',
-    fontWeight: 500,
+    ...AppTypography.mulish16Regular,
     color: mainHexPallete.brown[600]
   }
 };

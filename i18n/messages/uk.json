@@ -21,7 +21,7 @@
       "foundation": "Фундація",
       "foundationHome": "Про фундацію",
       "news": "Новини",
-      "mediaAboutUs": "Ми у ЗМІ",
+      "mediaAboutUs": "Медіа",
       "events": "Події",
       "archive": "Архів",
       "collaboration": "Співпраця"
@@ -65,9 +65,9 @@
   },
   "home": {
     "liatoshynskyOffice": {
-      "office": "КабІНет",
+      "office": "АрХів",
       "name": "ЛЯтоШинСькоГO",
-      "goToOfficeButton": "Увійти до кабінету"
+      "goToOfficeButton": "Увійти до архіву"
     }
   },
   "common": {
@@ -183,7 +183,8 @@
     },
     "buttons": {
       "viewSheetMusic": "Переглянути ноти",
-      "downloadMusic": "Завантажити"
+      "downloadMusic": "Завантажити",
+      "listenToComposition": "Прослухати композицію"
     },
     "work": {
       "name": "Усі документи",

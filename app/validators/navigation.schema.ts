@@ -9,7 +9,8 @@ export const navigationLinkSchema = translatedLinkSchema.extend({
 
 export const navigationSchema = z.object({
   title: translatedFieldSchema,
-  links: z.array(navigationLinkSchema)
+  links: z.array(navigationLinkSchema),
+  footerOrder: z.number().nullable().optional()
 });
 
 export function LocalizeSchemaWithSingleLink(locale: Locale) {

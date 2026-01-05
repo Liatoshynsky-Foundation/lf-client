@@ -28,7 +28,7 @@ function PaymentDetails() {
   }, []);
 
   return (
-    <Box sx={{ mr: '24px' }} data-testid="PaymentDetails">
+    <Box data-testid="PaymentDetails">
       <ButtonGroup
         sx={switcherSx}
         defaultActiveButton={0}

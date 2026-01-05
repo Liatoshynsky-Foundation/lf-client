@@ -70,6 +70,7 @@ export default function MobileDocumentTable({
         )}
         {totalPages > 1 && (
           <Pagination
+            hasMore={hasMore}
             count={totalPages}
             siblingCount={isMobile || isTablet ? 0 : 1}
             page={currentPage}

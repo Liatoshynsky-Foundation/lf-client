@@ -1,7 +1,9 @@
 'use client';
+
 import { ColumnDef } from '@tanstack/react-table';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   RenderActionCell,
@@ -21,12 +23,26 @@ import MobileDocumentTable from './MobileDocumentTable/MobileDocumentTable';
 import { DocumentRecord } from '~/types/types/document.types';
 
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
+import { Search } from '~/shared/components/search/Search';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export default function DocumentTableSelection({ documents }: { documents: DocumentRecord[] }) {
+export default function DocumentTableSection({ documents }: { readonly documents: DocumentRecord[] }) {
   const t = useTranslations('table.documents');
+  const router = useRouter();
+  const pathname = usePathname();
+
   const bp = useBreakpoints();
   const { isMobile, isTablet, isLaptop, isDesktop, isLaptopAndAbove } = bp;
+
+  const handleRowClick = (row: DocumentRecord) => {
+    const caseId = row.id;
+    if (!caseId) return;
+
+    router.push(`${pathname.replace(/\/$/, '')}/${encodeURIComponent(caseId)}`);
+  };
+
+  const [search, setSearch] = useState('');
+  const searchOptions = useMemo(() => [], []);
 
   const columnWidths = useMemo(
     () =>
@@ -49,20 +65,8 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
         cell: RenderCodeCell,
         sortingFn: 'alphanumeric'
       },
-      {
-        id: 'name',
-        accessorKey: 'name',
-        header: RenderNameHeader,
-        cell: RenderNameCell,
-        sortingFn: 'alphanumeric'
-      },
-      {
-        id: 'dates',
-        accessorKey: 'dates',
-        header: RenderDateHeader,
-        cell: RenderDateCell,
-        sortingFn: 'alphanumeric'
-      },
+      { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: RenderNameCell, sortingFn: 'alphanumeric' },
+      { id: 'dates', accessorKey: 'dates', header: RenderDateHeader, cell: RenderDateCell, sortingFn: 'alphanumeric' },
       {
         id: 'sheets',
         accessorKey: 'sheets',
@@ -77,26 +81,27 @@ export default function DocumentTableSelection({ documents }: { documents: Docum
         cell: RenderContentCell,
         sortingFn: 'alphanumeric'
       },
-      {
-        id: 'actions',
-        header: '',
-        cell: RenderActionCell
-      }
+      { id: 'actions', header: '', cell: RenderActionCell }
     ],
     []
   );
 
+  const searchNode = <Search search={search} setSearch={setSearch} options={searchOptions} />;
+
   if (isMobile || isTablet) {
-    return <MobileDocumentTable tableName={t('name')} data={documents} />;
+    return <MobileDocumentTable tableName={t('name')} data={documents} Search={searchNode} />;
   }
 
   return (
     <EnhancedTable
       data={documents}
       columns={baseColumns}
+      Search={searchNode}
       columnWidths={columnWidths}
       itemsPerPage={5}
       tableName={t('name')}
+      tableContainerSx={{ mt: { md: '80px', lg: '96px' }, mb: { md: '104px', lg: '160px' } }}
+      onRowClick={handleRowClick}
       rowSx={{
         cursor: 'pointer',
         transition: 'background-color 0.15s ease',

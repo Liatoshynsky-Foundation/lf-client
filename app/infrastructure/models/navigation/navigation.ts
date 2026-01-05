@@ -14,7 +14,8 @@ const linkSchema = new mongoose.Schema(
 const navigationSchema = new mongoose.Schema(
   {
     title: { type: translatedFieldSchema, required: true },
-    links: { type: [linkSchema], default: [] }
+    links: { type: [linkSchema], default: [] },
+    footerOrder: { type: Number }
   },
   { timestamps: true }
 );

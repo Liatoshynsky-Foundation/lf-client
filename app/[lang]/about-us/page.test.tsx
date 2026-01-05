@@ -2,8 +2,18 @@ import { render, screen } from '@testing-library/react';
 
 import Home from './page';
 
-jest.mock('next/headers', () => ({
-  draftMode: jest.fn().mockResolvedValue({ isEnabled: false })
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn(),
+  getTranslations: jest.fn().mockResolvedValue((k: string) => k)
+}));
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
+
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
+  __esModule: true,
+  PageNotFound: () => <div>Page not found</div>
 }));
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
@@ -41,84 +51,50 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
   default: () => <div>What we do</div>
 }));
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getTranslations: jest.fn().mockResolvedValue((k: string) => k)
-}));
-
-jest.mock('~/di/container', () => {
-  const liveGetPageData = jest.fn().mockResolvedValue({
-    blocks: {
-      IntroSection: {},
-      FoundationInfo: {},
-      OurMission: {},
-      OurGoals: {},
-      LiatoshynskyOffice: {},
-      WhatWeDo: {},
-      FoundationFounders: {}
-    }
-  });
-  const draftGetPageData = jest.fn().mockResolvedValue({
-    blocks: {
-      IntroSection: {},
-      FoundationInfo: {},
-      OurMission: {},
-      OurGoals: {},
-      LiatoshynskyOffice: {},
-      WhatWeDo: {},
-      FoundationFounders: {}
-    }
-  });
-
-  const pagesDataService = { getPageData: liveGetPageData };
-  const draftPagesDataService = { getPageData: draftGetPageData };
-
-  return {
-    __esModule: true,
-    __pagesDataService: pagesDataService,
-    __draftPagesDataService: draftPagesDataService,
-    createRequestContainer: () => ({
-      resolve: (token: string) => {
-        if (token === 'draftPagesDataService') return draftPagesDataService;
-        if (token === 'pagesDataService') return pagesDataService;
-        return {};
-      }
-    })
-  };
-});
-
 describe('Home page', () => {
-  const { draftMode } = jest.requireMock('next/headers');
-  const { __pagesDataService, __draftPagesDataService } = jest.requireMock('~/di/container') as {
-    __pagesDataService: { getPageData: jest.Mock };
-    __draftPagesDataService: { getPageData: jest.Mock };
+  const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
+    resolvePageData: jest.Mock;
+  };
+  const { setRequestLocale, getTranslations } = jest.requireMock('next-intl/server') as {
+    setRequestLocale: jest.Mock;
+    getTranslations: jest.Mock;
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('uses pagesDataService when draftMode is disabled', async () => {
-    (draftMode as jest.Mock).mockResolvedValueOnce({ isEnabled: false });
+  it('renders blocks when page exists and calls resolvePageData', async () => {
+    resolvePageData.mockResolvedValueOnce({
+      blocks: {
+        IntroSection: {},
+        FoundationInfo: {},
+        OurMission: {},
+        OurGoals: {},
+        LiatoshynskyOffice: {},
+        WhatWeDo: {},
+        FoundationFounders: {}
+      }
+    });
 
     const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
     render(ui);
 
+    expect(setRequestLocale).toHaveBeenCalledWith('en');
+    expect(resolvePageData).toHaveBeenCalledWith('about-us', 'en');
+    expect(getTranslations).toHaveBeenCalledWith('home.liatoshynskyOffice');
+
     expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
-    expect(__pagesDataService.getPageData).toHaveBeenCalledTimes(1);
-    expect(__pagesDataService.getPageData).toHaveBeenCalledWith('about-us', 'en');
-    expect(__draftPagesDataService.getPageData).not.toHaveBeenCalled();
+    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
   });
 
-  it('uses draftPagesDataService when draftMode is enabled', async () => {
-    (draftMode as jest.Mock).mockResolvedValueOnce({ isEnabled: true });
+  it('returns PageNotFound when page is missing', async () => {
+    resolvePageData.mockResolvedValueOnce(null);
 
     const ui = await Home({ params: Promise.resolve({ lang: 'uk' }) });
     render(ui);
 
-    expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
-    expect(__draftPagesDataService.getPageData).toHaveBeenCalledTimes(1);
-    expect(__draftPagesDataService.getPageData).toHaveBeenCalledWith('about-us', 'uk');
-    expect(__pagesDataService.getPageData).not.toHaveBeenCalled();
+    expect(resolvePageData).toHaveBeenCalledWith('about-us', 'uk');
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 });

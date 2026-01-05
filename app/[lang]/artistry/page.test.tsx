@@ -13,7 +13,7 @@ jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
   return MockLiatoshynskyArtistry;
 });
 
-jest.mock('~/components/tables/CompositionTable/MusicTableSelection', () => {
+jest.mock('~/components/tables/CompositionTable/MusicTableSection', () => {
   const MockCompositionTable = () => <div>Composition table</div>;
   MockCompositionTable.displayName = 'MockCompositionTable';
   return MockCompositionTable;

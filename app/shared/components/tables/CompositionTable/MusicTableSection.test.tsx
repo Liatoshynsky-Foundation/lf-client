@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import MusicTableSection from './MusicTableSelection';
+import MusicTableSection from './MusicTableSection';
 
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 
@@ -44,7 +44,7 @@ const staticFiltersData = {
   categories: [{ key: 'classic', name: 'classic' }],
   genres: [{ key: 'rock', name: 'rock' }],
   titles: [{ title: 'Symphony' }],
-  yearRange: { minYear: 1900, maxYear: 2025 }
+  yearRange: { minYear: 1900, maxYear: 2026 }
 };
 
 jest.mock('~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters', () => ({
@@ -53,7 +53,7 @@ jest.mock('~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters', () =>
       categories: [{ key: 'classic', name: 'classic' }],
       genres: [{ key: 'rock', name: 'rock' }],
       titles: [{ title: 'Symphony' }],
-      yearRange: { minYear: 1900, maxYear: 2025 }
+      yearRange: { minYear: 1900, maxYear: 2026 }
     },
     isLoading: false
   }))
@@ -196,6 +196,6 @@ describe('MusicTableSection (cleaned)', () => {
   it('year range uses provided values', () => {
     render(<MusicTableSection />);
     expect(screen.getByTestId('min-year')).toHaveTextContent('1900');
-    expect(screen.getByTestId('max-year')).toHaveTextContent('2025');
+    expect(screen.getByTestId('max-year')).toHaveTextContent('2026');
   });
 });

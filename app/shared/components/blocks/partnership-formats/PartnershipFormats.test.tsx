@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import PartnershipFormats from './PartnershipFormats';
+import { PartnershipImageType } from '~/types/page/cooperation.types';
 
 jest.mock('~/components/modal-component/ModalComponent', () => {
   return jest.fn(({ children, open, onClose }: any) => (
@@ -48,8 +49,8 @@ jest.mock('~/ds-components/card-with-text/CardWithText', () => {
 });
 
 jest.mock('~/ds-components/image-with-border/ImageWithBorder', () => {
-  return jest.fn(({ image, alt, width, height, borderWidth }: any) => (
-    <div data-testid="image-with-border" data-width={width} data-height={height} data-border-width={borderWidth}>
+  return jest.fn(({ image, alt, borderWidth }: any) => (
+    <div data-testid="image-with-border" data-border-width={borderWidth}>
       <img src={image} alt={alt} />
     </div>
   ));
@@ -63,10 +64,16 @@ jest.mock('next/image', () => ({
 }));
 
 jest.mock('./PartnershipSlider', () => {
+  const borderByType: Record<string, number> = {
+    firstRowImage: 2,
+    secondRowImage: 2
+  };
+
   return jest.fn(({ slides }: any) => (
     <div data-testid="partnership-slider">
       {slides.map((slide: any) => {
         const key = slide.type === 'card' ? slide.card?.title : slide.image?.src;
+
         return (
           <div key={key} data-testid="slider-slide">
             {slide.type === 'card' && slide.card && (
@@ -80,13 +87,9 @@ jest.mock('./PartnershipSlider', () => {
                 </ul>
               </div>
             )}
+
             {slide.type === 'image' && slide.image && (
-              <div
-                data-testid="image-with-border"
-                data-width={slide.image.width}
-                data-height={slide.image.height}
-                data-border-width={slide.image.borderWidth || 8}
-              >
+              <div data-testid="image-with-border" data-border-width={borderByType[slide.image.imageType] ?? 8}>
                 <img src={slide.image.src} alt={slide.image.alt} />
               </div>
             )}
@@ -113,16 +116,12 @@ describe('PartnershipFormats', () => {
     firstRowImage: {
       src: '/images/partnership-small.png',
       alt: 'Partnership collaboration',
-      width: 294,
-      height: 386,
-      borderWidth: 8
+      imageType: PartnershipImageType.FirstRowImage
     },
     secondRowImage: {
       src: '/images/partnership-large.png',
       alt: 'Team collaboration',
-      width: 608,
-      height: 385,
-      borderWidth: 8
+      imageType: PartnershipImageType.SecondRowImage
     },
     secondRowFirstCard: {
       icon: '/icons/icon3.svg',
@@ -283,10 +282,10 @@ describe('PartnershipFormats', () => {
       title: 'Test Title',
       firstRowFirstCard: mockData.firstRowFirstCard
     };
-    render(<PartnershipFormats data={minimalData} />);
+
+    render(<PartnershipFormats data={minimalData as any} />);
 
     const cards = screen.getAllByTestId('card-with-text');
-
     expect(cards.length).toBe(2);
 
     const technicalSupportCards = cards.filter((card) => within(card).queryByText('Technical Support'));
@@ -310,7 +309,7 @@ describe('PartnershipFormats', () => {
 
   it('should handle empty data gracefully', () => {
     const emptyData = { title: 'Empty State' };
-    render(<PartnershipFormats data={emptyData} />);
+    render(<PartnershipFormats data={emptyData as any} />);
 
     expect(screen.getByTestId('section-title')).toHaveTextContent('Empty State');
     expect(screen.queryByTestId('card-with-text')).not.toBeInTheDocument();
@@ -324,7 +323,7 @@ describe('PartnershipFormats', () => {
     expect(imageContainers.length).toBeGreaterThanOrEqual(2);
 
     for (const imageContainer of imageContainers) {
-      expect(imageContainer).toHaveAttribute('data-border-width', '8');
+      expect(imageContainer).toHaveAttribute('data-border-width', '2');
     }
   });
 
@@ -333,7 +332,6 @@ describe('PartnershipFormats', () => {
     const cards = screen.getAllByTestId('card-with-text');
 
     const technicalSupportCard = cards.find((card) => within(card).queryByText('Technical Support'));
-
     expect(technicalSupportCard).toBeDefined();
     if (technicalSupportCard) {
       const listItems = within(technicalSupportCard).getAllByRole('listitem');
@@ -377,9 +375,9 @@ describe('PartnershipFormats', () => {
     expect(imageCount).toBe(2);
   });
 
-  it('should not render slider when no data is provided', () => {
+  it('should not render slider slides when no data is provided', () => {
     const emptyData = { title: 'Empty State' };
-    render(<PartnershipFormats data={emptyData} />);
+    render(<PartnershipFormats data={emptyData as any} />);
 
     const slider = screen.getByTestId('partnership-slider');
     const slides = within(slider).queryAllByTestId('slider-slide');
