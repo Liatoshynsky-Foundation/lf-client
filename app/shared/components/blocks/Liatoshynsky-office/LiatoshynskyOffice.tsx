@@ -10,9 +10,19 @@ import Button from '~/ds-components/button/Button';
 import { styles } from './LiatoshynskyOffice.styles';
 import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
+import { getNavigationLink } from '~/lib/utils/navigationHelper';
+
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnType<typeof useTranslations> }) => {
+const LiatoshynskyOffice = async ({
+  data,
+  t
+}: {
+  data: ILiatoshynskyOffice;
+  t: ReturnType<typeof useTranslations>;
+}) => {
+  const archiveUrl = await getNavigationLink('/archive', 'archive');
+
   const { quote } = data;
   return (
     <Box sx={styles.mainContainer} data-testid="LiatoshynskyOffice">
@@ -45,7 +55,7 @@ const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnT
             size="large"
             color="primary"
             variant="contained"
-            link="/office"
+            link={archiveUrl}
             label={t('goToOfficeButton')}
             sx={styles.button}
             data-testid="LiatoshynskyOffice-goToOfficeButton"
