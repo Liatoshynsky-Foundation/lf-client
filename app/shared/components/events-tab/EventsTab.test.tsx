@@ -54,7 +54,7 @@ jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
 }));
 
 beforeEach(() => {
-  jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
+  jest.spyOn(globalThis, 'scrollTo').mockImplementation(() => {});
   jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
     top: 200,
     left: 0,
