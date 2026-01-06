@@ -11,28 +11,34 @@ import { usePagination } from '~/hooks/use-pagination/usePagination';
 import { styles } from './EventsTab.style';
 
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
-import { MOCK_EVENT_ITEMS } from '~/shared/components/blocks/event-card/EventItem.fixture';
+import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface EventsTabProps {
+  eventsData: ReadonlyArray<EventItemFixture>;
   itemsPerPage?: number;
   tabSx?: object;
 }
 
-const EventsTab = ({ itemsPerPage = 6, tabSx }: EventsTabProps) => {
+const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const t = useTranslations('common');
   const breakpoint = useBreakpoints();
 
+  const isUpcomingEvent = (e: EventItemFixture): e is EventItemFixture & { props: { date: { startDate: string } } } =>
+    !e.props.statusLabel && Boolean(e.props.date?.startDate);
+
+  const isCompletedEvent = (e: EventItemFixture): e is EventItemFixture & { props: { publishedAt: string } } =>
+    Boolean(e.props.statusLabel && e.props.publishedAt);
+
   const events = useMemo(() => {
-    const eventsData = [...MOCK_EVENT_ITEMS];
     const upcomingEvents = eventsData
-      .filter((e) => !e.props.statusLabel)
-      .sort((a, b) => a.props.date!.startDate.localeCompare(b.props.date!.startDate));
+      .filter(isUpcomingEvent)
+      .sort((a, b) => a.props.date.startDate.localeCompare(b.props.date.startDate));
     const completedEvents = eventsData
-      .filter((e) => e.props.statusLabel)
-      .sort((a, b) => a.props.publishedAt.localeCompare(b.props.publishedAt));
+      .filter(isCompletedEvent)
+      .sort((a, b) => b.props.publishedAt.localeCompare(a.props.publishedAt));
     return [...upcomingEvents, ...completedEvents];
-  }, []);
+  }, [eventsData]);
 
   const { hasMore, paginatedData, currentPage, totalPages, visiblePages, handleLoadMore, handlePageChange } =
     usePagination({

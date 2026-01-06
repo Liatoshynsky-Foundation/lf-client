@@ -1,14 +1,51 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 
 import EventsTab from './EventsTab';
 
+import type { EventItemProps } from '~/shared/components/blocks/event-card/EventItem';
+import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
+
+export const MOCK_EVENTS: ReadonlyArray<EventItemFixture> = [
+  {
+    id: 'upcoming-1',
+    props: {
+      title: 'Upcoming event 1',
+      date: {
+        startDate: '2025-02-01',
+        endDate: '2025-02-02'
+      }
+    } as EventItemProps
+  },
+  {
+    id: 'completed-1',
+    props: {
+      title: 'Completed event 1',
+      statusLabel: 'completed',
+      publishedAt: '2025-01-01T00:00:00.000Z'
+    } as EventItemProps
+  },
+  {
+    id: 'upcoming-2',
+    props: {
+      title: 'Upcoming event 2',
+      date: {
+        startDate: '2025-03-01',
+        endDate: '2025-02-02'
+      }
+    } as EventItemProps
+  },
+  {
+    id: 'completed-2',
+    props: {
+      title: 'Completed event 2',
+      statusLabel: 'completed',
+      publishedAt: '2025-02-01T00:00:00.000Z'
+    } as EventItemProps
+  }
+];
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
-}));
-
-jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => () => ({
-  isMobile: false,
-  isTablet: false
 }));
 
 jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
@@ -16,37 +53,20 @@ jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
   default: ({ title }: { title: string }) => <div data-testid="event-item">{title}</div>
 }));
 
-jest.mock('~/ds-components/pagination/Pagination', () => ({
-  __esModule: true,
-  default: ({ onChange }: any) => (
-    <button data-testid="pagination" onClick={() => onChange(null, 2)}>
-      Go to page 2
-    </button>
-  )
-}));
-
-jest.mock('~/ds-components/button/Button', () => ({
-  __esModule: true,
-  default: ({ children, onClick }: any) => <button onClick={onClick}>{children}</button>
-}));
-
-const handleLoadMore = jest.fn();
-const handlePageChange = jest.fn();
-
-jest.mock('~/hooks/use-pagination/usePagination', () => ({
-  usePagination: () => ({
-    hasMore: true,
-    paginatedData: [
-      { id: '1', props: { title: 'Event 1' } },
-      { id: '2', props: { title: 'Event 2' } }
-    ],
-    currentPage: 1,
-    totalPages: 3,
-    visiblePages: [1, 2, 3],
-    handleLoadMore,
-    handlePageChange
-  })
-}));
+beforeEach(() => {
+  jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
+  jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+    top: 200,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    toJSON: () => {}
+  });
+});
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -54,38 +74,44 @@ afterEach(() => {
 
 describe('EventsTab', () => {
   it('should render event items', () => {
-    render(<EventsTab />);
+    render(<EventsTab eventsData={MOCK_EVENTS} />);
 
     const items = screen.getAllByTestId('event-item');
-    expect(items).toHaveLength(2);
-    expect(items[0]).toHaveTextContent('Event 1');
-    expect(items[1]).toHaveTextContent('Event 2');
+    expect(items).toHaveLength(4);
   });
 
-  it('should render "View more" button when hasMore is true', () => {
-    render(<EventsTab />);
+  it('should render upcoming events first', () => {
+    render(<EventsTab eventsData={MOCK_EVENTS} />);
 
-    expect(screen.getByText('viewMore')).toBeInTheDocument();
+    const items = screen.getAllByTestId('event-item');
+    expect(items[0] && items[1]).toHaveTextContent('Upcoming event');
+    expect(items[2] && items[3]).toHaveTextContent('Completed event');
   });
 
-  it('should call handleLoadMore when "View more" is clicked', () => {
-    render(<EventsTab />);
+  it('should sort upcoming events by most recent first', () => {
+    render(<EventsTab eventsData={MOCK_EVENTS} />);
 
-    fireEvent.click(screen.getByText('viewMore'));
-    expect(handleLoadMore).toHaveBeenCalledTimes(1);
+    const items = screen.getAllByTestId('event-item');
+    expect(items[0]).toHaveTextContent('Upcoming event 1');
+    expect(items[1]).toHaveTextContent('Upcoming event 2');
   });
 
-  it('should render pagination when totalPages > 1', () => {
-    render(<EventsTab />);
+  it('should sort completed events by most recent publish date', () => {
+    render(<EventsTab eventsData={MOCK_EVENTS} />);
 
-    expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    const items = screen.getAllByTestId('event-item');
+    expect(items[2]).toHaveTextContent('Completed event 2');
+    expect(items[3]).toHaveTextContent('Completed event 1');
   });
 
-  it('should change page on pagination click', () => {
-    render(<EventsTab itemsPerPage={1} />);
+  it('should scroll to top on pagination click', async () => {
+    render(<EventsTab eventsData={MOCK_EVENTS} itemsPerPage={2} />);
 
-    fireEvent.click(screen.getByTestId('pagination'));
-
-    expect(handlePageChange).toHaveBeenCalledWith(2);
+    const pagination = screen.getByRole('navigation');
+    const page2 = await within(pagination).findByText('2');
+    await act(async () => {
+      fireEvent.click(page2);
+    });
+    expect(window.scrollTo).toHaveBeenCalled();
   });
 });
