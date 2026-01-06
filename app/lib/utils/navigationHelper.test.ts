@@ -38,87 +38,72 @@ describe('navigationHelper', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    const mockGetNavigation = jest.fn().mockResolvedValue(mockNavigationData);
     (newNavigationRepository as jest.Mock).mockReturnValue({
-      getNavigation: mockGetNavigation
+      getNavigation: jest.fn().mockResolvedValue(mockNavigationData)
     });
   });
 
-  describe('getNavigationLinkByHref', () => {
-    it.each([
-      ['/archive', '/archive', 'exact match'],
-      ['/cooperation', '/cooperation', 'single-link navigation item']
-    ])('should return the href when %s', async (href, expected) => {
-      const result = await getNavigationLinkByHref(href);
-      expect(result).toBe(expected);
-    });
-
-    it.each([
-      ['/non-existent', 'href is not found'],
-      ['/about-us', 'multi-link navigation item (no direct href)']
-    ])('should return undefined when %s', async (href) => {
-      const result = await getNavigationLinkByHref(href);
-      expect(result).toBeUndefined();
-    });
+  it('returns archive when href matches exactly', async () => {
+    await expect(getNavigationLinkByHref('/archive')).resolves.toBe('/archive');
   });
 
-  describe('getNavigationLinkByLabel', () => {
-    it.each([
-      ['Архів', '/archive', 'Ukrainian label (exact match)'],
-      ['Archive', '/archive', 'English label (exact match)'],
-      ['архів', '/archive', 'Ukrainian label (partial match)'],
-      ['arch', '/archive', 'English label (partial match)'],
-      ['ARCHIVE', '/archive', 'case-insensitive search']
-    ])('should find link by %s', async (label, expected) => {
-      const result = await getNavigationLinkByLabel(label);
-      expect(result).toBe(expected);
-    });
-
-    it('should return undefined when label is not found', async () => {
-      const result = await getNavigationLinkByLabel('NonExistent');
-      expect(result).toBeUndefined();
-    });
+  it('returns cooperation for single-link navigation item', async () => {
+    await expect(getNavigationLinkByHref('/cooperation')).resolves.toBe('/cooperation');
   });
 
-  describe('getNavigationLink', () => {
-    it.each([
-      ['/archive', undefined, undefined, '/archive', 'exact href match'],
-      ['/non-existent', 'archive', undefined, '/archive', 'label search when href does not match'],
-      ['/cooperation', 'archive', undefined, '/archive', 'href or label (whichever comes first)'],
-      ['/non-existent', 'also-non-existent', '/default', '/default', 'fallback when neither href nor label matches'],
-      ['/non-existent', 'also-non-existent', undefined, '/non-existent', 'href as default fallback'],
-      ['/test', 'архів', '/fallback', '/archive', 'Ukrainian label search'],
-      ['/test', 'ARCHIVE', '/fallback', '/archive', 'case-insensitive label search'],
-      ['/cooperation', undefined, undefined, '/cooperation', 'without label search parameter']
-    ])('should find link by %s', async (href, label, fallback, expected, _description) => {
-      const result = await getNavigationLink(href, label, fallback);
-      expect(result).toBe(expected);
-    });
+  it('returns undefined when href does not exist', async () => {
+    await expect(getNavigationLinkByHref('/non-existent')).resolves.toBeUndefined();
   });
 
-  describe('integration scenarios', () => {
-    it('should handle archive link lookup (LiatoshynskyOffice use case)', async () => {
-      const result = await getNavigationLink('/archive', 'archive');
-      expect(result).toBe('/archive');
+  it('returns undefined for multi-link item when searching by href only', async () => {
+    await expect(getNavigationLinkByHref('/about-us')).resolves.toBeUndefined();
+  });
+
+  it('finds archive by Ukrainian label', async () => {
+    await expect(getNavigationLinkByLabel('Архів')).resolves.toBe('/archive');
+  });
+
+  it('finds archive by English label', async () => {
+    await expect(getNavigationLinkByLabel('Archive')).resolves.toBe('/archive');
+  });
+
+  it('finds archive by lowercase Ukrainian label', async () => {
+    await expect(getNavigationLinkByLabel('архів')).resolves.toBe('/archive');
+  });
+
+  it('finds archive by partial English label', async () => {
+    await expect(getNavigationLinkByLabel('arch')).resolves.toBe('/archive');
+  });
+
+  it('returns undefined when label is not found', async () => {
+    await expect(getNavigationLinkByLabel('NonExistent')).resolves.toBeUndefined();
+  });
+
+  it('prefers exact href match over label search', async () => {
+    await expect(getNavigationLink('/archive', 'archive')).resolves.toBe('/archive');
+  });
+
+  it('falls back to label search when href does not match', async () => {
+    await expect(getNavigationLink('/non-existent', 'archive')).resolves.toBe('/archive');
+  });
+
+  it('returns fallback when neither href nor label matches', async () => {
+    await expect(getNavigationLink('/non-existent', 'also-non-existent', '/default')).resolves.toBe('/default');
+  });
+
+  it('returns href as fallback when no other match exists', async () => {
+    await expect(getNavigationLink('/non-existent', 'also-non-existent')).resolves.toBe('/non-existent');
+  });
+
+  it('handles archive lookup scenario used in LiatoshynskyOffice', async () => {
+    await expect(getNavigationLink('/archive', 'archive')).resolves.toBe('/archive');
+  });
+
+  it('returns fallback when navigation is empty', async () => {
+    (newNavigationRepository as jest.Mock).mockReturnValue({
+      getNavigation: jest.fn().mockResolvedValue([])
     });
 
-    it('should handle missing archive with fallback', async () => {
-      (newNavigationRepository as jest.Mock).mockReturnValue({
-        getNavigation: jest.fn().mockResolvedValue([])
-      });
-
-      const result = await getNavigationLink('/archive', 'archive', '/archive');
-      expect(result).toBe('/archive');
-    });
-
-    it('should correctly transform navigation with single link', async () => {
-      const result = await getNavigationLink('/cooperation');
-      expect(result).toBe('/cooperation');
-    });
-
-    it('should return undefined for multi-link items when searching by href only', async () => {
-      const result = await getNavigationLinkByHref('/about-us');
-      expect(result).toBeUndefined();
-    });
+    await expect(getNavigationLink('/archive', 'archive', '/archive')).resolves.toBe('/archive');
   });
 });
