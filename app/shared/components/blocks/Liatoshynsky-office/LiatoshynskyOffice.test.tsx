@@ -2,7 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import LiatoshynskyOffice from './LiatoshynskyOffice';
+jest.mock('~/lib/utils/navigationHelper', () => ({
+  getNavigationLink: jest.fn().mockResolvedValue('/archive')
+}));
 
 jest.mock('~/components/Quote/Quote', () => {
   const MockQuote = () => <div data-testid="quote" />;
@@ -22,10 +24,12 @@ jest.mock('next/font/google', () => ({
   Oswald: () => ({ className: 'mocked-oswald' })
 }));
 
+import LiatoshynskyOffice from './LiatoshynskyOffice';
+
 const mockTranslations: Record<string, string> = {
   office: 'Кабінет',
   name: 'Лятушинського',
-  goToOfficeButton: 'Увійти до кабінету'
+  goToOfficeButton: 'Увійти до архіву'
 };
 
 const mockTWithTranslations = (key: string) => {
@@ -41,28 +45,36 @@ const mockData = {
 };
 
 describe('LiatoshynskyOffice', () => {
-  beforeEach(() => {
-    render(LiatoshynskyOffice({ data: mockData, t: mockT }));
+  const setupComponent = async () => {
+    const component = await LiatoshynskyOffice({ data: mockData, t: mockT });
+    render(component);
+  };
+
+  it.each([
+    ['text content', 'Кабінет'],
+    ['text content', 'Лятушинського']
+  ])('should render the main %s from translations: %s', async (_, text) => {
+    await setupComponent();
+    expect(screen.getByText(text)).toBeInTheDocument();
   });
 
-  it('should render the main text content from translations', () => {
-    expect(screen.getByText('Кабінет')).toBeInTheDocument();
-    expect(screen.getByText('Лятушинського')).toBeInTheDocument();
+  it.each([
+    ['quote', 'quote'],
+    ['media', 'media']
+  ])('should render the %s component', async (description, testId) => {
+    await setupComponent();
+    expect(screen.getByTestId(testId)).toBeInTheDocument();
   });
 
-  it('should render the mocked child components', () => {
-    expect(screen.getByTestId('quote')).toBeInTheDocument();
-    expect(screen.getByTestId('media')).toBeInTheDocument();
-  });
-
-  it('should render the call-to-action link with the correct href and text', () => {
-    const link = screen.getByRole('link', { name: 'Увійти до кабінету' });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/office');
+  it('should render the call-to-action link with correct attributes', async () => {
+    await setupComponent();
+    const link = screen.getByRole('link', { name: 'Увійти до архіву' });
+    expect(link).toHaveAttribute('href', '/archive');
   });
 
   it('should apply the correct font class to the text block', async () => {
-    const textElement = await screen.findByText('Кабінет');
+    await setupComponent();
+    const textElement = screen.getByText('Кабінет');
     expect(textElement.parentElement).toHaveClass('mocked-oswald');
   });
 });
