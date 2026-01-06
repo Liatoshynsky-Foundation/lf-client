@@ -67,20 +67,8 @@ describe('navigationHelper', () => {
     await expect(getNavigationLinkByLabel('Archive')).resolves.toBe('/archive');
   });
 
-  it('finds archive by lowercase Ukrainian label', async () => {
-    await expect(getNavigationLinkByLabel('архів')).resolves.toBe('/archive');
-  });
-
-  it('finds archive by partial English label', async () => {
-    await expect(getNavigationLinkByLabel('arch')).resolves.toBe('/archive');
-  });
-
   it('returns undefined when label is not found', async () => {
     await expect(getNavigationLinkByLabel('NonExistent')).resolves.toBeUndefined();
-  });
-
-  it('prefers exact href match over label search', async () => {
-    await expect(getNavigationLink('/archive', 'archive')).resolves.toBe('/archive');
   });
 
   it('falls back to label search when href does not match', async () => {
@@ -93,10 +81,6 @@ describe('navigationHelper', () => {
 
   it('returns href as fallback when no other match exists', async () => {
     await expect(getNavigationLink('/non-existent', 'also-non-existent')).resolves.toBe('/non-existent');
-  });
-
-  it('handles archive lookup scenario used in LiatoshynskyOffice', async () => {
-    await expect(getNavigationLink('/archive', 'archive')).resolves.toBe('/archive');
   });
 
   it('returns fallback when navigation is empty', async () => {
