@@ -9,7 +9,7 @@ jest.mock('~/di/container', () => ({
 }));
 
 jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => ({
-  actionsHelpPageData: {
+  getActionsHelpData: jest.fn().mockResolvedValue({
     title: 'Допомогти справами',
     subtitle: {},
     paperItems: [],
@@ -17,7 +17,7 @@ jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => ({
       text: 'Запропонувати допомогу',
       link: '/cooperation'
     }
-  }
+  })
 }));
 
 jest.mock('~/shared/components/blocks/actions-help/ActionsHelp', () => {
