@@ -1,6 +1,10 @@
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { getNavigationLink } from '~/lib/utils/navigationHelper';
+
+const actionsHelpLink = await getNavigationLink('/cooperation', 'cooperation');
+
 export const actionsHelpPageData = {
   title: 'Допомогти справами',
   subtitle: {
@@ -41,6 +45,6 @@ export const actionsHelpPageData = {
   ],
   paperButton: {
     text: 'Запропонувати допомогу',
-    link: '/'
+    link: actionsHelpLink
   }
 };
