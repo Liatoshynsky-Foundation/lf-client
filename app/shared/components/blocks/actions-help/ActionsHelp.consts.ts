@@ -3,7 +3,9 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
 
-const actionsHelpLink = await getNavigationLink('/cooperation', 'cooperation');
+export async function getActionsHelpLink(): Promise<string> {
+  return await getNavigationLink('/cooperation', 'cooperation');
+}
 
 export const actionsHelpPageData = {
   title: 'Допомогти справами',
@@ -45,6 +47,6 @@ export const actionsHelpPageData = {
   ],
   paperButton: {
     text: 'Запропонувати допомогу',
-    link: actionsHelpLink
+    link: await getActionsHelpLink()
   }
 };
