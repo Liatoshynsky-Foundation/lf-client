@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { Oswald } from 'next/font/google';
 import type { useTranslations } from 'next-intl';
 import React from 'react';
@@ -12,10 +12,18 @@ import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = ({ data, t }: { data: ILiatoshynskyOffice; t: ReturnType<typeof useTranslations> }) => {
+const LiatoshynskyOffice = ({
+  data,
+  t,
+  sx
+}: {
+  data: ILiatoshynskyOffice;
+  t: ReturnType<typeof useTranslations>;
+  sx?: SxProps<Theme>;
+}) => {
   const { quote } = data;
   return (
-    <Box sx={styles.mainContainer} data-testid="LiatoshynskyOffice">
+    <Box sx={{ ...(styles.mainContainer as object), ...(sx as object) }} data-testid="LiatoshynskyOffice">
       <Box sx={styles.trapezoid} data-testid="LiatoshynskyOffice-trapezoid" />
       <Box sx={styles.contentContainer} data-testid="LiatoshynskyOffice-contentContainer">
         <Box sx={styles.quoteBlock} data-testid="LiatoshynskyOffice-quoteBlock">
