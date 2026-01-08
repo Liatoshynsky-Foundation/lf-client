@@ -12,7 +12,8 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
 jest.mock('next/image');
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'uk'
 }));
 
 jest.mock('~/i18n/navigation', () => ({
@@ -30,7 +31,13 @@ jest.mock('~/public/icons/facebook.svg', () => <div />);
 describe('BulletTextWithlinks component', () => {
   const useBreakpointsMock = useBreakpoints as jest.Mock;
 
-  const defaultButtons = [{ shortText: 'FB', fullText: 'Facebook', link: 'https://facebook.com' }];
+  const defaultButtons = [
+    {
+      shortText: { uk: 'FB', en: 'FB' },
+      fullText: { uk: 'Facebook', en: 'Facebook' },
+      link: 'https://facebook.com'
+    }
+  ];
 
   beforeEach(() => {
     jest.clearAllMocks();
