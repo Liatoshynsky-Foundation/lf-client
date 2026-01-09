@@ -62,9 +62,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   let cookieConsent: Cookies | null = null;
   try {
     cookieConsent = JSON.parse(cookieList.get('cookie_consent')?.value ?? '') as Cookies;
-    console.log('Parsed cookie_consent:', cookieConsent);
-  } catch (error) {
-    console.error('Error parsing cookie_consent:', error);
+  } catch {
     cookieConsent = null;
   }
 
