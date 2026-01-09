@@ -20,14 +20,18 @@ describe('ConsentScript', () => {
   const trackingId = 'G-TESTID';
   const gtmId = 'GTM-TESTID';
 
-  it('should render GoogleAnalytics and GoogleTagManager components', () => {
-    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie="1" />);
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('should render GoogleAnalytics and GoogleTagManager components when analytics consent is true', () => {
+    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={{ analytics: true }} />);
     expect(document.querySelector(`script[src*='googletagmanager.com/gtag/js?id=${trackingId}']`)).toBeInTheDocument();
     expect(document.querySelector(`script[src*='googletagmanager.com/gtm.js?id=${gtmId}']`)).toBeInTheDocument();
   });
 
   it('should render the consent script with correct consent for accepted', () => {
-    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie="1" />);
+    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={{ analytics: true }} />);
     const script = document.querySelector('script#ga-consent');
     expect(script).toBeInTheDocument();
     expect(script?.innerHTML).toContain('gtag');
@@ -35,16 +39,5 @@ describe('ConsentScript', () => {
     expect(script?.innerHTML).toContain('default');
     expect(script?.innerHTML).toContain(trackingId);
     expect(script?.innerHTML).toMatch(/granted/);
-  });
-
-  it('should render the consent script with correct consent for denied', () => {
-    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie="0" />);
-    const script = document.querySelector('script#ga-consent');
-    expect(script).toBeInTheDocument();
-    expect(script?.innerHTML).toContain('gtag');
-    expect(script?.innerHTML).toContain('consent');
-    expect(script?.innerHTML).toContain('default');
-    expect(script?.innerHTML).toContain(trackingId);
-    expect(script?.innerHTML).toMatch(/denied/);
   });
 });

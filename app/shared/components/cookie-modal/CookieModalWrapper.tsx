@@ -32,7 +32,10 @@ const CookieModalWrapper = ({ trackingId, gtmId, consent_cookie }: ConsentProps)
   return openPreferences ? (
     <CookiePreferencesModal
       open={openPreferences}
-      onClose={() => setOpenPreferences(false)}
+      onClose={() => {
+        setCollectAnalytics(false);
+        setOpenPreferences(false);
+      }}
       saveSettings={() => {
         setCookies(collectAnalytics);
         setOpenPreferences(false);
