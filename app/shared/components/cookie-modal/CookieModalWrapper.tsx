@@ -1,66 +1,55 @@
 'use client';
 import React, { useState } from 'react';
 
+import ConsentScript from '../google-tracking/ConsentScript';
 import { CookieModal } from './modal/CookieModal';
 import { CookiePreferencesModal } from './preferances/CookiePreferencesModal';
+import { Cookies } from '~/types/types/common.types';
 
-import { consentObj } from '~/lib/utils/consent';
+type ConsentProps = Readonly<{
+  trackingId: string;
+  gtmId: string;
+  consent_cookie: Cookies | null;
+}>;
 
-type GtagConsentParams = ReturnType<typeof consentObj>;
-
-declare global {
-  interface Window {
-    gtag: (command: 'consent', action: 'update' | 'default', params: GtagConsentParams) => void;
-  }
-}
-
-const CookieModalWrapper = ({ cookie_consent }: { cookie_consent: string }) => {
+const CookieModalWrapper = ({ trackingId, gtmId, consent_cookie }: ConsentProps) => {
   const [open, setOpen] = useState(true);
   const [openPreferences, setOpenPreferences] = useState(false);
   const [collectAnalytics, setCollectAnalytics] = useState(true);
+  const [analiticsEnabled, setAnaliticsEnabled] = useState(consent_cookie?.analytics === true || false);
 
-  const shouldRenderModal = !cookie_consent;
+  if (analiticsEnabled) {
+    return <ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={consent_cookie} />;
+  }
 
   const setCookies = (analytics: boolean) => {
     if (analytics) {
-      window.gtag('consent', 'update', consentObj(true));
+      setAnaliticsEnabled(true);
     }
-    document.cookie = `cookie_consent=${analytics ? 1 : 0}; path=/; max-age=31536000`;
+    document.cookie = `cookie_consent=${JSON.stringify({ analytics })}; path=/; max-age=31536000`;
   };
-
-  const showPreferences = () => {
-    setOpenPreferences(true);
-    setOpen(false);
-  };
-
-  if (!shouldRenderModal) {
-    return null;
-  }
 
   return openPreferences ? (
     <CookiePreferencesModal
       open={openPreferences}
-      onClose={() => {
-        setCookies(false);
-        setOpenPreferences(false);
-      }}
+      onClose={() => setOpenPreferences(false)}
       saveSettings={() => {
         setCookies(collectAnalytics);
         setOpenPreferences(false);
       }}
       checked={collectAnalytics}
-      onChecked={(value) => {
-        setCollectAnalytics(value);
-      }}
+      onChecked={(value) => setCollectAnalytics(value)}
     />
   ) : (
     <CookieModal
       open={open}
       onClose={() => {
-        setCookies(false);
         setOpen(false);
       }}
-      showPreferences={showPreferences}
+      showPreferences={() => {
+        setOpenPreferences(true);
+        setOpen(false);
+      }}
       acceptAll={() => {
         setCookies(true);
         setOpen(false);
