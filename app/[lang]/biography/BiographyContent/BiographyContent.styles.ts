@@ -6,7 +6,7 @@ export const biographyContentStyles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    rowGap: { xs: '48px', sm: '64px', md: '80px' },
+    rowGap: '16px',
     marginBottom: '80px',
     marginTop: { xs: '96px', md: '128px', lg: '144px', ultra: '80px' }
   },
