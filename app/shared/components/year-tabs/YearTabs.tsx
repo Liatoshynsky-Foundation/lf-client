@@ -8,6 +8,8 @@ import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 import { useScrollDirection } from '~/hooks/use-scroll-direction/useScrollDirection';
 
 const HEADER_OFFSET = 100;
+const HIDE_SENTINEL_SELECTOR = 'timeline-hide-sentinel';
+const OFFSET = 50;
 
 interface Data {
   years: string[];
@@ -18,13 +20,55 @@ export default function YearTabs({ years }: Readonly<Data>) {
   const [year, setYear] = useState<string>(years[0] ?? '');
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const isClickScrolling = useRef(false);
+
   const scrollDirection = useScrollDirection(100);
+  const scrollDirectionRef = useRef(scrollDirection);
+  useEffect(() => {
+    scrollDirectionRef.current = scrollDirection;
+  }, [scrollDirection]);
+
+  const [forceHidden, setForceHidden] = useState(false);
+  const forceHiddenRef = useRef(forceHidden);
+  useEffect(() => {
+    forceHiddenRef.current = forceHidden;
+  }, [forceHidden]);
+
+  useEffect(() => {
+    if (isMobile) return;
+
+    const el = document.getElementById(HIDE_SENTINEL_SELECTOR);
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const bottom = entry.rootBounds?.bottom ?? window.innerHeight;
+        const top = entry.boundingClientRect.top;
+
+        setForceHidden(top <= bottom);
+      },
+      {
+        threshold: 0,
+        rootMargin: `0px 0px -${OFFSET}px 0px`
+      }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
 
     const handleVisibility = () => {
-      const isScrollingDown = scrollDirection === 'down';
+      if (forceHiddenRef.current) {
+        setIsVisible(false);
+        return;
+      }
+
+      const isScrollingDown = scrollDirectionRef.current === 'down';
       const isBelowHeader = window.scrollY > HEADER_OFFSET;
       const shouldHideOnScroll = isScrollingDown && isBelowHeader;
       setIsVisible(!shouldHideOnScroll);
@@ -34,7 +78,7 @@ export default function YearTabs({ years }: Readonly<Data>) {
 
     window.addEventListener('scroll', handleVisibility, { passive: true });
     return () => window.removeEventListener('scroll', handleVisibility);
-  }, [scrollDirection, isMobile]);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isMobile) return;

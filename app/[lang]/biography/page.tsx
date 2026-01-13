@@ -42,6 +42,7 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     <MainLayout withLines>
       {blocks.heroSection && <HeroSection data={blocks.heroSection} years={years} />}
       {blocks.biographyContent && <BiographyContent data={blocks.biographyContent} />}
+      <div id="timeline-hide-sentinel" style={{ height: '1px' }} />
       {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} sx={{ mb: '80px' }} />}
     </MainLayout>
   );
