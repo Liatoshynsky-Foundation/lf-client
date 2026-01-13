@@ -75,7 +75,7 @@ describe('YearTabs', () => {
     jest.clearAllMocks();
     ioInstances = [];
 
-    Object.defineProperty(window, 'innerHeight', { value: 800, writable: true });
+    Object.defineProperty(globalThis, 'innerHeight', { value: 800, writable: true });
 
     mockUseBreakpoints.mockReturnValue({ isMobile: false });
     mockUseScrollDirection.mockReturnValue('up');
@@ -152,7 +152,7 @@ describe('YearTabs', () => {
     rerender(<YearTabs years={MOCK_YEARS} />);
 
     act(() => {
-      window.dispatchEvent(new Event('scroll'));
+      globalThis.dispatchEvent(new Event('scroll'));
     });
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%, calc(100% + 5vh))');
@@ -165,7 +165,7 @@ describe('YearTabs', () => {
     rerender(<YearTabs years={MOCK_YEARS} />);
 
     act(() => {
-      window.dispatchEvent(new Event('scroll'));
+      globalThis.dispatchEvent(new Event('scroll'));
     });
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%)');
@@ -326,7 +326,7 @@ describe('YearTabs', () => {
     });
 
     act(() => {
-      window.dispatchEvent(new Event('scroll'));
+      globalThis.dispatchEvent(new Event('scroll'));
     });
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%, calc(100% + 5vh))');
