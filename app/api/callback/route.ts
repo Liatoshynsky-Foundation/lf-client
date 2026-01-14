@@ -75,8 +75,8 @@ export async function POST(req: NextRequest) {
     String(reasonCode)
   ].join(';');
 
-  const localSig = hmacMd5(baseIncoming, WayForPay.MERCHANT_SECRET_KEY);
-  if (localSig !== merchantSignature) {
+  const localSignature = hmacMd5(baseIncoming, WayForPay.MERCHANT_SECRET_KEY);
+  if (localSignature !== merchantSignature) {
     return NextResponse.json({ error: 'invalid signature' }, { status: 403 });
   }
 
