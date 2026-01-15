@@ -42,3 +42,7 @@ export type contactsData = {
   phone: string;
   email: string;
 };
+
+export type Cookies = {
+  analytics: boolean;
+};

@@ -11,11 +11,11 @@ import Footer from '~/components/Footer/Footer';
 import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 
 import { styles } from './layout.styles';
+import { Cookies } from '~/types/types/common.types';
 
 import { routing } from '~/i18n/routing';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
-import ConsentScript from '~/shared/components/google-tracking/ConsentScript';
 import Header from '~/shared/components/Header/Header.server';
 import { AudioPlayerProvider } from '~/shared/context/AudioPlayerContext';
 import QueryProvider from '~/shared/providers/QueryProvider';
@@ -59,17 +59,17 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   }
 
   const cookieList = await cookies();
-  const cookieConsent = cookieList.get('cookie_consent')?.value || '';
+  let cookieConsent: Cookies | null = null;
+  try {
+    cookieConsent = JSON.parse(cookieList.get('cookie_consent')?.value ?? '') as Cookies;
+  } catch {
+    cookieConsent = null;
+  }
 
   return (
     <html lang={lang}>
       <head>
         <meta name="emotion-insertion-point" content="" />
-        <ConsentScript
-          trackingId={process.env.TRACKING_ID || ''}
-          gtmId={process.env.GTM_ID || ''}
-          consent_cookie={cookieConsent}
-        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${mulish.variable} ${oswald.variable}`}>
         <EmotionProvider>
@@ -82,7 +82,11 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
                     <Box sx={styles.childrenBox}>{children}</Box>
                     <Footer />
                   </Box>
-                  <CookieModalWrapper cookie_consent={cookieConsent} />
+                  <CookieModalWrapper
+                    consent_cookie={cookieConsent}
+                    trackingId={process.env.TRACKING_ID || ''}
+                    gtmId={process.env.GTM_ID || ''}
+                  />
                 </AudioPlayerProvider>
               </QueryProvider>
             </ThemeProvider>
