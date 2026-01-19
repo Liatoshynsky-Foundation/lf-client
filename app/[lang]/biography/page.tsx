@@ -1,6 +1,7 @@
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React, { ReactElement } from 'react';
 
+import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
@@ -27,7 +28,7 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     return <UnderDevelopment />;
   }
 
-  const page = await resolvePageData('biography', lang);
+  const [page, t] = await Promise.all([resolvePageData('biography', lang), getTranslations('home.liatoshynskyOffice')]);
 
   if (!page) {
     return <PageNotFound />;
@@ -41,6 +42,8 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     <MainLayout withLines>
       {blocks.heroSection && <HeroSection data={blocks.heroSection} years={years} />}
       {blocks.biographyContent && <BiographyContent data={blocks.biographyContent} />}
+      <div id="timeline-hide-sentinel" style={{ height: '1px' }} />
+      {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} sx={{ mb: '80px' }} />}
     </MainLayout>
   );
 }

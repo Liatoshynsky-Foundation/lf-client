@@ -67,6 +67,8 @@ export const styles = {
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,
     color: quoteColors[color],
+    fontFamily: 'Mulish',
+    fontStyle: 'italic',
     textAlign: alignments[align].textAlign
   }),
   sourceText: (align: Align) => ({

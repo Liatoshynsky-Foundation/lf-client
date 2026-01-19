@@ -13,6 +13,8 @@ import { isProductionMode } from '~/utils/isProductionMode';
 import {
   carsForAFU,
   carsForAFUData,
+  principleOfHopeButtonLink,
+  principleOfHopeButtonText,
   principleOfHopeDoc,
   principleOfHopeLinks,
   yermolenkoDoc,
@@ -38,7 +40,8 @@ export default function WarInUkraine() {
       <WarInfoSection />
 
       <BulletTextWithLinks
-        buttonText="Підтримати фонд"
+        buttonText={principleOfHopeButtonText[locale]}
+        buttonLink={principleOfHopeButtonLink}
         description={principleOfHopeDoc[locale]}
         buttons={principleOfHopeLinks}
       />
@@ -49,6 +52,7 @@ export default function WarInUkraine() {
         buttonText="Підтримати"
         description={yermolenkoDoc[locale]}
         buttons={yermolenkoLinks}
+        showMainButton={false}
         sx={{ marginBottom: 12 }}
       />
 

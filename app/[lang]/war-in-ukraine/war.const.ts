@@ -3,10 +3,20 @@ import { PaymentMethod } from '~/components/blocks/volunteer-donation/VolunteerD
 import { TipTapDoc } from '~/types/types/tiptap.types';
 import { boldText, makeDoc, normalText } from '~/utils/tiptapHelpers';
 
-type LocalizedTipTapDoc = {
-  uk: TipTapDoc;
-  en: TipTapDoc;
+type Localized<T> = {
+  uk: T;
+  en: T;
 };
+
+type LocalizedTipTapDoc = Localized<TipTapDoc>;
+type LocalizedString = Localized<string>;
+
+type LocalizedButtonItem = {
+  shortText: LocalizedString;
+  fullText: LocalizedString;
+  link: string;
+};
+
 export const warSupportDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
@@ -59,11 +69,25 @@ export const principleOfHopeDoc: LocalizedTipTapDoc = {
   ])
 };
 
-export const principleOfHopeLinks = [
+export const principleOfHopeButtonLink =
+  'https://next.privat24.ua/payments/form/%7B%22token%22%3A%225f3f8a36-862f-4714-a6e9-90320b0e9923%22%7D';
+
+export const principleOfHopeButtonText: LocalizedString = {
+  uk: 'Підтримати фонд',
+  en: 'Support the Foundation'
+};
+
+export const principleOfHopeLinks: LocalizedButtonItem[] = [
   {
-    shortText: 'Фонд «Принцип надії»',
-    fullText: 'Благодійний фонд «Принцип надії»',
-    link: 'https://www.facebook.com'
+    shortText: {
+      uk: 'Фонд «Принцип надії»',
+      en: 'Principle of Hope Foundation'
+    },
+    fullText: {
+      uk: 'Благодійний фонд «Принцип надії»',
+      en: 'Principle of Hope Charitable Foundation'
+    },
+    link: 'https://www.facebook.com/principleofhope'
   }
 ];
 
@@ -88,21 +112,39 @@ export const yermolenkoDoc: LocalizedTipTapDoc = {
   ])
 };
 
-export const yermolenkoLinks = [
+export const yermolenkoLinks: LocalizedButtonItem[] = [
   {
-    shortText: 'Kult: Podcast',
-    fullText: 'Kult: Podcast',
-    link: 'https://www.facebook.com'
+    shortText: {
+      uk: 'Kult: Podcast',
+      en: 'Kult: Podcast'
+    },
+    fullText: {
+      uk: 'Kult: Podcast',
+      en: 'Kult: Podcast'
+    },
+    link: 'https://www.facebook.com/kultpodcast'
   },
   {
-    shortText: 'В. Єрмоленка',
-    fullText: 'Володимира Єрмоленка',
-    link: 'https://www.facebook.com'
+    shortText: {
+      uk: 'В. Єрмоленка',
+      en: 'V. Yermolenko'
+    },
+    fullText: {
+      uk: 'Володимира Єрмоленка',
+      en: 'Volodymyr Yermolenko'
+    },
+    link: 'https://www.facebook.com/volodymyr.yermolenko'
   },
   {
-    shortText: 'Т. Огаркової',
-    fullText: 'Тетяни Огаркової',
-    link: 'https://www.facebook.com'
+    shortText: {
+      uk: 'Т. Огаркової',
+      en: 'T. Ogarkova'
+    },
+    fullText: {
+      uk: 'Тетяни Огаркової',
+      en: 'Tetiana Ogarkova'
+    },
+    link: 'https://www.facebook.com/tetyana.ogarkova'
   }
 ];
 

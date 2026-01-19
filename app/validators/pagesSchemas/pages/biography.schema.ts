@@ -82,9 +82,14 @@ const HeroSectionBlockSchema = z.object({
   noteText: translatedFieldSchema
 });
 
+const LiatoshynskyOfficeBlockSchema = z.object({
+  quote: QuoteSchema
+});
+
 const BiographyBlocksSchema = z.object({
   heroSection: HeroSectionBlockSchema,
-  biographyContent: z.array(BiographyContentBlockSchema)
+  biographyContent: z.array(BiographyContentBlockSchema),
+  LiatoshynskyOffice: LiatoshynskyOfficeBlockSchema
 });
 
 export const BiographyPageSchema = z.object({

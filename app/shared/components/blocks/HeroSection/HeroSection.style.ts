@@ -101,6 +101,9 @@ export const heroSectionStyles = {
 
   biographyText: {
     fontWeight: 300,
+    strong: {
+      fontWeight: 600
+    },
     fontStyle: 'normal',
     fontSize: { xs: '18px', md: '24px' },
     lineHeight: '160%',

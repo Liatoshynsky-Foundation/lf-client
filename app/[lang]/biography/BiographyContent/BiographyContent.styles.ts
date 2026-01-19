@@ -6,8 +6,8 @@ export const biographyContentStyles = {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
-    rowGap: { xs: '48px', sm: '64px', md: '80px' },
-    marginBottom: '160px',
+    rowGap: '16px',
+    marginBottom: '80px',
     marginTop: { xs: '96px', md: '128px', lg: '144px', ultra: '80px' }
   },
 
@@ -164,14 +164,14 @@ export const biographyContentStyles = {
   leftImageCaption: {
     alignSelf: 'start',
     textAlign: 'left',
-    fontSize: '16px',
+    fontSize: { xs: '14px', sm: '14px', md: '16px', lg: '16px', xl: '16px' },
     fontWeight: 500,
     lineHeight: '140%'
   },
 
   rigthImageCaption: {
     alignSelf: 'end',
-    fontSize: '14px',
+    fontSize: { xs: '14px', sm: '14px', md: '16px', lg: '16px', xl: '16px' },
     fontWeight: 400,
     lineHeight: '140%'
   }

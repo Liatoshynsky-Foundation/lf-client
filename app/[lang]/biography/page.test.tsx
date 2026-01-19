@@ -3,7 +3,8 @@ import { render, screen } from '@testing-library/react';
 import Biography from './page';
 
 jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn()
+  setRequestLocale: jest.fn(),
+  getTranslations: jest.fn()
 }));
 
 jest.mock('~/services/pages-data/resolvePageData', () => ({
@@ -25,9 +26,15 @@ jest.mock('./BiographyContent/BiographyContent', () => ({
   BiographyContent: () => <div>Biography content</div>
 }));
 
+jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => ({
+  __esModule: true,
+  default: () => <div>Liatoshynsky office</div>
+}));
+
 describe('Biography page', () => {
-  const { setRequestLocale } = jest.requireMock('next-intl/server') as {
+  const { setRequestLocale, getTranslations } = jest.requireMock('next-intl/server') as {
     setRequestLocale: jest.Mock;
+    getTranslations: jest.Mock;
   };
 
   const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
@@ -36,13 +43,15 @@ describe('Biography page', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    getTranslations.mockResolvedValue((key: string) => key);
   });
 
   it('should render biography blocks when page exists', async () => {
     resolvePageData.mockResolvedValueOnce({
       blocks: {
         heroSection: {},
-        biographyContent: [{ yearTitle: '1910' }, { yearTitle: null }, { yearTitle: '1930' }]
+        biographyContent: [{ yearTitle: '1910' }, { yearTitle: null }, { yearTitle: '1930' }],
+        LiatoshynskyOffice: {}
       }
     });
 
@@ -54,6 +63,7 @@ describe('Biography page', () => {
 
     expect(screen.getByText(/Hero section/i)).toBeInTheDocument();
     expect(screen.getByText(/Biography content/i)).toBeInTheDocument();
+    expect(screen.getByText(/Liatoshynsky office/i)).toBeInTheDocument();
     expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
   });
 
@@ -64,6 +74,7 @@ describe('Biography page', () => {
     render(ui);
 
     expect(resolvePageData).toHaveBeenCalledWith('biography', 'uk');
+    expect(getTranslations).toHaveBeenCalled();
     expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 });

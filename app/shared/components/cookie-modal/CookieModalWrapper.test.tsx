@@ -37,13 +37,24 @@ jest.mock('./preferances/CookiePreferencesModal', () => ({
     ) : null
 }));
 
+jest.mock('../google-tracking/ConsentScript', () => ({
+  __esModule: true,
+  default: ({ consent_cookie }: any) => (
+    <div>
+      Mocked ConsentScript - {consent_cookie && consent_cookie.analytics ? 'analytics:true' : 'analytics:false'}
+    </div>
+  )
+}));
+
 const expectCookieSet = (expected: 'granted' | 'denied') => {
-  expect(document.cookie).toContain('cookie_consent');
-  const cookieValue = JSON.parse(document.cookie.split('=')[1]);
+  const raw = (document.cookie || '').split(';').find((c) => c.trim().startsWith('cookie_consent='));
+  expect(raw).toBeTruthy();
+  const val = raw!.split('=')[1];
+  const cookieObj = JSON.parse(val);
   if (expected === 'granted') {
-    expect(cookieValue).toEqual(1);
+    expect(cookieObj).toEqual({ analytics: true });
   } else {
-    expect(cookieValue).toEqual(0);
+    expect(cookieObj).toEqual({ analytics: false });
   }
 };
 
@@ -51,71 +62,69 @@ describe('CookieModalWrapper', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     globalThis.gtag = jest.fn();
-    document.cookie = '';
+    document.cookie = 'cookie_consent=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   });
 
-  describe('with cookie_consent present', () => {
-    it('should not render CookieModal when cookie_consent includes analytics', () => {
-      render(<CookieModalWrapper cookie_consent={'1'} />);
+  it('should render ConsentScript and not CookieModal when consent_cookie.analytics is true', () => {
+    render(<CookieModalWrapper trackingId="" gtmId="" consent_cookie={{ analytics: true }} />);
+    expect(screen.getByText(/Mocked ConsentScript/)).toBeInTheDocument();
+    expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
+  });
+
+  it('should render CookieModal when consent_cookie.analytics is false (or missing)', () => {
+    render(<CookieModalWrapper trackingId="" gtmId="" consent_cookie={{ analytics: false }} />);
+    expect(screen.getByText('Mocked CookieModal')).toBeInTheDocument();
+  });
+
+  describe('without consent_cookie (fresh user)', () => {
+    beforeEach(() => {
+      document.cookie = 'cookie_consent=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      render(<CookieModalWrapper trackingId="" gtmId="" consent_cookie={null} />);
+    });
+
+    it('should render CookieModal', () => {
+      expect(screen.getByText('Mocked CookieModal')).toBeInTheDocument();
+    });
+
+    it('should not set cookie initially', () => {
+      expect(document.cookie).not.toContain('cookie_consent');
+    });
+
+    it('should close CookieModal and set denied cookie when Close is clicked', () => {
+      fireEvent.click(screen.getByText('Close'));
+      expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
+      expect(document.cookie).not.toContain('cookie_consent');
+    });
+
+    it('should set granted cookie when Accept All is clicked', () => {
+      fireEvent.click(screen.getByText('Accept All'));
+      expectCookieSet('granted');
       expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
     });
 
-    it('should not render CookieModal when cookie_consent includes denied', () => {
-      render(<CookieModalWrapper cookie_consent={'0'} />);
-      expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
+    it('should open CookiePreferencesModal when Show Preferences is clicked', () => {
+      fireEvent.click(screen.getByText('Show Preferences'));
+      expect(screen.getByText('Mocked CookiePreferencesModal')).toBeInTheDocument();
     });
 
-    describe('without cookie_consent', () => {
-      beforeEach(() => {
-        jest.clearAllMocks();
-        document.cookie = '';
-        render(<CookieModalWrapper cookie_consent="" />);
-      });
+    it('should save granted cookie when analytics is checked in CookiePreferencesModal', () => {
+      fireEvent.click(screen.getByText('Show Preferences'));
+      fireEvent.click(screen.getByText('Save Settings'));
+      expectCookieSet('granted');
+      expect(screen.queryByText('Mocked CookiePreferencesModal')).not.toBeInTheDocument();
+    });
 
-      it('should render CookieModal', () => {
-        expect(screen.getByText('Mocked CookieModal')).toBeInTheDocument();
-      });
+    it('should not set cookie when preferences are closed without saving', () => {
+      fireEvent.click(screen.getByText('Show Preferences'));
+      fireEvent.click(screen.getByText('Close'));
+      expect(document.cookie).not.toContain('cookie_consent');
+    });
 
-      it('should not set cookie initially', () => {
-        expect(document.cookie).not.toContain('cookie_consent');
-      });
-
-      it('should close CookieModal and set denied cookie when Close is clicked', () => {
-        fireEvent.click(screen.getByText('Close'));
-        expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
-        expectCookieSet('denied');
-      });
-
-      it('should set granted cookie when Accept All is clicked', () => {
-        fireEvent.click(screen.getByText('Accept All'));
-        expectCookieSet('granted');
-        expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
-      });
-
-      it('should open CookiePreferencesModal when Show Preferences is clicked', () => {
-        fireEvent.click(screen.getByText('Show Preferences'));
-        expect(screen.getByText('Mocked CookiePreferencesModal')).toBeInTheDocument();
-      });
-
-      it('should save granted cookie when analytics is checked in CookiePreferencesModal', () => {
-        fireEvent.click(screen.getByText('Show Preferences'));
-        fireEvent.click(screen.getByText('Save Settings'));
-        expectCookieSet('granted');
-        expect(screen.queryByText('Mocked CookiePreferencesModal')).not.toBeInTheDocument();
-      });
-
-      it('should set denied cookie when preferences are closed without saving', () => {
-        fireEvent.click(screen.getByText('Show Preferences'));
-        fireEvent.click(screen.getByText('Close'));
-        expectCookieSet('denied');
-      });
-
-      it('should set denied cookie when analytics is unchecked and saved in preferences', () => {
-        fireEvent.click(screen.getByText('Show Preferences'));
-        fireEvent.click(screen.getByTestId('cookie-checkbox'));
-        fireEvent.click(screen.getByText('Save Settings'));
-        expectCookieSet('denied');
-      });
+    it('should set denied cookie when analytics is unchecked and saved in preferences', () => {
+      fireEvent.click(screen.getByText('Show Preferences'));
+      fireEvent.click(screen.getByTestId('cookie-checkbox'));
+      fireEvent.click(screen.getByText('Save Settings'));
+      expectCookieSet('denied');
     });
   });
 });

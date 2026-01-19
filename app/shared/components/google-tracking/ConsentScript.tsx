@@ -1,17 +1,17 @@
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
 
+import { Cookies } from '~/types/types/common.types';
+
 import { consentObj, parseDaConsent } from '~/lib/utils/consent';
 
 type ConsentScriptProps = Readonly<{
   trackingId: string;
   gtmId: string;
-  consent_cookie: string;
+  consent_cookie: Cookies | null;
 }>;
 
-export default function ConsentScript({ trackingId, gtmId, consent_cookie }: ConsentScriptProps) {
-  const hasUserAlreadyConsented = consent_cookie === '1';
-
+export default function ConsentScript({ trackingId, gtmId }: ConsentScriptProps) {
   return (
     <>
       <GoogleAnalytics gaId={trackingId} />
@@ -23,7 +23,7 @@ export default function ConsentScript({ trackingId, gtmId, consent_cookie }: Con
 
                     gtag('js', new Date());
                     gtag('config', '${trackingId}');
-                    gtag('consent', 'default', ${parseDaConsent(consentObj(hasUserAlreadyConsented))});
+                    gtag('consent', 'default', ${parseDaConsent(consentObj(true))});
                 `}
       </Script>
     </>
