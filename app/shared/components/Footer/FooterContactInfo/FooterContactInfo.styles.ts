@@ -22,7 +22,8 @@ export const styles = {
     ...commonTextStyle,
     fontWeight: 700,
     fontSize: { xs: '18px', sm: '20px' },
-    lineHeight: '135%'
+    lineHeight: '135%',
+    textWrap: 'balance'
   },
   text: {
     ...commonTextStyle,
