@@ -67,7 +67,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <Link style={{ width: 'fit-content' }} href={link}>
+      <Link style={{ width: 'fit-content' }} href={link} scroll onClickCapture={() => window.scrollTo({ top: 0 })}>
         {content}
       </Link>
     );
