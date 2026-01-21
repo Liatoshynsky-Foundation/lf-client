@@ -2,6 +2,8 @@ import { mainHexPallete } from '~/shared/components/design-system/all-components
 
 export const styles = {
   root: {
+    mt: { xs: '35px', sm: '70px' },
+    mb: { xs: '55px', sm: '100px' },
     gridColumn: '1 / -1',
     maxWidth: '1728px',
     width: '100%',
