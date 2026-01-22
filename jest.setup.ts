@@ -27,3 +27,8 @@ jest.mock('next-intl/navigation', () => ({
 jest.mock('next-intl/routing', () => ({
   defineRouting: (config: Record<string, unknown>) => config
 }));
+
+jest.mock('next-intl/server', () => ({
+  getTranslations: async () => (key: string) => key,
+  setRequestLocale: () => undefined
+}));
