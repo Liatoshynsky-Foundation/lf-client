@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -17,11 +18,19 @@ import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
-export const metadata = createSeoMeta({
-  title: 'Фундація Лятошинського',
-  description: 'Ознайомтесь з Фундацією Лятошинського, її місією та цілями.',
-  url: '/'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.aboutUs');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/',
+    locale: lang
+  });
+}
 
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
