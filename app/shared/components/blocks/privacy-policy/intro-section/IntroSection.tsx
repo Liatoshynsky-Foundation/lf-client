@@ -18,7 +18,7 @@ export default function IntroSection({ title, trustAndSecurity, agreement, dataT
   return (
     <>
       <Box sx={styles(theme).titleWrapper} data-testid={dataTestId}>
-        <Typography sx={styles(theme).title} data-testid={`${dataTestId}-title`}>
+        <Typography variant="h1" sx={styles(theme).title} data-testid={`${dataTestId}-title`}>
           {title}
         </Typography>
       </Box>

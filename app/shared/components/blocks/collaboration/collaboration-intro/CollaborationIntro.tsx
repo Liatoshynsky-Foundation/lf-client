@@ -15,7 +15,7 @@ interface CollaborationIntroProps {
 export default function CollaborationIntro({ title, subtitle, content, contentAbove }: CollaborationIntroProps) {
   return (
     <Box sx={styles.container}>
-      <Typography variant="h2" sx={styles.title}>
+      <Typography variant="h1" sx={styles.title}>
         {title}
       </Typography>
       <Box sx={styles.textContainer}>

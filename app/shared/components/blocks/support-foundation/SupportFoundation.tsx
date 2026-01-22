@@ -15,7 +15,7 @@ function SupportFoundation() {
 
   return (
     <Box sx={styles.wrapper} data-testid="SupportFoundation">
-      <Typography variant="h2" sx={styles.sectionTitle} data-testid="SupportFoundation-title">
+      <Typography variant="h1" sx={styles.sectionTitle} data-testid="SupportFoundation-title">
         {t('title')}
       </Typography>
 
