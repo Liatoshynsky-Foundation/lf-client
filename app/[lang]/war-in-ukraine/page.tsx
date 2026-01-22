@@ -1,4 +1,6 @@
+import type { Metadata } from 'next';
 import { useLocale } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import VolunteerDonation from '~/components/blocks/volunteer-donation/VolunteerDonation';
@@ -7,6 +9,7 @@ import WarInfoSection from '~/components/blocks/war-info/WarInfoSection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 import BulletTextWithLinks from '~/ds-components/bullet-text-with-links/BulletTextWithLinks';
 
+import type { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
@@ -22,11 +25,19 @@ import {
 } from '~/[lang]/war-in-ukraine/war.const';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
-export const metadata = createSeoMeta({
-  title: 'Liatoshynsky Foundation during War in Ukraine',
-  description: '',
-  url: '/war-in-ukraine'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.warInUkraine');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/war-in-ukraine',
+    locale: lang
+  });
+}
 
 export default function WarInUkraine() {
   const locale = useLocale();

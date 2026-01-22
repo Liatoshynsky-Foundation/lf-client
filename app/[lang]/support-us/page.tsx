@@ -1,8 +1,11 @@
+import type { Metadata } from 'next';
 import { Locale } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import type { Language } from '~/types/types/language';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRootContainer } from '~/di/container';
@@ -14,12 +17,19 @@ import { faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/shared/components/blocks/support-foundation/SupportFoundation';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
-export const metadata = createSeoMeta({
-  title: 'Підтримати Фундацію',
-  description:
-    'Усі внески надходять безпосередньо на рахунок Фундації Лятошинського та спрямовуються на реалізацію її місії.',
-  url: '/support-us'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.supportUs');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/support-us',
+    locale: lang
+  });
+}
 
 type SupportUsProps = Readonly<{
   params: Promise<{

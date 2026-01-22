@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -11,11 +12,19 @@ import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 
-export const metadata = createSeoMeta({
-  title: 'Творчість - Фундація Лятошинського',
-  description: 'Ознайомтесь з творчістю Бориса Лятошинського.',
-  url: '/artistry'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.artistry');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/artistry',
+    locale: lang
+  });
+}
 
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;

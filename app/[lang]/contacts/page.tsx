@@ -1,4 +1,5 @@
-import { getLocale, setRequestLocale } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
@@ -11,11 +12,19 @@ import { createRequestContainer } from '~/di/container';
 import ColoredLayout from '~/layouts/colored-layout/ColoredLayout';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
-export const metadata = createSeoMeta({
-  title: 'Контакти',
-  description: 'Надішліть запит і ми сконтактуємо з вами протягом кількох робочих днів',
-  url: '/contacts'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.contacts');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/contacts',
+    locale: lang
+  });
+}
 
 export default async function Contacts({ params }: Readonly<Language>) {
   const { lang } = await params;

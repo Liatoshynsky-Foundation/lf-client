@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React, { ReactElement } from 'react';
 
@@ -14,11 +15,19 @@ import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { HeroSection } from '~/shared/components/blocks/HeroSection/HeroSection';
 
-export const metadata = createSeoMeta({
-  title: 'ЖиТтєПиС ЛятОшИнсьКогО',
-  description: 'Ознайомтесь з життєписом Бориса Лятошинського.',
-  url: '/biography'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.biography');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/biography',
+    locale: lang
+  });
+}
 
 export default async function Biography({ params }: Readonly<Language>): Promise<ReactElement> {
   const { lang } = await params;

@@ -1,4 +1,5 @@
-import { setRequestLocale } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import IntroSection from '~/components/blocks/privacy-policy/intro-section/IntroSection';
@@ -13,12 +14,19 @@ import { isProductionMode } from '~/utils/isProductionMode';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
-export const metadata = createSeoMeta({
-  title: 'Політика Конфіденційності',
-  description:
-    'Дізнайтесь, як Фундація Лятошинського збирає, використовує та захищає ваші персональні дані відповідно до Політики конфіденційності.',
-  url: '/privacy-policy'
-});
+export async function generateMetadata({ params }: Language): Promise<Metadata> {
+  const { lang } = await params;
+  setRequestLocale(lang);
+
+  const t = await getTranslations('meta.pages.privacyPolicy');
+
+  return createSeoMeta({
+    title: t('title'),
+    description: t('description'),
+    url: '/privacy-policy',
+    locale: lang
+  });
+}
 
 export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
