@@ -18,7 +18,7 @@ const WarInfoSection: React.FC<WarInfoSectionProps> = ({ sx, ...props }) => {
   return (
     <Box sx={[style.gridContainer, ...sxToArray(sx)]} {...props}>
       <Box sx={style.titleSection}>
-        <Typography variant="h2" sx={style.titleText}>
+        <Typography variant="h1" sx={style.titleText}>
           {t('title')}
         </Typography>
       </Box>

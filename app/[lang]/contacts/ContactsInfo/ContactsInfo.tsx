@@ -28,11 +28,11 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
       <Box sx={styles.wrapper}>
         <Box sx={styles.contactsInfoWrapper}>
           {title ? (
-            <Typography sx={styles.title} data-testid="ContactsInfo-title">
+            <Typography variant="h1" sx={styles.title} data-testid="ContactsInfo-title">
               {title}
             </Typography>
           ) : (
-            <Typography sx={styles.titleMain} variant="h2" data-testid="ContactsInfo-title">
+            <Typography sx={styles.titleMain} variant="h1" data-testid="ContactsInfo-title">
               {t('contacts')}
             </Typography>
           )}

@@ -46,7 +46,7 @@ describe('SupportFoundation', () => {
     render(<SupportFoundation />);
 
     const heading = screen.getByRole('heading', {
-      level: 2,
+      level: 1,
       name: 'Support the Foundation'
     });
 
