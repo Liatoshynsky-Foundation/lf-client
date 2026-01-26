@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
@@ -9,6 +9,7 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 interface Props {
   imageSrc: string;
@@ -19,6 +20,14 @@ interface Props {
   buttonLink: string;
 }
 
+const createParagraph = () => {
+  const ParagraphRenderer = (children: React.ReactNode) => (
+    <Typography sx={{ display: 'block', ...textStyles.blockDescription }}>{children}</Typography>
+  );
+  ParagraphRenderer.displayName = 'ParagraphRenderer';
+  return ParagraphRenderer;
+};
+
 const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, paragraph2, buttonText, buttonLink }) => {
   return (
     <Box sx={styles.mainContainer}>
@@ -28,7 +37,12 @@ const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, par
           marginBottom: { xs: paragraph2 ? '16px' : '24px', md: paragraph2 ? '16px' : '0px' }
         }}
       >
-        <TipTapContent data={paragraph1} />
+        <TipTapContent
+          data={paragraph1}
+          nodeRenderers={{
+            paragraph: createParagraph()
+          }}
+        />
       </Box>
 
       {paragraph2 && (

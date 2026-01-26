@@ -27,7 +27,7 @@ export const styles = {
   },
   img: {
     gridColumn: {
-      xs: '2 / -1',
+      xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / 12'
     },
@@ -70,7 +70,7 @@ export const styles = {
 export const imageSizes = {
   sizes: {
     width: { xs: 224, sm: 457, md: 569, lg: 718, xl: 816, xxl: 979, ultra: 816 },
-    height: { xs: 138, sm: 292, md: 336, lg: 498, xl: 498, xxl: 498, ultra: 498 }
+    height: { xs: 175, sm: 292, md: 336, lg: 498, xl: 498, xxl: 498, ultra: 498 }
   },
   border: {
     sizes: {
@@ -82,6 +82,6 @@ export const imageSizes = {
     color: mainHexPallete.yellow[300]
   },
   imageSx: {
-    width: { xs: '200px', sm: '400px', md: '496px', lg: '645px', xl: '744px', xxl: '806px', ultra: '1001px' }
+    width: { xs: '272px', sm: '400px', md: '496px', lg: '645px', xl: '744px', xxl: '806px', ultra: '1001px' }
   }
 };

@@ -1,6 +1,6 @@
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { boldText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 
 type Localized<T> = {
   uk: T;
@@ -12,13 +12,23 @@ type LocalizedString = Localized<string>;
 
 export const foundationParagraph1: LocalizedTipTapDoc = {
   uk: makeDoc([
+    boldText('Ласкаво просимо до Фундації Лятошинського!'),
     normalText(
-      'Ласкаво просимо до Фундації Лятошинського! Ми досліджуємо й популяризуємо українську класичну та сучасну музику в Україні й світі. Особливу увагу приділяємо спадщині Бориса Лятошинського (1895-1968) — одного з найвпливовіших українських композиторів ХХ століття, фундатора власної композиторської школи. Його твори поєднують у собі модерністські новації та романтичну виразність, що приваблює широке коло слухачів.'
+      ' Ми досліджуємо й популяризуємо українську класичну та сучасну музику в Україні й світі. Особливу увагу приділяємо спадщині Бориса Лятошинського (1895-1968) — одного з '
+    ),
+    boldText('найвпливовіших українських композиторів ХХ століття'),
+    normalText(
+      ', фундатора власної композиторської школи. Його твори поєднують у собі модерністські новації та романтичну виразність, що приваблює широке коло слухачів.'
     )
   ]),
   en: makeDoc([
+    boldText('Welcome to the Lyatoshynsky Foundation!'),
     normalText(
-      'Welcome to the Lyatoshynsky Foundation! We research and promote Ukrainian classical and contemporary music in Ukraine and worldwide. We pay special attention to the legacy of Borys Lyatoshynsky (1895-1968) — one of the most influential Ukrainian composers of the 20th century, founder of his own compositional school. His works combine modernist innovations and romantic expressiveness, attracting a wide audience.'
+      ' We research and promote Ukrainian classical and contemporary music in Ukraine and worldwide. We pay special attention to the legacy of Borys Lyatoshynsky (1895-1968) — one of the '
+    ),
+    boldText('most influential Ukrainian composers of the 20th century'),
+    normalText(
+      ', founder of his own compositional school. His works combine modernist innovations and romantic expressiveness, attracting a wide audience.'
     )
   ])
 };
