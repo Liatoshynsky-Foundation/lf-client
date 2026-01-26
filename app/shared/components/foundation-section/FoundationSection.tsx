@@ -1,51 +1,39 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
+import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import { imageSizes, styles } from './FoundationSection.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
-import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 interface Props {
   imageSrc: string;
   caption?: string;
-  paragraph1: string;
-  paragraph2?: string;
+  paragraph1: TipTapDoc;
+  paragraph2?: TipTapDoc;
   buttonText: string;
   buttonLink: string;
 }
 
 const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, paragraph2, buttonText, buttonLink }) => {
-  const paragraph2Content: TipTapDoc = {
-    type: TipTapNodeTypes.doc,
-    content: [
-      {
-        type: TipTapNodeTypes.paragraph as const,
-        content: [{ type: TipTapNodeTypes.text as const, text: paragraph2 || '' }]
-      }
-    ]
-  };
-
   return (
     <Box sx={styles.mainContainer}>
-      <Typography
+      <Box
         sx={{
-          display: 'block',
-          ...textStyles.blockDescription,
           ...styles.textStyle,
           marginBottom: { xs: paragraph2 ? '16px' : '24px', md: paragraph2 ? '16px' : '0px' }
         }}
       >
-        {paragraph1}
-      </Typography>
+        <TipTapContent data={paragraph1} />
+      </Box>
 
       {paragraph2 && (
         <ButtonContentBlock
-          content={paragraph2Content}
+          content={paragraph2}
           buttonText={buttonText}
           buttonColor="tertiary"
           sx={{ maxWidth: { xs: '246px' }, minWidth: { xs: '246px' } }}
