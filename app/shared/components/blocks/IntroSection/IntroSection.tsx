@@ -12,7 +12,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
 
   return (
     <Box sx={styles.container} data-testid="IntroSection">
-      <Typography sx={styles.title} data-testid="IntroSection-title">
+      <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
         {title}
       </Typography>
       <Box sx={styles.photoContainer} data-testid="IntroSection-photoContainer">

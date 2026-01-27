@@ -21,7 +21,9 @@ export function HeroSection({ data, years }: Readonly<HeroSectionProps>) {
       <Box sx={heroSectionStyles.topContainer} data-testid="HeroSection-topContainer">
         <Box sx={heroSectionStyles.titleWithQuoteContainer} data-testid="HeroSection-titleWithQuoteContainer">
           <Box data-testid="HeroSection-title">
-            <Typography sx={heroSectionStyles.title}>{t('title')}</Typography>
+            <Typography variant="h1" sx={heroSectionStyles.title}>
+              {t('title')}
+            </Typography>
           </Box>
 
           <QuoteBlock

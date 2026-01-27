@@ -29,7 +29,7 @@ const TitleWithQuote = ({
   return (
     <Box sx={styles.mainContainer} data-testid="TitleWithQuote">
       <Box sx={styles.titleSection}>
-        <Typography variant="h2" sx={styles.titleText} data-testid="TitleWithQuote-title">
+        <Typography variant="h1" sx={styles.titleText} data-testid="TitleWithQuote-title">
           {title}
         </Typography>
       </Box>

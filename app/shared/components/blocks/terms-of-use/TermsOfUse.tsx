@@ -22,7 +22,7 @@ const TermsOfUse = () => {
     <>
       <Box sx={style.gridContainer} data-testid="TermsOfUse">
         <Box sx={style.titleSection}>
-          <Typography variant="h2" sx={style.titleText} data-testid="TermsOfUse-title">
+          <Typography variant="h1" sx={style.titleText} data-testid="TermsOfUse-title">
             {t('title')}
           </Typography>
         </Box>

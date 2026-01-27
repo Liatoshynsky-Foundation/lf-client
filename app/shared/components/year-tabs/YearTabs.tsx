@@ -16,8 +16,9 @@ interface Data {
 }
 
 export default function YearTabs({ years }: Readonly<Data>) {
+  const validYears = years.filter((y) => y && y.trim() !== '');
   const { isMobile } = useBreakpoints();
-  const [year, setYear] = useState<string>(years[0] ?? '');
+  const [year, setYear] = useState<string>(validYears[0] ?? '');
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const isClickScrolling = useRef(false);
 
@@ -112,7 +113,7 @@ export default function YearTabs({ years }: Readonly<Data>) {
       if (closestTarget) {
         const id = closestTarget.id;
         const newYear = id.replace('year-', '');
-        if (newYear) {
+        if (newYear && validYears.includes(newYear)) {
           setYear((prevYear) => (newYear === prevYear ? prevYear : newYear));
         }
       }
@@ -127,7 +128,7 @@ export default function YearTabs({ years }: Readonly<Data>) {
     return () => {
       observer.disconnect();
     };
-  }, [isMobile]);
+  }, [isMobile, validYears]);
 
   const handleYearChange = (selectedYear: string) => {
     isClickScrolling.current = true;
@@ -160,9 +161,9 @@ export default function YearTabs({ years }: Readonly<Data>) {
           transform: isVisible ? 'translate(-50%)' : 'translate(-50%, calc(100% + 5vh))',
           transition: 'transform 0.4s ease'
         }}
-        activeButton={years.indexOf(year)}
+        activeButton={validYears.indexOf(year)}
         defaultActiveButton={0}
-        buttons={years.map((year) => (
+        buttons={validYears.map((year) => (
           <Button sx={styles.yearButton} value={year} key={year} onClick={() => handleYearChange(year)}>
             {year}
           </Button>
