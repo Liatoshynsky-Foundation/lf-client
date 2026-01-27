@@ -16,7 +16,7 @@ const CookieModalWrapper = ({ trackingId, gtmId, consent_cookie }: ConsentProps)
   const [open, setOpen] = useState(true);
   const [openPreferences, setOpenPreferences] = useState(false);
   const [collectAnalytics, setCollectAnalytics] = useState(true);
-  const [analiticsEnabled, setAnaliticsEnabled] = useState(consent_cookie?.analytics === true || false);
+  const [analiticsEnabled, setAnaliticsEnabled] = useState(Boolean(consent_cookie));
 
   if (analiticsEnabled) {
     return <ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={consent_cookie} />;

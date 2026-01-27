@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { LocalizationErrors } from '~/constants/errors';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 
 const BoldMarkSchema = z.object({ type: z.literal(TipTapMarkType.bold) });
@@ -27,7 +26,7 @@ export const MarkSchema = z.discriminatedUnion('type', [
 
 const TextNodeSchema = z.object({
   type: z.literal(TipTapNodeTypes.text),
-  text: z.string().min(1, { message: LocalizationErrors.MISSING_NODE_ERROR }),
+  text: z.string(),
   marks: z.array(MarkSchema).optional()
 });
 

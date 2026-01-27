@@ -2,14 +2,15 @@ import { Locale } from 'next-intl';
 import { z } from 'zod';
 
 import { LocalizationErrors } from '~/constants/errors';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
 });
 
 export const translatedFieldSchema = z.object({
-  uk: z.string().min(1, { message: LocalizationErrors.MISSING_UK_ERROR }),
-  en: z.string().min(1, { message: LocalizationErrors.MISSING_EN_ERROR })
+  uk: z.string(),
+  en: z.string()
 });
 
 export const translatedLinkSchema = z.object({
@@ -33,13 +34,55 @@ export type Localize<T> =
         : T;
 
 function isTranslatedField(value: unknown, locale: Locale): value is TranslatedField<unknown> {
-  return typeof value === 'object' && value !== null && locale in (value as any);
+  return typeof value === 'object' && value !== null && locale in (value as Record<string, unknown>);
+}
+
+function doesTipTapHaveTranslations(value: unknown): boolean {
+  // we receive doc -> content<paragraph | heading> -> text structure
+  if (typeof value !== 'object' || value === null) return false;
+
+  const rootNode = value as Record<string, unknown>; // start from the root (is a doc)
+
+  if (rootNode['type'] !== TipTapNodeTypes.doc || !Array.isArray(rootNode['content'])) {
+    return false;
+  }
+
+  for (const node of rootNode['content'] as Array<unknown>) {
+    if (typeof node !== 'object' || node === null) continue;
+    const paragraphOrHeading = node as Record<string, unknown>;
+    if (
+      (paragraphOrHeading['type'] !== TipTapNodeTypes.paragraph &&
+        paragraphOrHeading['type'] !== TipTapNodeTypes.heading) ||
+      !Array.isArray(paragraphOrHeading['content'])
+    ) {
+      continue;
+    }
+
+    for (const textNode of paragraphOrHeading['content'] as Array<unknown>) {
+      if (typeof textNode !== 'object' || textNode === null) continue;
+      const text = textNode as Record<string, unknown>;
+      if (text['type'] === TipTapNodeTypes.text && Array.isArray(text['marks'])) {
+        return text['text'] !== '';
+      }
+    }
+  }
+
+  return true;
 }
 
 export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale) {
   function localizeValue(value: unknown): unknown {
     if (isTranslatedField(value, locale)) {
-      return (value as Record<string, string>)[locale];
+      const field = value as Record<string, unknown>;
+
+      if (typeof field[locale] === 'string' && field[locale] === '') {
+        throw new Error(locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR);
+      }
+      if (typeof field[locale] === 'object' && !doesTipTapHaveTranslations(field[locale])) {
+        throw new Error(locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR);
+      }
+
+      return field[locale];
     }
     if (Array.isArray(value)) {
       return value.map(localizeValue);

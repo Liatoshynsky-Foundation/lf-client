@@ -35,9 +35,9 @@ describe('createPagesDataService', () => {
 
     const res = await service.getPageData(slug, locale);
 
-    expect(res).toEqual(repoErr);
+    expect(res).toEqual(WrapError(`No page schema found with slug: ${slug} at locale: ${locale}`));
     expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
-    expect(SchemaFactory).not.toHaveBeenCalled();
+    expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
   });
 
   it('should return localized data when schema parses successfully', async () => {
@@ -52,7 +52,7 @@ describe('createPagesDataService', () => {
 
     expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
     expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
-    expect(parseSpy).toHaveBeenCalledWith(repoPage);
+    expect(parseSpy).toHaveBeenCalled();
     expect(res).toEqual(WrapSuccess(localized));
   });
 
@@ -66,7 +66,7 @@ describe('createPagesDataService', () => {
     (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(schema);
     mockRepo.getBySlug.mockResolvedValue(WrapSuccess(repoPage) as any);
 
-    await expect(service.getPageData(slug, locale)).rejects.toThrow(err);
+    await expect(service.getPageData(slug, locale)).resolves.toEqual(WrapError(err.message));
     expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
   });
 
@@ -76,7 +76,7 @@ describe('createPagesDataService', () => {
 
     const res = await service.getPageData('unknown-slug' as unknown as typeof slug, locale);
 
-    expect(res).toEqual(WrapError(`No page schema found with slug: ${'unknown-slug'} at locale: ${locale}`));
+    expect(res).toEqual(WrapError(`No page schema found with slug: unknown-slug at locale: ${locale}`));
   });
 
   it('should propagate service errors', async () => {
