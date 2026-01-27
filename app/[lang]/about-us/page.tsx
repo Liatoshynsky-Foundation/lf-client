@@ -32,7 +32,11 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
+import { LocalizationErrors } from '~/constants/errors';
+import { isError, UnwrapResult } from '~/types/types/result';
+
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
+import TranslationNotFound from '~/shared/components/blocks/translation-not-found/TranslationNotFound';
 
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
@@ -42,7 +46,27 @@ export default async function Home({ params }: Readonly<Language>) {
     return <UnderDevelopment />;
   }
 
-  const [page, t] = await Promise.all([resolvePageData('about-us', lang), getTranslations('home.liatoshynskyOffice')]);
+  const [pageResult, t] = await Promise.all([
+    resolvePageData('about-us', lang),
+    getTranslations('home.liatoshynskyOffice')
+  ]);
+
+  console.log('About us page result:', pageResult);
+
+  if (isError(pageResult)) {
+    const error = pageResult.error;
+    if (error === LocalizationErrors.MISSING_NODE_ERROR || error === LocalizationErrors.MISSING_EN_ERROR) {
+      console.warn('About us page is missing translation for the requested locale.');
+      return <TranslationNotFound />;
+    }
+    if (error === LocalizationErrors.MISSING_UK_ERROR) {
+      console.warn('About us page is missing Ukrainian translation.');
+      return <PageNotFound />; // i dunno what to show in this case
+    }
+    throw new Error(`Unexpected error when fetching about-us page: ${error}`);
+  }
+
+  const page = UnwrapResult(pageResult);
 
   if (!page) {
     return <PageNotFound />;

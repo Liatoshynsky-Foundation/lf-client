@@ -1,13 +1,15 @@
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { LocalizationErrors } from '~/constants/errors';
+
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
 });
 
 export const translatedFieldSchema = z.object({
-  uk: z.string(),
-  en: z.string()
+  uk: z.string().min(1, { message: LocalizationErrors.MISSING_UK_ERROR }),
+  en: z.string().min(1, { message: LocalizationErrors.MISSING_EN_ERROR })
 });
 
 export const translatedLinkSchema = z.object({
