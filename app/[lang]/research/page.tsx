@@ -8,10 +8,12 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
+import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
@@ -36,7 +38,13 @@ export default async function ResearchPage({ params }: Readonly<Language>) {
     return <UnderDevelopment />;
   }
 
-  const page = await resolvePageData('research', lang);
+  const pageResult = await resolvePageData('research', lang);
+
+  if (isError(pageResult)) {
+    return ErrorPageFactory(pageResult.error);
+  }
+
+  const page = UnwrapResult(pageResult);
 
   if (!page) {
     return <PageNotFound />;

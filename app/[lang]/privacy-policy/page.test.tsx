@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import PrivacyPolicy from './page';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
@@ -8,6 +9,10 @@ jest.mock('next-intl/server', () => ({
 
 jest.mock('~/services/pages-data/resolvePageData', () => ({
   resolvePageData: jest.fn()
+}));
+
+jest.mock('~/lib/utils/errorPageFactory', () => ({
+  ErrorPageFactory: (msg: string) => <div>Error: {msg}</div>
 }));
 
 jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
@@ -37,22 +42,24 @@ describe('PrivacyPolicy page', () => {
   });
 
   it('should render all available blocks', async () => {
-    resolvePageData.mockResolvedValueOnce({
-      title: 'Privacy Policy',
-      blocks: {
-        IntroSection: { trustAndSecurity: {}, agreement: {} },
-        DataWeCollect: { title: 'Data We Collect', description: {}, sections: [], note: {} },
-        DataUsage: { title: 'How We Use Data', description: {}, list: [] },
-        Cookies: { title: 'Cookies', description: {}, list: [], note: {} },
-        GoogleAuth: { title: 'Google Auth', description: {}, list: [], note: {} },
-        SocialNetworks: { title: 'Social Networks', description: {} },
-        TargetedAds: { title: 'Targeted Ads', description: {} },
-        NewsletterSubscription: { title: 'Newsletter', description: {} },
-        DataRetention: { title: 'Data Retention', description: {} },
-        UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
-        ContactUs: { title: 'Contact Us', description: {} }
-      }
-    });
+    resolvePageData.mockResolvedValueOnce(
+      WrapSuccess({
+        title: 'Privacy Policy',
+        blocks: {
+          IntroSection: { trustAndSecurity: {}, agreement: {} },
+          DataWeCollect: { title: 'Data We Collect', description: {}, sections: [], note: {} },
+          DataUsage: { title: 'How We Use Data', description: {}, list: [] },
+          Cookies: { title: 'Cookies', description: {}, list: [], note: {} },
+          GoogleAuth: { title: 'Google Auth', description: {}, list: [], note: {} },
+          SocialNetworks: { title: 'Social Networks', description: {} },
+          TargetedAds: { title: 'Targeted Ads', description: {} },
+          NewsletterSubscription: { title: 'Newsletter', description: {} },
+          DataRetention: { title: 'Data Retention', description: {} },
+          UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
+          ContactUs: { title: 'Contact Us', description: {} }
+        }
+      })
+    );
 
     render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
 
@@ -72,11 +79,12 @@ describe('PrivacyPolicy page', () => {
   });
 
   it('should render PageNotFound when page is missing', async () => {
-    resolvePageData.mockResolvedValueOnce(null);
+    resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
     render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
 
     expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
-    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
   });
 });

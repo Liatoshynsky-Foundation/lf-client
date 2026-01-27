@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Home from './page';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn(),
@@ -9,6 +10,10 @@ jest.mock('next-intl/server', () => ({
 
 jest.mock('~/services/pages-data/resolvePageData', () => ({
   resolvePageData: jest.fn()
+}));
+
+jest.mock('~/lib/utils/errorPageFactory', () => ({
+  ErrorPageFactory: (msg: string) => <div>Error: {msg}</div>
 }));
 
 jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
@@ -65,17 +70,19 @@ describe('Home page', () => {
   });
 
   it('renders blocks when page exists and calls resolvePageData', async () => {
-    resolvePageData.mockResolvedValueOnce({
-      blocks: {
-        IntroSection: {},
-        FoundationInfo: {},
-        OurMission: {},
-        OurGoals: {},
-        LiatoshynskyOffice: {},
-        WhatWeDo: {},
-        FoundationFounders: {}
-      }
-    });
+    resolvePageData.mockResolvedValueOnce(
+      WrapSuccess({
+        blocks: {
+          IntroSection: {},
+          FoundationInfo: {},
+          OurMission: {},
+          OurGoals: {},
+          LiatoshynskyOffice: {},
+          WhatWeDo: {},
+          FoundationFounders: {}
+        }
+      })
+    );
 
     const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
     render(ui);
@@ -89,12 +96,13 @@ describe('Home page', () => {
   });
 
   it('returns PageNotFound when page is missing', async () => {
-    resolvePageData.mockResolvedValueOnce(null);
+    resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
     const ui = await Home({ params: Promise.resolve({ lang: 'uk' }) });
     render(ui);
 
     expect(resolvePageData).toHaveBeenCalledWith('about-us', 'uk');
-    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 import { PageStatus } from '~/types/enums/common.enums';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
 import DraftPageModel from '~/infrastructure/models/pages/draftPages.model';
 import PageModel from '~/infrastructure/models/pages/pages';
@@ -53,7 +54,7 @@ describe('pagesDataRepository', () => {
     expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(mockDbData);
-    expect(result).toEqual(mockParsed);
+    expect(result).toEqual(WrapSuccess(mockParsed));
   });
 
   it('should return null when published page is not found', async () => {
@@ -63,7 +64,7 @@ describe('pagesDataRepository', () => {
 
     const result = await pagesDataRepository.getBySlug(slug);
 
-    expect(result).toBeNull();
+    expect(result).toEqual(WrapError(`No page found with slug: ${slug} and status: ${PageStatus.Published}`));
     expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
@@ -80,7 +81,8 @@ describe('pagesDataRepository', () => {
       throw err;
     });
 
-    await expect(pagesDataRepository.getBySlug(slug)).rejects.toThrow(err);
+    const result = await pagesDataRepository.getBySlug(slug);
+    expect(result).toEqual(WrapError('Unexpected error during parsing:\n' + err.message));
     expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(invalidDb);
@@ -101,7 +103,7 @@ describe('pagesDataRepository', () => {
     expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(mockDbData);
-    expect(result).toEqual(mockParsed);
+    expect(result).toEqual(WrapSuccess(mockParsed));
   });
 
   it('should return null when draft page is not found', async () => {
@@ -111,7 +113,7 @@ describe('pagesDataRepository', () => {
 
     const result = await pagesDataRepository.getDraftBySlug(slug);
 
-    expect(result).toBeNull();
+    expect(result).toEqual(WrapError(`No page found with slug: ${slug} and status: ${PageStatus.Draft}`));
     expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
@@ -128,7 +130,8 @@ describe('pagesDataRepository', () => {
       throw err;
     });
 
-    await expect(pagesDataRepository.getDraftBySlug(slug)).rejects.toThrow(err);
+    const result = await pagesDataRepository.getDraftBySlug(slug);
+    expect(result).toEqual(WrapError('Unexpected error during parsing:\n' + err.message));
     expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(invalidDb);

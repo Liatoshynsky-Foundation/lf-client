@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { createPagesDataService } from './pagesDataService';
 import { SchemaFactory } from './schema-factory';
 import type { PageDataMap } from '~/types/page/pagesBase.type';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
 import type { PagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repo';
 
@@ -29,11 +30,12 @@ describe('createPagesDataService', () => {
   });
 
   it('should return null when page is not found', async () => {
-    mockRepo.getBySlug.mockResolvedValue(null);
+    const repoErr = WrapError<PageDataMap[typeof slug]>(`No page found with slug: ${slug} and status: published`);
+    mockRepo.getBySlug.mockResolvedValue(repoErr as any);
 
     const res = await service.getPageData(slug, locale);
 
-    expect(res).toBeNull();
+    expect(res).toEqual(repoErr);
     expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
     expect(SchemaFactory).not.toHaveBeenCalled();
   });
@@ -44,14 +46,14 @@ describe('createPagesDataService', () => {
     const parseSpy = jest.spyOn(schema, 'parse').mockReturnValue(localized);
 
     (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(schema);
-    mockRepo.getBySlug.mockResolvedValue(repoPage);
+    mockRepo.getBySlug.mockResolvedValue(WrapSuccess(repoPage) as any);
 
     const res = await service.getPageData(slug, locale);
 
     expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
     expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
     expect(parseSpy).toHaveBeenCalledWith(repoPage);
-    expect(res).toEqual(localized);
+    expect(res).toEqual(WrapSuccess(localized));
   });
 
   it('should propagate parsing error', async () => {
@@ -62,7 +64,7 @@ describe('createPagesDataService', () => {
     });
 
     (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(schema);
-    mockRepo.getBySlug.mockResolvedValue(repoPage);
+    mockRepo.getBySlug.mockResolvedValue(WrapSuccess(repoPage) as any);
 
     await expect(service.getPageData(slug, locale)).rejects.toThrow(err);
     expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
@@ -70,11 +72,11 @@ describe('createPagesDataService', () => {
 
   it('should return null if schema is undefined', async () => {
     (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(undefined as unknown as z.ZodTypeAny);
-    mockRepo.getBySlug.mockResolvedValue(repoPage);
+    mockRepo.getBySlug.mockResolvedValue(WrapSuccess(repoPage) as any);
 
     const res = await service.getPageData('unknown-slug' as unknown as typeof slug, locale);
 
-    expect(res).toBeNull();
+    expect(res).toEqual(WrapError(`No page schema found with slug: ${'unknown-slug'} at locale: ${locale}`));
   });
 
   it('should propagate service errors', async () => {
