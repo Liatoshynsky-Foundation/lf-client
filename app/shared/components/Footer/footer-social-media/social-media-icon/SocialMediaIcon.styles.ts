@@ -7,7 +7,7 @@ type SocialMediaIconProps = Partial<Record<SocialMediaTypes, { backgroundColor?:
 const instagramGradient = 'linear-gradient(165deg, #800BFD 10%, #FC01D7 35%, #FF0069 55%, #FF2F2B 75%, #FF8000 100%)';
 
 const baseButtonStyle: SxProps = {
-  backgroundColor: '#1A1008',
+  backgroundColor: '#190d03',
   borderRadius: '50%',
   width: 40,
   height: 40,
@@ -40,6 +40,19 @@ export const iconButtonBase = (type: SocialMediaTypes): SxProps => {
       },
 
       '&:hover::before': { opacity: 1 },
+      '&:focus': {
+        backgroundColor: '#190d03'
+      },
+      '&:focus::before': {
+        opacity: 0
+      },
+
+      '&:focus-visible': {
+        backgroundColor: '#190d03'
+      },
+      '&:focus-visible::before': {
+        opacity: 0
+      },
 
       '& > *': {
         position: 'relative',
@@ -50,8 +63,18 @@ export const iconButtonBase = (type: SocialMediaTypes): SxProps => {
 
   return {
     ...baseButtonStyle,
-    transition: '0.4s ease',
-    '&:hover': socialMediaHoverMap[type]
+    backgroundColor: '#190d03',
+    transition: 'background-color 0.3s ease',
+
+    '&:hover': socialMediaHoverMap[type],
+
+    '&:focus': {
+      backgroundColor: '#190d03'
+    },
+
+    '&:focus-visible': {
+      backgroundColor: '#190d03'
+    }
   };
 };
 
