@@ -4,6 +4,7 @@ import newCompositionsRepo from '~/infrastructure/repositories/artistry/composit
 import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
 import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository';
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+import newNewsRepository from '~/infrastructure/repositories/news/news.repository';
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
 
@@ -14,6 +15,7 @@ export type RepositoriesModule = {
   pagesDataRepo: ReturnType<typeof newPagesDataRepo>;
   scientificWorksRepo: ReturnType<typeof newScientificWorksRepo>;
   fundsRepository: ReturnType<typeof newFundsRepository>;
+  newsRepository: ReturnType<typeof newNewsRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -23,6 +25,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     compositionsRepo: asFunction(newCompositionsRepo).scoped(),
     pagesDataRepo: asFunction(newPagesDataRepo).scoped(),
     scientificWorksRepo: asFunction(newScientificWorksRepo).scoped(),
-    fundsRepository: asFunction(newFundsRepository).scoped()
+    fundsRepository: asFunction(newFundsRepository).scoped(),
+    newsRepository: asFunction(newNewsRepository).scoped()
   });
 };
