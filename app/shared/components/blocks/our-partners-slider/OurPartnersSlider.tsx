@@ -1,16 +1,19 @@
 'use client';
 
+import 'swiper/css';
 import { Box } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import PartnerLogo from '../../partner-logo/PartnerLogo';
 import { Partner } from '../our-partners/partners.data';
 import { styles } from './OurPartnersSlider.styles';
 
 interface OurPartnersSliderProps {
-  partners: Partner[];
-  autoScroll?: boolean;
-  autoScrollInterval?: number;
+  readonly partners: Partner[];
+  readonly autoScroll?: boolean;
+  readonly autoScrollInterval?: number;
 }
 
 export default function OurPartnersSlider({
@@ -18,73 +21,68 @@ export default function OurPartnersSlider({
   autoScroll = false,
   autoScrollInterval = 3000
 }: OurPartnersSliderProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const autoScrollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  if (!partners || partners.length === 0) return null;
 
-  const infinitePartners = [...partners, ...partners, ...partners];
-
-  useEffect(() => {
-    if (!autoScroll || !scrollContainerRef.current) return;
-
-    const scrollContainer = scrollContainerRef.current;
-    const itemWidth = scrollContainer.scrollWidth / infinitePartners.length;
-
-    const startAutoScroll = () => {
-      autoScrollTimerRef.current = setInterval(() => {
-        if (scrollContainer) {
-          const currentScroll = scrollContainer.scrollLeft;
-          const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-          const scrollAmount = itemWidth;
-
-          if (currentScroll >= maxScroll - scrollAmount) {
-            scrollContainer.scrollLeft = scrollAmount * partners.length;
-          } else {
-            scrollContainer.scrollLeft += scrollAmount;
-          }
-        }
-      }, autoScrollInterval);
-    };
-
-    const stopAutoScroll = () => {
-      if (autoScrollTimerRef.current) {
-        clearInterval(autoScrollTimerRef.current);
-        autoScrollTimerRef.current = null;
-      }
-    };
-
-    startAutoScroll();
-
-    scrollContainer.addEventListener('mouseenter', stopAutoScroll);
-    scrollContainer.addEventListener('mouseleave', startAutoScroll);
-
-    return () => {
-      stopAutoScroll();
-      scrollContainer.removeEventListener('mouseenter', stopAutoScroll);
-      scrollContainer.removeEventListener('mouseleave', startAutoScroll);
-    };
-  }, [autoScroll, autoScrollInterval, partners.length, infinitePartners.length]);
+  const sliderBreakpoints = {
+    0: {
+      slidesPerView: 2,
+      spaceBetween: 0
+    },
+    600: {
+      slidesPerView: 3,
+      spaceBetween: 0
+    },
+    900: {
+      slidesPerView: 4,
+      spaceBetween: 0
+    },
+    1200: {
+      slidesPerView: 5,
+      spaceBetween: 0
+    }
+  };
 
   return (
     <Box sx={styles.wrapper}>
       <Box sx={styles.sliderContainer}>
-        <Box ref={scrollContainerRef} sx={styles.scrollContainer}>
-          {infinitePartners.map((partner, index) => (
-            <Box key={`${partner.id}-${index}`} sx={styles.slideItem}>
-              <PartnerLogo
-                link={partner.link}
-                image={
-                  <img
-                    src={partner.img}
-                    alt={partner.name}
-                    width={200}
-                    height={100}
-                    style={styles.logoImage as React.CSSProperties}
-                  />
+        <Swiper
+          modules={[Autoplay]}
+          spaceBetween={0}
+          slidesPerView={5}
+          loop={true}
+          speed={800}
+          /* eslint-disable */
+          autoplay={
+            autoScroll
+              ? {
+                  delay: autoScrollInterval,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true
                 }
-              />
-            </Box>
+              : false
+          }
+          breakpoints={sliderBreakpoints}
+          style={styles.swiperStyle as React.CSSProperties}
+        >
+          {partners.map((partner) => (
+            <SwiperSlide key={partner.id} style={styles.slideStyle as React.CSSProperties}>
+              <Box sx={styles.slideItem}>
+                <PartnerLogo
+                  link={partner.link}
+                  image={
+                    <img
+                      src={partner.img}
+                      alt={partner.name}
+                      width={200}
+                      height={100}
+                      style={styles.logoImage as React.CSSProperties}
+                    />
+                  }
+                />
+              </Box>
+            </SwiperSlide>
           ))}
-        </Box>
+        </Swiper>
       </Box>
     </Box>
   );

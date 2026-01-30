@@ -10,27 +10,24 @@ export const styles = {
     width: '100%'
   },
 
-  scrollContainer: {
+  swiperStyle: {
+    width: '100%',
+    height: 'auto'
+  },
+
+  slideStyle: {
     display: 'flex',
-    overflowX: 'auto',
-    scrollBehavior: 'smooth',
-    gap: 0,
-    WebkitOverflowScrolling: 'touch',
-    msOverflowStyle: 'none',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    },
-    touchAction: 'pan-x'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   slideItem: {
-    flex: '0 0 20%',
-    minWidth: '20%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxSizing: 'border-box'
+    width: '100%',
+    height: '100%',
+    padding: { xs: '8px', sm: '12px', md: '16px' }
   },
 
   logoImage: {

@@ -43,6 +43,7 @@
     "react-hook-form": "^7.62.0",
     "react-virtualized": "^9.22.6",
     "redoc": "^2.5.2",
+    "swiper": "^12.1.0",
     "uuid": "^13.0.0",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0",
