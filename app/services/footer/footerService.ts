@@ -2,8 +2,9 @@ import type { Locale } from 'next-intl';
 
 import { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
 import { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
-import { ArraySchema, LocalizeSchema, NoSupportButtonLink } from '~/validators/constants';
+import { ArraySchema, NoSupportButtonLink } from '~/validators/constants';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
+import { LocalizeSchema } from '~/validators/localization';
 import { navigationSchema } from '~/validators/navigation.schema';
 
 interface FooterServiceDeps {

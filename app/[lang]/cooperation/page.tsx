@@ -6,11 +6,13 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
+import { isError } from '~/types/types/result';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import CollaborationInfo from '~/shared/components/blocks/collaboration/collaboration-info/CollaborationInfo';
 import CollaborationIntro from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro';
 import { collaborationIntroPageData } from '~/shared/components/blocks/collaboration/collaboration-intro/CollaborationIntro.consts';
@@ -40,13 +42,20 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
     return <UnderDevelopment />;
   }
 
-  const pageService = await createRequestContainer().resolve('pagesDataService');
+  const pageService = createRequestContainer().resolve('pagesDataService');
 
-  const page = await pageService.getPageData('cooperation', lang);
+  const pageResult = await pageService.getPageData('cooperation', lang);
+
+  if (isError(pageResult)) {
+    return ErrorPageFactory(pageResult.error);
+  }
+
+  const page = pageResult.value;
 
   if (!page) {
     return <PageNotFound />;
   }
+
   return (
     <>
       <MainLayout withLines>

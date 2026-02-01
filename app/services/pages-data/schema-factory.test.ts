@@ -21,14 +21,19 @@ jest.mock('~/validators/pagesSchemas/pages/cooperation.schema', () => ({
 jest.mock('~/validators/constants', () => {
   const NoOp = (s: any) => s;
   return {
-    LocalizeSchema: jest.fn((schema: any, locale: Locale) => ({ __schema: schema.__schema, locale })),
     NoTime: NoOp,
     NoIDSchema: NoOp,
     NoPageType: NoOp
   };
 });
 
-import { LocalizeSchema } from '~/validators/constants';
+jest.mock('~/validators/localization', () => {
+  return {
+    LocalizeSchema: jest.fn((schema: any, locale: Locale) => ({ __schema: schema.__schema, locale }))
+  };
+});
+
+import { LocalizeSchema } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';

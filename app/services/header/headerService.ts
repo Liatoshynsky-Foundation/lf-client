@@ -2,7 +2,8 @@ import type { Locale } from 'next-intl';
 
 import { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
 import { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
-import { ArraySchema, LocalizeSchema } from '~/validators/constants';
+import { ArraySchema } from '~/validators/constants';
+import { LocalizeSchema } from '~/validators/localization';
 import { LocalizeSchemaWithSingleLink, navigationSchema } from '~/validators/navigation.schema';
 
 interface HeaderServiceDeps {

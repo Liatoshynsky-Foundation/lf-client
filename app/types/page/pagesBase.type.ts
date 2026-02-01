@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 import { PageSlug } from '~/services/pages-data/schema-factory';
-import { ExcludeDBFields, Localize } from '~/validators/constants';
+import { ExcludeDBFields } from '~/validators/constants';
+import { Localize } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
