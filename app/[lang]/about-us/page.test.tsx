@@ -3,24 +3,6 @@ import { render, screen } from '@testing-library/react';
 import Home from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getTranslations: jest.fn().mockResolvedValue((k: string) => k)
-}));
-
-jest.mock('~/services/pages-data/resolvePageData', () => ({
-  resolvePageData: jest.fn()
-}));
-
-jest.mock('~/lib/utils/errorPageFactory', () => ({
-  ErrorPageFactory: (msg: string) => <div>Error: {msg}</div>
-}));
-
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  __esModule: true,
-  PageNotFound: () => <div>Page not found</div>
-}));
-
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
   default: () => <div>Foundation founders</div>
@@ -55,6 +37,10 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
   __esModule: true,
   default: () => <div>What we do</div>
 }));
+
+jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/errorPageFactory');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 describe('Home page', () => {
   const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {

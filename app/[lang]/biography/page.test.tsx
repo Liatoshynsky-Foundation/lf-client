@@ -3,23 +3,9 @@ import { render, screen } from '@testing-library/react';
 import Biography from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getTranslations: jest.fn()
-}));
-
-jest.mock('~/services/pages-data/resolvePageData', () => ({
-  resolvePageData: jest.fn()
-}));
-
-jest.mock('~/lib/utils/errorPageFactory', () => ({
-  ErrorPageFactory: (msg: string) => <div>Error: {msg}</div>
-}));
-
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  __esModule: true,
-  PageNotFound: () => <div>Page not found</div>
-}));
+jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/errorPageFactory');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 jest.mock('~/shared/components/blocks/HeroSection/HeroSection', () => ({
   __esModule: true,

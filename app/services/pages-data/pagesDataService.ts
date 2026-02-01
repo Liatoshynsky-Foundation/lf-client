@@ -24,6 +24,7 @@ const makeComposed = (get: PagesDataRepository['getBySlug']) => {
       if (err instanceof Error) {
         return WrapError(err.message);
       }
+      console.error('Unknown parsing error:', err);
       return WrapError('Unknown parsing error');
     }
   };

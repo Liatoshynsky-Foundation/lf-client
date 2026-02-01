@@ -5,22 +5,10 @@ import React from 'react';
 import ResearchPage from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn()
-}));
-
-jest.mock('~/services/pages-data/resolvePageData', () => ({
-  resolvePageData: jest.fn()
-}));
-
-jest.mock('~/lib/utils/errorPageFactory', () => ({
-  ErrorPageFactory: (msg: string) => <div>Error: {msg}</div>
-}));
-
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  __esModule: true,
-  PageNotFound: () => <div>Page not found</div>
-}));
+jest.mock('next-intl/server');
+jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/errorPageFactory');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork', () => {
   const Mock = (props: any) =>
