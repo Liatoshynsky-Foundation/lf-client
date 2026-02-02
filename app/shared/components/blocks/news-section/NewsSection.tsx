@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Locale } from 'next-intl';
 import React from 'react';
 
@@ -8,7 +8,6 @@ import { createRequestContainer } from '~/di/container';
 import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import { ContentSlider } from '~/shared/components/content-slider/ContentSlider';
-import SectionTitle from '~/shared/components/section-title/SectionTitle';
 
 interface Props {
   title: {
@@ -54,22 +53,10 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
 
   return (
     <Box sx={styles.mainContainer}>
-      <SectionTitle
-        icon={true}
-        title={title[locale]}
-        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
-        sx={{
-          mb: { xs: '16px' },
-          gap: {
-            xs: '16px',
-            sm: '24px',
-            md: '40px'
-          },
-          '& h2': {
-            textTransform: 'none'
-          }
-        }}
-      />
+      <Typography variant="h1" sx={styles.title}>
+        {title[locale]}
+      </Typography>
+
       <ButtonContentBlock
         content={textContent[locale]}
         buttonText={buttonText[locale]}
@@ -81,6 +68,7 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
         buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
         link={buttonLink}
       />
+
       <ContentSlider cards={newsCards} variant="news" />
     </Box>
   );

@@ -33,9 +33,9 @@ export const styles = {
 
   navButton: {
     position: 'static !important',
-    width: '48px !important',
+    width: '64px !important',
     height: '48px !important',
-    borderRadius: '50%',
+    borderRadius: '100px',
     border: `2px solid ${mainHexPallete.black}`,
     backgroundColor: 'transparent',
     cursor: 'pointer',
@@ -44,14 +44,22 @@ export const styles = {
     justifyContent: 'center',
     transition: 'all 0.3s ease-in-out',
     '&:after': {
-      fontSize: '20px !important',
-      fontWeight: 'bold',
-      color: mainHexPallete.black
+      content: '""'
+    },
+    '&:before': {
+      content: '""'
+    },
+    '& .swiper-navigation-icon': {
+      display: 'none'
+    },
+    '& img': {
+      filter: 'brightness(0)',
+      transition: 'filter 0.3s ease-in-out'
     },
     '&:hover': {
       backgroundColor: mainHexPallete.black,
-      '&:after': {
-        color: mainHexPallete.white
+      '& img': {
+        filter: 'brightness(0) invert(1)'
       }
     },
     '&.swiper-button-disabled': {
@@ -59,8 +67,8 @@ export const styles = {
       cursor: 'not-allowed',
       '&:hover': {
         backgroundColor: 'transparent',
-        '&:after': {
-          color: mainHexPallete.black
+        '& svg': {
+          filter: 'none'
         }
       }
     },

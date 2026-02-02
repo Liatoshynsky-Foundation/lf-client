@@ -14,6 +14,12 @@ export const styles = {
       md: '40px'
     }
   },
+  title: {
+    alignSelf: 'start',
+    mb: { sm: '0px', md: '34px' },
+    gridColumn: { xs: '1 / -1', sm: '1 / 8', md: '1 / 8' },
+    fontSize: { xs: '40px', md: '64px' }
+  },
   textStyle: {
     textIndent: {
       xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',

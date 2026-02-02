@@ -22,8 +22,8 @@ export const newsSectionTextContent: LocalizedTipTapDoc = {
 
 export const newsSectionData = {
   title: {
-    uk: 'НаШі НоВиНи',
-    en: 'OuR NeWs'
+    uk: 'НоВиНи ФунДаЦІЇ',
+    en: 'FounDatION NeWs '
   },
   textContent: newsSectionTextContent,
   buttonText: {

@@ -11,6 +11,8 @@ import BaseCard from '~/ds-components/base-card/BaseCard';
 
 import { styles } from './ContentSlider.styles';
 
+import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+
 interface ContentSliderProps {
   cards: Omit<BaseCardProps, 'variant'>[];
   variant?: 'news' | 'press';
@@ -20,8 +22,12 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
   return (
     <Box sx={styles.sliderContainer}>
       <Box sx={styles.navigationContainer}>
-        <Box className="swiper-button-prev" sx={styles.navButton} />
-        <Box className="swiper-button-next" sx={styles.navButton} />
+        <Box className="swiper-button-prev" sx={styles.navButton}>
+          <SvgImage src="/icons/arrow-left.svg" alt="Previous" width={20} height={20} />
+        </Box>
+        <Box className="swiper-button-next" sx={styles.navButton}>
+          <SvgImage src="/icons/arrow-right.svg" alt="Next" width={20} height={20} />
+        </Box>
       </Box>
 
       <Swiper
