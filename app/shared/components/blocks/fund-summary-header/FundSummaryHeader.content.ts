@@ -3,7 +3,7 @@ import { Locale } from 'next-intl';
 import { FundSummaryHeaderData } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
-import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+import { getNavigationLink } from '~/lib/utils/navigationHelper';
 
 function createDescriptionText(ukText: string, enText: string) {
   return {
@@ -59,23 +59,7 @@ function createFundItem(ukTitle: string, enTitle: string, ukDescription: string,
 }
 
 export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
-  const navigationRepo = newNavigationRepository();
-  const navigations = await navigationRepo.getNavigation();
-
-  for (const nav of navigations) {
-    const archiveLink = nav.links.find(
-      (link) =>
-        link.href === '/archive' ||
-        link.label.uk.toLowerCase().includes('архів') ||
-        link.label.en.toLowerCase().includes('archive')
-    );
-
-    if (archiveLink) {
-      return archiveLink.href;
-    }
-  }
-
-  return '/archive';
+  return await getNavigationLink('/archive', 'archive');
 }
 
 export const fundSummaryBacklinkText: Record<Locale, string> = {

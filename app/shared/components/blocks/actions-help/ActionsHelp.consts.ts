@@ -1,6 +1,8 @@
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { getNavigationLink } from '~/lib/utils/navigationHelper';
+
 export const actionsHelpPageData = {
   title: 'Допомогти справами',
   subtitle: {
@@ -44,3 +46,22 @@ export const actionsHelpPageData = {
     link: '/'
   }
 };
+
+export async function getActionsHelpData() {
+  let link = '/';
+  try {
+    link = await getNavigationLink('/cooperation', 'cooperation');
+  } catch (err) {
+    console.warn('Could not get navigation link:', err);
+  }
+
+  return {
+    title: 'Допомогти справами',
+    subtitle: actionsHelpPageData.subtitle,
+    paperItems: actionsHelpPageData.paperItems,
+    paperButton: {
+      ...actionsHelpPageData.paperButton,
+      link
+    }
+  };
+}
