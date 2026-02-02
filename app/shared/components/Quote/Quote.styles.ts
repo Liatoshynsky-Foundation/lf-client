@@ -38,7 +38,7 @@ export const quoteTextStyles = {
 export const sourceTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
-  lineHeight: '150%',
+  lineHeight: '140%',
   fontStyle: 'italic',
   fontSize: { xs: '14px', md: '16px' },
   letterSpacing: 0
@@ -62,13 +62,13 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
-    gap: quoteSizes.textGap
+    gap: quoteSizes.textGap,
+    width: { xs: '200px', sm: '330px', md: '380px' }
   }),
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,
     color: quoteColors[color],
     fontFamily: 'Mulish',
-    fontStyle: 'italic',
     textAlign: alignments[align].textAlign
   }),
   sourceText: (align: Align) => ({
