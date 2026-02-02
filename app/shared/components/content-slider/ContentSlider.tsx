@@ -13,7 +13,7 @@ import { styles } from './ContentSlider.styles';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-interface ContentSliderProps {
+export interface ContentSliderProps {
   cards: Omit<BaseCardProps, 'variant'>[];
   variant?: 'news' | 'press';
 }
