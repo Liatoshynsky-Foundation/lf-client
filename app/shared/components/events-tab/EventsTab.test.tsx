@@ -5,7 +5,7 @@ import EventsTab from './EventsTab';
 import type { EventItemProps } from '~/shared/components/blocks/event-card/EventItem';
 import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
 
-export const MOCK_EVENTS: ReadonlyArray<EventItemFixture> = [
+export const MOCK_EVENTS: EventItemFixture[] = [
   {
     id: 'upcoming-1',
     props: {
