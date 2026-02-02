@@ -2,13 +2,12 @@ import { Box } from '@mui/material';
 import { Locale } from 'next-intl';
 import React from 'react';
 
-import BaseCard from '~/ds-components/base-card/BaseCard';
-
 import { styles } from './NewsSection.styles';
 
 import { createRequestContainer } from '~/di/container';
 import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+import { ContentSlider } from '~/shared/components/content-slider/ContentSlider';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
 
 interface Props {
@@ -37,6 +36,21 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
   if (!newsList || newsList.length === 0) {
     return null;
   }
+
+  const newsCards = newsList.map((news) => {
+    const formattedDate = news.publishedAt
+      ? (formatIsoDateToDdMmYy((news.publishedAt as Date).toISOString()) ?? '')
+      : '';
+
+    return {
+      image: news.coverImage.src,
+      title: news.title,
+      publicationDate: formattedDate,
+      description: news.description,
+      href: `/news/${news.slug}`,
+      dataTestId: `NewsCard-${news.slug}`
+    };
+  });
 
   return (
     <Box sx={styles.mainContainer}>
@@ -67,34 +81,7 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
         buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
         link={buttonLink}
       />
-      {newsList.map((news) => {
-        const formattedDate = news.publishedAt
-          ? (formatIsoDateToDdMmYy((news.publishedAt as Date).toISOString()) ?? '')
-          : '';
-
-        return (
-          <Box
-            key={news._id.toString()}
-            sx={{
-              gridColumn: {
-                xs: 'span 4',
-                sm: 'span 4',
-                md: 'span 4'
-              }
-            }}
-          >
-            <BaseCard
-              image={news.coverImage.src}
-              title={news.title}
-              publicationDate={formattedDate}
-              description={news.description}
-              href={`/news/${news.slug}`}
-              variant="news"
-              dataTestId={`NewsCard-${news.slug}`}
-            />
-          </Box>
-        );
-      })}
+      <ContentSlider cards={newsCards} variant="news" />
     </Box>
   );
 };
