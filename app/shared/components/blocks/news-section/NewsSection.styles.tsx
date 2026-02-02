@@ -13,5 +13,14 @@ export const styles = {
       sm: '24px',
       md: '40px'
     }
+  },
+  textStyle: {
+    textIndent: {
+      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
+    },
+    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   }
 };
