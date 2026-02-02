@@ -1,11 +1,12 @@
-import { Typography } from '@mui/material';
 import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import MediaIntroSection from './MediaIntroSection/MediaIntroSection';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import MediaCenter from '~/shared/components/blocks/media-center/MediaCenter';
 
 const News = () => {
   if (isProductionMode()) {
@@ -13,8 +14,9 @@ const News = () => {
   }
 
   return (
-    <MainLayout>
-      <Typography variant="h1">News, Events & Media</Typography>
+    <MainLayout withLines>
+      <MediaIntroSection />
+      <MediaCenter />
     </MainLayout>
   );
 };
