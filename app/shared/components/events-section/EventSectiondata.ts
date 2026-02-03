@@ -78,7 +78,7 @@ export const mockEventsData = {
         uk: '06.05.25',
         en: '06.05.25'
       },
-      regLink: undefined // Здесь нет ссылки на регистрацию
+      regLink: undefined
     },
     {
       id: '3',

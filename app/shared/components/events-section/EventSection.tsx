@@ -41,7 +41,7 @@ const EventSection: React.FC<Props> = ({
       <Typography variant="h2" sx={styles.title}>
         {title}
       </Typography>
-
+      {/* Replace 44-56 lines with ButtonContentBlock component */}
       <Button
         variant="contained"
         href={ctaHref}
@@ -69,12 +69,13 @@ const EventSection: React.FC<Props> = ({
               </Typography>
               <Typography sx={styles.eventDescription}>{event.description}</Typography>
               <Box sx={styles.buttonGroup}>
-                <Button variant="outlined" sx={styles.actionButton}>
+                <Button variant="outlined" sx={styles.actionButton} href={`/events/${event.id}`}>
                   {viewLabel}
                 </Button>
                 {event.regLink && (
                   <Button
                     variant="text"
+                    href={event.regLink}
                     sx={styles.regButton}
                     endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
                   >
