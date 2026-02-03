@@ -44,22 +44,20 @@ export const HeroSection: React.FC = () => {
             src={heroIcon}
             alt="Lyatoshynsky Foundation Icon"
             style={{
-              width: 'auto',
-              height: 'auto'
+              width: '60px',
+              height: '50px'
             }}
             priority
           />
 
           {/* Text Paragraph */}
           <Typography sx={heroSectionStyles.textParagraph}>
-            Preserving and celebrating the legacy of Ukrainian composer Borys Lyatoshynsky through education, research,
-            and cultural initiatives.
+            Ви дуже добре сприймаєте музику, дуже тонко її відчуваєте, і я переконаний, що під час другого
+            прослуховування ви значно більше почуєте того, що існує «за нотами». Адже, зрештою, ноти — це лише «ноти»,
+            майстерність і т. п., але ви ж прекрасно знаєте, що в більшості музичних творів є ще й дещо «за нотами».
           </Typography>
 
-          {/* Main Text */}
-          <Typography component="h1" sx={heroSectionStyles.mainText}>
-            Welcome to Lyatoshynsky Foundation
-          </Typography>
+          <Typography sx={heroSectionStyles.smallText}>Борис Лятошинський</Typography>
         </Box>
 
         {/* Centered bottom button */}

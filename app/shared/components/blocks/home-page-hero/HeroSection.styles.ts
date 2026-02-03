@@ -76,7 +76,7 @@ export const heroSectionStyles = {
       sm: '32px',
       md: '40px'
     },
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     marginBottom: {
       xs: '64px',
       sm: '80px',
@@ -103,14 +103,12 @@ export const heroSectionStyles = {
 
   // Text paragraph styling
   textParagraph: {
+    textAlign: 'right',
     fontSize: {
-      xs: '16px',
-      sm: '18px',
-      md: '20px',
-      lg: '22px'
+      xs: '18px'
     },
     lineHeight: 1.6,
-    color: '#FCFCFC',
+    color: '#190D03',
     maxWidth: {
       xs: '100%',
       md: '600px',
@@ -120,16 +118,14 @@ export const heroSectionStyles = {
   },
 
   // Main text styling
-  mainText: {
+  smallText: {
+    textAlign: 'right',
+    fontStyle: 'italic',
     fontSize: {
-      xs: '32px',
-      sm: '48px',
-      md: '64px',
-      lg: '80px'
+      xs: '16px'
     },
-    fontWeight: 700,
     lineHeight: 1.1,
-    color: '#FCFCFC',
+    color: '#190D03',
     letterSpacing: '-0.02em',
     maxWidth: {
       xs: '100%',
