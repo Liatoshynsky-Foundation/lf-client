@@ -1,48 +1,66 @@
 'use client';
 
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
 import React from 'react';
+
+import heroIcon from './hero-icon.png';
+import heroBackgroundImage from './hero-image.png';
+import { heroSectionStyles } from './HeroSection.styles';
+
+import Button from '~/shared/components/design-system/all-components/button/Button';
 
 export const HomePageHero: React.FC = () => {
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom: '200px', // Space for the footer logo
-        position: 'relative',
-        zIndex: 10
-      }}
-    >
-      <Box
-        sx={{
-          textAlign: 'center',
-          maxWidth: '1200px',
-          padding: '0 24px'
+    <Box sx={heroSectionStyles.backgroundContainer}>
+      {/* Full-bleed background image */}
+      <Image
+        src={heroBackgroundImage}
+        alt="Hero background"
+        fill
+        priority
+        quality={90}
+        style={{
+          objectFit: 'cover',
+          objectPosition: 'center'
         }}
-      >
-        <Box
-          component="h1"
-          sx={{
-            fontSize: { xs: '2.5rem', md: '4rem', lg: '5rem' },
-            fontWeight: 700,
-            marginBottom: '2rem',
-            lineHeight: 1.2
-          }}
-        >
-          Welcome to Lyatoshynsky Foundation
+      />
+
+      {/* Overlay for better text readability */}
+      <Box sx={heroSectionStyles.overlay} />
+
+      {/* Content wrapper with grid */}
+      <Box sx={heroSectionStyles.contentWrapper}>
+        {/* Right-aligned content block */}
+        <Box sx={heroSectionStyles.rightContentBlock}>
+          {/* Hero Icon */}
+          <Image
+            src={heroIcon}
+            alt="Lyatoshynsky Foundation Icon"
+            style={{
+              width: 'auto',
+              height: 'auto'
+            }}
+            priority
+          />
+
+          {/* Text Paragraph */}
+          <Typography sx={heroSectionStyles.textParagraph}>
+            Preserving and celebrating the legacy of Ukrainian composer Borys Lyatoshynsky through education, research,
+            and cultural initiatives.
+          </Typography>
+
+          {/* Main Text */}
+          <Typography component="h1" sx={heroSectionStyles.mainText}>
+            Welcome to Lyatoshynsky Foundation
+          </Typography>
         </Box>
-        <Box
-          component="p"
-          sx={{
-            fontSize: { xs: '1.125rem', md: '1.5rem' },
-            lineHeight: 1.6,
-            opacity: 0.9
-          }}
-        >
-          Preserving and celebrating the legacy of Ukrainian composer Borys Lyatoshynsky
+
+        {/* Centered bottom button */}
+        <Box sx={heroSectionStyles.buttonContainer}>
+          <Button variant="contained" color="tertiary" size="large" sx={heroSectionStyles.ctaButton} link="#explore">
+            Explore Our Work
+          </Button>
         </Box>
       </Box>
     </Box>

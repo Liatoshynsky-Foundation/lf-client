@@ -216,49 +216,52 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
         )}
       </AnimatePresence>
 
-      {/* Footer Logo (after expansion) */}
-      <AnimatePresence>
-        {(stage === 'reveal' || stage === 'complete') && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            style={{
-              position: 'fixed',
-              bottom: 0,
-              left: 0,
-              width: '100vw',
-              zIndex: 1,
-              pointerEvents: 'none',
-              margin: 0,
-              padding: 0,
-              display: 'block'
-            }}
-          >
-            <LogoSvg
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                margin: 0,
-                padding: 0
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Content Reveal */}
+      {/* Content and Footer in Column Layout */}
       <motion.div
         variants={contentVariants}
         initial="hidden"
         animate={stage === 'reveal' || stage === 'complete' ? 'visible' : 'hidden'}
         style={{
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          overflow: 'hidden'
         }}
       >
+        {/* Content (HeroSection) */}
         {children}
+
+        {/* Footer Logo (after expansion) - below hero */}
+        <AnimatePresence>
+          {(stage === 'reveal' || stage === 'complete') && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              style={{
+                position: 'relative',
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
+                marginRight: 'calc(-50vw + 50%)',
+                pointerEvents: 'none',
+                padding: 0,
+                display: 'block'
+              }}
+            >
+              <LogoSvg
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  margin: 0,
+                  padding: 0
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </>
   );
