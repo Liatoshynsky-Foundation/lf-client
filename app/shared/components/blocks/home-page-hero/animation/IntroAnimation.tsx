@@ -33,7 +33,7 @@ interface IntroAnimationProps {
 
 export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComplete }) => {
   const { stage, currentFrame, isAnimationComplete } = useIntroAnimation({
-    splashDuration: 1800,
+    splashDuration: 1000,
     frameInterval: 180,
     totalFrames: ANIMATION_FRAMES.length,
     expansionDuration: 1200
@@ -61,7 +61,13 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
 
   const splashVariants = {
     initial: { opacity: 1 },
-    exit: { opacity: 0, transition: { duration: 0.3 } }
+    exit: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.4, 0, 0.2, 1] as const // Smooth cubic-bezier easing
+      }
+    }
   };
 
   const contentVariants = {
@@ -98,6 +104,13 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
             }}
           >
             <motion.div
+              key={stage === 'shape-shift' ? currentFrame : 'splash'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.15,
+                ease: [0.25, 0.1, 0.25, 1] // Smooth easing for frame transitions
+              }}
               style={{
                 position: 'relative',
                 width: '300px',
