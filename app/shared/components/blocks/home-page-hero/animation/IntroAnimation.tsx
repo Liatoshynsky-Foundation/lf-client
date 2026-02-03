@@ -1,6 +1,5 @@
 'use client';
 
-import { Box } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
@@ -13,7 +12,7 @@ import animation5 from './animation-5.png';
 import animation6 from './animation-6.png';
 import animation7 from './animation-7.png';
 import animation8 from './animation-8.png';
-import logoSvg from './logo.svg';
+import LogoSvg from './logo.svg';
 import { useIntroAnimation } from './useIntroAnimation';
 
 const ANIMATION_FRAMES = [
@@ -48,14 +47,14 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
 
   const getCurrentImage = () => {
     if (stage === 'splash' || stage === 'expansion' || stage === 'reveal' || stage === 'complete') {
-      return logoSvg;
+      return null; // Will use SVG component instead
     }
 
     if (currentFrame < ANIMATION_FRAMES.length) {
       return ANIMATION_FRAMES[currentFrame];
     }
 
-    return logoSvg;
+    return null; // Will use SVG component instead
   };
 
   const currentImage = getCurrentImage();
@@ -108,18 +107,29 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
                 justifyContent: 'center'
               }}
             >
-              <Image
-                src={currentImage}
-                alt="Logo Animation"
-                width={300}
-                height={300}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'contain'
-                }}
-                priority
-              />
+              {currentImage ? (
+                <Image
+                  src={currentImage}
+                  alt="Logo Animation"
+                  width={300}
+                  height={300}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain'
+                  }}
+                  priority
+                />
+              ) : (
+                <LogoSvg
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxWidth: '300px',
+                    maxHeight: '300px'
+                  }}
+                />
+              )}
             </motion.div>
           </motion.div>
         )}
@@ -128,8 +138,11 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
       {/* Expansion Stage */}
       <AnimatePresence>
         {stage === 'expansion' && (
-          <Box
-            sx={{
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
               position: 'fixed',
               top: 0,
               left: 0,
@@ -142,40 +155,66 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
           >
             <motion.div
               initial={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                x: '-50%',
-                y: '-50%',
-                width: '300px'
+                width: '300px',
+                height: 'auto'
               }}
               animate={{
-                top: 'auto',
-                bottom: 0,
-                left: '50%',
-                x: '-50%',
-                y: 0,
-                width: '100vw'
+                width: '100vw',
+                height: 'auto'
               }}
               transition={{
                 duration: 1.2,
                 ease: [0.43, 0.13, 0.23, 0.96]
               }}
+              style={{
+                position: 'fixed',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)'
+              }}
             >
-              <Image
-                src={currentImage}
-                alt="Logo"
-                width={300}
-                height={300}
+              <motion.div
+                initial={{
+                  y: 0
+                }}
+                animate={{
+                  y: 'calc(50vh - 50%)'
+                }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.43, 0.13, 0.23, 0.96]
+                }}
                 style={{
                   width: '100%',
-                  height: 'auto',
-                  objectFit: 'contain'
+                  height: 'auto'
                 }}
-                priority
-              />
+              >
+                {currentImage ? (
+                  <Image
+                    src={currentImage}
+                    alt="Logo"
+                    width={300}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      objectFit: 'contain',
+                      display: 'block'
+                    }}
+                    priority
+                  />
+                ) : (
+                  <LogoSvg
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                )}
+              </motion.div>
             </motion.div>
-          </Box>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -195,17 +234,11 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
               pointerEvents: 'none'
             }}
           >
-            <Image
-              src={logoSvg}
-              alt="Logo Footer"
-              width={1920}
-              height={200}
+            <LogoSvg
               style={{
                 width: '100%',
-                height: 'auto',
-                objectFit: 'cover'
+                height: 'auto'
               }}
-              priority
             />
           </motion.div>
         )}
