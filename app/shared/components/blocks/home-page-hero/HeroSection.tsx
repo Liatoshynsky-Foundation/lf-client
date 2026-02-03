@@ -10,24 +10,30 @@ import { heroSectionStyles } from './HeroSection.styles';
 
 import Button from '~/shared/components/design-system/all-components/button/Button';
 
-export const HomePageHero: React.FC = () => {
+export const HeroSection: React.FC = () => {
   return (
     <Box sx={heroSectionStyles.backgroundContainer}>
       {/* Full-bleed background image */}
-      <Image
-        src={heroBackgroundImage}
-        alt="Hero background"
-        fill
-        priority
-        quality={90}
-        style={{
-          objectFit: 'cover',
-          objectPosition: 'center'
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: -1
         }}
-      />
-
-      {/* Overlay for better text readability */}
-      <Box sx={heroSectionStyles.overlay} />
+      >
+        <Image
+          src={heroBackgroundImage}
+          alt="Hero background"
+          fill
+          priority
+          quality={90}
+          sizes="100vw"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+        />
+      </Box>
 
       {/* Content wrapper with grid */}
       <Box sx={heroSectionStyles.contentWrapper}>

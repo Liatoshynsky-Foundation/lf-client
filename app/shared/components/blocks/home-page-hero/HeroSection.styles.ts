@@ -2,11 +2,11 @@ export const heroSectionStyles = {
   // Full-bleed background container
   backgroundContainer: {
     position: 'relative' as const,
-    minHeight: '68vh', // 80% of viewport - IntroAnimation logo takes 20%
-    height: '68vh', // 80% of viewport - IntroAnimation logo takes 20%
+    minHeight: '68vh',
+    height: '68vh',
     width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginRight: 'calc(-50vw + 50%)',
+    left: '50%',
+    transform: 'translateX(-50%)',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column' as const
@@ -20,7 +20,7 @@ export const heroSectionStyles = {
     width: '100%',
     height: '100%',
     zIndex: -1,
-    objectFit: 'cover' as const,
+    objectFit: 'fill' as const,
     objectPosition: 'center'
   },
 

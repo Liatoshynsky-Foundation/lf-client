@@ -7,7 +7,7 @@ import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import { isProductionMode } from '~/lib/utils/isProductionMode';
 import { IntroAnimation } from '~/shared/components/blocks/home-page-hero/animation/IntroAnimation';
-import { HomePageHero } from '~/shared/components/blocks/home-page-hero/HeroSection';
+import { HeroSection } from '~/shared/components/blocks/home-page-hero/HeroSection';
 import UnderDevelopment from '~/shared/components/under-development/UnderDevelopment';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
@@ -36,7 +36,7 @@ export default async function Home({ params }: Readonly<Language>) {
   return (
     <IntroAnimation>
       <MainLayout withLines>
-        <HomePageHero />
+        <HeroSection />
       </MainLayout>
     </IntroAnimation>
   );
