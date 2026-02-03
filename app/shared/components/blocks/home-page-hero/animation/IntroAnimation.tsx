@@ -33,8 +33,8 @@ interface IntroAnimationProps {
 
 export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComplete }) => {
   const { stage, currentFrame, isAnimationComplete } = useIntroAnimation({
-    splashDuration: 1000,
-    frameInterval: 120,
+    splashDuration: 1800,
+    frameInterval: 180,
     totalFrames: ANIMATION_FRAMES.length,
     expansionDuration: 1200
   });
@@ -47,14 +47,14 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
 
   const getCurrentImage = () => {
     if (stage === 'splash' || stage === 'expansion' || stage === 'reveal' || stage === 'complete') {
-      return null; // Will use SVG component instead
+      return null;
     }
 
     if (currentFrame < ANIMATION_FRAMES.length) {
       return ANIMATION_FRAMES[currentFrame];
     }
 
-    return null; // Will use SVG component instead
+    return null;
   };
 
   const currentImage = getCurrentImage();
@@ -139,7 +139,7 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             style={{
               position: 'fixed',
               top: 0,
@@ -157,15 +157,18 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
             <motion.div
               initial={{
                 width: '300px',
-                y: 0
+                y: 0,
+                opacity: 1
               }}
               animate={{
                 width: '100vw',
-                y: 'calc(50vh - 50%)'
+                y: 'calc(50vh - 50%)',
+                opacity: 1
               }}
               transition={{
                 duration: 1.2,
-                ease: [0.43, 0.13, 0.23, 0.96]
+                ease: [0.25, 0.1, 0.25, 1],
+                opacity: { duration: 0.8, ease: 'easeInOut' }
               }}
               style={{
                 position: 'relative',
