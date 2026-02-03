@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/',
+    url: '/about-us',
     locale: lang
   });
 }
