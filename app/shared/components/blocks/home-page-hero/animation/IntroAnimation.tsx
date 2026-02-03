@@ -124,9 +124,7 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
                 <LogoSvg
                   style={{
                     width: '100%',
-                    height: 'auto',
-                    maxWidth: '300px',
-                    maxHeight: '300px'
+                    height: 'auto'
                   }}
                 />
               )}
@@ -150,69 +148,53 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
               height: '100vh',
               backgroundColor: '#ffffff',
               zIndex: 9998,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
           >
             <motion.div
               initial={{
                 width: '300px',
-                height: 'auto'
+                y: 0
               }}
               animate={{
                 width: '100vw',
-                height: 'auto'
+                y: 'calc(50vh - 50%)'
               }}
               transition={{
                 duration: 1.2,
                 ease: [0.43, 0.13, 0.23, 0.96]
               }}
               style={{
-                position: 'fixed',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
+                position: 'relative',
+                height: 'auto'
               }}
             >
-              <motion.div
-                initial={{
-                  y: 0
-                }}
-                animate={{
-                  y: 'calc(50vh - 50%)'
-                }}
-                transition={{
-                  duration: 1.2,
-                  ease: [0.43, 0.13, 0.23, 0.96]
-                }}
-                style={{
-                  width: '100%',
-                  height: 'auto'
-                }}
-              >
-                {currentImage ? (
-                  <Image
-                    src={currentImage}
-                    alt="Logo"
-                    width={300}
-                    height={300}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      objectFit: 'contain',
-                      display: 'block'
-                    }}
-                    priority
-                  />
-                ) : (
-                  <LogoSvg
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      display: 'block'
-                    }}
-                  />
-                )}
-              </motion.div>
+              {currentImage ? (
+                <Image
+                  src={currentImage}
+                  alt="Logo"
+                  width={300}
+                  height={300}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    display: 'block'
+                  }}
+                  priority
+                />
+              ) : (
+                <LogoSvg
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block'
+                  }}
+                />
+              )}
             </motion.div>
           </motion.div>
         )}
@@ -229,15 +211,21 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
               position: 'fixed',
               bottom: 0,
               left: 0,
-              width: '100%',
+              width: '100vw',
               zIndex: 1,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              margin: 0,
+              padding: 0,
+              display: 'block'
             }}
           >
             <LogoSvg
               style={{
                 width: '100%',
-                height: 'auto'
+                height: 'auto',
+                display: 'block',
+                margin: 0,
+                padding: 0
               }}
             />
           </motion.div>
