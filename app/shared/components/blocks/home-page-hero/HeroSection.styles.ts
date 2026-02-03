@@ -5,8 +5,9 @@ export const heroSectionStyles = {
     minHeight: '68vh',
     height: '68vh',
     width: '100vw',
-    left: '50%',
-    transform: 'translateX(-50%)',
+    marginLeft: 'calc(50% - 50vw)',
+    marginRight: 'calc(50% - 50vw)',
+    gridColumn: '1 / -1',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column' as const
