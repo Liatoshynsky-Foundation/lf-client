@@ -33,6 +33,8 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
 }
 
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
+import { artistrySectionData } from '~/shared/components/blocks/artistry-section/artistry.const';
+import ArtistrySection from '~/shared/components/blocks/artistry-section/ArtistrySection';
 
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
@@ -56,6 +58,7 @@ export default async function Home({ params }: Readonly<Language>) {
       {blocks.FoundationInfo && <FoundationInfo data={blocks.FoundationInfo} />}
       {blocks.OurMission && <OurMission data={blocks.OurMission} />}
       {blocks.OurGoals && <OurGoals data={blocks.OurGoals} />}
+      <ArtistrySection {...artistrySectionData} />
       {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} />}
       {blocks.WhatWeDo && <WhatWeDo data={blocks.WhatWeDo} />}
       {blocks.FoundationFounders && <FoundationFounders data={blocks.FoundationFounders} />}
