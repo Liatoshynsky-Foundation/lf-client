@@ -62,13 +62,13 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
-    gap: quoteSizes.textGap,
-    width: { xs: '200px', sm: '330px', md: '380px' }
+    gap: quoteSizes.textGap
   }),
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,
     color: quoteColors[color],
     fontFamily: 'Mulish',
+    fontStyle: 'italic',
     textAlign: alignments[align].textAlign
   }),
   sourceText: (align: Align) => ({
