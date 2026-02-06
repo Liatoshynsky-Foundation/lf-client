@@ -1,4 +1,5 @@
 'use client';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 
@@ -43,7 +44,9 @@ const YearWithLine = ({ year }: { year: number }) => {
     <Box sx={Styles.container} id={`year-${year}`}>
       <Box ref={textRef} sx={Styles.yearBlock}>
         <Box sx={Styles.line(offset)} />
-        <Box sx={Styles.year}>{numberStr}</Box>
+        <Typography variant="h2" sx={Styles.year}>
+          {numberStr}
+        </Typography>
       </Box>
     </Box>
   );
