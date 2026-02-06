@@ -55,13 +55,10 @@ export const styles = {
   },
   quoteBlock: {
     display: 'flex',
-    justifyContent: {
-      xs: 'center',
-      sm: 'right'
-    }
+    justifyContent: 'right'
   },
   quoteSx: {
-    width: { xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%' },
+    width: { xs: '200px', sm: '330px', md: '380px' },
     maxWidth: {
       xs: '272px',
       sm: '362px',
@@ -84,10 +81,7 @@ export const styles = {
       xs: '23px',
       sm: '2px'
     },
-    mx: {
-      xs: 'auto',
-      sm: 0
-    },
+    mx: 0,
     mt: {
       md: '-65px',
       lg: '-95px'
@@ -133,7 +127,7 @@ export const styles = {
     },
     display: 'flex',
     justifyContent: {
-      xs: 'center',
+      xs: 'left',
       sm: 'right'
     }
   },
@@ -145,7 +139,7 @@ export const styles = {
       lg: '-55px'
     },
     mx: {
-      xs: 'auto',
+      xs: 0,
       sm: '5px',
       md: '24px',
       lg: '25px',
