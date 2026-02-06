@@ -9,7 +9,7 @@ import { PageSchema as PageZodSchema } from '~/validators/pagesSchemas/pages';
 const getBySlugFactory = (model: typeof PageModel, status: PageStatus) => async (slug: PageSlug) => {
   await dbConnect();
   const page = await model.findOne({ slug, status }).lean().exec();
-  if (!page) return null;
+  if (!page) return;
   return PageZodSchema.parse(page);
 };
 

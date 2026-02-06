@@ -9,6 +9,8 @@ import Button from '~/ds-components/button/Button';
 
 import { styles } from './TranslationNotFound.styles';
 
+import ColoredLayout from '~/shared/layouts/colored-layout/ColoredLayout';
+
 export default function TranslationNotFound() {
   const router = useRouter();
   const pathname = usePathname();
@@ -20,18 +22,20 @@ export default function TranslationNotFound() {
   };
 
   return (
-    <PaperComponent childrenSx={styles.container} sx={styles.wrapper}>
-      <Box sx={styles.imageContainer}>
-        <Image alt="filimon-translator" src="/images/filimon-translator.png" layout="fill" objectFit="contain" />
-      </Box>
-      <Typography variant="customBold48">CoMing SoOn</Typography>
-      <Typography variant="customMedium16">
-        Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English version
-        will appear very soon.
-      </Typography>
-      <Button variant="contained" color="tertiary" onClick={handleRedirect}>
-        Return to Ukrainian
-      </Button>
-    </PaperComponent>
+    <ColoredLayout sx={styles.layout} wrapperSx={styles.wrapperLayout}>
+      <PaperComponent childrenSx={styles.container} sx={styles.wrapper}>
+        <Box sx={styles.imageContainer}>
+          <Image alt="filimon-translator" src="/images/filimon-translator.png" layout="fill" objectFit="contain" />
+        </Box>
+        <Typography variant="customBold48">CoMing SoOn</Typography>
+        <Typography variant="customMedium16">
+          Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English
+          version will appear very soon.
+        </Typography>
+        <Button variant="contained" color="tertiary" onClick={handleRedirect}>
+          Return to Ukrainian
+        </Button>
+      </PaperComponent>
+    </ColoredLayout>
   );
 }

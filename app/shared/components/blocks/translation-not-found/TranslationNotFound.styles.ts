@@ -23,6 +23,10 @@ export const styles = {
     }
   },
   wrapper: {
+    mt: {
+      xs: '64px',
+      md: '72px'
+    },
     maxWidth: {
       xs: '488px',
       md: '632px'
@@ -30,6 +34,18 @@ export const styles = {
     backgroundColor: {
       xs: 'transparent',
       sm: mainHexPallete.white
+    }
+  },
+
+  layout: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'start'
+  },
+  wrapperLayout: {
+    bgcolor: {
+      xs: '#FCFCFC',
+      sm: '#F2EEE8'
     }
   }
 };

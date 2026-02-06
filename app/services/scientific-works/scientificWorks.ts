@@ -4,7 +4,8 @@ import { WorkTableFilters } from '~/types/types/tableFilters.types';
 
 import { ScientificWorksRepository } from '~/infrastructure/repositories/scientific-works/scientificWorks.repo';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
-import { ArraySchema, LocalizeSchema, NoIDSchema } from '~/validators/constants';
+import { ArraySchema, NoIDSchema } from '~/validators/constants';
+import { LocalizeSchema } from '~/validators/localization';
 import { scientificWorkTitleSchema } from '~/validators/scientific-works/scientificWorks.schema';
 
 export const createScientificWorksService = ({

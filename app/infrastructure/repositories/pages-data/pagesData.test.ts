@@ -63,7 +63,7 @@ describe('pagesDataRepository', () => {
 
     const result = await pagesDataRepository.getBySlug(slug);
 
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
     expect(mockedFindOnePublished).toHaveBeenCalledWith({ slug, status: PageStatus.Published });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe('pagesDataRepository', () => {
 
     const result = await pagesDataRepository.getDraftBySlug(slug);
 
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
     expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();

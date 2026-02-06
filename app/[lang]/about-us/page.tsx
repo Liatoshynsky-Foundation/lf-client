@@ -13,10 +13,13 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
+import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -32,8 +35,6 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
-import { resolvePageData } from '~/services/pages-data/resolvePageData';
-
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
@@ -42,7 +43,16 @@ export default async function Home({ params }: Readonly<Language>) {
     return <UnderDevelopment />;
   }
 
-  const [page, t] = await Promise.all([resolvePageData('about-us', lang), getTranslations('home.liatoshynskyOffice')]);
+  const [pageResult, t] = await Promise.all([
+    resolvePageData('about-us', lang),
+    getTranslations('home.liatoshynskyOffice')
+  ]);
+
+  if (isError(pageResult)) {
+    return ErrorPageFactory(pageResult.error);
+  }
+
+  const page = UnwrapResult(pageResult);
 
   if (!page) {
     return <PageNotFound />;
