@@ -11,7 +11,7 @@ const mediaMentionRepository = {
     await dbConnect();
 
     const mediaMentions = await MediaMentionModel.find({ status: MediaMentionStatus.Published })
-      .select('_id title description slug coverImage publishedAt meta')
+      .select('_id url title description slug coverImage publishedAt meta')
       .sort({ publishedAt: -1 })
       .lean();
 

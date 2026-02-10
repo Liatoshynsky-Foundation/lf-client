@@ -29,6 +29,7 @@ export const mediaMentionSchema = z.object({
 
 export const mediaMentionListItemSchema = mediaMentionSchema.pick({
   _id: true,
+  url: true,
   title: true,
   description: true,
   slug: true,

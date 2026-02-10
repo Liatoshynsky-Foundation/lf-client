@@ -55,18 +55,25 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
         ref={listRef}
         sx={styles.cardsContainer}
       >
-        {paginatedData.map((newsItem) => (
-          <BaseCard
-            aria-label={`Матеріал: ${newsItem.title}`}
-            variant={variant}
-            href={`/${variant}/${newsItem._id}`}
-            key={newsItem._id}
-            description={newsItem.description}
-            image={newsItem.coverImage.src}
-            title={newsItem.title}
-            publicationDate={new Date(newsItem.publishedAt).toLocaleDateString('uk-UA')}
-          />
-        ))}
+        {paginatedData.map((newsItem) => {
+          const href =
+            variant === 'press' && 'url' in newsItem && typeof newsItem.url === 'string'
+              ? newsItem.url
+              : `/${variant}/${newsItem._id}`;
+
+          return (
+            <BaseCard
+              aria-label={`Матеріал: ${newsItem.title}`}
+              variant={variant}
+              href={href}
+              key={newsItem._id}
+              description={newsItem.description}
+              image={newsItem.coverImage.src}
+              title={newsItem.title}
+              publicationDate={new Date(newsItem.publishedAt || '').toLocaleDateString('uk-UA')}
+            />
+          );
+        })}
       </Box>
       <Box data-testid="MixPagination" sx={styles.paginationWrapper}>
         {hasMore && (

@@ -38,45 +38,58 @@ export default function BaseCard({
 }: Readonly<BaseCardProps>) {
   const t = useTranslations('news');
   const buttonConfig = BUTTON_CONFIG[variant];
+  const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
+
+  const cardContent = (
+    <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
+      <Box sx={styles.imageContainer} data-testid={`${dataTestId}-imageContainer`}>
+        <Image src={image} alt={title} fill style={styles.image} sizes="(max-width: 768px) 100vw, 33vw" />
+      </Box>
+
+      <Box sx={styles.content} data-testid={`${dataTestId}-content`}>
+        <Typography sx={styles.title} data-testid={`${dataTestId}-title`}>
+          {title}
+        </Typography>
+
+        <Typography sx={styles.date} data-testid={`${dataTestId}-date`}>
+          {t('publishedAtLabel')} {publicationDate}
+        </Typography>
+
+        <Typography sx={styles.description} data-testid={`${dataTestId}-description`}>
+          {description}
+        </Typography>
+
+        <Box sx={styles.buttonWrapper} data-testid={`${dataTestId}-buttonWrapper`}>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="medium"
+            fullWidth
+            endIcon={
+              buttonConfig.showIcon ? (
+                <SvgImage src="/icons/external-link.svg" alt="arrow" width={20} height={20} />
+              ) : undefined
+            }
+            data-testid={`${dataTestId}-button`}
+          >
+            {variant === 'news' ? t('viewButton') : t('goToButton')}
+          </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
+
+  if (isExternalLink) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+        {cardContent}
+      </a>
+    );
+  }
 
   return (
     <Link href={href} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
-        <Box sx={styles.imageContainer} data-testid={`${dataTestId}-imageContainer`}>
-          <Image src={image} alt={title} fill style={styles.image} sizes="(max-width: 768px) 100vw, 33vw" />
-        </Box>
-
-        <Box sx={styles.content} data-testid={`${dataTestId}-content`}>
-          <Typography sx={styles.title} data-testid={`${dataTestId}-title`}>
-            {title}
-          </Typography>
-
-          <Typography sx={styles.date} data-testid={`${dataTestId}-date`}>
-            {t('publishedAtLabel')} {publicationDate}
-          </Typography>
-
-          <Typography sx={styles.description} data-testid={`${dataTestId}-description`}>
-            {description}
-          </Typography>
-
-          <Box sx={styles.buttonWrapper} data-testid={`${dataTestId}-buttonWrapper`}>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="medium"
-              fullWidth
-              endIcon={
-                buttonConfig.showIcon ? (
-                  <SvgImage src="/icons/external-link.svg" alt="arrow" width={20} height={20} />
-                ) : undefined
-              }
-              data-testid={`${dataTestId}-button`}
-            >
-              {variant === 'news' ? t('viewButton') : t('goToButton')}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+      {cardContent}
     </Link>
   );
 }
