@@ -7,54 +7,51 @@ export interface EventItemFixture {
 
 export const MOCK_EVENT_ITEMS: EventItemFixture[] = [
   {
-    id: 'festival-weekend-1',
+    id: 'liatoshynsky-birthday-2026',
     props: {
       date: {
-        startDate: '2024-02-29',
-        endDate: '2024-03-02'
+        startDate: '2026-02-03'
       },
-      title: 'У Києві стартує фестиваль музики Бориса Лятошинського. Чому варто відвідати',
-      publishedAt: '2025-05-05T00:00:00.000Z',
+      title: '131 років від дня народження Бориса Лятошинського',
+      publishedAt: '2026-01-15T10:00:00.000Z',
       description:
-        'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968)',
+        '3 лютого 2026 року виповнюється 131 рік від дня народження видатного українського композитора Бориса Лятошинського (1895–1968) — фундатора власної композиторської школи та одного з найвпливовіших митців ХХ століття. Фундація Лятошинського запрошує всіх шанувальників української музики до участі в урочистих заходах.',
       image: {
-        src: '/images/events/festival-lyatoshynsky.png',
-        alt: 'Виконавці на сцені фестивалю Бориса Лятошинського'
+        src: '/news-mock-images/events2.png',
+        alt: 'Портрет композитора Бориса Лятошинського'
       },
-      href: '/uk/media/festival-borysa-lyatoshynskoho-1',
+      href: '/uk/news/liatoshynsky-birthday-131',
       actions: [
         {
-          label: 'Переглянути',
-          href: '/uk/media/festival-borysa-lyatoshynskoho-1/view'
-        },
-        {
-          label: 'Реєстрація',
-          href: '/uk/media/festival-borysa-lyatoshynskoho-1/registration'
+          label: 'Детальніше',
+          href: '/uk/news/liatoshynsky-birthday-131'
         }
       ]
     }
   },
   {
-    id: 'festival-weekend-2',
+    id: 'foundation-website-launch-2026',
     props: {
-      statusLabel: 'Завершено',
-      title: 'У Києві стартує фестиваль музики Бориса Лятошинського. Чому варто відвідати',
-      publishedAt: '2025-05-05T00:00:00.000Z',
-      description:
-        'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968)',
-      image: {
-        src: '/images/events/festival-lyatoshynsky.png',
-        alt: 'Виконавці на сцені фестивалю Бориса Лятошинського'
+      date: {
+        startDate: '2026-02-13'
       },
-      href: '/uk/media/festival-borysa-lyatoshynskoho-2',
+      title: 'Офіційне відкриття сайту Фундації Лятошинського',
+      publishedAt: '2026-02-01T12:00:00.000Z',
+      description:
+        '13 лютого 2026 року відбудеться урочисте відкриття офіційного сайту Фундації Лятошинського — цифрової платформи, присвяченої збереженню та популяризації творчої спадщини видатного українського композитора. На сайті ви знайдете унікальні архівні матеріали, наукові дослідження, аудіозаписи та відомості про майбутні культурні події.',
+      image: {
+        src: '/news-mock-images/events1.jpg',
+        alt: 'Офіційне відкриття сайту Фундації Лятошинського'
+      },
+      href: '/uk/news/foundation-website-launch',
       actions: [
         {
-          label: 'Переглянути',
-          href: '/uk/media/festival-borysa-lyatoshynskoho-2/view'
+          label: 'Детальніше',
+          href: '/uk/news/foundation-website-launch'
         },
         {
-          label: 'Реєстрація',
-          href: '/uk/media/festival-borysa-lyatoshynskoho-2/registration'
+          label: 'Відвідати сайт',
+          href: '/'
         }
       ]
     }
