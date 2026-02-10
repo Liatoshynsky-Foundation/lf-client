@@ -15,7 +15,7 @@ import { EventItemFixture } from '~/shared/components/blocks/event-card/EventIte
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface EventsTabProps {
-  eventsData: ReadonlyArray<EventItemFixture>;
+  eventsData: EventItemFixture[];
   itemsPerPage?: number;
   tabSx?: object;
 }

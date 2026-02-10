@@ -5,7 +5,7 @@ export interface EventItemFixture {
   props: EventItemProps;
 }
 
-export const MOCK_EVENT_ITEMS: Readonly<EventItemFixture[]> = [
+export const MOCK_EVENT_ITEMS: EventItemFixture[] = [
   {
     id: 'festival-weekend-1',
     props: {
