@@ -11,15 +11,29 @@ export const newsImageSchema = z.object({
   isTmp: z.boolean()
 });
 
-export const mongoObjectIdSchema = z.union([
-  z.string().regex(/^[0-9a-fA-F]{24}$/),
-  z.custom((val) => val != null && typeof val === 'object' && 'toString' in val)
-]);
+export const mongoObjectIdSchema = z
+  .union([
+    z.string().regex(/^[0-9a-fA-F]{24}$/),
+    z.custom((val) => val != null && typeof val === 'object' && 'toString' in val)
+  ])
+  .transform((val) => {
+    if (typeof val === 'string') return val;
+    if (val && typeof val === 'object' && 'toString' in val) {
+      return val.toString();
+    }
+    return String(val);
+  });
 
 export const newsSchema = z.object({
   _id: mongoObjectIdSchema,
-  publishedAt: z.coerce.date().nullable(),
-  newsDate: z.coerce.date().nullable(),
+  publishedAt: z.coerce
+    .date()
+    .nullable()
+    .transform((date) => date?.toISOString() ?? null),
+  newsDate: z.coerce
+    .date()
+    .nullable()
+    .transform((date) => date?.toISOString() ?? null),
   title: translatedFieldSchema,
   description: translatedFieldSchema,
   content: z.object({
@@ -32,8 +46,14 @@ export const newsSchema = z.object({
   meta: z.object({
     views: z.number()
   }),
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  createdAt: z.coerce
+    .date()
+    .optional()
+    .transform((date) => date?.toISOString()),
+  updatedAt: z.coerce
+    .date()
+    .optional()
+    .transform((date) => date?.toISOString())
 });
 
 export const newsListItemSchema = newsSchema.pick({
