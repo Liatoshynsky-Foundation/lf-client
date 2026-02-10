@@ -36,14 +36,17 @@ const News = async ({ params }: Readonly<Language>) => {
     return <UnderDevelopment />;
   }
 
-  // Fetch news data from database
-  const newsService = createRequestContainer().resolve('newsService');
+  const container = createRequestContainer();
+  const newsService = container.resolve('newsService');
+  const mediaMentionService = container.resolve('mediaMentionService');
+
   const newsData = await newsService.getAllPublishedNews(locale);
+  const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions();
 
   return (
     <MainLayout withLines>
       <MediaIntroSection />
-      <MediaCenter newsData={newsData} />
+      <MediaCenter newsData={newsData} mediaMentionsData={mediaMentionsData} />
     </MainLayout>
   );
 };
