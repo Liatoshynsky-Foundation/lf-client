@@ -22,19 +22,38 @@ jest.mock('~/ds-components/tabs/Tabs', () => ({
 }));
 
 jest.mock('./media.const', () => ({
-  mockNewsList: [{ _id: '1', publishedAt: '2023-01-01', title: 'News' }],
   mockPressList: [{ _id: '2', publishedAt: '2023-01-02', title: 'Press' }]
 }));
 
+const mockNewsData = [
+  {
+    _id: '1',
+    publishedAt: new Date('2023-01-01'),
+    newsDate: new Date('2023-01-01'),
+    title: 'Test News',
+    description: 'Test Description',
+    slug: 'test-news',
+    coverImage: {
+      src: '/test.jpg',
+      alt: 'Test Alt',
+      caption: 'Test Caption',
+      isTmp: false
+    },
+    meta: {
+      views: 100
+    }
+  }
+];
+
 describe('MediaCenter Component', () => {
   it('should render news list by default', () => {
-    render(<MediaCenter />);
+    render(<MediaCenter newsData={mockNewsData} />);
     expect(screen.getByTestId('media-list-news')).toBeInTheDocument();
     expect(screen.queryByTestId('media-list-press')).not.toBeInTheDocument();
   });
 
   it('should switch to "press" tab and renders press list', async () => {
-    render(<MediaCenter />);
+    render(<MediaCenter newsData={mockNewsData} />);
     const pressTab = screen.getByText('Ми у ЗМІ');
     fireEvent.click(pressTab);
     await waitFor(() => {

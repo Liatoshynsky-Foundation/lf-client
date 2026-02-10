@@ -380,6 +380,10 @@
         "title": "Archive",
         "description": "A collection of archival materials by Borys Liatoshynsky, including documents, letters, posters, manuscripts, and other historical sources."
       },
+      "news": {
+        "title": "News, Events and Media",
+        "description": "Latest news from the Liatoshynsky Foundation, upcoming events, and media presence."
+      },
       "notFound": {
         "title": "Page Not Found",
         "description": "The requested page could not be found. Please check the URL or return to the Liatoshynsky Foundation homepage."
