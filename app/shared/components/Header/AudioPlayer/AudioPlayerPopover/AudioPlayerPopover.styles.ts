@@ -88,6 +88,7 @@ export const styles = {
     textTransform: 'none',
     fontWeight: 500,
     height: 40,
+    width: '111px',
     '&:hover': {
       backgroundColor: '#f5f5f5'
     }
