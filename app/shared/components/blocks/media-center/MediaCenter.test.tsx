@@ -28,8 +28,8 @@ jest.mock('./media.const', () => ({
 const mockNewsData = [
   {
     _id: '1',
-    publishedAt: new Date('2023-01-01'),
-    newsDate: new Date('2023-01-01'),
+    publishedAt: new Date('2023-01-01').toISOString(),
+    newsDate: new Date('2023-01-01').toISOString(),
     title: 'Test News',
     description: 'Test Description',
     slug: 'test-news',
@@ -45,15 +45,33 @@ const mockNewsData = [
   }
 ];
 
+const mockMediaMentionsData = [
+  {
+    _id: '1',
+    url: 'https://example.com/media-mention',
+    title: 'Test Media Mention',
+    description: 'Test Media Description',
+    slug: 'test-media-mention',
+    coverImage: {
+      src: '/test-media.jpg',
+      alt: 'Test Media Alt'
+    },
+    publishedAt: new Date('2023-01-01').toISOString(),
+    meta: {
+      views: 50
+    }
+  }
+];
+
 describe('MediaCenter Component', () => {
   it('should render news list by default', () => {
-    render(<MediaCenter newsData={mockNewsData} />);
+    render(<MediaCenter newsData={mockNewsData} mediaMentionsData={mockMediaMentionsData} />);
     expect(screen.getByTestId('media-list-news')).toBeInTheDocument();
     expect(screen.queryByTestId('media-list-press')).not.toBeInTheDocument();
   });
 
   it('should switch to "press" tab and renders press list', async () => {
-    render(<MediaCenter newsData={mockNewsData} />);
+    render(<MediaCenter newsData={mockNewsData} mediaMentionsData={mockMediaMentionsData} />);
     const pressTab = screen.getByText('Ми у ЗМІ');
     fireEvent.click(pressTab);
     await waitFor(() => {
