@@ -1,17 +1,22 @@
 'use client';
 
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { z } from 'zod';
 
 import { CustomTabs } from '~/ds-components/tabs/Tabs';
 
 import EventsTab from '../../events-tab/EventsTab';
 import { EventItemFixture, MOCK_EVENT_ITEMS } from '../event-card/EventItem.fixture';
-import { mockNewsList, mockPressList } from './media.const';
 import { styles } from './MediaCenter.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import MediaList from '~/shared/components/design-system/all-components/media-list/MediaList';
+import { Localize } from '~/validators/localization';
+import { mediaMentionListItemSchema } from '~/validators/mediaMention.schema';
+import { newsListItemSchema } from '~/validators/news.schema';
 
 const tabs = [
   { id: 'news', label: 'Новини' },
@@ -21,36 +26,44 @@ const tabs = [
 
 type newsCardItemImage = {
   src: string;
+  alt?: string;
+  caption?: string;
+  isTmp?: boolean;
 };
 
 export type newsPressCardItem = {
-  _id: string;
-  publishedAt: string;
+  _id?: string;
+  publishedAt: string | Date | null;
   title: string;
   description: string;
-  content: TipTapDoc;
+  content?: TipTapDoc;
   coverImage: newsCardItemImage;
+  slug?: string;
+  newsDate?: Date | null | string;
+  meta?: {
+    views: number;
+  };
+  status?: string;
 };
 
-function MediaCenter() {
+type LocalizedNewsItem = Localize<z.infer<typeof newsListItemSchema>>;
+type MediaMentionItem = z.infer<typeof mediaMentionListItemSchema>;
+
+interface MediaCenterProps {
+  readonly newsData: LocalizedNewsItem[];
+  readonly mediaMentionsData: MediaMentionItem[];
+}
+
+function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>) {
+  const t = useTranslations('media.emptyState');
   const [selectedTab, setSelectedTab] = useState('news');
-  const [press, setPress] = useState<newsPressCardItem[] | null>(null);
   const [events, setEvents] = useState<EventItemFixture[] | null>(null);
-  const [news] = useState<newsPressCardItem[]>(() => {
-    return [...mockNewsList].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  });
 
   useEffect(() => {
-    if (selectedTab === 'press' && !press) {
-      const sortedPress = [...mockPressList].sort(
-        (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-      );
-      setPress(sortedPress);
-    }
     if (selectedTab === 'events' && !events) {
       setEvents(MOCK_EVENT_ITEMS);
     }
-  }, [selectedTab, press, events]);
+  }, [selectedTab, events]);
 
   return (
     <Box data-testid="MediaCenter" sx={styles.mediaContainer}>
@@ -64,13 +77,25 @@ function MediaCenter() {
         />
       </Box>
       {selectedTab === 'news' && (
-        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={news} variant="news" />
+        <>
+          {newsData.length > 0 ? (
+            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
+          ) : (
+            <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
+          )}
+        </>
       )}
 
       {selectedTab === 'events' && events && <EventsTab eventsData={events} />}
 
-      {selectedTab === 'press' && press && (
-        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={press} variant="press" />
+      {selectedTab === 'press' && (
+        <>
+          {mediaMentionsData.length > 0 ? (
+            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
+          ) : (
+            <EmptyState dataTestId="EmptyState-press" title={t('press.title')} description={t('press.description')} />
+          )}
+        </>
       )}
     </Box>
   );

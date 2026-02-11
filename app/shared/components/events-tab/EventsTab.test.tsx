@@ -53,6 +53,16 @@ jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
   default: ({ title }: { title: string }) => <div data-testid="event-item">{title}</div>
 }));
 
+jest.mock('~/shared/components/design-system/all-components/empty-state/EmptyState', () => ({
+  __esModule: true,
+  default: ({ dataTestId, title, description }: any) => (
+    <div data-testid={dataTestId}>
+      <div data-testid={`${dataTestId}-title`}>{title}</div>
+      {description && <div data-testid={`${dataTestId}-description`}>{description}</div>}
+    </div>
+  )
+}));
+
 beforeEach(() => {
   jest.spyOn(globalThis, 'scrollTo').mockImplementation(() => {});
   jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
@@ -113,5 +123,12 @@ describe('EventsTab', () => {
       fireEvent.click(page2);
     });
     expect(window.scrollTo).toHaveBeenCalled();
+  });
+
+  it('should show empty state when no events are provided', () => {
+    render(<EventsTab eventsData={[]} />);
+
+    expect(screen.getByTestId('EmptyState-events')).toBeInTheDocument();
+    expect(screen.queryByTestId('event-item')).not.toBeInTheDocument();
   });
 });

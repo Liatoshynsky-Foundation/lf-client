@@ -12,6 +12,7 @@ import { styles } from './EventsTab.style';
 
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
+import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface EventsTabProps {
@@ -22,6 +23,7 @@ interface EventsTabProps {
 
 const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const t = useTranslations('common');
+  const tEmpty = useTranslations('media.emptyState');
   const breakpoint = useBreakpoints();
 
   const isUpcomingEvent = (e: EventItemFixture): e is EventItemFixture & { props: { date: { startDate: string } } } =>
@@ -70,6 +72,16 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
     shouldScrollRef.current = true;
     handlePageChange(page);
   };
+
+  if (events.length === 0) {
+    return (
+      <EmptyState
+        dataTestId="EmptyState-events"
+        title={tEmpty('events.title')}
+        description={tEmpty('events.description')}
+      />
+    );
+  }
 
   return (
     <Box ref={tabRef} sx={{ ...styles.container, ...tabSx }} data-testid="EventsTab">

@@ -51,7 +51,7 @@ describe('EventItem', () => {
       })
     ).toBeInTheDocument();
 
-    expect(screen.getByTestId('EventItem-publishedAt')).toHaveTextContent('Опубліковано: 05.05.25');
+    expect(screen.getByTestId('EventItem-publishedAt')).toHaveTextContent('Опубліковано: 15.01.26');
 
     expect(screen.getByText(baseProps.description)).toBeInTheDocument();
     expect(screen.getByAltText(baseProps.image.alt)).toBeInTheDocument();
@@ -119,9 +119,10 @@ describe('EventItem', () => {
   });
 
   it('renders primary and secondary CTAs when two actions are provided', () => {
-    render(<EventItem {...baseProps} />);
+    const { props: twoActionsProps } = MOCK_EVENT_ITEMS[1];
+    render(<EventItem {...twoActionsProps} />);
 
-    const [primaryAction, secondaryAction] = baseProps.actions!;
+    const [primaryAction, secondaryAction] = twoActionsProps.actions!;
 
     const primaryLink = screen.getByText(primaryAction.label).closest('a');
     expect(primaryLink).not.toBeNull();
