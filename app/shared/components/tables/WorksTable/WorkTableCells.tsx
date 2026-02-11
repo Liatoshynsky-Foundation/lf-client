@@ -106,11 +106,23 @@ export const RenderActionCell = (info: CellContext<ScientificWorkTableRow, unkno
         }}
       >
         {isSmallScreen ? (
-          <IconButton size="small" variant={IconButtonColorVariant.Primary} sx={{ border: '1px solid black' }}>
+          <IconButton
+            size="small"
+            variant={IconButtonColorVariant.Primary}
+            sx={{ border: '1px solid black' }}
+            onClick={() => window.open('/mock-pdf.pdf', '_blank')}
+          >
             <SvgImage src="/icons/eye.svg" alt={t('view')} width={24} height={24} />
           </IconButton>
         ) : (
-          <Button variant="outlined" size="medium" color="primary" endIcon={<EyeIcon />}>
+          <Button
+            variant="outlined"
+            size="medium"
+            color="primary"
+            endIcon={<EyeIcon />}
+            externalLink={true}
+            link="/mock-pdf.pdf"
+          >
             {t('view')}
           </Button>
         )}
@@ -136,7 +148,14 @@ export const RenderActionCell = (info: CellContext<ScientificWorkTableRow, unkno
             <SvgImage src="/icons/log-out.svg" alt={t('goto')} width={24} height={24} />
           </IconButton>
         ) : (
-          <Button variant="outlined" size="medium" color="primary" link={row.url} endIcon={<LogOut />}>
+          <Button
+            variant="outlined"
+            size="medium"
+            color="primary"
+            externalLink={true}
+            link={row.url}
+            endIcon={<LogOut />}
+          >
             {t('goto')}
           </Button>
         )}
