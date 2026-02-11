@@ -1,8 +1,10 @@
 'use client';
 
-import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
+import { Box, IconButton, Popover, Typography } from '@mui/material';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+
+import Button from '~/ds-components/button/Button';
 
 import { styles } from './AudioPlayerPopover.styles';
 import { calculateProgress, formatTime } from '~/utils/audioPlayer';
@@ -109,7 +111,7 @@ const AudioPlayerPopover = ({
                 />
               </IconButton>
 
-              <Button fullWidth variant="contained" sx={styles.allTracksButton}>
+              <Button fullWidth variant="contained" link="/artistry" sx={styles.allTracksButton}>
                 Усі твори
               </Button>
             </Box>
