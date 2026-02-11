@@ -13,5 +13,13 @@ namespace NodeJS {
     TURNSTILE_SECRET_KEY: string;
     VERIFY_URL: string;
     TURNSTILE_SITE_KEY: string;
+    // Email Configuration
+    SMTP_HOST?: string;
+    SMTP_PORT?: string;
+    SMTP_SECURE?: string;
+    SMTP_USER?: string;
+    SMTP_PASSWORD?: string;
+    SMTP_FROM?: string;
+    CONTACT_EMAIL?: string;
   }
 }

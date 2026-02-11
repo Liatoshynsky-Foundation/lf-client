@@ -22,10 +22,17 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 
 type ContactFormProps = {
-  onSubmit: (data: { name: string; email: string; message: string; policy: boolean; phoneNumber?: string }) => void;
+  onSubmit: (data: {
+    name: string;
+    email: string;
+    message: string;
+    policy: boolean;
+    phoneNumber?: string;
+  }) => void | Promise<void>;
+  disabled?: boolean;
 };
 
-function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
+function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>) {
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
   const tConfirmation = useTranslations('contactForm.confirmation');
@@ -96,9 +103,9 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const onValid = (data: ContactFormInput) => {
+  const onValid = async (data: ContactFormInput) => {
     if (hasError) return;
-    onSubmit(data);
+    await onSubmit(data);
     setIsModalOpen(true);
   };
 
@@ -123,12 +130,14 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
               errors.name?.message || (isNameAtMaxLength && showNameMaxMessage ? tErrors('nameMaxLength') : '')
             }
             inputProps={{ maxLength: 50 }}
+            disabled={disabled}
           />
           <TextField
             label={t('email')}
             {...register('email')}
             error={!!errors.email}
             helperText={errors.email?.message}
+            disabled={disabled}
           />
           <TextField
             label={t('phoneNumber')}
@@ -140,6 +149,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
             }}
             error={!!errors.phoneNumber || hasError}
             helperText={errors.phoneNumber?.message || (hasError ? tErrors('phoneNumberInvalid') : '')}
+            disabled={disabled}
           />
           <TextField
             sx={styles.textArea}
@@ -153,6 +163,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
               (isMessageAtMaxLength && showMessageMaxMessage ? tErrors('messageMaxLength') : '')
             }
             inputProps={{ maxLength: 1000 }}
+            disabled={disabled}
           />
         </Box>
         <Box sx={styles.confidentialPolicyContainer}>
@@ -162,6 +173,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
                 <Checkbox
                   {...register('policy')}
                   checked={watch('policy') || false}
+                  disabled={disabled}
                   sx={{
                     color: errors.policy ? 'error.main' : undefined,
                     '&.Mui-checked': {
@@ -194,6 +206,7 @@ function ContactForm({ onSubmit }: Readonly<ContactFormProps>) {
           variant="contained"
           color="tertiary"
           sx={styles.requestButton}
+          disabled={disabled}
         >
           {t('buttonText')}
         </Button>
