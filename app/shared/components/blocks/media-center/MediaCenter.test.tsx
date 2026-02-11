@@ -9,6 +9,17 @@ jest.mock('~/shared/components/design-system/all-components/media-list/MediaList
   };
 });
 
+jest.mock('~/shared/components/design-system/all-components/empty-state/EmptyState', () => {
+  return function DummyEmptyState({ dataTestId, title, description }: any) {
+    return (
+      <div data-testid={dataTestId}>
+        <div data-testid={`${dataTestId}-title`}>{title}</div>
+        {description && <div data-testid={`${dataTestId}-description`}>{description}</div>}
+      </div>
+    );
+  };
+});
+
 jest.mock('~/ds-components/tabs/Tabs', () => ({
   CustomTabs: ({ tabs, onTabChange }: any) => (
     <div>
@@ -78,5 +89,26 @@ describe('MediaCenter Component', () => {
       expect(screen.queryByTestId('media-list-news')).not.toBeInTheDocument();
       expect(screen.getByTestId('media-list-press')).toBeInTheDocument();
     });
+  });
+
+  it('should show empty state when news data is empty', () => {
+    render(<MediaCenter newsData={[]} mediaMentionsData={mockMediaMentionsData} />);
+    expect(screen.getByTestId('EmptyState-news')).toBeInTheDocument();
+    expect(screen.queryByTestId('media-list-news')).not.toBeInTheDocument();
+  });
+
+  it('should show empty state when media mentions data is empty', async () => {
+    render(<MediaCenter newsData={mockNewsData} mediaMentionsData={[]} />);
+    const pressTab = screen.getByText('Ми у ЗМІ');
+    fireEvent.click(pressTab);
+    await waitFor(() => {
+      expect(screen.getByTestId('EmptyState-press')).toBeInTheDocument();
+      expect(screen.queryByTestId('media-list-press')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should show empty state when all data is empty', () => {
+    render(<MediaCenter newsData={[]} mediaMentionsData={[]} />);
+    expect(screen.getByTestId('EmptyState-news')).toBeInTheDocument();
   });
 });

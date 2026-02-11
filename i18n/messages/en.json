@@ -148,7 +148,21 @@
     }
   },
   "media": {
-    "title": "NeWs, EveNtS aNd MeDia"
+    "title": "NeWs, EveNtS aNd MeDia",
+    "emptyState": {
+      "news": {
+        "title": "No news yet",
+        "description": "Latest news and updates from the Liatoshynsky Foundation will appear here"
+      },
+      "events": {
+        "title": "No events yet",
+        "description": "Upcoming and past events from the Liatoshynsky Foundation will appear here"
+      },
+      "press": {
+        "title": "No media mentions yet",
+        "description": "Publications and mentions about the Liatoshynsky Foundation in the media will appear here"
+      }
+    }
   },
   "collaboration": {
     "offerCollaboration": {

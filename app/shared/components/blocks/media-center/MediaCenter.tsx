@@ -1,6 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
@@ -11,6 +12,7 @@ import { EventItemFixture, MOCK_EVENT_ITEMS } from '../event-card/EventItem.fixt
 import { styles } from './MediaCenter.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import MediaList from '~/shared/components/design-system/all-components/media-list/MediaList';
 import { Localize } from '~/validators/localization';
 import { mediaMentionListItemSchema } from '~/validators/mediaMention.schema';
@@ -53,6 +55,7 @@ interface MediaCenterProps {
 }
 
 function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>) {
+  const t = useTranslations('media.emptyState');
   const [selectedTab, setSelectedTab] = useState('news');
   const [events, setEvents] = useState<EventItemFixture[] | null>(null);
 
@@ -74,13 +77,25 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
         />
       </Box>
       {selectedTab === 'news' && (
-        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
+        <>
+          {newsData.length > 0 ? (
+            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
+          ) : (
+            <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
+          )}
+        </>
       )}
 
       {selectedTab === 'events' && events && <EventsTab eventsData={events} />}
 
       {selectedTab === 'press' && (
-        <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
+        <>
+          {mediaMentionsData.length > 0 ? (
+            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
+          ) : (
+            <EmptyState dataTestId="EmptyState-press" title={t('press.title')} description={t('press.description')} />
+          )}
+        </>
       )}
     </Box>
   );
