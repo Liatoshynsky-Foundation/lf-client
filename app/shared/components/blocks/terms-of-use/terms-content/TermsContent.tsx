@@ -45,6 +45,7 @@ const TermsContent = () => {
       <ButtonContentBlock
         buttonText={isMobile ? t('buttons.archive.short') : t('buttons.archive.full')}
         buttonColor="tertiary"
+        link={'/archive'}
         content={archiveDoc[locale]}
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{
