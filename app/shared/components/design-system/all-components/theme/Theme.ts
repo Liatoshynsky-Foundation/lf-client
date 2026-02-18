@@ -44,7 +44,7 @@ declare module '@mui/material' {
     customItalic14: true;
     customSemiBold16: true;
     customSemiBold18: true;
-    customBold25: true;
+    customBold24: true;
     customBold48: true;
   }
 }
@@ -62,7 +62,7 @@ declare module '@mui/material/styles' {
     customItalic14?: React.CSSProperties;
     customSemiBold16?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
-    customBold25: React.CSSProperties;
+    customBold24?: React.CSSProperties;
     customBold236?: React.CSSProperties;
     customBold132?: React.CSSProperties;
     customBold114?: React.CSSProperties;
@@ -81,7 +81,7 @@ declare module '@mui/material/styles' {
     customSemiBold18: React.CSSProperties;
     customSemiBold20: React.CSSProperties;
     customBold16: React.CSSProperties;
-    customBold25: React.CSSProperties;
+    customBold24: React.CSSProperties;
     customBold236: React.CSSProperties;
     customBold132: React.CSSProperties;
     customBold114: React.CSSProperties;
@@ -277,10 +277,10 @@ export const theme = createTheme({
       lineHeight: '140%',
       letterSpacing: '0px'
     },
-    customBold25: {
+    customBold24: {
       fontFamily: mulish.style.fontFamily,
       fontWeight: 700,
-      fontSize: '25px',
+      fontSize: '24px',
       lineHeight: '140%',
       letterSpacing: '0px'
     },

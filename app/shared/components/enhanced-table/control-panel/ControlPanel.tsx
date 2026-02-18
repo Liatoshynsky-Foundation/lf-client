@@ -117,11 +117,11 @@ export default function ControlPanel({
     <Box sx={{ ...ControlPanelStyles.root, ...sx }} data-testid="ControlPanel">
       <Box sx={ControlPanelStyles.header} data-testid="ControlPanel-header">
         <Typography
-          variant="customBold25"
+          variant="customBold24"
           data-testid="ControlPanel-tableName"
           sx={{
             fontSize: {
-              xs: '25px',
+              xs: '24px',
               md: '32px'
             }
           }}
