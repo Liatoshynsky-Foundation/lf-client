@@ -44,6 +44,7 @@ declare module '@mui/material' {
     customItalic14: true;
     customSemiBold16: true;
     customSemiBold18: true;
+    customBold25: true;
     customBold24: true;
     customBold48: true;
   }
@@ -62,7 +63,8 @@ declare module '@mui/material/styles' {
     customItalic14?: React.CSSProperties;
     customSemiBold16?: React.CSSProperties;
     customSemiBold18?: React.CSSProperties;
-    customBold24?: React.CSSProperties;
+    customBold25: React.CSSProperties;
+    customBold24: React.CSSProperties;
     customBold236?: React.CSSProperties;
     customBold132?: React.CSSProperties;
     customBold114?: React.CSSProperties;
