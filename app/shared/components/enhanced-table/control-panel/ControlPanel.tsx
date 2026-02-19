@@ -121,7 +121,7 @@ export default function ControlPanel({
           data-testid="ControlPanel-tableName"
           sx={{
             fontSize: {
-              xs: '25px',
+              xs: '24px',
               md: '32px'
             }
           }}
