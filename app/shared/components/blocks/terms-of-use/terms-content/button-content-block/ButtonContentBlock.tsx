@@ -42,7 +42,14 @@ const ButtonContentBlock = ({
         data-testid="ButtonContentBlock-button"
       >
         {buttonText}
-        <Svg Component={ArrowUpRight} alt="icon" color="#000" width="20px" height="20px" sx={styles.icon} />
+        <Svg
+          Component={ArrowUpRight}
+          alt="icon"
+          color={buttonColor === 'primary' ? '#fff' : '#000'}
+          width="20px"
+          height="20px"
+          sx={styles.icon}
+        />
       </Button>
     </Box>
 
