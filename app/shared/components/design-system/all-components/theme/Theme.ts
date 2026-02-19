@@ -84,6 +84,7 @@ declare module '@mui/material/styles' {
     customSemiBold20: React.CSSProperties;
     customBold16: React.CSSProperties;
     customBold24: React.CSSProperties;
+    customBold25: React.CSSProperties;
     customBold236: React.CSSProperties;
     customBold132: React.CSSProperties;
     customBold114: React.CSSProperties;
@@ -283,6 +284,13 @@ export const theme = createTheme({
       fontFamily: mulish.style.fontFamily,
       fontWeight: 700,
       fontSize: '24px',
+      lineHeight: '140%',
+      letterSpacing: '0px'
+    },
+    customBold25: {
+      fontFamily: mulish.style.fontFamily,
+      fontWeight: 700,
+      fontSize: '25px',
       lineHeight: '140%',
       letterSpacing: '0px'
     },
