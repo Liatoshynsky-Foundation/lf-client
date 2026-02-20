@@ -65,7 +65,7 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: [0.4, 0, 0.2, 1] as const // Smooth cubic-bezier easing
+        ease: [0.4, 0, 0.2, 1] as const
       }
     }
   };
@@ -83,7 +83,6 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
 
   return (
     <>
-      {/* Splash Screen */}
       <AnimatePresence>
         {(stage === 'splash' || stage === 'shape-shift') && (
           <motion.div
@@ -109,7 +108,7 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
               animate={{ opacity: 1 }}
               transition={{
                 duration: 0.15,
-                ease: [0.25, 0.1, 0.25, 1] // Smooth easing for frame transitions
+                ease: [0.25, 0.1, 0.25, 1]
               }}
               style={{
                 position: 'relative',
@@ -146,7 +145,6 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
         )}
       </AnimatePresence>
 
-      {/* Expansion Stage */}
       <AnimatePresence>
         {stage === 'expansion' && (
           <motion.div
@@ -216,7 +214,6 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
         )}
       </AnimatePresence>
 
-      {/* Content and Footer in Column Layout */}
       <motion.div
         variants={contentVariants}
         initial="hidden"
@@ -230,10 +227,8 @@ export const IntroAnimation: React.FC<IntroAnimationProps> = ({ children, onComp
           overflow: 'hidden'
         }}
       >
-        {/* Content (HeroSection) */}
         {children}
 
-        {/* Footer Logo (after expansion) - below hero */}
         <AnimatePresence>
           {(stage === 'reveal' || stage === 'complete') && (
             <motion.div

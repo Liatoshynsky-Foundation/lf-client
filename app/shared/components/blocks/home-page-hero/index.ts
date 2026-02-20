@@ -1,2 +1,2 @@
-export { HomePageHero } from './HeroSection';
+export { HeroSection } from './HeroSection';
 export { heroSectionStyles } from './HeroSection.styles';

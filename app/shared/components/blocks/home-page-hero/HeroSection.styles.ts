@@ -1,5 +1,4 @@
 export const heroSectionStyles = {
-  // Full-bleed background container
   backgroundContainer: {
     position: 'relative' as const,
     minHeight: '68vh',
@@ -13,7 +12,6 @@ export const heroSectionStyles = {
     flexDirection: 'column' as const
   },
 
-  // Full-bleed background image
   backgroundImage: {
     position: 'absolute' as const,
     top: 0,
@@ -25,7 +23,6 @@ export const heroSectionStyles = {
     objectPosition: 'center'
   },
 
-  // Content wrapper with grid layout
   contentWrapper: {
     position: 'relative',
     zIndex: 10,
@@ -61,7 +58,6 @@ export const heroSectionStyles = {
     }
   },
 
-  // Right-aligned content block container
   rightContentBlock: {
     gridColumn: {
       xs: '1 / -1',
@@ -84,7 +80,6 @@ export const heroSectionStyles = {
     }
   },
 
-  // Hero icon styling
   heroIcon: {
     width: {
       xs: '64px',
@@ -101,7 +96,6 @@ export const heroSectionStyles = {
     objectFit: 'contain' as const
   },
 
-  // Text paragraph styling
   textParagraph: {
     textAlign: 'right',
     fontSize: {
@@ -117,7 +111,6 @@ export const heroSectionStyles = {
     opacity: 0.95
   },
 
-  // Main text styling
   smallText: {
     textAlign: 'right',
     fontStyle: 'italic',
@@ -134,7 +127,6 @@ export const heroSectionStyles = {
     }
   },
 
-  // Bottom button container - centered
   buttonContainer: {
     gridColumn: '1 / -1',
     display: 'flex',
@@ -142,7 +134,6 @@ export const heroSectionStyles = {
     alignItems: 'center'
   },
 
-  // Button styling
   ctaButton: {
     minWidth: {
       xs: '200px',
@@ -151,7 +142,6 @@ export const heroSectionStyles = {
     }
   },
 
-  // Overlay for better text readability
   overlay: {
     position: 'absolute' as const,
     top: 0,

@@ -13,7 +13,6 @@ import Button from '~/shared/components/design-system/all-components/button/Butt
 export const HeroSection: React.FC = () => {
   return (
     <Box sx={heroSectionStyles.backgroundContainer}>
-      {/* Full-bleed background image */}
       <Box
         sx={{
           position: 'absolute',
@@ -35,11 +34,8 @@ export const HeroSection: React.FC = () => {
         />
       </Box>
 
-      {/* Content wrapper with grid */}
       <Box sx={heroSectionStyles.contentWrapper}>
-        {/* Right-aligned content block */}
         <Box sx={heroSectionStyles.rightContentBlock}>
-          {/* Hero Icon */}
           <Image
             src={heroIcon}
             alt="Lyatoshynsky Foundation Icon"
@@ -50,7 +46,6 @@ export const HeroSection: React.FC = () => {
             priority
           />
 
-          {/* Text Paragraph */}
           <Typography sx={heroSectionStyles.textParagraph}>
             Ви дуже добре сприймаєте музику, дуже тонко її відчуваєте, і я переконаний, що під час другого
             прослуховування ви значно більше почуєте того, що існує «за нотами». Адже, зрештою, ноти — це лише «ноти»,
@@ -60,7 +55,6 @@ export const HeroSection: React.FC = () => {
           <Typography sx={heroSectionStyles.smallText}>Борис Лятошинський</Typography>
         </Box>
 
-        {/* Centered bottom button */}
         <Box sx={heroSectionStyles.buttonContainer}>
           <Button variant="contained" color="tertiary" size="large" sx={heroSectionStyles.ctaButton} link="#explore">
             Explore Our Work
