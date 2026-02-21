@@ -1,7 +1,10 @@
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { type Locale, useLocale } from 'next-intl';
 import React from 'react';
 
+import BiographyGallery from '~/components/BiographyGallery/BiographyGallery';
+import { biographyGalleryPhotos } from '~/components/BiographyGallery/BiographyGallery.data';
+import { buildFrameImages } from '~/components/BiographyGallery/buildBiographyFrameImages';
 import ButtonContentBlock from '~/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 
 import { styles } from './BiographySection.styles';
@@ -10,26 +13,20 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 type LocalizedString = Record<Locale, string>;
 type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
 
-interface ImageItem {
-  src: string;
-  alt: LocalizedString;
-  caption: LocalizedString;
-}
-
 interface Props {
   title: LocalizedString;
   spanText: LocalizedString;
   text: LocalizedTipTapDoc;
   ctaLabel: LocalizedString;
   ctaHref: string;
-  images?: ImageItem[];
+  sx?: SxProps<Theme>;
 }
 
-export default function BiographySection({ title, spanText, text, ctaLabel, ctaHref }: Readonly<Props>) {
+export default function BiographySection({ title, spanText, text, ctaLabel, ctaHref, sx }: Readonly<Props>) {
   const locale = useLocale();
-
+  const images = buildFrameImages(biographyGalleryPhotos);
   return (
-    <Box sx={styles.container} data-testid="BiographySection">
+    <Box sx={{ ...styles.container, ...sx }} data-testid="BiographySection">
       <Box sx={styles.contentContainer} data-testid="BiographySection-contentContainer">
         <Box sx={styles.titleContainer} data-testid="BiographySection-titleContainer">
           <Typography sx={styles.spanText}>{spanText[locale]}</Typography>
@@ -48,9 +45,7 @@ export default function BiographySection({ title, spanText, text, ctaLabel, ctaH
           textContainerSx={{ mt: { xs: '32px', md: '40px', lg: '56px' }, mb: { xs: '24px', md: '0px' } }}
         />
       </Box>
-      <Box>
-        <span>Scroll block</span>
-      </Box>
+      <BiographyGallery images={images}></BiographyGallery>
     </Box>
   );
 }
