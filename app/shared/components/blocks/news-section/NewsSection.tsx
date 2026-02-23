@@ -37,9 +37,7 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
   }
 
   const newsCards = newsList.map((news) => {
-    const formattedDate = news.publishedAt
-      ? (formatIsoDateToDdMmYy((news.publishedAt as Date).toISOString()) ?? '')
-      : '';
+    const formattedDate = news.publishedAt ? (formatIsoDateToDdMmYy(news.publishedAt) ?? '') : '';
 
     return {
       image: news.coverImage.src,
