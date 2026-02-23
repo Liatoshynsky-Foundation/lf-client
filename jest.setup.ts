@@ -29,6 +29,6 @@ jest.mock('next-intl/routing', () => ({
 }));
 
 jest.mock('next-intl/server', () => ({
-  getTranslations: async () => (key: string) => key,
-  setRequestLocale: () => undefined
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key),
+  setRequestLocale: jest.fn().mockResolvedValue(() => undefined)
 }));

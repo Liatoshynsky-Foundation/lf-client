@@ -3,19 +3,12 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import ResearchPage from './page';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn()
-}));
-
-jest.mock('~/services/pages-data/resolvePageData', () => ({
-  resolvePageData: jest.fn()
-}));
-
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  __esModule: true,
-  PageNotFound: () => <div>Page not found</div>
-}));
+jest.mock('next-intl/server');
+jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/errorPageFactory');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 jest.mock('~/components/research-and-scientific-work/ResearchAndScientificWork', () => {
   const Mock = (props: any) =>
@@ -40,11 +33,13 @@ describe('Research Page', () => {
   });
 
   it('should render all components when data is successfully fetched', async () => {
-    resolvePageData.mockResolvedValueOnce({
-      blocks: {
-        HeroSection: { title: 'Some hero data' }
-      }
-    });
+    resolvePageData.mockResolvedValueOnce(
+      WrapSuccess({
+        blocks: {
+          HeroSection: { title: 'Some hero data' }
+        }
+      })
+    );
 
     const element = await ResearchPage({ params: Promise.resolve({ lang: 'uk' }) } as any);
     render(element);
@@ -56,9 +51,7 @@ describe('Research Page', () => {
   });
 
   it('should render only the table when hero section data is missing', async () => {
-    resolvePageData.mockResolvedValueOnce({
-      blocks: {}
-    });
+    resolvePageData.mockResolvedValueOnce(WrapSuccess({ blocks: {} }));
 
     const element = await ResearchPage({ params: Promise.resolve({ lang: 'en' }) } as any);
     render(element);
@@ -69,12 +62,12 @@ describe('Research Page', () => {
     expect(resolvePageData).toHaveBeenCalledWith('research', 'en');
   });
   it('should render PageNotFound when page is missing', async () => {
-    resolvePageData.mockResolvedValueOnce(null);
+    resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
     const element = await ResearchPage({ params: Promise.resolve({ lang: 'en' }) } as any);
     render(element);
 
-    expect(await screen.findByText(/Page not found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Error: No page found/i)).toBeInTheDocument();
     expect(resolvePageData).toHaveBeenCalledWith('research', 'en');
   });
 });

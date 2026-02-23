@@ -3,7 +3,8 @@ import { z } from 'zod';
 
 import { PageDataMap } from '~/types/page/pagesBase.type';
 
-import { LocalizeSchema, NoIDSchema, NoPageType, NoTime } from '~/validators/constants';
+import { NoIDSchema, NoPageType, NoTime } from '~/validators/constants';
+import { LocalizeSchema } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';

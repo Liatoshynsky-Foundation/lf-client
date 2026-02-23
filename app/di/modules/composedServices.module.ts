@@ -4,6 +4,7 @@ import { createArtistryService } from '~/services/artistry/artistryService';
 import { createFooterService } from '~/services/footer/footerService';
 import { createFundsService } from '~/services/funds/fundsService';
 import { createHeaderService } from '~/services/header/headerService';
+import { createMediaMentionService } from '~/services/media-mentions/mediaMentionService';
 import { createNewsService } from '~/services/news/newsService';
 import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
 import { createScientificWorksService } from '~/services/scientific-works/scientificWorks';
@@ -19,6 +20,7 @@ export type ComposedServicesModule = {
   draftPagesDataService: ReturnType<typeof createDraftPagesDataService>;
   fundsService: ReturnType<typeof createFundsService>;
   newsService: ReturnType<typeof createNewsService>;
+  mediaMentionService: ReturnType<typeof createMediaMentionService>;
 };
 
 export const registerComposedServicesFor = (container: AwilixContainer) => {
@@ -39,6 +41,8 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
 
     fundsService: asFunction(createFundsService).scoped(),
 
-    newsService: asFunction(createNewsService).scoped()
+    newsService: asFunction(createNewsService).scoped(),
+
+    mediaMentionService: asFunction(createMediaMentionService).scoped()
   });
 };

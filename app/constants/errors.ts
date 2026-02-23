@@ -68,3 +68,9 @@ export const loggerErrors = {
   ZOD_VALIDATION_ERROR: 'Zod validation error:',
   UNEXPECTED_HEADER_ERROR: 'Unexpected error in header API:'
 };
+
+export const LocalizationErrors = {
+  MISSING_UK_ERROR: 'Missing uk translation',
+  MISSING_EN_ERROR: 'Missing en translation',
+  MISSING_NODE_ERROR: 'Missing node translation'
+};

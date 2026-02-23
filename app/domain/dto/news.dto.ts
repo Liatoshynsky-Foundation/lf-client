@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 export enum NewsStatus {
   Draft = 'draft',
   Published = 'published',
@@ -22,9 +20,9 @@ export type NewsImageDTO = {
 };
 
 export type NewsDTO = {
-  _id: Types.ObjectId | string;
-  publishedAt: Date | null;
-  newsDate: Date | null;
+  _id: string;
+  publishedAt: string | null;
+  newsDate: string | null;
   title: {
     uk: string;
     en: string;
@@ -43,8 +41,8 @@ export type NewsDTO = {
   meta: {
     views: number;
   };
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type NewsListItemDTO = Pick<

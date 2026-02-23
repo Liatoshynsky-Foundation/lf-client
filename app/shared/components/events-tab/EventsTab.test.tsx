@@ -5,7 +5,7 @@ import EventsTab from './EventsTab';
 import type { EventItemProps } from '~/shared/components/blocks/event-card/EventItem';
 import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
 
-export const MOCK_EVENTS: ReadonlyArray<EventItemFixture> = [
+export const MOCK_EVENTS: EventItemFixture[] = [
   {
     id: 'upcoming-1',
     props: {
@@ -51,6 +51,16 @@ jest.mock('next-intl', () => ({
 jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
   __esModule: true,
   default: ({ title }: { title: string }) => <div data-testid="event-item">{title}</div>
+}));
+
+jest.mock('~/shared/components/design-system/all-components/empty-state/EmptyState', () => ({
+  __esModule: true,
+  default: ({ dataTestId, title, description }: any) => (
+    <div data-testid={dataTestId}>
+      <div data-testid={`${dataTestId}-title`}>{title}</div>
+      {description && <div data-testid={`${dataTestId}-description`}>{description}</div>}
+    </div>
+  )
 }));
 
 beforeEach(() => {
@@ -113,5 +123,12 @@ describe('EventsTab', () => {
       fireEvent.click(page2);
     });
     expect(window.scrollTo).toHaveBeenCalled();
+  });
+
+  it('should show empty state when no events are provided', () => {
+    render(<EventsTab eventsData={[]} />);
+
+    expect(screen.getByTestId('EmptyState-events')).toBeInTheDocument();
+    expect(screen.queryByTestId('event-item')).not.toBeInTheDocument();
   });
 });

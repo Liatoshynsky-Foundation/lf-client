@@ -38,7 +38,7 @@ export const quoteTextStyles = {
 export const sourceTextStyles = {
   fontFamily: 'Mulish',
   fontWeight: 500,
-  lineHeight: '150%',
+  lineHeight: '140%',
   fontStyle: 'italic',
   fontSize: { xs: '14px', md: '16px' },
   letterSpacing: 0

@@ -10,7 +10,8 @@ import {
   compositionTitlesSchema
 } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
-import { ArraySchema, LocalizeSchema, NoIDSchema } from '~/validators/constants';
+import { ArraySchema, NoIDSchema } from '~/validators/constants';
+import { LocalizeSchema } from '~/validators/localization';
 
 type ArtistryServiceDeps = {
   compositionsRepo: CompositionRepository;

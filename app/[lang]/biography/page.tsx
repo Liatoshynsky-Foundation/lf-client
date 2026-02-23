@@ -8,10 +8,12 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { BiographyContent } from './BiographyContent/BiographyContent';
 import { Language } from '~/types/types/language';
+import { isError, UnwrapResult } from '~/types/types/result';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { HeroSection } from '~/shared/components/blocks/HeroSection/HeroSection';
 
@@ -37,7 +39,16 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     return <UnderDevelopment />;
   }
 
-  const [page, t] = await Promise.all([resolvePageData('biography', lang), getTranslations('home.liatoshynskyOffice')]);
+  const [pageResult, t] = await Promise.all([
+    resolvePageData('biography', lang),
+    getTranslations('home.liatoshynskyOffice')
+  ]);
+
+  if (isError(pageResult)) {
+    return ErrorPageFactory(pageResult.error);
+  }
+
+  const page = UnwrapResult(pageResult);
 
   if (!page) {
     return <PageNotFound />;

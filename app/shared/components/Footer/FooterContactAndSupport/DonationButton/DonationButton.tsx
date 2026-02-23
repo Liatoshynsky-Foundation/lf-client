@@ -21,7 +21,15 @@ const DonationButton: React.FC<DonationDataProps> = ({ data }) => {
       shortLabel={data.shortText}
       link={data.link}
       startIcon={<SvgImage src="/icons/heart-handshake.svg" alt="Donation Button" width={20} height={20} />}
-      sx={{ gap: '0px' }}
+      sx={{
+        gap: '0px',
+        '&:hover': {
+          backgroundColor: 'primary.outlinedHovered'
+        },
+        '&:focus': {
+          backgroundColor: 'transparent'
+        }
+      }}
     />
   );
 };

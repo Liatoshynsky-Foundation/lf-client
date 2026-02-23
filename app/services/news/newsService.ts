@@ -1,7 +1,8 @@
 import { Locale } from 'next-intl';
 
 import type { NewsRepository } from '~/infrastructure/repositories/news/news.repo';
-import { ArraySchema, LocalizeSchema } from '~/validators/constants';
+import { ArraySchema } from '~/validators/constants';
+import { LocalizeSchema } from '~/validators/localization';
 import { newsListItemSchema, newsSchema } from '~/validators/news.schema';
 
 interface NewsServiceDeps {

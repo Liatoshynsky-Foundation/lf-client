@@ -1,20 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
 import Biography from './page';
+import { WrapError, WrapSuccess } from '~/types/types/result';
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getTranslations: jest.fn()
-}));
-
-jest.mock('~/services/pages-data/resolvePageData', () => ({
-  resolvePageData: jest.fn()
-}));
-
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  __esModule: true,
-  PageNotFound: () => <div>Page not found</div>
-}));
+jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/errorPageFactory');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 jest.mock('~/shared/components/blocks/HeroSection/HeroSection', () => ({
   __esModule: true,
@@ -47,13 +38,15 @@ describe('Biography page', () => {
   });
 
   it('should render biography blocks when page exists', async () => {
-    resolvePageData.mockResolvedValueOnce({
-      blocks: {
-        heroSection: {},
-        biographyContent: [{ yearTitle: '1910' }, { yearTitle: null }, { yearTitle: '1930' }],
-        LiatoshynskyOffice: {}
-      }
-    });
+    resolvePageData.mockResolvedValueOnce(
+      WrapSuccess({
+        blocks: {
+          heroSection: {},
+          biographyContent: [{ yearTitle: '1910' }, { yearTitle: null }, { yearTitle: '1930' }],
+          LiatoshynskyOffice: {}
+        }
+      })
+    );
 
     const ui = await Biography({ params: Promise.resolve({ lang: 'en' }) });
     render(ui);
@@ -68,13 +61,14 @@ describe('Biography page', () => {
   });
 
   it('should return PageNotFound when page is missing', async () => {
-    resolvePageData.mockResolvedValueOnce(null);
+    resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
     const ui = await Biography({ params: Promise.resolve({ lang: 'uk' }) });
     render(ui);
 
     expect(resolvePageData).toHaveBeenCalledWith('biography', 'uk');
     expect(getTranslations).toHaveBeenCalled();
-    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
   });
 });

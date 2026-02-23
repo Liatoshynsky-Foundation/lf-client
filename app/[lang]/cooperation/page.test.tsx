@@ -3,13 +3,13 @@ import React from 'react';
 
 import Collaboration from './page';
 
-const mockPageService = {
-  getPageData: jest.fn()
-};
+const getPageData = jest.fn();
 
 jest.mock('~/di/container', () => ({
   createRequestContainer: () => ({
-    resolve: async () => mockPageService
+    resolve: () => ({
+      getPageData
+    })
   })
 }));
 
@@ -78,8 +78,11 @@ jest.mock('~/shared/components/blocks/collaboration/offer-collaboration/OfferCol
 
 describe('Collaboration component', () => {
   it('should render CollaborationIntro component correctly', async () => {
-    mockPageService.getPageData.mockResolvedValue({
-      blocks: { partnershipFormats: null }
+    getPageData.mockResolvedValue({
+      ok: true,
+      value: {
+        blocks: { partnershipFormats: null }
+      }
     });
 
     render(await Collaboration({ params: Promise.resolve({ lang: 'en' }) } as any));

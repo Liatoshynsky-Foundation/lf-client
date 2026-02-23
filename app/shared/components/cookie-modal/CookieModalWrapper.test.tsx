@@ -71,9 +71,10 @@ describe('CookieModalWrapper', () => {
     expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
   });
 
-  it('should render CookieModal when consent_cookie.analytics is false (or missing)', () => {
+  it('should not render CookieModal when consent_cookie.analytics is false', () => {
     render(<CookieModalWrapper trackingId="" gtmId="" consent_cookie={{ analytics: false }} />);
-    expect(screen.getByText('Mocked CookieModal')).toBeInTheDocument();
+    expect(screen.getByText(/Mocked ConsentScript/)).toBeInTheDocument();
+    expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
   });
 
   describe('without consent_cookie (fresh user)', () => {

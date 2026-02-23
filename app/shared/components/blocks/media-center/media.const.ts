@@ -1,4 +1,25 @@
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import { TipTapDoc } from '~/types/types/tiptap.types';
+
+import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+
+type LocalizedTipTapDoc = {
+  uk: TipTapDoc;
+  en: TipTapDoc;
+};
+
+export const mediaBigDoc: LocalizedTipTapDoc = {
+  uk: makeDoc([
+    normalText(
+      'У цьому розділі ми зібрали все, чим живе Фундація Лятошинського просто зараз. Концерти, лекції, новини, відео й архівні скарби — тут звучить не лише музика, а й події, що формують українську культурну реальність.'
+    )
+  ]),
+  en: makeDoc([
+    normalText(
+      'In this section, we have gathered everything that the Lyatoshynsky Foundation is currently working on. Concerts, lectures, news, videos, and archival treasures — here you will find not only music, but also events that shape Ukrainian cultural reality.'
+    )
+  ])
+};
 
 export const mockNewsList = [
   {
@@ -75,3 +96,16 @@ export const mockPressList = [
     }
   }
 ];
+
+export const mediaSmallDoc: LocalizedTipTapDoc = {
+  uk: makeDoc([
+    normalText(
+      'Слідкуйте за анонсами, повертайтеся до вже пережитого, шукайте натхнення — Лятошинський і сьогодні має що сказати.'
+    )
+  ]),
+  en: makeDoc([
+    normalText(
+      'Follow the announcements, revisit past experiences, seek inspiration — Lyatoshynsky still has something to say today.'
+    )
+  ])
+};
