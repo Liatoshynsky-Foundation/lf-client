@@ -37,6 +37,7 @@ const TermsContent = () => {
       <ButtonContentBlock
         buttonText={isMobile ? t('buttons.library.short') : t('buttons.library.full')}
         buttonColor="tertiary"
+        link={'/artistry'}
         content={testDoc[locale]}
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{ maxWidth: { xs: '258px', sm: '308px' }, minWidth: { xs: '258px', sm: '308px' } }}
