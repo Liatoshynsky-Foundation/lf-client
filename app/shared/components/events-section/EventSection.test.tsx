@@ -2,6 +2,17 @@ import { render, screen } from '@testing-library/react';
 
 import EventSection from './EventSection';
 
+jest.mock('~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => {
+  return function MockButtonContentBlock({ buttonText, content }: any) {
+    return (
+      <div data-testid="mock-button-content-block">
+        <button>{buttonText}</button>
+        <div>{typeof content === 'string' ? content : 'Опис секції подій'}</div>
+      </div>
+    );
+  };
+});
+
 const mockEvents = [
   {
     id: '1',
@@ -24,7 +35,10 @@ const mockEvents = [
 
 const defaultProps = {
   title: 'Блок Подій',
-  text: 'Опис секції подій',
+  text: {
+    type: 'doc',
+    content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Опис секції подій' }] }]
+  } as any,
   ctaLabel: 'Всі події',
   ctaHref: '/events',
   publishDateLabel: 'Дата публікації',
