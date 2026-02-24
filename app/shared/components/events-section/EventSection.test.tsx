@@ -3,10 +3,10 @@ import { render, screen } from '@testing-library/react';
 import EventSection from './EventSection';
 
 jest.mock('~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => {
-  return function MockButtonContentBlock({ buttonText, content }: any) {
+  return function MockButtonContentBlock({ buttonText, content, link }: any) {
     return (
       <div data-testid="mock-button-content-block">
-        <button>{buttonText}</button>
+        <a href={link}>{buttonText}</a>
         <div>{typeof content === 'string' ? content : 'Опис секції подій'}</div>
       </div>
     );
