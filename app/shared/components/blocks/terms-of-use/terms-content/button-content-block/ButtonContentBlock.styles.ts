@@ -33,7 +33,7 @@ export const styles = {
   button: {
     alignSelf: 'end',
     px: 0,
-    ':hover': {
+    '& hover': {
       backgroundColor: mainHexPallete.yellow[500],
       color: '#000'
     }
