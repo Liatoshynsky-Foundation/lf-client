@@ -2,6 +2,9 @@ import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
 
 import { styles } from './EventSection.styles';
+import { TipTapDoc } from '~/types/types/tiptap.types';
+
+import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 
 interface EventItem {
   id: string;
@@ -15,7 +18,7 @@ interface EventItem {
 
 interface Props {
   title: string;
-  text: string;
+  text: TipTapDoc;
   ctaLabel: string;
   ctaHref: string;
   publishDateLabel: string;
@@ -41,19 +44,16 @@ const EventSection: React.FC<Props> = ({
       <Typography variant="h2" sx={styles.title}>
         {title}
       </Typography>
-      {/* Replace 44-56 lines with ButtonContentBlock component */}
-      <Button
-        variant="contained"
-        href={ctaHref}
-        sx={styles.mainCta}
-        endIcon={<Box component="img" src="/icons/arrow-up-right.svg" sx={{ width: 24, height: 24 }} />}
-      >
-        {ctaLabel}
-      </Button>
-
-      <Box sx={styles.descriptionWrapper}>
-        <Typography sx={styles.descriptionText}>{text}</Typography>
-      </Box>
+      <ButtonContentBlock
+        buttonText={ctaLabel}
+        link={ctaHref}
+        content={text}
+        sx={{ maxWidth: { xs: '246px' }, minWidth: { xs: '246px' }, backgroundColor: '#FCBD28', color: '#190D03' }}
+        containerSx={{ mb: { xs: '64px', md: '80px' } }}
+        textSx={styles.textStyle}
+        textContainerSx={{ marginBottom: { xs: '24px', md: '0px' } }}
+        buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
+      />
 
       <Box sx={styles.eventsList}>
         {displayedEvents.map((event) => (

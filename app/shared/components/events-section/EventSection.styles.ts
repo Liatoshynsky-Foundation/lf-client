@@ -26,44 +26,16 @@ export const styles = {
     fontWeight: 600,
     mb: { xs: '52px', sm: '52px', md: '52px', lg: '52px', xl: '52px' }
   },
-  // replase || delete styles for component ButtonContentBlock (30-65 lines)
-  descriptionWrapper: {
-    gridColumn: { xs: '1 / -1', md: '6 / -1' },
-    gridRow: '2',
-    display: 'flex',
-    mb: { xs: '32px', md: '17px', lg: '0px', xl: '0px' }
-  },
 
-  descriptionText: {
-    fontSize: { xs: '20px', md: '20px', lg: '20px' },
-    mt: { xs: '5px', md: '5px', lg: '5px' },
-    lineHeight: 1.6,
-    fontWeight: 400,
-    color: '#190D03',
-    textAlign: 'left',
-    textIndent: { md: 'calc(8.33% + 40px)', xl: 'calc(8.33% + 330px)' },
-    '@media (max-width: 900px)': { textIndent: 0 }
-  },
-
-  mainCta: {
-    gridColumn: { xs: '1 / -1', md: '1 / 6' },
-    gridRow: '2',
-    justifySelf: 'end',
-    mt: { xs: '20px', md: '100px', lg: '120px' },
-    borderRadius: '40px',
-    backgroundColor: '#FCBD28',
-    color: '#190D03',
-    '& .MuiButton-endIcon': {
-      marginLeft: '1px'
+  textStyle: {
+    textIndent: {
+      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
+      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
+      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
+      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
-    fontSize: { xs: '10px', md: '16px', lg: '16px' },
-    fontWeight: 500,
-    lineHeight: 1.5,
-    fontStyle: 'Medium',
-    textTransform: 'none',
-    '&:hover': { backgroundColor: '#e6a600' }
+    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
-
   eventsList: {
     gridColumn: '1 / -1',
     gridRow: '3',
