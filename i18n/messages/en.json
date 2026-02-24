@@ -261,6 +261,7 @@
     },
     "errors": {
       "minValue": "The 'From' value cannot be less than {min}",
+      "minValueTo": "The 'To' value cannot be less than {min}",
       "maxValue": "The 'To' value cannot be greater than {max}",
       "minDistance": "The 'To' value cannot be less than the 'From' value",
       "onlyNumbers": "Only numeric values are allowed"

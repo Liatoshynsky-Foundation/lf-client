@@ -24,7 +24,7 @@ export const getFilteringSchema = (minYear: number, maxYear: number, t: ReturnTy
         })
         .transform(Number)
         .refine((val) => val >= minYear, {
-          message: t('minValue', { min: minYear })
+          message: t('minValueTo', { min: minYear })
         })
         .refine((val) => val <= maxYear, {
           message: t('maxValue', { max: maxYear })
