@@ -17,8 +17,8 @@ export const styles = {
   title: {
     alignSelf: 'start',
     mb: { sm: '0px', md: '34px' },
-    gridColumn: { xs: '1 / -1', sm: '1 / 8', md: '1 / 8' },
-    fontSize: { xs: '40px', md: '64px' }
+    gridColumn: { xs: '1 / 2', sm: '1 / -1', md: '1 / -1' },
+    fontSize: { xs: '48px', sm: '64px', md: '88px', lg: '104px', xl: '120px' }
   },
   textStyle: {
     textIndent: {
