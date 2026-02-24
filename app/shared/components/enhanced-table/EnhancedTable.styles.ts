@@ -10,6 +10,7 @@ export const enhancedTableStyles = {
   container: (theme: Theme) => ({
     boxShadow: 'none',
     border: 'none',
+    backgroundColor: 'transparent',
 
     marginLeft: `-${theme.spacing(2.5)}`,
     marginRight: `-${theme.spacing(2.5)}`,
