@@ -36,6 +36,7 @@ const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
+    '^.+\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^~/public/(.*)$': '<rootDir>/public/$1',
     '^~/i18n/(.*)$': '<rootDir>/i18n/$1',
     '^~/utils/(.*)$': '<rootDir>/app/lib/utils/$1',

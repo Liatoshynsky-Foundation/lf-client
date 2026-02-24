@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
         hostname: `${AZURE_SAS_URL}`,
         port: '',
         pathname: '/**'
+      },
+      //dev only! remove in production
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**'
       }
     ]
   },
