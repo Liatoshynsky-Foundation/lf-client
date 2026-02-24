@@ -31,7 +31,7 @@ export const sliderStyles = {
     position: 'absolute',
     top: '0',
     transform: 'translateX(-50%)',
-    fontSize: (size: 'small' | 'big') => (size === 'small' ? '10px' : '12px'),
+    fontSize: (size: 'small' | 'big') => (size === 'small' ? '10px' : '14px'),
     fontWeight: 'bold',
     background: commonColors.valueLabelBackground,
     color: '#fff',
