@@ -63,7 +63,7 @@ export default async function Footer() {
             }}
             donation={{
               text: tFooter('donationButton'),
-              shortText: tFooter('donationButtonShort'),
+              shortText: locale === 'en' ? undefined : tFooter('donationButtonShort'),
               link: supportButtonLink
             }}
           />
