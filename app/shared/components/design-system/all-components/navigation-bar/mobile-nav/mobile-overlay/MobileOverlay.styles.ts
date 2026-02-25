@@ -64,7 +64,7 @@ export const styles = {
     },
     gap: { xs: '64px', sm: 0 },
     pb: { xs: '24px', sm: 0 },
-    pt: { xs: '6.2rem', sm: 0 },
+    pt: { xs: '86px', sm: 0 },
     justifyContent: { xs: 'space-between', sm: 'unset' }
   },
 

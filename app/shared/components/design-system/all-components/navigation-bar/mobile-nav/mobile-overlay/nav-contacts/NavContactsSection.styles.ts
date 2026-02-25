@@ -5,7 +5,7 @@ export const styles = {
   links: {
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '8px', md: '6px' }
+    gap: { xs: '8px', sm: '16px' }
   },
   mediaTitles: {
     ...AppTypography.mulish18Regular,
@@ -21,13 +21,11 @@ export const styles = {
   },
   contactLabel: {
     fontSize: { sm: '16px', md: '18px' },
-    lineHeight: { sm: '150%', md: '160%' },
-    mb: { sm: '-6px', md: 0 }
+    lineHeight: { sm: '150%', md: '160%' }
   },
   contactLink: {
     fontSize: { xs: '16px', md: '18px' },
-    textDecoration: 'underline',
-    height: { xs: '34px', sm: '20px', md: '24px' },
+    height: { xs: '34px', sm: '44px', md: '24px' },
     display: 'flex',
     alignItems: 'center'
   },
