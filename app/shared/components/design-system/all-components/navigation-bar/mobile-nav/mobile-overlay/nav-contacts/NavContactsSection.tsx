@@ -24,31 +24,35 @@ export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSec
       {isMobile && <LanguageSwitcher variant="mobile" data-testid="ContactsSection-languageSwitcher" />}
 
       <Box data-testid="ContactsSection-links" sx={styles.links}>
-        <ContactLink
-          data-testid="ContactsSection-phoneLink"
-          type="phone"
-          label={isMobile ? undefined : t('phoneNumber')}
-          value={contacts.phone}
-          direction={isMobile ? 'row' : 'column'}
-          icon={isMobile ? PhoneIcon : undefined}
-          iconSx={styles.icon}
-          labelSx={styles.contactLabel}
-          copyLinkSize="small"
-          iconColor="rgba(65, 43, 33, 0.8)"
-        />
+        <Box sx={styles.contactLink}>
+          <ContactLink
+            data-testid="ContactsSection-phoneLink"
+            type="phone"
+            label={isMobile ? undefined : t('phoneNumber')}
+            value={contacts.phone}
+            direction={isMobile ? 'row' : 'column'}
+            icon={isMobile ? PhoneIcon : undefined}
+            iconSx={styles.icon}
+            labelSx={styles.contactLabel}
+            copyLinkSize="small"
+            iconColor="rgba(65, 43, 33, 0.8)"
+          />
+        </Box>
 
-        <ContactLink
-          data-testid="ContactsSection-emailLink"
-          type="email"
-          label={isMobile ? undefined : t('email')}
-          value={contacts.email}
-          direction={isMobile ? 'row' : 'column'}
-          icon={isMobile ? MailIcon : undefined}
-          iconSx={styles.icon}
-          labelSx={styles.contactLabel}
-          copyLinkSize="small"
-          iconColor="rgba(65, 43, 33, 0.8)"
-        />
+        <Box sx={styles.contactLink}>
+          <ContactLink
+            data-testid="ContactsSection-emailLink"
+            type="email"
+            label={isMobile ? undefined : t('email')}
+            value={contacts.email}
+            direction={isMobile ? 'row' : 'column'}
+            icon={isMobile ? MailIcon : undefined}
+            iconSx={styles.icon}
+            labelSx={styles.contactLabel}
+            copyLinkSize="small"
+            iconColor="rgba(65, 43, 33, 0.8)"
+          />
+        </Box>
       </Box>
 
       <Box data-testid="ContactsSection-socialMedia" sx={styles.socialMediaBox}>

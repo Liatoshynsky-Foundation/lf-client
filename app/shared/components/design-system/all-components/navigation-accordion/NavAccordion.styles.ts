@@ -19,8 +19,7 @@ export const styles = {
   container: {
     width: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    gap: { xs: '10px', md: 0 }
+    flexDirection: 'column'
   },
   itemWrapper: {
     display: 'flex',
@@ -32,7 +31,8 @@ export const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     cursor: 'pointer',
-    padding: 0,
+    paddingY: { xs: '5px', md: '0' },
+    paddingX: 0,
     color: textStates.default.color,
     transition: 'color 0.2s ease',
 
