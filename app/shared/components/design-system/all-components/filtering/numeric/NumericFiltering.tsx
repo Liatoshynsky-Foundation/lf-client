@@ -118,7 +118,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
           />
         </Box>
         <DesignSystemSlider
-          size="small"
+          size="big"
           min={minNumber}
           max={maxNumber}
           step={1}
