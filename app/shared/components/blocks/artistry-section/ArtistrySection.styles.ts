@@ -53,13 +53,23 @@ export const styles = {
     },
     gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
+
+  additionalTextStyle: {
+    fontSize: {
+      xs: '16px',
+      md: '18px'
+    },
+    lineHeight: { xs: '150%', md: '160%' },
+    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
+  },
+
   subTitle: {
     ...AppTypography.oswald28Bold,
     fontSize: { md: '42px', lg: '48px' },
     fontWeight: { md: 600 },
     lineHeight: { xs: '150%', md: '120%' },
     letterSpacing: '0%',
-    textTransform: 'uppercase',
+    textTransform: { xs: 'uppercase', md: 'none' },
     gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
 

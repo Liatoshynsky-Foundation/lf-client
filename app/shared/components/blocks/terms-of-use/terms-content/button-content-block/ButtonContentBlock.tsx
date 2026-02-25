@@ -1,4 +1,5 @@
-import { Box } from '@mui/material';
+import { Theme } from '@emotion/react';
+import { Box, SxProps } from '@mui/material';
 
 import { styles } from './ButtonContentBlock.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
@@ -18,6 +19,8 @@ type ButtonContentBlockProps = {
   textContainerSx?: object;
   buttonContainerSx?: object;
   link?: string;
+  additionalDescription?: TipTapDoc;
+  additionalTextSx?: SxProps<Theme>;
 };
 
 const ButtonContentBlock = ({
@@ -29,7 +32,9 @@ const ButtonContentBlock = ({
   textSx,
   textContainerSx = { marginBottom: { xs: '24px', md: '0px' } },
   buttonContainerSx,
-  link
+  link,
+  additionalDescription,
+  additionalTextSx
 }: ButtonContentBlockProps) => (
   <Box sx={{ ...styles.wrapper, ...containerSx }} data-testid="ButtonContentBlock">
     <Box sx={{ ...styles.buttonBox, ...buttonContainerSx }}>
@@ -54,7 +59,13 @@ const ButtonContentBlock = ({
     </Box>
 
     <Box sx={styles.contentBox} data-testid="ButtonContentBlock-content">
-      <ContentBlock textSx={textSx} description={content} containerSx={textContainerSx} />
+      <ContentBlock
+        textSx={textSx}
+        description={content}
+        containerSx={textContainerSx}
+        additionalDescription={additionalDescription}
+        additionalTextSx={additionalTextSx}
+      />
     </Box>
   </Box>
 );
