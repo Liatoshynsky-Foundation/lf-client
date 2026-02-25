@@ -53,7 +53,12 @@ function PaymentDetails() {
             </Typography>
 
             {isIban ? (
-              <CopyLink hint="IBAN is copied" size="large" value={selectedPaymentDetails[key]} />
+              <CopyLink
+                hint="IBAN is copied"
+                size="large"
+                value={selectedPaymentDetails[key]}
+                forceShowCopyIcon={true}
+              />
             ) : (
               <Typography variant="customSemiBold20">{selectedPaymentDetails[key]}</Typography>
             )}

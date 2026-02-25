@@ -24,10 +24,12 @@ interface CopyLinkProps {
   hint?: string;
   delay?: number;
   sx?: SxProps<Theme>;
+  forceShowCopyIcon?: boolean;
 }
 
 function CopyLink({
   value,
+  forceShowCopyIcon = false,
   size = 'medium',
   type = 'primary',
   hint,
@@ -43,7 +45,7 @@ function CopyLink({
   const finalHint = hint || t('copied');
 
   const handleCopy = async () => {
-    if (isMobile || disabled) return;
+    if ((isMobile && !forceShowCopyIcon) || disabled) return;
 
     try {
       await navigator.clipboard.writeText(String(value));
@@ -64,7 +66,7 @@ function CopyLink({
   const copyIconSize = iconSizes[size];
   const copyLinkStyles = getCopyLinkStyles(type);
 
-  if (isMobile) {
+  if (isMobile && !forceShowCopyIcon) {
     let href = '';
     if (hrefType === 'phone') {
       href = `tel:${value}`;
