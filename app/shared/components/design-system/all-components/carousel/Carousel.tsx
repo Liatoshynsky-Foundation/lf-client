@@ -24,16 +24,27 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
   const [touchStartX, setTouchStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
-  const isFirstSlide = activeIndex === 0;
-  const isLastSlide = activeIndex === images.length - 1;
 
   const goToNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % images.length);
-  }, [images.length]);
+    setActiveIndex((prev) => {
+      if (infiniteLoop) {
+        return (prev + 1) % images.length;
+      }
+      return prev < images.length - 1 ? prev + 1 : prev;
+    });
+  }, [images.length, infiniteLoop]);
 
   const goToPrev = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
-  }, [images.length]);
+    setActiveIndex((prev) => {
+      if (infiniteLoop) {
+        return (prev - 1 + images.length) % images.length;
+      }
+      return prev > 0 ? prev - 1 : prev;
+    });
+  }, [images.length, infiniteLoop]);
+
+  const isFirstSlide = !infiniteLoop && activeIndex === 0;
+  const isLastSlide = !infiniteLoop && activeIndex === images.length - 1;
 
   const goToSlide = useCallback((index: number) => {
     setActiveIndex(index);
@@ -48,25 +59,32 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
     [activeIndex]
   );
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    setTouchStartX(e.touches[0].clientX || 0);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.targetTouches?.[0]) {
+      setTouchStartX(e.targetTouches[0].clientX);
+    }
   };
 
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    const currentX = e.touches[0].clientX || 0;
-    setDragOffset(currentX - touchStartX);
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartX !== null && e.targetTouches?.[0]) {
+      const currentTouchX = e.targetTouches[0].clientX;
+      setDragOffset(currentTouchX - touchStartX);
+    }
   };
 
   const handleTouchEnd = () => {
-    if (Math.abs(dragOffset) < 50) return;
-    if (dragOffset > 0) {
-      if (infiniteLoop || !isFirstSlide) goToPrev();
-    }
-    if (dragOffset < 0) {
-      if (infiniteLoop || !isLastSlide) goToNext();
+    if (dragOffset > 50) {
+      if (infiniteLoop || activeIndex > 0) {
+        goToPrev();
+      }
+    } else if (dragOffset < -50) {
+      if (infiniteLoop || activeIndex < images.length - 1) {
+        goToNext();
+      }
     }
 
     setDragOffset(0);
+    setTouchStartX(0);
   };
 
   const handleKey = useCallback(

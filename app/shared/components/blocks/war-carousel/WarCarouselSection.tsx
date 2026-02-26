@@ -28,7 +28,7 @@ const images = [
 const WarCarouselSection = () => {
   return (
     <Box sx={styles.carouselSectionContainer}>
-      <Carousel images={images} />
+      <Carousel images={images} infiniteLoop={true} />
     </Box>
   );
 };

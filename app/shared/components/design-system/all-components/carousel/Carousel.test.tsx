@@ -102,8 +102,8 @@ describe('Carousel', () => {
   it('should navigate to the next image with swipe', () => {
     render(<Carousel images={mockImages} />);
     const firstImage = screen.getByTestId('carousel-image-0');
-    fireEvent.touchStart(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
-    fireEvent.touchMove(firstImage, { touches: [{ clientX: 100, clientY: 0 }] });
+    fireEvent.touchStart(firstImage, { targetTouches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { targetTouches: [{ clientX: 100, clientY: 0 }] });
     fireEvent.touchEnd(firstImage);
     expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
   });
@@ -111,8 +111,8 @@ describe('Carousel', () => {
   it('should not navigate to the next image with small swipe', () => {
     render(<Carousel images={mockImages} />);
     const firstImage = screen.getByTestId('carousel-image-0');
-    fireEvent.touchStart(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
-    fireEvent.touchMove(firstImage, { touches: [{ clientX: 280, clientY: 0 }] });
+    fireEvent.touchStart(firstImage, { targetTouches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { targetTouches: [{ clientX: 280, clientY: 0 }] });
     fireEvent.touchEnd(firstImage);
     expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'false');
   });
@@ -120,8 +120,8 @@ describe('Carousel', () => {
   it('should be no infinite loop when it is not enabled', () => {
     render(<Carousel images={mockImages} />);
     const firstImage = screen.getByTestId('carousel-image-0');
-    fireEvent.touchStart(firstImage, { touches: [{ clientX: 200, clientY: 0 }] });
-    fireEvent.touchMove(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchStart(firstImage, { targetTouches: [{ clientX: 200, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { targetTouches: [{ clientX: 300, clientY: 0 }] });
     fireEvent.touchEnd(firstImage);
     expect(firstImage).toHaveAttribute('data-active', 'true');
   });
@@ -129,8 +129,8 @@ describe('Carousel', () => {
   it('should be infinite loop when it is enabled', () => {
     render(<Carousel images={mockImages} infiniteLoop />);
     const firstImage = screen.getByTestId('carousel-image-0');
-    fireEvent.touchStart(firstImage, { touches: [{ clientX: 200, clientY: 0 }] });
-    fireEvent.touchMove(firstImage, { touches: [{ clientX: 300, clientY: 0 }] });
+    fireEvent.touchStart(firstImage, { targetTouches: [{ clientX: 200, clientY: 0 }] });
+    fireEvent.touchMove(firstImage, { targetTouches: [{ clientX: 300, clientY: 0 }] });
     fireEvent.touchEnd(firstImage);
     expect(screen.getByTestId('carousel-image-2')).toHaveAttribute('data-active', 'true');
   });
