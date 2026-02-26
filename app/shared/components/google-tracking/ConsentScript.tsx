@@ -3,28 +3,31 @@ import Script from 'next/script';
 
 import { Cookies } from '~/types/types/common.types';
 
-import { consentObj, parseDaConsent } from '~/lib/utils/consent';
-
 type ConsentScriptProps = Readonly<{
   trackingId: string;
   gtmId: string;
   consent_cookie: Cookies | null;
 }>;
 
-export default function ConsentScript({ trackingId, gtmId }: ConsentScriptProps) {
+export default function ConsentScript({ trackingId, gtmId, consent_cookie }: ConsentScriptProps) {
+  const consentStatus = consent_cookie?.analytics ? 'granted' : 'denied';
+
   return (
     <>
       <GoogleAnalytics gaId={trackingId} />
-      <GoogleTagManager gtmId={gtmId} />
+      {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <Script id="ga-consent" strategy="beforeInteractive">
         {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){window.dataLayer.push(arguments);}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
 
-                    gtag('js', new Date());
-                    gtag('config', '${trackingId}');
-                    gtag('consent', 'default', ${parseDaConsent(consentObj(true))});
-                `}
+            gtag('js', new Date());
+            gtag('consent', 'update', {
+              'analytics_storage': '${consentStatus}',
+              'ad_storage': '${consentStatus}'
+            });
+            gtag('config', '${trackingId}');
+        `}
       </Script>
     </>
   );
