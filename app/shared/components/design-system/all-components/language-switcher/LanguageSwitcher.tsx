@@ -22,6 +22,10 @@ export interface LanguageSwitcherProps {
   scrollDirection?: ScrollDirection;
 }
 
+const setLocaleCookie = (locale: string) => {
+  document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+};
+
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDirection }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -43,6 +47,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
 
   const handleLanguageChange = (newLocale: Locale) => {
     if (newLocale === currentLocale) return;
+    setLocaleCookie(newLocale);
     router.replace(pathname, { locale: newLocale, scroll: false });
     handleClose();
   };
@@ -50,6 +55,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
   const toggleLocale = () => {
     const newLocale = currentLocale === 'uk' ? 'en' : 'uk';
     if (newLocale === currentLocale) return;
+    setLocaleCookie(newLocale);
     router.replace(pathname, { locale: newLocale, scroll: false });
   };
 
