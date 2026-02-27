@@ -22,6 +22,7 @@ type ContentBlockProps = Readonly<{
   list?: RichContent;
   additionalDescription?: RichContent;
   textSx?: SxProps<Theme>;
+  additionalTextSx?: SxProps<Theme>;
   containerSx?: SxProps<Theme>;
   dataTestId?: string;
 }>;
@@ -102,6 +103,7 @@ export default function ContentBlock({
   list,
   additionalDescription,
   textSx,
+  additionalTextSx,
   containerSx,
   dataTestId
 }: ContentBlockProps) {
@@ -110,7 +112,7 @@ export default function ContentBlock({
       {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '2/ -1', sm: '4/ -1', md: '6/-1' }} />}
       {renderTextBlock(description, textSx)}
       {renderList(list, textSx)}
-      {renderTextBlock(additionalDescription, textSx)}
+      {renderTextBlock(additionalDescription, additionalTextSx || textSx)}
     </Box>
   );
 }
