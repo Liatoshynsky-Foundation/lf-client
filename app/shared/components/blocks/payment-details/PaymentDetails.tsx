@@ -58,6 +58,8 @@ function PaymentDetails() {
                 size="large"
                 value={selectedPaymentDetails[key]}
                 forceShowCopyIcon={true}
+                sx={styles.iban}
+                iconSx={styles.ibanIcon}
               />
             ) : (
               <Typography variant="customSemiBold20">{selectedPaymentDetails[key]}</Typography>
