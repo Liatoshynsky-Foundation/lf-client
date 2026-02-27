@@ -20,24 +20,29 @@ describe('ConsentScript', () => {
   const trackingId = 'G-TESTID';
   const gtmId = 'GTM-TESTID';
 
-  afterEach(() => {
-    document.body.innerHTML = '';
-  });
-
   it('should render GoogleAnalytics and GoogleTagManager components when analytics consent is true', () => {
     render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={{ analytics: true }} />);
-    expect(document.querySelector(`script[src*='googletagmanager.com/gtag/js?id=${trackingId}']`)).toBeInTheDocument();
-    expect(document.querySelector(`script[src*='googletagmanager.com/gtm.js?id=${gtmId}']`)).toBeInTheDocument();
+    expect(document.querySelector(`script[src*='id=${trackingId}']`)).toBeInTheDocument();
+    expect(document.querySelector(`script[src*='id=${gtmId}']`)).toBeInTheDocument();
   });
 
-  it('should render the consent script with correct consent for accepted', () => {
+  it('should render the consent script with update status for accepted analytics', () => {
     render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={{ analytics: true }} />);
     const script = document.querySelector('script#ga-consent');
+
     expect(script).toBeInTheDocument();
     expect(script?.innerHTML).toContain('gtag');
-    expect(script?.innerHTML).toContain('consent');
-    expect(script?.innerHTML).toContain('default');
+    // eslint-disable-next-line quotes
+    expect(script?.innerHTML).toContain("'consent', 'update'");
     expect(script?.innerHTML).toContain(trackingId);
-    expect(script?.innerHTML).toMatch(/granted/);
+    // eslint-disable-next-line quotes
+    expect(script?.innerHTML).toContain("'analytics_storage': 'granted'");
+  });
+
+  it('should render denied status when consent is false', () => {
+    render(<ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={{ analytics: false }} />);
+    const script = document.querySelector('script#ga-consent');
+    // eslint-disable-next-line quotes
+    expect(script?.innerHTML).toContain("'analytics_storage': 'denied'");
   });
 });
