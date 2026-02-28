@@ -1,30 +1,22 @@
 export const heroSectionStyles = {
-  backgroundContainer: {
+  heroSection: {
     position: 'relative' as const,
-    minHeight: '68vh',
-    height: '68vh',
     width: '100vw',
     marginLeft: 'calc(50% - 50vw)',
     marginRight: 'calc(50% - 50vw)',
-    gridColumn: '1 / -1',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column' as const
+    gridColumn: '1/-1'
   },
 
-  backgroundImage: {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: -1,
-    objectFit: 'fill' as const,
-    objectPosition: 'center'
+  backgroundContainer: {
+    display: 'block',
+    height: '68vh',
+    maxHeight: '700px',
+    width: '100vw',
+    overflow: 'hidden'
   },
 
   contentWrapper: {
-    position: 'relative',
+    position: 'relative' as const,
     zIndex: 10,
     display: 'grid',
     gridTemplateColumns: {
@@ -47,13 +39,11 @@ export const heroSectionStyles = {
     width: '100%',
     flex: 1,
     paddingTop: {
-      xs: '120px',
-      sm: '140px',
+      xs: '32px',
       md: '160px'
     },
     paddingBottom: {
-      xs: '250px',
-      sm: '280px',
+      xs: '56px',
       md: '300px'
     }
   },
@@ -67,17 +57,22 @@ export const heroSectionStyles = {
     },
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: {
-      xs: '24px',
-      sm: '32px',
-      md: '40px'
+    // gap: {
+    //   xs: '24px',
+    //   sm: '32px',
+    //   md: '40px'
+    // },
+    alignItems: {
+      xs: 'flex-start',
+      sm: 'flex-end'
     },
-    alignItems: 'flex-end',
+    justifyContent: 'center',
     marginBottom: {
       xs: '64px',
       sm: '80px',
       md: '96px'
-    }
+    },
+    pointerEvents: 'none'
   },
 
   heroIcon: {
@@ -97,25 +92,42 @@ export const heroSectionStyles = {
   },
 
   textParagraph: {
-    textAlign: 'right',
+    textAlign: {
+      xs: 'left',
+      sm: 'right'
+    },
     fontSize: {
-      xs: '18px'
+      xs: '16px',
+      lg: '18px'
+    },
+    marginTop: {
+      xs: '16px',
+      md: '32px',
+      lg: '40px'
+    },
+    marginBottom: {
+      xs: '12px',
+      md: '16px',
+      lg: '24px'
     },
     lineHeight: 1.6,
     color: '#190D03',
     maxWidth: {
       xs: '100%',
-      md: '600px',
+      md: '500px',
       lg: '700px'
-    },
-    opacity: 0.95
+    }
   },
 
   smallText: {
-    textAlign: 'right',
     fontStyle: 'italic',
     fontSize: {
-      xs: '16px'
+      xs: '14px',
+      lg: '16px'
+    },
+    fontWeight: {
+      xs: '400',
+      lg: '500'
     },
     lineHeight: 1.1,
     color: '#190D03',
@@ -124,21 +136,6 @@ export const heroSectionStyles = {
       xs: '100%',
       md: '700px',
       lg: '800px'
-    }
-  },
-
-  buttonContainer: {
-    gridColumn: '1 / -1',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  ctaButton: {
-    minWidth: {
-      xs: '200px',
-      sm: '240px',
-      md: '280px'
     }
   },
 
