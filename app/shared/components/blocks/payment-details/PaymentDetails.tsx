@@ -1,5 +1,6 @@
 'use client';
 import { Box, Button, Typography } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -11,6 +12,7 @@ import { styles } from './PaymentDetails.styles';
 function PaymentDetails() {
   const [currency, setCurrency] = useState<currencyType>('uah');
   const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
+  const t = useTranslations('supportUs.payment');
 
   const switcherSx = useMemo(() => {
     const buttonsCount = currencyList.length;
@@ -54,7 +56,7 @@ function PaymentDetails() {
 
             {isIban ? (
               <CopyLink
-                hint="IBAN is copied"
+                hint={t('copyHint')}
                 size="large"
                 value={selectedPaymentDetails[key]}
                 forceShowCopyIcon={true}
