@@ -11,8 +11,17 @@ interface NewsServiceDeps {
 
 export const createNewsService = ({ newsRepository }: NewsServiceDeps) => ({
   async getAllPublishedNews(locale: Locale) {
-    const news = await newsRepository.getAllPublishedNews();
-    return ArraySchema(LocalizeSchema(newsListItemSchema, locale)).parse(news);
+    try {
+      const news = await newsRepository.getAllPublishedNews();
+
+      if (!news || news.length === 0) {
+        return [];
+      }
+
+      return ArraySchema(LocalizeSchema(newsListItemSchema, locale)).parse(news);
+    } catch {
+      return [];
+    }
   },
 
   async getNewsBySlug(slug: string, locale: Locale) {
