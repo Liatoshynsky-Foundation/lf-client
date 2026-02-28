@@ -1,8 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { Locale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
+import EmptyState from '~/ds-components/empty-state/EmptyState';
+
 import { styles } from './NewsSection.styles';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
 import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
@@ -15,8 +19,8 @@ interface Props {
     en: string;
   };
   textContent: {
-    uk: any;
-    en: any;
+    uk: TipTapDoc;
+    en: TipTapDoc;
   };
   buttonText: {
     uk: string;
@@ -27,13 +31,21 @@ interface Props {
 }
 
 export const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
+  const t = await getTranslations('media.emptyState');
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
 
   const newsList = await newsService.getAllPublishedNews(locale);
 
   if (!newsList || newsList.length === 0) {
-    return null;
+    return (
+      <Box sx={styles.mainContainer}>
+        <Typography variant="h1" sx={styles.title}>
+          {title[locale]}
+        </Typography>
+        <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
+      </Box>
+    );
   }
 
   const newsCards = newsList.map((news) => {
