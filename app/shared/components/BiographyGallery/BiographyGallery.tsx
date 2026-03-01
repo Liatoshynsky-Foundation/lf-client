@@ -82,7 +82,11 @@ function chunk<T>(arr: T[], size: number) {
   return res;
 }
 
-export default function BiographyGallery({ images, durationSec = 60, frameRepeats = 4 }: BiographyGalleryProps) {
+export default function BiographyGallery({
+  images,
+  durationSec = 60,
+  frameRepeats = 4
+}: Readonly<BiographyGalleryProps>) {
   const [paused, setPaused] = useState(false);
 
   const trackContent = useMemo(() => {

@@ -1,4 +1,4 @@
-import { Box, SxProps, Theme, Typography } from '@mui/material';
+import { Box, BoxProps, Typography } from '@mui/material';
 import { type Locale, useLocale } from 'next-intl';
 import React from 'react';
 
@@ -19,14 +19,14 @@ interface Props {
   text: LocalizedTipTapDoc;
   ctaLabel: LocalizedString;
   ctaHref: string;
-  sx?: SxProps<Theme>;
+  sx?: BoxProps['sx'];
 }
 
 export default function BiographySection({ title, spanText, text, ctaLabel, ctaHref, sx }: Readonly<Props>) {
   const locale = useLocale();
   const images = buildFrameImages(biographyGalleryPhotos);
   return (
-    <Box sx={{ ...styles.container, ...sx }} data-testid="BiographySection">
+    <Box sx={[styles.container, sx].flat() as BoxProps['sx']} data-testid="BiographySection">
       <Box sx={styles.contentContainer} data-testid="BiographySection-contentContainer">
         <Box sx={styles.titleContainer} data-testid="BiographySection-titleContainer">
           <Typography sx={styles.spanText}>{spanText[locale]}</Typography>
