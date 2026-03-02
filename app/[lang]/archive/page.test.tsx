@@ -104,7 +104,7 @@ describe('Archive Page', () => {
     await screen.findByTestId('ArchivePage-fundsGrid');
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds?lang=uk');
+    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
   });
 
   it('should call setParam when search is triggered', () => {
