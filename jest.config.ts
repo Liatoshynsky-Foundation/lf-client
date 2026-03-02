@@ -37,6 +37,7 @@ const config: Config = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^.+\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.svg$': '<rootDir>/__mocks__/svgMock.js',
     '^~/public/(.*)$': '<rootDir>/public/$1',
     '^~/i18n/(.*)$': '<rootDir>/i18n/$1',
     '^~/utils/(.*)$': '<rootDir>/app/lib/utils/$1',
