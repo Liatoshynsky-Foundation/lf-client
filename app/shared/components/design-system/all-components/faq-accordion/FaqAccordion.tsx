@@ -1,5 +1,5 @@
 'use client';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material'; // Добавили Box сюда
+import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
