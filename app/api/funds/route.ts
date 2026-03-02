@@ -12,9 +12,14 @@ export async function GET(req: NextRequest) {
     const lang = params.get('lang') || 'uk';
 
     const fundsService = createRequestContainer().resolve('fundsService');
+    type FundData = {
+      number: string | Record<string, string>;
+      title: string | Record<string, string>;
+      [key: string]: unknown;
+    };
     if (!fundId && !caseId) {
       const funds = await fundsService.getFunds();
-      const translatedFunds = funds.map((fund: any) => ({
+      const translatedFunds = funds.map((fund: FundData) => ({
         ...fund,
         number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
         title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
