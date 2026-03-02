@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createElement, React, ReactNode } from 'react';
+import * as React from 'react';
+import { createElement, ReactNode } from 'react';
 jest.mock('swiper/css', () => ({}));
 jest.mock('swiper/css/navigation', () => ({}));
 jest.mock('swiper/css/pagination', () => ({}));
@@ -8,9 +9,9 @@ jest.mock('swiper/react', () => ({
   SwiperSlide: ({ children }: any) => React.createElement('div', { 'data-testid': 'swiper-slide-mock' }, children)
 }));
 jest.mock('swiper/modules', () => ({
-  Navigation: (props: any) => null,
-  Pagination: (props: any) => null,
-  Autoplay: (props: any) => null
+  Navigation: (_props: any) => null,
+  Pagination: (_props: any) => null,
+  Autoplay: (_props: any) => null
 }));
 
 jest.mock('~/utils/isProductionMode', () => ({
