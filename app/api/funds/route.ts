@@ -9,8 +9,18 @@ export async function GET(req: NextRequest) {
     const params = req.nextUrl.searchParams;
     const fundId = params.get('id');
     const caseId = params.get('caseId');
+    const lang = params.get('lang') || 'uk';
 
     const fundsService = createRequestContainer().resolve('fundsService');
+    if (!fundId && !caseId) {
+      const funds = await fundsService.getFunds();
+      const translatedFunds = funds.map((fund: any) => ({
+        ...fund,
+        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
+        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
+      }));
+      return NextResponse.json({ success: true, data: translatedFunds });
+    }
 
     if (caseId) {
       const caseDetails = await fundsService.getCaseById(caseId);
@@ -34,8 +44,12 @@ export async function GET(req: NextRequest) {
       if (!fund) {
         return NextResponse.json({ success: false, error: errors.NOT_FOUND }, { status: 404 });
       }
-
-      return NextResponse.json({ success: true, data: fund });
+      const translatedFund = {
+        ...fund,
+        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
+        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
+      };
+      return NextResponse.json({ success: true, data: translatedFund });
     }
 
     const funds = await fundsService.getFunds();
