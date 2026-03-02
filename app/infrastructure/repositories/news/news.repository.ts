@@ -13,6 +13,10 @@ const newsRepository = {
       .sort({ publishedAt: -1 })
       .lean();
 
+    if (!news) {
+      return [];
+    }
+
     return ArraySchema(newsListItemSchema).parse(news);
   },
 

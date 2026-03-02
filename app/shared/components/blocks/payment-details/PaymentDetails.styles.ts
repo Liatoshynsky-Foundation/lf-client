@@ -66,7 +66,12 @@ export const styles = {
     display: 'flex',
     gap: '8px',
     width: '100%',
-    alignItems: 'center'
+    justifyContent: 'flex-start',
+    alignItems: { xs: 'flex-start', sm: 'center' }
+  },
+
+  ibanIcon: {
+    mt: { xs: '4px', sm: '0' }
   },
 
   ibanText: {
