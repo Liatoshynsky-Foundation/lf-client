@@ -41,8 +41,33 @@ export const styles = {
     justifyContent: { xs: 'center', sm: 'end' },
     mt: { xs: '64px', lg: '80px' }
   },
+  mobileSwiperContainer: {
+    gridColumn: '1 / -1',
+    width: '100vw',
+    marginLeft: '50%',
+    transform: 'translateX(-50%)',
+    mt: '24px',
+    overflow: 'hidden',
+
+    '& .swiper': {
+      width: '100%',
+      paddingLeft: '16px',
+      paddingRight: '0px',
+      overflow: 'visible'
+    },
+    '& .swiper-slide': {
+      width: 'auto',
+      display: 'flex'
+    }
+  },
+
   paper: (index: number) => ({
     position: 'relative',
-    top: `-${index * 12}px`
+    top: { xs: '0px', sm: `-${index * 12}px` },
+    maxWidth: {
+      xs: 'calc(100vw - 16px)',
+      sm: '296px'
+    },
+    Width: '100%'
   })
 };

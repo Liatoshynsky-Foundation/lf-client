@@ -3,6 +3,12 @@ import { render, screen } from '@testing-library/react';
 import ActionsHelp from './ActionsHelp';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
+jest.mock('swiper/react', () => ({
+  Swiper: ({ children }: { children: React.ReactNode }) => <div data-testid="mock-swiper">{children}</div>,
+  SwiperSlide: ({ children }: { children: React.ReactNode }) => <div data-testid="mock-swiper-slide">{children}</div>
+}));
+
+jest.mock('swiper/css', () => ({}));
 
 jest.mock('~/ds-components/text-card/TextCard', () => ({
   __esModule: true,

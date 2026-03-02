@@ -1,7 +1,7 @@
 export const styles = {
   container: {
     position: 'relative',
-    width: { xs: '270px', sm: '100%', md: '100%', lg: '272px', xl: '296px' },
+    width: { xs: '296px', md: '272px' },
     height: '351px',
     cursor: 'pointer',
     overflow: 'hidden',
