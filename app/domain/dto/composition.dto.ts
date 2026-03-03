@@ -29,6 +29,7 @@ export type CompositionDTO = {
   _id: string;
   title: string;
   year: number;
+  opusId: string | OpusDTO;
   audioAvailable: boolean;
   sheetAvailable: boolean;
   sheetMusic: SheetMusicDTO[];
@@ -37,6 +38,7 @@ export type CompositionDTO = {
   opus: OpusDTO;
   genres: GenreDTO;
 };
+
 export type CompositionTitlesDTO = {
   _id: string;
   title: string;

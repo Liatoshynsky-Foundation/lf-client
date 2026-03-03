@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
-import { CompositionDTO, Condition, Query } from '~/domain/dto/composition.dto';
+import { CompositionDTO, Condition, OpusDTO, Query } from '~/domain/dto/composition.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
@@ -52,11 +52,29 @@ const compositionsRepository = {
     const { search, category, genre, yearFrom, yearTo } = filters;
 
     const conditions: FilterQuery<CompositionDTO>[] = [];
+    let matchingOpuses: OpusDTO[] = [];
 
     if (search?.trim()) {
       const pattern = searchHelper(search);
+      const opusDocs = await Opus.find({
+        $or: [
+          { 'title.uk': { $regex: pattern, $options: 'i' } },
+          { 'title.en': { $regex: pattern, $options: 'i' } },
+          { number: { $regex: pattern, $options: 'i' } }
+        ]
+      })
+        .select('_id title')
+        .lean();
+
+      matchingOpuses = opusDocs as unknown as OpusDTO[];
+      const matchingOpusIds = matchingOpuses.map((o) => o._id);
+
       conditions.push({
-        $or: [{ 'title.uk': { $regex: pattern, $options: 'i' } }, { 'title.en': { $regex: pattern, $options: 'i' } }]
+        $or: [
+          { 'title.uk': { $regex: pattern, $options: 'i' } },
+          { 'title.en': { $regex: pattern, $options: 'i' } },
+          { opusId: { $in: matchingOpusIds } }
+        ]
       });
     }
 
@@ -96,9 +114,11 @@ const compositionsRepository = {
     }
 
     const query: FilterQuery<CompositionDTO> = conditions.length ? { $and: conditions } : {};
-
     const titles = await Compositions.find(query, { title: 1 }).lean();
-    return ArraySchema(compositionTitlesSchema).parse(titles);
+
+    const combinedResults = [...titles, ...matchingOpuses.map((o) => ({ _id: o._id, title: o.title }))];
+
+    return ArraySchema(compositionTitlesSchema).parse(combinedResults);
   },
   async getAllCompositions(
     search?: string,
@@ -110,10 +130,18 @@ const compositionsRepository = {
 
     const readySearchExpression = searchHelper(search);
     if (readySearchExpression) {
+      const pattern = readySearchExpression;
+      const matchingOpuses = await Opus.find({
+        $or: [{ 'title.uk': { $regex: pattern, $options: 'i' } }, { 'title.en': { $regex: pattern, $options: 'i' } }]
+      })
+        .select('_id')
+        .lean();
+
       conditions.push({
         $or: [
-          { 'title.uk': { $regex: readySearchExpression, $options: 'i' } },
-          { 'title.en': { $regex: readySearchExpression, $options: 'i' } }
+          { 'title.uk': { $regex: pattern, $options: 'i' } },
+          { 'title.en': { $regex: pattern, $options: 'i' } },
+          { opusId: { $in: matchingOpuses.map((o) => o._id) } }
         ]
       });
     }

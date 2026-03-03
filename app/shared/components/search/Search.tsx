@@ -12,9 +12,8 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
@@ -27,6 +26,8 @@ interface SearchProps<T> {
   setSearch: (value: string) => void;
   options: T[];
 }
+
+type TitleOption = { _id: string; title: string; kind: 'composition' | 'opus'; opusNumber?: string };
 
 function getIconStyle(isMobile: boolean, focused: boolean) {
   let width = 40;
@@ -63,22 +64,15 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
   const [value, setValue] = useState<T | null>(null);
   const [inputValue, setInputValue] = useState(search);
 
-  const debouncedInput = useMemo(
-    () =>
-      debounce((v: string) => {
-        setInputValue(v);
-      }, 200),
-    []
-  );
-
   const handleInputChange = useCallback(
     (_: SyntheticEvent, v: string) => {
+      if (v.length > 200) return;
+
       if (!opened) setOpened(true);
 
       setInputValue(v);
-      debouncedInput(v);
     },
-    [opened, debouncedInput]
+    [opened]
   );
 
   const handleSelect = useCallback(
@@ -87,6 +81,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
       const label = typeof v?.title === 'string' ? v.title : v?.title?.en || v?.title?.uk || '';
 
+      setInputValue(label);
       setSearch(label);
       setOpened(false);
     },
@@ -136,10 +131,12 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     );
   }, []);
 
-  const getOptionLabel = (option: T) => {
-    if (typeof option.title === 'string') return option.title;
-    if (typeof option.title === 'object') return option.title.en || option.title.uk || '';
-    return '';
+  const getOptionLabel = (option: TitleOption | string) => {
+    if (typeof option === 'string') return option;
+    if (option.kind === 'opus' && option.opusNumber) {
+      return `Op. ${option.opusNumber} — ${option.title}`;
+    }
+    return option.title;
   };
 
   return (
@@ -179,6 +176,10 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
             setFocused(false);
           }}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              maxLength: 200
+            },
             input: {
               ...params.InputProps,
               style: getIconStyle(isMobile, focused),
