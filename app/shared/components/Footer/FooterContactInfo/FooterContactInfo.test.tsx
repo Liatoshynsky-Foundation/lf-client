@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
+
 import FooterContactInfo from './FooterContactInfo';
 
 jest.mock('~/hooks/use-breakpoints/useBreakpoints');
