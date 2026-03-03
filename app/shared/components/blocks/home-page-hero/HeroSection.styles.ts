@@ -7,72 +7,44 @@ export const heroSectionStyles = {
     gridColumn: '1/-1'
   },
 
-  backgroundContainer: {
-    display: 'block',
-    height: '68vh',
-    maxHeight: '700px',
-    width: '100vw',
-    overflow: 'hidden'
+  clickableArea: {
+    position: 'relative'
   },
 
-  contentWrapper: {
-    position: 'relative' as const,
-    zIndex: 10,
-    display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
+  backgroundContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    position: 'relative',
+    height: {
+      xs: '500px',
+      lg: '60vh',
+      xl: '65vh'
     },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
+    maxHeight: {
+      sm: '60vh',
+      lg: '70vh'
     },
-    px: {
-      xs: '24px',
-      sm: '56px',
-      md: '72px'
-    },
-    maxWidth: '1728px',
-    margin: '0 auto',
     width: '100%',
-    flex: 1,
-    paddingTop: {
-      xs: '32px',
-      md: '160px'
-    },
-    paddingBottom: {
-      xs: '56px',
-      md: '300px'
+    clipPath: {
+      xs: 'polygon(0 0, 100% 0, 100% 90%, 0 95%)',
+      sm: 'polygon(0 0, 100% 0, 100% 90%, 0 98%)',
+      md: 'polygon(0 0, 100% 0, 100% 89%, 0 97%)',
+      lg: 'polygon(0 0, 100% 0, 100% 88%, 0 98%)'
     }
   },
 
-  rightContentBlock: {
-    gridColumn: {
-      xs: '1 / -1',
-      sm: '4 / -1',
-      md: '6 / -1',
-      lg: '7 / -1'
+  heroCharacter: {
+    position: 'absolute' as const,
+    left: {
+      sm: '0',
+      md: '-84px'
     },
-    display: 'flex',
-    flexDirection: 'column' as const,
-    // gap: {
-    //   xs: '24px',
-    //   sm: '32px',
-    //   md: '40px'
-    // },
-    alignItems: {
-      xs: 'flex-start',
-      sm: 'flex-end'
-    },
-    justifyContent: 'center',
-    marginBottom: {
-      xs: '64px',
-      sm: '80px',
-      md: '96px'
-    },
-    pointerEvents: 'none'
+    bottom: '0',
+    top: '0',
+    width: {
+      xs: '100%',
+      sm: '65%'
+    }
   },
 
   heroIcon: {
@@ -147,5 +119,60 @@ export const heroSectionStyles = {
     height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     zIndex: 0
+  },
+
+  contentWrapper: {
+    position: 'relative' as const,
+    zIndex: 10,
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(4, 1fr)',
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: {
+      xs: '16px',
+      sm: '24px',
+      md: '40px'
+    },
+    px: {
+      xs: '24px',
+      sm: '56px',
+      md: '72px'
+    },
+    maxWidth: '1728px',
+    margin: '0 auto',
+    width: '100%',
+    flex: 1,
+    paddingTop: {
+      xs: '32px',
+      md: '200px'
+    },
+    paddingBottom: {
+      xs: '56px',
+      md: '150px'
+    }
+  },
+
+  rightContentBlock: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '4 / -1',
+      md: '6 / -1',
+      lg: '7 / -1'
+    },
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: {
+      xs: 'flex-start',
+      sm: 'flex-end'
+    },
+    justifyContent: 'center',
+    marginBottom: {
+      xs: '64px',
+      sm: '80px',
+      md: '96px'
+    },
+    pointerEvents: 'none'
   }
 };

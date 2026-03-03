@@ -1,10 +1,11 @@
 'use client';
 
-import { Box, ButtonBase } from '@mui/material';
+import { Box } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
 
-import heroBackgroundImage from './hero-image.png';
+import heroBackgroundImage from './hero-background-image.png';
+import heroCharacterImage from './hero-character-image.png';
 import { heroSectionStyles } from './HeroSection.styles';
 import { HeroSectionQuoteBlock } from './HeroSectionQuoteBlock';
 import LogoSvg from './logo.svg';
@@ -12,10 +13,10 @@ import LogoSvg from './logo.svg';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export interface HeroProps {
+export type HeroProps = {
   heroQuote: string;
   heroQuoteSource: string;
-}
+};
 
 export const HeroSection: React.FC<HeroProps> = ({ heroQuote, heroQuoteSource }) => {
   const { togglePlay } = useAudioPlayer();
@@ -25,24 +26,43 @@ export const HeroSection: React.FC<HeroProps> = ({ heroQuote, heroQuoteSource })
 
   return (
     <Box sx={heroSectionStyles.heroSection}>
-      <ButtonBase onClick={togglePlay} sx={heroSectionStyles.backgroundContainer}>
-        <Image
-          src={heroBackgroundImage}
-          alt="Hero background"
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-          style={{
-            objectFit: 'cover',
-            objectPosition: `${bp.isMobile ? '18% 50%' : 'center'}`
-          }}
-        />
-        {bp.isLaptopAndAbove && heroContent}
-      </ButtonBase>
-      <Box sx={{ position: 'relative', height: 'auto' }}>
-        <LogoSvg style={{}} />
+      <Box onClick={togglePlay} sx={heroSectionStyles.clickableArea}>
+        <Box sx={heroSectionStyles.backgroundContainer}>
+          <Image
+            src={heroBackgroundImage}
+            alt="Hero background photo"
+            fill
+            priority
+            quality={90}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center'
+            }}
+          />
+          <Box sx={heroSectionStyles.heroCharacter}>
+            <Image
+              src={heroCharacterImage}
+              alt="Hero character photo"
+              priority
+              fill
+              quality={90}
+              style={{
+                objectFit: `${bp.isLaptopAndAbove ? 'contain' : 'cover'}`,
+                objectPosition: 'center'
+              }}
+            />
+          </Box>
+          {bp.isLaptopAndAbove && heroContent}
+        </Box>
       </Box>
+      <LogoSvg
+        style={{
+          display: 'block',
+          height: 'auto',
+          maxWidth: 1728,
+          margin: '0 auto'
+        }}
+      />
       {(bp.isMobile || bp.isTablet) && heroContent}
     </Box>
   );

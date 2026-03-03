@@ -4,10 +4,10 @@ import Image from 'next/image';
 import heroIcon from './hero-icon.png';
 import { heroSectionStyles } from './HeroSection.styles';
 
-export interface HeroSectionQuoteProps {
+export type HeroSectionQuoteProps = {
   heroQuote: string;
   heroQuoteSource: string;
-}
+};
 
 export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({ heroQuote, heroQuoteSource }) => {
   return (

@@ -63,7 +63,6 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
 
       <AnimatePresence
         onExitComplete={() => {
-          setShowExpansion(false);
           setShowContent(true);
         }}
       >
@@ -92,7 +91,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
               animate="animate"
               onAnimationComplete={() => setShowExpansion(false)}
               transition={{
-                duration: 1.2,
+                duration: 0.6,
                 ease: [0.25, 0.1, 0.5, 1],
                 opacity: { duration: 0.6, ease: 'easeInOut' }
               }}
