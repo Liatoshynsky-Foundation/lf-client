@@ -42,14 +42,14 @@ export const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     width: '112px',
-    height: '100%',
+    height: '60px',
     flexShrink: 0
   },
 
   logoImage: {
     objectFit: 'contain',
-    height: 'auto',
-    maxHeight: '112px',
+    height: '100%',
+    maxHeight: '60px',
     width: '100%'
   }
 };
