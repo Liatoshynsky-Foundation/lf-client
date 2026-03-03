@@ -33,6 +33,23 @@ export const styles = {
     gap: '16px',
     mt: '32px'
   },
+  '.icon-wrapper': {
+    position: 'relative',
+    '.hover-icon': {
+      display: 'none',
+      position: 'absolute',
+      top: 0,
+      left: 0
+    }
+  },
+  '&:hover .icon-wrapper': {
+    '.default-icon': {
+      display: 'none'
+    },
+    '.hover-icon': {
+      display: 'block'
+    }
+  },
   contactsItem: {
     display: 'flex',
     gap: '8px',
