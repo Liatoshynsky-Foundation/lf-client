@@ -1,8 +1,10 @@
-import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
+import { Box } from '@mui/material';
 
-import heroIcon from './hero-icon.png';
+import QuoteBlock from '~/components/Quote/Quote';
+
 import { heroSectionStyles } from './HeroSection.styles';
+
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export type HeroSectionQuoteProps = {
   heroQuote: string;
@@ -10,22 +12,22 @@ export type HeroSectionQuoteProps = {
 };
 
 export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({ heroQuote, heroQuoteSource }) => {
+  const bp = useBreakpoints();
+
   return (
     <Box sx={heroSectionStyles.contentWrapper}>
-      <Box sx={heroSectionStyles.rightContentBlock}>
-        <Image
-          src={heroIcon}
-          alt="Lyatoshynsky Foundation Icon"
-          style={{
-            width: '60px',
-            height: '50px'
-          }}
-          priority
-        />
-
-        <Typography sx={heroSectionStyles.textParagraph}> {heroQuote} </Typography>
-        <Typography sx={heroSectionStyles.smallText}> {heroQuoteSource} </Typography>
-      </Box>
+      <QuoteBlock
+        quoteText={heroQuote}
+        sourceText={heroQuoteSource}
+        quoteIconColor="black"
+        mainTextColor="black"
+        alignRight={bp.isMobile ? false : true}
+        imageTextGap={heroSectionStyles.imageTextGap}
+        textGap={heroSectionStyles.textGap}
+        iconWidth={heroSectionStyles.iconWidth}
+        width="100%"
+        sx={heroSectionStyles.rightContentBlock}
+      />
     </Box>
   );
 };

@@ -47,69 +47,70 @@ export const heroSectionStyles = {
     }
   },
 
-  heroIcon: {
-    width: {
-      xs: '64px',
-      sm: '80px',
-      md: '96px',
-      lg: '120px'
-    },
-    height: {
-      xs: '64px',
-      sm: '80px',
-      md: '96px',
-      lg: '120px'
-    },
-    objectFit: 'contain' as const
+  imageTextGap: {
+    xs: '16px',
+    md: '32px',
+    lg: '40px'
   },
 
-  textParagraph: {
-    textAlign: {
-      xs: 'left',
-      sm: 'right'
-    },
-    fontSize: {
-      xs: '16px',
-      lg: '18px'
-    },
-    marginTop: {
-      xs: '16px',
-      md: '32px',
-      lg: '40px'
-    },
-    marginBottom: {
-      xs: '12px',
-      md: '16px',
-      lg: '24px'
-    },
-    lineHeight: 1.6,
-    color: '#190D03',
-    maxWidth: {
-      xs: '100%',
-      md: '500px',
-      lg: '700px'
-    }
+  textGap: {
+    xs: '12px',
+    md: '16px',
+    lg: '24px'
   },
 
-  smallText: {
-    fontStyle: 'italic',
-    fontSize: {
-      xs: '14px',
-      lg: '16px'
-    },
-    fontWeight: {
-      xs: '400',
-      lg: '500'
-    },
-    lineHeight: 1.1,
-    color: '#190D03',
-    letterSpacing: '-0.02em',
-    maxWidth: {
-      xs: '100%',
-      md: '700px',
-      lg: '800px'
-    }
+  iconWidth: {
+    xs: '40px',
+    md: '50px',
+    lg: '60px'
   },
+
+  // textParagraph: {
+  //   textAlign: {
+  //     xs: 'left',
+  //     sm: 'right'
+  //   },
+  //   fontSize: {
+  //     xs: '16px',
+  //     lg: '18px'
+  //   },
+  //   marginTop: {
+  //     xs: '16px',
+  //     md: '32px',
+  //     lg: '40px'
+  //   },
+  //   marginBottom: {
+  //     xs: '12px',
+  //     md: '16px',
+  //     lg: '24px'
+  //   },
+  //   lineHeight: 1.6,
+  //   color: '#190D03',
+  //   maxWidth: {
+  //     xs: '100%',
+  //     md: '500px',
+  //     lg: '700px'
+  //   }
+  // },
+
+  // smallText: {
+  //   fontStyle: 'italic',
+  //   fontSize: {
+  //     xs: '14px',
+  //     lg: '16px'
+  //   },
+  //   fontWeight: {
+  //     xs: '400',
+  //     lg: '500'
+  //   },
+  //   lineHeight: 1.1,
+  //   color: '#190D03',
+  //   maxWidth: {
+  //     xs: '100%',
+  //     md: '700px',
+  //     lg: '800px'
+  //   }
+  // },
 
   overlay: {
     position: 'absolute' as const,

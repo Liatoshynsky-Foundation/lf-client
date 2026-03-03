@@ -58,7 +58,6 @@ export const HeroSection: React.FC<HeroProps> = ({ heroQuote, heroQuoteSource })
       <LogoSvg
         style={{
           display: 'block',
-          height: 'auto',
           maxWidth: 1728,
           margin: '0 auto'
         }}
