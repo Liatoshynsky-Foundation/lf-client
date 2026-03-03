@@ -20,14 +20,13 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
+import { TitleOption } from '~/types/types/composition.types';
 
 interface SearchProps<T> {
   search: string;
   setSearch: (value: string) => void;
   options: T[];
 }
-
-type TitleOption = { _id: string; title: string; kind: 'composition' | 'opus'; opusNumber?: string };
 
 function getIconStyle(isMobile: boolean, focused: boolean) {
   let width = 40;
@@ -48,11 +47,7 @@ function getIconStyle(isMobile: boolean, focused: boolean) {
   };
 }
 
-export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
-  search,
-  setSearch,
-  options
-}: SearchProps<T>) => {
+export const Search = <T extends TitleOption>({ search, setSearch, options }: SearchProps<T>) => {
   const theme = useTheme();
   const t = useTranslations('search');
 
@@ -131,12 +126,16 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     );
   }, []);
 
-  const getOptionLabel = (option: TitleOption | string) => {
+  const getOptionLabel = (option: T | string) => {
     if (typeof option === 'string') return option;
+
+    const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
+
     if (option.kind === 'opus' && option.opusNumber) {
-      return `Op. ${option.opusNumber} — ${option.title}`;
+      return `Op. ${option.opusNumber} — ${titleStr}`;
     }
-    return option.title;
+
+    return titleStr;
   };
 
   return (

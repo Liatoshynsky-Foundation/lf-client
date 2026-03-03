@@ -21,11 +21,11 @@ import {
 } from './MusicTableCells';
 import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
+import { TitleOption } from '~/types/types/composition.types';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters.types';
 
-import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -66,8 +66,6 @@ export default function MusicTableSection() {
     ApiRoutes.COMPOSITION_DATA,
     params
   );
-
-  type TitleOption = CompositionTitlesDTO;
 
   const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
 

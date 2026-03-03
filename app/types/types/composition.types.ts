@@ -49,3 +49,10 @@ export type Composition = {
   opus?: Opus;
   genres: Genre[];
 };
+
+export type TitleOption = {
+  _id: string;
+  title: string | { en?: string; uk?: string };
+  kind?: 'composition' | 'opus';
+  opusNumber?: string | number;
+};

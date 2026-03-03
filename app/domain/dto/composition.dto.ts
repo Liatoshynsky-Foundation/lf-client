@@ -47,6 +47,7 @@ export type Condition = {
   $or?: Array<
     | { 'title.uk'?: { $regex?: RegExp | string; $options?: string } }
     | { 'title.en'?: { $regex?: RegExp | string; $options?: string } }
+    | { opusId?: { $in: unknown[] } }
   >;
   categories?: { $in?: Array<string | number | Record<string, unknown>> };
   genres?: { $in?: Array<string | number | Record<string, unknown>> };
