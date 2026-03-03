@@ -25,16 +25,25 @@ export const styles = {
   },
 
   xsGrid: {
-    display: { xs: 'grid', sm: 'none' },
-    justifyContent: 'center',
+    display: { xs: 'flex', sm: 'none' },
+    justifyContent: 'flex-start',
+    overflowX: 'auto',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
     alignItems: 'center',
-    gap: '12px',
-    gridTemplateColumns: 'repeat(2, 1fr)'
+    gap: '4px',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    }
   },
 
   logoWrapper: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '112px',
+    height: '100%',
+    flexShrink: 0
   },
 
   logoImage: {
