@@ -10,7 +10,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 };
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useLocale: () => 'uk'
 }));
 
 const setParam = jest.fn();
