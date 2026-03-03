@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, PipelineStage } from 'mongoose';
 
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
@@ -12,6 +12,22 @@ import { namedFilterHelper, searchHelper, yearHelper } from '~/lib/utils/searchA
 import { compositionSchema, compositionTitlesSchema } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
+
+function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
+  return words.map((word) => ({
+    $or: fields.map((field) => ({
+      [field]: { $regex: word, $options: 'i' }
+    }))
+  })) as FilterQuery<T>[];
+}
+
+function buildAllWordsPresent<T>(words: string[], fieldGroups: string[][]): FilterQuery<T> {
+  const andClauses = fieldGroups.map((group) => buildWordSearchConditions<T>(words, group));
+
+  return {
+    $or: andClauses.map((clauses) => ({ $and: clauses }))
+  };
+}
 
 const compositionsRepository = {
   async getAllGenres() {
@@ -51,31 +67,45 @@ const compositionsRepository = {
 
     const { search, category, genre, yearFrom, yearTo } = filters;
 
-    const conditions: FilterQuery<CompositionDTO>[] = [];
-    let matchingOpuses: OpusDTO[] = [];
+    let searchWords: string[] = [];
 
     if (search?.trim()) {
-      const pattern = searchHelper(search);
-      const opusDocs = await Opus.find({
-        $or: [
-          { 'title.uk': { $regex: pattern, $options: 'i' } },
-          { 'title.en': { $regex: pattern, $options: 'i' } },
-          { number: { $regex: pattern, $options: 'i' } }
-        ]
-      })
-        .select('_id title')
-        .lean();
+      searchWords = search
+        .trim()
+        .split(/\s+/)
+        .map((w) => w.trim())
+        .filter((w): w is string => w.length >= 2)
+        .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    }
 
-      matchingOpuses = opusDocs as unknown as OpusDTO[];
-      const matchingOpusIds = matchingOpuses.map((o) => o._id);
+    const hasSearch = searchWords.length > 0;
 
-      conditions.push({
-        $or: [
-          { 'title.uk': { $regex: pattern, $options: 'i' } },
-          { 'title.en': { $regex: pattern, $options: 'i' } },
-          { opusId: { $in: matchingOpusIds } }
-        ]
-      });
+    const compositionPipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: 'opus',
+          localField: 'opusId',
+          foreignField: '_id',
+          as: 'opusData'
+        }
+      },
+      {
+        $unwind: {
+          path: '$opusData',
+          preserveNullAndEmptyArrays: true
+        }
+      }
+    ];
+
+    const compMatch: FilterQuery<CompositionDTO>[] = [];
+
+    if (hasSearch) {
+      const compFields = ['title.uk', 'title.en'];
+      const opusFields = ['opusData.title.uk', 'opusData.title.en'];
+
+      compMatch.push(
+        buildAllWordsPresent<CompositionDTO>(searchWords, [compFields, opusFields, [...compFields, ...opusFields]])
+      );
     }
 
     const categoryKeys = namedFilterHelper(category);
@@ -86,7 +116,7 @@ const compositionsRepository = {
       const categoryIds = categoryDocs.map((d) => d._id);
 
       if (categoryIds.length) {
-        conditions.push({ categories: { $in: categoryIds } });
+        compMatch.push({ categories: { $in: categoryIds } });
       } else {
         return [];
       }
@@ -100,7 +130,7 @@ const compositionsRepository = {
       const genreIds = genreDocs.map((d) => d._id);
 
       if (genreIds.length) {
-        conditions.push({ genres: { $in: genreIds } });
+        compMatch.push({ genres: { $in: genreIds } });
       } else {
         return [];
       }
@@ -109,17 +139,72 @@ const compositionsRepository = {
     const yearCond: { $gte?: number; $lte?: number } = {};
     if (yearFrom != null) yearCond.$gte = yearFrom;
     if (yearTo != null) yearCond.$lte = yearTo;
-    if (yearCond.$gte != null || yearCond.$lte != null) {
-      conditions.push({ year: yearCond });
+    if (Object.keys(yearCond).length) {
+      compMatch.push({ year: yearCond });
     }
 
-    const query: FilterQuery<CompositionDTO> = conditions.length ? { $and: conditions } : {};
-    const titles = await Compositions.find(query, { title: 1 }).lean();
+    if (compMatch.length > 0) {
+      compositionPipeline.push({
+        $match: compMatch.length === 1 ? compMatch[0] : { $and: compMatch }
+      });
+    }
 
-    const combinedResults = [...titles, ...matchingOpuses.map((o) => ({ _id: o._id, title: o.title }))];
+    compositionPipeline.push({
+      $project: {
+        _id: 1,
+        title: 1,
+        kind: { $literal: 'composition' },
+        opusNumber: '$opusData.number'
+      }
+    });
 
-    return ArraySchema(compositionTitlesSchema).parse(combinedResults);
+    const compositionTitles = await Compositions.aggregate(compositionPipeline).exec();
+
+    const opusPipeline: PipelineStage[] = [];
+
+    const opusMatch: FilterQuery<OpusDTO> = {};
+
+    if (hasSearch) {
+      opusMatch.$and = buildWordSearchConditions<OpusDTO>(searchWords, ['title.uk', 'title.en']);
+    }
+
+    const opusYearCond: { $gte?: number; $lte?: number } = {};
+    if (yearFrom != null) opusYearCond.$gte = yearFrom;
+    if (yearTo != null) opusYearCond.$lte = yearTo;
+    if (Object.keys(opusYearCond).length) {
+      if (!opusMatch.$and) opusMatch.$and = [];
+      opusMatch.$and.push({ releaseYear: opusYearCond });
+    }
+
+    if (Object.keys(opusMatch).length > 0) {
+      opusPipeline.push({ $match: opusMatch });
+    }
+
+    opusPipeline.push({
+      $project: {
+        _id: 1,
+        title: 1,
+        kind: { $literal: 'opus' },
+        opusNumber: '$number'
+      }
+    });
+
+    const opusTitles = await Opus.aggregate(opusPipeline).exec();
+
+    const allTitlesMap = new Map<string, any>();
+
+    [...compositionTitles, ...opusTitles].forEach((item) => {
+      const key = item._id.toString();
+      if (!allTitlesMap.has(key)) {
+        allTitlesMap.set(key, item);
+      }
+    });
+
+    const allTitles = Array.from(allTitlesMap.values());
+
+    return ArraySchema(compositionTitlesSchema).parse(allTitles);
   },
+
   async getAllCompositions(
     search?: string,
     filters?: { categories?: string[]; genres?: string[]; years?: { min?: number; max?: number } }
