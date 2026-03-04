@@ -20,7 +20,7 @@ export const styles = {
   },
   dropdownMenu: {
     marginTop: '8px',
-    marginLeft: '-16px'
+    transform: 'translateX(-16px)'
   },
   buttonGroup: {
     height: '40px',
