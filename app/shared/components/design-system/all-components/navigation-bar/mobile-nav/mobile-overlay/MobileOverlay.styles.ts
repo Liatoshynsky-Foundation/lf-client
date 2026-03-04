@@ -20,11 +20,11 @@ export const styles = {
     top: { xs: '-30px', md: '-48px' },
     left: 0,
     width: '100vw',
-    height: '107vh',
+    height: '100vh',
     backgroundColor: mainHexPallete.yellow[500],
     zIndex: 900,
     clipPath: {
-      xs: 'polygon(0 0, 100% 0, 100% 98%, 0 100%)',
+      xs: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
       sm: 'polygon(0 0, 100% 0, 100% 94%, 0 100%)'
     }
   },
