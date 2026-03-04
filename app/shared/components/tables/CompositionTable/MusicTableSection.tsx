@@ -39,6 +39,7 @@ import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilter
 import { useFilterAutocomplete } from '~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
+type TitlesAutocompleteParams = Omit<CompositionsFilters, 'search'>;
 
 export default function MusicTableSection() {
   const t = useTranslations('table.composition');
@@ -69,9 +70,14 @@ export default function MusicTableSection() {
 
   const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
 
-  const { options: titleOptions } = useFilterAutocomplete<CompositionsFilters, TitleOption>({
+  const titleParams = useMemo(() => {
+    const { search: _, ...rest } = params;
+    return rest;
+  }, [params]);
+
+  const { options: titleOptions } = useFilterAutocomplete<TitlesAutocompleteParams, TitleOption>({
     endpoint: ApiRoutes.COMPOSITION_TITLES,
-    params,
+    params: titleParams,
     select: selectTitles
   });
 

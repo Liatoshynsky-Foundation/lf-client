@@ -138,6 +138,18 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
     return titleStr;
   };
 
+  const filterOptions = useCallback((options: T[], { inputValue }: { inputValue: string }) => {
+    const trimmedInput = inputValue.trim().toLowerCase();
+    if (!trimmedInput) return options;
+
+    const words = trimmedInput.split(/\s+/).filter((w) => w.length > 0);
+
+    return options.filter((option) => {
+      const label = getOptionLabel(option).toLowerCase();
+      return words.every((word) => label.includes(word));
+    });
+  }, []);
+
   return (
     <Autocomplete<T, false, false, false>
       data-testid="music-search"
@@ -148,6 +160,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
       onInputChange={handleInputChange}
       renderOption={renderOption}
       getOptionLabel={getOptionLabel}
+      filterOptions={filterOptions}
       popupIcon={null}
       clearIcon={false}
       clearOnBlur={false}
@@ -173,6 +186,9 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
           onBlur={() => {
             setOpened(false);
             setFocused(false);
+            if (inputValue !== search) {
+              setSearch(inputValue);
+            }
           }}
           slotProps={{
             htmlInput: {
