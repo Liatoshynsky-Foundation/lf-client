@@ -9,9 +9,10 @@ import { WordMorpher } from './WordMorpher';
 interface IntroAnimationProps {
   children: ReactNode;
   onComplete?: () => void;
+  testID?: string;
 }
 
-export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
+export const IntroAnimation: FC<IntroAnimationProps> = ({ children, onComplete, testID = 'intro-animation' }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [showExpansion, setShowExpansion] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -43,6 +44,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
       <AnimatePresence onExitComplete={() => setShowExpansion(true)}>
         {showIntro && (
           <div
+            data-testid={`${testID}-overlay`}
             style={{
               position: 'fixed',
               top: 0,
@@ -56,7 +58,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
               justifyContent: 'center'
             }}
           >
-            <WordMorpher onComplete={() => setShowIntro(false)} />
+            <WordMorpher onComplete={() => setShowIntro(false)} testID={`${testID}-word-morpher`} />
           </div>
         )}
       </AnimatePresence>
@@ -64,10 +66,13 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
       <AnimatePresence
         onExitComplete={() => {
           setShowContent(true);
+          setShowExpansion(false);
+          onComplete?.();
         }}
       >
         {showExpansion && (
           <motion.div
+            data-testid={`${testID}-expansion`}
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
@@ -102,6 +107,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
             >
               <svg
                 viewBox="0 0 426 92"
+                data-testid={`${testID}-expansion-svg`}
                 style={{
                   width: '100%',
                   height: 'auto',
@@ -119,6 +125,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children }) => {
 
       {(!showIntro || showContent) && (
         <motion.div
+          data-testid={`${testID}-content`}
           variants={contentVariants}
           initial="hidden"
           animate="visible"

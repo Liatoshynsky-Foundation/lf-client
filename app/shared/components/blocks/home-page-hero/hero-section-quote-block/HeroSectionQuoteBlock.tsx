@@ -2,20 +2,25 @@ import { Box } from '@mui/material';
 
 import QuoteBlock from '~/components/Quote/Quote';
 
-import { heroSectionStyles } from './HeroSection.styles';
+import { heroSectionStyles } from '../HeroSection.styles';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 export type HeroSectionQuoteProps = {
   heroQuote: string;
   heroQuoteSource: string;
+  testID?: string;
 };
 
-export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({ heroQuote, heroQuoteSource }) => {
+export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({
+  heroQuote,
+  heroQuoteSource,
+  testID = 'hero-section-quote-block'
+}) => {
   const bp = useBreakpoints();
 
   return (
-    <Box sx={heroSectionStyles.contentWrapper}>
+    <Box sx={heroSectionStyles.contentWrapper} data-testid={testID}>
       <QuoteBlock
         quoteText={heroQuote}
         sourceText={heroQuoteSource}
@@ -27,6 +32,7 @@ export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({ heroQuo
         iconWidth={heroSectionStyles.iconWidth}
         width="100%"
         sx={heroSectionStyles.rightContentBlock}
+        data-testid={`${testID}-quote`}
       />
     </Box>
   );

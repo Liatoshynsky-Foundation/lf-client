@@ -16,11 +16,11 @@ export const heroQuoteSource: LocalizedString = {
 };
 
 export const playbackButton = {
-  stopPlayback: {
+  startPlayback: {
     uk: 'Увімкнути музику',
     en: 'Play music'
   } as LocalizedString,
-  startPlayback: {
+  stopPlayback: {
     uk: 'Зупинити музику',
     en: 'Stop music'
   } as LocalizedString

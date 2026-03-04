@@ -1,4 +1,24 @@
+import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+
 export const heroSectionStyles = {
+  imageTextGap: {
+    xs: '16px',
+    md: '32px',
+    lg: '40px'
+  },
+
+  textGap: {
+    xs: '12px',
+    md: '16px',
+    lg: '24px'
+  },
+
+  iconWidth: {
+    xs: '40px',
+    md: '50px',
+    lg: '60px'
+  },
+
   heroSection: {
     position: 'relative' as const,
     width: '100vw',
@@ -8,7 +28,10 @@ export const heroSectionStyles = {
   },
 
   clickableArea: {
-    position: 'relative'
+    position: 'relative',
+    cursor: 'none',
+    outline: 'none',
+    userSelect: 'none'
   },
 
   backgroundContainer: {
@@ -47,79 +70,45 @@ export const heroSectionStyles = {
     }
   },
 
-  imageTextGap: {
-    xs: '16px',
-    md: '32px',
-    lg: '40px'
-  },
-
-  textGap: {
-    xs: '12px',
-    md: '16px',
-    lg: '24px'
-  },
-
-  iconWidth: {
-    xs: '40px',
-    md: '50px',
-    lg: '60px'
-  },
-
-  // textParagraph: {
-  //   textAlign: {
-  //     xs: 'left',
-  //     sm: 'right'
-  //   },
-  //   fontSize: {
-  //     xs: '16px',
-  //     lg: '18px'
-  //   },
-  //   marginTop: {
-  //     xs: '16px',
-  //     md: '32px',
-  //     lg: '40px'
-  //   },
-  //   marginBottom: {
-  //     xs: '12px',
-  //     md: '16px',
-  //     lg: '24px'
-  //   },
-  //   lineHeight: 1.6,
-  //   color: '#190D03',
-  //   maxWidth: {
-  //     xs: '100%',
-  //     md: '500px',
-  //     lg: '700px'
-  //   }
-  // },
-
-  // smallText: {
-  //   fontStyle: 'italic',
-  //   fontSize: {
-  //     xs: '14px',
-  //     lg: '16px'
-  //   },
-  //   fontWeight: {
-  //     xs: '400',
-  //     lg: '500'
-  //   },
-  //   lineHeight: 1.1,
-  //   color: '#190D03',
-  //   maxWidth: {
-  //     xs: '100%',
-  //     md: '700px',
-  //     lg: '800px'
-  //   }
-  // },
-
-  overlay: {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
+  textLogoStyle: {
+    position: 'relative',
     width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    zIndex: 0
+    maxWidth: '1728px',
+    margin: '0 auto',
+    padding: 0,
+    img: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      display: 'block'
+    }
+  },
+
+  cursorButton: {
+    position: 'fixed',
+    transform: 'translate(-50%, -50%)',
+    pointerEvents: 'none',
+    zIndex: 9999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '44px',
+    width: '200px',
+    gap: '8px',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    padding: '10px 20px 10px 16px',
+    backdropFilter: 'blur(5px)',
+    borderRadius: '48px',
+    '@media (hover: none) and (pointer: coarse)': {
+      display: 'none'
+    }
+  },
+
+  cursorButtonText: {
+    fontWeight: '600',
+    fontSize: '16px',
+    letterSpacing: '-2%',
+    color: mainHexPallete?.brown?.[700] || '#574139'
   },
 
   contentWrapper: {
@@ -160,7 +149,7 @@ export const heroSectionStyles = {
       xs: '1 / -1',
       sm: '4 / -1',
       md: '6 / -1',
-      lg: '7 / -1'
+      lg: '8 / -1'
     },
     display: 'flex',
     flexDirection: 'column' as const,
@@ -174,6 +163,7 @@ export const heroSectionStyles = {
       sm: '80px',
       md: '96px'
     },
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    userSelect: 'none'
   }
 };
