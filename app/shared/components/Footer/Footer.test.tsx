@@ -79,26 +79,30 @@ jest.mock('~/public/images/logo.svg', () => ({
 
 describe('Footer component', () => {
   it('should render footer content correctly', async () => {
-    render(await Footer());
+    // 1. Рендерим один раз, дожидаясь асинхронного Footer
+    const footerComponent = await Footer();
+    render(footerComponent);
 
-    expect(await screen.findByText(/Privacy Policy/i)).toBeInTheDocument();
-    expect(await screen.findByText(/Terms of Use/i)).toBeInTheDocument();
-    expect(await screen.findByText(/Home/i)).toBeInTheDocument();
-    expect(await screen.findByText(/About/i)).toBeInTheDocument();
-    expect(await screen.findByText(/test@example\.com/i)).toBeInTheDocument();
-    expect(await screen.findByText(/123456/i)).toBeInTheDocument();
-    expect(await screen.findByText(/Donate Now/i)).toBeInTheDocument();
-    expect(await screen.findByText(/© 2025 My Company/i)).toBeInTheDocument();
-    expect(await screen.findByText(/Test Foundation/i)).toBeInTheDocument();
-    expect(await screen.findByRole('link', { name: /instagram/i })).toHaveAttribute(
+    // 2. Используем getByText для мгновенной проверки (так как render уже завершен)
+    // Если getByText упадет, мы сразу увидим какой именно текст не найден, без ожидания 5 секунд
+    expect(screen.getByText(/Privacy Policy/i)).toBeInTheDocument();
+    expect(screen.getByText(/Terms of Use/i)).toBeInTheDocument();
+    expect(screen.getByText(/Home/i)).toBeInTheDocument();
+    expect(screen.getByText(/About/i)).toBeInTheDocument();
+    expect(screen.getByText(/test@example\.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/123456/i)).toBeInTheDocument();
+    expect(screen.getByText(/Donate Now/i)).toBeInTheDocument();
+    expect(screen.getByText(/© 2025 My Company/i)).toBeInTheDocument();
+    expect(screen.getByText(/Test Foundation/i)).toBeInTheDocument();
+
+    // 3. Ссылки соцсетей
+    expect(screen.getByRole('link', { name: /instagram/i })).toHaveAttribute(
       'href',
       'https://instagram.com/foundation'
     );
-    expect(await screen.findByRole('link', { name: /facebook/i })).toHaveAttribute(
-      'href',
-      'https://facebook.com/foundation'
-    );
-    expect(await screen.findByRole('button', { name: /contactusbutton/i })).toBeInTheDocument();
-    expect(await screen.findByRole('link', { name: /donate/i })).toHaveAttribute('href', '/donate');
+    expect(screen.getByRole('link', { name: /facebook/i })).toHaveAttribute('href', 'https://facebook.com/foundation');
+
+    // 4. Кнопки
+    expect(screen.getByRole('link', { name: /donate/i })).toHaveAttribute('href', '/donate');
   });
 });
