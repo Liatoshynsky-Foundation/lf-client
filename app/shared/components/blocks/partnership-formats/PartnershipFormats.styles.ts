@@ -376,7 +376,7 @@ const baseStyles = {
     }
   },
   descriptionTypography: {
-    fontSize: { xs: '16px', md: '18px' }
+    fontSize: { xs: '16px', md: '20px' }
   },
   buttonContainer: {
     display: 'grid',
