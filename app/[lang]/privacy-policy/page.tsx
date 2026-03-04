@@ -6,7 +6,7 @@ import IntroSection from '~/components/blocks/privacy-policy/intro-section/Intro
 import PolicySection from '~/components/blocks/privacy-policy/policy-section/PolicySection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
-import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
+import { PageNotFound } from '../[...unknown-route]/page-not-found/pageNotFound';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
