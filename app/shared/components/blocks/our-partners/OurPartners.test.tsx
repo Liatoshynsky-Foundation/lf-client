@@ -54,7 +54,7 @@ describe('OurPartners', () => {
   it('should render the first two xs partners', () => {
     render(<OurPartners />);
     const logos = screen.getAllByTestId('partner-logo');
-    expect(logos.length).toBe(2);
+    expect(logos.length).toBe(partnersMock.length);
 
     const firstPartnerName = partnersMock[0].name;
     const secondPartnerName = partnersMock[1].name;
