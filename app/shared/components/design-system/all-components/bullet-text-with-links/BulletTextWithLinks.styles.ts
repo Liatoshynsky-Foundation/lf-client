@@ -29,7 +29,7 @@ export const styles = {
 
   button: {
     alignSelf: { xs: 'start', sm: 'end' },
-    maxWidth: { xs: '200px', sm: '250px' }
+    maxWidth: { xs: 'fit-content', sm: '250px' }
   },
 
   icon: {
