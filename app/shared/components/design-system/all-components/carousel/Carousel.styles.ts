@@ -82,6 +82,9 @@ export const styles = {
     opacity: 0,
     animation: `${fadeIn} 1s ease forwards`
   },
+  exactCaptionStyles: {
+    fontSize: '14px'
+  },
   dotsContainerStyles: {
     display: 'flex',
     justifyContent: 'center',
