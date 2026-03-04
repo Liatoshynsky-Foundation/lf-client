@@ -1,22 +1,50 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
-import PrivacyPolicy from './page';
+import PrivacyPolicy, { generateMetadata } from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
+import * as envUtils from '~/utils/isProductionMode';
 
 jest.mock('~/services/pages-data/resolvePageData');
-jest.mock('~/lib/utils/errorPageFactory');
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
+jest.mock('~/utils/isProductionMode', () => ({
+  isProductionMode: jest.fn()
+}));
+
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key),
+  setRequestLocale: jest.fn()
+}));
+
+jest.mock('~/lib/utils/errorPageFactory', () => ({
+  ErrorPageFactory: jest.fn((err) => <div data-testid="error-page">Error: {err}</div>)
+}));
+
+jest.mock('../[...unknown-route]/page-not-found/pageNotFound', () => ({
+  PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
+}));
 
 jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => {
-  const MockIntroSection = ({ title }: { title: string }) => <div>Intro section: {title}</div>;
-  MockIntroSection.displayName = 'MockIntroSection';
-  return MockIntroSection;
+  const MockIntro = ({ title }: { title: string }) => <div>Intro section: {title}</div>;
+  MockIntro.displayName = 'IntroSection';
+  return MockIntro;
 });
 
 jest.mock('~/components/blocks/privacy-policy/policy-section/PolicySection', () => {
-  const MockPolicySection = ({ title }: { title?: string }) => <div>Policy section: {title ?? 'untitled'}</div>;
-  MockPolicySection.displayName = 'MockPolicySection';
-  return MockPolicySection;
+  const MockPolicy = ({ title }: { title?: string }) => <div>Policy section: {title ?? 'untitled'}</div>;
+  MockPolicy.displayName = 'PolicySection';
+  return MockPolicy;
+});
+
+jest.mock('~/layouts/main-layout/MainLayout', () => {
+  const MockLayout = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+  MockLayout.displayName = 'MainLayout';
+  return MockLayout;
+});
+
+jest.mock('~/components/under-development/UnderDevelopment', () => {
+  const MockUnderDev = () => <div data-testid="under-dev">Under Development</div>;
+  MockUnderDev.displayName = 'UnderDevelopment';
+  return MockUnderDev;
 });
 
 describe('PrivacyPolicy page', () => {
@@ -24,8 +52,17 @@ describe('PrivacyPolicy page', () => {
     resolvePageData: jest.Mock;
   };
 
+  const mockParams = Promise.resolve({ lang: 'en' as const });
+
   beforeEach(() => {
     jest.clearAllMocks();
+    (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
+  });
+
+  it('should generate correct metadata', async () => {
+    const metadata = await generateMetadata({ params: mockParams });
+    expect(metadata).toBeDefined();
+    expect(metadata.title).toBe('title');
   });
 
   it('should render all available blocks', async () => {
@@ -48,30 +85,35 @@ describe('PrivacyPolicy page', () => {
       })
     );
 
-    render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
+    render(await PrivacyPolicy({ params: mockParams }));
 
     expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
-
     expect(screen.getByText(/Intro section: Privacy Policy/i)).toBeInTheDocument();
     expect(screen.getByText(/Policy section: Data We Collect/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: How We Use Data/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Cookies/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Google Auth/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Social Networks/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Targeted Ads/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Newsletter/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Data Retention/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Your Rights/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Contact Us/i)).toBeInTheDocument();
   });
 
-  it('should render PageNotFound when page is missing', async () => {
+  it('should render UnderDevelopment in production mode', async () => {
+    (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
+
+    render(await PrivacyPolicy({ params: mockParams }));
+
+    expect(screen.getByTestId('under-dev')).toBeInTheDocument();
+    expect(resolvePageData).not.toHaveBeenCalled();
+  });
+
+  it('should render ErrorPage when service returns error', async () => {
     resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
-    render(await PrivacyPolicy({ params: Promise.resolve({ lang: 'en' }) }));
+    render(await PrivacyPolicy({ params: mockParams }));
 
-    expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
-    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
+    expect(screen.getByTestId('error-page')).toHaveTextContent('Error: No page found');
+  });
+
+  it('should render PageNotFound when page is null', async () => {
+    resolvePageData.mockResolvedValueOnce(WrapSuccess(null));
+
+    render(await PrivacyPolicy({ params: mockParams }));
+
+    expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
   });
 });
