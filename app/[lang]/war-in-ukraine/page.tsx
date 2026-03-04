@@ -65,6 +65,7 @@ export default function WarInUkraine() {
         buttons={yermolenkoLinks}
         showMainButton={false}
         sx={{ marginBottom: 12 }}
+        showShortButtonsText={false}
       />
 
       <VolunteerDonation
