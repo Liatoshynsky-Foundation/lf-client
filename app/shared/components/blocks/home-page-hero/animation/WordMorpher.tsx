@@ -80,23 +80,28 @@ export const WordMorpher: FC<WordMorpherProps> = ({ onComplete, testID = 'word-m
   useEffect(() => {
     let autoplayTimer: ReturnType<typeof setInterval>;
 
-    const initialDelayTimer = setTimeout(() => {
+    const handleAnimationComplete = () => {
+      clearInterval(autoplayTimer);
+      setTimeout(() => {
+        onCompleteRef.current?.();
+      }, 400);
+    };
+
+    const updateStep = (prevStep: number) => {
+      if (prevStep < logoMatrix.length - 1) {
+        return prevStep + 1;
+      }
+      handleAnimationComplete();
+      return prevStep;
+    };
+
+    const startAnimationLoop = () => {
       autoplayTimer = setInterval(() => {
-        setStep((prevStep) => {
-          if (prevStep < logoMatrix.length - 1) {
-            return prevStep + 1;
-          } else {
-            clearInterval(autoplayTimer);
-
-            setTimeout(() => {
-              if (onCompleteRef.current) onCompleteRef.current();
-            }, 400);
-
-            return prevStep;
-          }
-        });
+        setStep(updateStep);
       }, 800);
-    }, 1000);
+    };
+
+    const initialDelayTimer = setTimeout(startAnimationLoop, 1000);
 
     return () => {
       clearTimeout(initialDelayTimer);
