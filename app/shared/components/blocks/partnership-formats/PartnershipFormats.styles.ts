@@ -421,7 +421,7 @@ const baseStyles = {
       xl: '37px 60px'
     },
     '@media (max-width: 480px)': {
-      height: 'calc(100vh - 24px)',
+      maxHeight: '100vh',
       width: '100vw'
     }
   },
