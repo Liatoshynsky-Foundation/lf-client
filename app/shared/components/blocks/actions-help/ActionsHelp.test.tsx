@@ -32,16 +32,19 @@ const mockData = {
         type: TipTapNodeTypes.paragraph,
         content: [
           {
-            type: TipTapNodeTypes.text,
-            text: 'subtitleText'
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: 'subtitleText',
+              en: 'subtitleText'
+            }
           }
         ]
       }
     ]
   } as TipTapDoc,
   paperItems: [
-    { title: { uk: 'Paper 1', en: 'Paper 1' }, description: 'Description 1' },
-    { title: { uk: 'Paper 2', en: 'Paper 2' }, description: 'Description 2' }
+    { title: { uk: 'Paper 1', en: 'Paper 1' }, description: { uk: 'Description 1', en: 'Description 1' } },
+    { title: { uk: 'Paper 2', en: 'Paper 2' }, description: { uk: 'Description 2', en: 'Description 2' } }
   ],
   paperButton: {
     text: { uk: 'Go to test', en: 'Go to test' },
@@ -75,7 +78,7 @@ describe('ActionsHelp component', () => {
 
     mockData.paperItems.forEach((paper) => {
       expect(screen.getByText(paper.title.en)).toBeInTheDocument();
-      expect(screen.getByText(paper.description)).toBeInTheDocument();
+      expect(screen.getByText(paper.description.en)).toBeInTheDocument();
     });
   });
 

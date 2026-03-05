@@ -27,9 +27,15 @@ export interface TextNode {
   marks?: Mark[];
 }
 
+export interface MultiLangNode {
+  type: TipTapNodeTypes.multiLangText;
+  text: { [key: string]: string };
+  marks?: Mark[];
+}
+
 export interface ParagraphNode {
   type: TipTapNodeTypes.paragraph;
-  content?: TextNode[];
+  content?: TextNode[] | MultiLangNode[];
 }
 
 export interface HeadingNode {
@@ -45,13 +51,14 @@ export interface TipTapDoc {
   content: TipTapElement[];
 }
 
-export type TipTapNode = TipTapDoc | HeadingNode | ParagraphNode | TextNode;
+export type TipTapNode = TipTapDoc | HeadingNode | ParagraphNode | TextNode | MultiLangNode;
 
 export interface TipTapNodeRenderers {
   [TipTapNodeTypes.doc]: (children: ReactNode, node: TipTapDoc) => ReactNode;
   [TipTapNodeTypes.heading]: (children: ReactNode, node: HeadingNode) => ReactNode;
   [TipTapNodeTypes.paragraph]: (children: ReactNode, node: ParagraphNode) => ReactNode;
   [TipTapNodeTypes.text]: (node: TextNode) => ReactNode;
+  [TipTapNodeTypes.multiLangText]: (node: MultiLangNode) => ReactNode;
 }
 
 export interface TipTapMarkRenderers {

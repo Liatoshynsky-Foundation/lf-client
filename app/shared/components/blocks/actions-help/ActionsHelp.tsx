@@ -14,7 +14,7 @@ interface ActionsHelpProps {
   subtitle: TipTapDoc;
   paperItems: {
     title: { uk: string; en: string };
-    description: string;
+    description: { uk: string; en: string };
   }[];
   paperButton: {
     text: { uk: string; en: string };
@@ -37,7 +37,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
         sx={styles.paper(index)}
         key={paper.title[locale]}
         title={paper.title[locale]}
-        description={paper.description}
+        description={paper.description[locale]}
         locale={locale}
       />
     );
@@ -60,6 +60,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       />
       <TipTapContent
         data={subtitle}
+        locale={locale}
         nodeRenderers={{
           paragraph: renderSubtitle
         }}

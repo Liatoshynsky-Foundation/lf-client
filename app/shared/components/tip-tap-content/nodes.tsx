@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 
 import renderText from '~/components/tip-tap-content/renderText';
 
+import renderMultiLangText from './multiLangText';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TextNode, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/tiptap.types';
 
@@ -19,3 +20,11 @@ export const getParagraph: TipTapNodeRenderers[TipTapNodeTypes.paragraph] = (chi
 type GetText = (renderers: TipTapMarkRenderers) => TipTapNodeRenderers[TipTapNodeTypes.text];
 
 export const getText: GetText = (renderers) => (node: TextNode) => renderText(renderers, node);
+
+type GetMultiLangText = (
+  renderers: TipTapMarkRenderers,
+  locale: string
+) => TipTapNodeRenderers[TipTapNodeTypes.multiLangText];
+
+export const getMultiLangText: GetMultiLangText = (renderers, locale) => (node) =>
+  renderMultiLangText(renderers, node, locale);

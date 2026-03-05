@@ -15,13 +15,23 @@ export const actionsHelpPageData = {
         type: TipTapNodeTypes.paragraph,
         content: [
           {
-            type: TipTapNodeTypes.text,
-            text: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що '
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що ',
+              en: 'We really need people — with your expertise, energy and a bit of time, because it is your participation that helps Ukrainian music become more visible in the world. And the more '
+            }
           },
-          { type: TipTapNodeTypes.text, text: 'гучніше й впевненіше', marks: [{ type: TipTapMarkType.bold }] },
           {
-            type: TipTapNodeTypes.text,
-            text: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.'
+            type: TipTapNodeTypes.multiLangText,
+            text: { uk: 'гучніше й впевненіше', en: 'louder and more confident' },
+            marks: [{ type: TipTapMarkType.bold }]
+          },
+          {
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.',
+              en: ' the louder it sounds, the more people understand and support us — at all levels.'
+            }
           }
         ]
       }
