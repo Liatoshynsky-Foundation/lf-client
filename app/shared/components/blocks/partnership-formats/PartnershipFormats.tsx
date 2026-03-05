@@ -123,7 +123,15 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
       <ModalComponent
         open={isModalOpen}
         onClose={handleCloseModal}
-        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflowY: {
+            xs: 'auto',
+            sm: 'hidden'
+          }
+        }}
       >
         <Box sx={{ position: 'relative' }}>
           <IconButton sx={styles.closeIcon} type={IconButtonVariant.icon} size="large" onClick={handleCloseModal}>
