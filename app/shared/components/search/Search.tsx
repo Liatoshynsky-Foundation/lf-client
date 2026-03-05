@@ -13,7 +13,7 @@ import {
   useTheme
 } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
@@ -21,6 +21,8 @@ import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
 import { TitleOption } from '~/types/types/composition.types';
+
+import { normalizeSearch } from '~/lib/utils/normalizeSearch';
 
 interface SearchProps<T> {
   search: string;
@@ -77,7 +79,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
       const label = typeof v?.title === 'string' ? v.title : v?.title?.en || v?.title?.uk || '';
 
       setInputValue(label);
-      setSearch(label);
+      setSearch(normalizeSearch(label));
       setOpened(false);
     },
     [setSearch]
@@ -86,12 +88,18 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
   const handleEnter = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
-        setSearch(inputValue);
+        setSearch(normalizeSearch(inputValue));
         setOpened(false);
       }
     },
     [inputValue, setSearch]
   );
+
+  useEffect(() => {
+    if (!focused) {
+      setInputValue(search);
+    }
+  }, [search, focused]);
 
   const renderOption = useCallback((props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
     const { key, ...rest } = props;
