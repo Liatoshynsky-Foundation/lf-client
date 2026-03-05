@@ -22,8 +22,6 @@ import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
 import { TitleOption } from '~/types/types/composition.types';
 
-import { normalizeSearch } from '~/lib/utils/normalizeSearch';
-
 interface SearchProps<T> {
   search: string;
   setSearch: (value: string) => void;
@@ -88,16 +86,12 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
   const handleEnter = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
-        setSearch(normalizeSearch(inputValue));
+        setSearch(inputValue);
         setOpened(false);
       }
     },
     [inputValue, setSearch]
   );
-
-  useEffect(() => {
-    setInputValue(search);
-  }, [search]);
 
   const renderOption = useCallback((props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
     const { key, ...rest } = props;
