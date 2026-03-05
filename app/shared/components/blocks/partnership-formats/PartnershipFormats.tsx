@@ -80,18 +80,24 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
       </Box>
 
       <Box sx={styles.firstRow}>
-        {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
-        <Box sx={styles.emptyColumn} />
-        {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
-        {renderImage(data.firstRowImage)}
+        <Box sx={styles.firstRowTopWrapper}>
+          {renderCard(data.firstRowFirstCard, styles.firstRowFirstCard)}
+          <Box sx={styles.emptyColumn} />
+        </Box>
+        <Box sx={styles.firstRowBottomWrapper}>
+          {renderCard(data.firstRowSecondCard, styles.firstRowSecondCard)}
+          {renderImage(data.firstRowImage)}
+        </Box>
         {renderCard(data.secondRowFirstCard, styles.secondRowFirstCardLg)}
         <Box sx={styles.emptyColumnSecond} />
       </Box>
 
       <Box sx={styles.secondRow}>
         {renderImage(data.secondRowImage)}
-        {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
-        {renderCard(data.secondRowSecondCard, { ...styles.secondRowSecondCard, ...styles.lastCardInRow })}
+        <Box sx={styles.cardsWrapper}>
+          {renderCard(data.secondRowFirstCard, styles.secondRowFirstCard)}
+          {renderCard(data.secondRowSecondCard, { ...styles.secondRowSecondCard, ...styles.lastCardInRow })}
+        </Box>
       </Box>
 
       {data.descriptionText && (

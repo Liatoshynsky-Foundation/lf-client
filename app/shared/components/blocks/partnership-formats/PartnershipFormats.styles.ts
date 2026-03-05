@@ -9,6 +9,20 @@ type ImageConfig = {
 };
 
 const baseStyles = {
+  cardsWrapper: {
+    display: {
+      xs: 'flex',
+      sm: 'flex',
+      md: 'flex',
+      lg: 'contents',
+      xl: 'contents'
+    },
+    gridColumn: '1 / -1',
+    justifyContent: 'flex-end',
+    gap: '30px',
+    marginTop: { xs: '0', sm: '0', md: '0' },
+    marginBottom: { xs: '0', sm: '40px', md: '10px', lg: 0 }
+  },
   container: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
@@ -34,8 +48,8 @@ const baseStyles = {
   firstRow: {
     display: {
       xs: 'none',
-      sm: 'grid',
-      md: 'contents',
+      sm: 'flex',
+      md: 'flex',
       lg: 'contents',
       xl: 'contents'
     },
@@ -45,19 +59,21 @@ const baseStyles = {
       lg: 'auto',
       xl: '480px'
     },
+    flexDirection: 'column',
+    alignItems: 'flex-end',
     gridTemplateColumns: 'subgrid',
     gridColumn: '1 / -1',
     rowGap: {
       xs: '24px',
-      sm: '24px',
-      md: '24px',
+      sm: '8px',
+      md: '0',
       lg: '24px',
       xl: '0'
     },
     mb: {
       xs: '24px',
-      sm: '32px',
-      md: '30px',
+      sm: '24x',
+      md: '8px',
       lg: '10px',
       xl: '10px',
       xxl: '10px'
@@ -70,7 +86,7 @@ const baseStyles = {
   secondRow: {
     display: {
       xs: 'none',
-      sm: 'grid',
+      sm: 'contents',
       md: 'contents',
       lg: 'contents',
       xl: 'contents'
@@ -85,8 +101,8 @@ const baseStyles = {
     gridColumn: '1 / -1',
     rowGap: {
       xs: '24px',
-      sm: '24px',
-      md: '24px',
+      sm: '8px',
+      md: '8px',
       lg: '24px',
       xl: '0'
     },
@@ -113,6 +129,17 @@ const baseStyles = {
     display: 'flex',
     justifyContent: 'flex-end'
   },
+  firstRowTopWrapper: {
+    display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'contents' },
+    width: { sm: '618px', md: '618px', lg: 'auto' },
+    justifyContent: 'space-between'
+  },
+  firstRowBottomWrapper: {
+    display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'contents' },
+    width: { sm: '618px', md: '618px', lg: 'auto' },
+    justifyContent: 'space-between',
+    alignItems: 'stretch'
+  },
   firstRowFirstCard: {
     justifySelf: {
       lg: 'end',
@@ -123,12 +150,13 @@ const baseStyles = {
       lg: 'start',
       xl: 'end'
     },
+    width: { sm: '294px', md: '294px', lg: 'auto' },
     marginTop: {
       lg: '24px',
       xl: '60px'
     },
     gridColumn: {
-      md: '4 / 10',
+      md: '6 / 10',
       lg: '2 / 6',
       xl: 'span 3',
       xxl: '3 / 6'
@@ -139,6 +167,7 @@ const baseStyles = {
     }
   },
   firstRowSecondCard: {
+    width: { sm: '294px', md: '294px', lg: 'auto' },
     justifySelf: {
       lg: 'end',
       xxl: 'end'
@@ -151,11 +180,12 @@ const baseStyles = {
       xl: '55px'
     },
     gridColumn: {
-      md: '4 / 10',
+      md: '6 / 10',
       lg: '9 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
     },
+
     mb: {
       md: '24px',
       lg: '24px'
@@ -170,8 +200,10 @@ const baseStyles = {
       xl: 'flex'
     },
     justifySelf: {
+      lg: 'auto',
       xxl: 'end'
     },
+
     marginTop: {
       xs: '0',
       sm: '12px',
@@ -180,16 +212,14 @@ const baseStyles = {
       xl: '28px'
     },
     gridColumn: {
-      md: '4 / 10',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '7 / 10'
-    }
+    },
+    width: { sm: '294px', md: 'auto' }
   },
   secondRowSecondCard: {
     justifySelf: {
-      sm: 'end',
-      md: 'end',
       lg: 'end',
       xxl: 'end'
     },
@@ -200,13 +230,15 @@ const baseStyles = {
       xl: '12px'
     },
     gridColumn: {
-      md: '10 / 13',
       lg: '10 / 13',
       xl: 'span 3',
       xxl: '10 / 13'
     }
   },
   emptyColumn: {
+    justifySelf: {
+      md: 'end'
+    },
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 4',
@@ -217,8 +249,8 @@ const baseStyles = {
     },
     display: {
       xs: 'none',
-      sm: 'block',
-      md: 'block',
+      sm: 'none',
+      md: 'none',
       lg: 'block',
       xl: 'block'
     },
@@ -236,9 +268,11 @@ const baseStyles = {
       xl: 'none'
     },
     justifySelf: {
+      md: 'end',
       lg: 'start'
     },
     gridColumn: {
+      md: '10 / 13',
       lg: '6 / 10'
     },
     width: {
@@ -270,6 +304,7 @@ const baseStyles = {
       xxl: '10 / 13'
     },
     justifySelf: {
+      sm: 'end',
       md: 'end',
       lg: 'end',
       xl: 'end'
@@ -285,6 +320,7 @@ const baseStyles = {
     },
     height: '100%',
     width: {
+      sm: '294px',
       md: '294px'
     },
     display: 'flex',
@@ -292,7 +328,7 @@ const baseStyles = {
   },
   firstRowImageWrapper: {
     transform: 'skewY(-2deg)',
-    mt: { sm: '0', md: '10px', lg: '0', xl: '42px' },
+    mt: { sm: '0', md: '15px', lg: '0', xl: '42px' },
     width: '100%',
     height: { xs: '386px', sm: '386px', md: '386px', lg: '386px', xl: '386px' },
     position: 'relative',
@@ -325,7 +361,10 @@ const baseStyles = {
       lg: 'translateX(-37px)',
       xl: 'translateX(0px)'
     },
+    justifySelf: { sm: 'end', md: 'end', lg: 'auto' },
     width: {
+      sm: '618px',
+      md: '618px',
       lg: '626px'
     },
     display: 'flex',
@@ -333,7 +372,7 @@ const baseStyles = {
   },
   secondRowImageWrapper: {
     transform: 'skewY(-2deg)',
-    mb: { sm: '40px', lg: '0', xl: '0' },
+    mb: { sm: '40px', md: '40px', lg: '0', xl: '0' },
     width: '100%',
     height: { xs: '400px', sm: '400px', md: '400px', lg: '400px', xl: '400px' },
     position: 'relative',
