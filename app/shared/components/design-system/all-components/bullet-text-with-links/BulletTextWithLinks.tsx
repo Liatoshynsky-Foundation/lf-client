@@ -35,6 +35,7 @@ type IconButtonContentBlockProps = BoxProps & {
   buttonText?: string;
   buttonLink?: string;
   showMainButton?: boolean;
+  showShortButtonsText?: boolean;
 };
 
 const imageSizes = {
@@ -54,6 +55,7 @@ export default function BulletTextWithLinks({
   buttonText,
   buttonLink,
   showMainButton = true,
+  showShortButtonsText = true,
   sx,
   ...props
 }: Readonly<IconButtonContentBlockProps>) {
@@ -97,7 +99,7 @@ export default function BulletTextWithLinks({
             externalLink={true}
             variant="outlined"
             size="medium"
-            startIcon={
+            endIcon={
               <Svg
                 Component={FacebookIcon}
                 fill="none"
@@ -109,7 +111,7 @@ export default function BulletTextWithLinks({
               />
             }
           >
-            {isMobile ? button.shortText[locale] : button.fullText[locale]}
+            {showShortButtonsText && isMobile ? button.shortText[locale] : button.fullText[locale]}
           </Button>
         ))}
       </Box>
