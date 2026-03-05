@@ -71,7 +71,7 @@ export default function WarInUkraine() {
         title={carsForAFUData.title}
         paymentMethods={carsForAFU}
         imageSrc={carsForAFUData.imageSrc}
-        caption={carsForAFUData.caption}
+        caption={carsForAFUData.caption[locale]}
       />
     </MainLayout>
   );

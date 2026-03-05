@@ -5,6 +5,10 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IWhatWeDo } from '~/types/page/about-us.types';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+jest.mock('next-intl', () => ({
+  useLocale: jest.fn(() => 'en')
+}));
+
 const createDescription = (text: string): TipTapDoc => ({
   type: TipTapNodeTypes.doc,
   content: [

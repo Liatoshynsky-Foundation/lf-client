@@ -24,7 +24,7 @@ jest.mock('~/ds-components/button-card/ButtonCard', () => ({
 }));
 
 const mockData = {
-  title: 'Actions Help',
+  title: { uk: 'Actions Help', en: 'Actions Help' },
   subtitle: {
     type: TipTapNodeTypes.doc,
     content: [
@@ -40,14 +40,18 @@ const mockData = {
     ]
   } as TipTapDoc,
   paperItems: [
-    { title: 'Paper 1', description: 'Description 1' },
-    { title: 'Paper 2', description: 'Description 2' }
+    { title: { uk: 'Paper 1', en: 'Paper 1' }, description: 'Description 1' },
+    { title: { uk: 'Paper 2', en: 'Paper 2' }, description: 'Description 2' }
   ],
   paperButton: {
-    text: 'Go to test',
+    text: { uk: 'Go to test', en: 'Go to test' },
     link: '/test-link'
   }
 };
+
+jest.mock('next-intl', () => ({
+  useLocale: () => 'en'
+}));
 
 describe('ActionsHelp component', () => {
   beforeEach(() => {
@@ -70,14 +74,14 @@ describe('ActionsHelp component', () => {
     expect(screen.getAllByTestId('text-card')).toHaveLength(mockData.paperItems.length);
 
     mockData.paperItems.forEach((paper) => {
-      expect(screen.getByText(paper.title)).toBeInTheDocument();
+      expect(screen.getByText(paper.title.en)).toBeInTheDocument();
       expect(screen.getByText(paper.description)).toBeInTheDocument();
     });
   });
 
   it('should render the ButtonCard with correct text and link', () => {
     const buttonCard = screen.getByTestId('button-card');
-    expect(buttonCard).toHaveTextContent(mockData.paperButton.text);
+    expect(buttonCard).toHaveTextContent(mockData.paperButton.text.en);
     expect(buttonCard).toHaveAttribute('href', mockData.paperButton.link);
   });
 });

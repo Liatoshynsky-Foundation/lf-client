@@ -17,6 +17,10 @@ const additionalDescription = [
   { id: 2, text: 'Text 2' }
 ];
 
+jest.mock('next-intl', () => ({
+  useLocale: () => 'uk'
+}));
+
 describe('ContentBlock', () => {
   it('should render SectionTitle when title prop is provided', () => {
     render(<ContentBlock title="Test Title" />);

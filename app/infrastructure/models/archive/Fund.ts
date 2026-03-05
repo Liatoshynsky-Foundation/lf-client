@@ -3,8 +3,8 @@ import { model, models, Schema, Types } from 'mongoose';
 export interface IFund {
   _id: Types.ObjectId;
   id: number;
-  number: string;
-  title: string;
+  number: { en: string; uk: string };
+  title: { en: string; uk: string };
   numberOfDescriptions: number;
   numberOfCases: number;
   organizationForm: string;

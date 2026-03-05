@@ -1,7 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
@@ -11,12 +11,12 @@ import { PaymentMethodItem } from './PaymentMethodItem';
 import { imageSizes, styles } from './VolunteerDonation.styles';
 
 export interface PaymentMethod {
-  label: string;
+  label: { uk: string; en: string };
   value: string;
 }
 
 interface Props {
-  title: string;
+  title: { uk: string; en: string };
   paymentMethods: PaymentMethod[];
   imageSrc: string;
   caption?: string;
@@ -24,6 +24,7 @@ interface Props {
 
 const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption }) => {
   const t = useTranslations('common');
+  const locale = useLocale();
 
   return (
     <Box sx={styles.mainContainer}>
@@ -42,7 +43,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
 
       <ImageWithCaption
         src={imageSrc}
-        alt={title}
+        alt={title[locale]}
         caption={caption ?? ''}
         captionSx={styles.captionSx}
         align="right"

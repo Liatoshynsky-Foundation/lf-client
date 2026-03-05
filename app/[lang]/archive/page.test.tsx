@@ -9,8 +9,9 @@ const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+jest.mock('use-intl', () => ({
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 const setParam = jest.fn();

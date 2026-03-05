@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { useLocale } from 'next-intl';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
@@ -9,21 +10,21 @@ import { styles } from './ActionsHelp.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 interface ActionsHelpProps {
-  title: string;
+  title: { uk: string; en: string };
   subtitle: TipTapDoc;
   paperItems: {
-    title: string;
+    title: { uk: string; en: string };
     description: string;
   }[];
   paperButton: {
-    text: string;
+    text: { uk: string; en: string };
     link: string;
   };
 }
 
 const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) => {
   const { title, subtitle, paperItems, paperButton } = data;
-
+  const locale = useLocale();
   const renderSubtitle = (children: React.ReactNode) => (
     <Typography variant="body2" sx={styles.typography} data-testid="ActionsHelp-subtitle">
       {children}
@@ -31,7 +32,15 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
   );
 
   const paperComponents = paperItems.map((paper, index) => {
-    return <TextCard sx={styles.paper(index)} key={paper.title} title={paper.title} description={paper.description} />;
+    return (
+      <TextCard
+        sx={styles.paper(index)}
+        key={paper.title[locale]}
+        title={paper.title[locale]}
+        description={paper.description}
+        locale={locale}
+      />
+    );
   });
 
   return (
@@ -59,7 +68,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
         {paperComponents}
         <ButtonCard
           sx={styles.paper(paperComponents.length)}
-          text={paperButton.text}
+          text={paperButton.text[locale]}
           link={paperButton.link}
           dataTestId="ActionsHelp-buttonCard"
         />

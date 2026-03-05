@@ -2,6 +2,7 @@
 
 import { Box, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useLocale } from 'use-intl';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
@@ -42,6 +43,7 @@ export default function Archive() {
   const [funds, setFunds] = useState<FundDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { params, setParam } = useTableFilters({ search: '' });
+  const locale = useLocale();
 
   useEffect(() => {
     const loadFunds = async () => {
@@ -70,7 +72,7 @@ export default function Archive() {
   const filteredFunds = funds.filter((fund) => {
     if (!params.search) return true;
     const query = params.search.toLowerCase();
-    return fund.number.toLowerCase().includes(query) || fund.title.toLowerCase().includes(query);
+    return fund.number[locale].toLowerCase().includes(query) || fund.title[locale].toLowerCase().includes(query);
   });
 
   const getNumColumns = () => {

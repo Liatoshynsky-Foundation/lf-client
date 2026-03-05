@@ -4,7 +4,10 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
 
 export const actionsHelpPageData = {
-  title: 'Допомогти справами',
+  title: {
+    uk: 'Допомогти справами',
+    en: 'Help with actions'
+  },
   subtitle: {
     type: TipTapNodeTypes.doc,
     content: [
@@ -26,23 +29,29 @@ export const actionsHelpPageData = {
   } as TipTapDoc,
   paperItems: [
     {
-      title: 'Допомога з перекладами',
-      description:
-        'Ми працюємо з архівами, партитурами, документами й записами, щоб відновити й упорядкувати культурну пам’ять.'
+      title: { uk: 'Допомога з перекладами', en: 'Help with Translations' },
+      description: {
+        uk: 'Ми працюємо з архівами, партитурами, документами й записами, щоб відновити й упорядкувати культурну пам’ять.',
+        en: 'We work with archives, sheet music, documents and recordings to restore and organize cultural memory.'
+      }
     },
     {
-      title: 'Допомога з організацією заходів',
-      description:
-        'Якщо вам близька музика та культура — можна долучитись до команди під час концертів, виставок чи лекцій'
+      title: { uk: 'Допомога з організацією заходів', en: 'Help with Event Organization' },
+      description: {
+        uk: 'Якщо вам близька музика та культура — можна долучитись до команди під час концертів, виставок чи лекцій',
+        en: 'If you are close to music and culture — you can join the team during concerts, exhibitions or lectures'
+      }
     },
     {
-      title: 'Адмініструвати соцмережі',
-      description:
-        'Допомага з публікаціями, відповідями на повідомлення, аналітикою або візуальним оформленням контенту'
+      title: { uk: 'Допомога з комунікацією', en: 'Help with Communication' },
+      description: {
+        uk: 'Допомага з публікаціями, відповідями на повідомлення, аналітикою або візуальним оформленням контенту',
+        en: 'Help with publications, responding to messages, analytics or visual design of content'
+      }
     }
   ],
   paperButton: {
-    text: 'Запропонувати допомогу',
+    text: { uk: 'Запропонувати допомогу', en: 'Propose Help' },
     link: '/'
   }
 };
@@ -56,7 +65,7 @@ export async function getActionsHelpData() {
   }
 
   return {
-    title: 'Допомогти справами',
+    title: actionsHelpPageData.title,
     subtitle: actionsHelpPageData.subtitle,
     paperItems: actionsHelpPageData.paperItems,
     paperButton: {

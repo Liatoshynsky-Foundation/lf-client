@@ -11,6 +11,7 @@ jest.mock('~/ds-components/copy-link/CopyLink');
 const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
 
 jest.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
       title: 'FAQ Title',
@@ -58,8 +59,8 @@ const mockFaqData = {
     email: 'test@email.com'
   },
   faq: [
-    { title: 'Question 1', content: 'Answer 1' },
-    { title: 'Question 2', content: 'Answer 2' }
+    { title: { en: 'Question 1', uk: 'Питання 1' }, content: { en: 'Answer 1', uk: 'Відповідь 1' } },
+    { title: { en: 'Question 2', uk: 'Питання 2' }, content: { en: 'Answer 2', uk: 'Відповідь 2' } }
   ]
 };
 

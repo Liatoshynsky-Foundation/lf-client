@@ -4,7 +4,8 @@ import React from 'react';
 import VolunteerDonation from './VolunteerDonation';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 jest.mock('~/ds-components/copy-link/CopyLink');
@@ -26,15 +27,15 @@ jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
 
 jest.mock('~/components/section-title/SectionTitle', () => ({
   __esModule: true,
-  default: ({ title }: { title: string }) => <h2 data-testid="section-title">{title}</h2>
+  default: ({ title }: { title: { en: string; uk: string } }) => <h2 data-testid="section-title">{title.en}</h2>
 }));
 
 describe('VolunteerDonation', () => {
   const mockProps = {
-    title: 'Support Our Cause',
+    title: { en: 'Support Our Cause', uk: 'Підтримайте нашу справу' },
     paymentMethods: [
-      { label: 'PayPal', value: 'paypal@example.com' },
-      { label: 'Bank Transfer', value: 'bank@example.com' }
+      { label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' },
+      { label: { en: 'Bank Transfer', uk: 'Банківський переказ' }, value: 'bank@example.com' }
     ],
     imageSrc: '/images/volunteer.jpg',
     caption: 'Volunteer making a difference'
@@ -109,7 +110,7 @@ describe('VolunteerDonation', () => {
   it('should render single payment method', () => {
     const propsWithOneMethod = {
       ...mockProps,
-      paymentMethods: [{ label: 'PayPal', value: 'paypal@example.com' }]
+      paymentMethods: [{ label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' }]
     };
     render(<VolunteerDonation {...propsWithOneMethod} />);
 
@@ -120,10 +121,10 @@ describe('VolunteerDonation', () => {
   });
 
   it('should use title as image alt text', () => {
-    const customTitle = 'Custom Donation Title';
+    const customTitle = { en: 'Custom Title', uk: 'Користувацький заголовок' };
     render(<VolunteerDonation {...mockProps} title={customTitle} />);
 
     const image = screen.getByRole('img');
-    expect(image).toHaveAttribute('alt', customTitle);
+    expect(image).toHaveAttribute('alt', customTitle.en);
   });
 });
