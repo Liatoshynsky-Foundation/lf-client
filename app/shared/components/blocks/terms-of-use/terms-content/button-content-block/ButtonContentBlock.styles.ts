@@ -35,7 +35,7 @@ export const styles = {
     px: 0,
     '& hover': {
       backgroundColor: mainHexPallete.yellow[500],
-      color: '#FFF'
+      color: '#000'
     }
   },
 

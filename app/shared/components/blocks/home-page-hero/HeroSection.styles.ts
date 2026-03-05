@@ -161,7 +161,6 @@ export const heroSectionStyles = {
     },
     justifyContent: 'center',
     marginBottom: {
-      xs: '64px',
       sm: '80px',
       md: '96px'
     },

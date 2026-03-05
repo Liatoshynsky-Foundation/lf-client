@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
+// --- Components ---
 import ArtistrySection from '~/components/blocks/artistry-section/ArtistrySection';
 import {
   artistrySectionData,
@@ -11,7 +12,6 @@ import BiographySection from '~/components/blocks/BiographySection/BiographySect
 import { ctaHref, ctaLabel, spanText, text, title } from '~/components/blocks/BiographySection/BiographySection.data';
 import CooperationSection from '~/components/blocks/cooperation-section/CooperationSection';
 import { cooperationSectionData } from '~/components/blocks/cooperation-section/CooperationSection.data';
-// --- Components (Paths resolved by user) ---
 import HeroSection from '~/components/blocks/home-page-hero/HeroSection';
 import { heroQuote, heroQuoteSource, playbackButton } from '~/components/blocks/home-page-hero/HeroSection.data';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
@@ -42,8 +42,8 @@ import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
 // --- Layouts & Utils ---
+import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';

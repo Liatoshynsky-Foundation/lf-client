@@ -33,7 +33,7 @@ const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, b
       <SectionTitle
         icon={true}
         title={title[locale]}
-        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
+        gridColumn={{ xs: '4/ -1', md: '6/-1' }}
         sx={{
           mb: { xs: '16px' },
           gap: {
@@ -42,7 +42,14 @@ const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, b
             md: '40px'
           },
           '& h2': {
-            textTransform: 'none'
+            fontSize: {
+              xs: '28px',
+              lg: '64px'
+            },
+            textTransform: {
+              sm: 'uppercase',
+              md: 'none'
+            }
           }
         }}
       />
