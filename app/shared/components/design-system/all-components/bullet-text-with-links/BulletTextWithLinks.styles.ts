@@ -30,7 +30,7 @@ export const styles = {
   },
 
   button: {
-    maxWidth: { xs: '200px', sm: '250px' }
+    maxWidth: { xs: 'fit-content', sm: '250px' }
   },
 
   icon: {
