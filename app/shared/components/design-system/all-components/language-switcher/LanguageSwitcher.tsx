@@ -96,7 +96,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
           EN
         </button>
 
-        <span style={styles.item(false)}>/</span>
+        <span style={styles.item(false)}>|</span>
 
         <button
           style={styles.item(currentLocale === 'uk')}
