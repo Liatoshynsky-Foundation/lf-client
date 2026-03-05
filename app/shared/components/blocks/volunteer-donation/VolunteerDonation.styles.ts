@@ -21,7 +21,7 @@ export const styles = {
   contentWrapper: {
     gridColumn: {
       xs: '1 / 5',
-      sm: '3 / 8',
+      sm: '4 / -1',
       md: '6 / -1'
     },
     mb: {
@@ -40,8 +40,7 @@ export const styles = {
   paymentMethodContainer: {
     display: 'flex',
     alignItems: { xs: 'flex-start', sm: 'center' },
-    flexDirection: { xs: 'column', sm: 'row' },
-    gap: { xs: '4px', sm: '20px' }
+    flexDirection: { xs: 'column', sm: 'row' }
   },
   label: {
     fontFamily: 'Mulish, Sans-serif',
@@ -50,7 +49,8 @@ export const styles = {
     whiteSpace: 'pre-line',
     fontWeight: 600,
     lineHeight: '150%',
-    fontSize: { xs: '16px', md: '20px' }
+    fontSize: { xs: '16px', md: '20px' },
+    width: '91px'
   },
   valueContainer: {
     display: 'flex',

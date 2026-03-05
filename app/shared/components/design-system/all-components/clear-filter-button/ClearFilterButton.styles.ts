@@ -8,6 +8,8 @@ export const styles = {
     display: 'flex',
     justifyContent: 'flex-start',
     color: rgbaClearFilterButton.defaultTextColor,
+    paddingRight: '14px',
+    paddingLeft: '14px',
 
     '& svg path, & svg circle, & svg line, & svg rect': {
       stroke: 'currentColor'

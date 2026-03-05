@@ -376,7 +376,7 @@ const baseStyles = {
     }
   },
   descriptionTypography: {
-    fontSize: { xs: '16px', md: '18px' }
+    fontSize: { xs: '16px', md: '20px' }
   },
   buttonContainer: {
     display: 'grid',
@@ -446,12 +446,12 @@ const imageByType: Record<PartnershipImageType, ImageConfig> = {
   [PartnershipImageType.FirstRowImage]: {
     container: baseStyles.firstRowImageContainer,
     wrapper: baseStyles.firstRowImageWrapper,
-    borderWidth: 2
+    borderWidth: 8
   },
   [PartnershipImageType.SecondRowImage]: {
     container: baseStyles.secondRowImageContainer,
     wrapper: baseStyles.secondRowImageWrapper,
-    borderWidth: 2
+    borderWidth: 8
   }
 };
 

@@ -1,8 +1,9 @@
 'use client';
 
 import { Box } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 
 import { CustomTabs } from '~/ds-components/tabs/Tabs';
@@ -56,14 +57,32 @@ interface MediaCenterProps {
 
 function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>) {
   const t = useTranslations('media.emptyState');
-  const [selectedTab, setSelectedTab] = useState('news');
   const [events, setEvents] = useState<EventItemFixture[] | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const activeTab = useMemo(() => {
+    const tab = searchParams.get('tab') ?? 'news';
+    return tab;
+  }, [searchParams]);
+
+  const handleTabChange = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('tab', value);
+
+      router.replace(`/news?${params.toString()}`, {
+        scroll: false
+      });
+    },
+    [router, searchParams]
+  );
 
   useEffect(() => {
-    if (selectedTab === 'events' && !events) {
+    if (activeTab === 'events' && !events) {
       setEvents(MOCK_EVENT_ITEMS);
     }
-  }, [selectedTab, events]);
+  }, [activeTab, events]);
 
   return (
     <Box data-testid="MediaCenter" sx={styles.mediaContainer}>
@@ -72,26 +91,26 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
           dataTestId="MediaTabsContainer"
           aria-label="Категорії медіа"
           tabs={tabs}
-          activeTab={selectedTab}
-          onTabChange={setSelectedTab}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
         />
       </Box>
-      {selectedTab === 'news' && (
+      {activeTab === 'news' && (
         <>
           {newsData.length > 0 ? (
-            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
+            <MediaList dataTestId={activeTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
           ) : (
             <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
           )}
         </>
       )}
 
-      {selectedTab === 'events' && events && <EventsTab eventsData={events} />}
+      {activeTab === 'events' && events && <EventsTab eventsData={events} />}
 
-      {selectedTab === 'press' && (
+      {activeTab === 'press' && (
         <>
           {mediaMentionsData.length > 0 ? (
-            <MediaList dataTestId={selectedTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
+            <MediaList dataTestId={activeTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
           ) : (
             <EmptyState dataTestId="EmptyState-press" title={t('press.title')} description={t('press.description')} />
           )}
