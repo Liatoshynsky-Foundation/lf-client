@@ -96,12 +96,19 @@ export const biographyContentStyles = {
 
   onlyImageRight: {
     position: 'relative',
+    marginLeft: 'auto',
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
       md: '6 / -1'
     },
-    alignSelf: 'end'
+    alignSelf: 'end',
+    maxWidth: {
+      xs: 250,
+      sm: 560,
+      md: '100%'
+    },
+    width: '100%'
   },
 
   imageContainer: {
@@ -131,7 +138,7 @@ export const biographyContentStyles = {
 
   bigHorizontal: {
     width: { xs: 199, sm: 400, md: 496, lg: 646, xl: 744 },
-    height: { xs: 150, sm: 280, md: 350, lg: 452, xl: 506, xxl: 560 }
+    height: { xs: 160, sm: 280, md: 350, lg: 452, xl: 506, xxl: 560 }
   },
 
   fullWidth: {

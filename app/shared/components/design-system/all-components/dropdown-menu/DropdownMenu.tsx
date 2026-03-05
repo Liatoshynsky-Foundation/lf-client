@@ -15,11 +15,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   sx,
   anchorOrigin = {
     vertical: PositionEnum.Bottom,
-    horizontal: PositionEnum.Center
+    horizontal: PositionEnum.Left
   },
   transformOrigin = {
     vertical: PositionEnum.Top,
-    horizontal: PositionEnum.Center
+    horizontal: PositionEnum.Left
   },
   ...props
 }) => {

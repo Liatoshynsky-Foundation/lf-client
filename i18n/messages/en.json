@@ -138,6 +138,9 @@
       "title": "SupPorT FoUndaTioN",
       "subTitle": "All contributions go <b>directly</b> to the Liatoshynsky Foundation account and are used to support its mission. Choose a currency convenient for you - <b>the transfer details are below</b>:"
     },
+    "payment": {
+      "copyHint": "IBAN is copied"
+    },
     "faq": {
       "title": "Frequently Asked Questions:",
       "subtitle": {
@@ -309,7 +312,7 @@
     "button": "Return to home"
   },
   "warSupport": {
-    "title": "RUSSIA'S WAR AGAINST UKRAINIANS",
+    "title": "RuSSiA'S WaR AgAiNsT UkRaInIaNs",
     "ourPartners": {
       "title": "OUR PARTNERS:",
       "description": "The Liatoshynsky Foundation is sincerely open to partnership and appreciates any support. We believe that cooperation based on trust and mutual respect will help us develop Ukrainian musical culture together. We invite those who share our mission and seek to participate in preserving the legacy of Borys Liatoshynsky and supporting contemporary musical initiatives to partner with us."

@@ -7,7 +7,7 @@ export const styles = {
       xs: ' "image"  "content" "buttons"',
       sm: '"buttons content" '
     },
-    columnGap: { xs: '20px', sm: '23px', md: '40px' },
+    columnGap: { xs: '16px', sm: '24px', md: '40px' },
     rowGap: { xs: '13px', sm: '17px', md: '20px' },
     alignItems: 'start',
     height: 'fit-content'
@@ -22,14 +22,15 @@ export const styles = {
     gridColumn: { xs: '1/ -1', sm: '1/4', md: '1 / 6' },
     justifyContent: 'space-between',
     width: '100%',
-    height: '100%',
-    marginBottom: { xs: '10px', sm: 0 },
-    marginTop: { xs: '4px', sm: 0 }
+    height: '100%'
+  },
+
+  positionBox: {
+    alignSelf: { xs: 'start', sm: 'end' }
   },
 
   button: {
-    alignSelf: { xs: 'start', sm: 'end' },
-    maxWidth: { xs: '200px', sm: '250px' }
+    maxWidth: { xs: 'fit-content', sm: '250px' }
   },
 
   icon: {

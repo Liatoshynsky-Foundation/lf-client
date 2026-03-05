@@ -6,7 +6,8 @@ export const styles = {
     height: '386px',
     backgroundColor: mainHexPallete.yellow[200],
     px: '34px',
-    py: '48px',
+    pt: '34px',
+    pb: '48px',
     boxSizing: 'border-box'
   },
   content: {

@@ -16,7 +16,6 @@ export default function OurPartners() {
   const partners = partnersMock;
 
   const layouts = generateLayouts(partners, patterns);
-  const xsPartners = partners.slice(0, 2);
 
   return (
     <Box sx={styles.wrapper}>
@@ -30,19 +29,11 @@ export default function OurPartners() {
       <ContentBlock textSx={styles.text} description={t('description')} />
 
       <Box sx={styles.xsGrid}>
-        {xsPartners.map((partner) => (
+        {partners.map((partner) => (
           <Box key={partner.id} sx={styles.logoWrapper}>
             <PartnerLogo
               link={partner.link}
-              image={
-                <img
-                  src={partner.img}
-                  alt={partner.name}
-                  width={200}
-                  height={100}
-                  style={styles.logoImage as React.CSSProperties}
-                />
-              }
+              image={<img src={partner.img} alt={partner.name} style={styles.logoImage as React.CSSProperties} />}
             />
           </Box>
         ))}

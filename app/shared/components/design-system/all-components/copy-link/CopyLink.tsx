@@ -24,6 +24,7 @@ interface CopyLinkProps {
   hint?: string;
   delay?: number;
   sx?: SxProps<Theme>;
+  iconSx?: SxProps<Theme>;
   forceShowCopyIcon?: boolean;
 }
 
@@ -36,7 +37,8 @@ function CopyLink({
   delay = 3000,
   hrefType,
   disabled = false,
-  sx
+  sx,
+  iconSx
 }: Readonly<CopyLinkProps>) {
   const { isMobile } = useBreakpoints();
   const [isCopied, setIsCopied] = useState(false);
@@ -108,11 +110,11 @@ function CopyLink({
       data-testid="CopyLink"
       sx={[styles.wrapper, copyLinkStyles, ...sxToArray(sx)]}
     >
-      <Typography component="span" variant={variant} data-testid="CopyLink-text">
+      <Typography sx={{ ...sx }} component="span" variant={variant} data-testid="CopyLink-text">
         {value}
       </Typography>
       <TooltipCustom title={finalHint} isOpen={isCopied} showArrow>
-        <Box sx={styles.iconWrapper} data-testid="CopyLink-iconWrapper">
+        <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]} data-testid="CopyLink-iconWrapper">
           <Svg
             width={`${copyIconSize}px`}
             height={`${copyIconSize}px`}

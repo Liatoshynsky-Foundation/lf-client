@@ -21,7 +21,8 @@ describe('FaqAccordion component', () => {
   });
 
   it('should not show plus icon initially', () => {
-    expect(screen.getByAltText('toggle icon')).toBeInTheDocument();
+    const icons = screen.getAllByAltText('toggle icon');
+    expect(icons[0]).toBeInTheDocument();
   });
 
   it('should show minus icon after clicking to expand', () => {

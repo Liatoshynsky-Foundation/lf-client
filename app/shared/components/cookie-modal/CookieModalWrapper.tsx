@@ -16,15 +16,17 @@ const CookieModalWrapper = ({ trackingId, gtmId, consent_cookie }: ConsentProps)
   const [open, setOpen] = useState(true);
   const [openPreferences, setOpenPreferences] = useState(false);
   const [collectAnalytics, setCollectAnalytics] = useState(true);
-  const [analiticsEnabled, setAnaliticsEnabled] = useState(Boolean(consent_cookie));
-
-  if (analiticsEnabled) {
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(consent_cookie?.analytics ?? false);
+  const hasUserDecision = consent_cookie !== null;
+  if (analyticsEnabled) {
     return <ConsentScript trackingId={trackingId} gtmId={gtmId} consent_cookie={consent_cookie} />;
   }
-
+  if (hasUserDecision && !analyticsEnabled) {
+    return null;
+  }
   const setCookies = (analytics: boolean) => {
     if (analytics) {
-      setAnaliticsEnabled(true);
+      setAnalyticsEnabled(true);
     }
     document.cookie = `cookie_consent=${JSON.stringify({ analytics })}; path=/; max-age=31536000`;
   };

@@ -50,8 +50,7 @@ export const style = {
     border: 'none',
     padding: '0',
     display: 'flex',
-    flexDirection: 'column',
-    height: '100%'
+    flexDirection: 'column'
   },
   topSection: {
     display: 'flex',
