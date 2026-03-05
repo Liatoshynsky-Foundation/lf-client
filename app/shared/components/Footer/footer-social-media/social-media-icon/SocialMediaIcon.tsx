@@ -14,7 +14,7 @@ interface SocialMediaIconProps {
 
 const SocialMediaIcon = ({ icon, href }: SocialMediaIconProps) => (
   <Link href={href} key={icon} target="_blank" sx={styles.link}>
-    <IconButton sx={iconButtonBase(icon)}>
+    <IconButton component="a" sx={iconButtonBase(icon)}>
       <Box sx={styles.iconWrapper}>
         <SvgImage
           src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}

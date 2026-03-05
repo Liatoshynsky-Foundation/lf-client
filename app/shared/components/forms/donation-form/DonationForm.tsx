@@ -102,6 +102,7 @@ function DonationForm() {
       id={item.toString()}
       variant="outlined"
       size={isMobile ? 'small' : 'medium'}
+      sx={style.currencySuggestionBtns}
       onClick={() => {
         setDonationSum(item);
         if (hasError) {

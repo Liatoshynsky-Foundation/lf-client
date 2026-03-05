@@ -19,7 +19,8 @@ export const styles = {
     alignItems: 'center'
   },
   dropdownMenu: {
-    marginTop: '8px'
+    marginTop: '8px',
+    transform: 'translateX(-16px)'
   },
   buttonGroup: {
     height: '40px',

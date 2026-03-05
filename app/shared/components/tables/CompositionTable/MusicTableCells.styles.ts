@@ -27,7 +27,7 @@ export const actionsCellContainerSx: SxProps<Theme> = {
   display: 'flex',
   justifyContent: 'flex-end',
   gap: 2,
-  pr: { xs: 1, sm: 2, md: 5 }
+  pr: { xs: 2, sm: 3, md: '58px' }
 };
 
 export const iconButtonSecondaryOutlinedSx: SxProps<Theme> = {

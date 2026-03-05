@@ -88,7 +88,13 @@ export const style = {
   currencySuggestion: {
     alignSelf: 'center',
     color: mainHexPallete.brown[600],
-    fontSize: { xs: '12px', sm: '18px' }
+    fontSize: '16px',
+    fontWeight: 400
+  },
+  currencySuggestionBtns: {
+    display: 'flex',
+    flexGrow: 1,
+    gap: '8px'
   },
   addBtns: {
     display: 'flex',
