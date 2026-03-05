@@ -129,7 +129,9 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
       </Box>
       <Box sx={styles.carouselFooterStyles}>
         <Box key={images[activeIndex].description} sx={styles.captionStyles} data-testid="carousel-caption">
-          <Typography variant="caption">{images[activeIndex]?.description}</Typography>
+          <Typography sx={styles.exactCaptionStyles} variant="caption">
+            {images[activeIndex]?.description}
+          </Typography>
         </Box>
         <Box sx={styles.dotsContainerStyles}>
           {images.map((image, index) => {
