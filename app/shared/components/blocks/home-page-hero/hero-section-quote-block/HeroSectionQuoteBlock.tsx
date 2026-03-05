@@ -6,13 +6,13 @@ import { heroSectionStyles } from '../HeroSection.styles';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export type HeroSectionQuoteProps = {
+type Props = {
   heroQuote: string;
   heroQuoteSource: string;
   testID?: string;
 };
 
-export const HeroSectionQuoteBlock: React.FC<HeroSectionQuoteProps> = ({
+export const HeroSectionQuoteBlock: React.FC<Props> = ({
   heroQuote,
   heroQuoteSource,
   testID = 'hero-section-quote-block'

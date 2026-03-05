@@ -28,6 +28,8 @@ export const heroSectionStyles = {
   },
 
   clickableArea: {
+    display: 'block',
+    width: '100%',
     position: 'relative',
     cursor: 'none',
     outline: 'none',

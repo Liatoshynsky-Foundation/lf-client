@@ -26,7 +26,7 @@ interface Props {
   partners?: Partner[];
 }
 
-export const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, buttonLink, partners }) => {
+const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, buttonLink, partners }) => {
   const locale = useLocale();
   return (
     <Box sx={styles.mainContainer}>
@@ -62,3 +62,5 @@ export const CooperationSection: React.FC<Props> = ({ title, textContent, button
     </Box>
   );
 };
+
+export default CooperationSection;

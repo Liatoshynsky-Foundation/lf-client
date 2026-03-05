@@ -30,7 +30,7 @@ interface Props {
   locale: Locale;
 }
 
-export const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
+const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
   const t = await getTranslations('media.emptyState');
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
@@ -83,3 +83,5 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
     </Box>
   );
 };
+
+export default NewsSection;
