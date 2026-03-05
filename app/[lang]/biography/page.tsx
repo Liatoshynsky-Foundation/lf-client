@@ -5,7 +5,7 @@ import React, { ReactElement } from 'react';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
-import { PageNotFound } from '../[...unknown-route]/page-not-found/pageNotFound';
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { BiographyContent } from './BiographyContent/BiographyContent';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';

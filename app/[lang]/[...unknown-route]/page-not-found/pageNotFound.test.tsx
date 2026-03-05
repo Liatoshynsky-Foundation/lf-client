@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { PageNotFound } from './pageNotFound';
+import { PageNotFound } from './PageNotFound';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key

@@ -1,6 +1,6 @@
 import { LocalizationErrors } from '~/constants/errors';
 
-import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/pageNotFound';
+import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
 import TranslationNotFound from '~/shared/components/blocks/translation-not-found/TranslationNotFound';
 
 export function ErrorPageFactory(error: string) {

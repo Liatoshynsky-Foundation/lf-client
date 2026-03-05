@@ -6,7 +6,7 @@ import ResearchAndScientificWork from '~/components/research-and-scientific-work
 import { WorkTableSection } from '~/components/tables/WorksTable/WorkTableSection';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
-import { PageNotFound } from '../[...unknown-route]/page-not-found/pageNotFound';
+import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
