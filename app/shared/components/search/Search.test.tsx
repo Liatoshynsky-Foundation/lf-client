@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Search } from './Search';
+import { TitleOption } from '~/types/types/composition.types';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => {
@@ -14,7 +15,7 @@ jest.mock('next-intl', () => ({
   }
 }));
 jest.mock('./LazyListItem', () => ({
-  VirtualizedListbox: ({ children }: any) => <ul>{children}</ul>
+  VirtualizedListbox: ({ children }: { children: ReactNode }) => <ul>{children}</ul>
 }));
 
 jest.mock('@mui/material/useMediaQuery', () => {
@@ -22,14 +23,14 @@ jest.mock('@mui/material/useMediaQuery', () => {
 });
 
 describe('Search', () => {
-  const options = [
-    { _id: '1', title: 'Test Song' },
-    { _id: '2', title: 'Another Song' }
+  const options: TitleOption[] = [
+    { _id: '1', title: 'Test Song', kind: 'composition' },
+    { _id: '2', title: 'Another Song', kind: 'composition' }
   ];
 
   const renderSearch = (opts = options, initialSearch = '') => {
     const setSearch = jest.fn();
-    render(<Search<{ _id: string; title: string }> search={initialSearch} setSearch={setSearch} options={opts} />);
+    render(<Search<TitleOption> search={initialSearch} setSearch={setSearch} options={opts} />);
     const input = screen.getByRole('combobox');
     const searchIcon = screen.queryByAltText('search');
     return { setSearch, input, searchIcon };

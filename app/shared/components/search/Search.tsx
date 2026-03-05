@@ -12,17 +12,15 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
 import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
-
-import { normalizeSearch } from '~/lib/utils/normalizeSearch';
+import { TitleOption } from '~/types/types/composition.types';
 
 interface SearchProps<T> {
   search: string;
@@ -49,11 +47,7 @@ function getIconStyle(isMobile: boolean, focused: boolean) {
   };
 }
 
-export const Search = <T extends { title?: string | { en?: string; uk?: string } }>({
-  search,
-  setSearch,
-  options
-}: SearchProps<T>) => {
+export const Search = <T extends TitleOption>({ search, setSearch, options }: SearchProps<T>) => {
   const theme = useTheme();
   const t = useTranslations('search');
 
@@ -65,21 +59,15 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
   const [value, setValue] = useState<T | null>(null);
   const [inputValue, setInputValue] = useState(search);
 
-  const debouncedInput = useMemo(
-    () =>
-      debounce((v: string) => {
-        setInputValue(v);
-      }, 200),
-    []
-  );
-
   const handleInputChange = useCallback(
     (_: SyntheticEvent, v: string) => {
+      if (v.length > 200) return;
+
       if (!opened) setOpened(true);
 
       setInputValue(v);
     },
-    [opened, debouncedInput]
+    [opened]
   );
 
   const handleSelect = useCallback(
@@ -88,7 +76,8 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
 
       const label = typeof v?.title === 'string' ? v.title : v?.title?.en || v?.title?.uk || '';
 
-      setSearch(normalizeSearch(label));
+      setInputValue(label);
+      setSearch(label);
       setOpened(false);
     },
     [setSearch]
@@ -97,16 +86,12 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
   const handleEnter = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
-        setSearch(normalizeSearch(inputValue));
+        setSearch(inputValue);
         setOpened(false);
       }
     },
     [inputValue, setSearch]
   );
-
-  useEffect(() => {
-    setInputValue(search);
-  }, [search]);
 
   const renderOption = useCallback((props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
     const { key, ...rest } = props;
@@ -141,11 +126,29 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
     );
   }, []);
 
-  const getOptionLabel = (option: T) => {
-    if (typeof option.title === 'string') return option.title;
-    if (typeof option.title === 'object') return option.title.en || option.title.uk || '';
-    return '';
+  const getOptionLabel = (option: T | string) => {
+    if (typeof option === 'string') return option;
+
+    const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
+
+    if (option.kind === 'opus' && option.opusNumber) {
+      return `Op. ${option.opusNumber} — ${titleStr}`;
+    }
+
+    return titleStr;
   };
+
+  const filterOptions = useCallback((options: T[], { inputValue }: { inputValue: string }) => {
+    const trimmedInput = inputValue.trim().toLowerCase();
+    if (!trimmedInput) return options;
+
+    const words = trimmedInput.split(/\s+/).filter((w) => w.length > 0);
+
+    return options.filter((option) => {
+      const label = getOptionLabel(option).toLowerCase();
+      return words.every((word) => label.includes(word));
+    });
+  }, []);
 
   return (
     <Autocomplete<T, false, false, false>
@@ -157,6 +160,7 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
       onInputChange={handleInputChange}
       renderOption={renderOption}
       getOptionLabel={getOptionLabel}
+      filterOptions={filterOptions}
       popupIcon={null}
       clearIcon={false}
       clearOnBlur={false}
@@ -182,8 +186,15 @@ export const Search = <T extends { title?: string | { en?: string; uk?: string }
           onBlur={() => {
             setOpened(false);
             setFocused(false);
+            if (inputValue !== search) {
+              setSearch(inputValue);
+            }
           }}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              maxLength: 200
+            },
             input: {
               ...params.InputProps,
               style: getIconStyle(isMobile, focused),
