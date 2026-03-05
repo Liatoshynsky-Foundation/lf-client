@@ -73,14 +73,17 @@ export default function BulletTextWithLinks({
       {showMainButton && (
         <Box sx={styles.buttonBox} data-testid="BulletTextWithLinks-buttonBox">
           {!isMobile && imageBox}
-          <Button size="medium" variant="contained" sx={{ ...styles.button }} link={buttonLink} externalLink={true}>
-            {buttonText}
-            <Svg Component={ArrowUpRight} alt="icon" color="#fff" width="20px" height="20px" sx={styles.icon} />
-          </Button>
+          <Box sx={styles.positionBox}>
+            <Button size="medium" variant="contained" sx={{ ...styles.button }} link={buttonLink} externalLink={true}>
+              {buttonText}
+              <Svg Component={ArrowUpRight} alt="icon" color="#fff" width="20px" height="20px" sx={styles.icon} />
+            </Button>
+          </Box>
         </Box>
       )}
       <Box sx={styles.contentBox} data-testid="BulletTextWithLinks-contentBox">
         <ContentBlock
+          containerSx={{ columnGap: { xs: '16px', sm: '24px', md: '40px' } }}
           dataTestId="BulletTextWithLinks-content"
           description={description}
           textSx={{ gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' } }}
