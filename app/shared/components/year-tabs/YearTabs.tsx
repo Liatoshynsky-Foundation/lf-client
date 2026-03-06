@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { styles } from '~/components/year-tabs/YearTabs.styles';
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
@@ -16,7 +16,7 @@ interface Data {
 }
 
 export default function YearTabs({ years }: Readonly<Data>) {
-  const validYears = years.filter((y) => y && y.trim() !== '');
+  const validYears = useMemo(() => years.filter((y) => y && y.trim() !== ''), [years]);
   const { isMobile } = useBreakpoints();
   const [year, setYear] = useState<string>(validYears[0] ?? '');
   const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -130,9 +130,40 @@ export default function YearTabs({ years }: Readonly<Data>) {
     };
   }, [isMobile, validYears]);
 
+  useEffect(() => {
+    const scrollToHash = () => {
+      const hash = globalThis.location?.hash;
+      if (!hash) return;
+
+      const raw = hash.slice(1);
+      const id = raw.endsWith('s') ? raw.slice(0, -1) : raw;
+      if (!id) return;
+
+      const element = document.getElementById(`year-${id}`);
+      if (!element) return;
+
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - HEADER_OFFSET;
+
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+
+      if (validYears.includes(id)) {
+        setYear(id);
+      }
+    };
+
+    scrollToHash();
+    globalThis.addEventListener?.('hashchange', scrollToHash);
+
+    return () => {
+      globalThis.removeEventListener?.('hashchange', scrollToHash);
+    };
+  }, [validYears]);
+
   const handleYearChange = (selectedYear: string) => {
     isClickScrolling.current = true;
     setYear(selectedYear);
+    globalThis.history.pushState(null, '', `#${selectedYear}s`);
     const element = document.getElementById(`year-${selectedYear}`);
 
     if (element) {

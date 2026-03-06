@@ -28,6 +28,8 @@ export const heroSectionStyles = {
   },
 
   clickableArea: {
+    display: 'block',
+    width: '100%',
     position: 'relative',
     cursor: 'none',
     outline: 'none',
@@ -159,7 +161,6 @@ export const heroSectionStyles = {
     },
     justifyContent: 'center',
     marginBottom: {
-      xs: '64px',
       sm: '80px',
       md: '96px'
     },

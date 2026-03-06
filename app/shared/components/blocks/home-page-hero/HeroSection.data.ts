@@ -1,9 +1,6 @@
-type Localized<T> = {
-  uk: T;
-  en: T;
-};
+import type { Locale } from 'next-intl';
 
-type LocalizedString = Localized<string>;
+type LocalizedString = Record<Locale, string>;
 
 export const heroQuote: LocalizedString = {
   uk: 'Ви дуже добре сприймаєте музику, дуже тонко її відчуваєте, і я переконаний, що під час другого прослуховування ви значно більше почуєте того, що існує «за нотами». Адже, зрештою, ноти — це лише «ноти», майстерність і т. п., але ви ж прекрасно знаєте, що в більшості музичних творів є ще й дещо «за нотами».',

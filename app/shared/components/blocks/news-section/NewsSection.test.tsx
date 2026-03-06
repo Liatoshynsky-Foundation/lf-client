@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Locale } from 'next-intl';
 import React from 'react';
 
-import { NewsSection } from './NewsSection';
+import NewsSection from './NewsSection';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
