@@ -20,7 +20,7 @@ const FooterSocialMedia = ({ media, containerSx }: FooterSocialMediaProps) => {
     if (typeof item.icon === 'string') {
       item.icon = sanitizeSocialMediaType(item.icon);
     }
-    return <SocialMediaIcon key={item.icon} icon={item.icon as SocialMediaTypes} href={item.link} />;
+    return <SocialMediaIcon key={item.link} icon={item.icon as SocialMediaTypes} href={item.link} />;
   });
 
   return <Box sx={{ ...styles.container, ...containerSx }}>{socialMedias}</Box>;
