@@ -13,7 +13,7 @@ interface SocialMediaIconProps {
 }
 
 const SocialMediaIcon = ({ icon, href }: SocialMediaIconProps) => (
-  <IconButton component="a" href={href} target="_blank" rel="noopener noreferrer" sx={iconButtonBase(icon)}>
+  <IconButton<'a'> component="a" href={href} target="_blank" rel="noopener noreferrer" sx={iconButtonBase(icon)}>
     <Box sx={styles.iconWrapper}>
       <SvgImage
         src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}
