@@ -8,11 +8,10 @@ import { WordMorpher } from './WordMorpher';
 
 interface IntroAnimationProps {
   children: ReactNode;
-  onComplete?: () => void;
   testID?: string;
 }
 
-export const IntroAnimation: FC<IntroAnimationProps> = ({ children, onComplete, testID = 'intro-animation' }) => {
+export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'intro-animation' }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [showExpansion, setShowExpansion] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -28,19 +27,9 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, onComplete, 
     }
   };
 
-  const contentVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: 'easeOut' as const
-      }
-    }
-  };
-
   return (
     <>
+      <div style={{ display: 'contents', opacity: showContent ? 1 : 0, transition: 'opacity 0.5s' }}>{children}</div>
       <AnimatePresence onExitComplete={() => setShowExpansion(true)}>
         {showIntro && (
           <div
@@ -67,7 +56,6 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, onComplete, 
         onExitComplete={() => {
           setShowContent(true);
           setShowExpansion(false);
-          onComplete?.();
         }}
       >
         {showExpansion && (
@@ -122,25 +110,6 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, onComplete, 
           </motion.div>
         )}
       </AnimatePresence>
-
-      {(!showIntro || showContent) && (
-        <motion.div
-          data-testid={`${testID}-content`}
-          variants={contentVariants}
-          initial="hidden"
-          animate="visible"
-          style={{
-            position: 'relative',
-            zIndex: 10,
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            overflow: 'hidden'
-          }}
-        >
-          {children}
-        </motion.div>
-      )}
     </>
   );
 };

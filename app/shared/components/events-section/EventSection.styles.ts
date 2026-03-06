@@ -14,7 +14,7 @@ export const styles = {
       md: '40px'
     },
     width: '100%',
-    my: { xs: '80px', sm: '104px', md: '128px', lg: '144px', xl: '160px' }
+    my: { xs: '80px' }
   },
   sliderWrapper: {
     gridColumn: { xs: '1 / -1', sm: '1 / -1' },

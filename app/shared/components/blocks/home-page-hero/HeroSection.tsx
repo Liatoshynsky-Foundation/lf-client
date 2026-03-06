@@ -12,7 +12,7 @@ import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-export type HeroProps = {
+export type Props = {
   heroQuote: string;
   heroQuoteSource: string;
   playbackButton: {
@@ -29,7 +29,7 @@ const imagesPaths = {
   playIcon: '/images/main-page-hero-section/play-icon.svg'
 };
 
-export const HeroSection: React.FC<HeroProps> = ({ heroQuote, heroQuoteSource, playbackButton }) => {
+const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButton }) => {
   const { isPlaying, togglePlay } = useAudioPlayer();
   const bp = useBreakpoints();
 
@@ -89,3 +89,5 @@ export const HeroSection: React.FC<HeroProps> = ({ heroQuote, heroQuoteSource, p
     </Box>
   );
 };
+
+export default HeroSection;

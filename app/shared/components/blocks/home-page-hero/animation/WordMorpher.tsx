@@ -1,3 +1,4 @@
+'use client';
 import { interpolateAll, splitPathString } from 'flubber';
 import { animate, motion, MotionValue, useMotionValue, useTransform } from 'framer-motion';
 import { FC, useEffect, useRef, useState } from 'react';
