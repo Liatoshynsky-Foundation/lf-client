@@ -3,14 +3,18 @@ import { Box, FormControl, Input, MenuItem, Select, Typography } from '@mui/mate
 import { useLocale, useTranslations } from 'next-intl';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
+import { Svg } from '~/components/colored-svg/ColoredSvg';
 import PaperComponent from '~/components/paper-component/PaperComponent';
 import TurnstileWidget from '~/components/turnstileWidget/TurnstileWidget';
 import Button from '~/ds-components/button/Button';
+import { mainHexPallete } from '~/ds-components/theme/colors';
 import { useDonation } from '~/hooks/use-donation/useDonation';
 
 import { style } from './DonationForm.styles';
 import { Currency } from '~/types/types/common.types';
 
+import ChevronDown from '~/public/icons/chevron-down.svg';
+import ChevronUp from '~/public/icons/chevron-up.svg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP'];
@@ -167,6 +171,25 @@ function DonationForm() {
                 value={currency}
                 onChange={handleCurrencySwitch}
                 data-testid="DonationForm-currencySelect"
+                IconComponent={(props) => (
+                  <Box
+                    {...props}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      transform: 'translateY(-1px) !important'
+                    }}
+                  >
+                    <Svg
+                      Component={openDropdown ? ChevronUp : ChevronDown}
+                      alt="chevron"
+                      stroke={mainHexPallete.black}
+                      width="24px"
+                      height="24px"
+                      sx={{ display: 'flex' }}
+                    />
+                  </Box>
+                )}
               >
                 {currencyItems}
               </Select>
