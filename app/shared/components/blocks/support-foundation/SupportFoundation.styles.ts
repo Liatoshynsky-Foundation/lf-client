@@ -34,8 +34,8 @@ export const styles = {
   sectionSubtitle: {
     width: '100%',
     mb: { xs: '32px', sm: '64px' },
-    textAlign: { xs: 'left', lg: 'justify' },
-    textIndent: { xs: '26%', sm: '15%', md: '14%', lg: '60%' },
+    textAlign: { xs: 'left', lg: 'left' },
+    textIndent: { xs: '26%', sm: '15%', md: '14%', lg: '60%', xl: '35%' },
     lineHeight: '160%',
     color: mainHexPallete.brown[700]
   }
