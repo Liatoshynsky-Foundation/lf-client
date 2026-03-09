@@ -30,8 +30,20 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
         </Box>
       </Box>
       <Box>
-        <ContactLink type="phone" value={contacts.phone} label={labels.phoneLabel} alertMsg={alertMsg} />
-        <ContactLink type="email" value={contacts.email} label="Email" alertMsg={alertMsg} />
+        <ContactLink
+          type="phone"
+          value={contacts.phone}
+          label={labels.phoneLabel}
+          alertMsg={alertMsg}
+          valueSx={styles.contactLink}
+        />
+        <ContactLink
+          type="email"
+          value={contacts.email}
+          label="Email"
+          alertMsg={alertMsg}
+          valueSx={styles.contactLink}
+        />
       </Box>
     </Box>
   );

@@ -24,6 +24,7 @@ interface CopyLinkProps {
   hint?: string;
   delay?: number;
   sx?: SxProps<Theme>;
+  textSx?: SxProps<Theme>;
   forceShowCopyIcon?: boolean;
 }
 
@@ -36,7 +37,8 @@ function CopyLink({
   delay = 3000,
   hrefType,
   disabled = false,
-  sx
+  sx,
+  textSx
 }: Readonly<CopyLinkProps>) {
   const { isMobile } = useBreakpoints();
   const [isCopied, setIsCopied] = useState(false);
@@ -79,7 +81,12 @@ function CopyLink({
         <Typography
           variant={variant}
           data-testid="CopyLink--mobile"
-          sx={[copyLinkStyles, ...sxToArray(sx), ...(disabled ? [getMobileDisabledStyles()] : [])]}
+          sx={[
+            copyLinkStyles,
+            ...sxToArray(sx),
+            ...sxToArray(textSx),
+            ...(disabled ? [getMobileDisabledStyles()] : [])
+          ]}
         >
           {value}
         </Typography>
@@ -91,7 +98,7 @@ function CopyLink({
         variant={variant}
         href={href}
         data-testid="CopyLink--mobile"
-        sx={[copyLinkStyles, ...sxToArray(sx), ...(disabled ? [getMobileDisabledStyles()] : [])]}
+        sx={[copyLinkStyles, ...sxToArray(sx), ...sxToArray(textSx), ...(disabled ? [getMobileDisabledStyles()] : [])]}
       >
         {value}
       </Link>
@@ -108,7 +115,7 @@ function CopyLink({
       data-testid="CopyLink"
       sx={[styles.wrapper, copyLinkStyles, ...sxToArray(sx)]}
     >
-      <Typography component="span" variant={variant} data-testid="CopyLink-text">
+      <Typography component="span" variant={variant} data-testid="CopyLink-text" sx={sxToArray(textSx)}>
         {value}
       </Typography>
       <TooltipCustom title={finalHint} isOpen={isCopied} showArrow>
