@@ -258,6 +258,7 @@ export default function MusicTableSection() {
       <EnhancedTable
         key={tableKey}
         data={data}
+        isSearchActive={!!params.search}
         loading={loadingData}
         columns={columns}
         groupByKey="opus"
