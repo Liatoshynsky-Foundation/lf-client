@@ -28,6 +28,30 @@ const proposedSum: Record<Currency, number[]> = {
 const MIN_DONATION_AMOUNT = 0;
 const isValidDonationAmount = (value: number | ''): boolean => typeof value === 'number' && value > MIN_DONATION_AMOUNT;
 
+const DropdownIcon = (props: React.HTMLAttributes<HTMLDivElement>) => {
+  const isOpen = typeof props.className === 'string' && props.className.includes('iconOpen');
+
+  return (
+    <Box
+      {...props}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        transform: 'translateY(-1px) !important'
+      }}
+    >
+      <Svg
+        Component={isOpen ? ChevronUp : ChevronDown}
+        alt="chevron"
+        stroke={mainHexPallete.black}
+        width="24px"
+        height="24px"
+        sx={{ display: 'flex' }}
+      />
+    </Box>
+  );
+};
+
 function DonationForm() {
   const t = useTranslations('donationForm');
   const lang = useLocale();
@@ -171,25 +195,7 @@ function DonationForm() {
                 value={currency}
                 onChange={handleCurrencySwitch}
                 data-testid="DonationForm-currencySelect"
-                IconComponent={(props) => (
-                  <Box
-                    {...props}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      transform: 'translateY(-1px) !important'
-                    }}
-                  >
-                    <Svg
-                      Component={openDropdown ? ChevronUp : ChevronDown}
-                      alt="chevron"
-                      stroke={mainHexPallete.black}
-                      width="24px"
-                      height="24px"
-                      sx={{ display: 'flex' }}
-                    />
-                  </Box>
-                )}
+                IconComponent={DropdownIcon}
               >
                 {currencyItems}
               </Select>
