@@ -64,7 +64,9 @@ export const styles = {
       mb: '10px'
     }
   },
-
+  contactLabel: {
+    fontSize: '18px'
+  },
   formWrapper: {
     padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '75px 96px' },
     margin: { xs: '0px -24px', sm: 'unset' },
