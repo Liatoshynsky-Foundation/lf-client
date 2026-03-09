@@ -28,6 +28,8 @@ export const styles = {
     display: { xs: 'flex', sm: 'none' },
     justifyContent: 'flex-start',
     overflowX: 'auto',
+    overflowY: 'hidden',
+    touchAction: 'pan-x',
     scrollbarWidth: 'none',
     msOverflowStyle: 'none',
     alignItems: 'center',
