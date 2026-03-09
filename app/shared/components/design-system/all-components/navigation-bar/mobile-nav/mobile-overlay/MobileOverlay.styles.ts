@@ -31,19 +31,26 @@ export const styles = {
 
   overlayContent: {
     display: 'grid',
+
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
+
     columnGap: { xs: '16px', sm: '24px', md: '40px' },
 
     paddingInline: { xs: '24px', sm: '56px', md: '72px' },
     paddingTop: { xs: '63px', sm: '112px', md: '112px' },
 
-    height: '100vh',
+    minHeight: '100vh',
     height: '100dvh',
-    overflow: 'hidden',
+
+    overflowY: {
+      xs: 'auto',
+      sm: 'hidden'
+    },
+
     position: 'relative'
   },
 
