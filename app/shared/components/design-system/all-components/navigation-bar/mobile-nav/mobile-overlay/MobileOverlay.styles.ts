@@ -43,8 +43,8 @@ export const styles = {
     paddingInline: { xs: '24px', sm: '56px', md: '72px' },
     paddingTop: { xs: '63px', sm: '112px', md: '112px' },
 
-    minHeight: '100vh',
-    height: '100dvh',
+    height: '100vh',
+    ['height' as string]: '100dvh',
 
     overflowY: {
       xs: 'auto',
