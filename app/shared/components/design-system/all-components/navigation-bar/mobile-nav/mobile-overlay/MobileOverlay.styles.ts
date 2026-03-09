@@ -42,6 +42,7 @@ export const styles = {
     paddingTop: { xs: '63px', sm: '112px', md: '112px' },
 
     height: '100vh',
+    height: '100dvh',
     overflow: 'hidden',
     position: 'relative'
   },
