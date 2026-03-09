@@ -38,6 +38,14 @@ export const styles = {
     transformOrigin: 'top left'
   },
   contentContainer: {
+    maxWidth: {
+      xs: '452px',
+      sm: 'none'
+    },
+    mx: {
+      xs: 'auto',
+      sm: 0
+    },
     p: {
       xs: '39px 0 65px',
       sm: '18px 46px 72px 35px',
