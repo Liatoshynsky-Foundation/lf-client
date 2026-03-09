@@ -82,8 +82,15 @@ export const style = {
   },
   currencyInput: {
     minWidth: '90px',
-    verticalAlign: 'bottom',
-    marginBottom: '16px'
+    marginBottom: '16px',
+    '& .MuiSelect-select': {
+      paddingBottom: '0px'
+    },
+    '& .MuiSelect-select .MuiTypography-root': {
+      fontWeight: 700,
+      WebkitTextFillColor: mainHexPallete.black,
+      lineHeight: 2
+    }
   },
   currencySuggestion: {
     alignSelf: 'center',
