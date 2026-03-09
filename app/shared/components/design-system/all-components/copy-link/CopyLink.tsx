@@ -24,6 +24,7 @@ interface CopyLinkProps {
   hint?: string;
   delay?: number;
   sx?: SxProps<Theme>;
+  iconSx?: SxProps<Theme>;
   forceShowCopyIcon?: boolean;
 }
 
@@ -36,7 +37,8 @@ function CopyLink({
   delay = 3000,
   hrefType,
   disabled = false,
-  sx
+  sx,
+  iconSx
 }: Readonly<CopyLinkProps>) {
   const { isMobile } = useBreakpoints();
   const [isCopied, setIsCopied] = useState(false);
@@ -112,7 +114,7 @@ function CopyLink({
         {value}
       </Typography>
       <TooltipCustom title={finalHint} isOpen={isCopied} showArrow>
-        <Box sx={styles.iconWrapper} data-testid="CopyLink-iconWrapper">
+        <Box sx={[styles.iconWrapper, ...sxToArray(iconSx)]} data-testid="CopyLink-iconWrapper">
           <Svg
             width={`${copyIconSize}px`}
             height={`${copyIconSize}px`}

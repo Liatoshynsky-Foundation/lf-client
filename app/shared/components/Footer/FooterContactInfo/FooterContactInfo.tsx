@@ -30,12 +30,14 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
         </Box>
       </Box>
       <Box>
+
         <ContactLink
           type="phone"
           value={contacts.phone}
           label={labels.phoneLabel}
           alertMsg={alertMsg}
           valueSx={styles.contactLink}
+          useNativeLink
         />
         <ContactLink
           type="email"
@@ -43,7 +45,9 @@ const FooterContactInfo: FC<FooterContactInfoProps> = ({ contacts, labels, alert
           label="Email"
           alertMsg={alertMsg}
           valueSx={styles.contactLink}
+          useNativeLink
         />
+
       </Box>
     </Box>
   );

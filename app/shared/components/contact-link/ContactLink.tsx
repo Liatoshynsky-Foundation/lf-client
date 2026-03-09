@@ -33,6 +33,7 @@ interface ContactLinkProps {
   copyLinkSize?: CopyIconSize;
   direction?: ContactLinkDirection;
   dataTestid?: string;
+  useNativeLink?: boolean;
 }
 
 export const ContactLink = ({
@@ -49,11 +50,14 @@ export const ContactLink = ({
   disabled = false,
   direction = 'row',
   iconSize = 'medium',
-  copyLinkSize = 'medium'
+  copyLinkSize = 'medium',
+  useNativeLink = false
 }: ContactLinkProps) => {
   const { isMobile } = useBreakpoints();
 
   const hasLabelOutside = !!label && !isMobile;
+
+  const href = type === 'phone' ? `tel:${value.replace(/\s+/g, '')}` : `mailto:${value}`;
 
   return (
     <Box sx={styles.wrapper} data-testid={dataTestid}>
@@ -91,14 +95,28 @@ export const ContactLink = ({
             </Typography>
           )}
 
-          <CopyLink
-            value={value}
-            hrefType={type}
-            size={copyLinkSize}
-            hint={alertMsg}
-            disabled={disabled}
-            sx={isMobile ? [styles.mobileStretchedLink, ...sxToArray(valueSx)] : valueSx}
-          />
+
+          {useNativeLink ? (
+            <Typography
+              component="a"
+              href={disabled ? undefined : href}
+              sx={isMobile ? [styles.mobileStretchedLink, ...sxToArray(valueSx)] : [styles.link, ...sxToArray(valueSx)]}
+              onClick={(e) => {
+                if (disabled) e.preventDefault();
+              }}
+            >
+              {value}
+            </Typography>
+          ) : (
+            <CopyLink
+              value={value}
+              hrefType={type}
+              size={copyLinkSize}
+              hint={alertMsg}
+              disabled={disabled}
+              sx={isMobile ? [styles.mobileStretchedLink, ...sxToArray(valueSx)] : valueSx}
+            />
+          )}
         </Box>
       </Box>
     </Box>

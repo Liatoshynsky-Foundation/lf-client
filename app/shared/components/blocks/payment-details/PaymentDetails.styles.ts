@@ -4,6 +4,7 @@ export const styles = {
   buttonGroup: {
     backgroundColor: mainHexPallete.brown[50],
     p: '4px',
+    height: '36px',
     width: { xs: '100%', sm: 'fit-content' },
 
     div: {
@@ -42,7 +43,7 @@ export const styles = {
     '& h6.MuiTypography-root': {
       lineHeight: '150%',
       color: mainHexPallete.brown[500],
-      width: { xs: '100%', sm: '150px', lg: '180px' },
+      width: { xs: '100%', sm: '115px' },
       flexShrink: 0
     },
 
@@ -57,16 +58,18 @@ export const styles = {
     flexDirection: { xs: 'column', sm: 'row' },
     justifyContent: 'flex-start',
     alignItems: { xs: 'flex-start', sm: 'flex-start' },
-    gap: { xs: '4px', sm: '25px' },
+    gap: { xs: '4px', sm: '24px' },
     width: '100%',
     py: '4px'
   },
 
   iban: {
-    display: 'flex',
     gap: '8px',
-    width: '100%',
-    alignItems: 'center'
+    alignItems: { xs: 'flex-start', sm: 'center' }
+  },
+
+  ibanIcon: {
+    mt: { xs: '4px', sm: '0' }
   },
 
   ibanText: {

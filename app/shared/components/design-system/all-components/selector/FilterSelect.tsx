@@ -144,11 +144,11 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
         onClose={handleCloseMenu}
         anchorOrigin={{
           vertical: PositionEnum.Bottom,
-          horizontal: PositionEnum.Center
+          horizontal: PositionEnum.Left
         }}
         transformOrigin={{
           vertical: PositionEnum.Top,
-          horizontal: PositionEnum.Center
+          horizontal: PositionEnum.Left
         }}
         maxHeight={300}
         menuList={menuList}

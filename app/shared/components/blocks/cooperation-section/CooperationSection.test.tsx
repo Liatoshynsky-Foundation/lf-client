@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import { partnersMock } from '../our-partners/partners.data';
-import { CooperationSection } from './CooperationSection';
+import CooperationSection from './CooperationSection';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 

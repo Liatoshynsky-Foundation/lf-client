@@ -81,11 +81,11 @@ export const principleOfHopeLinks: LocalizedButtonItem[] = [
   {
     shortText: {
       uk: 'Фонд «Принцип надії»',
-      en: 'Principle of Hope Foundation'
+      en: 'The Principle of Hope'
     },
     fullText: {
       uk: 'Благодійний фонд «Принцип надії»',
-      en: 'Principle of Hope Charitable Foundation'
+      en: 'The Principle of Hope Charitable Foundation'
     },
     link: 'https://www.facebook.com/principleofhope'
   }

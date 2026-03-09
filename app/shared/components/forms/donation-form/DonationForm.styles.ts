@@ -82,13 +82,26 @@ export const style = {
   },
   currencyInput: {
     minWidth: '90px',
-    verticalAlign: 'bottom',
-    marginBottom: '16px'
+    marginBottom: '16px',
+    '& .MuiSelect-select': {
+      paddingBottom: '0px'
+    },
+    '& .MuiSelect-select .MuiTypography-root': {
+      fontWeight: 700,
+      WebkitTextFillColor: mainHexPallete.black,
+      lineHeight: 2
+    }
   },
   currencySuggestion: {
     alignSelf: 'center',
     color: mainHexPallete.brown[600],
-    fontSize: { xs: '12px', sm: '18px' }
+    fontSize: '16px',
+    fontWeight: 400
+  },
+  currencySuggestionBtns: {
+    display: 'flex',
+    flexGrow: 1,
+    gap: '8px'
   },
   addBtns: {
     display: 'flex',

@@ -74,6 +74,7 @@ describe('YearTabs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ioInstances = [];
+    globalThis.history.pushState(null, '', '/');
 
     Object.defineProperty(globalThis, 'innerHeight', { value: 800, writable: true });
 

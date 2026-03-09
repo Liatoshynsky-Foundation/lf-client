@@ -14,16 +14,19 @@ const QuoteBlock = ({
   alignRight,
   sx,
   width,
+  imageTextGap,
+  textGap,
+  iconWidth,
   dataTestId
 }: QuoteBlockProps) => {
   const alignKey = alignRight ? 'right' : 'left';
 
   return (
-    <Box sx={[styles.mainContainer(alignKey, width), ...sxToArray(sx)]} data-testid={dataTestId}>
-      <Box sx={styles.image(quoteIconColor, alignKey)}>
+    <Box sx={[styles.mainContainer(alignKey, width, imageTextGap), ...sxToArray(sx)]} data-testid={dataTestId}>
+      <Box sx={styles.image(quoteIconColor, alignKey, iconWidth)}>
         <QuoteImage />
       </Box>
-      <Box sx={styles.textContainer(alignKey)} data-testid="Quote-textContainer">
+      <Box sx={styles.textContainer(alignKey, textGap)} data-testid="Quote-textContainer">
         <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
           {quoteText}
         </Typography>

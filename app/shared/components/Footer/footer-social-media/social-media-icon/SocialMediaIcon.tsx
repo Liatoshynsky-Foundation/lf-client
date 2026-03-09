@@ -1,6 +1,4 @@
-import { Box, Link } from '@mui/material';
-
-import { IconButton } from '~/ds-components/icon-button/IconButton';
+import { Box } from '@mui/material';
 
 import { iconButtonBase, styles } from './SocialMediaIcon.styles';
 import { SocialMediaTypes } from '~/types/enums/common.enums';
@@ -13,18 +11,16 @@ interface SocialMediaIconProps {
 }
 
 const SocialMediaIcon = ({ icon, href }: SocialMediaIconProps) => (
-  <Link href={href} key={icon} target="_blank" sx={styles.link}>
-    <IconButton sx={iconButtonBase(icon)}>
-      <Box sx={styles.iconWrapper}>
-        <SvgImage
-          src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}
-          alt={icon}
-          width={24}
-          height={24}
-        />
-      </Box>
-    </IconButton>
-  </Link>
+  <Box component="a" href={href} target="_blank" rel="noopener noreferrer" sx={iconButtonBase(icon)}>
+    <Box sx={styles.iconWrapper}>
+      <SvgImage
+        src={icon === SocialMediaTypes.AnotherMedia ? '/icons/share.svg' : `/icons/${icon}.svg`}
+        alt={icon}
+        width={24}
+        height={24}
+      />
+    </Box>
+  </Box>
 );
 
 export default SocialMediaIcon;

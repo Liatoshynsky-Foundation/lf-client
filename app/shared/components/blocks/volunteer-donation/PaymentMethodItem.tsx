@@ -17,7 +17,7 @@ export const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({ method, hi
       <Box sx={styles.paymentMethodContainer}>
         {method.label && <Typography sx={styles.label}>{method.label}:</Typography>}
 
-        <CopyLink hint={hint} size="large" value={method.value} />
+        <CopyLink sx={styles.value} hint={hint} size="large" value={method.value} />
       </Box>
     </Box>
   );

@@ -65,8 +65,8 @@ jest.mock('next/image', () => ({
 
 jest.mock('./PartnershipSlider', () => {
   const borderByType: Record<string, number> = {
-    firstRowImage: 2,
-    secondRowImage: 2
+    firstRowImage: 8,
+    secondRowImage: 8
   };
 
   return jest.fn(({ slides }: any) => (
@@ -323,7 +323,7 @@ describe('PartnershipFormats', () => {
     expect(imageContainers.length).toBeGreaterThanOrEqual(2);
 
     for (const imageContainer of imageContainers) {
-      expect(imageContainer).toHaveAttribute('data-border-width', '2');
+      expect(imageContainer).toHaveAttribute('data-border-width', '8');
     }
   });
 

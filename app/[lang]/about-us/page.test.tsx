@@ -88,7 +88,7 @@ describe('Home page', () => {
     render(ui);
 
     expect(resolvePageData).toHaveBeenCalledWith('about-us', 'uk');
-    expect(screen.queryByText(/Page not found/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/No page found/i)).toBeInTheDocument();
     expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
   });
 });

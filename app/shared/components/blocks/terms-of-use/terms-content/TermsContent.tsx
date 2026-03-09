@@ -51,8 +51,7 @@ const TermsContent = () => {
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{
           maxWidth: { xs: '220px', sm: '289px' },
-          minWidth: { xs: '220px', sm: '289px' },
-          right: { sm: '16px', md: 0 }
+          minWidth: { xs: '220px', sm: '289px' }
         }}
       />
 

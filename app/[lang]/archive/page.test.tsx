@@ -10,7 +10,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 };
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useLocale: () => 'uk'
 }));
 
 const setParam = jest.fn();
@@ -104,7 +104,7 @@ describe('Archive Page', () => {
     await screen.findByTestId('ArchivePage-fundsGrid');
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds');
+    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds?lang=uk');
   });
 
   it('should call setParam when search is triggered', () => {
