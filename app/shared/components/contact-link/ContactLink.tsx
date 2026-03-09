@@ -95,7 +95,6 @@ export const ContactLink = ({
             </Typography>
           )}
 
-
           {useNativeLink ? (
             <Typography
               component="a"
