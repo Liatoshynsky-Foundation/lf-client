@@ -12,7 +12,7 @@ export const styles = {
     height: '100%'
   },
   childrenBox: {
-    height: '100%'
+    flexGrow: 1
   },
   topSection: {
     marginBottom: '15px'
