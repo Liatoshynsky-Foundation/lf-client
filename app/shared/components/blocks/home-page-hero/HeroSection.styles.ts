@@ -47,7 +47,8 @@ export const heroSectionStyles = {
     },
     maxHeight: {
       sm: '60vh',
-      lg: '70vh'
+      md: '600px',
+      xl: '800px'
     },
     width: '100%',
     clipPath: {

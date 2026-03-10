@@ -35,6 +35,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose, showPre
       handleClose={onClose}
       titleSx={styles.title}
       topSection={styles.topSection}
+      contentBoxSx={{ height: '100%' }}
       childrenBoxSx={styles.childrenBox}
       verticalAlignment={PositionEnum.Bottom}
       horizontalAlignment={PositionEnum.Left}
