@@ -40,5 +40,8 @@ export const styles = {
       xs: '15px',
       sm: '17px'
     }
+  },
+  contactLink: {
+    fontSize: '18px'
   }
 };

@@ -29,6 +29,7 @@ interface ContactLinkProps {
   disabled?: boolean;
   labelSx?: SxProps<Theme>;
   iconSx?: SxProps<Theme>;
+  valueSx?: SxProps<Theme>;
   copyLinkSize?: CopyIconSize;
   direction?: ContactLinkDirection;
   dataTestid?: string;
@@ -43,6 +44,7 @@ export const ContactLink = ({
   iconColor,
   alertMsg,
   labelSx,
+  valueSx,
   iconSx,
   dataTestid,
   disabled = false,
@@ -97,7 +99,7 @@ export const ContactLink = ({
             <Typography
               component="a"
               href={disabled ? undefined : href}
-              sx={isMobile ? styles.mobileStretchedLink : styles.link}
+              sx={isMobile ? [styles.mobileStretchedLink, ...sxToArray(valueSx)] : [styles.link, ...sxToArray(valueSx)]}
               onClick={(e) => {
                 if (disabled) e.preventDefault();
               }}
@@ -111,7 +113,7 @@ export const ContactLink = ({
               size={copyLinkSize}
               hint={alertMsg}
               disabled={disabled}
-              sx={isMobile ? styles.mobileStretchedLink : undefined}
+              sx={isMobile ? [styles.mobileStretchedLink, ...sxToArray(valueSx)] : valueSx}
             />
           )}
         </Box>
