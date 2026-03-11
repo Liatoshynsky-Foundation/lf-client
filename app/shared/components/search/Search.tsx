@@ -150,11 +150,32 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
     const trimmedInput = inputValue.trim().toLowerCase();
     if (!trimmedInput) return options;
 
-    const words = trimmedInput.split(/\s+/).filter((w) => w.length > 0);
+    const words = trimmedInput.split(/\s+/).filter(Boolean);
 
-    return options.filter((option) => {
+    const filtered = options.filter((option) => {
       const label = getOptionLabel(option).toLowerCase();
       return words.every((word) => label.includes(word));
+    });
+
+    return filtered.sort((a, b) => {
+      const aLabel = getOptionLabel(a).toLowerCase();
+      const bLabel = getOptionLabel(b).toLowerCase();
+
+      if (aLabel === trimmedInput) return -1;
+      if (bLabel === trimmedInput) return 1;
+
+      if (aLabel.startsWith(trimmedInput) && !bLabel.startsWith(trimmedInput)) return -1;
+      if (!aLabel.startsWith(trimmedInput) && bLabel.startsWith(trimmedInput)) return 1;
+
+      const aIndex = aLabel.indexOf(trimmedInput);
+      const bIndex = bLabel.indexOf(trimmedInput);
+
+      if (aIndex !== bIndex) return aIndex - bIndex;
+
+      return aLabel.localeCompare(bLabel, ['uk', 'en'], {
+        sensitivity: 'base',
+        numeric: true
+      });
     });
   }, []);
 
@@ -173,7 +194,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
       clearIcon={false}
       clearOnBlur={false}
       disableListWrap
-      open={!!opened}
+      open={opened}
       noOptionsText={<Typography>{t('notFound')}</Typography>}
       loadingText={<Typography>{t('loading')}</Typography>}
       slotProps={{
