@@ -355,7 +355,7 @@ gitGraph
 [![@DenisGordProgrammer](https://avatars.githubusercontent.com/u/152603666?v=4&size=250)](https://github.com/DenisGordProgrammer)
 [![@krxllll](https://avatars.githubusercontent.com/u/51999128?v=4&size=250)](https://github.com/krxllll)
 
-#### Team UA-5393
+#### Team UA-5353
 [![@MykolaMak](https://avatars.githubusercontent.com/u/40358197?v=4&size=250)](https://github.com/MykolaMak)
 <a href="https://github.com/dest411"><img src="https://avatars.githubusercontent.com/u/146329542?v=4" width="250" alt="@dest411"></a>
 [![@kandyba](https://avatars.githubusercontent.com/u/11414249?v=4&size=250)](https://github.com/kandyba)
