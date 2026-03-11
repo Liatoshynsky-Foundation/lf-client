@@ -74,7 +74,7 @@ export const styles = {
     ...quoteTextStyles,
     color: quoteColors[color],
     fontFamily: 'Mulish',
-    fontStyle: 'italic',
+    fontStyle: 'normal',
     textAlign: alignments[align].textAlign
   }),
   sourceText: (align: Align) => ({

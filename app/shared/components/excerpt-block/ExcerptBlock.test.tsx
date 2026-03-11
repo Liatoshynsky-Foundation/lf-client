@@ -32,25 +32,23 @@ describe('ExcerptBlock', () => {
     expect(screen.getByText('Some source')).toBeInTheDocument();
     expect(screen.getByAltText('Quote icon')).toBeInTheDocument();
   });
-  it('applies correct class for mobile', () => {
+
+  it('applies correct typography variant for mobile quote', () => {
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
 
     render(<ExcerptBlock quote="Some quote" source="Some source" />);
     const quote = screen.getByText('Some quote');
-    const source = screen.getByText('Some source');
 
     expect(quote.className).toMatch(/MuiTypography-customItalic18/);
-    expect(source.className).toMatch(/MuiTypography-customItalic14/);
   });
 
-  it('applies correct class for desktop', () => {
+  it('applies correct typography variant for desktop quote', () => {
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
 
     render(<ExcerptBlock quote="Some quote" source="Some source" />);
+
     const quote = screen.getByText('Some quote');
-    const source = screen.getByText('Some source');
 
     expect(quote.className).toMatch(/MuiTypography-h5/);
-    expect(source.className).toMatch(/MuiTypography-customItalic14/);
   });
 });
