@@ -15,19 +15,18 @@
 ## Table of Contents
 
 - [Installation](#installation)
-  - [Required to install](#Required-to-install)
-  - [Environment](#Environment)
-  - [Clone](#Clone)
-  - [Setup](#Setup)
-  - [How to run local](#How-to-run-local)
-  - [How to run Docker](#How-to-run-Docker)
-- [Usage](#Usage)
-  - [How to work with swagger UI](#How-to-work-with-swagger-UI)
-  - [How to run tests](#How-to-run-tests)
-  - [How to Checkstyle](#How-to-Checkstyle)
+  - [Required to install](#required-to-install)
+  - [Environment](#environment)
+  - [Clone](#clone)
+  - [Setup](#setup)
+  - [How to run local](#how-to-run-local)
+  - [How to run Docker](#how-to-run-docker)
+- [Usage](#usage)
+  - [How to run tests](#how-to-run-tests)
+  - [How to Checkstyle](#how-to-checkstyle)
   - [Turnstile Captcha](#turnstile-captcha)
   - [WayforPay Integration](#wayforpay-integration)
-- [Documentation](#Documentation)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
   - [issue flow](#git-flow)
@@ -184,52 +183,53 @@ export async function GET() {
 ### Folder structure
 
 ```markdown
-app/
-├── [lang]/
-│ ├── events/
-│ │ ├── page.tsx # /[lang]/events (list of events)
-│ │ ├── [slug]/
-│ │ │ └── page.tsx # /[lang]/events/:slug (individual event)
-│ │ ├── layout.tsx # Optional layout for events
-│ │ ├── components/ # Events-specific components
-│ │ │ ├── Events.tsx
-│ │ │ └── Event.tsx
-│ ├── biography/
-│ │ └── page.tsx # /[lang]/biography
-│ ├── media-about-us/
-│ │ └── page.tsx # /[lang]/media-about-us
-│ ├── collaboration/
-│ │ └── page.tsx # /[lang]/collaboration
-├── shared/
-│ ├── components/
-│ │ ├── design-system/
-│ │ │ └── button/
-│ │ │ ├── Button.test.tsx
-│ │ │ ├── Button.tsx
-│ │ │ └── Button.styles.ts
-│ │ ├── Header.tsx
-│ │ └── Footer.tsx
-│ └── hooks/
-│ └── useAuth.ts
-├── api/
-│ ├── events/
-│ │ ├── route.ts # /api/events (list, create)
-│ │ └── [slug]/
-│ │ └── route.ts # /api/events/:slug (read, update, delete)
-├── models/
-│ └── Event.ts # Mongoose Event schema and model
-├── db/
-│ └── connect.ts # MongoDB connection logic
-├── middleware/
-│ ├── logger.ts
-│ └── authentication.ts
-├── lib/
-│ ├── axiosAPI.ts
-│ └── db.ts # Optional alias to db/connect.ts
-├── constants/
-├── middleware.ts # Root-level middleware (i18n, auth)
-├── config/
-│ └── index.ts # Environment variable parsing and validation
+├── public/                            # Static assets (icons, images, mock news images)
+│   └── images/                        # Categorized image assets (biography, events, partners)
+├── app/                               # Main application source (Next.js App Router)
+│   ├── [lang]/                        # Localization-based routing wrapper
+│   │   ├── about-us/                  # Foundation history and mission pages
+│   │   ├── archive/                   # Digital archives ([fund] and [case] dynamic routes)
+│   │   ├── artistry/                  # Creative and artistic activity sections
+│   │   ├── biography/                 # Liatoshynsky biography with interactive content
+│   │   ├── contacts/                  # Contact pages with feedback info
+│   │   ├── news/                      # Media center and foundation news
+│   │   ├── research/                  # Scientific research and publications section
+│   │   └── war-in-ukraine/            # Dedicated section for current events/impact
+│   ├── api/                           # Server-side API routes (Route Handlers)
+│   │   ├── compositions/              # CRUD for musical compositions (data, filters, titles)
+│   │   ├── scientific-works/          # Management of scientific publications and filtering
+│   │   ├── blob-url/                  # Azure Storage integration for media URLs
+│   │   ├── create-invoice/            # Payment and donation processing logic
+│   │   └── health/                    # API health monitoring endpoint
+│   ├── di/                            # Dependency Injection layer
+│   │   └── modules/                   # Inversify or custom DI module definitions
+│   ├── domain/                        # Core business logic and types
+│   │   └── dto/                       # Data Transfer Objects for API-Client communication
+│   ├── infrastructure/                # Data Access Layer
+│   │   ├── db/                        # Database connection logic
+│   │   ├── models/                    # Database schemas (Archive, News, ScientificWorks)
+│   │   └── repositories/              # Repository pattern for DB abstraction
+│   ├── services/                      # Application Business Services
+│   │   ├── scientific-works/          # Business logic for scientific data
+│   │   ├── email/                     # Email sending services and templates
+│   │   ├── pages-data/                # Dynamic content aggregation for various pages
+│   │   └── upload/                    # File handling and Azure Blob Storage services
+│   ├── shared/                        # Reusable core codebase
+│   │   ├── components/                # Global UI Components
+│   │   │   ├── design-system/         # Atomic components
+│   │   │   ├── blocks/                # Complex UI sections
+│   │   │   ├── tables/                # Advanced data tables
+│   │   │   ├── forms/                 # Specialized forms
+│   │   │   ├── Header/                # Site navigation with AudioPlayer integration
+│   │   │   ├── Footer/                # Multi-section footer with social media links
+│   │   │   └── design-system/         # Atomic design system
+│   │   ├── hooks/                     # React hooks
+│   │   ├── context/                   # Global state management
+│   │   ├── layouts/                   # Shared page layouts
+│   │   └── exceptions/                # Custom error handling and domain-specific errors
+│   ├── types/                         # Global TypeScript definitions, enums, and interfaces
+│   ├── validators/                    # Data validation schemas
+│   └── middleware/                    # Next.js middleware
 ```
 
 ---
@@ -307,32 +307,75 @@ gitGraph
 
 ### Development team
 
+#### Team Lv-680.5
 [![@Mav-Ivan](https://avatars.githubusercontent.com/u/110425368?v=4&size=250)](https://github.com/Mav-Ivan)
+
+#### Team Lv-680.10
+<a href="https://github.com/Mike-Popovych"><img src="https://avatars.githubusercontent.com/u/125293578?v=4" width="250" alt="@Mike-Popovych"></a>
+
+#### Team Lv-680.11
+[![@Renatavl](https://avatars.githubusercontent.com/u/86105228?v=4&size=250)](https://github.com/Renatavl)
+
+#### Team Lv-680.12
+<a href="https://github.com/markgol777"><img src="https://avatars.githubusercontent.com/u/66869816?v=4" width="250" alt="@markgol777"></a>
 [![@VKormylo](https://avatars.githubusercontent.com/u/65959529?v=4&size=250)](https://github.com/VKormylo)
+<a href="https://github.com/nebby2105"><img src="https://avatars.githubusercontent.com/u/154923065?v=4" width="250" alt="@nebby2105"></a>
 [![@SofiiaYevush](https://avatars.githubusercontent.com/u/142519729?v=4&size=250)](https://github.com/SofiiaYevush)
+[![@ArtemHolikov](https://avatars.githubusercontent.com/u/102384883?v=4&size=250)](https://github.com/ArtemHolikov)
+[![@sandrvvu](https://avatars.githubusercontent.com/u/105361812?v=4&size=250)](https://github.com/sandrvvu)
+
+#### Team Lv-680.13
 [![@yur4uwe](https://avatars.githubusercontent.com/u/157615455?v=4&size=250)](https://github.com/yur4uwe)
 [![@uliaescha](https://avatars.githubusercontent.com/u/136600464?v=4&size=250)](https://github.com/uliaescha)
 [![@Iarynovskyi](https://avatars.githubusercontent.com/u/164883382?v=4&size=250)](https://github.com/Iarynovskyi)
 [![@danikua](https://avatars.githubusercontent.com/u/115005047?v=4&size=250)](https://github.com/danikua)
 [![@lizabre](https://avatars.githubusercontent.com/u/108484546?v=4&size=250)](https://github.com/lizabre)
 [![@oleg191006](https://avatars.githubusercontent.com/u/156513251?v=4&size=250)](https://github.com/oleg191006)
+<a href="https://github.com/TARDeus524"><img src="https://avatars.githubusercontent.com/u/142096148?v=4" width="250" alt="@TARDeus524"></a>
 [![@IrynaKhylchuk](https://avatars.githubusercontent.com/u/141860021?v=4&size=250)](https://github.com/IrynaKhylchuk)
 [![@luvthenika](https://avatars.githubusercontent.com/u/124041223?v=4&size=250)](https://github.com/luvthenika)
 [![@irynalaitaruk](https://avatars.githubusercontent.com/u/30904237?v=4&size=250)](https://github.com/irynalaitaruk)
-[![@Mike-Popovych](https://avatars.githubusercontent.com/u/125293578?v=4&size=250)](https://github.com/Mike-Popovych)
-[![@TARDeus524](https://avatars.githubusercontent.com/u/142096148?v=4&size=250)](https://github.com/TARDeus524)
+
+#### Team UA-5044
+[![@ssashayurchenko](https://avatars.githubusercontent.com/u/160735952?v=4&size=250)](https://github.com/ssashayurchenko)
+<a href="https://github.com/bohuslavstan"><img src="https://avatars.githubusercontent.com/u/156684724?v=4" width="250" alt="@bohuslavstan"></a>
+[![@Kryzhanivsky](https://avatars.githubusercontent.com/u/77616134?v=4&size=250)](https://github.com/Kryzhanivsky)
+
+#### Team UA-5195
+[![@qqwz0](https://avatars.githubusercontent.com/u/105491259?v=4&size=250)](https://github.com/qqwz0)
+[![@NatalyKrvch](https://avatars.githubusercontent.com/u/105675637?v=4&size=250)](https://github.com/NatalyKrvch)
+[![@stsvt](https://avatars.githubusercontent.com/u/167477637?v=4&size=250)](https://github.com/stsvt)
+[![@Taras-ep](https://avatars.githubusercontent.com/u/151529282?v=4&size=250)](https://github.com/Taras-ep)
+[![@ruslansymonenko](https://avatars.githubusercontent.com/u/99801898?v=4&size=250)](https://github.com/ruslansymonenko)
+[![@alisa-korniienko](https://avatars.githubusercontent.com/u/33879792?v=4&size=250)](https://github.com/alisa-korniienko)
+[![@LischenkoYaroslav](https://avatars.githubusercontent.com/u/47635043?v=4&size=250)](https://github.com/LischenkoYaroslav)
+[![@MaksFullJs](https://avatars.githubusercontent.com/u/182541010?v=4&size=250)](https://github.com/MaksFullJs)
+<a href="https://github.com/Xlopuk"><img src="https://avatars.githubusercontent.com/u/182114610?v=4" width="250" alt="@Xlopuk"></a>
+[![@kolibri753](https://avatars.githubusercontent.com/u/89083538?v=4&size=250)](https://github.com/kolibri753)
+[![@DenisGordProgrammer](https://avatars.githubusercontent.com/u/152603666?v=4&size=250)](https://github.com/DenisGordProgrammer)
+[![@krxllll](https://avatars.githubusercontent.com/u/51999128?v=4&size=250)](https://github.com/krxllll)
+
+#### Team UA-5393
+[![@MykolaMak](https://avatars.githubusercontent.com/u/40358197?v=4&size=250)](https://github.com/MykolaMak)
+<a href="https://github.com/dest411"><img src="https://avatars.githubusercontent.com/u/146329542?v=4" width="250" alt="@dest411"></a>
+[![@kandyba](https://avatars.githubusercontent.com/u/11414249?v=4&size=250)](https://github.com/kandyba)
+[![@Jevgan](https://avatars.githubusercontent.com/u/134773983?v=4&size=250)](https://github.com/Jevgan)
+[![@navimov](https://avatars.githubusercontent.com/u/108539100?v=4&size=250)](https://github.com/navimov)
+[![@Fedorieieva](https://avatars.githubusercontent.com/u/115637318?v=4&size=250)](https://github.com/Fedorieieva)
+[![@Th0mas-H0ward](https://avatars.githubusercontent.com/u/86684680?v=4&size=250)](https://github.com/Th0mas-H0ward)
+
 
 ### DevOps team
 
 [![@qwqw-333](https://avatars.githubusercontent.com/u/132368159?v=4&size=250)](https://github.com/qwqw-333)
-[![@denchik911](https://avatars.githubusercontent.com/u/61146063?v=4&size=250)](https://github.com/denchik911)
+<a href="https://github.com/denchik911"><img src="https://avatars.githubusercontent.com/u/61146063?v=4" width="250" alt="@denchik911"></a>
 
 ### Designer team
 
 [![@Nastia197](https://avatars.githubusercontent.com/u/76164279?v=4&size=250)](https://github.com/Nastia197)
 [![@a-humanenko](https://avatars.githubusercontent.com/u/192996565?v=4&size=250)](https://github.com/a-humanenko)
 [![@Valigura](https://avatars.githubusercontent.com/u/12103932?v=4&size=250)](https://github.com/Valigura)
-[![@JuliaKharaim](https://avatars.githubusercontent.com/u/170419178?v=4&size=250)](https://github.com/JuliaKharaim)
+<a href="https://github.com/JuliaKharaim"><img src="https://avatars.githubusercontent.com/u/170419178?v=4" width="250" alt="@JuliaKharaim"></a>
 
 ---
 
