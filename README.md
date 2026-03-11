@@ -357,7 +357,7 @@ gitGraph
 
 #### Team UA-5353
 [![@MykolaMak](https://avatars.githubusercontent.com/u/40358197?v=4&size=250)](https://github.com/MykolaMak)
-<a href="https://github.com/dest411"><img src="https://avatars.githubusercontent.com/u/146329542?v=4" width="250" alt="@dest411"></a>
+[![@dest411](https://avatars.githubusercontent.com/u/146329542?v=4&size=250)](https://github.com/dest411)
 [![@kandyba](https://avatars.githubusercontent.com/u/11414249?v=4&size=250)](https://github.com/kandyba)
 [![@Jevgan](https://avatars.githubusercontent.com/u/134773983?v=4&size=250)](https://github.com/Jevgan)
 [![@navimov](https://avatars.githubusercontent.com/u/108539100?v=4&size=250)](https://github.com/navimov)
