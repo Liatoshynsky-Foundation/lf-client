@@ -200,6 +200,7 @@ const baseStyles = {
       xl: 'flex'
     },
     justifySelf: {
+      xl: 'end',
       lg: 'auto',
       xxl: 'end'
     },
@@ -230,7 +231,7 @@ const baseStyles = {
       xl: '12px'
     },
     gridColumn: {
-      lg: '10 / 13',
+      lg: '9 / 13',
       xl: 'span 3',
       xxl: '10 / 13'
     }
@@ -340,11 +341,12 @@ const baseStyles = {
       lg: 'start',
       xl: 'start'
     },
+
     gridColumn: {
       xs: '1 / -1',
       sm: 'span 8',
       md: '4 / 13',
-      lg: '3 / 10',
+      lg: '3 / 9',
       xl: 'span 6',
       xxl: '3 / 7'
     },
@@ -358,10 +360,9 @@ const baseStyles = {
     },
     height: '100%',
     transform: {
-      lg: 'translateX(-37px)',
       xl: 'translateX(0px)'
     },
-    justifySelf: { sm: 'end', md: 'end', lg: 'auto' },
+    justifySelf: { sm: 'end', md: 'end', lg: 'end', xl: 'start' },
     width: {
       sm: '618px',
       md: '618px',
