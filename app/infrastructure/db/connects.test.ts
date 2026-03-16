@@ -1,3 +1,12 @@
+jest.mock('bson', () => ({}), { virtual: true });
+jest.mock(
+  'mongoose',
+  () => ({
+    connect: jest.fn(),
+    connection: { readyState: 1 }
+  }),
+  { virtual: true }
+);
 import type { Mongoose } from 'mongoose';
 
 import { errors } from '~/constants/errors';
@@ -36,7 +45,25 @@ describe('dbConnect', () => {
     (global as { mongoose?: MongooseGlobalCache }).mongoose = undefined;
     jest.clearAllMocks();
   });
+  it('should return cached connection if it already exists', async () => {
+    const loggerMock = createLoggerMock();
+    const existingConnection = { connection: { readyState: 1 } };
 
+    (global as any).mongoose = {
+      conn: existingConnection,
+      promise: Promise.resolve(existingConnection)
+    };
+
+    mockConfig('mongodb://localhost:27017/test-db');
+    mockLoggerModule(loggerMock);
+
+    const dbConnectModule = await import('~/infrastructure/db/connect');
+    const dbConnect = dbConnectModule.default;
+
+    const conn = await dbConnect();
+
+    expect(conn).toStrictEqual(existingConnection);
+  });
   it('should connect and cache the connection', async () => {
     const connectMock = jest.fn().mockResolvedValue(mockConnection);
     const loggerMock = createLoggerMock();
