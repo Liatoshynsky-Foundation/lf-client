@@ -3,12 +3,13 @@ import React from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
+import Button from '~/ds-components/button/Button';
 
 import { imageSizes, styles } from './FoundationSection.styles';
-import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
+import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 interface Props {
@@ -46,30 +47,26 @@ const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, par
       </Box>
 
       {paragraph2 && (
-        <ButtonContentBlock
-          content={paragraph2}
-          buttonText={buttonText}
-          buttonColor="tertiary"
-          sx={{ maxWidth: { xs: '246px' }, minWidth: { xs: '246px' } }}
-          textSx={{ gridColumn: styles.textStyle.gridColumn }}
-          textContainerSx={{ marginBottom: { xs: '24px', md: '0px' } }}
-          buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
-          link={buttonLink}
-        />
+        <Box sx={{ gridColumn: { xs: '1/-1', sm: '4/-1', md: '6/-1' }, marginBottom: { xs: '16px', md: '0px' } }}>
+          <TipTapContent data={paragraph2} nodeRenderers={{ paragraph: createParagraph() }} />
+        </Box>
       )}
 
-      {!paragraph2 && (
-        <ButtonContentBlock
-          content={{ type: TipTapNodeTypes.doc, content: [] }}
-          buttonText={buttonText}
-          buttonColor="tertiary"
-          sx={{ maxWidth: { xs: '246px' }, minWidth: { xs: '246px' } }}
-          textSx={{ display: 'none' }}
-          textContainerSx={{ display: 'none' }}
-          buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
+      <Box sx={styles.stickyButtonWrapper}>
+        <Button
           link={buttonLink}
-        />
-      )}
+          color="tertiary"
+          variant="contained"
+          sx={{
+            maxWidth: { xs: '246px' },
+            minWidth: { xs: '246px' },
+            gap: '8px'
+          }}
+        >
+          {buttonText}
+          <Svg Component={ArrowUpRight} alt="icon" color="#000" width="20px" height="20px" />
+        </Button>
+      </Box>
 
       <ImageWithCaption
         src={imageSrc}
