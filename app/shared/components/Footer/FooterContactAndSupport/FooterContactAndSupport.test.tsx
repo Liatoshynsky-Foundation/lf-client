@@ -19,7 +19,7 @@ describe('FooterContactAndSupport', () => {
   it('renders both buttons correctly', () => {
     render(<FooterContactAndSupport contact={contact} donation={donation} />);
 
-    expect(screen.getByRole('button', { name: /contact us/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /donate/i })).toHaveAttribute('href', donation.link);
   });
 });

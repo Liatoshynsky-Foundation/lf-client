@@ -21,11 +21,11 @@ import {
 } from './MusicTableCells';
 import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
+import { TitleOption } from '~/types/types/composition.types';
 import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters.types';
 
-import { CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -39,6 +39,7 @@ import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilter
 import { useFilterAutocomplete } from '~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete';
 
 type TableKey = 'mobile' | 'tablet' | 'desktop';
+type TitlesAutocompleteParams = Omit<CompositionsFilters, 'search'>;
 
 export default function MusicTableSection() {
   const t = useTranslations('table.composition');
@@ -67,13 +68,16 @@ export default function MusicTableSection() {
     params
   );
 
-  type TitleOption = CompositionTitlesDTO;
-
   const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
 
-  const { options: titleOptions } = useFilterAutocomplete<CompositionsFilters, TitleOption>({
+  const titleParams = useMemo(() => {
+    const { search: _, ...rest } = params;
+    return rest;
+  }, [params]);
+
+  const { options: titleOptions } = useFilterAutocomplete<TitlesAutocompleteParams, TitleOption>({
     endpoint: ApiRoutes.COMPOSITION_TITLES,
-    params,
+    params: titleParams,
     select: selectTitles
   });
 
@@ -254,6 +258,7 @@ export default function MusicTableSection() {
       <EnhancedTable
         key={tableKey}
         data={data}
+        isSearchActive={!!params.search}
         loading={loadingData}
         columns={columns}
         groupByKey="opus"

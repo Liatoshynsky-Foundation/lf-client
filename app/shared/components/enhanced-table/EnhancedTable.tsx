@@ -60,6 +60,7 @@ interface EnhancedTableProps<T extends RowData> {
   rowSx?: object;
   tableContainerSx?: SxProps<Theme>;
   onRowClick?: (row: T) => void;
+  isSearchActive?: boolean;
 }
 
 export const EnhancedTable = <T extends RowData>({
@@ -79,7 +80,8 @@ export const EnhancedTable = <T extends RowData>({
   noResults,
   rowSx,
   tableContainerSx,
-  onRowClick
+  onRowClick,
+  isSearchActive = false
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -88,10 +90,13 @@ export const EnhancedTable = <T extends RowData>({
   const breakpoint = useBreakpoints();
 
   const toggleGroupCollapse = (groupLabel: string) => {
-    setCollapsedGroups((prev) => ({
-      ...prev,
-      [groupLabel]: !prev[groupLabel]
-    }));
+    setCollapsedGroups((prev) => {
+      const currentState = prev[groupLabel] ?? isSearchActive;
+      return {
+        ...prev,
+        [groupLabel]: !currentState
+      };
+    });
   };
 
   const getGroupColumns = <T extends RowData>(columns: ColumnDef<T>[], groupItems: T[]): ColumnDef<T>[] =>
@@ -212,7 +217,7 @@ export const EnhancedTable = <T extends RowData>({
                     <CollapsibleRow
                       key={`group-${entry.label}`}
                       data={entry.items}
-                      collapsed={collapsedGroups[entry.label] ?? false}
+                      collapsed={collapsedGroups[entry.label] ?? isSearchActive}
                       action={() => toggleGroupCollapse(entry.label)}
                       columns={getGroupColumns(columns, entry.items)}
                     />

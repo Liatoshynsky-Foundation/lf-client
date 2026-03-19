@@ -7,7 +7,7 @@ export const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    height: '100%'
+    flexGrow: 1
   },
   title: {
     fontWeight: 700,

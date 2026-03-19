@@ -31,7 +31,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
         title={title}
         sx={styles.title}
         icon={false}
-        gridColumn={{ xs: '1 / -1', sm: '3 / -1', md: '6 / -1' }}
+        gridColumn={{ xs: '1 / -1', sm: '4 / -1', md: '6 / -1' }}
       />
 
       <Box sx={styles.contentWrapper}>

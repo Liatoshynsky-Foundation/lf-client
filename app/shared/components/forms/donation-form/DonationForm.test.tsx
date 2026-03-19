@@ -3,6 +3,10 @@ import React from 'react';
 
 import DonationForm from './DonationForm';
 
+jest.mock('~/components/colored-svg/ColoredSvg', () => ({
+  Svg: () => <svg data-testid="mock-chevron" />
+}));
+
 jest.mock('~/ds-components/button/Button', () => {
   const MockButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { fullWidth?: boolean }> = ({
     children,

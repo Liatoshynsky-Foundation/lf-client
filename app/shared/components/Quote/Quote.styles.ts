@@ -1,3 +1,5 @@
+import { ResponsiveStyleValue, SxProps, Theme } from '@mui/system';
+
 import type { Align } from '~/types/types/quoteComponent';
 
 export const quoteSizes = {
@@ -45,30 +47,34 @@ export const sourceTextStyles = {
 };
 
 export const styles = {
-  mainContainer: (align: Align, width?: Record<string, string> | string) => ({
+  mainContainer: (
+    align: Align,
+    width?: Record<string, string> | string,
+    gap?: ResponsiveStyleValue<string | number> | null
+  ) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
     width: width ?? quoteSizes.width,
-    gap: { xs: '32px', md: '40px' }
+    gap: gap ?? { xs: '32px', md: '40px' }
   }),
-  image: (color: keyof typeof quoteColors, align: Align) => ({
-    width: quoteSizes.icon,
+  image: (color: keyof typeof quoteColors, align: Align, width?: ResponsiveStyleValue<string | number> | null) => ({
+    width: width ?? quoteSizes.icon,
     height: 'auto',
     color: quoteColors[color],
     transform: alignments[align].iconTransform
   }),
-  textContainer: (align: Align) => ({
+  textContainer: (align: Align, textGap?: ResponsiveStyleValue<string | number> | null): SxProps<Theme> => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: alignments[align].alignItems,
-    gap: quoteSizes.textGap
+    gap: textGap ?? quoteSizes.textGap
   }),
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,
     color: quoteColors[color],
     fontFamily: 'Mulish',
-    fontStyle: 'italic',
+    fontStyle: 'normal',
     textAlign: alignments[align].textAlign
   }),
   sourceText: (align: Align) => ({

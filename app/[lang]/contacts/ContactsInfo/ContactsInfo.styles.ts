@@ -3,7 +3,7 @@ import { mainHexPallete } from '~/shared/components/design-system/all-components
 export const styles = {
   root: {
     mt: { xs: '35px', sm: '70px' },
-    mb: { xs: '55px', sm: '100px' },
+    mb: { xs: '55px', sm: '90px', md: '105px' },
     gridColumn: '1 / -1',
     maxWidth: '1728px',
     width: '100%',
@@ -64,7 +64,9 @@ export const styles = {
       mb: '10px'
     }
   },
-
+  contactLabel: {
+    fontSize: '18px'
+  },
   formWrapper: {
     padding: { xs: '40px 24px 80px', sm: '64px 32px', md: '75px 53px', lg: '75px 96px' },
     margin: { xs: '0px -24px', sm: 'unset' },

@@ -20,29 +20,37 @@ export const styles = {
     top: { xs: '-30px', md: '-48px' },
     left: 0,
     width: '100vw',
-    height: '107vh',
+    height: '100vh',
     backgroundColor: mainHexPallete.yellow[500],
     zIndex: 900,
     clipPath: {
-      xs: 'polygon(0 0, 100% 0, 100% 98%, 0 100%)',
+      xs: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
       sm: 'polygon(0 0, 100% 0, 100% 94%, 0 100%)'
     }
   },
 
   overlayContent: {
     display: 'grid',
+
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
+
     columnGap: { xs: '16px', sm: '24px', md: '40px' },
 
     paddingInline: { xs: '24px', sm: '56px', md: '72px' },
     paddingTop: { xs: '63px', sm: '112px', md: '112px' },
 
-    height: '100vh',
-    overflow: 'hidden',
+    minHeight: '100vh',
+    height: '100dvh',
+
+    overflowY: {
+      xs: 'auto',
+      sm: 'hidden'
+    },
+
     position: 'relative'
   },
 

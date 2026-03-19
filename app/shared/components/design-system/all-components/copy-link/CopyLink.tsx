@@ -110,7 +110,7 @@ function CopyLink({
       data-testid="CopyLink"
       sx={[styles.wrapper, copyLinkStyles, ...sxToArray(sx)]}
     >
-      <Typography component="span" variant={variant} data-testid="CopyLink-text">
+      <Typography component="span" variant={variant} data-testid="CopyLink-text" sx={sxToArray(sx)}>
         {value}
       </Typography>
       <TooltipCustom title={finalHint} isOpen={isCopied} showArrow>

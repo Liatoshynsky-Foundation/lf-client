@@ -20,7 +20,7 @@ describe('SupportButton', () => {
   it('should render the button with correct label', () => {
     render(<SupportButton data={mockData} />);
 
-    const button = screen.getByRole('button', { name: /support/i });
+    const button = screen.getByRole('link', { name: /support/i });
     expect(button).toBeInTheDocument();
 
     const icon = screen.queryByAltText(/support button/i);
