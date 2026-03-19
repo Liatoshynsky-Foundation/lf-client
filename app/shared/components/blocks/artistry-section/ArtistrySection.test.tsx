@@ -1,44 +1,79 @@
 import { render, screen } from '@testing-library/react';
 
+import { artistrySectionData } from './artistry.const';
 import ArtistrySection from './ArtistrySection';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
-const mockTipTapDoc = {
-  type: 'doc',
-  content: []
-} as any;
+const ButtonContentBlockMock = jest.fn(({ buttonText, additionalDescription }: any) => (
+  <div>
+    <button data-testid="ButtonContentBlock-mock">{buttonText}</button>
+    {additionalDescription && <div data-testid="additional-content">Extra</div>}
+  </div>
+));
 
-const mockProps = {
-  subTitle: { uk: 'Підзаголовок', en: 'Subtitle' },
-  textContent: {
-    uk: mockTipTapDoc,
-    en: mockTipTapDoc
-  },
-  buttonText: { uk: 'Натисни мене', en: 'Click me' },
-  buttonLink: '/test-link'
-};
+jest.mock('../terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => ({
+  __esModule: true,
+  default: (props: any) => ButtonContentBlockMock(props)
+}));
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'uk'
 }));
 
-jest.mock('../terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => {
-  return function MockButtonBlock({ buttonText }: any) {
-    return <button data-testid="ButtonContentBlock-button">{buttonText}</button>;
-  };
-});
-
 describe('ArtistrySection Component', () => {
-  it('should render the correct subtitle based on locale', () => {
-    render(<ArtistrySection {...mockProps} />);
-
-    const subTitleElement = screen.getByText(mockProps.subTitle.uk);
-    expect(subTitleElement).toBeInTheDocument();
-    expect(subTitleElement.tagName).toBe('H5');
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should render button with localized text', () => {
-    render(<ArtistrySection {...mockProps} />);
+  it('should render correctly with real constant data', () => {
+    render(<ArtistrySection {...artistrySectionData} />);
 
-    expect(screen.getByTestId('ButtonContentBlock-button')).toHaveTextContent('Натисни мене');
+    expect(screen.getByText(artistrySectionData.subTitle.uk)).toBeInTheDocument();
+    expect(screen.getByTestId('ButtonContentBlock-mock')).toHaveTextContent(artistrySectionData.buttonText.uk);
+  });
+
+  it('should cover splitTipTapContent when content is short or empty', () => {
+    const shortProps = {
+      ...artistrySectionData,
+      textContent: {
+        uk: { type: TipTapNodeTypes.doc, content: [] },
+        en: {
+          type: TipTapNodeTypes.doc,
+          content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'short' }] }]
+        }
+      }
+    };
+
+    render(<ArtistrySection {...(shortProps as any)} />);
+    expect(screen.queryByTestId('additional-content')).not.toBeInTheDocument();
+  });
+
+  it('should cover full split logic with multiple text nodes', () => {
+    const multiNodeProps = {
+      ...artistrySectionData,
+      textContent: {
+        uk: {
+          type: TipTapNodeTypes.doc,
+          content: [
+            {
+              type: TipTapNodeTypes.paragraph,
+              content: [
+                { type: TipTapNodeTypes.text, text: 'First' },
+                { type: TipTapNodeTypes.text, text: 'Second' }
+              ]
+            }
+          ]
+        },
+        en: artistrySectionData.textContent.en
+      }
+    };
+
+    render(<ArtistrySection {...(multiNodeProps as any)} />);
+
+    expect(screen.getByTestId('additional-content')).toBeInTheDocument();
+
+    const lastCall = ButtonContentBlockMock.mock.calls[0][0];
+    expect(lastCall.content.content[0].content).toHaveLength(1);
+    expect(lastCall.additionalDescription.content[0].content).toHaveLength(1);
   });
 });

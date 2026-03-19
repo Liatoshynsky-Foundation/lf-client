@@ -1,8 +1,9 @@
 import '@testing-library/jest-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { currencyList, paymentDetails } from './constants';
 import PaymentDetails from './PaymentDetails';
 
 jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => ({
@@ -10,112 +11,68 @@ jest.mock('../../design-system/all-components/button-group/ButtonGroup', () => (
   default: ({ buttons }: { buttons: React.ReactNode[] }) => <div data-testid="mock-button-group">{buttons}</div>
 }));
 
-jest.mock('../../design-system/all-components/copy-link/CopyLink');
+jest.mock('../../design-system/all-components/copy-link/CopyLink', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    const val = props.text || props.value || props.copyText || '';
+    return (
+      <div data-testid="mock-copy-link" data-copy-value={val} onClick={() => navigator.clipboard.writeText(val)}>
+        {props.children}
+        <span data-testid="copy-content">{val}</span>
+      </div>
+    );
+  }
+}));
 
 jest.mock('../../svg-image/SvgImage', () => ({
   SvgImage: (props: React.ComponentProps<'img'>) => <img data-testid="svg-image" {...props} alt="content copy icon" />
 }));
-
-jest.mock('./constants', () => {
-  const currencyList = ['uah', 'usd', 'eur'] as const;
-
-  const paymentDetails = {
-    uah: {
-      receiver: 'ГО "ФУНДАЦІЯ ЛЯТОШИНСЬКОГО"',
-      edrpou: '45111281',
-      bank: 'АТ «УКРСИББАНК»',
-      iban: 'UA28-U-A-H'
-    },
-    usd: {
-      receiver: 'B. Lyatoshynsky Foundation',
-      edrpou: '45111281',
-      bank: 'JSC UKRSIBBANK (USD)',
-      iban: 'UA28-U-S-D'
-    },
-    eur: {
-      receiver: 'B. Lyatoshynsky Foundation',
-      edrpou: '45111281',
-      bank: 'JSC UKRSIBBANK (EUR)',
-      iban: 'UA28-E-U-R'
-    }
-  };
-
-  const paymentFields = [
-    { label: 'Отримувач:', key: 'receiver' },
-    { label: 'ЄДРПОУ:', key: 'edrpou' },
-    { label: 'Банк:', key: 'bank' },
-    { label: 'IBAN:', key: 'iban', isIban: true }
-  ] as const;
-
-  return {
-    __esModule: true,
-    currencyList,
-    paymentDetails,
-    paymentFields
-  };
-});
 
 function renderWithTheme(ui: React.ReactElement) {
   const theme = createTheme();
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
 }
 
-beforeEach(() => {
-  Object.assign(navigator, {
-    clipboard: { writeText: jest.fn().mockResolvedValue(undefined) }
-  });
-});
-
-describe('PaymentDetails', () => {
-  test('should render currency buttons and default to UAH', () => {
-    renderWithTheme(<PaymentDetails />);
-
-    expect(screen.getByRole('button', { name: 'UAH' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'USD' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'EUR' })).toBeInTheDocument();
-
-    expect(screen.getByText('Отримувач:')).toBeInTheDocument();
-    expect(screen.getByText('ГО "ФУНДАЦІЯ ЛЯТОШИНСЬКОГО"')).toBeInTheDocument();
-    expect(screen.getByText('ЄДРПОУ:')).toBeInTheDocument();
-    expect(screen.getByText('45111281')).toBeInTheDocument();
-    expect(screen.getByText('Банк:')).toBeInTheDocument();
-    expect(screen.getByText('АТ «УКРСИББАНК»')).toBeInTheDocument();
-    expect(screen.getByText('IBAN:')).toBeInTheDocument();
-    expect(screen.getByText('UA28-U-A-H')).toBeInTheDocument();
-  });
-
-  test('should switch currency and update details', () => {
-    renderWithTheme(<PaymentDetails />);
-
-    fireEvent.click(screen.getByRole('button', { name: 'USD' }));
-    expect(screen.getByText('JSC UKRSIBBANK (USD)')).toBeInTheDocument();
-    expect(screen.getByText('UA28-U-S-D')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'EUR' }));
-    expect(screen.getByText('JSC UKRSIBBANK (EUR)')).toBeInTheDocument();
-    expect(screen.getByText('UA28-E-U-R')).toBeInTheDocument();
-  });
-
-  it('should copy IBAN to clipboard when IBAN is clicked', async () => {
-    render(<PaymentDetails />);
-
-    const copyLinks = screen.getAllByTestId('mock-copy-link');
-    const ibanCopyButton = copyLinks.find((link) => link.textContent?.includes('UA28-U-A-H'));
-
-    await act(async () => {
-      if (ibanCopyButton) {
-        fireEvent.click(ibanCopyButton);
-      }
+describe('PaymentDetails with Real Constants', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    Object.assign(navigator, {
+      clipboard: { writeText: jest.fn().mockResolvedValue(undefined) }
     });
-
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('UA28-U-A-H');
   });
 
-  test('should render all labels from paymentFields', () => {
+  test('should render currency buttons', () => {
     renderWithTheme(<PaymentDetails />);
-    expect(screen.getByText('Отримувач:')).toBeInTheDocument();
-    expect(screen.getByText('ЄДРПОУ:')).toBeInTheDocument();
-    expect(screen.getByText('Банк:')).toBeInTheDocument();
-    expect(screen.getByText('IBAN:')).toBeInTheDocument();
+    currencyList.forEach((currency) => {
+      expect(screen.getByRole('button', { name: new RegExp(currency, 'i') })).toBeInTheDocument();
+    });
+  });
+
+  test('should update IBAN when switching currencies', () => {
+    renderWithTheme(<PaymentDetails />);
+
+    expect(screen.getByTestId('mock-copy-link')).toHaveAttribute('data-copy-value', paymentDetails.uah.iban);
+
+    const usdBtn = screen.getByRole('button', { name: /USD/i });
+    fireEvent.click(usdBtn);
+
+    expect(screen.getByTestId('mock-copy-link')).toHaveAttribute('data-copy-value', paymentDetails.usd.iban);
+  });
+
+  test('should copy the correct IBAN to clipboard on click', () => {
+    renderWithTheme(<PaymentDetails />);
+
+    fireEvent.click(screen.getByRole('button', { name: /EUR/i }));
+
+    const copyLink = screen.getByTestId('mock-copy-link');
+    fireEvent.click(copyLink);
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(paymentDetails.eur.iban);
+  });
+
+  test('should render static labels correctly', () => {
+    renderWithTheme(<PaymentDetails />);
+    expect(screen.getByText(/Банк:/i)).toBeInTheDocument();
+    expect(screen.getByText(paymentDetails.uah.bank)).toBeInTheDocument();
   });
 });

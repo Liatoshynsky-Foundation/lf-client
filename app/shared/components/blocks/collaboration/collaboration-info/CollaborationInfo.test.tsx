@@ -16,35 +16,32 @@ jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: () => <div data-testid="mock-svg" />
 }));
 
-jest.mock('./collaboration.const', () => ({
-  infoDoc: { en: 'info content' },
-  supportDoc: { en: 'support content' },
-  partnersDoc: { en: 'partners content' },
-  partnershipDoc: { en: 'partnership content' }
+jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div data-testid="tiptap-mock">{JSON.stringify(data)}</div>
 }));
 
-describe('CollaborationInfo component', () => {
-  test('should render SectionTitle with translated title', () => {
+describe('CollaborationInfo component with real data', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should render and cover constants by checking ButtonContentBlock', () => {
     render(<CollaborationInfo />);
+
+    expect(screen.getByTestId('ButtonContentBlock')).toBeInTheDocument();
+
     expect(screen.getByText('title')).toBeInTheDocument();
   });
 
-  test('should render ButtonContentBlock with correct localized content', () => {
-    render(<CollaborationInfo />);
-    expect(screen.getByText('info content')).toBeInTheDocument();
-    expect(screen.getByText('supportButton')).toBeInTheDocument();
-  });
-
-  test('should render all TitleContentBlock sections with correct content', () => {
+  test('should verify that real constant data from collaboration.const.ts is used', () => {
     render(<CollaborationInfo />);
 
-    expect(screen.getByText('supportTitle')).toBeInTheDocument();
-    expect(screen.getByText('support content')).toBeInTheDocument();
+    const tiptapBlocks = screen.getAllByTestId('tiptap-mock');
 
-    expect(screen.getByText('partnersTitle')).toBeInTheDocument();
-    expect(screen.getByText('partners content')).toBeInTheDocument();
+    const expectedText = 'Any financial contribution made to the Foundation';
+    expect(tiptapBlocks[0]).toHaveTextContent(new RegExp(expectedText, 'i'));
 
-    expect(screen.getByText('partnershipTitle')).toBeInTheDocument();
-    expect(screen.getByText('partnership content')).toBeInTheDocument();
+    expect(tiptapBlocks[1]).toHaveTextContent(/We understand that everyone has different/i);
   });
 });

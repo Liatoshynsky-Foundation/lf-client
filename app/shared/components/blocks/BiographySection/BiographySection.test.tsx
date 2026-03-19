@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+import BiographySection from './BiographySection';
+import * as bioData from './BiographySection.data';
 jest.mock('next-intl', () => ({
   useLocale: () => 'en'
 }));
@@ -32,13 +34,30 @@ jest.mock('~/components/blocks/terms-of-use/terms-content/button-content-block/B
   )
 }));
 
-import BiographySection from './BiographySection';
-
 describe('BiographySection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  it('renders correctly using REAL data from .data.ts', () => {
+    render(
+      <BiographySection
+        title={bioData.title}
+        spanText={bioData.spanText}
+        text={bioData.text}
+        ctaLabel={bioData.ctaLabel}
+        ctaHref={bioData.ctaHref}
+      />
+    );
 
+    expect(screen.getByTestId('BiographySection')).toBeInTheDocument();
+
+    expect(screen.getByText(bioData.title.en)).toBeInTheDocument();
+    expect(screen.getByText(bioData.spanText.en)).toBeInTheDocument();
+
+    const btn = screen.getByTestId('ButtonContentBlock-mock');
+    expect(btn).toHaveAttribute('data-href', bioData.ctaHref);
+    expect(btn).toHaveAttribute('data-buttontext', bioData.ctaLabel.en);
+  });
   it('renders localized title/spanText and passes images to BiographyGallery', () => {
     const builtImages = [
       {

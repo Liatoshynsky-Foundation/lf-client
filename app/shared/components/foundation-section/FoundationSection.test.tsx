@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import FoundationSection from './FoundationSection';
+import * as foundationData from './FoundationSectionData';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
@@ -96,5 +98,23 @@ describe('FoundationSection', () => {
     render(<FoundationSection {...propsWithoutCaption} />);
 
     expect(screen.getByAltText('Foundation')).toBeInTheDocument();
+  });
+
+  it('should correctly utilize and export all data from FoundationSectionData', () => {
+    expect(foundationData.foundationParagraph1).toBeDefined();
+    expect(foundationData.foundationParagraph2).toBeDefined();
+    expect(foundationData.foundationButtonText).toBeDefined();
+    expect(foundationData.foundationSectionData).toBeDefined();
+
+    render(
+      <FoundationSection
+        imageSrc={foundationData.foundationSectionData.imageSrc}
+        buttonLink={foundationData.foundationSectionData.buttonLink}
+        buttonText={foundationData.foundationButtonText.uk}
+        paragraph1={foundationData.foundationParagraph1.uk}
+      />
+    );
+
+    expect(screen.getByText(foundationData.foundationButtonText.uk)).toBeInTheDocument();
   });
 });

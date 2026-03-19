@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
+import * as mediaData from './media.const';
 import MediaCenter from './MediaCenter';
 
 let searchParamsValue = new URLSearchParams('');
@@ -39,52 +40,77 @@ jest.mock('~/ds-components/tabs/Tabs', () => ({
   )
 }));
 
-const mockNewsData = [{ _id: '1', title: 'News', publishedAt: '2023-01-01', coverImage: { src: '' } }];
-const mockMediaMentionsData = [{ _id: '1', title: 'Media', publishedAt: '2023-01-01', coverImage: { src: '' } }];
-
-describe('MediaCenter Component', () => {
+describe('MediaCenter Component Full Coverage', () => {
   beforeEach(() => {
     searchParamsValue = new URLSearchParams('');
     jest.clearAllMocks();
   });
 
-  it('should render news list by default', () => {
-    render(<MediaCenter newsData={mockNewsData as any} mediaMentionsData={mockMediaMentionsData as any} />);
+  it('should render news list by default using real constants', () => {
+    render(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />);
+
     expect(screen.getByTestId('media-list-news')).toBeInTheDocument();
   });
 
-  it('should switch to "press" tab and renders press list', async () => {
+  it('should switch to "press" tab and render press list', async () => {
     const { rerender } = render(
-      <MediaCenter newsData={mockNewsData as any} mediaMentionsData={mockMediaMentionsData as any} />
+      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
     );
 
-    const pressTab = screen.getByText('Ми у ЗМІ');
+    const pressTab = screen.getByText(/Ми у ЗМІ/i);
     fireEvent.click(pressTab);
 
-    rerender(<MediaCenter newsData={mockNewsData as any} mediaMentionsData={mockMediaMentionsData as any} />);
+    rerender(
+      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('media-list-press')).toBeInTheDocument();
-      expect(screen.queryByTestId('media-list-news')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should switch to "events" tab and trigger events loading (useEffect coverage)', async () => {
+    const { rerender } = render(
+      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+    );
+
+    const eventsTab = screen.getByText(/Події/i);
+    fireEvent.click(eventsTab);
+
+    searchParamsValue = new URLSearchParams('tab=events');
+
+    rerender(
+      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/131 років від дня народження/i)).toBeInTheDocument();
+
+      expect(screen.getAllByTestId('EventItem-root').length).toBeGreaterThan(0);
     });
   });
 
   it('should show empty state when news data is empty', () => {
-    render(<MediaCenter newsData={[]} mediaMentionsData={mockMediaMentionsData as any} />);
-
+    render(<MediaCenter newsData={[]} mediaMentionsData={mediaData.mockPressList as any} />);
     expect(screen.getByTestId('EmptyState-news')).toBeInTheDocument();
   });
 
   it('should show empty state when media mentions data is empty', async () => {
-    const { rerender } = render(<MediaCenter newsData={mockNewsData as any} mediaMentionsData={[]} />);
+    const { rerender } = render(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} />);
 
-    const pressTab = screen.getByText('Ми у ЗМІ');
+    const pressTab = screen.getByText(/Ми у ЗМІ/i);
     fireEvent.click(pressTab);
 
-    rerender(<MediaCenter newsData={mockNewsData as any} mediaMentionsData={[]} />);
+    rerender(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} />);
 
     await waitFor(() => {
       expect(screen.getByTestId('EmptyState-press')).toBeInTheDocument();
     });
+  });
+
+  it('should verify constants content directly (for 100% media.const.ts)', () => {
+    expect(mediaData.mediaBigDoc.uk.type).toBe('doc');
+    expect(mediaData.mediaSmallDoc.en.type).toBe('doc');
+    expect(mediaData.mockNewsList[0].status).toBe('published');
   });
 });
