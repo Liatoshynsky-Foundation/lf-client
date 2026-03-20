@@ -1,71 +1,95 @@
+'use client';
+
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
-import TipTapContent from '~/components/tip-tap-content/TipTapContent';
-import Button from '~/ds-components/button/Button';
 
 import { imageSizes, styles } from './FoundationSection.styles';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
-import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
+import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
 interface Props {
   imageSrc: string;
   caption?: string;
-  paragraph1: TipTapDoc;
-  paragraph2?: TipTapDoc;
+
+  paragraph1: React.ReactNode;
+  paragraph2?: React.ReactNode;
   buttonText: string;
   buttonLink: string;
 }
 
-const createParagraph = () => {
-  const ParagraphRenderer = (children: React.ReactNode) => (
-    <Typography sx={{ display: 'block', ...textStyles.blockDescription }}>{children}</Typography>
-  );
-  ParagraphRenderer.displayName = 'ParagraphRenderer';
-  return ParagraphRenderer;
-};
+const EMPTY_TIPTAP_DOC: TipTapDoc = { type: TipTapNodeTypes.doc, content: [] };
 
 const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, paragraph2, buttonText, buttonLink }) => {
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const [dynamicPadding, setDynamicPadding] = useState(0);
+
+  useEffect(() => {
+    const calculatePadding = () => {
+      if (textRef.current && buttonRef.current) {
+        const textHeight = textRef.current.offsetHeight;
+        const buttonHeight = buttonRef.current.offsetHeight;
+        const gap = textHeight - buttonHeight;
+        setDynamicPadding(gap > 0 ? gap : 0);
+      }
+    };
+
+    calculatePadding();
+    window.addEventListener('resize', calculatePadding);
+    return () => window.removeEventListener('resize', calculatePadding);
+  }, [paragraph2]);
+
   return (
     <Box sx={styles.mainContainer}>
-      <Box
+      <Typography
         sx={{
+          display: 'block',
+          ...textStyles.blockDescription,
           ...styles.textStyle,
           marginBottom: { xs: paragraph2 ? '16px' : '24px', md: paragraph2 ? '16px' : '0px' }
         }}
       >
-        <TipTapContent
-          data={paragraph1}
-          nodeRenderers={{
-            paragraph: createParagraph()
-          }}
-        />
-      </Box>
+        {paragraph1}
+      </Typography>
 
       {paragraph2 && (
-        <Box sx={{ gridColumn: { xs: '1/-1', sm: '4/-1', md: '6/-1' }, marginBottom: { xs: '16px', md: '0px' } }}>
-          <TipTapContent data={paragraph2} nodeRenderers={{ paragraph: createParagraph() }} />
-        </Box>
-      )}
-
-      <Box sx={styles.stickyButtonWrapper}>
-        <Button
-          link={buttonLink}
-          color="tertiary"
-          variant="contained"
+        <Typography
+          data-testid="paragraph2"
+          ref={textRef}
           sx={{
-            maxWidth: { xs: '246px' },
-            minWidth: { xs: '246px' },
-            gap: '8px'
+            display: 'block',
+            ...textStyles.blockDescription,
+            gridColumn: { xs: '1/-1', sm: '4/-1', md: '6/-1' },
+            marginBottom: { xs: '16px', md: '0px' }
           }}
         >
-          {buttonText}
-          <Svg Component={ArrowUpRight} alt="icon" color="#000" width="20px" height="20px" />
-        </Button>
+          {paragraph2}
+        </Typography>
+      )}
+
+      <Box
+        data-testid="sticky-wrapper"
+        data-padding={dynamicPadding}
+        sx={{ ...styles.stickyButtonWrapper, paddingTop: { md: `${dynamicPadding}px` } }}
+      >
+        <Box ref={buttonRef} data-testid="button-wrapper" sx={{ height: 'fit-content' }}>
+          <ButtonContentBlock
+            content={EMPTY_TIPTAP_DOC}
+            buttonText={buttonText}
+            buttonColor="tertiary"
+            containerSx={{ display: 'flex', width: '246px' }}
+            textSx={{ display: 'none' }}
+            textContainerSx={{ display: 'none' }}
+            buttonContainerSx={{ width: '246px' }}
+            sx={{ width: '246px', minWidth: '246px', maxWidth: '246px' }}
+            link={buttonLink}
+          />
+        </Box>
       </Box>
 
       <ImageWithCaption

@@ -30,7 +30,6 @@ export const styles = {
     gridRow: { md: '2/7' },
     position: { md: 'sticky' },
     top: { md: '96px' },
-    paddingTop: { md: '120px', lg: '64px', xl: '30px' },
     alignSelf: { md: 'start' },
     display: 'flex',
     justifyContent: { xs: 'flex-start', md: 'flex-end' },
