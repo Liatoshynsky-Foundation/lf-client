@@ -35,7 +35,7 @@ const FoundationSection: React.FC<Props> = ({ imageSrc, caption, paragraph1, par
         const textHeight = textRef.current.offsetHeight;
         const buttonHeight = buttonRef.current.offsetHeight;
         const gap = textHeight - buttonHeight;
-        setDynamicPadding(gap > 0 ? gap : 0);
+        setDynamicPadding(Math.max(gap, 0));
       }
     };
 

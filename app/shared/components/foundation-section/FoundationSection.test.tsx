@@ -101,7 +101,7 @@ describe('FoundationSection', () => {
     const { unmount } = render(<FoundationSection {...defaultProps} paragraph2={mockParagraph2} />);
 
     await act(async () => {
-      window.dispatchEvent(new Event('resize'));
+      globalThis.dispatchEvent(new Event('resize'));
     });
 
     const stickyWrapper = screen.getByTestId('sticky-wrapper');
@@ -112,7 +112,7 @@ describe('FoundationSection', () => {
   });
 
   it('should remove resize listener on unmount', () => {
-    const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
+    const removeEventListenerSpy = jest.spyOn(globalThis, 'removeEventListener');
     const { unmount } = render(<FoundationSection {...defaultProps} paragraph2={mockParagraph2} />);
 
     unmount();
