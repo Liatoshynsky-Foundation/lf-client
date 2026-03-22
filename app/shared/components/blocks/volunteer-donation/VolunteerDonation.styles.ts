@@ -97,18 +97,10 @@ export const styles = {
     },
     maxWidth: {
       xs: '100%',
-      sm: '100%',
-      md: '100%',
-      lg: '100%',
-      xl: '100%',
       xxl: '1001px'
     },
     width: {
       xs: '100%',
-      sm: '100%',
-      md: '100%',
-      lg: '100%',
-      xl: '100%',
       xxl: '806px',
       ultra: '1001px'
     }
@@ -130,8 +122,8 @@ export const imageSizes = {
     color: mainHexPallete.blue[300]
   },
   imageSx: {
-    width: { xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%', xxl: '806px', ultra: '1001px' },
-    height: { xs: 'auto', sm: 'auto', md: 'auto' },
+    width: { xs: '100%', xxl: '806px', ultra: '1001px' },
+    height: { xs: 'auto' },
     aspectRatio: { xs: '224 / 138', sm: '457 / 292', md: '569 / 336' }
   }
 };
