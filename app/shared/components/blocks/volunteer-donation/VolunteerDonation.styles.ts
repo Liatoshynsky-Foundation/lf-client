@@ -80,7 +80,6 @@ export const styles = {
       sm: '4 / -1',
       md: '6 / -1',
       lg: '6 / -1'
-      // xl: '6 / -1'
     },
     gridRow: {
       sm: '5 / 7'
