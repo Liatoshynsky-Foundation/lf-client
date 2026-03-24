@@ -20,9 +20,10 @@ interface Props {
   paymentMethods: PaymentMethod[];
   imageSrc: string;
   caption?: string;
+  imageAlt?: string;
 }
 
-const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption }) => {
+const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption, imageAlt }) => {
   const t = useTranslations('common');
 
   return (
@@ -42,7 +43,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
 
       <ImageWithCaption
         src={imageSrc}
-        alt={title}
+        alt={imageAlt ?? title}
         caption={caption ?? ''}
         captionSx={styles.captionSx}
         align="right"
