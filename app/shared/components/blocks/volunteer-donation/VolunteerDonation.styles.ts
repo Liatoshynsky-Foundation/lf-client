@@ -100,7 +100,6 @@ export const styles = {
     },
     width: {
       xs: '100%',
-      xxl: '806px',
       ultra: '1001px'
     }
   }
@@ -121,7 +120,7 @@ export const imageSizes = {
     color: mainHexPallete.blue[300]
   },
   imageSx: {
-    width: { xs: '100%', xxl: '806px', ultra: '1001px' },
+    width: { xs: '100%', ultra: '1001px' },
     height: { xs: 'auto' },
     aspectRatio: { xs: '224 / 138', sm: '457 / 292', md: '569 / 336' }
   }
