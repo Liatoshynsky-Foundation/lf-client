@@ -58,9 +58,7 @@ const PartnershipFormats: React.FC<PartnershipFormatsProps> = ({ data }) => {
 
   const mobileSlides = [
     data.firstRowFirstCard && { type: 'card' as const, card: data.firstRowFirstCard },
-    data.firstRowImage && { type: 'image' as const, image: data.firstRowImage },
     data.firstRowSecondCard && { type: 'card' as const, card: data.firstRowSecondCard },
-    data.secondRowImage && { type: 'image' as const, image: data.secondRowImage },
     data.secondRowFirstCard && { type: 'card' as const, card: data.secondRowFirstCard },
     data.secondRowSecondCard && { type: 'card' as const, card: data.secondRowSecondCard }
   ].filter(Boolean) as Array<{ type: 'card' | 'image'; card?: PartnershipCard; image?: PartnershipImage }>;
