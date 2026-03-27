@@ -1,6 +1,9 @@
 export const sliderStyles = {
   container: {
-    width: '100%',
+    width: {
+      xs: 'calc(100% + 24px)',
+      sm: '100%'
+    },
     overflow: 'hidden',
     mb: {
       xs: '24px'
@@ -14,26 +17,28 @@ export const sliderStyles = {
   },
   slidesContainer: {
     display: 'flex',
+    gap: '16px',
     transition: 'transform 0.3s ease-in-out',
     willChange: 'transform'
   },
   slide: {
-    minWidth: '100%',
+    flexShrink: 0,
+    maxWidth: 'max-content',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   },
   cardWrapper: {
     width: {
-      xs: '100%',
+      xs: '272px',
       sm: '294px'
     },
     maxWidth: {
-      xs: '100%',
+      xs: 'max-content',
       sm: '294px'
     },
     minWidth: {
-      xs: '100%',
+      xs: '272px',
       sm: '294px'
     },
     '& > *': {
@@ -44,15 +49,15 @@ export const sliderStyles = {
   imageWrapper: {
     transform: 'skewY(-2deg)',
     width: {
-      xs: '100%',
+      xs: '272px',
       sm: '294px'
     },
     maxWidth: {
-      xs: '100%',
+      xs: '272px',
       sm: '294px'
     },
     minWidth: {
-      xs: '100%',
+      xs: '272px',
       sm: '294px'
     },
     height: '386px',
