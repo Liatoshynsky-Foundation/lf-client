@@ -47,9 +47,9 @@ describe('PartnershipSlider', () => {
 
   it('should cover the return null branch for invalid slide types', () => {
     const invalidSlides: any[] = [{ type: 'invalid' }];
-    const { container } = render(<PartnershipSlider slides={invalidSlides} />);
+    render(<PartnershipSlider slides={invalidSlides} />);
 
-    const slideWrapper = container.querySelector('.MuiBox-root.css-11cmzn9');
-    expect(slideWrapper).toBeEmptyDOMElement();
+    expect(screen.queryByTestId('card-mock')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('image-mock')).not.toBeInTheDocument();
   });
 });
