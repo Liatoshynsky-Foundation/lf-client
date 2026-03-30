@@ -21,7 +21,7 @@ jest.mock('~/lib/utils/errorPageFactory', () => ({
   ErrorPageFactory: jest.fn((err) => <div data-testid="error-page">Error: {err}</div>)
 }));
 
-jest.mock('../[...unknown-route]/page-not-found/pageNotFound', () => ({
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
   PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
 }));
 

@@ -40,7 +40,7 @@ jest.mock('~/components/under-development/UnderDevelopment', () => {
   return MockUnderDev;
 });
 
-jest.mock('../[...unknown-route]/page-not-found/pageNotFound', () => ({
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
   PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
 }));
 

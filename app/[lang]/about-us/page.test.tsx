@@ -53,7 +53,7 @@ jest.mock('~/services/pages-data/resolvePageData');
 jest.mock('~/lib/utils/errorPageFactory', () => ({
   ErrorPageFactory: jest.fn(() => <div data-testid="error-page">Error: No page found</div>)
 }));
-jest.mock('../[...unknown-route]/page-not-found/pageNotFound');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
 
 describe('Home page', () => {
   const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
