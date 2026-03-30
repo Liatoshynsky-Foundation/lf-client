@@ -4,7 +4,7 @@ export const styles = {
   mainContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    my: { sm: '104px', md: '128px', lg: '144px' },
+    my: { xs: '80px', sm: '96px', md: '112px', lg: '144px' },
     gridTemplateColumns: {
       xs: 'repeat(4, 1fr)',
       sm: 'repeat(8, 1fr)',
@@ -25,6 +25,16 @@ export const styles = {
     },
     gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
+  stickyButtonWrapper: {
+    gridColumn: { xs: '1/-1', sm: '4/-1', md: '1/6' },
+    gridRow: { md: '2/7' },
+    position: { md: 'sticky' },
+    top: { md: '96px' },
+    alignSelf: { md: 'start' },
+    display: 'flex',
+    justifyContent: { xs: 'flex-start', md: 'flex-end' },
+    alignItems: 'flex-start'
+  },
   img: {
     gridColumn: {
       xs: '1 / -1',
@@ -33,9 +43,6 @@ export const styles = {
     },
     gridRow: {
       sm: '5 / 7'
-    },
-    mb: {
-      xs: '56px'
     },
     mt: {
       xs: '56px'
@@ -74,11 +81,11 @@ export const imageSizes = {
   },
   border: {
     sizes: {
-      width: { xs: 31, sm: 38, md: 57, lg: 80 },
-      height: { xs: 134, sm: 134, md: 204, lg: 360 }
+      width: { xs: 24, sm: 24, md: 41, lg: 41 },
+      height: { xs: 139, sm: 153, md: 272, lg: 346 }
     },
-    top: { xs: 16, sm: 20, md: 36, lg: 38, xl: 40 },
-    left: { xs: 16, sm: 26, md: 41, lg: 40, xl: 40 },
+    top: { xs: 12, sm: 20, md: 20, lg: 20, xl: 20 },
+    left: { xs: 12, sm: 12, md: 20, lg: 20, xl: 20 },
     color: mainHexPallete.yellow[300]
   },
   imageSx: {

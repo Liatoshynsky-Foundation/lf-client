@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, Box, Typography } from '@mui/material';
+import { Badge, Box, Collapse, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
@@ -136,7 +136,16 @@ export default function ControlPanel({
       </Box>
       <Box sx={ControlPanelStyles.controlsColumn} data-testid="ControlPanel-controlsColumn">
         {isMobile && searchActive ? <Box>{Search}</Box> : null}
-        {filtersActive ? <Box sx={ControlPanelStyles.filtersContainer}>{Filters}</Box> : null}
+        <Collapse
+          in={filtersActive}
+          timeout={{ enter: 300, exit: 600 }}
+          sx={{
+            transitionTimingFunction: filtersActive ? 'ease-in' : 'ease-out'
+          }}
+          unmountOnExit
+        >
+          <Box sx={ControlPanelStyles.filtersContainer}>{Filters}</Box>
+        </Collapse>
       </Box>
     </Box>
   );
