@@ -3,9 +3,6 @@ import React from 'react';
 
 import FoundationSection from './FoundationSection';
 import * as foundationData from './FoundationSection.data';
-import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/tiptap.types';
-
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => {
   return function MockImageWithCaption(props: { alt?: string; caption?: string; src?: string }) {
     return (
@@ -102,10 +99,6 @@ describe('FoundationSection', () => {
     });
 
     const { unmount } = render(<FoundationSection {...defaultProps} paragraph2={mockParagraph2} />);
-
-    await act(async () => {
-      globalThis.dispatchEvent(new Event('resize'));
-    });
 
     const stickyWrapper = screen.getByTestId('sticky-wrapper');
     expect(stickyWrapper).toHaveAttribute('data-padding', '52');
