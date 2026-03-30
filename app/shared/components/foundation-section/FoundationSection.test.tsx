@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import FoundationSection from './FoundationSection';
-import * as foundationData from './FoundationSectionData';
+import * as foundationData from './FoundationSection.data';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-import { artistrySectionData } from './artistry.const';
 import ArtistrySection from './ArtistrySection';
+import { artistrySectionData } from './ArtistrySection.data';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
 const ButtonContentBlockMock = jest.fn(({ buttonText, additionalDescription }: any) => (
