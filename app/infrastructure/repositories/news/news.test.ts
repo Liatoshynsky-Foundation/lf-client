@@ -15,7 +15,8 @@ jest.mock('~/infrastructure/models/news/news.model', () => ({
 
 const newsRepository = newNewsRepository();
 
-const createFakeId = () => '65f1d5f2' + Math.random().toString(16).slice(2, 10) + 'a1b2c3d4';
+let counterA = 0x10000000;
+const createFakeId = () => '65f1d5f2' + (counterA++).toString(16) + 'a1b2c3d4';
 
 const mockMongooseChain = (resolvedValue: any) => ({
   select: jest.fn().mockReturnThis(),

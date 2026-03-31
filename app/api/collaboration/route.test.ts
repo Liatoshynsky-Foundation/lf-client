@@ -50,7 +50,7 @@ describe('Collaboration API Route (POST)', () => {
 
     (emailService.sendCollaborationEmail as jest.Mock).mockResolvedValue({
       success: true,
-      previewUrl: 'http://preview.com'
+      previewUrl: 'https://preview.com'
     });
 
     const mockReq = {
@@ -66,7 +66,7 @@ describe('Collaboration API Route (POST)', () => {
       })
     );
     expect(successResponse).toHaveBeenCalledWith(
-      expect.objectContaining({ success: true, previewUrl: 'http://preview.com' }),
+      expect.objectContaining({ success: true, previewUrl: 'https://preview.com' }),
       200
     );
   });

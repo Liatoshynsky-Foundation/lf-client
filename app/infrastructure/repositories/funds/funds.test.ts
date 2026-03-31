@@ -21,7 +21,7 @@ jest.mock('~/infrastructure/models/archive/Document', () => ({}));
 
 const fundsRepository = newFundsRepository();
 
-const createFakeId = () => '65f1d5f2' + Math.random().toString(16).slice(2, 10);
+const createFakeId = () => '65f1d5f2' + Date.now().toString(16).slice(-8);
 
 const mockMongooseChain = (resolvedValue: any) => ({
   sort: jest.fn().mockReturnThis(),
@@ -61,7 +61,7 @@ describe('fundsRepository', () => {
             dates: '2020',
             sheets: '10',
             contentDescription: 'Desc',
-            pdfUrl: 'http://link.com',
+            pdfUrl: 'https://link.com',
             order: 1
           }
         ]

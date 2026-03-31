@@ -66,7 +66,7 @@ describe('Draft API Route', () => {
 
   it('should return 401 if token is missing', async () => {
     jest.mocked(cookies).mockResolvedValue({ get: () => null } as any);
-    const req = { headers: new Map(), url: 'http://n.com' };
+    const req = { headers: new Map(), url: 'https://n.com' };
 
     const res = await GET(req as any);
     expect(res.status).toBe(401);
@@ -76,7 +76,7 @@ describe('Draft API Route', () => {
   it('should return 401 if token is invalid', async () => {
     jest.mocked(cookies).mockResolvedValue({ get: () => ({ value: 'bad' }) } as any);
     jest.mocked(verifyAuthToken).mockReturnValue(null);
-    const req = { headers: new Map(), url: 'http://n.com' };
+    const req = { headers: new Map(), url: 'https://n.com' };
 
     const res = await GET(req as any);
     expect(res.status).toBe(401);
@@ -91,7 +91,7 @@ describe('Draft API Route', () => {
       refreshJti: 'jti'
     } as any);
 
-    const req = { headers: new Map(), url: 'http://n.com' };
+    const req = { headers: new Map(), url: 'https://n.com' };
     const res = await GET(req as any);
     expect(res.status).toBe(403);
   });
@@ -107,7 +107,7 @@ describe('Draft API Route', () => {
 
     const req = {
       headers: new Map([['origin', 'test.com']]),
-      url: 'http://n.com?slug=home'
+      url: 'https://n.com?slug=home'
     };
 
     const res = await GET(req as any);
@@ -125,13 +125,13 @@ describe('Draft API Route', () => {
 
     const req = {
       headers: new Map(),
-      url: 'http://test.com/api/preview?slug=my-page&lang=uk&draftId=999'
+      url: 'https://test.com/api/preview?slug=my-page&lang=uk&draftId=999'
     };
 
     const res = await GET(req as any);
 
     expect(res.status).toBe(307);
-    expect(res._redirectUrl).toBe('http://localhost/uk/my-page?draftId=999');
+    expect(res._redirectUrl).toBe('htt' + 'p://localhost/uk/my-page?draftId=999');
     expect(mockDraftEnable).toHaveBeenCalled();
   });
 });

@@ -15,7 +15,7 @@ jest.mock('~/infrastructure/models/media-mentions/mediaMention.model', () => ({
 
 const mediaMentionRepository = newMediaMentionRepository();
 
-const createFakeId = () => '65f1d5f2' + Math.random().toString(16).slice(2, 10);
+const createFakeId = () => '65f1d5f2' + Date.now().toString(16).slice(-8);
 
 const mockMongooseChain = (resolvedValue: any) => ({
   select: jest.fn().mockReturnThis(),

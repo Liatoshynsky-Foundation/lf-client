@@ -14,7 +14,7 @@ describe('EmailService', () => {
     jest.clearAllMocks();
     (nodemailer.createTransport as jest.Mock).mockReturnValue(mockTransporter);
     (nodemailer.createTestAccount as jest.Mock).mockResolvedValue({ user: 'u', pass: 'p' });
-    (nodemailer.getTestMessageUrl as jest.Mock).mockReturnValue('http://preview.com');
+    (nodemailer.getTestMessageUrl as jest.Mock).mockReturnValue('https://preview.com');
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('EmailService', () => {
 
       const spyLog = jest.spyOn(console, 'log').mockImplementation();
 
-      (nodemailer.getTestMessageUrl as jest.Mock).mockReturnValue('http://preview.com');
+      (nodemailer.getTestMessageUrl as jest.Mock).mockReturnValue('https://preview.com');
 
       const res = await emailService.sendEmail({
         to: 'test@example.com',
@@ -39,8 +39,8 @@ describe('EmailService', () => {
       });
 
       expect(res.success).toBe(true);
-      expect(res.previewUrl).toBe('http://preview.com');
-      expect(spyLog).toHaveBeenCalledWith('Preview URL: %s', 'http://preview.com');
+      expect(res.previewUrl).toBe('https://preview.com');
+      expect(spyLog).toHaveBeenCalledWith('Preview URL: %s', 'https://preview.com');
 
       spyLog.mockRestore();
       envSpy.restore();

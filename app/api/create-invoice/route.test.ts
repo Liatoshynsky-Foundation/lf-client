@@ -56,7 +56,7 @@ describe('Create Invoice API Route (POST)', () => {
     mockConsume.mockRejectedValueOnce(new Error('Rate limit exceeded'));
 
     const mockReq = {
-      headers: { get: () => '1.2.3.4' },
+      headers: { get: () => '127.0.0.1' },
       json: async () => ({ amount: 100 })
     };
 
@@ -66,17 +66,18 @@ describe('Create Invoice API Route (POST)', () => {
     expect(errorResponse).toHaveBeenCalledWith(['Too many requests'], 429);
     expect(res.status).toBe(429);
   });
+
   it('should cover line 17 (successful rate limit consumption)', async () => {
     mockConsume.mockResolvedValueOnce({ remainingPoints: 4 });
 
     const mockReq = {
-      headers: { get: () => '192.168.1.1' },
+      headers: { get: () => '127.0.0.2' },
       json: async () => ({ amount: 100 })
     };
 
     const res = await POST(mockReq as any);
 
-    expect(mockConsume).toHaveBeenCalledWith('192.168.1.1');
+    expect(mockConsume).toHaveBeenCalledWith('127.0.0.2');
     expect(res.status).toBe(200);
   });
 
@@ -91,23 +92,25 @@ describe('Create Invoice API Route (POST)', () => {
     expect(mockConsume).toHaveBeenCalledWith('');
     expect(mockConsume).toHaveReturned();
   });
+
   it('should create invoice successfully with valid data', async () => {
     const mockReq = {
-      headers: { get: () => '1.2.3.4' },
+      headers: { get: () => '127.0.0.1' },
       json: async () => ({ amount: 500, lang: 'en' })
     };
 
     const res = await POST(mockReq as any);
 
-    expect(mockConsume).toHaveBeenCalledWith('1.2.3.4');
+    expect(mockConsume).toHaveBeenCalledWith('127.0.0.1');
     expect(res.status).toBe(200);
     expect(res._testData.amount).toBe(500);
   });
+
   it('should return 400 for invalid donation amount', async () => {
     const { errorResponse } = await import('~/utils/apiResponse');
 
     const mockReq = {
-      headers: { get: () => '1.2.3.4' },
+      headers: { get: () => '127.0.0.1' },
       json: async () => ({ amount: 2000 })
     };
 
@@ -119,7 +122,7 @@ describe('Create Invoice API Route (POST)', () => {
 
   it('should handle default currency and UA language correctly', async () => {
     const mockReq = {
-      headers: { get: () => '1.2.3.4' },
+      headers: { get: () => '127.0.0.1' },
       json: async () => ({ amount: 100, lang: 'ua' })
     };
 

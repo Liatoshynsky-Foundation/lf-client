@@ -16,7 +16,7 @@ describe('Turnstile API Route', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (WayForPay as any).TURNSTILE_SECRET_KEY = 'secret';
-    (WayForPay as any).VERIFY_URL = 'http://verify.url';
+    (WayForPay as any).VERIFY_URL = 'https://verify.url';
   });
 
   it('should return 400 if token is missing', async () => {

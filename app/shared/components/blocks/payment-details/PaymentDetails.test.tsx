@@ -16,10 +16,15 @@ jest.mock('../../design-system/all-components/copy-link/CopyLink', () => ({
   default: (props: any) => {
     const val = props.text || props.value || props.copyText || '';
     return (
-      <div data-testid="mock-copy-link" data-copy-value={val} onClick={() => navigator.clipboard.writeText(val)}>
+      <button
+        type="button"
+        data-testid="mock-copy-link"
+        data-copy-value={val}
+        onClick={() => navigator.clipboard.writeText(val)}
+      >
         {props.children}
         <span data-testid="copy-content">{val}</span>
-      </div>
+      </button>
     );
   }
 }));

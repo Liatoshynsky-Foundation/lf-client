@@ -23,13 +23,11 @@ jest.mock('~/infrastructure/models/scientific-works/scientificWorksTableData', (
 
 const repo = newScientificWorksRepo();
 
+let counterB = 1;
 const createFakeId = () => {
-  const chars = 'abcdef0123456789';
-  let id = '507f191e';
-  for (let i = 0; i < 16; i++) {
-    id += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return id;
+  const id = '507f191e';
+  const suffix = (counterB++).toString(16).padStart(16, '0');
+  return id + suffix;
 };
 
 const mockMongooseChain = (resolvedValue: any) => {
@@ -143,7 +141,7 @@ describe('scientificWorksRepository', () => {
       authors: [],
       startYear: 2000,
       endYear: null,
-      url: 'http://link.com',
+      url: 'https://link.com',
       isPreview: false
     };
 
