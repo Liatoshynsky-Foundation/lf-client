@@ -5,6 +5,7 @@ import React from 'react';
 
 import EmptyState from '~/ds-components/empty-state/EmptyState';
 
+import { getDynamicRoute } from '../../constants/routes';
 import { styles } from './NewsSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
@@ -56,7 +57,7 @@ const NewsSection: React.FC<Props> = async ({ locale, title, textContent, button
       title: news.title,
       publicationDate: formattedDate,
       description: news.description,
-      href: `/news/${news.slug}`,
+      href: getDynamicRoute.newsItem(news.slug),
       dataTestId: `NewsCard-${news.slug}`
     };
   });

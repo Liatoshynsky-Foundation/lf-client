@@ -2,6 +2,7 @@ import { partnersMock } from '../our-partners/partners.data';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -31,6 +32,6 @@ export const cooperationSectionData = {
     uk: 'Долучитись до співпраці',
     en: 'Join the Partnership'
   },
-  buttonLink: '/cooperation',
+  buttonLink: ROUTES.COOPERATION,
   partners: partnersMock
 };

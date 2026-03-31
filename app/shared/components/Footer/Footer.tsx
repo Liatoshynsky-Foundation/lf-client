@@ -16,6 +16,7 @@ import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 import { createRequestContainer } from '~/di/container';
 import { mapFooterNavigation } from '~/lib/utils/footerNavigationMapper';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export default async function Footer() {
   const tFooter = await getTranslations('footer');
@@ -28,7 +29,7 @@ export default async function Footer() {
     .getFooterData(locale);
 
   const contactUsLink =
-    navigation?.[1]?.links?.find((link: { label: string; href: string }) => link.href === '/contacts')?.href ?? '';
+    navigation?.[1]?.links?.find((link: { label: string; href: string }) => link.href === ROUTES.CONTACTS)?.href ?? '';
 
   const enhancedNavigation = await mapFooterNavigation(navigation);
 

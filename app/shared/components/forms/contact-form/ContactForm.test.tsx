@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
+import { ROUTES } from '../../constants/routes';
 import ContactForm from './ContactForm';
 
 jest.mock('public/icons/info-error.svg', () => {
@@ -77,7 +78,7 @@ describe('ContactForm', () => {
     if (!link) {
       throw new Error('Expected a privacy policy link to be present.');
     }
-    expect(link).toHaveAttribute('href', '/privacy-policy');
+    expect(link).toHaveAttribute('href', ROUTES.PRIVACY_POLICY);
   });
 
   it('should render a submit button', () => {

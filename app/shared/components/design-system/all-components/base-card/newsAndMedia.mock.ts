@@ -1,5 +1,7 @@
 import type { BaseCardProps } from '~/ds-components/base-card/BaseCard';
 
+import { getDynamicRoute } from '~/shared/components/constants/routes';
+
 export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
   {
     image: '/images/placeholder.png',
@@ -7,7 +9,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
     publicationDate: '15.01.25',
     description:
       'Національна філармонія України запрошує на урочистий концерт, присвячений ювілею видатного композитора. У програмі - найкращі твори майстра.',
-    href: '/news/concert-130-anniversary'
+    href: getDynamicRoute.newsItem('concert-130-anniversary')
   },
   {
     image: '/images/placeholder.png',
@@ -15,7 +17,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
     publicationDate: '10.01.25',
     description:
       'Фундація представляє цифрову реставрацію історичного запису Третьої симфонії під орудою Натана Рахліна 1951 року.',
-    href: '/news/third-symphony-recording'
+    href: getDynamicRoute.newsItem('third-symphony-recording')
   },
   {
     image: '/images/placeholder.png',
@@ -23,7 +25,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
     publicationDate: '05.01.25',
     description:
       'У Національному музеї літератури відкрилась виставка рідкісних рукописів, листів та фотографій із родинного архіву композитора.',
-    href: '/news/archive-exhibition'
+    href: getDynamicRoute.newsItem('archive-exhibition')
   }
 ];
 

@@ -3,7 +3,9 @@ import { getTranslations } from 'next-intl/server';
 export type FooterNavLink = { label: string; href: string };
 export type FooterNavSection = { title: string; links: FooterNavLink[] };
 
-const UNIFIED_NEWS_ROUTE = '/news';
+import { ROUTES } from '~/shared/components/constants/routes';
+
+const UNIFIED_NEWS_ROUTE = ROUTES.NEWS;
 
 export async function mapFooterNavigation(sections: FooterNavSection[]): Promise<FooterNavSection[]> {
   const tNav = await getTranslations('header.navLabels');

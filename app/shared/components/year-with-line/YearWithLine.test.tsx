@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import YearWithLine from './YearWithLine';
+HTMLCanvasElement.prototype.getContext = jest.fn();
 
 jest.mock('~/hooks/use-breakpoints/useBreakpoints', () => ({
   __esModule: true,

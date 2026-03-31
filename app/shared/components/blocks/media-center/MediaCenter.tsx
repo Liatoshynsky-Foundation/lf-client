@@ -8,6 +8,7 @@ import { z } from 'zod';
 
 import { CustomTabs } from '~/ds-components/tabs/Tabs';
 
+import { ROUTES } from '../../constants/routes';
 import EventsTab from '../../events-tab/EventsTab';
 import { EventItemFixture, MOCK_EVENT_ITEMS } from '../event-card/EventItem.fixture';
 import { styles } from './MediaCenter.styles';
@@ -71,7 +72,7 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
       const params = new URLSearchParams(searchParams.toString());
       params.set('tab', value);
 
-      router.replace(`/news?${params.toString()}`, {
+      router.replace(`${ROUTES.NEWS}?${params.toString()}`, {
         scroll: false
       });
     },

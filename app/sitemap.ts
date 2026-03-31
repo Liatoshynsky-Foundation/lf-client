@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const headersList = await headers();
   const hostName = headersList.get('host') ?? 'localhost:3000';
@@ -8,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = `${protocol}://${hostName}`;
 
   const languages = ['en', 'uk'];
-  const staticPages = ['', '/artistry'];
+  const staticPages = ['', ROUTES.ARTISTRY];
 
   const staticRoutes: MetadataRoute.Sitemap = [];
 

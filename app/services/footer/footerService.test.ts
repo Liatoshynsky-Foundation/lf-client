@@ -1,6 +1,7 @@
 import type { Locale } from 'next-intl';
 
 import { createFooterService } from '~/services/footer/footerService';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 describe('footerService (composed)', () => {
   const mockContactInfo = {
@@ -33,7 +34,7 @@ describe('footerService (composed)', () => {
     copyright: { uk: '© 2025 Фундація', en: '© 2025 Foundation' },
     links: [
       { label: { uk: 'Політика', en: 'Privacy Policy' }, href: '/privacy' },
-      { label: { uk: 'Умови', en: 'Terms of Use' }, href: '/terms' }
+      { label: { uk: 'Умови', en: 'Terms of Use' }, href: ROUTES.TERMS }
     ]
   };
 
@@ -41,7 +42,7 @@ describe('footerService (composed)', () => {
     {
       title: { uk: 'Головна', en: 'Main' },
       links: [
-        { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+        { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
         { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: true }
       ]
     }
@@ -99,14 +100,14 @@ describe('footerService (composed)', () => {
         text: '© 2025 Foundation',
         links: [
           { label: 'Privacy Policy', href: '/privacy' },
-          { label: 'Terms of Use', href: '/terms' }
+          { label: 'Terms of Use', href: ROUTES.TERMS }
         ]
       },
       navigation: [
         {
           title: 'Main',
           links: [
-            { label: 'Home', href: '/', visibility: true },
+            { label: 'Home', href: ROUTES.HOME, visibility: true },
             { label: 'About', href: '/about', visibility: true }
           ]
         }

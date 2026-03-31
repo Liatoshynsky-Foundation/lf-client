@@ -13,6 +13,7 @@ import ArchiveCaseDetails, {
   type ArchiveCaseDetailsLabels,
   type ArchiveCaseDocument
 } from '~/shared/components/blocks/archive-case-details/ArchiveCaseDetails';
+import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 type ArchiveCasePageParams = {
   lang: Locale;
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Readonly<ArchiveCasePageProps
     return createSeoMeta({
       title: 'Архівна справа не знайдена',
       description: 'Запитувану архівну справу не знайдено.',
-      url: `/archive/${fund}/${caseId}`
+      url: getDynamicRoute.archiveCase(fund, caseId)
     });
   }
 
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: Readonly<ArchiveCasePageProps
   return createSeoMeta({
     title,
     description,
-    url: `/archive/${fund}/${caseId}`
+    url: getDynamicRoute.archiveCase(fund, caseId)
   });
 }
 
@@ -70,7 +71,7 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
     notFound();
   }
 
-  const fundHref = `/${lang}/archive/${fund}`;
+  const fundHref = `/${lang}${getDynamicRoute.archiveFund(fund)}`;
 
   const documents: ArchiveCaseDocument[] =
     caseDetails.documents?.map((doc) => ({
@@ -78,7 +79,7 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
       title: doc.text
     })) ?? [];
 
-  const buildCaseHref = (id: string) => `/${lang}/archive/${fund}/${id}`;
+  const buildCaseHref = (id: string) => `/${lang}${getDynamicRoute.archiveCase(fund, id)}`;
 
   const mapAdjacentCase = (caseItem: CaseDetailsDTO['prevCase']): ArchiveAdjacentCase | undefined => {
     if (!caseItem?._id) {

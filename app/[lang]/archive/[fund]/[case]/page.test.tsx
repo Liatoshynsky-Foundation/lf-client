@@ -6,6 +6,7 @@ import ArchiveCasePage, { generateMetadata } from './page';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
 import type { ArchiveCaseDetailsProps } from '~/shared/components/blocks/archive-case-details/ArchiveCaseDetails';
+import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 const mockGetCaseById = jest.fn();
 
@@ -95,7 +96,7 @@ describe('generateMetadata', () => {
     const expectedConfig = {
       title: `Архівна справа ${mockCaseDetails.cipher} – ${mockCaseDetails.name}`,
       description: `Архівна справа «${mockCaseDetails.name}» (${mockCaseDetails.cipher}). Дати: ${mockCaseDetails.dates}.`,
-      url: '/archive/2/op1-spr3'
+      url: getDynamicRoute.archiveCase(2, 'op1-spr3')
     };
 
     expect(mockGetCaseById).toHaveBeenCalledWith('op1-spr3');
@@ -114,7 +115,7 @@ describe('generateMetadata', () => {
     const expectedConfig = {
       title: 'Архівна справа не знайдена',
       description: 'Запитувану архівну справу не знайдено.',
-      url: '/archive/2/missing-id'
+      url: getDynamicRoute.archiveCase(2, 'missing-id')
     };
 
     expect(mockGetCaseById).toHaveBeenCalledWith('missing-id');
@@ -134,6 +135,7 @@ describe('ArchiveCasePage', () => {
 
   it('renders archive case details inside main layout and maps data correctly', async () => {
     mockGetCaseById.mockResolvedValue(mockCaseDetails);
+    const lang = 'en';
 
     const jsx = await ArchiveCasePage({
       params: Promise.resolve({ lang: 'en', fund: '2', case: 'op1-spr3' })
@@ -156,7 +158,7 @@ describe('ArchiveCasePage', () => {
     expect(props.dateRange).toBe(mockCaseDetails.dates);
     expect(props.sheetsCount).toBe(mockCaseDetails.sheets);
     expect(props.pdfUrl).toBe(mockCaseDetails.pdfUrl);
-    expect(props.fundHref).toBe('/en/archive/2');
+    expect(props.fundHref).toBe(`/${lang}${getDynamicRoute.archiveFund('2')}`);
 
     expect(props.documents).toEqual([
       { id: 'doc-1', title: 'Документ А' },
@@ -164,13 +166,13 @@ describe('ArchiveCasePage', () => {
     ]);
 
     expect(props.prevCase).toEqual({
-      href: '/en/archive/2/prev-id',
+      href: `/${lang}${getDynamicRoute.archiveCase('2', 'prev-id')}`,
       indexLabel: 'Ф. 2, оп. 1, спр. 2',
       title: 'Попередня справа'
     });
 
     expect(props.nextCase).toEqual({
-      href: '/en/archive/2/next-id',
+      href: `/${lang}${getDynamicRoute.archiveCase('2', 'next-id')}`,
       indexLabel: 'Ф. 2, оп. 1, спр. 4',
       title: 'Наступна справа'
     });

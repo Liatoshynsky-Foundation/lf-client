@@ -1,3 +1,5 @@
+import { ROUTES } from '../../constants/routes';
+
 export interface Partner {
   id: string;
   link: string;
@@ -22,7 +24,7 @@ const partnerData: Partner[] = [
     id: 'liatoshynsky',
     name: 'Liatoshynsky Space',
     img: 'liatoshynsky-space.png',
-    link: '/'
+    link: ROUTES.HOME
   },
   {
     id: 'masterKlass',

@@ -1,6 +1,7 @@
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -36,5 +37,5 @@ export const artistrySectionData = {
     uk: 'Переглянути усі твори',
     en: 'View All Compositions'
   },
-  buttonLink: '/artistry'
+  buttonLink: ROUTES.ARTISTRY
 };

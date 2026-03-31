@@ -3,6 +3,8 @@ import React from 'react';
 
 import MediaList from './MediaList';
 
+import { getDynamicRoute } from '~/shared/components/constants/routes';
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => (key === 'viewMore' ? 'Переглянути більше' : key)
 }));
@@ -86,7 +88,7 @@ describe('MediaList Component', () => {
     const cards = screen.getAllByTestId('base-card');
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveTextContent('News 1');
-    expect(cards[0]).toHaveAttribute('data-href', '/news/1');
+    expect(cards[0]).toHaveAttribute('data-href', getDynamicRoute.newsItem('1'));
   });
 
   it('should render "Load More" button when hasMore is true', () => {

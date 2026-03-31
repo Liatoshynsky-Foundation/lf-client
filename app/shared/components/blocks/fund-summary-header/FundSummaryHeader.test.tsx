@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { useLocale } from 'next-intl';
 import React from 'react';
 
+import { ROUTES } from '../../constants/routes';
 import { mockFundSummaryData } from './__fixtures__/fundSummaryHeader.fixtures';
 import FundSummaryHeader, { FundSummaryHeaderProps } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
@@ -54,7 +55,7 @@ jest.mock('~/ds-components/link/CustomLink', () => ({
 
 describe('FundSummaryHeader', () => {
   const mockData: FundSummaryHeaderProps = {
-    backLinkUrl: '/support-us',
+    backLinkUrl: ROUTES.SUPPORT_US,
     backLinkText: 'Back to Support Us',
     title: 'Fund Summary',
     data: mockFundSummaryData
@@ -76,7 +77,7 @@ describe('FundSummaryHeader', () => {
     render(<FundSummaryHeader {...mockData} />);
 
     const backLink = screen.getByTestId('custom-link');
-    expect(backLink).toHaveAttribute('href', '/support-us');
+    expect(backLink).toHaveAttribute('href', ROUTES.SUPPORT_US);
     expect(backLink).toHaveTextContent('Back to Support Us');
   });
 

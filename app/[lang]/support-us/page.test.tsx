@@ -8,17 +8,21 @@ jest.mock('~/di/container', () => ({
   createRootContainer: jest.fn()
 }));
 
-jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => ({
-  getActionsHelpData: jest.fn().mockResolvedValue({
-    title: 'Допомогти справами',
-    subtitle: {},
-    paperItems: [],
-    paperButton: {
-      text: 'Запропонувати допомогу',
-      link: '/cooperation'
-    }
-  })
-}));
+jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => {
+  const { ROUTES } = jest.requireActual('~/shared/components/constants/routes');
+
+  return {
+    getActionsHelpData: jest.fn().mockResolvedValue({
+      title: 'Допомогти справами',
+      subtitle: {},
+      paperItems: [],
+      paperButton: {
+        text: 'Запропонувати допомогу',
+        link: ROUTES.COOPERATION
+      }
+    })
+  };
+});
 
 jest.mock('~/shared/components/blocks/actions-help/ActionsHelp', () => {
   const MockActionsHelp = () => <div>Actions Help</div>;

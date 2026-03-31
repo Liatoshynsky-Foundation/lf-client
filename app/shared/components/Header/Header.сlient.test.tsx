@@ -5,6 +5,7 @@ import Header from './Header.client';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 import { HeaderData } from '~/types/types/header.type';
 
+import { ROUTES } from '~/shared/components/constants/routes';
 import { useHideHeader } from '~/shared/hooks/use-hide-header/useHideHeader';
 import { useScrollDirection } from '~/shared/hooks/use-scroll-direction/useScrollDirection';
 
@@ -48,9 +49,9 @@ export const mockHeaderData: HeaderData = {
       title: 'Main Section',
       links: [
         { label: 'Home', href: '/home', visibility: true },
-        { label: 'News', href: '/news', visibility: true },
+        { label: 'News', href: ROUTES.NEWS, visibility: true },
         { label: 'Media', href: '/media', visibility: true },
-        { label: 'Archive', href: '/archive', visibility: true },
+        { label: 'Archive', href: ROUTES.ARCHIVE, visibility: true },
         { label: 'Collaboration', href: '/collaboration', visibility: true }
       ]
     },
@@ -58,9 +59,9 @@ export const mockHeaderData: HeaderData = {
       title: 'Other',
       links: [
         { label: 'Liatoshynsky', href: '/liatoshynsky', visibility: true },
-        { label: 'Biography', href: '/biography', visibility: true },
-        { label: 'Artistry', href: '/artistry', visibility: true },
-        { label: 'Research', href: '/research', visibility: true },
+        { label: 'Biography', href: ROUTES.BIOGRAPHY, visibility: true },
+        { label: 'Artistry', href: ROUTES.ARTISTRY, visibility: true },
+        { label: 'Research', href: ROUTES.RESEARCH, visibility: true },
         { label: 'Foundation', href: '/foundation', visibility: true }
       ]
     }

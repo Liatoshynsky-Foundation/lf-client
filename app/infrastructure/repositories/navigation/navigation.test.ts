@@ -1,5 +1,6 @@
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -25,7 +26,7 @@ describe('navigationRepository', () => {
       {
         title: { uk: 'Головна', en: 'Main' },
         links: [
-          { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+          { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
           { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: false }
         ],
         order: 1
@@ -54,7 +55,7 @@ describe('navigationRepository', () => {
     const invalidDocs = [
       {
         title: { uk: 'Головна' },
-        links: [{ label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true }],
+        links: [{ label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true }],
         order: 1
       }
     ];

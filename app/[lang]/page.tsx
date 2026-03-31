@@ -48,6 +48,7 @@ import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { IntroAnimation } from '~/shared/components/blocks/home-page-hero/animation';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/',
+    url: ROUTES.HOME,
     locale: lang
   });
 }
@@ -132,7 +133,7 @@ export default async function Home({ params }: Readonly<Language>) {
       title: eventsTitle[lang],
       text: eventsMainText[lang],
       ctaLabel: eventsCtaLabel[lang],
-      ctaHref: '/events',
+      ctaHref: `${ROUTES.NEWS}#events`,
       publishDateLabes: eventsPublishDateLabel[lang],
       viewLabel: eventsViewLabel[lang],
       regLabel: eventsRegLabel[lang],

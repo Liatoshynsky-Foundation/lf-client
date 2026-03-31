@@ -20,6 +20,7 @@ import { isProductionMode } from '~/utils/isProductionMode';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/',
+    url: ROUTES.HOME,
     locale: lang
   });
 }

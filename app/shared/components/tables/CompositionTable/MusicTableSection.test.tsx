@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { ROUTES } from '../../constants/routes';
 import MusicTableSection from './MusicTableSection';
 
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
@@ -19,7 +20,7 @@ jest.mock('next-intl', () => ({
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ children, href = '#' }: any) => <a href={href}>{children}</a>,
   useRouter: () => ({ push: jest.fn() }),
-  usePathname: () => '/',
+  usePathname: () => ROUTES.HOME,
   useLocale: () => 'en'
 }));
 
@@ -144,7 +145,7 @@ jest.mock('~/shared/components/get-notes-modal/GetNotesModal', () => ({
 }));
 
 jest.mock('next-intl/navigation', () => ({
-  usePathname: () => '/',
+  usePathname: () => ROUTES.HOME,
   useRouter: () => ({ push: jest.fn() }),
   useLocale: () => 'en',
   redirect: jest.fn()
