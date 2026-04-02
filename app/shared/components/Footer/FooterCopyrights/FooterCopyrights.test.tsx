@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+import { ROUTES } from '../../constants/routes';
 import FooterCopyrights from './FooterCopyrights';
 
 describe('FooterCopyrights', () => {
@@ -7,7 +8,7 @@ describe('FooterCopyrights', () => {
     text: 'Mock text',
     links: [
       { label: 'Mock Privacy', href: '/privacy' },
-      { label: 'Mock Terms', href: '/terms' }
+      { label: 'Mock Terms', href: ROUTES.TERMS }
     ]
   };
 

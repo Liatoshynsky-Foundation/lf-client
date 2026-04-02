@@ -12,6 +12,7 @@ import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import MediaCenter from '~/shared/components/blocks/media-center/MediaCenter';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/news',
+    url: ROUTES.NEWS,
     locale: lang
   });
 }

@@ -4,6 +4,7 @@ import { FundSummaryHeaderData } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 function createDescriptionText(ukText: string, enText: string) {
   return {
@@ -59,7 +60,7 @@ function createFundItem(ukTitle: string, enTitle: string, ukDescription: string,
 }
 
 export async function getFundSummaryHeaderBacklinkUrl(): Promise<string> {
-  return await getNavigationLink('/archive', 'archive');
+  return await getNavigationLink(ROUTES.ARCHIVE, 'archive');
 }
 
 export const fundSummaryBacklinkText: Record<Locale, string> = {

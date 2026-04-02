@@ -5,6 +5,7 @@ import { infoDoc, partnersDoc, partnershipDoc, supportDoc } from './collaboratio
 import { styles } from './CollaborationInfo.styles';
 
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+import { ROUTES } from '~/shared/components/constants/routes';
 import TitleContentBlock from '~/shared/components/design-system/all-components/title-content-block/TittleContentBlock';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
 
@@ -35,7 +36,7 @@ export default function CollaborationInfo() {
         textSx={styles.textStyle}
         textContainerSx={{ marginBottom: { xs: '24px', md: '0px' } }}
         buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
-        link="/support-us"
+        link={ROUTES.SUPPORT_US}
       />
       <TitleContentBlock
         containerSx={{ mt: { xs: '56px', sm: '96px', md: '112px' } }}

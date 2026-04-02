@@ -1,10 +1,12 @@
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 export const footerData = {
   text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
   links: [
     { label: 'Політика конфіденційності', href: '/privacy' },
-    { label: 'Умови користування сайтом', href: '/terms' },
+    { label: 'Умови користування сайтом', href: ROUTES.TERMS },
     { label: 'Інформація для медіа / партнерів', href: '/media' }
   ]
 };
@@ -19,16 +21,16 @@ export const sections = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',
     links: [
-      { label: 'Життєпис', href: '/biography' },
-      { label: 'Творчість', href: '/artistry' },
-      { label: 'Дослідження та наукові роботи', href: '/research' }
+      { label: 'Життєпис', href: ROUTES.BIOGRAPHY },
+      { label: 'Творчість', href: ROUTES.ARTISTRY },
+      { label: 'Дослідження та наукові роботи', href: ROUTES.RESEARCH }
     ]
   },
   {
     title: 'ПРО ФУНДАЦІЮ',
     links: [
-      { label: 'Про нас', href: '/about-us' },
-      { label: 'Новини', href: '/news' },
+      { label: 'Про нас', href: ROUTES.ABOUT_US },
+      { label: 'Новини', href: ROUTES.NEWS },
       { label: 'Ми у ЗМІ', href: '/media-about-us' }
     ]
   },

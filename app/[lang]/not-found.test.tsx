@@ -3,6 +3,8 @@ import React from 'react';
 
 import { PageNotFound } from './[...unknown-route]/page-not-found/PageNotFound';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
@@ -28,6 +30,6 @@ describe('NotFound', () => {
     ).toBeInTheDocument();
     const link = screen.getByRole('link', { name: /"Return to home/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/');
+    expect(link).toHaveAttribute('href', ROUTES.HOME);
   });
 });

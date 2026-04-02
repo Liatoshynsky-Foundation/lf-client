@@ -15,6 +15,7 @@ import { getActionsHelpData } from '~/shared/components/blocks/actions-help/Acti
 import Faq from '~/shared/components/blocks/FAQ/FAQ';
 import { faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/shared/components/blocks/support-foundation/SupportFoundation';
+import { ROUTES } from '~/shared/components/constants/routes';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/support-us',
+    url: ROUTES.SUPPORT_US,
     locale: lang
   });
 }

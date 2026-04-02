@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 type Localized<T> = {
   uk: T;
   en: T;
@@ -39,6 +41,6 @@ export const foundationButtonText: LocalizedString = {
 
 export const foundationSectionData = {
   imageSrc: '/images/foundation-section.jpg',
-  buttonLink: '/about-us',
+  buttonLink: ROUTES.ABOUT_US,
   caption: ''
 };

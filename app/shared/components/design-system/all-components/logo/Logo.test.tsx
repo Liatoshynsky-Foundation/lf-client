@@ -3,6 +3,8 @@ import React from 'react';
 
 import Logo from './Logo';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
 }));
@@ -23,7 +25,7 @@ describe('Logo component', () => {
 
     expect(logo).toBeInTheDocument();
     expect(parent).toBeInTheDocument();
-    expect(parent).toHaveAttribute('href', '/');
+    expect(parent).toHaveAttribute('href', ROUTES.HOME);
   });
 
   it('renders office variant without link', () => {

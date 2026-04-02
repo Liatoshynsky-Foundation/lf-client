@@ -8,7 +8,7 @@ let searchParamsValue = new URLSearchParams('');
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     replace: jest.fn((url: string) => {
-      const search = url.split('?')[1];
+      const search = url.includes('?') ? url.split('?')[1] : '';
       searchParamsValue = new URLSearchParams(search || '');
     })
   }),

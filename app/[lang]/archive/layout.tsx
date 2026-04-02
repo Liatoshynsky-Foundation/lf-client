@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import type { Language } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/archive',
+    url: ROUTES.ARCHIVE,
     locale: lang
   });
 }

@@ -6,6 +6,7 @@ import NewsSection from './NewsSection';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 // Mock dependencies
 jest.mock('next-intl/server', () => ({
@@ -92,7 +93,7 @@ const mockProps = {
     uk: 'Переглянути усі новини',
     en: 'View All News'
   },
-  buttonLink: '/news',
+  buttonLink: ROUTES.NEWS,
   locale: 'uk' as Locale
 };
 
