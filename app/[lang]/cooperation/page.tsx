@@ -19,6 +19,7 @@ import { collaborationIntroPageData } from '~/shared/components/blocks/collabora
 import OfferCollaboration from '~/shared/components/blocks/collaboration/offer-collaboration/OfferCollaboration';
 import OurPartners from '~/shared/components/blocks/our-partners/OurPartners';
 import PartnershipFormats from '~/shared/components/blocks/partnership-formats/PartnershipFormats';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/cooperation',
+    url: ROUTES.COOPERATION,
     locale: lang
   });
 }

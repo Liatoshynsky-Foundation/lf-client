@@ -8,6 +8,8 @@ import Button from '~/ds-components/button/Button';
 
 import { styles } from './AudioPlayerPopover.styles';
 import { calculateProgress, formatTime } from '~/utils/audioPlayer';
+
+import { ROUTES } from '~/shared/components/constants/routes';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
@@ -111,7 +113,7 @@ const AudioPlayerPopover = ({
                 />
               </IconButton>
 
-              <Button fullWidth variant="contained" link="/artistry" sx={styles.allTracksButton}>
+              <Button fullWidth variant="contained" link={ROUTES.ARTISTRY} sx={styles.allTracksButton}>
                 Усі твори
               </Button>
             </Box>

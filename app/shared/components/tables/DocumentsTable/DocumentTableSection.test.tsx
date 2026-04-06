@@ -4,6 +4,8 @@ import React from 'react';
 import DocumentTableSection from './DocumentTableSection';
 import { DocumentRecord } from '~/types/types/document.types';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
@@ -19,7 +21,7 @@ jest.mock('next/navigation', () => ({
     back: jest.fn(),
     prefetch: jest.fn()
   }),
-  usePathname: () => '/uk/archive/fund-1'
+  usePathname: () => `/uk${ROUTES.ARCHIVE}/fund-1`
 }));
 
 const mockUseBreakpoints = jest.fn();

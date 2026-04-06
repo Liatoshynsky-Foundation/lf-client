@@ -18,6 +18,7 @@ import { isPathWithin, normalizePath } from '~/lib/utils/navPath';
 import ChevronDown from '~/public/icons/chevron-down.svg';
 import ChevronUp from '~/public/icons/chevron-up.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export interface DropdownItem {
   label: string;
@@ -78,7 +79,7 @@ const DesktopNav = ({
 
     if (groupIndex !== -1) {
       setActiveButton(groupIndex);
-    } else if (currentPath === '/') {
+    } else if (currentPath === ROUTES.HOME) {
       setActiveButton(1);
     } else {
       setActiveButton(undefined);

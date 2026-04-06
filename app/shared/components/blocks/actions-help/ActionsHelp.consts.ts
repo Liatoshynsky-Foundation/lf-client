@@ -2,6 +2,7 @@ import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export const actionsHelpPageData = {
   title: 'Допомогти справами',
@@ -43,14 +44,14 @@ export const actionsHelpPageData = {
   ],
   paperButton: {
     text: 'Запропонувати допомогу',
-    link: '/'
+    link: ROUTES.HOME
   }
 };
 
 export async function getActionsHelpData() {
-  let link = '/';
+  let link: string = ROUTES.HOME;
   try {
-    link = await getNavigationLink('/cooperation', 'cooperation');
+    link = await getNavigationLink(ROUTES.COOPERATION, 'cooperation');
   } catch (err) {
     console.warn('Could not get navigation link:', err);
   }

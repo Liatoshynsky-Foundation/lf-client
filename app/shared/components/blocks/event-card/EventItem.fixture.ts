@@ -1,3 +1,4 @@
+import { getDynamicRoute, ROUTES } from '../../constants/routes';
 import type { EventItemProps } from './EventItem';
 
 export interface EventItemFixture {
@@ -20,11 +21,11 @@ export const MOCK_EVENT_ITEMS: EventItemFixture[] = [
         src: '/news-mock-images/events2.png',
         alt: 'Портрет композитора Бориса Лятошинського'
       },
-      href: '/uk/news/liatoshynsky-birthday-131',
+      href: `/uk${getDynamicRoute.newsItem('liatoshynsky-birthday-131')}`,
       actions: [
         {
           label: 'Детальніше',
-          href: '/uk/news/liatoshynsky-birthday-131'
+          href: `/uk${getDynamicRoute.newsItem('liatoshynsky-birthday-131')}`
         }
       ]
     }
@@ -43,15 +44,15 @@ export const MOCK_EVENT_ITEMS: EventItemFixture[] = [
         src: '/news-mock-images/events1.jpg',
         alt: 'Офіційне відкриття сайту Фундації Лятошинського'
       },
-      href: '/uk/news/foundation-website-launch',
+      href: `/uk${getDynamicRoute.newsItem('foundation-website-launch')}`,
       actions: [
         {
           label: 'Детальніше',
-          href: '/uk/news/foundation-website-launch'
+          href: `/uk${getDynamicRoute.newsItem('foundation-website-launch')}`
         },
         {
           label: 'Відвідати сайт',
-          href: '/'
+          href: ROUTES.HOME
         }
       ]
     }

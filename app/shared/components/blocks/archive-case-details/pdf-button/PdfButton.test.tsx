@@ -2,9 +2,11 @@ import { render, screen } from '@testing-library/react';
 
 import PdfButton, { type PdfButtonProps } from './PdfButton';
 
+import { getDynamicRoute } from '~/shared/components/constants/routes';
+
 describe('PdfButton', () => {
   const defaultProps: PdfButtonProps = {
-    href: '/uk/archive/fund/2/case/op1-spr2',
+    href: `/uk${getDynamicRoute.archiveCase(2, 'op1-spr2')}`,
     label: 'View PDF',
     dataTestId: 'PdfButton-test'
   };

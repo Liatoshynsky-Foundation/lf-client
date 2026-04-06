@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { useLocale } from 'next-intl';
 import React from 'react';
 
-import FundSummaryHeader from './FundSummaryHeader';
-import * as realContent from './FundSummaryHeader.content';
+import { ROUTES } from '../../constants/routes';
+import { mockFundSummaryData } from './__fixtures__/fundSummaryHeader.fixtures';
+import FundSummaryHeader, { FundSummaryHeaderProps } from './FundSummaryHeader';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
@@ -58,13 +59,63 @@ jest.mock('~/ds-components/link/CustomLink', () => ({
 }));
 
 describe('FundSummaryHeader', () => {
+  const mockData: FundSummaryHeaderProps = {
+    backLinkUrl: ROUTES.SUPPORT_US,
+    backLinkText: 'Back to Support Us',
+    title: 'Fund Summary',
+    data: mockFundSummaryData
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
     (useLocale as jest.Mock).mockReturnValue('en');
   });
 
-  it('should render correctly with REAL data and cover content functions', async () => {
-    (getNavigationLink as jest.Mock).mockResolvedValue('/archive');
+  it('should render the component with all main elements', () => {
+    render(<FundSummaryHeader {...mockData} />);
+
+    expect(screen.getByTestId('custom-link')).toBeInTheDocument();
+    expect(screen.getByTestId('section-title')).toBeInTheDocument();
+    expect(screen.getAllByTestId('tip-tap-content').length).toBeGreaterThan(0);
+  });
+
+  it('should render the back link with correct URL and text', () => {
+    render(<FundSummaryHeader {...mockData} />);
+
+    const backLink = screen.getByTestId('custom-link');
+    expect(backLink).toHaveAttribute('href', ROUTES.SUPPORT_US);
+    expect(backLink).toHaveTextContent('Back to Support Us');
+  });
+
+  it('should render the back link icon', () => {
+    render(<FundSummaryHeader {...mockData} />);
+
+    const icon = screen.getByAltText('');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute('src', '/icons/arrow-left.svg');
+  });
+
+  it('should render the title', () => {
+    render(<FundSummaryHeader {...mockData} />);
+
+    const title = screen.getByTestId('section-title');
+    expect(title).toHaveTextContent('Fund Summary');
+  });
+
+  it('should render all items in English locale', () => {
+    jest.mocked(useLocale).mockReturnValue('en');
+
+    render(<FundSummaryHeader {...mockData} />);
+
+    expect(screen.getByText('Fund Name:')).toBeInTheDocument();
+    expect(screen.getByText('Fund Purpose:')).toBeInTheDocument();
+    expect(screen.getByText('Beneficiaries:')).toBeInTheDocument();
+  });
+
+  it('should render all items in Ukrainian locale', () => {
+    jest.mocked(useLocale).mockReturnValue('uk');
+
+    render(<FundSummaryHeader {...mockData} />);
 
     const backlink = await realContent.getFundSummaryHeaderBacklinkUrl();
     expect(backlink).toBe('/archive');

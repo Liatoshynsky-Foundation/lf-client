@@ -1,5 +1,6 @@
 import { Navigation } from '~/infrastructure/models/navigation/navigation';
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -25,12 +26,22 @@ describe('navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  describe('newNavigationRepository', () => {
-    it('should return the repository object', () => {
-      const repo = newNavigationRepository();
-      expect(repo).toBeDefined();
-      expect(typeof repo.getNavigation).toBe('function');
-      expect(typeof repo.getSpecialNavigation).toBe('function');
+  it('should return parsed navigation data with raw translations', async () => {
+    const mockDocs = [
+      {
+        title: { uk: 'Головна', en: 'Main' },
+        links: [
+          { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
+          { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: false }
+        ],
+        order: 1
+      }
+    ];
+
+    (Navigation.find as jest.Mock).mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue(mockDocs)
+      })
     });
   });
 
@@ -66,7 +77,19 @@ describe('navigationRepository', () => {
 
       const result = await navigationRepository.getNavigation();
 
-      expect(result).toEqual([]);
+  it('should throw if data does not match schema', async () => {
+    const invalidDocs = [
+      {
+        title: { uk: 'Головна' },
+        links: [{ label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true }],
+        order: 1
+      }
+    ];
+
+    (Navigation.find as jest.Mock).mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue(invalidDocs)
+      })
     });
 
     it('should throw if data does not match schema', async () => {

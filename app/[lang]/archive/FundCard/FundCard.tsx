@@ -5,6 +5,7 @@ import { Box, Typography } from '@mui/material';
 import { styles } from './FundCard.styles';
 
 import { Link } from '~/i18n/navigation';
+import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 export interface FundCardProps {
   id: number;
@@ -14,7 +15,7 @@ export interface FundCardProps {
 
 export default function FundCard({ id, number, title }: Readonly<FundCardProps>) {
   return (
-    <Link href={`/archive/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href={getDynamicRoute.archiveFund(id)} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Box component="article" sx={styles.card} data-testid="FundCard" aria-label={`${number}: ${title}`}>
         <Typography sx={styles.fundNumber} data-testid="FundCard-number">
           {number}

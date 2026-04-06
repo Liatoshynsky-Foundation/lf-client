@@ -11,6 +11,7 @@ import { styles } from './LiatoshynskyOffice.styles';
 import { ILiatoshynskyOffice } from '~/types/page/about-us.types';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
@@ -24,7 +25,7 @@ const LiatoshynskyOffice = async ({
   sx?: SxProps<Theme>;
 }) => {
   const { quote } = data;
-  const archiveUrl = await getNavigationLink('/archive', 'archive');
+  const archiveUrl = await getNavigationLink(ROUTES.ARCHIVE, 'archive');
 
   return (
     <Box sx={{ ...(styles.mainContainer as object), ...(sx as object) }} data-testid="LiatoshynskyOffice">

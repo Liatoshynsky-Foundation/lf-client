@@ -1,5 +1,7 @@
 import { createSeoMeta } from './createSeoMeta';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 const localBaseUrl = 'http://localhost:3000';
 const prodBaseUrl = 'https://lf-client.com';
 
@@ -16,14 +18,14 @@ describe('createSeoMeta', () => {
     const meta = createSeoMeta({
       title: 'Test Title',
       description: 'Test Description',
-      url: '/artistry',
+      url: ROUTES.ARTISTRY,
       imageUrl: '/images/test.jpg',
       locale: 'uk'
     });
 
     expect(meta.title).toBe('Test Title');
     expect(meta.description).toBe('Test Description');
-    expect(meta.openGraph?.url).toBe(`${localBaseUrl}/uk/artistry`);
+    expect(meta.openGraph?.url).toBe(`${localBaseUrl}/uk${ROUTES.ARTISTRY}`);
     expect(meta.openGraph?.locale).toBe('uk_UA');
     expect(meta.openGraph?.alternateLocale).toBe('en_US');
 
@@ -45,7 +47,7 @@ describe('createSeoMeta', () => {
     const meta = createSeoMeta({
       title: 'Prod Title',
       description: 'Prod Description',
-      url: '/',
+      url: ROUTES.HOME,
       locale: 'en'
     });
 

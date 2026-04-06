@@ -7,6 +7,8 @@ import ArchiveCaseDetails, {
   type ArchiveCaseDocument
 } from './ArchiveCaseDetails';
 
+import { getDynamicRoute } from '~/shared/components/constants/routes';
+
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: () => <span data-testid="SvgMock" />
 }));
@@ -18,13 +20,13 @@ describe('ArchiveCaseDetails', () => {
   ];
 
   const prevCase: ArchiveAdjacentCase = {
-    href: '/uk/archive/2/op1-spr2',
+    href: `/uk${getDynamicRoute.archiveCase(2, 'op1-spr2')}`,
     indexLabel: 'Ф. 2, оп. 1, спр. 2',
     title: 'Попередня справа'
   };
 
   const nextCase: ArchiveAdjacentCase = {
-    href: '/uk/archive/2/op1-spr4',
+    href: `/uk${getDynamicRoute.archiveCase(2, 'op1-spr4')}`,
     indexLabel: 'Ф. 2, оп. 1, спр. 4',
     title: 'Наступна справа'
   };
@@ -47,7 +49,7 @@ describe('ArchiveCaseDetails', () => {
     sheetsCount: 26,
     pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
     documents,
-    fundHref: '/uk/archive/2',
+    fundHref: `/uk${getDynamicRoute.archiveFund(2)}`,
     prevCase,
     nextCase,
     labels

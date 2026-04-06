@@ -1,13 +1,14 @@
 import type { Locale } from 'next-intl';
 
 import { createHeaderService } from '~/services/header/headerService';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 describe('headerService (composed)', () => {
   const mockNavigationRaw = [
     {
       title: { uk: 'Головна', en: 'Main' },
       links: [
-        { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+        { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
         { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: true }
       ]
     }
@@ -52,7 +53,7 @@ describe('headerService (composed)', () => {
         {
           title: 'Main',
           links: [
-            { label: 'Home', href: '/', visibility: true },
+            { label: 'Home', href: ROUTES.HOME, visibility: true },
             { label: 'About', href: '/about', visibility: true }
           ]
         }

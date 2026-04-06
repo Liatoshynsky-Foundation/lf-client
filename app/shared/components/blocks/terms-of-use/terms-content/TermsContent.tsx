@@ -17,6 +17,7 @@ import {
 } from '../terms.const.';
 import ButtonContentBlock from './button-content-block/ButtonContentBlock';
 
+import { ROUTES } from '~/shared/components/constants/routes';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import { SkewedBlock } from '~/shared/components/design-system/all-components/skewed-block/SkewedBlock';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
@@ -37,7 +38,7 @@ const TermsContent = () => {
       <ButtonContentBlock
         buttonText={isMobile ? t('buttons.library.short') : t('buttons.library.full')}
         buttonColor="tertiary"
-        link={'/artistry'}
+        link={ROUTES.ARTISTRY}
         content={testDoc[locale]}
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{ maxWidth: { xs: '258px', sm: '308px' }, minWidth: { xs: '258px', sm: '308px' } }}
@@ -46,7 +47,7 @@ const TermsContent = () => {
       <ButtonContentBlock
         buttonText={isMobile ? t('buttons.archive.short') : t('buttons.archive.full')}
         buttonColor="tertiary"
-        link={'/archive'}
+        link={ROUTES.ARCHIVE}
         content={archiveDoc[locale]}
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{

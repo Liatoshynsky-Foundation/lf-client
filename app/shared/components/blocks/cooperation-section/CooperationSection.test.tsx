@@ -6,6 +6,7 @@ import CooperationSection from './CooperationSection';
 import { cooperationSectionData } from './CooperationSection.data';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'en'
@@ -44,12 +45,37 @@ jest.mock('../our-partners-slider', () => {
 });
 
 describe('CooperationSection', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  const mockProps = {
+    title: {
+      uk: 'Співпраця',
+      en: 'Cooperation'
+    },
+    textContent: {
+      uk: makeDoc([normalText('Текст українською')]),
+      en: makeDoc([normalText('Text in English')])
+    },
+    buttonText: {
+      uk: 'Детальніше',
+      en: 'Learn More'
+    },
+    buttonLink: ROUTES.COOPERATION,
+    partners: partnersMock.slice(0, 3)
+  };
+
+  it('should render section title with correct locale', () => {
+    render(<CooperationSection {...mockProps} />);
+
+    expect(screen.getByTestId('section-title')).toBeInTheDocument();
+    expect(screen.getByTestId('section-title')).toHaveTextContent('Cooperation');
   });
 
-  it('should render correctly with REAL data from .data.ts (100% coverage fix)', () => {
-    render(<CooperationSection {...cooperationSectionData} />);
+  it('should render button content block with correct data', () => {
+    render(<CooperationSection {...mockProps} />);
+
+    expect(screen.getByTestId('button-content-block')).toBeInTheDocument();
+    expect(screen.getByTestId('button-link')).toHaveTextContent('Learn More');
+    expect(screen.getByTestId('button-link')).toHaveAttribute('href', ROUTES.COOPERATION);
+  });
 
     const title = screen.getByTestId('section-title');
     expect(title).toBeInTheDocument();

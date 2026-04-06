@@ -10,23 +10,21 @@ jest.mock('~/di/container', () => ({
   createRootContainer: jest.fn()
 }));
 
-jest.mock('~/utils/isProductionMode', () => ({
-  isProductionMode: jest.fn()
-}));
+jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => {
+  const { ROUTES } = jest.requireActual('~/shared/components/constants/routes');
 
-jest.mock('next-intl/server', () => ({
-  getTranslations: jest.fn().mockResolvedValue((key: string) => key),
-  setRequestLocale: jest.fn()
-}));
-
-jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => ({
-  getActionsHelpData: jest.fn().mockResolvedValue({
-    title: 'Допомогти справами',
-    subtitle: {},
-    paperItems: [],
-    paperButton: { text: 'Link', link: '/cooperation' }
-  })
-}));
+  return {
+    getActionsHelpData: jest.fn().mockResolvedValue({
+      title: 'Допомогти справами',
+      subtitle: {},
+      paperItems: [],
+      paperButton: {
+        text: 'Запропонувати допомогу',
+        link: ROUTES.COOPERATION
+      }
+    })
+  };
+});
 
 jest.mock('~/shared/components/blocks/actions-help/ActionsHelp', () => {
   const MockActionsHelp = () => <div>Actions Help</div>;

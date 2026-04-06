@@ -8,7 +8,7 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
-import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 // Mock dependencies
 // yep, here we are mocking :)
@@ -65,10 +65,19 @@ const mockTipTapContent: TipTapDoc = {
 };
 
 const mockProps = {
-  title: { uk: 'Новини', en: 'News' },
-  textContent: { uk: mockTipTapContent, en: mockTipTapContent },
-  buttonText: { uk: 'Усі', en: 'All' },
-  buttonLink: '/news',
+  title: {
+    uk: 'Новини Фундації',
+    en: 'Foundation News'
+  },
+  textContent: {
+    uk: mockTipTapContent,
+    en: mockTipTapContent
+  },
+  buttonText: {
+    uk: 'Переглянути усі новини',
+    en: 'View All News'
+  },
+  buttonLink: ROUTES.NEWS,
   locale: 'uk' as Locale
 };
 

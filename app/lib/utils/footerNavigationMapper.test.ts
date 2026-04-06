@@ -1,5 +1,7 @@
 import { type FooterNavSection, mapFooterNavigation } from './footerNavigationMapper';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => {
     const mock: Record<string, string> = {
@@ -22,7 +24,7 @@ describe('mapFooterNavigation', () => {
         title: 'Section 1',
         links: [
           { label: 'About', href: '/about' },
-          { label: 'Contact', href: '/contacts' }
+          { label: 'Contact', href: ROUTES.CONTACTS }
         ]
       }
     ];
@@ -39,7 +41,7 @@ describe('mapFooterNavigation', () => {
         title: 'Foundation',
         links: [
           { label: 'About', href: '/about' },
-          { label: 'News', href: '/news' }
+          { label: 'News', href: ROUTES.NEWS }
         ]
       }
     ];
@@ -48,9 +50,9 @@ describe('mapFooterNavigation', () => {
 
     expect(result[0].links).toEqual([
       { label: 'About', href: '/about' },
-      { label: 'News', href: '/news#news' },
-      { label: 'Events', href: '/news#events' },
-      { label: 'Media About Us', href: '/news#media' }
+      { label: 'News', href: `${ROUTES.NEWS}#news` },
+      { label: 'Events', href: `${ROUTES.NEWS}#events` },
+      { label: 'Media About Us', href: `${ROUTES.NEWS}#media` }
     ]);
   });
 
@@ -60,12 +62,12 @@ describe('mapFooterNavigation', () => {
         title: 'Foundation',
         links: [
           { label: 'About', href: '/about' },
-          { label: 'News', href: '/news' }
+          { label: 'News', href: ROUTES.NEWS }
         ]
       },
       {
         title: 'Misc',
-        links: [{ label: 'Archive', href: '/archive' }]
+        links: [{ label: 'Archive', href: ROUTES.ARCHIVE }]
       }
     ];
 
@@ -78,26 +80,26 @@ describe('mapFooterNavigation', () => {
     const sections: FooterNavSection[] = [
       {
         title: 'Foundation',
-        links: [{ label: 'News', href: '/news' }]
+        links: [{ label: 'News', href: ROUTES.NEWS }]
       },
       {
         title: 'Another',
-        links: [{ label: 'News again', href: '/news' }]
+        links: [{ label: 'News again', href: ROUTES.NEWS }]
       }
     ];
 
     const result = await mapFooterNavigation(sections);
 
     expect(result[0].links).toEqual([
-      { label: 'News', href: '/news#news' },
-      { label: 'Events', href: '/news#events' },
-      { label: 'Media About Us', href: '/news#media' }
+      { label: 'News', href: `${ROUTES.NEWS}#news` },
+      { label: 'Events', href: `${ROUTES.NEWS}#events` },
+      { label: 'Media About Us', href: `${ROUTES.NEWS}#media` }
     ]);
 
     expect(result[1].links).toEqual([
-      { label: 'News', href: '/news#news' },
-      { label: 'Events', href: '/news#events' },
-      { label: 'Media About Us', href: '/news#media' }
+      { label: 'News', href: `${ROUTES.NEWS}#news` },
+      { label: 'Events', href: `${ROUTES.NEWS}#events` },
+      { label: 'Media About Us', href: `${ROUTES.NEWS}#media` }
     ]);
   });
 });

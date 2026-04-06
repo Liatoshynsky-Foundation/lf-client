@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import { createElement, ReactNode } from 'react';
+
+import { ROUTES } from '~/shared/components/constants/routes';
 jest.mock('swiper/css', () => ({}));
 jest.mock('swiper/css/navigation', () => ({}));
 jest.mock('swiper/css/pagination', () => ({}));
@@ -32,9 +34,9 @@ jest.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
     Link: ({ children, href }: { children: ReactNode; href?: string }) => createElement('a', { href }, children),
     redirect: () => undefined,
-    usePathname: () => '/',
+    usePathname: () => ROUTES.HOME,
     useRouter: () => ({}),
-    getPathname: () => '/'
+    getPathname: () => ROUTES.HOME
   })
 }));
 
