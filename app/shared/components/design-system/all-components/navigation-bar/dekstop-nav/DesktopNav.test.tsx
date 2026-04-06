@@ -4,9 +4,10 @@ import type { SVGProps } from 'react';
 import DesktopNav from './DesktopNav';
 
 import type { NavigationDTO } from '~/domain/dto/navigation.dto';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('~/i18n/navigation', () => ({
-  usePathname: jest.fn(() => '/')
+  usePathname: jest.fn(() => ROUTES.HOME)
 }));
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg.tsx', () => ({
@@ -30,13 +31,13 @@ const navLabels: NavigationDTO[] = [
     title: 'Фундація',
     links: [
       { label: 'Про Фундацію', href: '/about', visibility: true },
-      { label: 'Новини', href: '/news', visibility: true },
+      { label: 'Новини', href: ROUTES.NEWS, visibility: true },
       { label: 'Медіа про нас', href: '/media', visibility: true }
     ]
   },
   {
     title: 'Архів',
-    links: [{ label: 'Архів', href: '/archive', visibility: true }]
+    links: [{ label: 'Архів', href: ROUTES.ARCHIVE, visibility: true }]
   },
   {
     title: 'Співпраця',
@@ -102,7 +103,7 @@ describe('DesktopNav', () => {
     const archiveLink = screen.getByText('Архів').closest('a');
     const collabLink = screen.getByText('Співпраця').closest('a');
 
-    expect(archiveLink).toHaveAttribute('href', '/archive');
+    expect(archiveLink).toHaveAttribute('href', ROUTES.ARCHIVE);
     expect(collabLink).toHaveAttribute('href', '/collaboration');
   });
 
@@ -110,7 +111,7 @@ describe('DesktopNav', () => {
     render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
     fireEvent.click(screen.getByText('Фундація'));
 
-    expect(screen.getByText('Новини').closest('a')).toHaveAttribute('href', '/news');
+    expect(screen.getByText('Новини').closest('a')).toHaveAttribute('href', ROUTES.NEWS);
     expect(screen.getByText('Медіа про нас').closest('a')).toHaveAttribute('href', '/media');
   });
 

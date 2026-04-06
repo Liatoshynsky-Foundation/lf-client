@@ -1,6 +1,7 @@
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { boldText, linkText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -94,11 +95,11 @@ export const rightsManagementDoc: LocalizedTipTapDoc = {
 export const privacyDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText('Уся персональна інформація захищена відповідно до '),
-    linkText('Політики конфіденційності', '/privacy-policy')
+    linkText('Політики конфіденційності', ROUTES.PRIVACY_POLICY)
   ]),
   en: makeDoc([
     normalText('All personal information is protected in accordance with the '),
-    linkText('Privacy Policy', '/privacy-policy')
+    linkText('Privacy Policy', ROUTES.PRIVACY_POLICY)
   ])
 };
 
@@ -107,14 +108,14 @@ export const supportDoc: LocalizedTipTapDoc = {
     normalText(
       'Ми прагнемо забезпечити стабільну роботу сайту. Якщо ви помітили технічну помилку або маєте труднощі з доступом до матеріалів — '
     ),
-    linkText('напишіть нам', '/contacts'),
+    linkText('напишіть нам', ROUTES.CONTACTS),
     normalText('.')
   ]),
   en: makeDoc([
     normalText(
       'We strive to ensure the stable operation of the site. If you notice a technical error or have difficulty accessing the materials — '
     ),
-    linkText('contact us', '/contacts'),
+    linkText('contact us', ROUTES.CONTACTS),
     normalText('.')
   ])
 };

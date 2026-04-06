@@ -25,22 +25,33 @@ export const styles = {
   },
 
   xsGrid: {
-    display: { xs: 'grid', sm: 'none' },
-    justifyContent: 'center',
+    display: { xs: 'flex', sm: 'none' },
+    justifyContent: 'flex-start',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    touchAction: 'pan-x',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
     alignItems: 'center',
-    gap: '12px',
-    gridTemplateColumns: 'repeat(2, 1fr)'
+    gap: '4px',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    }
   },
 
   logoWrapper: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '112px',
+    height: '60px',
+    flexShrink: 0
   },
 
   logoImage: {
     objectFit: 'contain',
-    height: 'auto',
-    maxHeight: '112px',
+    height: '100%',
+    maxHeight: '60px',
     width: '100%'
   }
 };

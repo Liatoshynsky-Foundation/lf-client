@@ -24,6 +24,7 @@ import {
   yermolenkoLinks
 } from '~/[lang]/war-in-ukraine/war.const';
 import MainLayout from '~/layouts/main-layout/MainLayout';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   return createSeoMeta({
     title: t('title'),
     description: t('description'),
-    url: '/war-in-ukraine',
+    url: ROUTES.WAR_IN_UKRAINE,
     locale: lang
   });
 }
@@ -65,6 +66,7 @@ export default function WarInUkraine() {
         buttons={yermolenkoLinks}
         showMainButton={false}
         sx={{ marginBottom: 12 }}
+        showShortButtonsText={false}
       />
 
       <VolunteerDonation
@@ -72,6 +74,7 @@ export default function WarInUkraine() {
         paymentMethods={carsForAFU}
         imageSrc={carsForAFUData.imageSrc}
         caption={carsForAFUData.caption[locale]}
+        imageAlt="Портрет Володимира Єрмоленка з дружиною Тетяною Огарковою"
       />
     </MainLayout>
   );

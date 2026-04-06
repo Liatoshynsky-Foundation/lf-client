@@ -21,9 +21,7 @@ export default function ExcerptBlock({ quote, source, dataTestId }: ExcerptBlock
       <Typography sx={styles.quoteContainer} variant="customItalic18" fontWeight={700}>
         {quote}
       </Typography>
-      <Typography variant="customItalic14" fontWeight={500}>
-        {source}
-      </Typography>
+      <Typography fontWeight={500}>{source}</Typography>
     </Box>
   ) : (
     <Box sx={styles.desktopView} data-testid={dataTestId}>
@@ -34,7 +32,7 @@ export default function ExcerptBlock({ quote, source, dataTestId }: ExcerptBlock
       <Typography sx={styles.sourceText(isTablet)} variant="customItalic14" fontWeight={500}>
         {source}
       </Typography>
-      <Typography variant="h5" fontStyle={'italic'} sx={styles.quoteText}>
+      <Typography variant="h5" sx={styles.quoteText}>
         {quote}
       </Typography>
     </Box>

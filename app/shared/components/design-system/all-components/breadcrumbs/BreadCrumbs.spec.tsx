@@ -3,6 +3,8 @@ import * as nextNavigation from 'next/navigation';
 
 import CustomBreadcrumbs from './CustomBreadCrumbs';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next/navigation'),
   usePathname: jest.fn()
@@ -14,7 +16,7 @@ describe('CustomBreadcrumbs', () => {
   });
 
   it('should render Custom Breadcrumbs component', () => {
-    (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
+    (nextNavigation.usePathname as jest.Mock).mockReturnValue(ROUTES.HOME);
 
     render(<CustomBreadcrumbs />);
     const breadcrumbNav = screen.getByRole('navigation');
@@ -22,7 +24,7 @@ describe('CustomBreadcrumbs', () => {
   });
 
   it('should render Home page link', () => {
-    (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
+    (nextNavigation.usePathname as jest.Mock).mockReturnValue(ROUTES.HOME);
 
     render(<CustomBreadcrumbs />);
     expect(screen.getByRole('link', { name: /home page/i })).toBeInTheDocument();
@@ -39,7 +41,7 @@ describe('CustomBreadcrumbs', () => {
     expect(screen.queryByRole('link', { name: /level3/i })).not.toBeInTheDocument();
   });
   it('should render Typography  if the element is the last in the breadcrumb', () => {
-    (nextNavigation.usePathname as jest.Mock).mockReturnValue('/about-us');
+    (nextNavigation.usePathname as jest.Mock).mockReturnValue(ROUTES.ABOUT_US);
     render(<CustomBreadcrumbs />);
     expect(screen.getByRole('link', { name: /home page/i })).toBeInTheDocument();
     const typography = screen.getByText('about-us');
@@ -47,7 +49,7 @@ describe('CustomBreadcrumbs', () => {
   });
 
   it('should renders nothing for just base path', () => {
-    (nextNavigation.usePathname as jest.Mock).mockReturnValue('/');
+    (nextNavigation.usePathname as jest.Mock).mockReturnValue(ROUTES.HOME);
 
     render(<CustomBreadcrumbs />);
     expect(screen.queryByText('not exisitng breadcrumb1')).not.toBeInTheDocument();

@@ -4,6 +4,7 @@ import React from 'react';
 
 jest.unmock('~/components/under-development/UnderDevelopment');
 
+import { ROUTES } from '../constants/routes';
 import UnderDevelopment from './UnderDevelopment';
 
 jest.mock('next-intl', () => ({
@@ -60,6 +61,6 @@ describe('UnderDevelopment component', () => {
   it('should wrap the button inside a link to "/"', () => {
     render(<UnderDevelopment />);
     const link = screen.getByRole('link', { name: 'Повернутися на головну' });
-    expect(link).toHaveAttribute('href', '/');
+    expect(link).toHaveAttribute('href', ROUTES.HOME);
   });
 });

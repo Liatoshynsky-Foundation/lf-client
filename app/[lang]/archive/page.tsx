@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, CircularProgress } from '@mui/material';
+import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useLocale } from 'use-intl';
 
@@ -39,6 +40,7 @@ const getColumnPaddingTop = (columnNum: number) => {
 export default function Archive() {
   const { isMobile, isTablet, isLaptop, isDesktop } = useBreakpoints();
   const [error, setError] = useState<string | null>(null);
+  const locale = useLocale();
 
   const [funds, setFunds] = useState<FundDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +50,7 @@ export default function Archive() {
   useEffect(() => {
     const loadFunds = async () => {
       try {
-        const response = await fetch('/api/funds');
+        const response = await fetch(`/api/funds?lang=${locale}`);
         if (!response.ok) {
           throw new Error('Failed to fetch funds');
         }
@@ -63,7 +65,7 @@ export default function Archive() {
     };
 
     loadFunds();
-  }, []);
+  }, [locale]);
 
   if (error) {
     throw new Error(error);

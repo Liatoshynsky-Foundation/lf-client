@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import ControlPanel from './ControlPanel';
 
@@ -89,7 +89,7 @@ describe('ControlPanel', () => {
       expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
     });
 
-    it('should toggle filters visibility on desktop button click', () => {
+    it('should toggle filters visibility on desktop button click', async () => {
       render(<ControlPanel {...defaultProps} />);
 
       expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
@@ -101,7 +101,9 @@ describe('ControlPanel', () => {
 
       fireEvent.click(filtersButton);
 
-      expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
+      });
     });
 
     it('should not display the badge count when activeFiltersCount is 0 (desktop)', () => {
@@ -123,7 +125,7 @@ describe('ControlPanel', () => {
       mockedUseBreakpoints.mockReturnValue(mobileBreakpoints);
     });
 
-    it('should toggle filters visibility on mobile button click', () => {
+    it('should toggle filters visibility on mobile button click', async () => {
       render(<ControlPanel {...defaultProps} />);
 
       const filtersButton = screen.getByRole('button', { name: 'controls.filters' });
@@ -135,7 +137,10 @@ describe('ControlPanel', () => {
       expect(screen.getByTestId('filters-component')).toBeInTheDocument();
 
       fireEvent.click(filtersButton);
-      expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('filters-component')).not.toBeInTheDocument();
+      });
     });
 
     it('should toggle search visibility on mobile button click', () => {

@@ -26,14 +26,14 @@ interface Props {
   partners?: Partner[];
 }
 
-export const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, buttonLink, partners }) => {
+const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, buttonLink, partners }) => {
   const locale = useLocale();
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle
         icon={true}
         title={title[locale]}
-        gridColumn={{ xs: '1/ -1', sm: '4/ -1', md: '6/-1' }}
+        gridColumn={{ xs: '4/ -1', md: '6/-1' }}
         sx={{
           mb: { xs: '16px' },
           gap: {
@@ -42,7 +42,14 @@ export const CooperationSection: React.FC<Props> = ({ title, textContent, button
             md: '40px'
           },
           '& h2': {
-            textTransform: 'none'
+            fontSize: {
+              xs: '28px',
+              lg: '64px'
+            },
+            textTransform: {
+              sm: 'uppercase',
+              md: 'none'
+            }
           }
         }}
       />
@@ -62,3 +69,5 @@ export const CooperationSection: React.FC<Props> = ({ title, textContent, button
     </Box>
   );
 };
+
+export default CooperationSection;

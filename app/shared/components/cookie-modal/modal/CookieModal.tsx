@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Button from '~/ds-components/button/Button';
 import { Modal } from '~/ds-components/modal/Modal';
 
+import { ROUTES } from '../../constants/routes';
 import { styles } from './CookieModal.styles';
 import { PositionEnum } from '~/types/enums/common.enums';
 
@@ -21,7 +22,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose, showPre
   const t = useTranslations('cookie.modal');
 
   const renderLink = (chunks: React.ReactNode) => (
-    <Link href="/privacy-policy" style={styles.link}>
+    <Link href={ROUTES.PRIVACY_POLICY} style={styles.link}>
       {chunks}
     </Link>
   );
@@ -35,6 +36,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose, showPre
       handleClose={onClose}
       titleSx={styles.title}
       topSection={styles.topSection}
+      contentBoxSx={{ height: '100%' }}
       childrenBoxSx={styles.childrenBox}
       verticalAlignment={PositionEnum.Bottom}
       horizontalAlignment={PositionEnum.Left}

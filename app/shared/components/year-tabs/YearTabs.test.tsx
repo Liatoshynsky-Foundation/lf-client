@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
+import { ROUTES } from '../constants/routes';
 import YearTabs from './YearTabs';
 
 const MOCK_YEARS = ['2025', '2024', '2023'];
@@ -74,6 +75,7 @@ describe('YearTabs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ioInstances = [];
+    globalThis.history.pushState(null, '', ROUTES.HOME);
 
     Object.defineProperty(globalThis, 'innerHeight', { value: 800, writable: true });
 

@@ -29,6 +29,7 @@ export type CompositionDTO = {
   _id: string;
   title: string;
   year: number;
+  opusId: string | OpusDTO;
   audioAvailable: boolean;
   sheetAvailable: boolean;
   sheetMusic: SheetMusicDTO[];
@@ -37,6 +38,7 @@ export type CompositionDTO = {
   opus: OpusDTO;
   genres: GenreDTO;
 };
+
 export type CompositionTitlesDTO = {
   _id: string;
   title: string;
@@ -45,6 +47,7 @@ export type Condition = {
   $or?: Array<
     | { 'title.uk'?: { $regex?: RegExp | string; $options?: string } }
     | { 'title.en'?: { $regex?: RegExp | string; $options?: string } }
+    | { opusId?: { $in: unknown[] } }
   >;
   categories?: { $in?: Array<string | number | Record<string, unknown>> };
   genres?: { $in?: Array<string | number | Record<string, unknown>> };

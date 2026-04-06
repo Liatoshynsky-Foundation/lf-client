@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl';
 import { styles } from './FundCard.styles';
 
 import { Link } from '~/i18n/navigation';
+import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 export interface FundCardProps {
   id: number;
@@ -16,7 +17,7 @@ export interface FundCardProps {
 export default function FundCard({ id, number, title }: Readonly<FundCardProps>) {
   const locale = useLocale();
   return (
-    <Link href={`/archive/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href={getDynamicRoute.archiveFund(id)} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Box
         component="article"
         sx={styles.card}

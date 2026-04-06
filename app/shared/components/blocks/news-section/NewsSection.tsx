@@ -5,6 +5,7 @@ import React from 'react';
 
 import EmptyState from '~/ds-components/empty-state/EmptyState';
 
+import { getDynamicRoute } from '../../constants/routes';
 import { styles } from './NewsSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
@@ -30,7 +31,7 @@ interface Props {
   locale: Locale;
 }
 
-export const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
+const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
   const t = await getTranslations('media.emptyState');
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
@@ -56,7 +57,7 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
       title: news.title,
       publicationDate: formattedDate,
       description: news.description,
-      href: `/news/${news.slug}`,
+      href: getDynamicRoute.newsItem(news.slug),
       dataTestId: `NewsCard-${news.slug}`
     };
   });
@@ -83,3 +84,5 @@ export const NewsSection: React.FC<Props> = async ({ locale, title, textContent,
     </Box>
   );
 };
+
+export default NewsSection;

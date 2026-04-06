@@ -91,7 +91,10 @@ const PartnershipSlider: React.FC<PartnershipSliderProps> = ({ slides }) => {
         <Box
           sx={{
             ...sliderStyles.slidesContainer,
-            transform: `translateX(-${currentSlide * 100}%)`
+            transform: {
+              xs: `translateX(-${currentSlide * 288}px)`,
+              sm: `translateX(-${currentSlide * 310}px)`
+            }
           }}
         >
           {slides.map((slide) => {

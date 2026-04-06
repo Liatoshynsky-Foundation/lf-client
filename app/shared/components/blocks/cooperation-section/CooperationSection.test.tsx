@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 
 import { partnersMock } from '../our-partners/partners.data';
-import { CooperationSection } from './CooperationSection';
+import CooperationSection from './CooperationSection';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'en'
@@ -56,7 +57,7 @@ describe('CooperationSection', () => {
       uk: 'Детальніше',
       en: 'Learn More'
     },
-    buttonLink: '/cooperation',
+    buttonLink: ROUTES.COOPERATION,
     partners: partnersMock.slice(0, 3)
   };
 
@@ -72,7 +73,7 @@ describe('CooperationSection', () => {
 
     expect(screen.getByTestId('button-content-block')).toBeInTheDocument();
     expect(screen.getByTestId('button-link')).toHaveTextContent('Learn More');
-    expect(screen.getByTestId('button-link')).toHaveAttribute('href', '/cooperation');
+    expect(screen.getByTestId('button-link')).toHaveAttribute('href', ROUTES.COOPERATION);
   });
 
   it('should render partners slider with provided partners', () => {

@@ -2,7 +2,7 @@
 
 import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { forwardRef, ReactNode } from 'react';
+import { ElementType, forwardRef, ReactNode } from 'react';
 
 import { ButtonLabel } from './ButtonLabel';
 
@@ -10,11 +10,16 @@ import { Link } from '~/i18n/navigation';
 
 const CustomButton = styled(MuiButton)({});
 
-type Size = 'large' | 'medium' | 'small';
-type Variant = 'contained' | 'outlined' | 'text';
+interface ExtraProps {
+  href?: string;
+  target?: string;
+  rel?: string;
+  scroll?: boolean;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+}
 
-type BaseButtonProps = {
-  size?: Size;
+export type ButtonProps = {
+  size?: 'large' | 'medium' | 'small';
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   loading?: boolean;
@@ -22,29 +27,44 @@ type BaseButtonProps = {
   shortLabel?: string;
   link?: string;
   externalLink?: boolean;
-} & (
-  | {
-      color?: 'primary' | 'secondary';
-      variant?: Variant;
-    }
-  | {
-      color: 'tertiary';
-      variant?: 'contained';
-    }
-);
-export type ButtonProps = BaseButtonProps & Omit<MuiButtonProps, keyof BaseButtonProps>;
+} & Omit<MuiButtonProps, 'size'>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ label, shortLabel, link, externalLink, disabled, loading, startIcon, endIcon, children, ...props }, ref) => {
+  ({ label, shortLabel, link, externalLink, disabled, loading, startIcon, endIcon, children, sx, ...props }, ref) => {
     const isDisabled = disabled ?? loading;
 
-    const content = (
+    let component: ElementType = 'button';
+
+    if (link && !isDisabled) {
+      component = externalLink ? 'a' : Link;
+    }
+
+    const extraProps: ExtraProps = {};
+
+    if (link && !isDisabled) {
+      extraProps.href = link;
+      if (externalLink) {
+        extraProps.target = '_blank';
+        extraProps.rel = 'noopener noreferrer';
+      } else {
+        extraProps.scroll = true;
+      }
+    }
+
+    return (
       <CustomButton
+        component={component}
         ref={ref}
         disabled={isDisabled}
         startIcon={!loading ? startIcon : undefined}
         endIcon={!loading ? endIcon : undefined}
+        sx={{
+          width: 'fit-content',
+          ...(link && { textDecoration: 'none' }),
+          ...sx
+        }}
         {...props}
+        {...extraProps}
       >
         {loading ? (
           <CircularProgress color="inherit" size={25} data-testid="loader" />
@@ -54,22 +74,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </ButtonLabel>
         )}
       </CustomButton>
-    );
-
-    if (!link) return content;
-
-    if (externalLink) {
-      return (
-        <a href={link} target="_blank" rel="noopener noreferrer">
-          {content}
-        </a>
-      );
-    }
-
-    return (
-      <Link style={{ width: 'fit-content' }} href={link} scroll onClickCapture={() => window.scrollTo({ top: 0 })}>
-        {content}
-      </Link>
     );
   }
 );

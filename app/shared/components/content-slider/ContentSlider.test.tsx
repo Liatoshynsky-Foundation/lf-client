@@ -5,6 +5,7 @@ import React from 'react';
 jest.mock('swiper/css', () => ({}));
 jest.mock('swiper/css/navigation', () => ({}));
 
+import { getDynamicRoute } from '../constants/routes';
 import { ContentSlider } from './ContentSlider';
 
 // Mock Swiper components
@@ -37,7 +38,7 @@ const mockCards = [
     title: 'News Title 1',
     publicationDate: '15.01.25',
     description: 'Description 1',
-    href: '/news/news-1',
+    href: getDynamicRoute.newsItem('news-1'),
     dataTestId: 'news-card-1'
   },
   {
@@ -45,7 +46,7 @@ const mockCards = [
     title: 'News Title 2',
     publicationDate: '16.01.25',
     description: 'Description 2',
-    href: '/news/news-2',
+    href: getDynamicRoute.newsItem('news-2'),
     dataTestId: 'news-card-2'
   },
   {
@@ -53,7 +54,7 @@ const mockCards = [
     title: 'News Title 3',
     publicationDate: '17.01.25',
     description: 'Description 3',
-    href: '/news/news-3',
+    href: getDynamicRoute.newsItem('news-3'),
     dataTestId: 'news-card-3'
   }
 ];

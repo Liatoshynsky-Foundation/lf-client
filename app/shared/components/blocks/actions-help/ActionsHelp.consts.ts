@@ -2,6 +2,7 @@ import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 export const actionsHelpPageData = {
   title: {
@@ -39,37 +40,31 @@ export const actionsHelpPageData = {
   } as TipTapDoc,
   paperItems: [
     {
-      title: { uk: 'Допомога з перекладами', en: 'Help with Translations' },
-      description: {
-        uk: 'Ми працюємо з архівами, партитурами, документами й записами, щоб відновити й упорядкувати культурну пам’ять.',
-        en: 'We work with archives, sheet music, documents and recordings to restore and organize cultural memory.'
-      }
+      title: 'Перекласти',
+      description:
+        'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.'
     },
     {
-      title: { uk: 'Допомога з організацією заходів', en: 'Help with Event Organization' },
-      description: {
-        uk: 'Якщо вам близька музика та культура — можна долучитись до команди під час концертів, виставок чи лекцій',
-        en: 'If you are close to music and culture — you can join the team during concerts, exhibitions or lectures'
-      }
+      title: 'Розповісти',
+      description:
+        'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.'
     },
     {
-      title: { uk: 'Допомога з комунікацією', en: 'Help with Communication' },
-      description: {
-        uk: 'Допомага з публікаціями, відповідями на повідомлення, аналітикою або візуальним оформленням контенту',
-        en: 'Help with publications, responding to messages, analytics or visual design of content'
-      }
+      title: 'Зафільмувати',
+      description:
+        'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.'
     }
   ],
   paperButton: {
-    text: { uk: 'Запропонувати допомогу', en: 'Propose Help' },
-    link: '/'
+    text: 'Запропонувати допомогу',
+    link: ROUTES.HOME
   }
 };
 
 export async function getActionsHelpData() {
-  let link = '/';
+  let link: string = ROUTES.HOME;
   try {
-    link = await getNavigationLink('/cooperation', 'cooperation');
+    link = await getNavigationLink(ROUTES.COOPERATION, 'cooperation');
   } catch (err) {
     console.warn('Could not get navigation link:', err);
   }

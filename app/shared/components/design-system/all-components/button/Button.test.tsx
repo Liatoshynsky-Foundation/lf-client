@@ -47,7 +47,6 @@ describe('Button Component', () => {
     render(<Button link="/test-link" label="Go" />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/test-link');
-    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   it('should open link in new tab when externalLink is true', () => {
@@ -72,7 +71,7 @@ describe('Button Component', () => {
 
   it('should render button content inside link when externalLink is true', () => {
     render(<Button link="/external" externalLink label="Inside" />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('link')).toBeInTheDocument();
   });
 
   it('should display children if label not provided', () => {

@@ -20,9 +20,10 @@ interface Props {
   paymentMethods: PaymentMethod[];
   imageSrc: string;
   caption?: string;
+  imageAlt?: string;
 }
 
-const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption }) => {
+const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption, imageAlt }) => {
   const t = useTranslations('common');
   const locale = useLocale();
 
@@ -32,7 +33,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
         title={title}
         sx={styles.title}
         icon={false}
-        gridColumn={{ xs: '1 / -1', sm: '3 / -1', md: '6 / -1' }}
+        gridColumn={{ xs: '1 / -1', sm: '4 / -1', md: '6 / -1' }}
       />
 
       <Box sx={styles.contentWrapper}>
@@ -43,7 +44,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
 
       <ImageWithCaption
         src={imageSrc}
-        alt={title[locale]}
+        alt={imageAlt ?? title[locale]}
         caption={caption ?? ''}
         captionSx={styles.captionSx}
         align="right"

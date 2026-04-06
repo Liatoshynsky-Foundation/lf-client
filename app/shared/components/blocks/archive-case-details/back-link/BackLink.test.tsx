@@ -2,12 +2,14 @@ import { render, screen } from '@testing-library/react';
 
 import BackLink, { type BackLinkProps } from './BackLink';
 
+import { getDynamicRoute } from '~/shared/components/constants/routes';
+
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ alt }: { alt: string }) => <span data-testid="mock-svg" aria-label={alt} />
 }));
 
 const defaultProps: BackLinkProps = {
-  href: '/uk/archive/2',
+  href: `/uk${getDynamicRoute.archiveFund(2)}`,
   label: 'Повернутись'
 };
 

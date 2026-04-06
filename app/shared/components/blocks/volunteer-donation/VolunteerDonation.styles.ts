@@ -21,7 +21,7 @@ export const styles = {
   contentWrapper: {
     gridColumn: {
       xs: '1 / 5',
-      sm: '3 / 8',
+      sm: '4 / -1',
       md: '6 / -1'
     },
     mb: {
@@ -40,8 +40,7 @@ export const styles = {
   paymentMethodContainer: {
     display: 'flex',
     alignItems: { xs: 'flex-start', sm: 'center' },
-    flexDirection: { xs: 'column', sm: 'row' },
-    gap: { xs: '4px', sm: '20px' }
+    flexDirection: { xs: 'column', sm: 'row' }
   },
   label: {
     fontFamily: 'Mulish, Sans-serif',
@@ -50,7 +49,8 @@ export const styles = {
     whiteSpace: 'pre-line',
     fontWeight: 600,
     lineHeight: '150%',
-    fontSize: { xs: '16px', md: '20px' }
+    fontSize: { xs: '16px', md: '20px' },
+    width: '91px'
   },
   valueContainer: {
     display: 'flex',
@@ -78,7 +78,8 @@ export const styles = {
     gridColumn: {
       xs: '2 / -1',
       sm: '4 / -1',
-      md: '6 / 12'
+      md: '6 / -1',
+      lg: '6 / -1'
     },
     gridRow: {
       sm: '5 / 7'
@@ -94,20 +95,11 @@ export const styles = {
       md: '14px'
     },
     maxWidth: {
-      xs: '224px',
-      sm: '457px',
-      md: '569px',
-      lg: '718px',
-      xl: '816px',
+      xs: '100%',
       xxl: '1001px'
     },
     width: {
-      xs: '200px',
-      sm: '400px',
-      md: '496px',
-      lg: '645px',
-      xl: '744px',
-      xxl: '806px',
+      xs: '100%',
       ultra: '1001px'
     }
   }
@@ -128,6 +120,8 @@ export const imageSizes = {
     color: mainHexPallete.blue[300]
   },
   imageSx: {
-    width: { xs: '200px', sm: '400px', md: '496px', lg: '645px', xl: '744px', xxl: '806px', ultra: '1001px' }
+    width: { xs: '100%', ultra: '1001px' },
+    height: { xs: 'auto' },
+    aspectRatio: { xs: '224 / 138', sm: '457 / 292', md: '569 / 336' }
   }
 };

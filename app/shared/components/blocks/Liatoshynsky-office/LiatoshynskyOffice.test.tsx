@@ -2,8 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
+import { ROUTES } from '~/shared/components/constants/routes';
+
 jest.mock('~/lib/utils/navigationHelper', () => ({
-  getNavigationLink: jest.fn().mockResolvedValue('/archive')
+  getNavigationLink: jest.fn().mockResolvedValue(ROUTES.ARCHIVE)
 }));
 
 jest.mock('~/components/Quote/Quote', () => {
@@ -69,7 +71,7 @@ describe('LiatoshynskyOffice', () => {
   it('should render the call-to-action link with correct attributes', async () => {
     await setupComponent();
     const link = screen.getByRole('link', { name: 'Увійти до архіву' });
-    expect(link).toHaveAttribute('href', '/archive');
+    expect(link).toHaveAttribute('href', ROUTES.ARCHIVE);
   });
 
   it('should apply the correct font class to the text block', async () => {

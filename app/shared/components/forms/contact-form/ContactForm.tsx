@@ -12,6 +12,7 @@ import NotesConfirmModal from '~/components/get-notes-modal/notes-confirmation-m
 import ModalComponent from '~/components/modal-component/ModalComponent';
 import Button from '~/ds-components/button/Button';
 
+import { ROUTES } from '../../constants/routes';
 import PaperComponent from '../../paper-component/PaperComponent';
 import { styles } from './ContactForm.styles';
 
@@ -186,7 +187,7 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
               label={
                 <Box>
                   <Typography variant="customItalic14" sx={styles.confidentialPolicyText}>
-                    {t('policyText')} <Link href="/privacy-policy">{t('policyLink')}</Link>
+                    {t('policyText')} <Link href={ROUTES.PRIVACY_POLICY}>{t('policyLink')}</Link>
                   </Typography>
                   {errors.policy && (
                     <FormHelperText sx={styles.checkboxError}>

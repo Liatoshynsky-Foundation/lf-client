@@ -3,6 +3,7 @@ import newFoundationInfoRepo from './foundationInfo.repository';
 import { BrandingInfo } from '~/infrastructure/models/foundation-info/foundationInfoBranding';
 import { ContactInfo } from '~/infrastructure/models/foundation-info/foundationInfoContact';
 import { PublicInfo } from '~/infrastructure/models/foundation-info/foundationInfoPublic';
+import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('~/infrastructure/db/connect', () => ({
   __esModule: true,
@@ -58,7 +59,7 @@ const mockPublicData = {
   },
   links: [
     { label: { uk: 'Політика', en: 'Privacy' }, href: '/privacy' },
-    { label: { uk: 'Умови', en: 'Terms' }, href: '/terms' }
+    { label: { uk: 'Умови', en: 'Terms' }, href: ROUTES.TERMS }
   ]
 };
 

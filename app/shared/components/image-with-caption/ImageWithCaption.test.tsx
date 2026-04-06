@@ -9,6 +9,10 @@ const sizes: ElementSizes = {
   height: { xs: 200, sm: 400, md: 600 }
 };
 
+jest.mock('next-intl', () => ({
+  useLocale: () => 'en'
+}));
+
 jest.mock('next/image');
 
 describe('ImageWithCaption', () => {

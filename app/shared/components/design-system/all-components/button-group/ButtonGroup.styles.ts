@@ -64,7 +64,7 @@ export const StyledButtonItem = styled(Box, {
     '&:hover': {
       background: 'rgba(25, 13, 3, 0.12)'
     },
-    '& button': {
+    '& .MuiButtonBase-root, && a, && button': {
       backgroundColor: 'transparent',
       color: 'inherit',
       textDecoration: 'none',

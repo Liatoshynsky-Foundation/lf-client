@@ -72,9 +72,12 @@ describe('CookieModalWrapper', () => {
   });
 
   it('should not render CookieModal when consent_cookie.analytics is false', () => {
-    render(<CookieModalWrapper trackingId="" gtmId="" consent_cookie={{ analytics: false }} />);
-    expect(screen.getByText(/Mocked ConsentScript/)).toBeInTheDocument();
+    const { container } = render(
+      <CookieModalWrapper trackingId="G-TEST" gtmId="GTM-TEST" consent_cookie={{ analytics: false }} />
+    );
+    expect(screen.queryByText(/Mocked ConsentScript/)).not.toBeInTheDocument();
     expect(screen.queryByText('Mocked CookieModal')).not.toBeInTheDocument();
+    expect(container.firstChild).toBeNull();
   });
 
   describe('without consent_cookie (fresh user)', () => {

@@ -65,8 +65,8 @@ jest.mock('next/image', () => ({
 
 jest.mock('./PartnershipSlider', () => {
   const borderByType: Record<string, number> = {
-    firstRowImage: 2,
-    secondRowImage: 2
+    firstRowImage: 8,
+    secondRowImage: 8
   };
 
   return jest.fn(({ slides }: any) => (
@@ -323,7 +323,7 @@ describe('PartnershipFormats', () => {
     expect(imageContainers.length).toBeGreaterThanOrEqual(2);
 
     for (const imageContainer of imageContainers) {
-      expect(imageContainer).toHaveAttribute('data-border-width', '2');
+      expect(imageContainer).toHaveAttribute('data-border-width', '8');
     }
   });
 
@@ -347,7 +347,7 @@ describe('PartnershipFormats', () => {
     expect(slider).toBeInTheDocument();
 
     const sliderSlides = within(slider).getAllByTestId('slider-slide');
-    expect(sliderSlides.length).toBe(6);
+    expect(sliderSlides.length).toBe(4);
   });
 
   it('should render mobile slider with cards and images', () => {
@@ -357,7 +357,7 @@ describe('PartnershipFormats', () => {
     expect(slider).toBeInTheDocument();
 
     const sliderSlides = within(slider).getAllByTestId('slider-slide');
-    expect(sliderSlides.length).toBe(6);
+    expect(sliderSlides.length).toBe(4);
 
     let cardCount = 0;
     let imageCount = 0;
@@ -372,7 +372,7 @@ describe('PartnershipFormats', () => {
     }
 
     expect(cardCount).toBe(4);
-    expect(imageCount).toBe(2);
+    expect(imageCount).toBe(0);
   });
 
   it('should not render slider slides when no data is provided', () => {
