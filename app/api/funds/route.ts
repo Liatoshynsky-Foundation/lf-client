@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const params = req.nextUrl.searchParams;
     const fundId = params.get('id');
     const caseId = params.get('caseId');
-    const lang = params.get('lang') || 'uk';
+    const lang: 'uk' | 'en' = (params.get('lang') as 'uk' | 'en') || 'uk';
 
     const fundsService = createRequestContainer().resolve('fundsService');
     type FundData = {

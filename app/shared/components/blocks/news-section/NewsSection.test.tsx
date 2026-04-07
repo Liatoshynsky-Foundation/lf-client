@@ -3,6 +3,7 @@ import { Locale } from 'next-intl';
 import React from 'react';
 
 import NewsSection from './NewsSection';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
@@ -62,17 +63,13 @@ jest.mock('~/lib/utils/parseIsoDate', () => ({
 }));
 
 const mockTipTapContent: TipTapDoc = {
-  type: 'doc' as TipTapDoc['type'],
+  type: TipTapNodeTypes.doc,
   content: [
     {
-      type: 'paragraph' as NonNullable<TipTapDoc['content']>[number]['type'],
+      type: TipTapNodeTypes.paragraph,
       content: [
         {
-          type: 'text' as NonNullable<
-            NonNullable<
-              Extract<NonNullable<TipTapDoc['content']>[number], { type: 'paragraph' | 'heading' }>['content']
-            >[number]
-          >['type'],
+          type: TipTapNodeTypes.text,
           text: 'Test content'
         }
       ]

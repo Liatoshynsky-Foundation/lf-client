@@ -35,7 +35,7 @@ export interface MultiLangNode {
 
 export interface ParagraphNode {
   type: TipTapNodeTypes.paragraph;
-  content?: TextNode[] | MultiLangNode[];
+  content?: (TextNode | MultiLangNode)[];
 }
 
 export interface HeadingNode {

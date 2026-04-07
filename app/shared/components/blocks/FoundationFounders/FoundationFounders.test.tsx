@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import FoundationFounders from './FoundationFounders';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IFoundationFounders } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { MultiLangNode, TextNode, TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('./FoundationTeam/FoundationTeam', () => {
   const MockFoundationTeam = ({ title }: { title: string }) => <div data-testid="foundation-team">{title}</div>;
@@ -16,14 +16,22 @@ jest.mock('./FoundationWasCreated/FoundationWasCreated', () => {
     const paragraph = data.content?.[0];
     const nodes = paragraph?.content ?? [];
 
+    function renderNode(node: TextNode | MultiLangNode) {
+      if (typeof node.text === 'string') {
+        return node.text;
+      } else {
+        return node.text.en;
+      }
+    }
+
     return (
       <div data-testid="foundation-was-created">
         <p>
           {nodes.map((node, i) =>
             node.marks?.some((m) => m.type === 'bold') ? (
-              <strong key={i}>{node.text}</strong>
+              <strong key={i}>{renderNode(node)}</strong>
             ) : (
-              <span key={i}>{node.text}</span>
+              <span key={i}>{renderNode(node)}</span>
             )
           )}
         </p>
