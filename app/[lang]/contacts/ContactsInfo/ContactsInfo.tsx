@@ -43,6 +43,7 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
                 label={t('phoneNumber')}
                 value={contacts.phone}
                 direction="column"
+                valueSx={styles.contactLabel}
                 data-testid="ContactsInfo-phoneLink"
               />
             </Box>
@@ -52,6 +53,7 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
                 label={t('email')}
                 value={contacts.email}
                 direction="column"
+                valueSx={styles.contactLabel}
                 data-testid="ContactsInfo-emailLink"
               />
             </Box>

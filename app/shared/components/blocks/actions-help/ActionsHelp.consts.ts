@@ -40,23 +40,41 @@ export const actionsHelpPageData = {
   } as TipTapDoc,
   paperItems: [
     {
-      title: 'Перекласти',
-      description:
-        'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.'
+      title: {
+        uk: 'Перекласти',
+        en: 'Translate'
+      },
+      description: {
+        uk: 'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.',
+        en: 'Do you know languages? Help translate programs, articles or interviews so that people outside of Ukraine can read about Lyatoshinskiy.'
+      }
     },
     {
-      title: 'Розповісти',
-      description:
-        'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.'
+      title: {
+        uk: 'Розповісти',
+        en: 'Tell a Story'
+      },
+      description: {
+        uk: 'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.',
+        en: 'Can you write an article, conduct an interview or engage media? This will help Ukrainian music be heard by a wider audience.'
+      }
     },
     {
-      title: 'Зафільмувати',
-      description:
-        'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.'
+      title: {
+        uk: 'Зафільмувати',
+        en: 'Film'
+      },
+      description: {
+        uk: 'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.',
+        en: 'Are you filming events or editing short videos? Your skills are very needed for our social media, posters and presentations.'
+      }
     }
   ],
   paperButton: {
-    text: 'Запропонувати допомогу',
+    text: {
+      uk: 'Дізнатися більше',
+      en: 'Learn more'
+    },
     link: ROUTES.HOME
   }
 };

@@ -9,7 +9,7 @@ const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };
 
-jest.mock('use-intl', () => ({
+jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
   useLocale: () => 'en'
 }));
@@ -105,7 +105,7 @@ describe('Archive Page', () => {
     await screen.findByTestId('ArchivePage-fundsGrid');
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds?lang=uk');
+    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds?lang=en');
   });
 
   it('should call setParam when search is triggered', () => {

@@ -12,19 +12,35 @@ jest.mock('swiper/css', () => ({}));
 
 jest.mock('~/ds-components/text-card/TextCard', () => ({
   __esModule: true,
-  default: ({ title, description }: { title: string; description: string }) => (
+  default: ({
+    title,
+    description,
+    locale = 'en'
+  }: {
+    title: string | { en: string; uk: string };
+    description: string | { en: string; uk: string };
+    locale?: 'en' | 'uk';
+  }) => (
     <div data-testid="text-card">
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <h3>{typeof title === 'string' ? title : title[locale]}</h3>
+      <p>{typeof description === 'string' ? description : description[locale]}</p>
     </div>
   )
 }));
 
 jest.mock('~/ds-components/button-card/ButtonCard', () => ({
   __esModule: true,
-  default: ({ text, link }: { text: string; link: string }) => (
-    <a data-testid="button-card" href={link}>
-      {text}
+  default: ({
+    text,
+    link,
+    dataTestId
+  }: {
+    text: string | { en: string; uk: string };
+    link: string;
+    dataTestId?: string;
+  }) => (
+    <a data-testid={dataTestId || 'button-card'} href={link}>
+      {typeof text === 'string' ? text : text.en}
     </a>
   )
 }));
@@ -89,7 +105,7 @@ describe('ActionsHelp component', () => {
   });
 
   it('should render the ButtonCard with correct text and link', () => {
-    const buttonCard = screen.getByTestId('button-card');
+    const buttonCard = screen.getByTestId('ActionsHelp-buttonCard');
     expect(buttonCard).toHaveTextContent(mockData.paperButton.text.en);
     expect(buttonCard).toHaveAttribute('href', mockData.paperButton.link);
   });

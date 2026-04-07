@@ -43,7 +43,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       ...paperItems.map((paper, index) => (
         <TextCard
           sx={styles.paper(isMobile ? 0 : index)}
-          key={paper.title}
+          key={paper.title[locale]}
           title={paper.title}
           description={paper.description}
         />
@@ -51,7 +51,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       <ButtonCard
         key="button-card"
         sx={styles.paper(isMobile ? 0 : paperItems.length)}
-        text={paperButton.text}
+        text={paperButton.text[locale]}
         link={paperButton.link}
         dataTestId="ActionsHelp-buttonCard"
       />

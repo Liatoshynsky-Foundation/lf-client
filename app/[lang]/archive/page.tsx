@@ -3,7 +3,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { useLocale } from 'use-intl';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
@@ -45,7 +44,6 @@ export default function Archive() {
   const [funds, setFunds] = useState<FundDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { params, setParam } = useTableFilters({ search: '' });
-  const locale = useLocale();
 
   useEffect(() => {
     const loadFunds = async () => {
