@@ -26,32 +26,13 @@ describe('navigationRepository', () => {
     jest.clearAllMocks();
   });
 
-  it('should return parsed navigation data with raw translations', async () => {
-    const mockDocs = [
-      {
-        title: { uk: 'Головна', en: 'Main' },
-        links: [
-          { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
-          { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: false }
-        ],
-        order: 1
-      }
-    ];
-
-    (Navigation.find as jest.Mock).mockReturnValue({
-      sort: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue(mockDocs)
-      })
-    });
-  });
-
   describe('getNavigation', () => {
     it('should return parsed navigation data with raw translations', async () => {
       const mockDocs = [
         {
           title: { uk: 'Головна', en: 'Main' },
           links: [
-            { label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true },
+            { label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true },
             { label: { uk: 'Про нас', en: 'About' }, href: '/about', visibility: false }
           ],
           order: 1
@@ -74,29 +55,15 @@ describe('navigationRepository', () => {
 
     it('should return empty array if no navigation data found', async () => {
       (Navigation.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
-
       const result = await navigationRepository.getNavigation();
-
-  it('should throw if data does not match schema', async () => {
-    const invalidDocs = [
-      {
-        title: { uk: 'Головна' },
-        links: [{ label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true }],
-        order: 1
-      }
-    ];
-
-    (Navigation.find as jest.Mock).mockReturnValue({
-      sort: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue(invalidDocs)
-      })
+      expect(result).toEqual([]);
     });
 
     it('should throw if data does not match schema', async () => {
       const invalidDocs = [
         {
           title: { uk: 'Головна' },
-          links: [{ label: { uk: 'Дім', en: 'Home' }, href: '/', visibility: true }],
+          links: [{ label: { uk: 'Дім', en: 'Home' }, href: ROUTES.HOME, visibility: true }],
           order: 1
         }
       ];
@@ -148,6 +115,7 @@ describe('navigationRepository', () => {
       await expect(navigationRepository.getSpecialNavigation()).rejects.toThrow();
     });
   });
+
   describe('getFooterNavigation', () => {
     it('should return sorted footer navigation and parse via Zod', async () => {
       const mockDocs = [

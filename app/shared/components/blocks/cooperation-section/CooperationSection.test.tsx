@@ -75,15 +75,6 @@ describe('CooperationSection', () => {
     expect(screen.getByTestId('button-content-block')).toBeInTheDocument();
     expect(screen.getByTestId('button-link')).toHaveTextContent('Learn More');
     expect(screen.getByTestId('button-link')).toHaveAttribute('href', ROUTES.COOPERATION);
-  });
-
-    const title = screen.getByTestId('section-title');
-    expect(title).toBeInTheDocument();
-    expect(title).toHaveTextContent('OuR PaRtNeRs');
-
-    const buttonLink = screen.getByTestId('button-link');
-    expect(buttonLink).toHaveTextContent('Join the Partnership');
-    expect(buttonLink).toHaveAttribute('href', '/cooperation');
 
     expect(screen.getByTestId('our-partners-slider')).toBeInTheDocument();
   });

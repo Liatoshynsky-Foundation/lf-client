@@ -8,6 +8,7 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { createRequestContainer } from '~/di/container';
+import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 // Mock dependencies

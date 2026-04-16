@@ -2,14 +2,16 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import SupportUs, { generateMetadata } from './page';
-import * as envUtils from '~/utils/isProductionMode';
+import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRootContainer } from '~/di/container';
 
 jest.mock('~/di/container', () => ({
   createRootContainer: jest.fn()
 }));
-
+jest.mock('~/utils/isProductionMode', () => ({
+  isProductionMode: jest.fn()
+}));
 jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => {
   const { ROUTES } = jest.requireActual('~/shared/components/constants/routes');
 
@@ -74,7 +76,7 @@ describe('SupportUs page', () => {
       })
     });
 
-    (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
+    (isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
   it('should generate correct metadata', async () => {
@@ -93,7 +95,7 @@ describe('SupportUs page', () => {
   });
 
   it('should render UnderDevelopment in production mode', async () => {
-    (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
+    (isProductionMode as jest.Mock).mockReturnValue(true);
 
     const ui = await SupportUs(mockProps);
     render(ui);

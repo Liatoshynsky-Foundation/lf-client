@@ -5,14 +5,17 @@ import React from 'react';
 import { ROUTES } from '../../constants/routes';
 import { mockFundSummaryData } from './__fixtures__/fundSummaryHeader.fixtures';
 import FundSummaryHeader, { FundSummaryHeaderProps } from './FundSummaryHeader';
+import * as realContent from './FundSummaryHeader.content';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-
-import { getNavigationLink } from '~/lib/utils/navigationHelper';
 
 jest.mock('~/lib/utils/navigationHelper', () => ({
   getNavigationLink: jest.fn()
 }));
-
+jest.mock('./FundSummaryHeader.content', () => ({
+  __esModule: true,
+  ...jest.requireActual('./FundSummaryHeader.content'),
+  getFundSummaryHeaderBacklinkUrl: jest.fn().mockResolvedValue('/archive')
+}));
 jest.mock('@mui/material', () => ({
   Box: ({ children, ...props }: any) => (
     <div data-testid="mui-box" {...props}>
@@ -90,9 +93,9 @@ describe('FundSummaryHeader', () => {
   it('should render the back link icon', () => {
     render(<FundSummaryHeader {...mockData} />);
 
-    const icon = screen.getByAltText('');
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute('src', '/icons/arrow-left.svg');
+    const backLink = screen.getByTestId('custom-link');
+    expect(backLink).toBeInTheDocument();
+    expect(backLink).toHaveAttribute('href', ROUTES.SUPPORT_US);
   });
 
   it('should render the title', () => {
@@ -112,26 +115,23 @@ describe('FundSummaryHeader', () => {
     expect(screen.getByText('Beneficiaries:')).toBeInTheDocument();
   });
 
-  it('should render all items in Ukrainian locale', () => {
+  it('should fetch backlink and pass it to the component', async () => {
     jest.mocked(useLocale).mockReturnValue('uk');
-
-    render(<FundSummaryHeader {...mockData} />);
 
     const backlink = await realContent.getFundSummaryHeaderBacklinkUrl();
     expect(backlink).toBe('/archive');
 
     const props = {
       backLinkUrl: backlink,
-      backLinkText: realContent.fundSummaryBacklinkText.en,
-      title: realContent.fundSummaryTitle.en,
+      backLinkText: 'Назад',
+      title: 'Заголовок',
       data: realContent.fundSummaryContent
     };
 
     render(<FundSummaryHeader {...props} />);
 
-    expect(screen.getByText(/Back to archive/i)).toBeInTheDocument();
-    expect(screen.getByTestId('section-title')).toHaveTextContent(realContent.fundSummaryTitle.en);
-    expect(screen.getByText(/Number of inventories/i)).toBeInTheDocument();
+    const link = screen.getByTestId('custom-link');
+    expect(link).toHaveAttribute('href', '/archive');
   });
 
   it('should render all items in Ukrainian locale', () => {
