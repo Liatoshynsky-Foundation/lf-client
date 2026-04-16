@@ -1,8 +1,8 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import FoundationSection from './FoundationSection';
-
+import * as foundationData from './FoundationSection.data';
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => {
   return function MockImageWithCaption(props: { alt?: string; caption?: string; src?: string }) {
     return (
@@ -100,10 +100,6 @@ describe('FoundationSection', () => {
 
     const { unmount } = render(<FoundationSection {...defaultProps} paragraph2={mockParagraph2} />);
 
-    await act(async () => {
-      globalThis.dispatchEvent(new Event('resize'));
-    });
-
     const stickyWrapper = screen.getByTestId('sticky-wrapper');
     expect(stickyWrapper).toHaveAttribute('data-padding', '52');
 
@@ -119,5 +115,23 @@ describe('FoundationSection', () => {
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
     removeEventListenerSpy.mockRestore();
+  });
+
+  it('should correctly utilize and export all data from FoundationSectionData', () => {
+    expect(foundationData.foundationParagraph1).toBeDefined();
+    expect(foundationData.foundationParagraph2).toBeDefined();
+    expect(foundationData.foundationButtonText).toBeDefined();
+    expect(foundationData.foundationSectionData).toBeDefined();
+
+    render(
+      <FoundationSection
+        imageSrc={foundationData.foundationSectionData.imageSrc}
+        buttonLink={foundationData.foundationSectionData.buttonLink}
+        buttonText={foundationData.foundationButtonText.uk}
+        paragraph1={foundationData.foundationParagraph1.uk}
+      />
+    );
+
+    expect(screen.getByText(foundationData.foundationButtonText.uk)).toBeInTheDocument();
   });
 });

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageNotFound Component should match snapshot for visual consistency 1`] = `<DocumentFragment />`;

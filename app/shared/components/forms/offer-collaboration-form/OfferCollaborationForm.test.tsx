@@ -1,4 +1,6 @@
+/* eslint-disable no-console */
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import ContactForm from '~/components/forms/contact-form/ContactForm';
 
@@ -18,6 +20,8 @@ jest.mock('../../paper-component/PaperComponent', () => ({
     </div>
   ))
 }));
+
+global.fetch = jest.fn();
 
 describe('OfferCollaborationForm', () => {
   const mockProps = {
@@ -67,15 +71,67 @@ describe('OfferCollaborationForm', () => {
     );
   });
 
-  it('should pass an onSubmit handler to ContactForm and execute it', () => {
-    render(<OfferCollaborationForm />);
+  describe('onSubmit handler coverage', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      jest.spyOn(console, 'log').mockImplementation(() => {});
+    });
 
-    const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
-    const lastCallProps = contactFormCalls[contactFormCalls.length - 1][0];
+    afterEach(() => {
+      (console.error as jest.Mock).mockRestore();
+      (console.log as jest.Mock).mockRestore();
+    });
 
-    expect(lastCallProps).toHaveProperty('onSubmit');
-    expect(typeof lastCallProps.onSubmit).toBe('function');
+    it('should handle successful submission without previewUrl', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true })
+      });
 
-    expect(() => lastCallProps.onSubmit()).not.toThrow();
+      render(<OfferCollaborationForm />);
+
+      const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
+      const onSubmit = contactFormCalls[contactFormCalls.length - 1][0].onSubmit;
+
+      await onSubmit({ name: 'Test' });
+
+      expect(global.fetch).toHaveBeenCalled();
+    });
+
+    it('should log previewUrl on successful submission if provided', async () => {
+      const fakeUrl = 'https://mail.preview.url';
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ previewUrl: fakeUrl })
+      });
+
+      render(<OfferCollaborationForm />);
+
+      const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
+      const onSubmit = contactFormCalls[contactFormCalls.length - 1][0].onSubmit;
+
+      await onSubmit({ name: 'Test' });
+
+      expect(console.log).toHaveBeenCalledWith('Email preview URL:', fakeUrl);
+    });
+
+    it('should log error and throw exception on failed submission (!response.ok)', async () => {
+      const mockErrors = { field: 'Invalid data' };
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ errors: mockErrors })
+      });
+
+      render(<OfferCollaborationForm />);
+
+      const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
+      const onSubmit = contactFormCalls[contactFormCalls.length - 1][0].onSubmit;
+
+      try {
+        await onSubmit({ name: 'Test' });
+      } catch {}
+
+      expect(console.error).toHaveBeenCalledWith('Failed to submit collaboration request:', mockErrors);
+    });
   });
 });

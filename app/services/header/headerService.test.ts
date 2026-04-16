@@ -68,7 +68,16 @@ describe('headerService (composed)', () => {
     expect(navigationServiceMock.getNavigation).toHaveBeenCalled();
     expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
   });
+  it('should return null for specialNavigation if repository returns null (branch coverage)', async () => {
+    navigationServiceMock.getSpecialNavigation.mockResolvedValueOnce(null);
 
+    const result = await headerService.getHeaderData('en' as Locale);
+
+    expect(result.specialNavigation).toBeNull();
+
+    expect(result.navigation).toBeDefined();
+    expect(navigationServiceMock.getSpecialNavigation).toHaveBeenCalledTimes(1);
+  });
   it('should return empty string as supportButtonLink if undefined', async () => {
     foundationInfoServiceMock.getSupportButtonLink.mockResolvedValueOnce({ supportButtonLink: undefined });
 

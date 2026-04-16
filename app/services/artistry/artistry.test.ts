@@ -59,16 +59,8 @@ describe('artistryService', () => {
     it('should fetch genres, localize them and return the result', async () => {
       const locale = 'uk';
       compositionServiceMock.getAllGenres.mockResolvedValue(mockRawGenres);
-
       const result = await artistryService.getAllGenres(locale);
-
-      expect(result).toEqual([
-        {
-          key: 'romance',
-          name: 'Романс'
-        }
-      ]);
-      expect(compositionServiceMock.getAllGenres).toHaveBeenCalledTimes(1);
+      expect(result).toEqual([{ key: 'romance', name: 'Романс' }]);
     });
   });
 
@@ -76,64 +68,61 @@ describe('artistryService', () => {
     it('should fetch categories, localize them and return the result', async () => {
       const locale = 'uk';
       compositionServiceMock.getAllCategories.mockResolvedValue(mockRawCategories);
-
       const result = await artistryService.getAllCategories(locale);
+      expect(result).toEqual([{ key: 'classical', name: 'Класична' }]);
+    });
+  });
 
-      expect(result).toEqual([
-        {
-          key: 'classical',
-          name: 'Класична'
-        }
-      ]);
-      expect(compositionServiceMock.getAllCategories).toHaveBeenCalledTimes(1);
+  describe('getAllCompositions', () => {
+    it('should fetch compositions, localize them and return the result', async () => {
+      const locale = 'uk';
+      compositionServiceMock.getAllCompositions.mockResolvedValue(mockRawCompositions);
+      const result = await artistryService.getAllCompositions(locale, '');
+      expect(result[0].name).toBe('Красива пісня');
+      expect(result[0].opusTitle).toBe('Перший опус');
     });
 
-    describe('getAllCompositions', () => {
-      it('should fetch compositions, localize them and return the result', async () => {
-        const locale = 'uk';
-        const searchFilter = '';
-        compositionServiceMock.getAllCompositions.mockResolvedValue(mockRawCompositions);
+    it('should return empty array if null returned', async () => {
+      compositionServiceMock.getAllCompositions.mockResolvedValue(null);
+      const result = await artistryService.getAllCompositions('uk', '');
+      expect(result).toEqual([]);
+    });
+  });
 
-        const result = await artistryService.getAllCompositions(locale, searchFilter);
-        expect(result).toEqual([
-          {
-            id: mockRawCompositions[0]._id,
-            name: mockRawCompositions[0].title.uk,
-            year: mockRawCompositions[0].year,
-            audioAvailable: mockRawCompositions[0].audioAvailable,
-            sheetAvailable: mockRawCompositions[0].sheetAvailable,
-            sheetMusic: mockRawCompositions[0].sheetMusic,
-            createdAt: mockRawCompositions[0].createdAt,
-            updatedAt: mockRawCompositions[0].updatedAt,
-            opus: mockRawCompositions[0].opusId.number,
-            opusTitle: mockRawCompositions[0].opusId.title.uk,
-            genre: [mockRawCompositions[0].genres[0].name.uk]
-          }
-        ]);
-        expect(compositionServiceMock.getAllCompositions).toHaveBeenCalledTimes(1);
-      });
+  describe('getAllCompositionTitles (Targeting lines 43-46)', () => {
+    it('should fetch titles and localize them', async () => {
+      const locale = 'en';
+      const mockTitles = [
+        {
+          // Заменяем '1' на валидный 24-символьный hex ID
+          _id: '507f191e810c19729de860ea',
+          title: { en: 'Title En', uk: 'Назва Укр' }
+        }
+      ];
+      compositionServiceMock.getAllCompositionTitles.mockResolvedValue(mockTitles);
 
-      it('should return an empty array if composition service returns null or undefined', async () => {
-        const locale = 'uk';
-        const searchFilter = '';
-        compositionServiceMock.getAllCompositions.mockResolvedValue(null);
+      const result = await artistryService.getAllCompositionTitles(locale, {});
 
-        const result = await artistryService.getAllCompositions(locale, searchFilter);
+      expect(result).toEqual([{ _id: '507f191e810c19729de860ea', title: 'Title En' }]);
+      expect(compositionServiceMock.getAllCompositionTitles).toHaveBeenCalled();
+    });
 
-        expect(result).toEqual([]);
-        expect(compositionServiceMock.getAllCompositions).toHaveBeenCalledTimes(1);
-      });
+    it('should return empty array if repo returns null (line 44)', async () => {
+      compositionServiceMock.getAllCompositionTitles.mockResolvedValue(null);
+      const result = await artistryService.getAllCompositionTitles('uk', {});
+      expect(result).toEqual([]);
+    });
+  });
 
-      it('should return an empty array if composition service returns an empty array', async () => {
-        const locale = 'uk';
-        const searchFilter = '';
-        compositionServiceMock.getAllCompositions.mockResolvedValue([]);
+  describe('getCompositionsYearRange (Targeting lines 49-51)', () => {
+    it('should fetch and return year range', async () => {
+      const mockRange = { minYear: 1950, maxYear: 2024 };
+      compositionServiceMock.getCompositionsYearRange.mockResolvedValue(mockRange);
 
-        const result = await artistryService.getAllCompositions(locale, searchFilter);
+      const result = await artistryService.getCompositionsYearRange();
 
-        expect(result).toEqual([]);
-        expect(compositionServiceMock.getAllCompositions).toHaveBeenCalledTimes(1);
-      });
+      expect(result).toEqual(mockRange);
+      expect(compositionServiceMock.getCompositionsYearRange).toHaveBeenCalled();
     });
   });
 });

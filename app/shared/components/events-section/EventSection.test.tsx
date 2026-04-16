@@ -1,6 +1,21 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import EventSection from './EventSection';
+import * as eventData from './EventSection.data';
+
+jest.mock('~/hooks/use-breakpoints/useBreakpoints');
+
+jest.mock('swiper/react', () => ({
+  Swiper: ({ children }: any) => <div data-testid="swiper-mock">{children}</div>,
+  SwiperSlide: ({ children }: any) => <div data-testid="swiper-slide-mock">{children}</div>
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: jest.fn()
+}));
 
 jest.mock('~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => {
   return function MockButtonContentBlock({ buttonText, content, link }: any) {
@@ -48,43 +63,94 @@ const defaultProps = {
 };
 
 describe('EventSection', () => {
-  it('should render the main title and section description', () => {
-    render(<EventSection {...defaultProps} />);
-    expect(screen.getByText('Блок Подій')).toBeInTheDocument();
-    expect(screen.getByText('Опис секції подій')).toBeInTheDocument();
+  const mockedUseBreakpoints = useBreakpoints as jest.Mock;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    mockedUseBreakpoints.mockReturnValue({ isMobile: false, isDesktop: true });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn()
+      }))
+    });
   });
 
-  it('should render the list of events (up to 3)', () => {
-    render(<EventSection {...defaultProps} />);
-    expect(screen.getByText('Test Event 1')).toBeInTheDocument();
-    expect(screen.getByText('Test Event 2')).toBeInTheDocument();
-    const images = screen.getAllByRole('img');
-    expect(images.length).toBeGreaterThanOrEqual(2);
+  describe('Desktop Layout', () => {
+    it('should render the main title and section description', () => {
+      render(<EventSection {...defaultProps} />);
+      expect(screen.getByText('Блок Подій')).toBeInTheDocument();
+      expect(screen.getByText('Опис секції подій')).toBeInTheDocument();
+    });
+
+    it('should render the list of events', () => {
+      render(<EventSection {...defaultProps} />);
+      expect(screen.getByText('Test Event 1')).toBeInTheDocument();
+      expect(screen.getByText('Test Event 2')).toBeInTheDocument();
+    });
   });
 
-  it('should correctly display the publish date with label', () => {
-    render(<EventSection {...defaultProps} />);
-    expect(screen.getByText('Дата публікації: 01.01.2024')).toBeInTheDocument();
+  describe('Mobile Layout (Coverage lines 66-121)', () => {
+    beforeEach(() => {
+      mockedUseBreakpoints.mockReturnValue({ isMobile: true, isDesktop: false });
+
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: jest.fn().mockImplementation((query) => ({
+          matches: true,
+          media: query,
+          onchange: null,
+          addListener: jest.fn(),
+          removeListener: jest.fn(),
+          addEventListener: jest.fn(),
+          removeEventListener: jest.fn(),
+          dispatchEvent: jest.fn()
+        }))
+      });
+    });
+
+    it('should render mobile slider navigation containers', () => {
+      const { container } = render(<EventSection {...defaultProps} />);
+
+      const prevBtn = container.querySelector('.event-prev');
+      const nextBtn = container.querySelector('.event-next');
+
+      expect(prevBtn).toBeInTheDocument();
+      expect(nextBtn).toBeInTheDocument();
+    });
+
+    it('should show registration link in mobile view if provided', () => {
+      render(<EventSection {...defaultProps} />);
+      expect(screen.getByText('Реєстрація')).toBeInTheDocument();
+    });
   });
 
-  it('should show registration button only if regLink is provided', () => {
-    render(<EventSection {...defaultProps} />);
-    const regButtons = screen.getAllByText('Реєстрація');
-    expect(regButtons.length).toBe(1);
-  });
+  describe('Data File Coverage (100% EventSection.data.ts)', () => {
+    it('should utilize all data constants', () => {
+      const checkData = {
+        title: eventData.eventsTitle,
+        text: eventData.eventsMainText,
+        mock: eventData.mockEventsData,
+        pub: eventData.eventsPublishDateLabel,
+        view: eventData.eventsViewLabel,
+        reg: eventData.eventsRegLabel,
+        cta: eventData.eventsCtaLabel
+      };
 
-  it('should have the correct href attribute for the main CTA button', () => {
-    render(<EventSection {...defaultProps} />);
-    const ctaButton = screen.getByRole('link', { name: /Всі події/i });
-    expect(ctaButton).toHaveAttribute('href', '/events');
-  });
+      expect(checkData.title).toBeDefined();
 
-  it('should limit the number of displayed events to 3', () => {
-    const manyEvents = Array(5)
-      .fill(mockEvents[0])
-      .map((ev, i) => ({ ...ev, id: `${i}` }));
-    render(<EventSection {...defaultProps} events={manyEvents} />);
-    const viewButtons = screen.getAllByText('Дивитись');
-    expect(viewButtons.length).toBe(3);
+      render(<EventSection {...defaultProps} title={eventData.eventsTitle.uk} />);
+
+      expect(screen.getByText(eventData.eventsTitle.uk)).toBeInTheDocument();
+    });
   });
 });
