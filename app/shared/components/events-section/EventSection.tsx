@@ -33,11 +33,15 @@ interface Props {
 }
 
 const formatResponsiveDate = (dateStr: string) => {
-  const match = dateStr.match(/(.*?)([\.\s]?)(\d{4})$/);
+  const year = dateStr.slice(-4);
 
-  if (!match) return dateStr;
+  if (isNaN(Number(year))) return dateStr;
 
-  const [_, mainPart, separator, year] = match;
+  const separator = dateStr.slice(-5, -4);
+  const hasSeparator = separator === '.' || separator === ' ';
+
+  const mainPart = hasSeparator ? dateStr.slice(0, -5) : dateStr.slice(0, -4);
+  const finalSeparator = hasSeparator ? separator : '';
 
   return (
     <>
@@ -51,7 +55,7 @@ const formatResponsiveDate = (dateStr: string) => {
           }
         }}
       >
-        {separator}
+        {finalSeparator}
       </Box>
       <Box
         component="span"
@@ -67,7 +71,6 @@ const formatResponsiveDate = (dateStr: string) => {
     </>
   );
 };
-
 const EventSection: React.FC<Props> = ({
   title,
   text,
