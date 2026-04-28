@@ -72,7 +72,10 @@ export const styles = {
     color: '#190D03',
     lineHeight: 1.4,
     fontStyle: 'SemiBold',
-    fontFamily: 'Oswald'
+    fontFamily: 'Oswald',
+    textTransform: 'uppercase',
+    whiteSpace: { xs: 'nowrap', lg: 'normal' },
+    mb: { xs: '12px', md: '0px' }
   },
 
   eventTitle: {
