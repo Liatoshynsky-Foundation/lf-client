@@ -35,7 +35,7 @@ interface Props {
 const formatResponsiveDate = (dateStr: string) => {
   const year = dateStr.slice(-4);
 
-  if (isNaN(Number(year))) return dateStr;
+  if (Number.isNaN(Number(year))) return dateStr;
 
   const separator = dateStr.slice(-5, -4);
   const hasSeparator = separator === '.' || separator === ' ';
