@@ -32,6 +32,42 @@ interface Props {
   events: EventItem[];
 }
 
+const formatResponsiveDate = (dateStr: string) => {
+  const match = dateStr.match(/(.*?)([\.\s]?)(\d{4})$/);
+
+  if (!match) return dateStr;
+
+  const [_, mainPart, separator, year] = match;
+
+  return (
+    <>
+      {mainPart}
+      <Box
+        component="span"
+        sx={{
+          display: {
+            xs: 'inline',
+            '@media (min-width: 1280px)': { display: 'none' }
+          }
+        }}
+      >
+        {separator}
+      </Box>
+      <Box
+        component="span"
+        sx={{
+          display: {
+            xs: 'inline',
+            '@media (min-width: 1280px)': { display: 'block' }
+          }
+        }}
+      >
+        {year}
+      </Box>
+    </>
+  );
+};
+
 const EventSection: React.FC<Props> = ({
   title,
   text,
@@ -85,7 +121,7 @@ const EventSection: React.FC<Props> = ({
             {displayedEvents.map((event) => (
               <SwiperSlide key={event.id}>
                 <Box sx={{ ...styles.eventItem, width: '100%', mb: 0 }}>
-                  <Typography sx={styles.eventDate}>{event.date}</Typography>
+                  <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
                   <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
                   <Box sx={styles.eventInfo}>
                     <Typography variant="h4" sx={styles.eventTitle}>
@@ -123,7 +159,7 @@ const EventSection: React.FC<Props> = ({
         <Box sx={styles.eventsList}>
           {displayedEvents.map((event) => (
             <Box key={event.id} sx={styles.eventItem}>
-              <Typography sx={styles.eventDate}>{event.date}</Typography>
+              <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
               <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
               <Box sx={styles.eventInfo}>
                 <Typography variant="h4" sx={styles.eventTitle}>

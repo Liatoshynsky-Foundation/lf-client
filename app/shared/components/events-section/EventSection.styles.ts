@@ -65,7 +65,7 @@ export const styles = {
   },
 
   eventDate: {
-    gridColumn: { xs: '1 / -1', sm: '1 / 4', md: '1 / 5', lg: '1 / 2', xl: '1 / 3' },
+    gridColumn: { xs: '1 / -1', sm: '1 / 4', md: '1 / 5', lg: '1 / 3', xl: '1 / 3' },
     gridRow: { xs: '1', sm: '1', md: '1' },
     fontSize: { xs: '20px', sm: '20px', md: '28px', lg: '28px' },
     fontWeight: 700,
@@ -74,7 +74,20 @@ export const styles = {
     fontStyle: 'SemiBold',
     fontFamily: 'Oswald',
     textTransform: 'uppercase',
-    whiteSpace: { xs: 'nowrap', lg: 'normal' },
+    whiteSpace: {
+      xs: 'nowrap',
+      '@media (min-width: 1280px)': { whiteSpace: 'normal' }
+    },
+
+    maxWidth: {
+      '@media (min-width: 1280px) and (max-width: 1439px)': {
+        maxWidth: '120px'
+      },
+      '@media (min-width: 1440px)': {
+        maxWidth: 'none'
+      }
+    },
+
     mb: { xs: '12px', md: '0px' }
   },
 
