@@ -59,7 +59,7 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
           const href =
             variant === 'press' && 'url' in newsItem && typeof newsItem.url === 'string'
               ? newsItem.url
-              : `/${variant}/${newsItem._id}`;
+              : `/${variant}/${newsItem.slug ?? newsItem._id}`;
 
           return (
             <BaseCard
