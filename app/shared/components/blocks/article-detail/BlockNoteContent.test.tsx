@@ -15,11 +15,16 @@ const makeBlock = (overrides: Partial<BlockNoteBlock> & Pick<BlockNoteBlock, 'ty
   ...overrides
 });
 
+const inlineText = (text: string, styles = {}) => ({ type: 'text' as const, text, styles });
+
 const textBlock = (text: string, styles = {}): BlockNoteBlock =>
-  makeBlock({
-    type: 'paragraph',
-    content: [{ type: 'text', text, styles }]
-  });
+  makeBlock({ type: 'paragraph', content: [inlineText(text, styles)] });
+
+const headingBlock = (level: number, text: string): BlockNoteBlock =>
+  makeBlock({ type: 'heading', props: { level }, content: [inlineText(text)] });
+
+const listItemBlock = (type: 'bulletListItem' | 'numberedListItem', text: string, id = 'test-id'): BlockNoteBlock =>
+  makeBlock({ id, type, content: [inlineText(text)] });
 
 describe('BlockNoteContent', () => {
   describe('empty state', () => {
@@ -84,9 +89,7 @@ describe('BlockNoteContent', () => {
     it('renders link with correct href', () => {
       const block = makeBlock({
         type: 'paragraph',
-        content: [
-          { type: 'link', href: 'https://example.com', content: [{ type: 'text', text: 'Click me', styles: {} }] }
-        ]
+        content: [{ type: 'link', href: 'https://example.com', content: [inlineText('Click me')] }]
       });
       render(<BlockNoteContent blocks={[block]} />);
       const link = screen.getByRole('link', { name: 'Click me' });
@@ -96,7 +99,7 @@ describe('BlockNoteContent', () => {
     it('renders link with target="_blank" and rel="noopener noreferrer"', () => {
       const block = makeBlock({
         type: 'paragraph',
-        content: [{ type: 'link', href: 'https://example.com', content: [{ type: 'text', text: 'Link', styles: {} }] }]
+        content: [{ type: 'link', href: 'https://example.com', content: [inlineText('Link')] }]
       });
       render(<BlockNoteContent blocks={[block]} />);
       const link = screen.getByRole('link', { name: 'Link' });
@@ -107,52 +110,29 @@ describe('BlockNoteContent', () => {
 
   describe('headings', () => {
     it('renders heading level 1 as h1', () => {
-      const block = makeBlock({
-        type: 'heading',
-        props: { level: 1 },
-        content: [{ type: 'text', text: 'Title H1', styles: {} }]
-      });
-      render(<BlockNoteContent blocks={[block]} />);
+      render(<BlockNoteContent blocks={[headingBlock(1, 'Title H1')]} />);
       expect(screen.getByRole('heading', { level: 1, name: 'Title H1' })).toBeInTheDocument();
     });
 
     it('renders heading level 2 as h2', () => {
-      const block = makeBlock({
-        type: 'heading',
-        props: { level: 2 },
-        content: [{ type: 'text', text: 'Title H2', styles: {} }]
-      });
-      render(<BlockNoteContent blocks={[block]} />);
+      render(<BlockNoteContent blocks={[headingBlock(2, 'Title H2')]} />);
       expect(screen.getByRole('heading', { level: 2, name: 'Title H2' })).toBeInTheDocument();
     });
 
     it('renders heading level 3 as h3', () => {
-      const block = makeBlock({
-        type: 'heading',
-        props: { level: 3 },
-        content: [{ type: 'text', text: 'Title H3', styles: {} }]
-      });
-      render(<BlockNoteContent blocks={[block]} />);
+      render(<BlockNoteContent blocks={[headingBlock(3, 'Title H3')]} />);
       expect(screen.getByRole('heading', { level: 3, name: 'Title H3' })).toBeInTheDocument();
     });
 
     it('caps heading level at h3 for level > 3', () => {
-      const block = makeBlock({
-        type: 'heading',
-        props: { level: 5 },
-        content: [{ type: 'text', text: 'Title H5', styles: {} }]
-      });
-      render(<BlockNoteContent blocks={[block]} />);
+      render(<BlockNoteContent blocks={[headingBlock(5, 'Title H5')]} />);
       expect(screen.getByRole('heading', { level: 3, name: 'Title H5' })).toBeInTheDocument();
     });
   });
 
   describe('bullet list', () => {
     it('renders bullet list items inside <ul>', () => {
-      const blocks = [
-        makeBlock({ id: '1', type: 'bulletListItem', content: [{ type: 'text', text: 'Item A', styles: {} }] }),
-        makeBlock({ id: '2', type: 'bulletListItem', content: [{ type: 'text', text: 'Item B', styles: {} }] })
-      ];
+      const blocks = [listItemBlock('bulletListItem', 'Item A', '1'), listItemBlock('bulletListItem', 'Item B', '2')];
       render(<BlockNoteContent blocks={blocks} />);
       expect(document.querySelector('ul')).toBeInTheDocument();
       expect(screen.getByText('Item A')).toBeInTheDocument();
@@ -161,9 +141,9 @@ describe('BlockNoteContent', () => {
 
     it('groups consecutive bullet items into one <ul>', () => {
       const blocks = [
-        makeBlock({ id: '1', type: 'bulletListItem', content: [{ type: 'text', text: 'A', styles: {} }] }),
-        makeBlock({ id: '2', type: 'bulletListItem', content: [{ type: 'text', text: 'B', styles: {} }] }),
-        makeBlock({ id: '3', type: 'bulletListItem', content: [{ type: 'text', text: 'C', styles: {} }] })
+        listItemBlock('bulletListItem', 'A', '1'),
+        listItemBlock('bulletListItem', 'B', '2'),
+        listItemBlock('bulletListItem', 'C', '3')
       ];
       render(<BlockNoteContent blocks={blocks} />);
       expect(document.querySelectorAll('ul')).toHaveLength(1);
@@ -171,24 +151,20 @@ describe('BlockNoteContent', () => {
 
     it('creates separate <ul> groups when separated by a paragraph', () => {
       const blocks = [
-        makeBlock({ id: '1', type: 'bulletListItem', content: [{ type: 'text', text: 'A', styles: {} }] }),
+        listItemBlock('bulletListItem', 'A', '1'),
         textBlock('Paragraph between'),
-        makeBlock({ id: '3', type: 'bulletListItem', content: [{ type: 'text', text: 'B', styles: {} }] })
+        listItemBlock('bulletListItem', 'B', '3')
       ];
       render(<BlockNoteContent blocks={blocks} />);
       expect(document.querySelectorAll('ul')).toHaveLength(2);
     });
 
     it('renders nested children inside bullet list item', () => {
-      const childBlock = makeBlock({
-        id: 'child',
-        type: 'bulletListItem',
-        content: [{ type: 'text', text: 'Nested', styles: {} }]
-      });
+      const childBlock = listItemBlock('bulletListItem', 'Nested', 'child');
       const block = makeBlock({
         id: 'parent',
         type: 'bulletListItem',
-        content: [{ type: 'text', text: 'Parent', styles: {} }],
+        content: [inlineText('Parent')],
         children: [childBlock]
       });
       render(<BlockNoteContent blocks={[block]} />);
@@ -199,8 +175,8 @@ describe('BlockNoteContent', () => {
   describe('numbered list', () => {
     it('renders numbered list items inside <ol>', () => {
       const blocks = [
-        makeBlock({ id: '1', type: 'numberedListItem', content: [{ type: 'text', text: 'Step 1', styles: {} }] }),
-        makeBlock({ id: '2', type: 'numberedListItem', content: [{ type: 'text', text: 'Step 2', styles: {} }] })
+        listItemBlock('numberedListItem', 'Step 1', '1'),
+        listItemBlock('numberedListItem', 'Step 2', '2')
       ];
       render(<BlockNoteContent blocks={blocks} />);
       expect(document.querySelector('ol')).toBeInTheDocument();
@@ -209,10 +185,7 @@ describe('BlockNoteContent', () => {
     });
 
     it('creates separate groups for bullet and numbered lists', () => {
-      const blocks = [
-        makeBlock({ id: '1', type: 'bulletListItem', content: [{ type: 'text', text: 'Bullet', styles: {} }] }),
-        makeBlock({ id: '2', type: 'numberedListItem', content: [{ type: 'text', text: 'Number', styles: {} }] })
-      ];
+      const blocks = [listItemBlock('bulletListItem', 'Bullet', '1'), listItemBlock('numberedListItem', 'Number', '2')];
       render(<BlockNoteContent blocks={blocks} />);
       expect(document.querySelector('ul')).toBeInTheDocument();
       expect(document.querySelector('ol')).toBeInTheDocument();
@@ -221,33 +194,21 @@ describe('BlockNoteContent', () => {
 
   describe('checkListItem', () => {
     it('renders checked checkbox', () => {
-      const block = makeBlock({
-        type: 'checkListItem',
-        props: { checked: true },
-        content: [{ type: 'text', text: 'Done', styles: {} }]
-      });
+      const block = makeBlock({ type: 'checkListItem', props: { checked: true }, content: [inlineText('Done')] });
       render(<BlockNoteContent blocks={[block]} />);
       const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
       expect(checkbox.checked).toBe(true);
     });
 
     it('renders unchecked checkbox', () => {
-      const block = makeBlock({
-        type: 'checkListItem',
-        props: { checked: false },
-        content: [{ type: 'text', text: 'Todo', styles: {} }]
-      });
+      const block = makeBlock({ type: 'checkListItem', props: { checked: false }, content: [inlineText('Todo')] });
       render(<BlockNoteContent blocks={[block]} />);
       const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
       expect(checkbox.checked).toBe(false);
     });
 
     it('renders checkbox as readOnly', () => {
-      const block = makeBlock({
-        type: 'checkListItem',
-        props: { checked: true },
-        content: [{ type: 'text', text: 'Task', styles: {} }]
-      });
+      const block = makeBlock({ type: 'checkListItem', props: { checked: true }, content: [inlineText('Task')] });
       render(<BlockNoteContent blocks={[block]} />);
       expect(screen.getByRole('checkbox')).toHaveAttribute('readOnly');
     });
@@ -286,7 +247,7 @@ describe('BlockNoteContent', () => {
 
   describe('unknown block type', () => {
     it('renders inline content for unknown type', () => {
-      const block = makeBlock({ type: 'unknown', content: [{ type: 'text', text: 'Fallback text', styles: {} }] });
+      const block = makeBlock({ type: 'unknown', content: [inlineText('Fallback text')] });
       render(<BlockNoteContent blocks={[block]} />);
       expect(screen.getByText('Fallback text')).toBeInTheDocument();
     });

@@ -11,14 +11,12 @@ import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 export type ArticleDetailProps = {
   lang: string;
-  coverImage: { src: string; alt: string };
   date?: string;
-  views?: number;
   title: string;
   blocks: BlockNoteBlock[];
 };
 
-export function ArticleDetail({ lang, date, title, blocks }: ArticleDetailProps) {
+export function ArticleDetail({ lang, date, title, blocks }: Readonly<ArticleDetailProps>) {
   return (
     <MainLayout withLines>
       <Box sx={styles.newsHeader}>

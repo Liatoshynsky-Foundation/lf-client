@@ -1,3 +1,10 @@
+const smallLabel = {
+  fontFamily: 'Mulish',
+  fontWeight: 500,
+  fontSize: { xs: '12px', md: '16px' },
+  lineHeight: '150%'
+} as const;
+
 export const styles = {
   container: {
     gridColumn: '1 / -1',
@@ -38,22 +45,13 @@ export const styles = {
     mt: 0,
     mb: 0
   },
-  content: {},
   backLink: {
     paddingLeft: 0
   },
-  backLinkLabel: {
-    fontFamily: 'Mulish',
-    fontWeight: 500,
-    fontSize: { xs: '12px', md: '16px' },
-    lineHeight: '150%'
-  },
+  backLinkLabel: smallLabel,
   publicDate: {
+    ...smallLabel,
     whiteSpace: 'nowrap',
-    flexShrink: 0,
-    fontFamily: 'Mulish',
-    fontWeight: 500,
-    fontSize: { xs: '12px', md: '16px' },
-    lineHeight: '150%'
+    flexShrink: 0
   }
 };

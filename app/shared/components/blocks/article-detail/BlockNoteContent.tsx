@@ -46,17 +46,17 @@ function applyTextStyles(item: TextContent): React.ReactNode {
 }
 
 function renderInline(content: InlineContent[]): React.ReactNode {
-  return content.map((item, i) => {
+  return content.map((item) => {
     if (item.type === 'link') {
       return (
-        <a key={i} href={item.href} target="_blank" rel="noopener noreferrer">
-          {item.content.map((c, j) => (
-            <Fragment key={j}>{applyTextStyles(c)}</Fragment>
+        <a key={`link-${item.href}`} href={item.href} target="_blank" rel="noopener noreferrer">
+          {item.content.map((c) => (
+            <Fragment key={`text-${c.text}`}>{applyTextStyles(c)}</Fragment>
           ))}
         </a>
       );
     }
-    return <Fragment key={i}>{applyTextStyles(item)}</Fragment>;
+    return <Fragment key={`text-${item.text}`}>{applyTextStyles(item)}</Fragment>;
   });
 }
 
@@ -168,7 +168,7 @@ type BlockNoteContentProps = {
   blocks: BlockNoteBlock[];
 };
 
-export function BlockNoteContent({ blocks }: BlockNoteContentProps) {
+export function BlockNoteContent({ blocks }: Readonly<BlockNoteContentProps>) {
   const groups = groupBlocks(blocks);
-  return <Box>{groups.map(renderGroup)}</Box>;
+  return <Box>{groups.map((group, index) => renderGroup(group, index))}</Box>;
 }
