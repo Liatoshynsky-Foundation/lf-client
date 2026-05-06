@@ -149,8 +149,6 @@ describe('NewsDetailPage', () => {
     expect(props.lang).toBe('uk');
     expect(props.title).toBe(mockNews.title);
     expect(props.date).toBe('01.05.24');
-    expect(props.views).toBe(mockNews.meta.views);
-    expect(props.coverImage).toEqual(mockNews.coverImage);
     expect(props.blocks).toEqual(mockNews.content.content.blocks);
   });
 

@@ -55,14 +55,5 @@ export default async function NewsDetailPage({ params }: Readonly<NewsDetailPage
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blocks = ((news.content as any)?.content?.blocks ?? []) as BlockNoteBlock[];
 
-  return (
-    <ArticleDetail
-      lang={lang}
-      coverImage={news.coverImage}
-      date={displayDate}
-      views={news.meta.views}
-      title={news.title}
-      blocks={blocks}
-    />
-  );
+  return <ArticleDetail lang={lang} date={displayDate} title={news.title} blocks={blocks} />;
 }
