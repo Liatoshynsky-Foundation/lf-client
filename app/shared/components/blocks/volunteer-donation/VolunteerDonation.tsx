@@ -30,7 +30,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle
-        title={title}
+        title={title[locale]}
         sx={styles.title}
         icon={false}
         gridColumn={{ xs: '1 / -1', sm: '4 / -1', md: '6 / -1' }}
