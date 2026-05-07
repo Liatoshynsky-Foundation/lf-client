@@ -2,11 +2,15 @@ import { render, screen } from '@testing-library/react';
 
 import FundCard from './FundCard';
 
+jest.mock('next-intl', () => ({
+  useLocale: jest.fn(() => 'en')
+}));
+
 describe('FundCard', () => {
   const defaultProps = {
     id: 1,
-    number: 'Fund 1',
-    title: 'Test Fund Title'
+    number: { en: 'Fund 1', uk: 'Фунд 1' },
+    title: { en: 'Test Fund Title', uk: 'Тестова назва фонду' }
   };
 
   it('should renders without crashing', () => {
@@ -30,8 +34,8 @@ describe('FundCard', () => {
   it('should renders with different prop values', () => {
     const customProps = {
       id: 99,
-      number: 'Custom Fund',
-      title: 'Custom Title'
+      number: { en: 'Custom Fund', uk: 'Кастомний Фунд' },
+      title: { en: 'Custom Title', uk: 'Кастомна Назва' }
     };
 
     render(<FundCard {...customProps} />);
@@ -52,7 +56,7 @@ describe('FundCard', () => {
   it('should handles long titles', () => {
     const longTitle = 'Very Long Title That Should Be Displayed Properly';
 
-    render(<FundCard {...defaultProps} title={longTitle} />);
+    render(<FundCard {...defaultProps} title={{ en: longTitle, uk: longTitle }} />);
 
     expect(screen.getByText(longTitle)).toBeInTheDocument();
   });

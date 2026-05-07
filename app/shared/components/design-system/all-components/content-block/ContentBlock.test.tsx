@@ -18,6 +18,9 @@ const additionalDescription = [
   { id: 2, text: 'Text 2' }
 ];
 
+jest.mock('next-intl', () => ({
+  useLocale: () => 'uk'
+}));
 const mockTipTapData = {
   type: 'doc',
   content: [

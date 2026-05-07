@@ -183,53 +183,53 @@ export async function GET() {
 ### Folder structure
 
 ```markdown
-├── public/                            # Static assets (icons, images, mock news images)
-│   └── images/                        # Categorized image assets (biography, events, partners)
-├── app/                               # Main application source (Next.js App Router)
-│   ├── [lang]/                        # Localization-based routing wrapper
-│   │   ├── about-us/                  # Foundation history and mission pages
-│   │   ├── archive/                   # Digital archives ([fund] and [case] dynamic routes)
-│   │   ├── artistry/                  # Creative and artistic activity sections
-│   │   ├── biography/                 # Liatoshynsky biography with interactive content
-│   │   ├── contacts/                  # Contact pages with feedback info
-│   │   ├── news/                      # Media center and foundation news
-│   │   ├── research/                  # Scientific research and publications section
-│   │   └── war-in-ukraine/            # Dedicated section for current events/impact
-│   ├── api/                           # Server-side API routes (Route Handlers)
-│   │   ├── compositions/              # CRUD for musical compositions (data, filters, titles)
-│   │   ├── scientific-works/          # Management of scientific publications and filtering
-│   │   ├── blob-url/                  # Azure Storage integration for media URLs
-│   │   ├── create-invoice/            # Payment and donation processing logic
-│   │   └── health/                    # API health monitoring endpoint
-│   ├── di/                            # Dependency Injection layer
-│   │   └── modules/                   # Inversify or custom DI module definitions
-│   ├── domain/                        # Core business logic and types
-│   │   └── dto/                       # Data Transfer Objects for API-Client communication
-│   ├── infrastructure/                # Data Access Layer
-│   │   ├── db/                        # Database connection logic
-│   │   ├── models/                    # Database schemas (Archive, News, ScientificWorks)
-│   │   └── repositories/              # Repository pattern for DB abstraction
-│   ├── services/                      # Application Business Services
-│   │   ├── scientific-works/          # Business logic for scientific data
-│   │   ├── email/                     # Email sending services and templates
-│   │   ├── pages-data/                # Dynamic content aggregation for various pages
-│   │   └── upload/                    # File handling and Azure Blob Storage services
-│   ├── shared/                        # Reusable core codebase
-│   │   ├── components/                # Global UI Components
-│   │   │   ├── design-system/         # Atomic components
-│   │   │   ├── blocks/                # Complex UI sections
-│   │   │   ├── tables/                # Advanced data tables
-│   │   │   ├── forms/                 # Specialized forms
-│   │   │   ├── Header/                # Site navigation with AudioPlayer integration
-│   │   │   ├── Footer/                # Multi-section footer with social media links
-│   │   │   └── design-system/         # Atomic design system
-│   │   ├── hooks/                     # React hooks
-│   │   ├── context/                   # Global state management
-│   │   ├── layouts/                   # Shared page layouts
-│   │   └── exceptions/                # Custom error handling and domain-specific errors
-│   ├── types/                         # Global TypeScript definitions, enums, and interfaces
-│   ├── validators/                    # Data validation schemas
-│   └── middleware/                    # Next.js middleware
+├── public/ # Static assets (icons, images, mock news images)
+│ └── images/ # Categorized image assets (biography, events, partners)
+├── app/ # Main application source (Next.js App Router)
+│ ├── [lang]/ # Localization-based routing wrapper
+│ │ ├── about-us/ # Foundation history and mission pages
+│ │ ├── archive/ # Digital archives ([fund] and [case] dynamic routes)
+│ │ ├── artistry/ # Creative and artistic activity sections
+│ │ ├── biography/ # Liatoshynsky biography with interactive content
+│ │ ├── contacts/ # Contact pages with feedback info
+│ │ ├── news/ # Media center and foundation news
+│ │ ├── research/ # Scientific research and publications section
+│ │ └── war-in-ukraine/ # Dedicated section for current events/impact
+│ ├── api/ # Server-side API routes (Route Handlers)
+│ │ ├── compositions/ # CRUD for musical compositions (data, filters, titles)
+│ │ ├── scientific-works/ # Management of scientific publications and filtering
+│ │ ├── blob-url/ # Azure Storage integration for media URLs
+│ │ ├── create-invoice/ # Payment and donation processing logic
+│ │ └── health/ # API health monitoring endpoint
+│ ├── di/ # Dependency Injection layer
+│ │ └── modules/ # Inversify or custom DI module definitions
+│ ├── domain/ # Core business logic and types
+│ │ └── dto/ # Data Transfer Objects for API-Client communication
+│ ├── infrastructure/ # Data Access Layer
+│ │ ├── db/ # Database connection logic
+│ │ ├── models/ # Database schemas (Archive, News, ScientificWorks)
+│ │ └── repositories/ # Repository pattern for DB abstraction
+│ ├── services/ # Application Business Services
+│ │ ├── scientific-works/ # Business logic for scientific data
+│ │ ├── email/ # Email sending services and templates
+│ │ ├── pages-data/ # Dynamic content aggregation for various pages
+│ │ └── upload/ # File handling and Azure Blob Storage services
+│ ├── shared/ # Reusable core codebase
+│ │ ├── components/ # Global UI Components
+│ │ │ ├── design-system/ # Atomic components
+│ │ │ ├── blocks/ # Complex UI sections
+│ │ │ ├── tables/ # Advanced data tables
+│ │ │ ├── forms/ # Specialized forms
+│ │ │ ├── Header/ # Site navigation with AudioPlayer integration
+│ │ │ ├── Footer/ # Multi-section footer with social media links
+│ │ │ └── design-system/ # Atomic design system
+│ │ ├── hooks/ # React hooks
+│ │ ├── context/ # Global state management
+│ │ ├── layouts/ # Shared page layouts
+│ │ └── exceptions/ # Custom error handling and domain-specific errors
+│ ├── types/ # Global TypeScript definitions, enums, and interfaces
+│ ├── validators/ # Data validation schemas
+│ └── middleware/ # Next.js middleware
 ```
 
 ---
@@ -308,15 +308,19 @@ gitGraph
 ### Development team
 
 #### Team Lv-680.5
+
 [![@Mav-Ivan](https://avatars.githubusercontent.com/u/110425368?v=4&size=250)](https://github.com/Mav-Ivan)
 
 #### Team Lv-680.10
+
 <a href="https://github.com/Mike-Popovych"><img src="https://avatars.githubusercontent.com/u/125293578?v=4" width="250" alt="@Mike-Popovych"></a>
 
 #### Team Lv-680.11
+
 [![@Renatavl](https://avatars.githubusercontent.com/u/86105228?v=4&size=250)](https://github.com/Renatavl)
 
 #### Team Lv-680.12
+
 <a href="https://github.com/markgol777"><img src="https://avatars.githubusercontent.com/u/66869816?v=4" width="250" alt="@markgol777"></a>
 [![@VKormylo](https://avatars.githubusercontent.com/u/65959529?v=4&size=250)](https://github.com/VKormylo)
 <a href="https://github.com/nebby2105"><img src="https://avatars.githubusercontent.com/u/154923065?v=4" width="250" alt="@nebby2105"></a>
@@ -325,6 +329,7 @@ gitGraph
 [![@sandrvvu](https://avatars.githubusercontent.com/u/105361812?v=4&size=250)](https://github.com/sandrvvu)
 
 #### Team Lv-680.13
+
 [![@yur4uwe](https://avatars.githubusercontent.com/u/157615455?v=4&size=250)](https://github.com/yur4uwe)
 [![@uliaescha](https://avatars.githubusercontent.com/u/136600464?v=4&size=250)](https://github.com/uliaescha)
 [![@Iarynovskyi](https://avatars.githubusercontent.com/u/164883382?v=4&size=250)](https://github.com/Iarynovskyi)
@@ -337,11 +342,13 @@ gitGraph
 [![@irynalaitaruk](https://avatars.githubusercontent.com/u/30904237?v=4&size=250)](https://github.com/irynalaitaruk)
 
 #### Team UA-5044
+
 [![@ssashayurchenko](https://avatars.githubusercontent.com/u/160735952?v=4&size=250)](https://github.com/ssashayurchenko)
 <a href="https://github.com/bohuslavstan"><img src="https://avatars.githubusercontent.com/u/156684724?v=4" width="250" alt="@bohuslavstan"></a>
 [![@Kryzhanivsky](https://avatars.githubusercontent.com/u/77616134?v=4&size=250)](https://github.com/Kryzhanivsky)
 
 #### Team UA-5195
+
 [![@qqwz0](https://avatars.githubusercontent.com/u/105491259?v=4&size=250)](https://github.com/qqwz0)
 [![@NatalyKrvch](https://avatars.githubusercontent.com/u/105675637?v=4&size=250)](https://github.com/NatalyKrvch)
 [![@stsvt](https://avatars.githubusercontent.com/u/167477637?v=4&size=250)](https://github.com/stsvt)
@@ -356,6 +363,7 @@ gitGraph
 [![@krxllll](https://avatars.githubusercontent.com/u/51999128?v=4&size=250)](https://github.com/krxllll)
 
 #### Team UA-5353
+
 [![@MykolaMak](https://avatars.githubusercontent.com/u/40358197?v=4&size=250)](https://github.com/MykolaMak)
 [![@dest411](https://avatars.githubusercontent.com/u/146329542?v=4&size=250)](https://github.com/dest411)
 [![@kandyba](https://avatars.githubusercontent.com/u/11414249?v=4&size=250)](https://github.com/kandyba)
@@ -363,7 +371,6 @@ gitGraph
 [![@navimov](https://avatars.githubusercontent.com/u/108539100?v=4&size=250)](https://github.com/navimov)
 [![@Fedorieieva](https://avatars.githubusercontent.com/u/115637318?v=4&size=250)](https://github.com/Fedorieieva)
 [![@Th0mas-H0ward](https://avatars.githubusercontent.com/u/86684680?v=4&size=250)](https://github.com/Th0mas-H0ward)
-
 
 ### DevOps team
 

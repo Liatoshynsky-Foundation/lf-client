@@ -133,7 +133,10 @@ describe('fundsRepository', () => {
       expect(result.documents).toEqual([]);
       expect(result.prevCase).toBeNull();
       expect(result.nextCase).toBeNull();
-      expect(result.fundNumber).toBe('');
+      expect(result.fundNumber).toEqual({
+        en: '',
+        uk: ''
+      });
     });
 
     it('should return full case details with navigation', async () => {

@@ -5,7 +5,10 @@ import { getNavigationLink } from '~/lib/utils/navigationHelper';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 export const actionsHelpPageData = {
-  title: 'Допомогти справами',
+  title: {
+    uk: 'Допомогти справами',
+    en: 'Help with actions'
+  },
   subtitle: {
     type: TipTapNodeTypes.doc,
     content: [
@@ -13,13 +16,23 @@ export const actionsHelpPageData = {
         type: TipTapNodeTypes.paragraph,
         content: [
           {
-            type: TipTapNodeTypes.text,
-            text: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що '
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що ',
+              en: 'We really need people — with your expertise, energy and a bit of time, because it is your participation that helps Ukrainian music become more visible in the world. And the more '
+            }
           },
-          { type: TipTapNodeTypes.text, text: 'гучніше й впевненіше', marks: [{ type: TipTapMarkType.bold }] },
           {
-            type: TipTapNodeTypes.text,
-            text: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.'
+            type: TipTapNodeTypes.multiLangText,
+            text: { uk: 'гучніше й впевненіше', en: 'louder and more confident' },
+            marks: [{ type: TipTapMarkType.bold }]
+          },
+          {
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.',
+              en: ' the louder it sounds, the more people understand and support us — at all levels.'
+            }
           }
         ]
       }
@@ -27,23 +40,41 @@ export const actionsHelpPageData = {
   } as TipTapDoc,
   paperItems: [
     {
-      title: 'Перекласти',
-      description:
-        'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.'
+      title: {
+        uk: 'Перекласти',
+        en: 'Translate'
+      },
+      description: {
+        uk: 'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.',
+        en: 'Do you know languages? Help translate programs, articles or interviews so that people outside of Ukraine can read about Lyatoshinskiy.'
+      }
     },
     {
-      title: 'Розповісти',
-      description:
-        'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.'
+      title: {
+        uk: 'Розповісти',
+        en: 'Tell a Story'
+      },
+      description: {
+        uk: 'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.',
+        en: 'Can you write an article, conduct an interview or engage media? This will help Ukrainian music be heard by a wider audience.'
+      }
     },
     {
-      title: 'Зафільмувати',
-      description:
-        'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.'
+      title: {
+        uk: 'Зафільмувати',
+        en: 'Film'
+      },
+      description: {
+        uk: 'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.',
+        en: 'Are you filming events or editing short videos? Your skills are very needed for our social media, posters and presentations.'
+      }
     }
   ],
   paperButton: {
-    text: 'Запропонувати допомогу',
+    text: {
+      uk: 'Дізнатися більше',
+      en: 'Learn more'
+    },
     link: ROUTES.HOME
   }
 };
@@ -57,7 +88,7 @@ export async function getActionsHelpData() {
   }
 
   return {
-    title: 'Допомогти справами',
+    title: actionsHelpPageData.title,
     subtitle: actionsHelpPageData.subtitle,
     paperItems: actionsHelpPageData.paperItems,
     paperButton: {

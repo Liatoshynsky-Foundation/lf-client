@@ -318,6 +318,11 @@
       "description": "The Liatoshynsky Foundation is sincerely open to partnership and appreciates any support. We believe that cooperation based on trust and mutual respect will help us develop Ukrainian musical culture together. We invite those who share our mission and seek to participate in preserving the legacy of Borys Liatoshynsky and supporting contemporary musical initiatives to partner with us."
     }
   },
+  "warCarousel": {
+    "photo1": "Caption for photo 1",
+    "photo2": "Caption for photo 2",
+    "photo3": "Caption for photo 3"
+  },
   "archivePage": {
     "title": "ArcHive",
     "description": "Original documents are stored in the private archive of the Borys Liatoshynsky Cabinet-Museum (Kyiv, Ukraine)",

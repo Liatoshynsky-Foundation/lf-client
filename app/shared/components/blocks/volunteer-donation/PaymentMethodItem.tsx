@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { useLocale } from 'next-intl';
 import React from 'react';
 
 import CopyLink from '~/ds-components/copy-link/CopyLink';
@@ -12,10 +13,12 @@ interface PaymentMethodItemProps {
 }
 
 export const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({ method, hint }) => {
+  const locale = useLocale();
+
   return (
     <Box sx={styles.card}>
       <Box sx={styles.paymentMethodContainer}>
-        {method.label && <Typography sx={styles.label}>{method.label}:</Typography>}
+        {method.label && <Typography sx={styles.label}>{method.label[locale]}:</Typography>}
 
         <CopyLink sx={styles.value} hint={hint} size="large" value={method.value} />
       </Box>

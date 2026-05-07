@@ -1,7 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
@@ -11,12 +11,12 @@ import { PaymentMethodItem } from './PaymentMethodItem';
 import { imageSizes, styles } from './VolunteerDonation.styles';
 
 export interface PaymentMethod {
-  label: string;
+  label: { uk: string; en: string };
   value: string;
 }
 
 interface Props {
-  title: string;
+  title: { uk: string; en: string };
   paymentMethods: PaymentMethod[];
   imageSrc: string;
   caption?: string;
@@ -25,11 +25,12 @@ interface Props {
 
 const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, caption, imageAlt }) => {
   const t = useTranslations('common');
+  const locale = useLocale();
 
   return (
     <Box sx={styles.mainContainer}>
       <SectionTitle
-        title={title}
+        title={title[locale]}
         sx={styles.title}
         icon={false}
         gridColumn={{ xs: '1 / -1', sm: '4 / -1', md: '6 / -1' }}
@@ -43,7 +44,7 @@ const VolunteerDonation: React.FC<Props> = ({ title, paymentMethods, imageSrc, c
 
       <ImageWithCaption
         src={imageSrc}
-        alt={imageAlt ?? title}
+        alt={imageAlt ?? title[locale]}
         caption={caption ?? ''}
         captionSx={styles.captionSx}
         align="right"

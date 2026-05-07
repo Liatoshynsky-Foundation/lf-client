@@ -1,5 +1,5 @@
 import { getBold, getItalic, getLink, getUnderline } from '~/components/tip-tap-content/marks';
-import { getDoc, getHeading, getParagraph, getText } from '~/components/tip-tap-content/nodes';
+import { getDoc, getHeading, getMultiLangText, getParagraph, getText } from '~/components/tip-tap-content/nodes';
 import renderNode from '~/components/tip-tap-content/renderNode';
 
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
@@ -9,9 +9,10 @@ interface TipTapContentProps {
   data: TipTapDoc;
   nodeRenderers?: Partial<TipTapNodeRenderers>;
   markRenderers?: Partial<TipTapMarkRenderers>;
+  locale?: string;
 }
 
-const TipTapContent: React.FC<TipTapContentProps> = ({ data, nodeRenderers, markRenderers }) => {
+const TipTapContent: React.FC<TipTapContentProps> = ({ data, nodeRenderers, markRenderers, locale = 'en' }) => {
   const TipTapDefaultMarkRenderers: TipTapMarkRenderers = {
     [TipTapMarkType.bold]: getBold,
     [TipTapMarkType.italic]: getItalic,
@@ -25,7 +26,8 @@ const TipTapContent: React.FC<TipTapContentProps> = ({ data, nodeRenderers, mark
     [TipTapNodeTypes.doc]: getDoc,
     [TipTapNodeTypes.heading]: getHeading,
     [TipTapNodeTypes.paragraph]: getParagraph,
-    [TipTapNodeTypes.text]: getText(finalMarkRenderers)
+    [TipTapNodeTypes.text]: getText(finalMarkRenderers),
+    [TipTapNodeTypes.multiLangText]: getMultiLangText(finalMarkRenderers, locale)
   };
 
   const finalNodeRenderers: TipTapNodeRenderers = { ...TipTapDefaultNodeRenderers, ...nodeRenderers };

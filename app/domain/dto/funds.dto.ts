@@ -1,13 +1,13 @@
 export type FundDTO = {
   id: number;
-  number: string;
-  title: string;
+  number: { en: string; uk: string };
+  title: { en: string; uk: string };
 };
 
 export type FundDetailsDTO = {
   id: number;
-  number: string;
-  title: string;
+  number: { en: string; uk: string };
+  title: { en: string; uk: string };
   numberOfDescriptions: number;
   numberOfCases: number;
   organizationForm: string;
@@ -40,8 +40,8 @@ export type CaseDetailsDTO = {
   contentDescription: string;
   pdfUrl: string | null;
   fundId: string;
-  fundNumber: string;
-  fundTitle: string;
+  fundNumber: { en: string; uk: string };
+  fundTitle: { en: string; uk: string };
   documents?: DocumentDTO[];
   prevCase?: { _id: string; name: string; cipher: string } | null;
   nextCase?: { _id: string; name: string; cipher: string } | null;

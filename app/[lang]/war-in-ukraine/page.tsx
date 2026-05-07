@@ -73,7 +73,7 @@ export default function WarInUkraine() {
         title={carsForAFUData.title}
         paymentMethods={carsForAFU}
         imageSrc={carsForAFUData.imageSrc}
-        caption={carsForAFUData.caption}
+        caption={carsForAFUData.caption[locale]}
         imageAlt="Портрет Володимира Єрмоленка з дружиною Тетяною Огарковою"
       />
     </MainLayout>
