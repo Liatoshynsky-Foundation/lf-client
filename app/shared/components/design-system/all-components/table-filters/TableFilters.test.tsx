@@ -2,18 +2,19 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { TableFilters } from './TableFilters';
+import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
 jest.mock('@mui/material', () => ({
-  Box: ({ children, ...props }: any) => (
-    <div data-testid="mui-box" {...props}>
+  Box: ({ children, sx, ...props }: any) => (
+    <div data-testid="mui-box" style={sx} {...props}>
       {children}
     </div>
   )
 }));
 
 jest.mock('~/ds-components/icon-button/IconButton', () => ({
-  IconButton: ({ children, ...props }: any) => (
-    <button data-testid="icon-btn" {...props}>
+  IconButton: ({ children, onClick, ...props }: any) => (
+    <button data-testid="icon-btn" onClick={onClick} {...props}>
       {children}
     </button>
   )
@@ -21,7 +22,11 @@ jest.mock('~/ds-components/icon-button/IconButton', () => ({
 
 jest.mock('~/shared/components/design-system/all-components/tooltip/Tooltip', () => ({
   __esModule: true,
-  default: ({ children }: any) => <div data-testid="tooltip">{children}</div>
+  default: ({ children, title }: any) => (
+    <div data-testid="tooltip" title={title}>
+      {children}
+    </div>
+  )
 }));
 
 jest.mock('~/public/icons/trash-2.svg', () => ({
@@ -31,13 +36,6 @@ jest.mock('~/public/icons/trash-2.svg', () => ({
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
-}));
-
-jest.mock('./TableFilters.styles', () => ({
-  styles: {
-    container: {},
-    row: {}
-  }
 }));
 
 describe('TableFilters', () => {
@@ -61,8 +59,8 @@ describe('TableFilters', () => {
 
   it('should keep static filters in their original position while sorting others', () => {
     const filters = [
-      { id: 'static1', element: <div data-testid="static1">Static</div>, isStatic: true },
       { id: 'a', element: <div data-testid="a">A</div>, isActive: false },
+      { id: 'static1', element: <div data-testid="static1">Static</div>, isStatic: true },
       { id: 'b', element: <div data-testid="b">B</div>, isActive: true }
     ];
 
@@ -70,11 +68,12 @@ describe('TableFilters', () => {
 
     const renderedOrder = screen.getAllByTestId(/^TableFilters-filter-/).map((node) => node.dataset.testid);
 
-    expect(renderedOrder).toEqual(['TableFilters-filter-static1', 'TableFilters-filter-b', 'TableFilters-filter-a']);
+    expect(renderedOrder).toEqual(['TableFilters-filter-b', 'TableFilters-filter-static1', 'TableFilters-filter-a']);
   });
 
   it('should display the clear button when filters are active and handler is provided', () => {
     render(<TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />);
+
     expect(screen.getByTestId('TableFilters-clearButton')).toBeInTheDocument();
     expect(screen.getByTestId('delete-icon')).toBeInTheDocument();
   });
@@ -91,12 +90,27 @@ describe('TableFilters', () => {
 
   it('should call onClearAllFilters when the clear button is clicked', () => {
     render(<TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />);
-    fireEvent.click(screen.getByTestId('TableFilters-clearButton'));
+
+    const clearBtn = screen.getByTestId('TableFilters-clearButton');
+    fireEvent.click(clearBtn);
+
     expect(onClearAllFilters).toHaveBeenCalledTimes(1);
   });
 
-  it('should wrap the clear button inside a tooltip', () => {
+  it('should wrap the clear button inside a tooltip with correct title', () => {
     render(<TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />);
-    expect(screen.getByTestId('tooltip')).toBeInTheDocument();
+
+    const tooltip = screen.getByTestId('tooltip');
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveAttribute('title', 'clearAll');
+  });
+
+  it('should pass correct enum variants to IconButton', () => {
+    render(<TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />);
+
+    const btn = screen.getByTestId('TableFilters-clearButton');
+
+    expect(btn).toHaveAttribute('type', IconButtonVariant.outlined);
+    expect(btn).toHaveAttribute('variant', IconButtonColorVariant.Secondary);
   });
 });

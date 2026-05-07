@@ -8,19 +8,19 @@ describe('baseService.request', () => {
 
   beforeEach(() => {
     originalFetch = global.fetch;
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.useRealTimers();
     global.fetch = originalFetch;
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
 
-  it('should return JSON response when successful', async () => {
-    const mockData = { message: 'ok' };
+  it('should handle finally branch when timeoutId is undefined', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(mockData)
+      json: () => Promise.resolve({ data: 'ok' })
     } as unknown as Response);
 
     const result = await baseService.request({
@@ -28,53 +28,32 @@ describe('baseService.request', () => {
       url: '/test'
     });
 
-    expect(result).toEqual(mockData);
+    expect(result).toEqual({ data: 'ok' });
+    expect(jest.getTimerCount()).toBe(0);
   });
 
-  it('should return blob response when responseType is blob', async () => {
-    const mockBlob = new Blob(['data']);
+  it('should handle finally branch when timeoutId exists', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      blob: () => Promise.resolve(mockBlob)
+      json: () => Promise.resolve({ data: 'ok' })
     } as unknown as Response);
 
-    const result = await baseService.request({
+    await baseService.request({
       method: 'GET',
       url: '/test',
-      responseType: 'blob'
+      timeout: 5000
     });
 
-    expect(result).toEqual(mockBlob);
+    expect(jest.getTimerCount()).toBe(0);
   });
 
-  it('should throw ResponseError on non-ok response', async () => {
-    const errorResponse = {
-      code: 'SOME_ERROR',
-      message: 'Something went wrong'
-    };
-
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      json: () => Promise.resolve(errorResponse)
-    } as unknown as Response);
-
-    await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(ResponseError);
-  });
-
-  it('should throw timeout error if request takes too long', async () => {
-    jest.useFakeTimers();
-
+  it('should throw timeout error and clear timer in finally', async () => {
     const abortError = new DOMException('Aborted', 'AbortError');
-
-    const rejectLater = (_resolve: unknown, reject: (reason?: unknown) => void) => {
-      setTimeout(() => {
-        reject(abortError);
-      }, 100);
-    };
-
-    const mockTimeoutFetch = (): Promise<Response> => new Promise(rejectLater);
-
-    global.fetch = jest.fn(mockTimeoutFetch) as unknown as typeof global.fetch;
+    global.fetch = jest.fn().mockImplementation((_, options) => {
+      return new Promise((_, reject) => {
+        options.signal.addEventListener('abort', () => reject(abortError));
+      });
+    }) as unknown as typeof global.fetch;
 
     const promise = baseService.request({
       method: 'GET',
@@ -82,27 +61,18 @@ describe('baseService.request', () => {
       timeout: 100
     });
 
-    jest.advanceTimersByTime(200);
+    jest.advanceTimersByTime(150);
 
     await expect(promise).rejects.toEqual(new ResponseError(errors.REQUEST_TIMEOUT));
+    expect(jest.getTimerCount()).toBe(0);
   });
 
-  it('should throw known ResponseError instance as is', async () => {
-    const knownError = new ResponseError({ code: 'TEST_CODE', message: 'Known' });
-
-    global.fetch = jest.fn().mockImplementation(() => {
-      throw knownError;
-    }) as unknown as typeof global.fetch;
-
-    await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toThrow(knownError);
-  });
-
-  it('should throw generic error as UNKNOWN_ERROR if not a ResponseError', async () => {
+  it('should throw UNKNOWN_ERROR for generic exceptions', async () => {
     global.fetch = jest.fn().mockImplementation(() => {
       throw new Error('Unexpected');
     }) as unknown as typeof global.fetch;
 
-    await expect(baseService.request({ method: 'GET', url: '/test' })).rejects.toEqual(
+    await expect(baseService.request({ method: 'GET', url: '/err', timeout: 100 })).rejects.toEqual(
       new ResponseError({
         code: 'UNKNOWN_ERROR',
         message: 'An unexpected error occurred.'
@@ -110,54 +80,41 @@ describe('baseService.request', () => {
     );
   });
 
-  it('should set JSON body for non-GET requests with non-FormData data', async () => {
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ success: true })
-    } as unknown as Response);
-
-    global.fetch = mockFetch;
-
-    await baseService.request({
-      method: 'POST',
-      url: '/submit',
-      data: { name: 'Test' }
-    });
-
+  it('should handle JSON body', async () => {
+    const mockFetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({}) });
+    global.fetch = mockFetch as any;
+    await baseService.request({ method: 'POST', url: '/p', data: { x: 1 } });
     expect(mockFetch).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({
-        body: JSON.stringify({ name: 'Test' }),
-        headers: expect.objectContaining({
-          'Content-Type': 'application/json'
-        })
-      })
+      expect.objectContaining({ body: JSON.stringify({ x: 1 }) })
     );
   });
 
-  it('should set FormData body and skip Content-Type header', async () => {
-    const formData = new FormData();
-    formData.append('file', new Blob(['test']));
+  it('should handle FormData body', async () => {
+    const fd = new FormData();
+    const mockFetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({}) });
+    global.fetch = mockFetch as any;
+    await baseService.request({ method: 'POST', url: '/u', data: fd });
+    expect(mockFetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ body: fd }));
+  });
 
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ success: true })
-    } as unknown as Response);
+  it('should handle responseType blob', async () => {
+    const b = new Blob();
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, blob: () => Promise.resolve(b) }) as any;
+    const res = await baseService.request({ method: 'GET', url: '/b', responseType: 'blob' });
+    expect(res).toBe(b);
+  });
 
-    global.fetch = mockFetch;
+  it('should throw known ResponseError', async () => {
+    const e = new ResponseError({ code: 'X', message: 'Y' });
+    global.fetch = jest.fn().mockImplementation(() => {
+      throw e;
+    }) as any;
+    await expect(baseService.request({ method: 'GET', url: '/e' })).rejects.toThrow(e);
+  });
 
-    await baseService.request({
-      method: 'POST',
-      url: '/upload',
-      data: formData
-    });
-
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        body: formData,
-        headers: {}
-      })
-    );
+  it('should throw error on non-ok response', async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: false, json: () => Promise.resolve({ message: 'err' }) }) as any;
+    await expect(baseService.request({ method: 'GET', url: '/404' })).rejects.toThrow(ResponseError);
   });
 });

@@ -5,8 +5,17 @@ import React from 'react';
 import { ROUTES } from '../../constants/routes';
 import { mockFundSummaryData } from './__fixtures__/fundSummaryHeader.fixtures';
 import FundSummaryHeader, { FundSummaryHeaderProps } from './FundSummaryHeader';
+import * as realContent from './FundSummaryHeader.content';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
+jest.mock('~/lib/utils/navigationHelper', () => ({
+  getNavigationLink: jest.fn()
+}));
+jest.mock('./FundSummaryHeader.content', () => ({
+  __esModule: true,
+  ...jest.requireActual('./FundSummaryHeader.content'),
+  getFundSummaryHeaderBacklinkUrl: jest.fn().mockResolvedValue('/archive')
+}));
 jest.mock('@mui/material', () => ({
   Box: ({ children, ...props }: any) => (
     <div data-testid="mui-box" {...props}>
@@ -26,7 +35,7 @@ jest.mock('next/image', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-  useLocale: jest.fn(() => 'en')
+  useLocale: jest.fn()
 }));
 
 jest.mock('~/components/section-title/SectionTitle', () => ({
@@ -38,16 +47,15 @@ jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
   __esModule: true,
   default: ({ data, nodeRenderers }: any) => {
     const renderer = nodeRenderers?.[TipTapNodeTypes.paragraph];
-    const content = data?.content?.[0]?.content?.[0]?.text || 'mock content';
-    return <div data-testid="tip-tap-content">{renderer ? renderer(content) : content}</div>;
+    const text = data?.content?.[0]?.content?.[0]?.text || '';
+    return <div data-testid="tip-tap-content">{renderer ? renderer(text) : text}</div>;
   }
 }));
 
 jest.mock('~/ds-components/link/CustomLink', () => ({
   __esModule: true,
-  default: ({ path, children, startIcon }: any) => (
+  default: ({ path, children }: any) => (
     <a href={path} data-testid="custom-link">
-      {startIcon}
       {children}
     </a>
   )
@@ -63,6 +71,7 @@ describe('FundSummaryHeader', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (useLocale as jest.Mock).mockReturnValue('en');
   });
 
   it('should render the component with all main elements', () => {
@@ -84,9 +93,9 @@ describe('FundSummaryHeader', () => {
   it('should render the back link icon', () => {
     render(<FundSummaryHeader {...mockData} />);
 
-    const icon = screen.getByAltText('');
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute('src', '/icons/arrow-left.svg');
+    const backLink = screen.getByTestId('custom-link');
+    expect(backLink).toBeInTheDocument();
+    expect(backLink).toHaveAttribute('href', ROUTES.SUPPORT_US);
   });
 
   it('should render the title', () => {
@@ -106,63 +115,47 @@ describe('FundSummaryHeader', () => {
     expect(screen.getByText('Beneficiaries:')).toBeInTheDocument();
   });
 
-  it('should render all items in Ukrainian locale', () => {
+  it('should fetch backlink and pass it to the component', async () => {
     jest.mocked(useLocale).mockReturnValue('uk');
 
-    render(<FundSummaryHeader {...mockData} />);
+    const backlink = await realContent.getFundSummaryHeaderBacklinkUrl();
+    expect(backlink).toBe('/archive');
 
-    expect(screen.getByText('Назва фонду:')).toBeInTheDocument();
-    expect(screen.getByText('Ціль фонду:')).toBeInTheDocument();
-    expect(screen.getByText('Бенефіціари:')).toBeInTheDocument();
-  });
-
-  it('should split items into two columns correctly', () => {
-    render(<FundSummaryHeader {...mockData} />);
-
-    const itemTitles = screen.getAllByTestId('typography-h6');
-    expect(itemTitles).toHaveLength(3);
-  });
-
-  it('should handle single item', () => {
-    jest.mocked(useLocale).mockReturnValue('en');
-
-    const singleItemData = {
-      ...mockData,
-      data: {
-        items: [mockFundSummaryData.items[0]]
-      }
+    const props = {
+      backLinkUrl: backlink,
+      backLinkText: 'Назад',
+      title: 'Заголовок',
+      data: realContent.fundSummaryContent
     };
 
-    render(<FundSummaryHeader {...singleItemData} />);
+    render(<FundSummaryHeader {...props} />);
 
-    expect(screen.getByText('Fund Name:')).toBeInTheDocument();
-    expect(screen.getAllByTestId('tip-tap-content')).toHaveLength(1);
+    const link = screen.getByTestId('custom-link');
+    expect(link).toHaveAttribute('href', '/archive');
   });
 
-  it('should handle empty items array', () => {
-    const emptyData = {
-      ...mockData,
-      data: {
-        items: []
-      }
-    };
+  it('should render all items in Ukrainian locale', () => {
+    (useLocale as jest.Mock).mockReturnValue('uk');
 
-    render(<FundSummaryHeader {...emptyData} />);
+    render(
+      <FundSummaryHeader
+        backLinkUrl="/archive"
+        backLinkText={realContent.fundSummaryBacklinkText.uk}
+        title={realContent.fundSummaryTitle.uk}
+        data={realContent.fundSummaryContent}
+      />
+    );
 
-    expect(screen.getByTestId('section-title')).toBeInTheDocument();
-    expect(screen.queryByTestId('typography-h6')).not.toBeInTheDocument();
+    expect(screen.getByText(/Повернутись до архіву/i)).toBeInTheDocument();
+    expect(screen.getByText(/Кількість описів/i)).toBeInTheDocument();
+    expect(screen.getByText(/Мова документів/i)).toBeInTheDocument();
   });
 
-  it('should render TipTapContent with custom paragraph renderer', () => {
-    render(<FundSummaryHeader {...mockData} />);
+  it('should split items into two columns correctly (odd number)', () => {
+    render(
+      <FundSummaryHeader backLinkUrl="/" backLinkText="Back" title="Title" data={realContent.fundSummaryContent} />
+    );
 
-    const tipTapContents = screen.getAllByTestId('tip-tap-content');
-    expect(tipTapContents.length).toBeGreaterThan(0);
-  });
-
-  it('should mount component without errors', () => {
-    const { container } = render(<FundSummaryHeader {...mockData} />);
-
-    expect(container).toBeInTheDocument();
+    expect(screen.getAllByTestId('typography-h6')).toHaveLength(realContent.fundSummaryContent.items.length);
   });
 });

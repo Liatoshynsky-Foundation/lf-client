@@ -59,7 +59,7 @@ const FlubberPath: FC<FlubberPathProps> = ({ progress, index, testID }) => {
     return () => clearInterval(idleInterval);
   }, [index]);
 
-  const d = useTransform(progress, (latest) => {
+  const d = useTransform(progress, (latest: number) => {
     const stepIndex = Math.min(Math.floor(latest), logoMatrix.length - 1);
     const percentage = latest - stepIndex;
 

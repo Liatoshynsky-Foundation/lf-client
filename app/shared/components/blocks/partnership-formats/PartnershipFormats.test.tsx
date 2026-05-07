@@ -155,7 +155,12 @@ describe('PartnershipFormats', () => {
     expect(screen.getByTestId('section-title')).toBeInTheDocument();
     expect(screen.getByTestId('section-title')).toHaveTextContent('Partnership Formats');
   });
+  it('should return null when mapping fails or data is empty', () => {
+    const { container } = render(<PartnershipFormats data={{ title: 'Test' } as any} />);
 
+    const gridContainer = container.querySelector('.MuiGrid-container');
+    expect(gridContainer).not.toBeInTheDocument();
+  });
   it('should render all first row cards', () => {
     render(<PartnershipFormats data={mockData} />);
     const cards = screen.getAllByTestId('card-with-text');

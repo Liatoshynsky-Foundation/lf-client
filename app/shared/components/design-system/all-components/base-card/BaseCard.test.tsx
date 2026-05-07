@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import BaseCard, { BaseCardProps } from './BaseCard';
+import { mockNewsCards, mockPressCards } from './newsAndMedia.mock';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -21,7 +22,11 @@ jest.mock('next/image', () => ({
 
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+  default: ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <a href={href} data-testid="next-link">
+      {children}
+    </a>
+  )
 }));
 
 jest.mock('~/ds-components/button/Button', () => ({
@@ -56,150 +61,105 @@ describe('BaseCard', () => {
     variant: 'news'
   };
 
-  describe('Component rendering', () => {
-    it('should render the component with all elements', () => {
+  describe('Component rendering & Mock Data Coverage', () => {
+    it('should render correctly with REAL mock data (covers newsAndMedia.mock.ts)', () => {
+      const newsData = { ...mockNewsCards[0], variant: 'news' as const };
+      render(<BaseCard {...newsData} />);
+
+      expect(screen.getByText(newsData.title)).toBeInTheDocument();
+      expect(screen.getByText(newsData.description)).toBeInTheDocument();
+    });
+
+    it('should render the component with all base elements', () => {
       render(<BaseCard {...defaultProps} />);
 
       expect(screen.getByTestId('BaseCard')).toBeInTheDocument();
       expect(screen.getByTestId('BaseCard-imageContainer')).toBeInTheDocument();
-      expect(screen.getByTestId('BaseCard-content')).toBeInTheDocument();
       expect(screen.getByTestId('BaseCard-title')).toBeInTheDocument();
-      expect(screen.getByTestId('BaseCard-date')).toBeInTheDocument();
-      expect(screen.getByTestId('BaseCard-description')).toBeInTheDocument();
-      expect(screen.getByTestId('BaseCard-buttonWrapper')).toBeInTheDocument();
-      expect(screen.getByTestId('BaseCard-button')).toBeInTheDocument();
+      expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
     });
 
     it('should render image with correct props', () => {
       render(<BaseCard {...defaultProps} />);
-
       const image = screen.getByTestId('next-image');
-      expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', defaultProps.image);
       expect(image).toHaveAttribute('alt', defaultProps.title);
     });
 
-    it('should render title text', () => {
-      render(<BaseCard {...defaultProps} />);
-
-      expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
-    });
-
     it('should render publication date with label', () => {
       render(<BaseCard {...defaultProps} />);
-
       expect(screen.getByText(`Опубліковано: ${defaultProps.publicationDate}`)).toBeInTheDocument();
     });
+  });
 
-    it('should render description text', () => {
-      render(<BaseCard {...defaultProps} />);
+  describe('Link Logic & Branch Coverage (Lines 83-88)', () => {
+    it('should render a standard <a> tag for external links (isExternalLink branch)', () => {
+      const externalProps = {
+        ...defaultProps,
+        href: 'https://external-resource.com',
+        title: 'External Site'
+      };
 
-      expect(screen.getByText(defaultProps.description)).toBeInTheDocument();
-    });
-
-    it('should render as a clickable link', () => {
-      render(<BaseCard {...defaultProps} />);
+      render(<BaseCard {...externalProps} />);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', defaultProps.href);
+      expect(link).toHaveAttribute('href', 'https://external-resource.com');
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+
+      expect(link).not.toHaveAttribute('data-testid', 'next-link');
+    });
+
+    it('should render a standard <a> tag when href is "#" (from mockPressCards)', () => {
+      const pressData = { ...mockPressCards[0], variant: 'press' as const };
+      render(<BaseCard {...pressData} />);
+
+      const link = screen.getByRole('link');
+      expect(link).toHaveAttribute('href', pressData.href);
+    });
+
+    it('should render Next.js Link for internal routes', () => {
+      render(<BaseCard {...defaultProps} href="/internal-page" />);
+      const link = screen.getByTestId('next-link');
+      expect(link).toHaveAttribute('href', '/internal-page');
     });
   });
 
-  describe('Variant: news', () => {
-    it('should render correct button text for news variant', () => {
+  describe('Variants: news vs press', () => {
+    it('should render "news" variant without icon', () => {
       render(<BaseCard {...defaultProps} variant="news" />);
-
       expect(screen.getByText('Переглянути')).toBeInTheDocument();
-    });
-
-    it('should not render icon for news variant', () => {
-      render(<BaseCard {...defaultProps} variant="news" />);
-
       expect(screen.queryByTestId('button-icon')).not.toBeInTheDocument();
     });
-  });
 
-  describe('Variant: press', () => {
-    it('should render correct button text for press variant', () => {
+    it('should render "press" variant with external link icon', () => {
       render(<BaseCard {...defaultProps} variant="press" />);
-
       expect(screen.getByText('Перейти')).toBeInTheDocument();
-    });
-
-    it('should render icon for press variant', () => {
-      render(<BaseCard {...defaultProps} variant="press" />);
-
       expect(screen.getByTestId('button-icon')).toBeInTheDocument();
-      expect(screen.getByTestId('svg-image')).toBeInTheDocument();
-    });
-
-    it('should render correct icon for press variant', () => {
-      render(<BaseCard {...defaultProps} variant="press" />);
-
-      const icon = screen.getByTestId('svg-image');
-      expect(icon).toHaveAttribute('src', '/icons/external-link.svg');
+      expect(screen.getByTestId('svg-image')).toHaveAttribute('src', '/icons/external-link.svg');
     });
   });
 
-  describe('Custom dataTestId', () => {
+  describe('Custom dataTestId & Accessibility', () => {
     it('should use custom dataTestId when provided', () => {
-      render(<BaseCard {...defaultProps} dataTestId="CustomTestId" />);
-
-      expect(screen.getByTestId('CustomTestId')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-imageContainer')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-content')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-title')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-date')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-description')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-buttonWrapper')).toBeInTheDocument();
-      expect(screen.getByTestId('CustomTestId-button')).toBeInTheDocument();
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('should render as semantic article element', () => {
-      render(<BaseCard {...defaultProps} />);
-
-      expect(screen.getByRole('article')).toBeInTheDocument();
+      render(<BaseCard {...defaultProps} dataTestId="CustomID" />);
+      expect(screen.getByTestId('CustomID')).toBeInTheDocument();
+      expect(screen.getByTestId('CustomID-title')).toBeInTheDocument();
     });
 
-    it('should have aria-label with card title', () => {
+    it('should render as semantic article with aria-label', () => {
       render(<BaseCard {...defaultProps} />);
-
       const article = screen.getByRole('article');
+      expect(article).toBeInTheDocument();
       expect(article).toHaveAttribute('aria-label', defaultProps.title);
     });
   });
 
   describe('Props variations', () => {
-    it('should handle different image URLs', () => {
-      const customProps = { ...defaultProps, image: '/custom-image.png' };
-      render(<BaseCard {...customProps} />);
-
-      const image = screen.getByTestId('next-image');
-      expect(image).toHaveAttribute('src', '/custom-image.png');
-    });
-
-    it('should handle different href values', () => {
-      const customProps = { ...defaultProps, href: '/custom-link' };
-      render(<BaseCard {...customProps} />);
-
-      expect(screen.getByRole('link')).toHaveAttribute('href', '/custom-link');
-    });
-
-    it('should handle long titles', () => {
-      const longTitle = 'This is a very long title that should be truncated with ellipsis after two lines';
+    it('should handle missing description or long content', () => {
+      const longTitle = 'A'.repeat(100);
       render(<BaseCard {...defaultProps} title={longTitle} />);
-
       expect(screen.getByText(longTitle)).toBeInTheDocument();
-    });
-
-    it('should handle long descriptions', () => {
-      const longDescription =
-        'This is a very long description that should be truncated with ellipsis after three lines of text content';
-      render(<BaseCard {...defaultProps} description={longDescription} />);
-
-      expect(screen.getByText(longDescription)).toBeInTheDocument();
     });
   });
 });

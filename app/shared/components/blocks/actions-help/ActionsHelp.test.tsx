@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import { render, screen } from '@testing-library/react';
 
 import ActionsHelp from './ActionsHelp';
@@ -8,8 +9,15 @@ jest.mock('swiper/react', () => ({
   SwiperSlide: ({ children }: { children: React.ReactNode }) => <div data-testid="mock-swiper-slide">{children}</div>
 }));
 
-jest.mock('swiper/css', () => ({}));
+jest.mock('next-intl', () => ({
+  useLocale: () => 'en'
+}));
 
+jest.mock('swiper/css', () => ({}));
+jest.mock('@mui/material', () => ({
+  ...jest.requireActual('@mui/material'),
+  useMediaQuery: jest.fn()
+}));
 jest.mock('~/ds-components/text-card/TextCard', () => ({
   __esModule: true,
   default: ({
@@ -73,11 +81,43 @@ const mockData = {
     link: '/test-link'
   }
 };
+describe('ActionsHelp mobile version', () => {
+  it('should render Swiper on mobile screens', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(true);
 
-jest.mock('next-intl', () => ({
-  useLocale: () => 'en'
-}));
+    render(<ActionsHelp data={mockData} />);
 
+    expect(screen.getByTestId('mock-swiper')).toBeInTheDocument();
+    expect(screen.getAllByTestId('mock-swiper-slide')).toHaveLength(mockData.paperItems.length + 1);
+  });
+});
+describe('ActionsHelp Responsive Rendering', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should render plain cards array on Desktop (isMobile = false)', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(false);
+
+    render(<ActionsHelp data={mockData} />);
+
+    expect(screen.queryByTestId('mock-swiper')).not.toBeInTheDocument();
+
+    expect(screen.getAllByTestId('text-card')).toHaveLength(mockData.paperItems.length);
+    expect(screen.getByTestId('ActionsHelp-buttonCard')).toBeInTheDocument();
+  });
+
+  it('should render cards inside Swiper on Mobile (isMobile = true)', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(true);
+
+    render(<ActionsHelp data={mockData} />);
+
+    expect(screen.getByTestId('mock-swiper')).toBeInTheDocument();
+
+    const slides = screen.getAllByTestId('mock-swiper-slide');
+    expect(slides.length).toBe(mockData.paperItems.length + 1);
+  });
+});
 describe('ActionsHelp component', () => {
   beforeEach(() => {
     render(<ActionsHelp data={mockData} />);

@@ -56,9 +56,6 @@ export async function GET(req: NextRequest) {
       };
       return NextResponse.json({ success: true, data: translatedFund });
     }
-
-    const funds = await fundsService.getFunds();
-    return NextResponse.json({ success: true, data: funds });
   } catch {
     return NextResponse.json({ success: false, error: errors.FUNDS_FETCH_FAILED }, { status: 500 });
   }

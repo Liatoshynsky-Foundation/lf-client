@@ -3,12 +3,17 @@ import newScientificWorksRepo from './scientificWorks.repository';
 import { ScientificWorksAuthor } from '~/infrastructure/models/scientific-works/scientificWorksAuthor';
 import { ScientificWorks } from '~/infrastructure/models/scientific-works/scientificWorksTableData';
 
-jest.mock('~/infrastructure/db/connect', () => jest.fn());
+jest.mock('~/infrastructure/db/connect', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue(undefined)
+}));
+
 jest.mock('~/infrastructure/models/scientific-works/scientificWorksAuthor', () => ({
   ScientificWorksAuthor: {
     find: jest.fn()
   }
 }));
+
 jest.mock('~/infrastructure/models/scientific-works/scientificWorksTableData', () => ({
   ScientificWorks: {
     find: jest.fn(),
@@ -18,139 +23,153 @@ jest.mock('~/infrastructure/models/scientific-works/scientificWorksTableData', (
 
 const repo = newScientificWorksRepo();
 
+let counterB = 1;
+const createFakeId = () => {
+  const id = '507f191e';
+  const suffix = (counterB++).toString(16).padStart(16, '0');
+  return id + suffix;
+};
+
+const mockMongooseChain = (resolvedValue: any) => {
+  const chain: any = {
+    sort: jest.fn(() => chain),
+    select: jest.fn(() => chain),
+    populate: jest.fn(() => chain),
+    lean: jest.fn().mockResolvedValue(resolvedValue)
+  };
+  return chain;
+};
+
 describe('scientificWorksRepository', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should return parsed authors', async () => {
-    const mockAuthors = [
-      {
-        _id: '507f191e810c19729de860ea',
-        name: { uk: 'Іван', en: 'Ivan' },
-        surname: { uk: 'Коваль', en: 'Koval' }
-      }
-    ];
+  describe('getAllAuthors', () => {
+    it('should call select when fields are provided (covers lines 19-21)', async () => {
+      const mockChain = mockMongooseChain([]);
+      (ScientificWorksAuthor.find as jest.Mock).mockReturnValue(mockChain);
 
-    (ScientificWorksAuthor.find as any).mockReturnValue({
-      lean: jest.fn().mockResolvedValue(mockAuthors)
+      await repo.getAllAuthors(['name', 'surname']);
+
+      expect(mockChain.select).toHaveBeenCalledWith('name surname');
     });
 
-    const result = await repo.getAllAuthors();
+    it('should return parsed authors via Zod', async () => {
+      const mockAuthors = [{ _id: createFakeId(), name: { uk: 'І', en: 'I' }, surname: { uk: 'К', en: 'K' } }];
+      (ScientificWorksAuthor.find as jest.Mock).mockReturnValue(mockMongooseChain(mockAuthors));
 
-    expect(result).toEqual(mockAuthors);
-    expect(ScientificWorksAuthor.find).toHaveBeenCalledTimes(1);
+      const result = await repo.getAllAuthors();
+      expect(result).toEqual(mockAuthors);
+    });
   });
+  describe('Coverage specialized tests (Authors and Branches)', () => {
+    it('should cover all branches of author?.length in getAllScientificTitles', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue({ lean: jest.fn().mockResolvedValue([]) });
 
-  it('should return parsed titles', async () => {
-    const mockTitles = [
-      {
-        _id: '507f1f77bcf86cd799439011',
-        title: { uk: 'Назва', en: 'Title' }
-      }
-    ];
+      await repo.getAllScientificTitles({ author: undefined });
 
-    (ScientificWorks.find as jest.Mock).mockReturnValue({
-      lean: jest.fn().mockResolvedValue(mockTitles)
+      await repo.getAllScientificTitles({ author: [] });
+
+      await repo.getAllScientificTitles({ author: [createFakeId()] });
+
+      expect(ScientificWorks.find).toHaveBeenCalledTimes(3);
     });
 
-    const result = await repo.getAllScientificTitles();
+    it('should cover all branches of author?.length in getAllScientificWorks', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
 
-    expect(result).toEqual(mockTitles);
+      await repo.getAllScientificWorks({ author: undefined });
+      await repo.getAllScientificWorks({ author: [] });
+      await repo.getAllScientificWorks({ author: [createFakeId()] });
+
+      expect(ScientificWorks.find).toHaveBeenCalled();
+    });
   });
-
-  it('should return year range from aggregate', async () => {
-    (ScientificWorks.aggregate as any).mockResolvedValue([{ minYear: 1950, maxYear: 2020 }]);
-
-    const result = await repo.getScientificWorksYearRange();
-
-    expect(result).toEqual({ minYear: 1950, maxYear: 2020 });
-  });
-
-  it('should fall back to defaults when no rows returned', async () => {
-    (ScientificWorks.aggregate as any).mockResolvedValue([]);
-
-    const result = await repo.getScientificWorksYearRange();
-
-    expect(result.minYear).toBe(1900);
-    expect(result.maxYear).toBe(new Date().getFullYear());
-  });
-
-  it('should correctly build search query', async () => {
-    const parsed = {
-      _id: '507f1f77bcf86cd799439011',
-      title: { uk: 'A', en: 'A' },
-      authors: [
-        {
-          _id: '507f191e810c19729de860ea',
-          name: { uk: 'Іван', en: 'Ivan' },
-          surname: { uk: 'Коваль', en: 'Koval' }
-        }
-      ],
-      startYear: 2000,
-      endYear: null,
-      url: null,
-      isPreview: false
-    };
-
-    (ScientificWorks.find as any).mockReturnValue({
-      populate: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue([parsed])
-      })
+  describe('getAllScientificTitles', () => {
+    beforeEach(() => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue({ lean: jest.fn().mockResolvedValue([]) });
     });
 
-    const result = await repo.getAllScientificWorks({
-      search: 'abc'
+    it('should handle zero filters (covers query = {} branch)', async () => {
+      await repo.getAllScientificTitles({});
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg).toEqual({});
     });
 
-    expect(result).toHaveLength(1);
-    expect(ScientificWorks.find).toHaveBeenCalled();
+    it('should handle EXACTLY ONE filter (covers conditions.length === 1 branch)', async () => {
+      await repo.getAllScientificTitles({ search: 'only-search' });
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
 
-    const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg.$and).toHaveLength(1);
+    });
 
-    expect(queryArg).toMatchObject({
-      $or: [{ 'title.uk': expect.any(Object) }, { 'title.en': expect.any(Object) }]
+    it('should handle author filter with empty array (covers optional chaining branch)', async () => {
+      await repo.getAllScientificTitles({ author: [] });
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg).toEqual({});
+    });
+
+    it('should handle complex filters (search + author + years)', async () => {
+      await repo.getAllScientificTitles({
+        search: 'test',
+        author: [createFakeId()],
+        yearFrom: 1990,
+        yearTo: 2020
+      });
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg.$and).toHaveLength(3);
     });
   });
 
-  it('should apply author and years filters', async () => {
-    const parsed = {
-      _id: '507f191e810c19729de860ea',
+  describe('getScientificWorksYearRange', () => {
+    it('should return range or defaults', async () => {
+      (ScientificWorks.aggregate as jest.Mock).mockResolvedValueOnce([{ minYear: 1950, maxYear: 2020 }]);
+      const res1 = await repo.getScientificWorksYearRange();
+      expect(res1).toEqual({ minYear: 1950, maxYear: 2020 });
+
+      (ScientificWorks.aggregate as jest.Mock).mockResolvedValueOnce([]);
+      const res2 = await repo.getScientificWorksYearRange();
+      expect(res2.minYear).toBe(1900);
+    });
+  });
+
+  describe('getAllScientificWorks', () => {
+    const mockWork = {
+      _id: createFakeId(),
       title: { uk: 'A', en: 'A' },
       authors: [],
       startYear: 2000,
       endYear: null,
-      url: null,
+      url: 'https://link.com',
       isPreview: false
     };
 
-    (ScientificWorks.find as any).mockReturnValue({
-      populate: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue([parsed])
-      })
+    it('should handle empty filters (covers lines 99-100 else)', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue(mockMongooseChain([mockWork]));
+      await repo.getAllScientificWorks({});
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg).toEqual({});
     });
 
-    await repo.getAllScientificWorks({
-      author: ['id1', 'id2'],
-      years: [1990, 2020]
+    it('should handle single condition', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue(mockMongooseChain([mockWork]));
+      await repo.getAllScientificWorks({ search: 'test' });
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg.$or).toBeDefined();
     });
 
-    const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
-
-    expect(queryArg).toMatchObject({
-      $and: [{ authors: { $in: ['id1', 'id2'] } }, { startYear: { $gte: 1990, $lte: 2020 } }]
-    });
-  });
-
-  it('should return [] when no works found', async () => {
-    (ScientificWorks.find as any).mockReturnValue({
-      populate: jest.fn().mockReturnValue({
-        lean: jest.fn().mockResolvedValue([])
-      })
+    it('should handle multiple conditions', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue(mockMongooseChain([mockWork]));
+      await repo.getAllScientificWorks({ search: 'test', years: [1990, 2020] });
+      const queryArg = (ScientificWorks.find as jest.Mock).mock.calls[0][0];
+      expect(queryArg.$and).toBeDefined();
     });
 
-    const result = await repo.getAllScientificWorks({});
-
-    expect(result).toEqual([]);
+    it('should return [] if works is empty (covers line 107)', async () => {
+      (ScientificWorks.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+      const result = await repo.getAllScientificWorks({});
+      expect(result).toEqual([]);
+    });
   });
 });

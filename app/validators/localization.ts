@@ -20,6 +20,7 @@ function isTranslatedField(value: unknown, locale: Locale): value is TranslatedF
 }
 
 function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): boolean {
+  if (!Array.isArray(root.content)) return true;
   for (const node of root.content) {
     if (!node.content) {
       continue;

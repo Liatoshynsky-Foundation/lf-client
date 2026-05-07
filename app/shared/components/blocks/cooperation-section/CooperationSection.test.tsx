@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import { partnersMock } from '../our-partners/partners.data';
 import CooperationSection from './CooperationSection';
+import { cooperationSectionData } from './CooperationSection.data';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 import { ROUTES } from '~/shared/components/constants/routes';
@@ -17,9 +19,8 @@ jest.mock('../../section-title/SectionTitle', () => {
 });
 
 jest.mock('../terms-of-use/terms-content/button-content-block/ButtonContentBlock', () => {
-  const MockButtonContentBlock = ({ content, buttonText, link }: any) => (
+  const MockButtonContentBlock = ({ buttonText, link }: any) => (
     <div data-testid="button-content-block">
-      <div data-testid="content">{JSON.stringify(content)}</div>
       <a href={link} data-testid="button-link">
         {buttonText}
       </a>
@@ -74,37 +75,37 @@ describe('CooperationSection', () => {
     expect(screen.getByTestId('button-content-block')).toBeInTheDocument();
     expect(screen.getByTestId('button-link')).toHaveTextContent('Learn More');
     expect(screen.getByTestId('button-link')).toHaveAttribute('href', ROUTES.COOPERATION);
+
+    expect(screen.getByTestId('our-partners-slider')).toBeInTheDocument();
   });
 
-  it('should render partners slider with provided partners', () => {
+  it('should render with custom mock props for specific edge cases', () => {
+    const mockProps = {
+      title: { uk: 'Співпраця', en: 'Cooperation' },
+      textContent: {
+        uk: makeDoc([normalText('Текст')]),
+        en: makeDoc([normalText('Text')])
+      },
+      buttonText: { uk: 'Детальніше', en: 'Learn More' },
+      buttonLink: '/cooperation',
+      partners: partnersMock.slice(0, 2)
+    };
+
     render(<CooperationSection {...mockProps} />);
 
-    const slider = screen.getByTestId('our-partners-slider');
-    expect(slider).toBeInTheDocument();
-    expect(slider).toHaveAttribute('data-partners-count', '3');
-
-    const sliderPartners = screen.getAllByTestId('slider-partner');
-    expect(sliderPartners).toHaveLength(3);
+    expect(screen.getByTestId('section-title')).toHaveTextContent('Cooperation');
+    expect(screen.getAllByTestId('slider-partner')).toHaveLength(2);
   });
 
-  it('should render partners slider with empty array when no partners provided', () => {
-    const propsWithoutPartners = { ...mockProps, partners: undefined };
-    render(<CooperationSection {...propsWithoutPartners} />);
+  it('should handle undefined partners correctly', () => {
+    const propsWithoutPartners = {
+      ...cooperationSectionData,
+      partners: undefined
+    };
+
+    render(<CooperationSection {...(propsWithoutPartners as any)} />);
 
     const slider = screen.getByTestId('our-partners-slider');
-    expect(slider).toBeInTheDocument();
     expect(slider).toHaveAttribute('data-partners-count', '0');
-  });
-
-  it('should render all main components', () => {
-    render(<CooperationSection {...mockProps} />);
-
-    const title = screen.getByText('Cooperation');
-    const buttonBlock = screen.getByTestId('button-content-block');
-    const slider = screen.getByTestId('our-partners-slider');
-
-    expect(title).toBeInTheDocument();
-    expect(buttonBlock).toBeInTheDocument();
-    expect(slider).toBeInTheDocument();
   });
 });
