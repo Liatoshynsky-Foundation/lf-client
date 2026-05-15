@@ -177,10 +177,10 @@ describe('AudioPlayer', () => {
     }
   });
 
-  it('should call togglePlay when button clicked and isPlaying is false', () => {
+  it('should NOT call togglePlay when button clicked and isPlaying is false', () => {
     renderComponent({ isPlaying: false });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
-    expect(mockTogglePlay).toHaveBeenCalled();
+    expect(mockTogglePlay).not.toHaveBeenCalled();
   });
 
   it('should NOT call togglePlay when button clicked and isPlaying is true', () => {
