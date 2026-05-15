@@ -1,10 +1,13 @@
 import { MenuItem, MenuItemProps } from '@mui/material';
+import type { ElementType } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 interface CustomMenuItemProps extends MenuItemProps {
   children: React.ReactNode;
   selected?: boolean;
+  component?: ElementType;
+  href?: string;
 }
 
 type ReadonlyCustomMenuItemProps = Readonly<CustomMenuItemProps>;

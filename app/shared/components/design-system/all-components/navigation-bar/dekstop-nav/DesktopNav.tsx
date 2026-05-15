@@ -151,11 +151,21 @@ const DesktopNav = ({
   });
 
   const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
-    <Link href={item.href} key={`${item.href}-${index}`}>
-      <CustomMenuItem sx={styles.menuItem} onClick={handleDropdownClose}>
-        {item.label}
-      </CustomMenuItem>
-    </Link>
+    <CustomMenuItem
+      key={`${item.href}-${index}`}
+      sx={styles.menuItem}
+      onClick={handleDropdownClose}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleDropdownClose();
+        }
+      }}
+      tabIndex={0}
+      component={Link}
+      href={item.href}
+    >
+      {item.label}
+    </CustomMenuItem>
   ));
 
   return (
