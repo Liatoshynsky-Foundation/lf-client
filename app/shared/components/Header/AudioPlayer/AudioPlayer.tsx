@@ -156,11 +156,7 @@ export default function AudioPlayer() {
 
   const handlePopoverToggle = useCallback(() => {
     setAnchorEl((prev) => (prev ? null : buttonRef.current));
-
-    if (src && !isPlaying) {
-      togglePlay();
-    }
-  }, [isPlaying, togglePlay, src]);
+  }, []);
 
   const onSeek = useCallback((newProgress: number) => {
     const audio = audioRef.current;
