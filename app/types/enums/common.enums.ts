@@ -39,7 +39,8 @@ export enum TipTapNodeTypes {
   doc = 'doc',
   heading = 'heading',
   paragraph = 'paragraph',
-  text = 'text'
+  text = 'text',
+  multiLangText = 'multiLangText'
 }
 
 export enum TipTapMarkType {

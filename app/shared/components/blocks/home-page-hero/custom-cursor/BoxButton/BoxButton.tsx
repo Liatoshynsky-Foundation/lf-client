@@ -20,7 +20,7 @@ type BoxButtonProps = {
 };
 
 export const BoxButton = ({ onClick, children, cursorContent, customSX, testID = 'box-button' }: BoxButtonProps) => {
-  const { cursorConfig, eventHandlers } = useButtonCursor();
+  const { cursorConfig, eventHandlers, ref } = useButtonCursor();
   const bp = useBreakpoints();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -42,7 +42,7 @@ export const BoxButton = ({ onClick, children, cursorContent, customSX, testID =
 
   return (
     <>
-      <Box {...interactionProps} data-testid={testID} sx={[...sxToArray(customSX)]}>
+      <Box ref={ref} {...interactionProps} data-testid={testID} sx={[...sxToArray(customSX)]}>
         {children}
       </Box>
 

@@ -5,7 +5,8 @@ import VolunteerDonation from './VolunteerDonation';
 import { volunteerDonationData } from './volunteerDonationData';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 jest.mock('~/ds-components/copy-link/CopyLink', () => ({
@@ -38,22 +39,33 @@ jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
 
 jest.mock('~/components/section-title/SectionTitle', () => ({
   __esModule: true,
-  default: ({ title }: { title: string }) => <h2 data-testid="section-title">{title}</h2>
+  default: ({ title }: { title: string | { en: string; uk: string } }) => (
+    <h2 data-testid="section-title">{typeof title === 'string' ? title : title.en}</h2>
+  )
 }));
 
 describe('VolunteerDonation Coverage Fix', () => {
   const mockProps = {
-    title: 'Support Our Cause',
+    title: { en: 'Support Our Cause', uk: 'Підтримайте нашу справу' },
     paymentMethods: [
-      { label: 'PayPal', value: 'paypal@example.com' },
-      { label: 'Bank Transfer', value: 'bank@example.com' }
+      { label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' },
+      { label: { en: 'Bank Transfer', uk: 'Банківський переказ' }, value: 'bank@example.com' }
     ],
     imageSrc: '/images/volunteer.jpg',
     caption: 'Volunteer making a difference'
   };
 
   it('should render correctly with REAL data from volunteerDonationData.ts', () => {
-    render(<VolunteerDonation {...volunteerDonationData} />);
+    const normalizedVolunteerDonationData = {
+      ...volunteerDonationData,
+      title: { en: volunteerDonationData.title, uk: volunteerDonationData.title },
+      paymentMethods: volunteerDonationData.paymentMethods.map((method) => ({
+        ...method,
+        label: { en: method.label, uk: method.label }
+      }))
+    };
+
+    render(<VolunteerDonation {...normalizedVolunteerDonationData} />);
 
     expect(screen.getByTestId('section-title')).toHaveTextContent(volunteerDonationData.title);
     expect(screen.getByText(/Ukraine.resisting@gmail.com/i)).toBeInTheDocument();
@@ -81,9 +93,34 @@ describe('VolunteerDonation Coverage Fix', () => {
     expect(screen.queryByTestId('mock-copy-link')).not.toBeInTheDocument();
   });
 
+  it('should render single payment method', () => {
+    const propsWithOneMethod = {
+      ...mockProps,
+      paymentMethods: [{ label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' }]
+    };
+    render(<VolunteerDonation {...propsWithOneMethod} />);
+
+    expect(screen.getByText('PayPal:')).toBeInTheDocument();
+    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
+    const copyButtons = screen.getAllByTestId('mock-copy-link');
+    expect(copyButtons).toHaveLength(1);
+  });
+
+  it('should use title as image alt text', () => {
+    const customTitle = { en: 'Custom Title', uk: 'Користувацький заголовок' };
+
+    render(<VolunteerDonation {...mockProps} title={customTitle} />);
+
+    const image = screen.getByRole('img');
+
+    expect(image).toHaveAttribute('alt', customTitle.en);
+  });
+
   it('should render image without caption when caption is not provided', () => {
     const propsWithoutCaption = { ...mockProps, caption: undefined };
+
     render(<VolunteerDonation {...propsWithoutCaption} />);
+
     expect(screen.queryByText('Volunteer making a difference')).not.toBeInTheDocument();
   });
 });

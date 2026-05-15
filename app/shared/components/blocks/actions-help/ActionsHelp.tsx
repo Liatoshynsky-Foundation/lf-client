@@ -2,6 +2,7 @@
 
 import 'swiper/css';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { useLocale } from 'next-intl';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
@@ -13,20 +14,21 @@ import { styles } from './ActionsHelp.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 interface ActionsHelpProps {
-  title: string;
+  title: { uk: string; en: string };
   subtitle: TipTapDoc;
   paperItems: {
-    title: string;
-    description: string;
+    title: { uk: string; en: string };
+    description: { uk: string; en: string };
   }[];
   paperButton: {
-    text: string;
+    text: { uk: string; en: string };
     link: string;
   };
 }
 
 const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) => {
   const { title, subtitle, paperItems, paperButton } = data;
+  const locale = useLocale();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -41,7 +43,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       ...paperItems.map((paper, index) => (
         <TextCard
           sx={styles.paper(isMobile ? 0 : index)}
-          key={paper.title}
+          key={paper.title[locale]}
           title={paper.title}
           description={paper.description}
         />
@@ -49,7 +51,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       <ButtonCard
         key="button-card"
         sx={styles.paper(isMobile ? 0 : paperItems.length)}
-        text={paperButton.text}
+        text={paperButton.text[locale]}
         link={paperButton.link}
         dataTestId="ActionsHelp-buttonCard"
       />
@@ -94,6 +96,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
       />
       <TipTapContent
         data={subtitle}
+        locale={locale}
         nodeRenderers={{
           paragraph: renderSubtitle
         }}

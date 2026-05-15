@@ -99,8 +99,8 @@ export const fundsRepository: FundsRepository = {
       contentDescription: caseDoc.contentDescription,
       pdfUrl: caseDoc.pdfUrl,
       fundId: caseDoc.fundId.toString(),
-      fundNumber: fund?.number ?? '',
-      fundTitle: fund?.title ?? '',
+      fundNumber: fund?.number ?? { en: '', uk: '' },
+      fundTitle: fund?.title ?? { en: '', uk: '' },
       documents: documents
         .sort((a, b) => a.order - b.order)
         .map(

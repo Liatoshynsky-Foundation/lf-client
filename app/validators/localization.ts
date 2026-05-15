@@ -3,7 +3,6 @@ import z from 'zod';
 
 import { TipTapDocSchema } from './pagesSchemas/tiptap.schema';
 import { LocalizationErrors } from '~/constants/errors';
-import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type TranslatedField<T> = Record<Locale, T>;
 
@@ -21,6 +20,7 @@ function isTranslatedField(value: unknown, locale: Locale): value is TranslatedF
 }
 
 function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): boolean {
+  if (!Array.isArray(root.content)) return true;
   for (const node of root.content) {
     if (!node.content) {
       continue;
@@ -50,7 +50,7 @@ function validTranslatedField(value: Record<string, unknown>, locale: Locale, pa
   }
 
   if (typeof fieldValue === 'object') {
-    return doesTipTapHaveTranslations(fieldValue as TipTapDoc);
+    return doesTipTapHaveTranslations(fieldValue as z.infer<typeof TipTapDocSchema>);
   }
 
   return false;

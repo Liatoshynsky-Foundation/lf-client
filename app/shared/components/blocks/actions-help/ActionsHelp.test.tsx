@@ -9,6 +9,10 @@ jest.mock('swiper/react', () => ({
   SwiperSlide: ({ children }: { children: React.ReactNode }) => <div data-testid="mock-swiper-slide">{children}</div>
 }));
 
+jest.mock('next-intl', () => ({
+  useLocale: () => 'en'
+}));
+
 jest.mock('swiper/css', () => ({}));
 jest.mock('@mui/material', () => ({
   ...jest.requireActual('@mui/material'),
@@ -16,25 +20,41 @@ jest.mock('@mui/material', () => ({
 }));
 jest.mock('~/ds-components/text-card/TextCard', () => ({
   __esModule: true,
-  default: ({ title, description }: { title: string; description: string }) => (
+  default: ({
+    title,
+    description,
+    locale = 'en'
+  }: {
+    title: string | { en: string; uk: string };
+    description: string | { en: string; uk: string };
+    locale?: 'en' | 'uk';
+  }) => (
     <div data-testid="text-card">
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <h3>{typeof title === 'string' ? title : title[locale]}</h3>
+      <p>{typeof description === 'string' ? description : description[locale]}</p>
     </div>
   )
 }));
 
 jest.mock('~/ds-components/button-card/ButtonCard', () => ({
   __esModule: true,
-  default: ({ text, link }: { text: string; link: string }) => (
-    <a data-testid="button-card" href={link}>
-      {text}
+  default: ({
+    text,
+    link,
+    dataTestId
+  }: {
+    text: string | { en: string; uk: string };
+    link: string;
+    dataTestId?: string;
+  }) => (
+    <a data-testid={dataTestId || 'button-card'} href={link}>
+      {typeof text === 'string' ? text : text.en}
     </a>
   )
 }));
 
 const mockData = {
-  title: 'Actions Help',
+  title: { uk: 'Actions Help', en: 'Actions Help' },
   subtitle: {
     type: TipTapNodeTypes.doc,
     content: [
@@ -42,19 +62,22 @@ const mockData = {
         type: TipTapNodeTypes.paragraph,
         content: [
           {
-            type: TipTapNodeTypes.text,
-            text: 'subtitleText'
+            type: TipTapNodeTypes.multiLangText,
+            text: {
+              uk: 'subtitleText',
+              en: 'subtitleText'
+            }
           }
         ]
       }
     ]
   } as TipTapDoc,
   paperItems: [
-    { title: 'Paper 1', description: 'Description 1' },
-    { title: 'Paper 2', description: 'Description 2' }
+    { title: { uk: 'Paper 1', en: 'Paper 1' }, description: { uk: 'Description 1', en: 'Description 1' } },
+    { title: { uk: 'Paper 2', en: 'Paper 2' }, description: { uk: 'Description 2', en: 'Description 2' } }
   ],
   paperButton: {
-    text: 'Go to test',
+    text: { uk: 'Go to test', en: 'Go to test' },
     link: '/test-link'
   }
 };
@@ -81,7 +104,7 @@ describe('ActionsHelp Responsive Rendering', () => {
     expect(screen.queryByTestId('mock-swiper')).not.toBeInTheDocument();
 
     expect(screen.getAllByTestId('text-card')).toHaveLength(mockData.paperItems.length);
-    expect(screen.getByTestId('button-card')).toBeInTheDocument();
+    expect(screen.getByTestId('ActionsHelp-buttonCard')).toBeInTheDocument();
   });
 
   it('should render cards inside Swiper on Mobile (isMobile = true)', () => {
@@ -116,14 +139,14 @@ describe('ActionsHelp component', () => {
     expect(screen.getAllByTestId('text-card')).toHaveLength(mockData.paperItems.length);
 
     mockData.paperItems.forEach((paper) => {
-      expect(screen.getByText(paper.title)).toBeInTheDocument();
-      expect(screen.getByText(paper.description)).toBeInTheDocument();
+      expect(screen.getByText(paper.title.en)).toBeInTheDocument();
+      expect(screen.getByText(paper.description.en)).toBeInTheDocument();
     });
   });
 
   it('should render the ButtonCard with correct text and link', () => {
-    const buttonCard = screen.getByTestId('button-card');
-    expect(buttonCard).toHaveTextContent(mockData.paperButton.text);
+    const buttonCard = screen.getByTestId('ActionsHelp-buttonCard');
+    expect(buttonCard).toHaveTextContent(mockData.paperButton.text.en);
     expect(buttonCard).toHaveAttribute('href', mockData.paperButton.link);
   });
 });

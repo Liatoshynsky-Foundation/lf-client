@@ -1,5 +1,6 @@
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
 
 import { imageSizes, styles } from './SectionTitle.styles';
 import { sxToArray } from '~/utils/sxToArray';
@@ -10,13 +11,14 @@ interface SectionTitleProps {
   icon?: boolean;
   mb?: number | string;
   gridColumn?: object;
-  title: string;
+  title: { uk: string; en: string } | string;
   sx?: SxProps<Theme>;
   dataTestId?: string;
 }
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx, dataTestId }) => {
   const sizesAttribute = generateSizesAttribute(imageSizes);
+  const locale = useLocale();
 
   return (
     <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestId}>
@@ -30,7 +32,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gri
         component="h2"
         {...(dataTestId ? { 'data-testid': `${dataTestId}-title` } : {})}
       >
-        {title}
+        {typeof title === 'string' ? title : title[locale]}
       </Typography>
     </Box>
   );

@@ -72,7 +72,7 @@ export default function Archive() {
   const filteredFunds = funds.filter((fund) => {
     if (!params.search) return true;
     const query = params.search.toLowerCase();
-    return fund.number.toLowerCase().includes(query) || fund.title.toLowerCase().includes(query);
+    return fund.number[locale].toLowerCase().includes(query) || fund.title[locale].toLowerCase().includes(query);
   });
 
   const getNumColumns = () => {

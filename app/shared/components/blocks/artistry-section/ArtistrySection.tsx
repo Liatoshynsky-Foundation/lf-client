@@ -68,13 +68,13 @@ export default function ArtistrySection({ subTitle, textContent, buttonText, but
           </Typography>
           <ButtonContentBlock
             buttonText={buttonText[locale]}
-            content={content}
+            content={content as TipTapDoc}
             link={buttonLink}
             textSx={styles.textStyle}
             sx={styles.buttonStyle}
             buttonContainerSx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}
             textContainerSx={{ mt: { xs: '16px', md: '24px' }, mb: { xs: '24px', md: '0px' }, rowGap: { xs: '2px' } }}
-            additionalDescription={additionalContent}
+            additionalDescription={additionalContent as TipTapDoc}
             additionalTextSx={styles.additionalTextStyle}
           />
         </Box>

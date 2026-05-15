@@ -32,6 +32,45 @@ interface Props {
   events: EventItem[];
 }
 
+const formatResponsiveDate = (dateStr: string) => {
+  const year = dateStr.slice(-4);
+
+  if (Number.isNaN(Number(year))) return dateStr;
+
+  const separator = dateStr.slice(-5, -4);
+  const hasSeparator = separator === '.' || separator === ' ';
+
+  const mainPart = hasSeparator ? dateStr.slice(0, -5) : dateStr.slice(0, -4);
+  const finalSeparator = hasSeparator ? separator : '';
+
+  return (
+    <>
+      {mainPart}
+      <Box
+        component="span"
+        sx={{
+          display: {
+            xs: 'inline',
+            '@media (min-width: 1280px)': { display: 'none' }
+          }
+        }}
+      >
+        {finalSeparator}
+      </Box>
+      <Box
+        component="span"
+        sx={{
+          display: {
+            xs: 'inline',
+            '@media (min-width: 1280px)': { display: 'block' }
+          }
+        }}
+      >
+        {year}
+      </Box>
+    </>
+  );
+};
 const EventSection: React.FC<Props> = ({
   title,
   text,
@@ -85,7 +124,7 @@ const EventSection: React.FC<Props> = ({
             {displayedEvents.map((event) => (
               <SwiperSlide key={event.id}>
                 <Box sx={{ ...styles.eventItem, width: '100%', mb: 0 }}>
-                  <Typography sx={styles.eventDate}>{event.date}</Typography>
+                  <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
                   <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
                   <Box sx={styles.eventInfo}>
                     <Typography variant="h4" sx={styles.eventTitle}>
@@ -123,7 +162,7 @@ const EventSection: React.FC<Props> = ({
         <Box sx={styles.eventsList}>
           {displayedEvents.map((event) => (
             <Box key={event.id} sx={styles.eventItem}>
-              <Typography sx={styles.eventDate}>{event.date}</Typography>
+              <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
               <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
               <Box sx={styles.eventInfo}>
                 <Typography variant="h4" sx={styles.eventTitle}>

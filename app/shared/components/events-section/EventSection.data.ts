@@ -46,23 +46,27 @@ export const eventsCtaLabel = {
   en: 'View all events'
 };
 
+const COMMON_TITLE = {
+  uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
+  en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
+};
+
+const COMMON_DESC = {
+  uk: 'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968). Звісно, ця постать в українській культурі є настільки м...',
+  en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Lyatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
+};
+
 export const mockEventsData = {
   ctaHref: ROUTES.NEWS,
   events: [
     {
       id: '1',
       date: {
-        uk: '29.09 - 30.09 2024',
-        en: '29.09 - 30.09 2024'
+        uk: '29.02 - 02.03.2024',
+        en: '29.02 - 02.03.2024'
       },
-      title: {
-        uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
-        en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
-      },
-      description: {
-        uk: 'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968). Звісно, ця постать в українській культурі є настільки м...',
-        en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Lyatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
-      },
+      title: COMMON_TITLE,
+      description: COMMON_DESC,
       image: '/images/event-section1.png',
       publishDate: {
         uk: '05.05.25',
@@ -73,8 +77,8 @@ export const mockEventsData = {
     {
       id: '2',
       date: {
-        uk: '15.10 - 16.10 2024',
-        en: '15.10 - 16.10 2024'
+        uk: '15.10 - 16.10.2024',
+        en: '15.10 - 16.10.2024'
       },
       title: {
         uk: '«ЗОЛОТИЙ ОБРУЧ»: МАЙЖЕ ДЕТЕКТИВНА ІСТОРІЯ',
@@ -94,17 +98,11 @@ export const mockEventsData = {
     {
       id: '3',
       date: {
-        uk: '29.09 - 30.09 2024',
-        en: '29.09 - 30.09 2024'
+        uk: '29.09 - 30.09.2024',
+        en: '29.09 - 30.09.2024'
       },
-      title: {
-        uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
-        en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
-      },
-      description: {
-        uk: 'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968). Звісно, ця постать в українській культурі є настільки м...',
-        en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Lyatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
-      },
+      title: COMMON_TITLE,
+      description: COMMON_DESC,
       image: '/images/event-section3.png',
       publishDate: {
         uk: '05.05.25',
@@ -115,17 +113,11 @@ export const mockEventsData = {
     {
       id: '4',
       date: {
-        uk: '29.09 - 30.09 2024',
-        en: '29.09 - 30.09 2024'
+        uk: '29.09 - 30.09.2024',
+        en: '29.09 - 30.09.2024'
       },
-      title: {
-        uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
-        en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
-      },
-      description: {
-        uk: 'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968). Звісно, ця постать в українській культурі є настільки м...',
-        en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Lyatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
-      },
+      title: COMMON_TITLE,
+      description: COMMON_DESC,
       image: '/images/event-section1.png',
       publishDate: {
         uk: '05.05.25',

@@ -150,17 +150,23 @@ export const yermolenkoLinks: LocalizedButtonItem[] = [
 
 export const carsForAFU: PaymentMethod[] = [
   {
-    label: 'Карта',
+    label: { uk: 'Карта', en: 'Card' },
     value: 'UA023052990000026009036207343'
   },
   {
-    label: 'Paypal',
+    label: { uk: 'Paypal', en: 'Paypal' },
     value: 'Ukraine.resisting@gmail.com'
   }
 ];
 
 export const carsForAFUData = {
-  title: 'НА АВТІВКИ ДЛЯ ЗСУ:',
+  title: {
+    uk: 'НА АВТІВКИ ДЛЯ ЗСУ:',
+    en: 'FOR THE ARMED FORCES OF UKRAINE:'
+  },
   imageSrc: '/images/war-in-ukraine-page/photo-1.png',
-  caption: 'Володимир Єрмоленко разом з дружиною Тетяною Огарковою'
+  caption: {
+    uk: 'Володимир Єрмоленко разом з дружиною Тетяною Огарковою',
+    en: 'Volodymyr Yermolenko with his wife Tetiana Ogarkova'
+  }
 };

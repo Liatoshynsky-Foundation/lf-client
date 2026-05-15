@@ -25,6 +25,10 @@ const renderNode: RenderNode = (renderers, node) => {
       return renderers.paragraph(children, node);
     }
 
+    case TipTapNodeTypes.multiLangText: {
+      return renderers.multiLangText(node);
+    }
+
     case TipTapNodeTypes.text:
       return renderers.text(node);
 

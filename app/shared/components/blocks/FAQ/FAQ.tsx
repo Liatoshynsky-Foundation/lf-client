@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
 import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
@@ -13,8 +13,14 @@ import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
 
 type FaqItemProps = {
-  title: string;
-  content: string;
+  title: {
+    en: string;
+    uk: string;
+  };
+  content: {
+    en: string;
+    uk: string;
+  };
 };
 
 type FaqProps = {
@@ -29,9 +35,10 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
   const { contacts, faq } = data;
 
   const t = useTranslations('supportUs.faq');
+  const locale = useLocale();
 
   const faqItems = faq.map((item) => {
-    return <FaqAccordion key={item.title} title={item.title} content={item.content} />;
+    return <FaqAccordion key={item.title[locale]} title={item.title[locale]} content={item.content[locale]} />;
   });
 
   return (
