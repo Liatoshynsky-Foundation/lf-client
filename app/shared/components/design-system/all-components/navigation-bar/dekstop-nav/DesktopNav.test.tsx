@@ -26,6 +26,21 @@ jest.mock('~/public/icons/chevron-up.svg', () => ({
 
 jest.mock('~/ds-components/button/Button');
 
+jest.mock('~/ds-components/dropdown-menu/DropdownMenu', () => ({
+  __esModule: true,
+  default: ({ open, menuList }: { open: boolean; menuList: React.ReactNode }) =>
+    open ? <div data-testid="dropdown-menu">{menuList}</div> : null
+}));
+
+jest.mock('~/ds-components/menu-item/MenuItem', () => ({
+  __esModule: true,
+  default: ({ children, onClick }: { children: React.ReactNode; onClick: () => void; sx?: unknown }) => (
+    <div role="menuitem" onClick={onClick}>
+      {children}
+    </div>
+  )
+}));
+
 const navLabels: NavigationDTO[] = [
   {
     title: 'Фундація',
