@@ -4,11 +4,21 @@ import { translatedFieldSchema } from './constants';
 
 import { NewsStatus } from '~/domain/dto/news.dto';
 
+export const cropRectSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number()
+});
+
+export type CropRect = z.infer<typeof cropRectSchema>;
+
 export const newsImageSchema = z.object({
   src: z.string(),
   alt: translatedFieldSchema,
   caption: translatedFieldSchema,
-  isTmp: z.boolean()
+  isTmp: z.boolean(),
+  crop: cropRectSchema.nullable().optional()
 });
 
 export const mongoObjectIdSchema = z

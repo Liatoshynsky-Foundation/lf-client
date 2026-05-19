@@ -31,7 +31,13 @@ const newsSchema = new Schema<INewsDocument>(
         uk: { type: String, required: true },
         en: { type: String, required: true }
       },
-      isTmp: { type: Boolean, default: false }
+      isTmp: { type: Boolean, default: false },
+      crop: {
+        x: { type: Number },
+        y: { type: Number },
+        width: { type: Number },
+        height: { type: Number }
+      }
     },
     status: {
       type: String,

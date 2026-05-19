@@ -31,6 +31,7 @@ type newsCardItemImage = {
   alt?: string;
   caption?: string;
   isTmp?: boolean;
+  crop?: { x: number; y: number; width: number; height: number } | null;
 };
 
 export type newsPressCardItem = {

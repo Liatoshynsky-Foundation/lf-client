@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import BaseCard, { BaseCardProps } from './BaseCard';
@@ -50,6 +50,12 @@ jest.mock('~/ds-components/button/Button', () => ({
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
   SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="svg-image" />
 }));
+
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
 describe('BaseCard', () => {
   const defaultProps: BaseCardProps = {
@@ -123,6 +129,14 @@ describe('BaseCard', () => {
       const link = screen.getByTestId('next-link');
       expect(link).toHaveAttribute('href', '/internal-page');
     });
+
+    it('should treat http:// links as external (short-circuit branch)', () => {
+      render(<BaseCard {...defaultProps} href="http://external.com" />);
+      const link = screen.getByRole('link');
+      expect(link).toHaveAttribute('href', 'http://external.com');
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    });
   });
 
   describe('Variants: news vs press', () => {
@@ -160,6 +174,92 @@ describe('BaseCard', () => {
       const longTitle = 'A'.repeat(100);
       render(<BaseCard {...defaultProps} title={longTitle} />);
       expect(screen.getByText(longTitle)).toBeInTheDocument();
+    });
+  });
+
+  describe('Crop functionality', () => {
+    afterEach(() => {
+      global.ResizeObserver = class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      };
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 0 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 0 });
+    });
+
+    it('should render native img when crop is provided', () => {
+      const crop = { x: 0, y: 0, width: 200, height: 150 };
+      render(<BaseCard {...defaultProps} crop={crop} />);
+
+      const img = screen.getByRole('img', { name: defaultProps.title });
+      expect(img.tagName).toBe('IMG');
+      expect(img).toHaveAttribute('src', defaultProps.image);
+      expect(img).toHaveAttribute('alt', defaultProps.title);
+      expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+    });
+
+    it('should render Next.js Image when crop is null', () => {
+      render(<BaseCard {...defaultProps} crop={null} />);
+
+      expect(screen.getByTestId('next-image')).toBeInTheDocument();
+    });
+
+    it('should disconnect ResizeObserver on unmount', () => {
+      const disconnectMock = jest.fn();
+      global.ResizeObserver = class {
+        observe() {}
+        unobserve() {}
+        disconnect() {
+          disconnectMock();
+        }
+      } as unknown as typeof ResizeObserver;
+
+      const { unmount } = render(<BaseCard {...defaultProps} />);
+      unmount();
+
+      expect(disconnectMock).toHaveBeenCalled();
+    });
+
+    it('should skip ResizeObserver setup when containerRef is null', () => {
+      const nullRef = new Proxy({ current: null as HTMLDivElement | null }, { set: () => true });
+      const useRefSpy = jest.spyOn(React, 'useRef');
+      useRefSpy.mockReturnValueOnce(nullRef as React.RefObject<HTMLDivElement>);
+
+      expect(() => render(<BaseCard {...defaultProps} />)).not.toThrow();
+
+      useRefSpy.mockRestore();
+    });
+
+    it('should call handleImageLoad and buildCroppedStyle when image loads with sized container', () => {
+      global.ResizeObserver = class {
+        private cb: ResizeObserverCallback;
+        constructor(cb: ResizeObserverCallback) {
+          this.cb = cb;
+        }
+        observe() {
+          this.cb(
+            [{ contentRect: { width: 400, height: 300 } } as ResizeObserverEntry],
+            this as unknown as ResizeObserver
+          );
+        }
+        unobserve() {}
+        disconnect() {}
+      } as unknown as typeof ResizeObserver;
+
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 800 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 600 });
+
+      const crop = { x: 10, y: 20, width: 200, height: 150 };
+      render(<BaseCard {...defaultProps} crop={crop} />);
+
+      const img = screen.getByRole('img', { name: defaultProps.title });
+
+      act(() => {
+        fireEvent.load(img);
+      });
+
+      expect(img.style.transform).toContain('translate');
     });
   });
 });
