@@ -131,9 +131,9 @@ describe('BaseCard', () => {
     });
 
     it('should treat http:// links as external (short-circuit branch)', () => {
-      render(<BaseCard {...defaultProps} href="http://external.com" />);
+      render(<BaseCard {...defaultProps} href="http://localhost/page" />);
       const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', 'http://external.com');
+      expect(link).toHaveAttribute('href', 'http://localhost/page');
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     });
