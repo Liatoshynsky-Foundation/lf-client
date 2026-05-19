@@ -111,7 +111,7 @@ export default function BaseCard({
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
       <Box ref={containerRef} sx={styles.imageContainer} data-testid={`${dataTestId}-imageContainer`}>
-        {crop != null ? (
+        {crop ? (
           <img ref={imgRef} src={image} alt={title} loading="lazy" onLoad={handleImageLoad} style={croppedImgStyle} />
         ) : (
           <Image src={image} alt={title} fill style={styles.image} sizes="(max-width: 768px) 100vw, 33vw" />

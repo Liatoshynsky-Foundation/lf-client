@@ -51,11 +51,11 @@ jest.mock('~/shared/components/svg-image/SvgImage', () => ({
   SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="svg-image" />
 }));
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
+globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn()
+}));
 
 describe('BaseCard', () => {
   const defaultProps: BaseCardProps = {
@@ -179,11 +179,11 @@ describe('BaseCard', () => {
 
   describe('Crop functionality', () => {
     afterEach(() => {
-      global.ResizeObserver = class ResizeObserver {
-        observe() {}
-        unobserve() {}
-        disconnect() {}
-      };
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }));
       Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 0 });
       Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 0 });
     });
@@ -207,13 +207,11 @@ describe('BaseCard', () => {
 
     it('should disconnect ResizeObserver on unmount', () => {
       const disconnectMock = jest.fn();
-      global.ResizeObserver = class {
-        observe() {}
-        unobserve() {}
-        disconnect() {
-          disconnectMock();
-        }
-      } as unknown as typeof ResizeObserver;
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: disconnectMock
+      }));
 
       const { unmount } = render(<BaseCard {...defaultProps} />);
       unmount();
@@ -232,20 +230,13 @@ describe('BaseCard', () => {
     });
 
     it('should call handleImageLoad and buildCroppedStyle when image loads with sized container', () => {
-      global.ResizeObserver = class {
-        private cb: ResizeObserverCallback;
-        constructor(cb: ResizeObserverCallback) {
-          this.cb = cb;
-        }
-        observe() {
-          this.cb(
-            [{ contentRect: { width: 400, height: 300 } } as ResizeObserverEntry],
-            this as unknown as ResizeObserver
-          );
-        }
-        unobserve() {}
-        disconnect() {}
-      } as unknown as typeof ResizeObserver;
+      globalThis.ResizeObserver = jest.fn().mockImplementation((cb: ResizeObserverCallback) => ({
+        observe: jest.fn(() => {
+          cb([{ contentRect: { width: 400, height: 300 } } as ResizeObserverEntry], {} as ResizeObserver);
+        }),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }));
 
       Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 800 });
       Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 600 });
