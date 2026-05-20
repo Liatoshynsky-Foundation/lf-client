@@ -1,10 +1,12 @@
+import { JSONContent } from '@tiptap/react';
+
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 export interface IImageBlock {
   src: string;
-  alt: string;
+  alt: JSONContent | string;
   generatedSrc: string;
-  caption?: string | null;
+  caption?: JSONContent | string | null;
 }
 
 export interface IQuoteBlock {
@@ -12,10 +14,15 @@ export interface IQuoteBlock {
   source: string;
 }
 
+export interface ITipTapQuoteBlock {
+  text: string | TipTapDoc;
+  source: string | TipTapDoc;
+}
+
 export interface IIntroSection {
-  title: string;
+  title: string | TipTapDoc;
   image: IImageBlock | null;
-  quote: IQuoteBlock | null;
+  quote: ITipTapQuoteBlock | null;
 }
 
 export interface IFoundationInfo {
@@ -26,39 +33,39 @@ export interface IFoundationInfo {
 }
 
 export interface IOurMission {
-  title: string;
+  title: string | TipTapDoc;
   list: TipTapDoc[];
   smallImage: IImageBlock | null;
   bigImage: IImageBlock | null;
 }
 
 export interface IOurGoals {
-  title: string;
+  title: string | TipTapDoc;
   goals: {
-    title: string;
-    description: TipTapDoc;
+    title: string | TipTapDoc;
+    description: string | TipTapDoc;
   }[];
 }
 
 export interface ILiatoshynskyOffice {
-  quote: IQuoteBlock | null;
+  quote: ITipTapQuoteBlock | null;
 }
 
 export interface IWhatWeDo {
-  title: string;
+  title: string | TipTapDoc;
   items: {
-    title: string;
-    description: TipTapDoc;
+    title: string | TipTapDoc;
+    description: string | TipTapDoc;
   }[];
 }
 
 export interface IFoundationFounders {
   titleText: TipTapDoc;
-  listTitle: string;
+  listTitle: string | TipTapDoc;
   members: {
     photo: IImageBlock;
-    name: string;
-    description: string;
+    name: string | TipTapDoc;
+    description: string | TipTapDoc;
   }[];
 }
 
