@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { TipTapDocSchema } from './pagesSchemas/tiptap.schema';
+
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
 });
@@ -7,6 +9,11 @@ export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /
 export const translatedFieldSchema = z.object({
   uk: z.string(),
   en: z.string()
+});
+
+export const translatedTipTapSchema = z.object({
+  uk: z.union([TipTapDocSchema, z.string()]),
+  en: z.union([TipTapDocSchema, z.string()])
 });
 
 export const translatedLinkSchema = z.object({
