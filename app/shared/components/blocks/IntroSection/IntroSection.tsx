@@ -9,6 +9,12 @@ import { styles } from './IntroSection.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IIntroSection } from '~/types/page/about-us.types';
 
+const titleRenderer = (children: React.ReactNode) => (
+  <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
+    {children}
+  </Typography>
+);
+
 export function IntroSection({ data }: { readonly data: IIntroSection }) {
   const { title, image, quote } = data;
 
@@ -22,11 +28,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
         <TipTapContent
           data={title}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: (children) => (
-              <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
-                {children}
-              </Typography>
-            )
+            [TipTapNodeTypes.paragraph]: titleRenderer
           }}
         />
       )}

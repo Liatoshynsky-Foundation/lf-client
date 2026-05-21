@@ -1,7 +1,8 @@
 'use client';
-import { Box, Typography } from '@mui/material';
+
+import { Box, Typography, TypographyProps } from '@mui/material';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { styles } from './PersonCard.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
@@ -19,6 +20,15 @@ interface PersonCardProps {
 
 const DEFAULT_FALLBACK = '/images/light-logo.svg';
 
+interface TextRendererConfig {
+  sx: TypographyProps['sx'];
+}
+
+const createTypographyRenderer = (config: TextRendererConfig) => {
+  const Paragraph = (children: React.ReactNode) => <Typography sx={config.sx}>{children}</Typography>;
+  return Paragraph;
+};
+
 const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fallbackSrc = DEFAULT_FALLBACK }) => {
   const [src, setSrc] = useState<string>(imgURL);
   const [failed, setFailed] = useState(false);
@@ -29,6 +39,14 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
       setSrc(fallbackSrc);
     }
   };
+
+  const nameRenderer = useMemo(() => {
+    return createTypographyRenderer({ sx: styles.name });
+  }, []);
+
+  const descriptionRenderer = useMemo(() => {
+    return createTypographyRenderer({ sx: styles.description });
+  }, []);
 
   return (
     <Box sx={styles.container}>
@@ -48,7 +66,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
         <TipTapContent
           data={renderData(name)}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.name}>{children}</Typography>
+            [TipTapNodeTypes.paragraph]: nameRenderer
           }}
         />
       )}
@@ -57,7 +75,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
         <TipTapContent
           data={renderData(description)}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.description}>{children}</Typography>
+            [TipTapNodeTypes.paragraph]: descriptionRenderer
           }}
         />
       )}

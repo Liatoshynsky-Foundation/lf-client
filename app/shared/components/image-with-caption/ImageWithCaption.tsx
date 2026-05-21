@@ -3,15 +3,14 @@
 import { Box, BoxProps, Breakpoint, Typography, TypographyProps } from '@mui/material';
 import { JSONContent } from '@tiptap/react';
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
-import React from 'react';
+import { Locale, useLocale } from 'next-intl';
+import React, { useMemo } from 'react';
 
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 
 import { styles } from './ImageWithCaption.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { ElementSizes, LocalizedString } from '~/types/types/common.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { ElementSizes } from '~/types/types/common.types';
 
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { extractTextFromTipTap, getPlainString, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
@@ -22,6 +21,8 @@ export interface BorderProps {
   left: Partial<Record<Breakpoint, number>>;
   color?: string;
 }
+
+type LocalizedString = Record<Locale, string>;
 
 interface ImageWithCaptionProps {
   src: string;
@@ -37,6 +38,25 @@ interface ImageWithCaptionProps {
   dataTestId?: string;
 }
 
+interface CaptionConfig {
+  sizes: ElementSizes;
+  align: 'left' | 'right';
+  sx: TypographyProps['sx'];
+  className?: string;
+}
+
+const createCaptionRenderer = (config: CaptionConfig) => {
+  const Caption = (children: React.ReactNode) => (
+    <Typography
+      className={config.className}
+      sx={[styles.caption(config.sizes, config.align), config.sx].flat() as TypographyProps['sx']}
+    >
+      {children}
+    </Typography>
+  );
+  return Caption;
+};
+
 const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   src,
   alt,
@@ -51,7 +71,16 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   dataTestId
 }) => {
   const sizesAttribute = generateSizesAttribute(sizes);
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
+
+  const paragraphRenderer = useMemo(() => {
+    return createCaptionRenderer({
+      sizes,
+      align,
+      sx: captionSx,
+      className: captionClassName
+    });
+  }, [sizes, align, captionSx, captionClassName]);
 
   const resolvedAltText = isTipTapDoc(alt)
     ? extractTextFromTipTap(alt, locale)
@@ -73,16 +102,9 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
       {caption &&
         (isTipTapDoc(caption) ? (
           <TipTapContent
-            data={caption as unknown as TipTapDoc}
+            data={caption}
             nodeRenderers={{
-              [TipTapNodeTypes.paragraph]: (children) => (
-                <Typography
-                  className={captionClassName}
-                  sx={[styles.caption(sizes, align), captionSx].flat() as TypographyProps['sx']}
-                >
-                  {children}
-                </Typography>
-              )
+              [TipTapNodeTypes.paragraph]: paragraphRenderer
             }}
           />
         ) : (
@@ -90,7 +112,7 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
             className={captionClassName}
             sx={[styles.caption(sizes, align), captionSx].flat() as TypographyProps['sx']}
           >
-            {getPlainString(caption as string | LocalizedString)}
+            {getPlainString(caption as string | LocalizedString, locale)}
           </Typography>
         ))}
     </Box>

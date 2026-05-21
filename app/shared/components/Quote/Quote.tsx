@@ -1,4 +1,7 @@
-import { Box, Typography } from '@mui/material';
+'use client';
+
+import { Box, Typography, TypographyProps } from '@mui/material';
+import React, { useMemo } from 'react';
 
 import TipTapContent from '../tip-tap-content/TipTapContent';
 import { styles } from './Quote.styles';
@@ -6,7 +9,22 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
+import { isTipTapDoc } from '~/lib/utils/tiptapHelpers';
 import QuoteImage from '~/public/images/quote.svg';
+
+interface UnifiedRendererConfig {
+  sx: TypographyProps['sx'];
+  dataTestId: string;
+}
+
+const createTypographyRenderer = (config: UnifiedRendererConfig) => {
+  const Paragraph = (children: React.ReactNode) => (
+    <Typography sx={config.sx} data-testid={config.dataTestId}>
+      {children}
+    </Typography>
+  );
+  return Paragraph;
+};
 
 const QuoteBlock = ({
   quoteText,
@@ -23,6 +41,23 @@ const QuoteBlock = ({
 }: QuoteBlockProps) => {
   const alignKey = alignRight ? 'right' : 'left';
 
+  const mainTextStyle = styles.mainText(mainTextColor, alignKey);
+  const sourceTextStyle = styles.sourceText(alignKey);
+
+  const mainTextRenderer = useMemo(() => {
+    return createTypographyRenderer({
+      sx: mainTextStyle,
+      dataTestId: 'Quote-textContainer--text'
+    });
+  }, [mainTextStyle]);
+
+  const sourceTextRenderer = useMemo(() => {
+    return createTypographyRenderer({
+      sx: sourceTextStyle,
+      dataTestId: 'Quote-textContainer--source'
+    });
+  }, [sourceTextStyle]);
+
   return (
     <Box sx={[styles.mainContainer(alignKey, width, imageTextGap), ...sxToArray(sx)]} data-testid={dataTestId}>
       <Box sx={styles.image(quoteIconColor, alignKey, iconWidth)}>
@@ -30,37 +65,29 @@ const QuoteBlock = ({
       </Box>
       <Box sx={styles.textContainer(alignKey, textGap)} data-testid="Quote-textContainer">
         {quoteText &&
-          (typeof quoteText === 'string' ? (
-            <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
+          (!isTipTapDoc(quoteText) ? (
+            <Typography sx={mainTextStyle} data-testid="Quote-textContainer--text">
               {quoteText}
             </Typography>
           ) : (
             <TipTapContent
               data={quoteText}
               nodeRenderers={{
-                [TipTapNodeTypes.paragraph]: (children) => (
-                  <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
-                    {children}
-                  </Typography>
-                )
+                [TipTapNodeTypes.paragraph]: mainTextRenderer
               }}
             />
           ))}
 
         {sourceText &&
-          (typeof sourceText === 'string' ? (
-            <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
+          (!isTipTapDoc(sourceText) ? (
+            <Typography sx={sourceTextStyle} data-testid="Quote-textContainer--source">
               {sourceText}
             </Typography>
           ) : (
             <TipTapContent
               data={sourceText}
               nodeRenderers={{
-                [TipTapNodeTypes.paragraph]: (children) => (
-                  <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
-                    {children}
-                  </Typography>
-                )
+                [TipTapNodeTypes.paragraph]: sourceTextRenderer
               }}
             />
           ))}

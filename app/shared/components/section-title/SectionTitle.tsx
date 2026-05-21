@@ -3,7 +3,7 @@
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Locale, useLocale } from 'next-intl';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import TipTapContent from '../tip-tap-content/TipTapContent';
 import { imageSizes, styles } from './SectionTitle.styles';
@@ -25,39 +25,46 @@ interface SectionTitleProps {
   dataTestId?: string;
 }
 
+interface TitleConfig {
+  gridColumn?: object;
+  dataTestId: { 'data-testid'?: string };
+}
+
+const createTitleRenderer = (config: TitleConfig) => {
+  const Title = (children: React.ReactNode) => (
+    <Typography sx={styles.title(config.gridColumn)} component="h2" {...config.dataTestId}>
+      {children}
+    </Typography>
+  );
+  return Title;
+};
+
 const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx, dataTestId }) => {
   const sizesAttribute = generateSizesAttribute(imageSizes);
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
+  const testIdProps = dataTestId ? { 'data-testid': `${dataTestId}-title` } : {};
+
+  const paragraphRenderer = useMemo(() => {
+    return createTitleRenderer({ gridColumn, dataTestId: testIdProps });
+  }, [gridColumn, testIdProps]);
 
   return (
     <Box sx={[styles.container(mb), ...sxToArray(sx)]} data-testid={dataTestId}>
       {icon && (
-        <Box sx={styles.image} {...(dataTestId ? { 'data-testid': `${dataTestId}-icon` } : {})}>
+        <Box sx={styles.image}>
           <Image src="/icons/ellipse.svg" alt="ellipse" fill sizes={sizesAttribute} />
         </Box>
       )}
 
       {isTipTapDoc(title) ? (
         <TipTapContent
-          data={title as unknown as TipTapDoc}
+          data={title}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: (children) => (
-              <Typography
-                sx={styles.title(gridColumn)}
-                component="h2"
-                {...(dataTestId ? { 'data-testid': `${dataTestId}-title` } : {})}
-              >
-                {children}
-              </Typography>
-            )
+            [TipTapNodeTypes.paragraph]: paragraphRenderer
           }}
         />
       ) : (
-        <Typography
-          sx={styles.title(gridColumn)}
-          component="h2"
-          {...(dataTestId ? { 'data-testid': `${dataTestId}-title` } : {})}
-        >
+        <Typography sx={styles.title(gridColumn)} component="h2" {...testIdProps}>
           {getPlainString(title, locale)}
         </Typography>
       )}
