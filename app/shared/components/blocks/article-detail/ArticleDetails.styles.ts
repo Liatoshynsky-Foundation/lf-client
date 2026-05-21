@@ -19,6 +19,29 @@ export const styles = {
       fontSize: '20px'
     }
   },
+  bodyRow: {
+    gridColumn: '1 / -1',
+    display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' },
+    alignItems: { xs: 'flex-start', md: 'stretch' },
+    mb: { xs: '80px', md: '130px' }
+  },
+  registrationColumn: {
+    width: { xs: '100%', md: '43%' },
+    flexShrink: 0,
+    mb: { xs: '50px', md: 0 },
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  contentColumn: {
+    width: { xs: '100%', md: '57%' },
+    '& .MuiTypography-body1': {
+      fontFamily: 'Mulish',
+      fontWeight: 400,
+      lineHeight: '160%',
+      fontSize: '20px'
+    }
+  },
   newsHeader: {
     gridColumn: '1 / -1',
     width: '100%',

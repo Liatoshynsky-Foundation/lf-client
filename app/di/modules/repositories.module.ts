@@ -1,6 +1,7 @@
 import { asFunction, asValue, AwilixContainer } from 'awilix';
 
 import newCompositionsRepo from '~/infrastructure/repositories/artistry/compositions.repository';
+import newEventRepository from '~/infrastructure/repositories/events/event.repository';
 import eventsRepository from '~/infrastructure/repositories/events/events.repository';
 import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
 import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository';
@@ -20,6 +21,7 @@ export type RepositoriesModule = {
   newsRepository: ReturnType<typeof newNewsRepository>;
   mediaMentionRepository: ReturnType<typeof newMediaMentionRepository>;
   eventsRepo: typeof eventsRepository;
+  eventRepository: ReturnType<typeof newEventRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -32,6 +34,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     fundsRepository: asFunction(newFundsRepository).scoped(),
     newsRepository: asFunction(newNewsRepository).scoped(),
     mediaMentionRepository: asFunction(newMediaMentionRepository).scoped(),
-    eventsRepo: asValue(eventsRepository)
+    eventsRepo: asValue(eventsRepository),
+    eventRepository: asFunction(newEventRepository).scoped()
   });
 };
