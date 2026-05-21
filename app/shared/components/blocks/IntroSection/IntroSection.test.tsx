@@ -49,6 +49,16 @@ const mockData: IIntroSection = {
   image: mockImage
 };
 
+const mockTipTapTitle = {
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [{ type: TipTapNodeTypes.text, text: 'Mocked TipTap Title' }]
+    }
+  ]
+} as unknown as TipTapDoc;
+
 describe('IntroSection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -63,6 +73,21 @@ describe('IntroSection', () => {
       expect(titleElement).toHaveTextContent('Welcome to the Lyatoshynsky Foundation');
 
       expect(screen.queryByTestId('mock-tiptap-container')).not.toBeInTheDocument();
+    });
+
+    it('should alternate branches and mount TipTapContent when fed a structured node title object', () => {
+      const dataWithTipTapTitle: IIntroSection = {
+        ...mockData,
+        title: mockTipTapTitle
+      };
+
+      render(<IntroSection data={dataWithTipTapTitle} />);
+
+      expect(screen.getByTestId('mock-tiptap-container')).toBeInTheDocument();
+
+      const customRenderedTitle = screen.getByTestId('IntroSection-title');
+      expect(customRenderedTitle).toBeInTheDocument();
+      expect(customRenderedTitle).toHaveTextContent('Mocked TipTap Title');
     });
   });
 

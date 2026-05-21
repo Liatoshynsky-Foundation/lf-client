@@ -18,6 +18,14 @@ jest.mock('~/public/images/quote.svg', () => ({
   default: () => <svg data-testid="icon-svg" />
 }));
 
+jest.mock('~/lib/utils/sxToArray', () => ({
+  sxToArray: (sx: unknown) => (Array.isArray(sx) ? sx : [sx].filter(Boolean))
+}));
+
+jest.mock('~/lib/utils/tiptapHelpers', () => ({
+  isTipTapDoc: jest.fn((val) => val && typeof val === 'object' && 'id' in val)
+}));
+
 jest.mock('../tip-tap-content/TipTapContent', () => ({
   __esModule: true,
   default: ({ nodeRenderers, data }: MockTipTapContentProps) => {

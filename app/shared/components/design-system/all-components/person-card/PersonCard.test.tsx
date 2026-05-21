@@ -15,17 +15,43 @@ jest.mock('next/image', () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} data-testid="next-image" />
 }));
 
+jest.mock('~/shared/components/tip-tap-content/nodes', () => ({
+  renderData: jest.fn((input: unknown) => {
+    if (typeof input === 'object' && input !== null) return input;
+    return {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [{ type: TipTapNodeTypes.text, text: String(input) }]
+        }
+      ]
+    };
+  })
+}));
+
 jest.mock('~/shared/components/tip-tap-content/TipTapContent', () => ({
   __esModule: true,
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    const textSnippet = typeof data === 'string' ? data : (data?.content?.[0]?.content?.[0] as any)?.text;
+    let textSnippet: unknown = '';
+    if (typeof data === 'string') {
+      textSnippet = data;
+    } else if (data && typeof data === 'object' && 'content' in data) {
+      const firstContent = data.content?.[0];
+      if (firstContent && typeof firstContent === 'object' && 'content' in firstContent) {
+        const textNode = firstContent.content?.[0];
+        if (textNode && typeof textNode === 'object' && 'text' in textNode) {
+          textSnippet = textNode.text;
+        }
+      }
+    }
 
-    const resolvedText =
+    const resolvedText: string =
       typeof textSnippet === 'object' && textSnippet !== null
-        ? textSnippet.uk || textSnippet.en || ''
-        : textSnippet || 'Fallback Text';
+        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
+        : (textSnippet as string) || 'Fallback Text';
 
     return (
       <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(resolvedText) : resolvedText}</div>

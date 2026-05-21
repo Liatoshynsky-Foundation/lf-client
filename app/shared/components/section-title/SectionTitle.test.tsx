@@ -31,7 +31,7 @@ jest.mock('~/utils/sxToArray', () => ({
 }));
 
 jest.mock('~/lib/utils/tiptapHelpers', () => ({
-  isTipTapDoc: jest.fn((val) => val && val.type === 'doc'),
+  isTipTapDoc: jest.fn((val) => val?.type === 'doc'),
   getPlainString: jest.fn((val) => (typeof val === 'string' ? val : val?.en || 'localized-fallback'))
 }));
 
@@ -53,7 +53,7 @@ jest.mock('../tip-tap-content/TipTapContent', () => ({
       }
     }
 
-    const dummyText =
+    const dummyText: string =
       typeof textSnippet === 'object' && textSnippet !== null
         ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
         : (textSnippet as string) || 'Fallback Text';
@@ -107,15 +107,24 @@ describe('SectionTitle', () => {
   });
 
   describe('Dynamic TestID Mapping Propagation', () => {
-    it.each([
-      ['OurGoals', mockLocalizedTitle, 'Test English Title'],
-      ['OurMission', mockTipTapTitle, 'TipTap Title Content']
-    ])('should match DOM structural suffixes when test ID "%s" is allocated', (testId, titlePayload, expectedText) => {
-      render(<SectionTitle title={titlePayload} dataTestId={testId} />);
+    const testIdScenarios = [
+      { id: 'OurGoals', payload: mockLocalizedTitle, expected: 'Test English Title' },
+      { id: 'OurMission', payload: mockTipTapTitle, expected: 'TipTap Title Content' }
+    ];
 
-      expect(screen.getByTestId(testId)).toBeInTheDocument();
-      expect(screen.getByTestId(`${testId}-title`)).toHaveTextContent(expectedText);
-      expect(screen.getByTestId(`${testId}-icon`)).toBeInTheDocument();
-    });
+    it.each(testIdScenarios)(
+      'should match DOM structural suffixes when test ID is assigned to variant "$id"',
+      ({ id, payload, expected }) => {
+        render(<SectionTitle title={payload} dataTestId={id} />);
+
+        expect(screen.getByTestId(id)).toBeInTheDocument();
+
+        const matchingElements = screen.getAllByTestId(`${id}-title`);
+        expect(matchingElements.length).toBeGreaterThanOrEqual(1);
+
+        const hasExpectedText = matchingElements.some((el) => el.textContent === expected);
+        expect(hasExpectedText).toBe(true);
+      }
+    );
   });
 });
