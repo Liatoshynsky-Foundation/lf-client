@@ -1,4 +1,5 @@
 import { Breakpoint } from '@mui/material';
+import { Locale } from 'next-intl';
 
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
@@ -6,6 +7,8 @@ export interface ElementSizes {
   width: Partial<Record<Breakpoint, number>>;
   height: Partial<Record<Breakpoint, number>>;
 }
+
+export type LocalizedString = Record<Locale, string>;
 
 export type ButtonGroupSizeOptions = 'small' | 'big';
 export type ButtonGroupPaletteOptions = 'primary' | 'secondary' | 'tertiary';
