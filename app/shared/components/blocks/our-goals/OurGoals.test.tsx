@@ -1,3 +1,5 @@
+'use client';
+
 import { render, screen } from '@testing-library/react';
 import { JSONContent } from '@tiptap/react';
 import React from 'react';
@@ -5,10 +7,10 @@ import React from 'react';
 import OurGoals from './OurGoals';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IOurGoals } from '~/types/page/about-us.types';
-import { ParagraphNode, TipTapDoc } from '~/types/types/tiptap.types';
+import { ParagraphNode, TipTapDoc, TipTapElement } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
-  data: TipTapDoc;
+  data: TipTapDoc | string;
   nodeRenderers?: Record<string, (children: React.ReactNode, node: ParagraphNode) => React.ReactNode>;
 };
 
@@ -39,12 +41,14 @@ jest.mock('../../tip-tap-content/nodes', () => ({
   }),
   getTitledParagraph: jest.fn((variant: string, title: unknown) => {
     return function MockTitledParagraph(children: React.ReactNode) {
-      const titleText =
-        typeof title === 'string'
-          ? title
-          : title && typeof title === 'object'
-            ? (title as JSONContent)?.content?.[0]?.content?.[0]?.text || 'Mocked Object Title'
-            : 'Fallback Title';
+      let titleText = 'Fallback Title';
+
+      if (typeof title === 'string') {
+        titleText = title;
+      } else if (title && typeof title === 'object' && 'content' in title) {
+        const docObj = title as JSONContent;
+        titleText = docObj.content?.[0]?.content?.[0]?.text || 'Mocked Object Title';
+      }
 
       return (
         <div data-testid="titled-paragraph" data-variant={variant}>
@@ -61,19 +65,32 @@ jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    const rawText = data?.content?.[0]?.content?.[0]?.text;
-    const dummyText: string =
-      typeof rawText === 'string'
-        ? rawText
-        : rawText && typeof rawText === 'object'
-          ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
-          : 'Fallback Text';
+    let textSnippet: unknown = '';
+    let dummyNode: ParagraphNode | undefined;
 
-    const dummyNode = data?.content?.[0] as ParagraphNode;
+    if (typeof data === 'string') {
+      textSnippet = data;
+    } else if (data && typeof data === 'object' && 'content' in data) {
+      const firstBlock = data.content?.[0];
+      if (firstBlock && typeof firstBlock === 'object') {
+        dummyNode = firstBlock as ParagraphNode;
+        if ('content' in firstBlock) {
+          const inlineContent = (firstBlock as TipTapElement).content;
+          if (Array.isArray(inlineContent) && inlineContent[0] && typeof inlineContent[0] === 'object') {
+            textSnippet = inlineContent[0].text;
+          }
+        }
+      }
+    }
+
+    const dummyText =
+      typeof textSnippet === 'object' && textSnippet !== null
+        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
+        : (textSnippet as string) || 'Fallback Text';
 
     return (
       <div data-testid="mock-tiptap-content">
-        {ParagraphRenderer ? ParagraphRenderer(dummyText, dummyNode) : dummyText}
+        {ParagraphRenderer && dummyNode ? ParagraphRenderer(dummyText, dummyNode) : dummyText}
       </div>
     );
   }
@@ -122,79 +139,69 @@ describe('OurGoals component', () => {
     jest.clearAllMocks();
   });
 
-  describe('Standard Rendering Flow', () => {
-    beforeEach(() => {
+  describe('Standard Rendering Pipeline Flows', () => {
+    it('should mount with correct title configurations, layout structures, and localized elements', () => {
       render(<OurGoals data={testData} />);
-    });
 
-    it('should render the section title', () => {
       expect(screen.getByTestId('SectionTitle')).toHaveTextContent(testData.title as string);
-    });
 
-    it('should pass target values to the factory layout pipeline and display all headers', () => {
       const titledParagraphs = screen.getAllByTestId('titled-paragraph');
       expect(titledParagraphs).toHaveLength(testData.goals.length);
       expect(titledParagraphs[0]).toHaveAttribute('data-variant', 'goals');
 
-      testData.goals.forEach(({ title }) => {
-        expect(screen.getByText(title as string)).toBeInTheDocument();
-      });
-    });
-
-    it('should display the paragraph description text nodes through the rendering tree', () => {
-      testData.goals.forEach(({ description }) => {
-        const doc = description as TipTapDoc;
-        const text = doc?.content?.[0]?.content?.[0]?.text ?? '';
-
-        const textPrimitive: string = typeof text === 'string' ? text : (text as Record<string, string>).uk || '';
-
-        expect(screen.getByText(textPrimitive)).toBeInTheDocument();
-      });
-    });
-
-    it('should render the bullet icons with responsive layouts intact', () => {
       const images = screen.getAllByTestId('next-image');
       expect(images).toHaveLength(testData.goals.length);
       expect(images[0]).toHaveAttribute('sizes', '(max-width: 600px) 16px, 24px');
       expect(images[0]).toHaveAttribute('alt', 'bullet icon');
+
+      testData.goals.forEach(({ title, description }) => {
+        let expectedTitleText = '';
+        if (typeof title === 'string') {
+          expectedTitleText = title;
+        } else if (title && typeof title === 'object' && 'content' in title) {
+          const rawTitleText = title.content?.[0]?.content?.[0]?.text || '';
+          expectedTitleText =
+            typeof rawTitleText === 'string' ? rawTitleText : (rawTitleText as Record<string, string>).uk || '';
+        }
+
+        expect(screen.getByText(expectedTitleText)).toBeInTheDocument();
+
+        const doc = description as TipTapDoc;
+        const rawDescText = doc?.content?.[0]?.content?.[0]?.text || '';
+
+        const expectedDescriptionText =
+          typeof rawDescText === 'string' ? rawDescText : (rawDescText as Record<string, string>).uk || '';
+
+        expect(screen.getByText(expectedDescriptionText)).toBeInTheDocument();
+      });
     });
   });
 
-  describe('Edge Cases & Core Data Adjustments', () => {
-    it('should safely construct rendering blocks when goal title properties map to an object structure', () => {
+  describe('Hybrid Content Path Routing & Edge Cases', () => {
+    it('should cleanly parse titles that enter processing trees inside nested TipTapDoc objects', () => {
       const objectTitleData: IOurGoals = {
         title: 'Title',
-        goals: [
-          {
-            title: makeDescription('Object Title Text'),
-            description: makeDescription('Description Text')
-          }
-        ]
+        goals: [{ title: makeDescription('Object Title Text'), description: makeDescription('Description Text') }]
       };
 
       render(<OurGoals data={objectTitleData} />);
       expect(screen.getByText('Object Title Text')).toBeInTheDocument();
     });
 
-    it('should rely on dynamic transformations if custom descriptions enter the tree as raw strings', () => {
+    it('should gracefully adapt when description blocks map to raw text string fields', () => {
       const stringDescriptionData: IOurGoals = {
         title: 'Title',
-        goals: [
-          {
-            title: 'String Goal Key',
-            description: 'This is a raw string description' as unknown as TipTapDoc
-          }
-        ]
+        goals: [{ title: 'String Goal Key', description: 'This is a raw string description' }]
       };
 
       render(<OurGoals data={stringDescriptionData} />);
       expect(screen.getByText('This is a raw string description')).toBeInTheDocument();
     });
 
-    it('should suppress TipTap markup containers cleanly when description node parameters are missing', () => {
+    it('should skip layout assembly chains when description parameters resolve to empty strings', () => {
       const emptyDescriptionData: IOurGoals = {
         title: 'Title',
-        goals: [{ title: 'Empty Goal', description: null as unknown as TipTapDoc }]
+        goals: [{ title: 'Empty Goal', description: '' }]
       };
 
       render(<OurGoals data={emptyDescriptionData} />);

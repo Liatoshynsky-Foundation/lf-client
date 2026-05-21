@@ -1,35 +1,16 @@
+'use client';
+
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import TitleWithDescription from './TitleWithDescription';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { TipTapDoc, TipTapElement } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
-  data: TipTapDoc & { id?: string };
+  data: (TipTapDoc & { id?: string }) | string;
   nodeRenderers?: Record<string, (children: React.ReactNode) => React.ReactNode>;
 };
-
-jest.mock('../tip-tap-content/TipTapContent', () => ({
-  __esModule: true,
-  default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
-    const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
-
-    const rawText = data?.content?.[0]?.content?.[0]?.text;
-    const dummyText: string =
-      typeof rawText === 'string'
-        ? rawText
-        : rawText && typeof rawText === 'object'
-          ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
-          : 'Fallback Content';
-
-    return (
-      <div data-testid={`mock-tiptap-${data.id || 'content'}`}>
-        {ParagraphRenderer ? ParagraphRenderer(dummyText) : dummyText}
-      </div>
-    );
-  }
-}));
 
 jest.mock('../tip-tap-content/nodes', () => ({
   renderData: jest.fn((input: unknown) => {
@@ -45,6 +26,42 @@ jest.mock('../tip-tap-content/nodes', () => ({
       ]
     };
   })
+}));
+
+jest.mock('../tip-tap-content/TipTapContent', () => ({
+  __esModule: true,
+  default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
+    const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
+
+    let textSnippet: unknown = '';
+    let containerId = 'content';
+
+    if (typeof data === 'string') {
+      textSnippet = data;
+    } else if (data && typeof data === 'object') {
+      if ('id' in data && typeof data.id === 'string') containerId = data.id;
+      if ('content' in data) {
+        const firstBlock = data.content?.[0];
+        if (firstBlock && typeof firstBlock === 'object' && 'content' in firstBlock) {
+          const inlineNodes = (firstBlock as TipTapElement).content;
+          if (Array.isArray(inlineNodes) && inlineNodes[0] && typeof inlineNodes[0] === 'object') {
+            textSnippet = inlineNodes[0].text;
+          }
+        }
+      }
+    }
+
+    const dummyText =
+      typeof textSnippet === 'object' && textSnippet !== null
+        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
+        : (textSnippet as string) || 'Fallback Content';
+
+    return (
+      <div data-testid={`mock-tiptap-${containerId}`}>
+        {ParagraphRenderer ? ParagraphRenderer(dummyText) : dummyText}
+      </div>
+    );
+  }
 }));
 
 const mockTipTapTitle = {

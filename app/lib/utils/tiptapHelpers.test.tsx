@@ -11,157 +11,101 @@ import {
 } from './tiptapHelpers';
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { LocalizedString } from '~/types/types/common.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { Mark, TipTapDoc } from '~/types/types/tiptap.types';
 
 describe('tiptap.utils', () => {
-  describe('normalText', () => {
-    it('should create a normal text node', () => {
-      const node = normalText('hello');
-      expect(node).toEqual<TipTapTextNode>({
-        type: TipTapNodeTypes.text,
-        text: 'hello'
-      });
-    });
+  const createTextNode = (text: string, marks?: Mark[]): TipTapTextNode => ({
+    type: TipTapNodeTypes.text,
+    text,
+    ...(marks && { marks })
   });
 
-  describe('boldText', () => {
-    it('should create a bold text node', () => {
-      const node = boldText('hello');
-      expect(node).toEqual<TipTapTextNode>({
-        type: TipTapNodeTypes.text,
-        text: 'hello',
-        marks: [{ type: TipTapMarkType.bold }]
-      });
-    });
-  });
+  const localizedMock: LocalizedString = { uk: 'Привіт', en: 'Hello' };
+  const multiLangNodeMock = { text: { uk: 'Укр текст', en: 'Eng text' } };
 
-  describe('boldUnderlineText', () => {
-    it('should create a bold+underline text node', () => {
-      const node = boldUnderlineText('hello');
-      expect(node).toEqual<TipTapTextNode>({
-        type: TipTapNodeTypes.text,
-        text: 'hello',
-        marks: [{ type: TipTapMarkType.bold }, { type: TipTapMarkType.underline }]
-      });
-    });
-  });
+  describe('Node Creation Helpers (normal, bold, boldUnderline, link)', () => {
+    it('should create expected text nodes with correct markup modifiers', () => {
+      expect(normalText('hello')).toEqual(createTextNode('hello'));
 
-  describe('linkText', () => {
-    it('should create a bold+underline link text node', () => {
-      const node = linkText('Click me', 'https://example.com');
-      expect(node).toEqual<TipTapTextNode>({
-        type: TipTapNodeTypes.text,
-        text: 'Click me',
-        marks: [
-          {
-            type: TipTapMarkType.link,
-            attrs: { href: 'https://example.com' }
-          },
+      expect(boldText('hello')).toEqual(createTextNode('hello', [{ type: TipTapMarkType.bold }]));
+
+      expect(boldUnderlineText('hello')).toEqual(
+        createTextNode('hello', [{ type: TipTapMarkType.bold }, { type: TipTapMarkType.underline }])
+      );
+
+      expect(linkText('Click me', 'https://example.com')).toEqual(
+        createTextNode('Click me', [
+          { type: TipTapMarkType.link, attrs: { href: 'https://example.com' } },
           { type: TipTapMarkType.bold },
           { type: TipTapMarkType.underline }
-        ]
-      });
+        ])
+      );
     });
   });
 
   describe('makeDoc', () => {
-    it('should wrap nodes into a doc with a paragraph', () => {
-      const nodes = [normalText('hi'), boldText('there')];
-      const doc = makeDoc(nodes);
+    it('should wrap nodes into a doc with a paragraph container', () => {
+      const doc = makeDoc([normalText('hi'), boldText('there')]);
 
       const expected: TipTapDoc = {
         type: TipTapNodeTypes.doc,
         content: [
           {
             type: TipTapNodeTypes.paragraph,
-            content: [
-              {
-                type: TipTapNodeTypes.text,
-                text: 'hi'
-              },
-              {
-                type: TipTapNodeTypes.text,
-                text: 'there',
-                marks: [{ type: TipTapMarkType.bold }]
-              }
-            ]
+            content: [createTextNode('hi'), createTextNode('there', [{ type: TipTapMarkType.bold }])]
           }
         ]
       };
-
       expect(doc).toEqual(expected);
     });
   });
 
   describe('isTipTapDoc', () => {
-    it('should return true for a valid TipTapDoc-like object', () => {
-      expect(isTipTapDoc({ type: 'doc', content: [] })).toBe(true);
-    });
-
-    it('should return false for null or undefined', () => {
-      expect(isTipTapDoc(null)).toBe(false);
-      expect(isTipTapDoc(undefined)).toBe(false);
-    });
-
-    it('should return false for primitive values', () => {
-      expect(isTipTapDoc('string')).toBe(false);
-      expect(isTipTapDoc(123)).toBe(false);
-    });
-
-    it('should return false for objects missing the "type" property', () => {
-      expect(isTipTapDoc({ content: [] })).toBe(false);
+    it.each([
+      [true, { type: 'doc', content: [] }, 'valid document-like objects'],
+      [false, null, 'null references'],
+      [false, undefined, 'undefined references'],
+      [false, 'string', 'string primitives'],
+      [false, 123, 'number primitives'],
+      [false, { content: [] }, 'objects missing a type field']
+    ])('should return %s for %s', (expected, input, _description) => {
+      expect(isTipTapDoc(input)).toBe(expected);
     });
   });
 
   describe('getPlainString', () => {
-    it('should return the string immediately if input is a string', () => {
+    it('should fall back to raw string or fetch specific language translations', () => {
       expect(getPlainString('Standard String')).toBe('Standard String');
       expect(getPlainString('Standard String', 'en')).toBe('Standard String');
-    });
 
-    it('should return the "uk" localized string by default', () => {
-      const localized: LocalizedString = { uk: 'Привіт', en: 'Hello' };
-      expect(getPlainString(localized)).toBe('Привіт');
-    });
+      expect(getPlainString(localizedMock)).toBe('Привіт'); // Defaults to uk
+      expect(getPlainString(localizedMock, 'en')).toBe('Hello');
 
-    it('should return the specified locale string if requested', () => {
-      const localized: LocalizedString = { uk: 'Привіт', en: 'Hello' };
-      expect(getPlainString(localized, 'en')).toBe('Hello');
-    });
-
-    it('should fallback to an empty string if the requested locale is missing', () => {
-      const localized = { en: 'Hello' } as unknown as LocalizedString;
-      expect(getPlainString(localized, 'uk')).toBe('');
+      const partialObj = { en: 'Hello' } as unknown as LocalizedString;
+      expect(getPlainString(partialObj, 'uk')).toBe('');
     });
   });
 
   describe('extractTextFromTipTap', () => {
-    it('should return an empty string for null, undefined, or non-objects', () => {
-      expect(extractTextFromTipTap(null)).toBe('');
-      expect(extractTextFromTipTap(undefined)).toBe('');
-      expect(extractTextFromTipTap('not an object')).toBe('');
+    it.each([
+      ['', null, 'uk', 'null entries'],
+      ['', undefined, 'uk', 'undefined entries'],
+      ['', 'not an object', 'uk', 'plain non-object primitives'],
+      ['', { type: 'p', marks: [] }, 'uk', 'valid nodes without explicit text elements'],
+      ['Plain text node', { text: 'Plain text node' }, 'uk', 'flat native text properties']
+    ])('should return "%s" for %s', (expected, input, locale, _description) => {
+      expect(extractTextFromTipTap(input, locale as 'uk' | 'en')).toBe(expected);
     });
 
-    it('should return standard string text directly from the "text" property', () => {
-      expect(extractTextFromTipTap({ text: 'Plain text node' })).toBe('Plain text node');
+    it('should extract localized configurations based on structural locale requests', () => {
+      expect(extractTextFromTipTap(multiLangNodeMock)).toBe('Укр текст'); // Defaults to uk
+      expect(extractTextFromTipTap(multiLangNodeMock, 'en')).toBe('Eng text');
+
+      const partialTextNode = { text: { en: 'Eng text' } };
+      expect(extractTextFromTipTap(partialTextNode, 'uk')).toBe('');
     });
 
-    it('should resolve localized text objects inside the "text" property (default uk)', () => {
-      const node = { text: { uk: 'Укр текст', en: 'Eng text' } };
-      expect(extractTextFromTipTap(node)).toBe('Укр текст');
-    });
-
-    it('should resolve localized text objects inside the "text" property (specific locale)', () => {
-      const node = { text: { uk: 'Укр текст', en: 'Eng text' } };
-      expect(extractTextFromTipTap(node, 'en')).toBe('Eng text');
-    });
-
-    it('should fallback to an empty string if localized text is missing the requested locale', () => {
-      const node = { text: { en: 'Eng text' } };
-      expect(extractTextFromTipTap(node, 'uk')).toBe('');
-    });
-
-    it('should recursively extract and concatenate text from a deeply nested "content" array', () => {
+    it('should recursively crawl and aggregate deep content nodes together', () => {
       const deeplyNestedNode = {
         content: [
           { text: 'Hello ' },
@@ -173,10 +117,6 @@ describe('tiptap.utils', () => {
 
       expect(extractTextFromTipTap(deeplyNestedNode, 'uk')).toBe('Hello nested world');
       expect(extractTextFromTipTap(deeplyNestedNode, 'en')).toBe('Hello nested WORLD');
-    });
-
-    it('should return an empty string if the object is valid but has no text or content array', () => {
-      expect(extractTextFromTipTap({ type: 'paragraph', marks: [] })).toBe('');
     });
   });
 });

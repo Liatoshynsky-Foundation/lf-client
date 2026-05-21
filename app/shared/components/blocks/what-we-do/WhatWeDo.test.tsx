@@ -1,13 +1,15 @@
+'use client';
+
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import WhatWeDo from './WhatWeDo';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IWhatWeDo } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { TipTapDoc, TipTapElement } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
-  data: TipTapDoc;
+  data: TipTapDoc | string;
   nodeRenderers?: Record<string, (children: React.ReactNode) => React.ReactNode>;
 };
 
@@ -49,13 +51,23 @@ jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    const rawText = data?.content?.[0]?.content?.[0]?.text;
-    const dummyText: string =
-      typeof rawText === 'string'
-        ? rawText
-        : rawText && typeof rawText === 'object'
-          ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
-          : 'Fallback Text';
+    let textSnippet: unknown = '';
+    if (typeof data === 'string') {
+      textSnippet = data;
+    } else if (data && typeof data === 'object' && 'content' in data) {
+      const firstBlock = data.content?.[0];
+      if (firstBlock && typeof firstBlock === 'object' && 'content' in firstBlock) {
+        const firstInlineNode = (firstBlock as TipTapElement).content;
+        if (Array.isArray(firstInlineNode) && firstInlineNode[0] && typeof firstInlineNode[0] === 'object') {
+          textSnippet = firstInlineNode[0].text;
+        }
+      }
+    }
+
+    const dummyText =
+      typeof textSnippet === 'object' && textSnippet !== null
+        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
+        : (textSnippet as string) || 'Fallback Text';
 
     return <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(dummyText) : dummyText}</div>;
   }
@@ -83,12 +95,7 @@ const createDescription = (text: string): TipTapDoc => ({
   content: [
     {
       type: TipTapNodeTypes.paragraph,
-      content: [
-        {
-          type: TipTapNodeTypes.text,
-          text
-        }
-      ]
+      content: [{ type: TipTapNodeTypes.text, text }]
     }
   ]
 });
@@ -112,18 +119,18 @@ describe('WhatWeDo component', () => {
     jest.clearAllMocks();
   });
 
-  describe('TipTap Content Path', () => {
-    beforeEach(() => {
+  describe('Modern TipTap Content Execution Path', () => {
+    it('should accurately assemble section titles, custom bullet layouts, and child render hooks together', () => {
       render(<WhatWeDo data={testData} />);
-    });
 
-    it('should render the section title using SectionTitle component', () => {
       const titleEl = screen.getByTestId('WhatWeDo-title');
       expect(titleEl).toBeInTheDocument();
-      expect(titleEl).toHaveTextContent('What are we doing?:');
-    });
+      expect(titleEl).toHaveTextContent(testData.title as string);
 
-    it('should pass description down to TipTapContent and hook up getTitledParagraph renderer', () => {
+      const icons = screen.getAllByTestId('next-image');
+      expect(icons).toHaveLength(testData.items.length);
+      expect(icons[0]).toHaveAttribute('alt', 'bullet icon');
+
       const paragraphs = screen.getAllByTestId('titled-paragraph');
       expect(paragraphs).toHaveLength(testData.items.length);
       expect(paragraphs[0]).toHaveAttribute('data-variant', 'whatWeDo');
@@ -133,22 +140,16 @@ describe('WhatWeDo component', () => {
         screen.getByText('We organize artistic events that bring Lyatoshynsky`s music back to the stage.')
       ).toBeInTheDocument();
     });
-
-    it('should render bullet icons for each row', () => {
-      const icons = screen.getAllByTestId('next-image');
-      expect(icons).toHaveLength(testData.items.length);
-      expect(icons[0]).toHaveAttribute('alt', 'bullet icon');
-    });
   });
 
-  describe('Legacy String Content Path', () => {
-    it('should fall back to TitleWithDescription if item.description is a string', () => {
+  describe('Legacy String Fallback Path', () => {
+    it('should transparently reroute layout processing down to TitleWithDescription components', () => {
       const legacyData: IWhatWeDo = {
         title: 'Legacy Section',
         items: [
           {
             title: 'Legacy Title One',
-            description: 'Legacy Plain String Description' as unknown as TipTapDoc
+            description: 'Legacy Plain String Description'
           }
         ]
       };
