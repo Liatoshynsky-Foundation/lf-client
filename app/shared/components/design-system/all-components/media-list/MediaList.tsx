@@ -69,6 +69,7 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
               key={newsItem._id}
               description={newsItem.description}
               image={newsItem.coverImage.src}
+              crop={newsItem.coverImage.crop ?? null}
               title={newsItem.title}
               publicationDate={new Date(newsItem.publishedAt || '').toLocaleDateString('uk-UA')}
             />
