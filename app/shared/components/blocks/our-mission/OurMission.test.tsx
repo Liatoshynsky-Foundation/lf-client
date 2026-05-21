@@ -1,139 +1,183 @@
-import { render, screen } from '@testing-library/react';
+import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
+import { LocalizedString } from '~/types/types/common.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import OurMission from './OurMission';
-import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { IOurMission } from '~/types/page/about-us.types';
+import {
+  boldText,
+  boldUnderlineText,
+  extractTextFromTipTap,
+  getPlainString,
+  isTipTapDoc,
+  linkText,
+  makeDoc,
+  normalText,
+  TipTapTextNode
+} from '~/lib/utils/tiptapHelpers';
 
-jest.mock('next-intl/server', () => ({
-  getTranslations: jest.fn().mockImplementation(async (namespace) => {
-    const translations: Record<string, string> = {
-      'home.ourMission.title': 'Наша місія',
-      'home.ourMission.list.item1': 'Tестовий текст один',
-      'home.ourMission.list.item2': 'Tестовий текст два',
-      'home.ourMission.list.item3': 'Tестовий текст три',
-      'home.ourMission.imageCaption': 'Тестовий опис'
-    };
-
-    return (key: string) => translations[`${namespace}.${key}`] || key;
-  })
-}));
-
-jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
-  __esModule: true,
-  default: ({ src, alt, caption }: { src: string; alt: string; caption: string }) => (
-    <div data-testid="image-with-caption">
-      <img src={src} alt={alt} />
-      {caption && <p>{caption}</p>}
-    </div>
-  )
-}));
-
-jest.mock('~/components/section-title/SectionTitle', () => ({
-  __esModule: true,
-  default: ({ title }: { title: string }) => <h2>{title}</h2>
-}));
-
-jest.mock('~/components/svg-image/SvgImage', () => ({
-  __esModule: true,
-  SvgImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />
-}));
-
-jest.mock('~/components/list-item/ListItem', () => ({
-  __esModule: true,
-  default: ({ text }: { text: string }) => (
-    <div>
-      <img src="/mock-image" alt="mock-alt" />
-      <p>{text}</p>
-    </div>
-  )
-}));
-
-const testData: IOurMission = {
-  title: 'Наша місія',
-  list: [
-    {
-      type: TipTapNodeTypes.doc,
-      content: [
-        {
-          type: TipTapNodeTypes.paragraph,
-          content: [
-            {
-              type: TipTapNodeTypes.text,
-              text: 'Tестовий текст один'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      type: TipTapNodeTypes.doc,
-      content: [
-        {
-          type: TipTapNodeTypes.paragraph,
-          content: [
-            {
-              type: TipTapNodeTypes.text,
-              text: 'Tестовий текст два'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      type: TipTapNodeTypes.doc,
-      content: [
-        {
-          type: TipTapNodeTypes.paragraph,
-          content: [
-            {
-              type: TipTapNodeTypes.text,
-              text: 'Tестовий текст три'
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  smallImage: {
-    src: 'test',
-    alt: 'Tetiana Homon',
-    caption: 'Tетяна Гомон',
-    generatedSrc: '/api/blob-url?folderName=photos&blobName=test'
-  },
-  bigImage: {
-    src: 'test',
-    alt: 'Tetiana Homon',
-    caption: 'Tетяна Гомон',
-    generatedSrc: '/api/blob-url?folderName=photos&blobName=test'
-  }
-};
-
-describe('OurMission component', () => {
-  beforeEach(() => {
-    render(OurMission({ data: testData }));
+describe('tiptap.utils', () => {
+  describe('normalText', () => {
+    it('should create a normal text node', () => {
+      const node = normalText('hello');
+      expect(node).toEqual<TipTapTextNode>({
+        type: TipTapNodeTypes.text,
+        text: 'hello'
+      });
+    });
   });
 
-  it('should render the section title', () => {
-    expect(screen.getByText('Наша місія')).toBeInTheDocument();
+  describe('boldText', () => {
+    it('should create a bold text node', () => {
+      const node = boldText('hello');
+      expect(node).toEqual<TipTapTextNode>({
+        type: TipTapNodeTypes.text,
+        text: 'hello',
+        marks: [{ type: TipTapMarkType.bold }]
+      });
+    });
   });
 
-  it('should render all mission list items', () => {
-    expect(screen.getByText('Tестовий текст один')).toBeInTheDocument();
-    expect(screen.getByText('Tестовий текст два')).toBeInTheDocument();
-    expect(screen.getByText('Tестовий текст три')).toBeInTheDocument();
+  describe('boldUnderlineText', () => {
+    it('should create a bold+underline text node', () => {
+      const node = boldUnderlineText('hello');
+      expect(node).toEqual<TipTapTextNode>({
+        type: TipTapNodeTypes.text,
+        text: 'hello',
+        marks: [{ type: TipTapMarkType.bold }, { type: TipTapMarkType.underline }]
+      });
+    });
   });
 
-  it('should render both images with correct alt texts', () => {
-    const images = screen.getAllByAltText('Tetiana Homon');
-    expect(images.length).toBe(2);
+  describe('linkText', () => {
+    it('should create a bold+underline link text node', () => {
+      const node = linkText('Click me', 'https://example.com');
+      expect(node).toEqual<TipTapTextNode>({
+        type: TipTapNodeTypes.text,
+        text: 'Click me',
+        marks: [
+          {
+            type: TipTapMarkType.link,
+            attrs: { href: 'https://example.com' }
+          },
+          { type: TipTapMarkType.bold },
+          { type: TipTapMarkType.underline }
+        ]
+      });
+    });
   });
 
-  it('should render captions', () => {
-    expect(screen.getAllByText('Tетяна Гомон').length).toBeGreaterThan(0);
+  describe('makeDoc', () => {
+    it('should wrap nodes into a doc with a paragraph', () => {
+      const nodes = [normalText('hi'), boldText('there')];
+      const doc = makeDoc(nodes);
+
+      const expected: TipTapDoc = {
+        type: TipTapNodeTypes.doc,
+        content: [
+          {
+            type: TipTapNodeTypes.paragraph,
+            content: [
+              {
+                type: TipTapNodeTypes.text,
+                text: 'hi'
+              },
+              {
+                type: TipTapNodeTypes.text,
+                text: 'there',
+                marks: [{ type: TipTapMarkType.bold }]
+              }
+            ]
+          }
+        ]
+      };
+
+      expect(doc).toEqual(expected);
+    });
   });
 
-  it('should render bullet icons', () => {
-    const bullets = screen.getAllByAltText('mock-alt');
-    expect(bullets.length).toBe(3);
+  describe('isTipTapDoc', () => {
+    it('should return true for a valid TipTapDoc-like object', () => {
+      expect(isTipTapDoc({ type: 'doc', content: [] })).toBe(true);
+    });
+
+    it('should return false for null or undefined', () => {
+      expect(isTipTapDoc(null)).toBe(false);
+      expect(isTipTapDoc(undefined)).toBe(false);
+    });
+
+    it('should return false for primitive values', () => {
+      expect(isTipTapDoc('string')).toBe(false);
+      expect(isTipTapDoc(123)).toBe(false);
+    });
+
+    it('should return false for objects missing the "type" property', () => {
+      expect(isTipTapDoc({ content: [] })).toBe(false);
+    });
+  });
+
+  describe('getPlainString', () => {
+    it('should return the string immediately if input is a string', () => {
+      expect(getPlainString('Standard String')).toBe('Standard String');
+      expect(getPlainString('Standard String', 'en')).toBe('Standard String');
+    });
+
+    it('should return the "uk" localized string by default', () => {
+      const localized: LocalizedString = { uk: 'Привіт', en: 'Hello' };
+      expect(getPlainString(localized)).toBe('Привіт');
+    });
+
+    it('should return the specified locale string if requested', () => {
+      const localized: LocalizedString = { uk: 'Привіт', en: 'Hello' };
+      expect(getPlainString(localized, 'en')).toBe('Hello');
+    });
+
+    it('should fallback to an empty string if the requested locale is missing', () => {
+      const localized = { en: 'Hello' } as unknown as LocalizedString;
+      expect(getPlainString(localized, 'uk')).toBe('');
+    });
+  });
+
+  describe('extractTextFromTipTap', () => {
+    it('should return an empty string for null, undefined, or non-objects', () => {
+      expect(extractTextFromTipTap(null)).toBe('');
+      expect(extractTextFromTipTap(undefined)).toBe('');
+      expect(extractTextFromTipTap('not an object')).toBe('');
+    });
+
+    it('should return standard string text directly from the "text" property', () => {
+      expect(extractTextFromTipTap({ text: 'Plain text node' })).toBe('Plain text node');
+    });
+
+    it('should resolve localized text objects inside the "text" property (default uk)', () => {
+      const node = { text: { uk: 'Укр текст', en: 'Eng text' } };
+      expect(extractTextFromTipTap(node)).toBe('Укр текст');
+    });
+
+    it('should resolve localized text objects inside the "text" property (specific locale)', () => {
+      const node = { text: { uk: 'Укр текст', en: 'Eng text' } };
+      expect(extractTextFromTipTap(node, 'en')).toBe('Eng text');
+    });
+
+    it('should fallback to an empty string if localized text is missing the requested locale', () => {
+      const node = { text: { en: 'Eng text' } };
+      expect(extractTextFromTipTap(node, 'uk')).toBe('');
+    });
+
+    it('should recursively extract and concatenate text from a deeply nested "content" array', () => {
+      const deeplyNestedNode = {
+        content: [
+          { text: 'Hello ' },
+          { content: [{ text: 'nested ' }] },
+          { text: { uk: 'world', en: 'WORLD' } },
+          { type: 'empty-node-without-text' }
+        ]
+      };
+
+      expect(extractTextFromTipTap(deeplyNestedNode, 'uk')).toBe('Hello nested world');
+      expect(extractTextFromTipTap(deeplyNestedNode, 'en')).toBe('Hello nested WORLD');
+    });
+
+    it('should return an empty string if the object is valid but has no text or content array', () => {
+      expect(extractTextFromTipTap({ type: 'paragraph', marks: [] })).toBe('');
+    });
   });
 });
