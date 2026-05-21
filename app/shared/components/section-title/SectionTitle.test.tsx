@@ -6,7 +6,7 @@ import React from 'react';
 
 import SectionTitle from './SectionTitle';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc, TipTapElement } from '~/types/types/tiptap.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
   data: TipTapDoc | string;
@@ -19,7 +19,7 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} data-testid="next-image" />
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt="" data-testid="next-image" />
 }));
 
 jest.mock('~/lib/utils/generateSizesAttribute', () => ({
@@ -40,23 +40,15 @@ jest.mock('../tip-tap-content/TipTapContent', () => ({
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    let textSnippet: unknown = '';
-    if (typeof data === 'string') {
-      textSnippet = data;
-    } else if (data && typeof data === 'object' && 'content' in data) {
-      const firstBlock = data.content?.[0];
-      if (firstBlock && typeof firstBlock === 'object' && 'content' in firstBlock) {
-        const firstInlineNode = (firstBlock as TipTapElement).content;
-        if (Array.isArray(firstInlineNode) && firstInlineNode[0] && typeof firstInlineNode[0] === 'object') {
-          textSnippet = firstInlineNode[0].text;
-        }
-      }
-    }
+    const isObjectDoc = typeof data === 'object' && data !== null && 'content' in data;
+    const isString = typeof data === 'string' ? data : undefined;
 
-    const dummyText: string =
-      typeof textSnippet === 'object' && textSnippet !== null
-        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
-        : (textSnippet as string) || 'Fallback Text';
+    const rawText = isObjectDoc ? data.content?.[0]?.content?.[0]?.text : isString;
+
+    const isLocalizedObject = rawText && typeof rawText === 'object';
+    const dummyText: string = isLocalizedObject
+      ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
+      : (rawText as string) || 'Fallback Text';
 
     return <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(dummyText) : dummyText}</div>;
   }

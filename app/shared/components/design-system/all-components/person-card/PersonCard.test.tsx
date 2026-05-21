@@ -12,7 +12,7 @@ type MockTipTapContentProps = {
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} data-testid="next-image" />
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt="" data-testid="next-image" />
 }));
 
 jest.mock('~/shared/components/tip-tap-content/nodes', () => ({
@@ -35,23 +35,15 @@ jest.mock('~/shared/components/tip-tap-content/TipTapContent', () => ({
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    let textSnippet: unknown = '';
-    if (typeof data === 'string') {
-      textSnippet = data;
-    } else if (data && typeof data === 'object' && 'content' in data) {
-      const firstContent = data.content?.[0];
-      if (firstContent && typeof firstContent === 'object' && 'content' in firstContent) {
-        const textNode = firstContent.content?.[0];
-        if (textNode && typeof textNode === 'object' && 'text' in textNode) {
-          textSnippet = textNode.text;
-        }
-      }
-    }
+    const isObjectDoc = typeof data === 'object' && data !== null && 'content' in data;
+    const isString = typeof data === 'string' ? data : undefined;
 
-    const resolvedText: string =
-      typeof textSnippet === 'object' && textSnippet !== null
-        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
-        : (textSnippet as string) || 'Fallback Text';
+    const rawText = isObjectDoc ? data.content?.[0]?.content?.[0]?.text : isString;
+
+    const isLocalizedObject = rawText && typeof rawText === 'object';
+    const resolvedText: string = isLocalizedObject
+      ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
+      : (rawText as string) || 'Fallback Text';
 
     return (
       <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(resolvedText) : resolvedText}</div>

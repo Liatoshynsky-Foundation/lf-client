@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import React from 'react';
 
 import { renderData } from '../tip-tap-content/nodes';
@@ -7,43 +7,32 @@ import { styles } from './TitleWithDescription.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TitleWithDescriptionProps } from '~/types/types/titleWithDescriptionComponent';
 
+const renderBlock = (sx: SxProps<Theme>) => {
+  const Block = (children: React.ReactNode) => <Typography sx={sx}>{children}</Typography>;
+  return Block;
+};
+
 const TitleWithDescription = ({ variant, title, description, dataTestId }: TitleWithDescriptionProps) => {
   return (
     <Box sx={styles.container(variant)} data-testid={dataTestId}>
       {typeof title === 'string' ? (
-        <>
-          <Typography sx={styles.blockTitle()}>{title}</Typography>
-          {description && (
-            <TipTapContent
-              data={renderData(description)}
-              nodeRenderers={{
-                [TipTapNodeTypes.paragraph]: (children) => (
-                  <Typography sx={styles.blockDescription()}>{children}</Typography>
-                )
-              }}
-            />
-          )}
-        </>
+        <Typography sx={styles.blockTitle()}>{title}</Typography>
       ) : (
-        <>
-          <TipTapContent
-            data={title}
-            nodeRenderers={{
-              [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.blockTitle()}>{children}</Typography>
-            }}
-          />
+        <TipTapContent
+          data={title}
+          nodeRenderers={{
+            [TipTapNodeTypes.paragraph]: renderBlock({ sx: styles.blockTitle() })
+          }}
+        />
+      )}
 
-          {description && (
-            <TipTapContent
-              data={renderData(description)}
-              nodeRenderers={{
-                [TipTapNodeTypes.paragraph]: (children) => (
-                  <Typography sx={styles.blockDescription()}>{children}</Typography>
-                )
-              }}
-            />
-          )}
-        </>
+      {description && (
+        <TipTapContent
+          data={renderData(description)}
+          nodeRenderers={{
+            [TipTapNodeTypes.paragraph]: renderBlock({ sx: styles.blockDescription() })
+          }}
+        />
       )}
     </Box>
   );

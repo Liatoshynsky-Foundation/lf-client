@@ -18,7 +18,7 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} data-testid="next-image" />
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt="" data-testid="next-image" />
 }));
 
 jest.mock('~/lib/utils/generateSizesAttribute', () => ({
@@ -26,7 +26,7 @@ jest.mock('~/lib/utils/generateSizesAttribute', () => ({
 }));
 
 jest.mock('~/lib/utils/tiptapHelpers', () => ({
-  isTipTapDoc: jest.fn((val) => val && val.type === 'doc'),
+  isTipTapDoc: jest.fn((val) => val?.type === 'doc'),
   getPlainString: jest.fn((val) => (typeof val === 'string' ? val : val?.en || 'localized-string')),
   extractTextFromTipTap: jest.fn(() => 'extracted-tiptap-alt-text')
 }));
@@ -48,7 +48,20 @@ const defaultSizes: ElementSizes = {
   height: { xs: 200, sm: 400, md: 600 }
 };
 
-const mockTipTapData = { type: 'doc', content: [] } as unknown as JSONContent;
+const mockTipTapData = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: 'extracted-tiptap-alt-text'
+        }
+      ]
+    }
+  ]
+} as unknown as JSONContent;
 
 describe('ImageWithCaption', () => {
   beforeEach(() => {

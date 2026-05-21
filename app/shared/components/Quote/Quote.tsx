@@ -9,7 +9,6 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
-import { isTipTapDoc } from '~/lib/utils/tiptapHelpers';
 import QuoteImage from '~/public/images/quote.svg';
 
 interface UnifiedRendererConfig {
@@ -65,7 +64,7 @@ const QuoteBlock = ({
       </Box>
       <Box sx={styles.textContainer(alignKey, textGap)} data-testid="Quote-textContainer">
         {quoteText &&
-          (!isTipTapDoc(quoteText) ? (
+          (typeof quoteText === 'string' ? (
             <Typography sx={mainTextStyle} data-testid="Quote-textContainer--text">
               {quoteText}
             </Typography>
@@ -79,7 +78,7 @@ const QuoteBlock = ({
           ))}
 
         {sourceText &&
-          (!isTipTapDoc(sourceText) ? (
+          (typeof sourceText === 'string' ? (
             <Typography sx={sourceTextStyle} data-testid="Quote-textContainer--source">
               {sourceText}
             </Typography>

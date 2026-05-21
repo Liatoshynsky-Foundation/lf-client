@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography, TypographyProps } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import Image from 'next/image';
 import React, { useMemo, useState } from 'react';
 
@@ -20,13 +20,9 @@ interface PersonCardProps {
 
 const DEFAULT_FALLBACK = '/images/light-logo.svg';
 
-interface TextRendererConfig {
-  sx: TypographyProps['sx'];
-}
-
-const createTypographyRenderer = (config: TextRendererConfig) => {
-  const Paragraph = (children: React.ReactNode) => <Typography sx={config.sx}>{children}</Typography>;
-  return Paragraph;
+const renderBlock = (sx: SxProps<Theme>) => {
+  const Block = (children: React.ReactNode) => <Typography sx={sx}>{children}</Typography>;
+  return Block;
 };
 
 const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fallbackSrc = DEFAULT_FALLBACK }) => {
@@ -41,11 +37,11 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
   };
 
   const nameRenderer = useMemo(() => {
-    return createTypographyRenderer({ sx: styles.name });
+    return renderBlock(styles.name);
   }, []);
 
   const descriptionRenderer = useMemo(() => {
-    return createTypographyRenderer({ sx: styles.description });
+    return renderBlock(styles.description);
   }, []);
 
   return (

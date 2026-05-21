@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import React from 'react';
 
 import { styles } from '~/components/blocks/FoundationFounders/FoundationTeam/FoundationTeam.styles';
@@ -9,6 +9,11 @@ import PersonCard from '~/ds-components/person-card/PersonCard';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IImageBlock } from '~/types/page/about-us.types';
 import { TipTapDoc } from '~/types/types/tiptap.types';
+
+const renderTitle = (sx: SxProps<Theme>) => {
+  const Title = (children: React.ReactNode) => <Typography sx={sx}>{children}</Typography>;
+  return Title;
+};
 
 interface FoundationTeamProps {
   title: string | TipTapDoc;
@@ -39,7 +44,7 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team, dataTestId
             <TipTapContent
               data={title}
               nodeRenderers={{
-                [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.title}>{children}</Typography>
+                [TipTapNodeTypes.paragraph]: renderTitle(styles.title)
               }}
             />
           ))}

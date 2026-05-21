@@ -2,7 +2,6 @@
 
 import { Box } from '@mui/material';
 import Image from 'next/image';
-import { Locale, useLocale } from 'next-intl';
 import React from 'react';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
@@ -19,7 +18,6 @@ import { extractTextFromTipTap, getPlainString, isTipTapDoc } from '~/lib/utils/
 const OurGoals = ({ data }: { data: IOurGoals }) => {
   const { title, goals } = data;
   const sizesAttribute = generateSizesAttribute(iconSizes);
-  const locale = useLocale() as Locale;
 
   return (
     <Box sx={styles.mainContainer} data-testid="OurGoals">
@@ -28,8 +26,8 @@ const OurGoals = ({ data }: { data: IOurGoals }) => {
       <Box sx={styles.goalsGrid} data-testid="OurGoals-goalsGrid">
         {goals.map((goal, index) => {
           const plainTitleText = isTipTapDoc(goal.title)
-            ? extractTextFromTipTap(goal.title, locale)
-            : getPlainString(goal.title, locale);
+            ? extractTextFromTipTap(goal.title)
+            : getPlainString(goal.title);
 
           const normalizedPrefix = plainTitleText.trim()
             ? plainTitleText.replace(/\s+/g, '-').substring(0, 20)

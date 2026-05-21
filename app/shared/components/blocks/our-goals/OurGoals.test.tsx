@@ -7,7 +7,7 @@ import React from 'react';
 import OurGoals from './OurGoals';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IOurGoals } from '~/types/page/about-us.types';
-import { ParagraphNode, TipTapDoc, TipTapElement } from '~/types/types/tiptap.types';
+import { ParagraphNode, TipTapDoc } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
   data: TipTapDoc | string;
@@ -16,7 +16,9 @@ type MockTipTapContentProps = {
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt="" data-testid="next-image" />
+  default: ({ fill, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean }) => (
+    <img {...props} alt="bullet icon" data-filled={fill ? 'true' : undefined} data-testid="next-image" />
+  )
 }));
 
 jest.mock('~/components/section-title/SectionTitle', () => ({
@@ -65,28 +67,15 @@ jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
 
-    let textSnippet: unknown = '';
-    let dummyNode: ParagraphNode | undefined;
+    const isObjectDoc = typeof data === 'object' && data !== null && 'content' in data;
+    const dummyNode = isObjectDoc ? (data.content?.[0] as ParagraphNode) : undefined;
 
-    if (typeof data === 'string') {
-      textSnippet = data;
-    } else if (data && typeof data === 'object' && 'content' in data) {
-      const firstBlock = data.content?.[0];
-      if (firstBlock && typeof firstBlock === 'object') {
-        dummyNode = firstBlock as ParagraphNode;
-        if ('content' in firstBlock) {
-          const inlineContent = (firstBlock as TipTapElement).content;
-          if (Array.isArray(inlineContent) && inlineContent[0] && typeof inlineContent[0] === 'object') {
-            textSnippet = inlineContent[0].text;
-          }
-        }
-      }
-    }
+    const rawText = typeof data === 'string' ? data : data?.content?.[0]?.content?.[0]?.text;
 
-    const dummyText =
-      typeof textSnippet === 'object' && textSnippet !== null
-        ? (textSnippet as Record<string, string>).uk || (textSnippet as Record<string, string>).en || ''
-        : (textSnippet as string) || 'Fallback Text';
+    const dummyText: string =
+      typeof rawText === 'object' && rawText !== null
+        ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
+        : (rawText as string) || 'Fallback Text';
 
     return (
       <div data-testid="mock-tiptap-content">
@@ -143,7 +132,8 @@ describe('OurGoals component', () => {
     it('should mount with correct title configurations, layout structures, and localized elements', () => {
       render(<OurGoals data={testData} />);
 
-      expect(screen.getByTestId('SectionTitle')).toHaveTextContent(testData.title as string);
+      const titleText = typeof testData.title === 'string' ? testData.title : 'Fallback Title';
+      expect(screen.getByTestId('SectionTitle')).toHaveTextContent(titleText);
 
       const titledParagraphs = screen.getAllByTestId('titled-paragraph');
       expect(titledParagraphs).toHaveLength(testData.goals.length);
