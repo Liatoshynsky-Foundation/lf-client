@@ -4,11 +4,16 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 import { styles } from './PersonCard.styles';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import { TipTapDoc } from '~/types/types/tiptap.types';
+
+import { renderData } from '~/shared/components/tip-tap-content/nodes';
+import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
 
 interface PersonCardProps {
   imgURL: string;
-  name: string;
-  description: string;
+  name: string | TipTapDoc;
+  description: string | TipTapDoc;
   fallbackSrc?: string;
 }
 
@@ -29,7 +34,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
     <Box sx={styles.container}>
       <Box sx={styles.photoWrapper}>
         <Image
-          alt={name}
+          alt="Person photo"
           src={src}
           width={185}
           height={166}
@@ -38,10 +43,24 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
           loading="lazy"
         />
       </Box>
-      <Box sx={styles.textWrapper}>
-        <Typography sx={styles.name}>{name}</Typography>
-        <Typography sx={styles.description}>{description}</Typography>
-      </Box>
+
+      {name && (
+        <TipTapContent
+          data={renderData(name)}
+          nodeRenderers={{
+            [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.name}>{children}</Typography>
+          }}
+        />
+      )}
+
+      {description && (
+        <TipTapContent
+          data={renderData(description)}
+          nodeRenderers={{
+            [TipTapNodeTypes.paragraph]: (children) => <Typography sx={styles.description}>{children}</Typography>
+          }}
+        />
+      )}
     </Box>
   );
 };
