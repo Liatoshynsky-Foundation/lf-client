@@ -98,7 +98,7 @@ function MediaCenter({ newsData, mediaMentionsData, eventsData }: Readonly<Media
 
       {activeTab === 'events' && (
         <>
-          {eventsData.length > 0 ? (
+          {eventsData?.length > 0 ? (
             <EventsTab eventsData={eventsData} />
           ) : (
             <EmptyState

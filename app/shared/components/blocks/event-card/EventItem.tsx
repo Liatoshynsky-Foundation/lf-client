@@ -45,6 +45,7 @@ const buildEventItemDateLabels = (date: EventItemDate, locale: string): EventIte
   if (!date.startDate) return null;
 
   const startDateObj = new Date(date.startDate);
+  if (isNaN(startDateObj.getTime())) return null;
   const yearLabel = startDateObj.getFullYear().toString();
 
   let rangeLabel = '';
@@ -55,7 +56,7 @@ const buildEventItemDateLabels = (date: EventItemDate, locale: string): EventIte
     const formatNumeric = (d: Date) =>
       `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
 
-    rangeLabel = `${formatNumeric(startDateObj)} - ${formatNumeric(endDateObj)}`;
+    rangeLabel = `${formatNumeric(startDateObj)} – ${formatNumeric(endDateObj)}`;
   } else {
     const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
 

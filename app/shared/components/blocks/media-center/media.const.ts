@@ -97,6 +97,28 @@ export const mockPressList = [
   }
 ];
 
+export const mockEventsList = [
+  {
+    _id: '1',
+    title: '131 років від дня народження',
+    eventDateTimeStart: '2025-05-21T00:00:00.000Z',
+    eventDateTimeEnd: null,
+    status: 'published',
+    publishedAt: '2025-05-20T00:00:00.000Z',
+    description: 'Опис події',
+    slug: 'event-title-1',
+    coverImage: {
+      src: '/images/placeholder.png',
+      alt: 'Альтернативний текст',
+      caption: 'Підпис',
+      isTmp: false
+    },
+    meta: {
+      views: 100
+    }
+  }
+];
+
 export const mediaSmallDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(

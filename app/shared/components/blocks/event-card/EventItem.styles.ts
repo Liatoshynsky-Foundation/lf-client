@@ -72,6 +72,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   dateRange: {
+    whiteSpace: 'nowrap',
     fontFamily: 'var(--font-oswald)',
     fontWeight: 600,
     fontSize: {

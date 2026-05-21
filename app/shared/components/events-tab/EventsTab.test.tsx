@@ -2,50 +2,38 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 
 import EventsTab from './EventsTab';
 
-import type { EventItemProps } from '~/shared/components/blocks/event-card/EventItem';
-import { EventItemFixture } from '~/shared/components/blocks/event-card/EventItem.fixture';
-
-export const MOCK_EVENTS: EventItemFixture[] = [
+export const MOCK_EVENTS: any[] = [
   {
-    id: 'upcoming-1',
-    props: {
-      title: 'Upcoming event 1',
-      date: {
-        startDate: '2025-02-01',
-        endDate: '2025-02-02'
-      }
-    } as EventItemProps
+    _id: 'upcoming-1',
+    title: 'Upcoming event 1',
+    eventDateTimeStart: '2050-02-01T00:00:00.000Z',
+    slug: 'upcoming-1'
   },
   {
-    id: 'completed-1',
-    props: {
-      title: 'Completed event 1',
-      statusLabel: 'completed',
-      publishedAt: '2025-01-01T00:00:00.000Z'
-    } as EventItemProps
+    _id: 'completed-1',
+    title: 'Completed event 1',
+    eventDateTimeStart: '2020-01-01T00:00:00.000Z',
+    publishedAt: '2020-01-01T00:00:00.000Z',
+    slug: 'completed-1'
   },
   {
-    id: 'upcoming-2',
-    props: {
-      title: 'Upcoming event 2',
-      date: {
-        startDate: '2025-03-01',
-        endDate: '2025-02-02'
-      }
-    } as EventItemProps
+    _id: 'upcoming-2',
+    title: 'Upcoming event 2',
+    eventDateTimeStart: '2050-03-01T00:00:00.000Z',
+    slug: 'upcoming-2'
   },
   {
-    id: 'completed-2',
-    props: {
-      title: 'Completed event 2',
-      statusLabel: 'completed',
-      publishedAt: '2025-02-01T00:00:00.000Z'
-    } as EventItemProps
+    _id: 'completed-2',
+    title: 'Completed event 2',
+    eventDateTimeStart: '2020-02-01T00:00:00.000Z',
+    publishedAt: '2020-02-01T00:00:00.000Z',
+    slug: 'completed-2'
   }
 ];
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'uk'
 }));
 
 jest.mock('~/shared/components/blocks/event-card/EventItem', () => ({
