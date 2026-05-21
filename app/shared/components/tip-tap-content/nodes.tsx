@@ -2,9 +2,17 @@ import { Typography } from '@mui/material';
 
 import renderText from '~/components/tip-tap-content/renderText';
 
+import TitleWithDescription from '../title-with-description/TitleWithDescription';
 import renderMultiLangText from './multiLangText';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TextNode, TipTapMarkRenderers, TipTapNodeRenderers } from '~/types/types/tiptap.types';
+import {
+  ParagraphNode,
+  TextNode,
+  TipTapDoc,
+  TipTapMarkRenderers,
+  TipTapNodeRenderers
+} from '~/types/types/tiptap.types';
+import { Variant } from '~/types/types/titleWithDescriptionComponent';
 
 export const getDoc: TipTapNodeRenderers[TipTapNodeTypes.doc] = (children) => children;
 
@@ -16,6 +24,40 @@ export const getHeading: TipTapNodeRenderers[TipTapNodeTypes.heading] = (childre
 export const getParagraph: TipTapNodeRenderers[TipTapNodeTypes.paragraph] = (children) => (
   <Typography variant="body2">{children}</Typography>
 );
+
+type GetTitledParagraph = (
+  variant: Variant,
+  title: string | TipTapDoc
+) => (_children: React.ReactNode, node: ParagraphNode) => React.JSX.Element;
+
+export const getTitledParagraph: GetTitledParagraph = (variant, title) => {
+  const TitledParagraph = (_children: React.ReactNode, node: ParagraphNode) => {
+    const descriptionDoc: TipTapDoc = {
+      type: TipTapNodeTypes.doc,
+      content: [node]
+    };
+
+    return <TitleWithDescription variant={variant} title={title} description={descriptionDoc} />;
+  };
+
+  return TitledParagraph;
+};
+type RenderData = (input: string | TipTapDoc) => TipTapDoc;
+
+export const renderData: RenderData = (input) => {
+  if (typeof input === 'object' && input !== null) {
+    return input;
+  }
+  return {
+    type: TipTapNodeTypes.doc,
+    content: [
+      {
+        type: TipTapNodeTypes.paragraph,
+        content: [{ type: TipTapNodeTypes.text, text: input }]
+      }
+    ]
+  };
+};
 
 type GetText = (renderers: TipTapMarkRenderers) => TipTapNodeRenderers[TipTapNodeTypes.text];
 
