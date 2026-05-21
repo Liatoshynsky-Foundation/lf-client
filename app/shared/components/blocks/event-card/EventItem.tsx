@@ -3,12 +3,13 @@
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+
+import Button from '~/ds-components/button/Button';
 
 import { styles } from './EventItem.styles';
 
-import { formatIsoDateToDdMmYy, parseIsoDate } from '~/lib/utils/parseIsoDate';
+import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 
@@ -40,22 +41,36 @@ type EventItemDateLabels = {
   ariaLabel: string;
 };
 
-const buildEventItemDateLabels = (date: EventItemDate): EventItemDateLabels | null => {
-  const start = parseIsoDate(date.startDate);
-  if (!start) return null;
+const buildEventItemDateLabels = (date: EventItemDate, locale: string): EventItemDateLabels | null => {
+  if (!date.startDate) return null;
 
-  const startLabel = `${start.day}.${start.month}`;
+  const startDateObj = new Date(date.startDate);
+  const yearLabel = startDateObj.getFullYear().toString();
 
-  const endParsed = date.endDate ? parseIsoDate(date.endDate) : null;
-  const endLabel = endParsed ? `${endParsed.day}.${endParsed.month}` : undefined;
+  let rangeLabel = '';
 
-  const rangeLabel = endLabel ? `${startLabel} – ${endLabel}` : startLabel;
-  const ariaLabel = `${rangeLabel} ${start.year}`.trim();
+  if (date.endDate) {
+    const endDateObj = new Date(date.endDate);
+
+    const formatNumeric = (d: Date) =>
+      `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+
+    rangeLabel = `${formatNumeric(startDateObj)} - ${formatNumeric(endDateObj)}`;
+  } else {
+    const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
+
+    const formattedDate = startDateObj.toLocaleDateString(dateLocale, {
+      day: 'numeric',
+      month: 'long'
+    });
+
+    rangeLabel = formattedDate.toUpperCase();
+  }
 
   return {
     rangeLabel,
-    yearLabel: start.year,
-    ariaLabel
+    yearLabel,
+    ariaLabel: `${rangeLabel} ${yearLabel}`
   };
 };
 
@@ -66,14 +81,15 @@ const EventItem = ({
   publishedAt,
   description,
   image,
-  href,
   actions,
   sx
 }: Readonly<EventItemProps>) => {
   const t = useTranslations('news');
 
+  const locale = useLocale();
+
   const hasStatus = Boolean(statusLabel);
-  const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date) : null;
+  const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date, locale) : null;
   const startDateTime = date?.startDate ?? '';
 
   const groupAriaLabel = hasStatus ? statusLabel : dateLabels?.ariaLabel;
@@ -110,11 +126,9 @@ const EventItem = ({
         </Box>
 
         <Box sx={styles.imageWrapper}>
-          <Link href={href} aria-label={title} style={{ display: 'block', width: '100%', height: '100%' }}>
-            <Box sx={styles.imageFrame}>
-              <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
-            </Box>
-          </Link>
+          <Box sx={styles.imageFrame}>
+            <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
+          </Box>
         </Box>
       </Box>
 
@@ -134,14 +148,15 @@ const EventItem = ({
         {(primaryAction || secondaryAction) && (
           <Box sx={styles.actions}>
             {primaryAction && (
-              <CustomLink
-                path={primaryAction.href}
-                sx={styles.primaryLink}
-                labelSx={styles.primaryLinkLabel}
+              <Button
+                variant="outlined"
+                color="primary"
+                size="medium"
+                href={primaryAction.href}
                 data-testid="EventItem-primaryCta"
               >
                 {primaryAction.label}
-              </CustomLink>
+              </Button>
             )}
 
             {secondaryAction && (

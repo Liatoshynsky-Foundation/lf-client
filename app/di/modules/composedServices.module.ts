@@ -1,6 +1,7 @@
 import { asFunction, AwilixContainer } from 'awilix';
 
 import { createArtistryService } from '~/services/artistry/artistryService';
+import { createEventsService } from '~/services/events/eventsService';
 import { createFooterService } from '~/services/footer/footerService';
 import { createFundsService } from '~/services/funds/fundsService';
 import { createHeaderService } from '~/services/header/headerService';
@@ -21,6 +22,7 @@ export type ComposedServicesModule = {
   fundsService: ReturnType<typeof createFundsService>;
   newsService: ReturnType<typeof createNewsService>;
   mediaMentionService: ReturnType<typeof createMediaMentionService>;
+  eventsService: ReturnType<typeof createEventsService>;
 };
 
 export const registerComposedServicesFor = (container: AwilixContainer) => {
@@ -42,6 +44,8 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
     fundsService: asFunction(createFundsService).scoped(),
 
     newsService: asFunction(createNewsService).scoped(),
+
+    eventsService: asFunction(({ eventsRepo }) => createEventsService({ eventsRepository: eventsRepo })).scoped(),
 
     mediaMentionService: asFunction(createMediaMentionService).scoped()
   });
