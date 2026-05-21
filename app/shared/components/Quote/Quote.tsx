@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
 
+import TipTapContent from '../tip-tap-content/TipTapContent';
 import { styles } from './Quote.styles';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { QuoteBlockProps } from '~/types/types/quoteComponent';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
@@ -27,12 +29,41 @@ const QuoteBlock = ({
         <QuoteImage />
       </Box>
       <Box sx={styles.textContainer(alignKey, textGap)} data-testid="Quote-textContainer">
-        <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
-          {quoteText}
-        </Typography>
-        <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
-          {sourceText}
-        </Typography>
+        {quoteText &&
+          (typeof quoteText === 'string' ? (
+            <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
+              {quoteText}
+            </Typography>
+          ) : (
+            <TipTapContent
+              data={quoteText}
+              nodeRenderers={{
+                [TipTapNodeTypes.paragraph]: (children) => (
+                  <Typography sx={styles.mainText(mainTextColor, alignKey)} data-testid="Quote-textContainer--text">
+                    {children}
+                  </Typography>
+                )
+              }}
+            />
+          ))}
+
+        {sourceText &&
+          (typeof sourceText === 'string' ? (
+            <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
+              {sourceText}
+            </Typography>
+          ) : (
+            <TipTapContent
+              data={sourceText}
+              nodeRenderers={{
+                [TipTapNodeTypes.paragraph]: (children) => (
+                  <Typography sx={styles.sourceText(alignKey)} data-testid="Quote-textContainer--source">
+                    {children}
+                  </Typography>
+                )
+              }}
+            />
+          ))}
       </Box>
     </Box>
   );
