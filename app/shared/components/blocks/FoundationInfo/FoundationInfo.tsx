@@ -8,6 +8,8 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { styles } from './FoundationInfo.styles';
 import { IFoundationInfo } from '~/types/page/about-us.types';
 
+import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
+
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
   const { image, ourOrganisation, ourName, ourBelief } = data;
 
@@ -76,7 +78,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         {image && (
           <Image
             src={image.generatedSrc}
-            alt={image.alt}
+            alt={extractTextFromTipTap(image.alt)}
             fill={false}
             width={410}
             height={490}
