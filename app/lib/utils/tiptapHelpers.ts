@@ -25,7 +25,7 @@ export const extractTextFromTipTap: ExtractTextFromTipTap = (node, locale = 'uk'
   if (typeof node !== 'object' || node === null) return '';
 
   if ('text' in node) {
-    const textVal = (node as { text: unknown }).text;
+    const textVal = node.text;
     if (typeof textVal === 'string') return textVal;
 
     if (typeof textVal === 'object' && textVal !== null) {
@@ -33,7 +33,7 @@ export const extractTextFromTipTap: ExtractTextFromTipTap = (node, locale = 'uk'
     }
   }
 
-  if ('content' in node && Array.isArray((node as { content: unknown }).content)) {
+  if ('content' in node && Array.isArray(node.content)) {
     return (node as { content: unknown[] }).content.map((child) => extractTextFromTipTap(child, locale)).join('');
   }
 
