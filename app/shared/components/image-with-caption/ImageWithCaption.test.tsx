@@ -18,7 +18,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} data-testid="next-image" />
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
+  )
 }));
 
 jest.mock('~/lib/utils/generateSizesAttribute', () => ({
