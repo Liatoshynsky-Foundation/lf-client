@@ -19,7 +19,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt="" data-testid="next-image" />
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
+  )
 }));
 
 jest.mock('~/lib/utils/generateSizesAttribute', () => ({
@@ -70,6 +72,24 @@ describe('SectionTitle', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useLocale as jest.Mock).mockReturnValue('en');
+  });
+
+  it('should render title with icon', () => {
+    render(<SectionTitle title={{ uk: 'Test title', en: 'Test title' }} />);
+
+    const title = screen.getByText('Test title');
+    const icon = screen.getByAltText('ellipse');
+    expect(title).toBeInTheDocument();
+    expect(icon).toBeInTheDocument();
+  });
+
+  it('should render title without icon', () => {
+    render(<SectionTitle icon={false} title={{ uk: 'Test title', en: 'Test title' }} />);
+
+    const title = screen.getByText('Test title');
+    const icon = screen.queryByAltText('ellipse');
+    expect(title).toBeInTheDocument();
+    expect(icon).not.toBeInTheDocument();
   });
 
   describe('Icon Visibility and Content Routing Matrix', () => {
