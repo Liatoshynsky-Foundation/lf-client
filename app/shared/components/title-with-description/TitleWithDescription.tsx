@@ -21,7 +21,7 @@ const TitleWithDescription = ({ variant, title, description, dataTestId }: Title
         <TipTapContent
           data={title}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: renderBlock({ sx: styles.blockTitle() })
+            [TipTapNodeTypes.paragraph]: renderBlock(styles.blockTitle())
           }}
         />
       )}
@@ -30,7 +30,7 @@ const TitleWithDescription = ({ variant, title, description, dataTestId }: Title
         <TipTapContent
           data={renderData(description)}
           nodeRenderers={{
-            [TipTapNodeTypes.paragraph]: renderBlock({ sx: styles.blockDescription() })
+            [TipTapNodeTypes.paragraph]: renderBlock(styles.blockDescription())
           }}
         />
       )}
