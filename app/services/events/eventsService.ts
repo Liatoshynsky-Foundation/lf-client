@@ -1,12 +1,13 @@
 import { Locale } from 'next-intl';
 
-import type { EventsRepository } from '~/infrastructure/repositories/events/events.repo';
+import eventsRepositoryObj from '~/infrastructure/repositories/events/events.repository';
+import logger from '~/middleware/logger/logger';
 import { ArraySchema } from '~/validators/constants';
 import { eventListItemSchema, eventSchema } from '~/validators/events.schema';
 import { LocalizeSchema } from '~/validators/localization';
 
 interface EventsServiceDeps {
-  eventsRepository: EventsRepository;
+  eventsRepository: typeof eventsRepositoryObj;
 }
 
 export const createEventsService = ({ eventsRepository }: EventsServiceDeps) => ({
@@ -14,21 +15,27 @@ export const createEventsService = ({ eventsRepository }: EventsServiceDeps) => 
     try {
       const events = await eventsRepository.getAllPublishedEvents();
 
-      if (!events || events.length === 0) {
+      if (events.length === 0) {
         return [];
       }
 
       return ArraySchema(LocalizeSchema(eventListItemSchema, locale)).parse(events);
-    } catch {
+    } catch (error) {
+      logger.error('Failed to get published events', { error });
       return [];
     }
   },
 
   async getEventBySlug(slug: string, locale: Locale) {
-    const event = await eventsRepository.getEventBySlug(slug);
-    if (!event) return null;
+    try {
+      const event = await eventsRepository.getEventBySlug(slug);
+      if (!event) return null;
 
-    return LocalizeSchema(eventSchema, locale).parse(event);
+      return LocalizeSchema(eventSchema, locale).parse(event);
+    } catch (error) {
+      logger.error('Failed to get or parse event by slug (${slug}):', { error });
+      return null;
+    }
   }
 });
 

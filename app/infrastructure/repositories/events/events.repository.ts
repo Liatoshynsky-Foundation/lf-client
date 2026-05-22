@@ -4,20 +4,17 @@ import EventModel from '~/infrastructure/models/events/events.model';
 import { ArraySchema } from '~/validators/constants';
 import { eventListItemSchema, eventSchema } from '~/validators/events.schema';
 
+const EVENT_LIST_FIELDS =
+  '_id slug status publishedAt eventDateTimeStart eventDateTimeEnd title description coverImage meta ticketUrl';
+
 const eventsRepository = {
   async getAllPublishedEvents() {
     await dbConnect();
 
     const events = await EventModel.find({ status: EventStatus.Published })
-      .select(
-        '_id slug status publishedAt eventDateTimeStart eventDateTimeEnd title description coverImage meta ticketUrl'
-      )
+      .select(EVENT_LIST_FIELDS)
       .sort({ publishedAt: -1 })
       .lean();
-
-    if (!events) {
-      return [];
-    }
 
     return ArraySchema(eventListItemSchema).parse(events);
   },
@@ -33,8 +30,4 @@ const eventsRepository = {
   }
 };
 
-function newEventsRepository(): typeof eventsRepository {
-  return eventsRepository;
-}
-
-export default newEventsRepository;
+export default eventsRepository;

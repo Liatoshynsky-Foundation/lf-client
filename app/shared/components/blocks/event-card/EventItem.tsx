@@ -45,7 +45,7 @@ const buildEventItemDateLabels = (date: EventItemDate, locale: string): EventIte
   if (!date.startDate) return null;
 
   const startDateObj = new Date(date.startDate);
-  if (isNaN(startDateObj.getTime())) return null;
+  if (Number.isNaN(startDateObj.getTime())) return null;
   const yearLabel = startDateObj.getFullYear().toString();
 
   let rangeLabel = '';

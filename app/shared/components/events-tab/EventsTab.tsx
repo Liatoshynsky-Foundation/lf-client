@@ -36,7 +36,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
 
     const upcomingEvents = eventsData
       .filter((e) => e.eventDateTimeStart && new Date(e.eventDateTimeStart) >= now)
-      .sort((a, b) => new Date(a.eventDateTimeStart!).getTime() - new Date(b.eventDateTimeStart!).getTime());
+      .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
 
     const completedEvents = eventsData
       .filter((e) => !e.eventDateTimeStart || new Date(e.eventDateTimeStart) < now)
