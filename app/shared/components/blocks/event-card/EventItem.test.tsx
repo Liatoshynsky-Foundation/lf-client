@@ -1,8 +1,19 @@
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import EventItem, { type EventItemProps } from './EventItem';
 import { MOCK_EVENT_ITEMS } from './EventItem.fixture';
+
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="next-image" />
+}));
+
+globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn()
+}));
 
 jest.mock('next-intl', () => ({
   __esModule: true,
@@ -194,5 +205,78 @@ describe('EventItem', () => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expectNoStatusOrDates(dateBlock);
+  });
+
+  describe('Crop functionality', () => {
+    afterEach(() => {
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }));
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 0 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 0 });
+    });
+
+    it('should render native img when crop is provided', () => {
+      const crop = { x: 0, y: 0, width: 200, height: 150 };
+      const props = { ...baseProps, image: { ...baseProps.image, crop } };
+
+      render(<EventItem {...props} />);
+
+      const img = screen.getByRole('img', { name: baseProps.image.alt });
+      expect(img.tagName).toBe('IMG');
+      expect(img).toHaveAttribute('src', baseProps.image.src);
+      expect(img).toHaveAttribute('alt', baseProps.image.alt);
+      expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+    });
+
+    it('should render Next.js Image when crop is null', () => {
+      const props = { ...baseProps, image: { ...baseProps.image, crop: null } };
+      render(<EventItem {...props} />);
+
+      expect(screen.getByTestId('next-image')).toBeInTheDocument();
+    });
+
+    it('should disconnect ResizeObserver on unmount', () => {
+      const disconnectMock = jest.fn();
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: disconnectMock
+      }));
+
+      const { unmount } = render(<EventItem {...baseProps} />);
+      unmount();
+
+      expect(disconnectMock).toHaveBeenCalled();
+    });
+
+    it('should call handleImageLoad and apply cropped styles when image loads with sized container', () => {
+      globalThis.ResizeObserver = jest.fn().mockImplementation((cb: ResizeObserverCallback) => ({
+        observe: jest.fn(() => {
+          cb([{ contentRect: { width: 400, height: 300 } } as ResizeObserverEntry], {} as ResizeObserver);
+        }),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }));
+
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 800 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 600 });
+
+      const crop = { x: 10, y: 20, width: 200, height: 150 };
+      const props = { ...baseProps, image: { ...baseProps.image, crop } };
+
+      render(<EventItem {...props} />);
+
+      const img = screen.getByRole('img', { name: baseProps.image.alt });
+
+      act(() => {
+        fireEvent.load(img);
+      });
+
+      expect(img.style.transform).toContain('translate');
+      expect(img.style.transform).toContain('scale');
+    });
   });
 });

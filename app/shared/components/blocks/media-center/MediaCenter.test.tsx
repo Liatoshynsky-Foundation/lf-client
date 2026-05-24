@@ -45,6 +45,13 @@ jest.mock('~/ds-components/tabs/Tabs', () => ({
   )
 }));
 
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+global.ResizeObserver = ResizeObserverMock as any;
+
 describe('MediaCenter Component Full Coverage', () => {
   beforeEach(() => {
     searchParamsValue = new URLSearchParams('');

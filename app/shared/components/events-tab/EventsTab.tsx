@@ -32,14 +32,30 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const breakpoint = useBreakpoints();
 
   const events = useMemo(() => {
-    const now = new Date();
+    const nowTime = new Date().getTime();
 
     const upcomingEvents = eventsData
-      .filter((e) => e.eventDateTimeStart && new Date(e.eventDateTimeStart) >= now)
+      .filter((e) => {
+        const dateToCheck = e.eventDateTimeEnd
+          ? new Date(e.eventDateTimeEnd).getTime()
+          : e.eventDateTimeStart
+            ? new Date(e.eventDateTimeStart).getTime()
+            : 0;
+
+        return dateToCheck >= nowTime;
+      })
       .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
 
     const completedEvents = eventsData
-      .filter((e) => !e.eventDateTimeStart || new Date(e.eventDateTimeStart) < now)
+      .filter((e) => {
+        const dateToCheck = e.eventDateTimeEnd
+          ? new Date(e.eventDateTimeEnd).getTime()
+          : e.eventDateTimeStart
+            ? new Date(e.eventDateTimeStart).getTime()
+            : 0;
+
+        return dateToCheck < nowTime;
+      })
       .sort((a, b) => {
         const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
         const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
@@ -86,7 +102,14 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   return (
     <Box ref={tabRef} sx={{ ...styles.container, ...tabSx }} data-testid="EventsTab">
       {paginatedData.map((event) => {
-        const isCompleted = event.eventDateTimeStart ? new Date(event.eventDateTimeStart) < new Date() : false;
+        const isCompleted = (() => {
+          const dateToCheck = event.eventDateTimeEnd
+            ? new Date(event.eventDateTimeEnd).getTime()
+            : event.eventDateTimeStart
+              ? new Date(event.eventDateTimeStart).getTime()
+              : 0;
+          return dateToCheck < new Date().getTime();
+        })();
 
         const cardActions = [{ label: 'Переглянути', href: `/news/${event.slug}` }];
 
@@ -104,7 +127,8 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
             description={event.description}
             image={{
               src: event.coverImage?.src || '/images/placeholder.png',
-              alt: event.coverImage?.alt || 'Зображення події'
+              alt: event.coverImage?.alt || 'Зображення події',
+              crop: event.coverImage?.crop
             }}
             href={`/news/${event.slug}`}
             date={{

@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
@@ -12,6 +13,37 @@ import { styles } from './EventItem.styles';
 import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
+
+export type CropRect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+function buildCroppedStyle(
+  crop: CropRect,
+  natW: number,
+  natH: number,
+  containerW: number,
+  containerH: number
+): React.CSSProperties {
+  const scaleX = containerW / crop.width;
+  const scaleY = containerH / crop.height;
+  const scale = Math.max(scaleX, scaleY);
+  const translateX = -(crop.x * scale) + (containerW - crop.width * scale) / 2;
+  const translateY = -(crop.y * scale) + (containerH - crop.height * scale) / 2;
+  return {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: natW,
+    height: natH,
+    maxWidth: 'none',
+    transformOrigin: '0 0',
+    transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`
+  };
+}
 
 export type EventItemDate = {
   startDate: string;
@@ -29,7 +61,7 @@ export type EventItemProps = {
   title: string;
   publishedAt: string;
   description: string;
-  image: { src: string; alt: string };
+  image: { src: string; alt: string; crop?: CropRect | null };
   href: string;
   actions?: ReadonlyArray<EventItemAction>;
   sx?: SxProps<Theme>;
@@ -101,6 +133,40 @@ const EventItem = ({
   const rootSx: SxProps<Theme> = [styles.root, ...sxToArray(sx)];
   const formattedPublishedAt = formatIsoDateToDdMmYy(publishedAt) ?? publishedAt;
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [natSize, setNatSize] = useState({ w: 0, h: 0 });
+  const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setContainerSize({ w: entry.contentRect.width, h: entry.contentRect.height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!image.crop) return;
+    const img = imgRef.current;
+    if (img?.complete && img.naturalWidth) {
+      setNatSize({ w: img.naturalWidth, h: img.naturalHeight });
+    }
+  }, [image.crop]);
+
+  const handleImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    setNatSize({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight });
+  }, []);
+
+  const croppedImgStyle = useMemo((): React.CSSProperties => {
+    if (!natSize.w || !natSize.h || !containerSize.w || !containerSize.h) {
+      return { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' };
+    }
+    return buildCroppedStyle(image.crop!, natSize.w, natSize.h, containerSize.w, containerSize.h);
+  }, [image.crop, natSize, containerSize]);
+
   return (
     <Box component="article" sx={rootSx} data-testid="EventItem-root">
       <Box sx={styles.leftSide} data-testid="EventItem-left">
@@ -127,8 +193,19 @@ const EventItem = ({
         </Box>
 
         <Box sx={styles.imageWrapper}>
-          <Box sx={styles.imageFrame}>
-            <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
+          <Box sx={styles.imageFrame} ref={containerRef}>
+            {image.crop ? (
+              <img
+                ref={imgRef}
+                src={image.src}
+                alt={image.alt}
+                loading="lazy"
+                onLoad={handleImageLoad}
+                style={croppedImgStyle}
+              />
+            ) : (
+              <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
+            )}
           </Box>
         </Box>
       </Box>

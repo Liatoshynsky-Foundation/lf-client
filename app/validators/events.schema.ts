@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { mongoObjectIdSchema, translatedFieldSchema } from './constants';
+import { cropRectSchema } from './news.schema';
 
 import { EventStatus } from '~/domain/dto/events.dto';
 
@@ -8,7 +9,9 @@ export const eventImageSchema = z.object({
   src: z.string(),
   alt: translatedFieldSchema,
   caption: translatedFieldSchema,
-  isTmp: z.boolean()
+  isTmp: z.boolean(),
+
+  crop: cropRectSchema.nullable().optional()
 });
 
 export const eventSchema = z.object({

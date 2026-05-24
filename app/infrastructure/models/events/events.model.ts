@@ -4,6 +4,16 @@ import { EventDTO, EventStatus } from '~/domain/dto/events.dto';
 
 export interface IEventDocument extends Omit<EventDTO, '_id'>, Document {}
 
+const cropRectSchema = new Schema(
+  {
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true }
+  },
+  { _id: false }
+);
+
 const eventSchema = new Schema<IEventDocument>(
   {
     slug: { type: String, required: true, index: true, unique: true },
@@ -38,7 +48,8 @@ const eventSchema = new Schema<IEventDocument>(
         uk: { type: String, required: true },
         en: { type: String, required: true }
       },
-      isTmp: { type: Boolean, default: false }
+      isTmp: { type: Boolean, default: false },
+      crop: { type: cropRectSchema, required: false }
     },
     meta: {
       views: { type: Number, default: 0, required: true }
