@@ -14,9 +14,7 @@ export function buildCroppedStyle(
   containerW: number,
   containerH: number
 ): React.CSSProperties {
-  const scaleX = containerW / crop.width;
-  const scaleY = containerH / crop.height;
-  const scale = Math.max(scaleX, scaleY);
+  const scale = Math.max(crop.width > 0 ? containerW / crop.width : 1, crop.height > 0 ? containerH / crop.height : 1);
   const translateX = -(crop.x * scale) + (containerW - crop.width * scale) / 2;
   const translateY = -(crop.y * scale) + (containerH - crop.height * scale) / 2;
 

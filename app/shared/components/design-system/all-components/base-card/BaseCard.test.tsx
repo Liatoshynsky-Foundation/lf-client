@@ -213,20 +213,11 @@ describe('BaseCard', () => {
         disconnect: disconnectMock
       }));
 
-      const { unmount } = render(<BaseCard {...defaultProps} />);
+      const crop = { x: 0, y: 0, width: 100, height: 100 };
+      const { unmount } = render(<BaseCard {...defaultProps} crop={crop} />);
       unmount();
 
       expect(disconnectMock).toHaveBeenCalled();
-    });
-
-    it('should skip ResizeObserver setup when containerRef is null', () => {
-      const nullRef = new Proxy({ current: null as HTMLDivElement | null }, { set: () => true });
-      const useRefSpy = jest.spyOn(React, 'useRef');
-      useRefSpy.mockReturnValueOnce(nullRef as React.RefObject<HTMLDivElement>);
-
-      expect(() => render(<BaseCard {...defaultProps} />)).not.toThrow();
-
-      useRefSpy.mockRestore();
     });
 
     it('should call handleImageLoad and buildCroppedStyle when image loads with sized container', () => {

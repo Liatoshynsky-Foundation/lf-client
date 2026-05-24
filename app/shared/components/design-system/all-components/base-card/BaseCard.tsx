@@ -3,14 +3,14 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './BaseCard.styles';
 
-import { buildCroppedStyle, type CropRect } from '~/lib/utils/cropUtils';
+import { type CropRect } from '~/lib/utils/cropUtils';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
 
 export type Variant = 'news' | 'press';
 
@@ -44,39 +44,7 @@ export default function BaseCard({
   const buttonConfig = BUTTON_CONFIG[variant];
   const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const [natSize, setNatSize] = useState({ w: 0, h: 0 });
-  const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
-      setContainerSize({ w: entry.contentRect.width, h: entry.contentRect.height });
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!crop) return;
-    const img = imgRef.current;
-    if (img?.complete && img.naturalWidth) {
-      setNatSize({ w: img.naturalWidth, h: img.naturalHeight });
-    }
-  }, [crop]);
-
-  const handleImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    setNatSize({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight });
-  }, []);
-
-  const croppedImgStyle = useMemo((): React.CSSProperties => {
-    if (!natSize.w || !natSize.h || !containerSize.w || !containerSize.h) {
-      return { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' };
-    }
-    return buildCroppedStyle(crop!, natSize.w, natSize.h, containerSize.w, containerSize.h);
-  }, [crop, natSize, containerSize]);
+  const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
 
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
