@@ -7,7 +7,5 @@ export const getBold: TipTapMarkRenderers[TipTapMarkType.bold] = (children) => <
 export const getItalic: TipTapMarkRenderers[TipTapMarkType.italic] = (children) => <em>{children}</em>;
 export const getUnderline: TipTapMarkRenderers[TipTapMarkType.underline] = (children) => <u>{children}</u>;
 export const getLink: TipTapMarkRenderers[TipTapMarkType.link] = (children, mark) => (
-  <Link href={mark.attrs?.href || '#'} underline="hover">
-    {children}
-  </Link>
+  <Link href={mark.attrs?.href || '#'}>{children}</Link>
 );

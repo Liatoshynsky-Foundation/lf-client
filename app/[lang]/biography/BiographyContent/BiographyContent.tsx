@@ -28,7 +28,7 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
             <ImageWithCaption
               src={item.additionalImage.src}
               alt={item.additionalImage.alt}
-              caption={item.additionalImage.caption ?? ''}
+              caption={item.additionalImage.caption ?? {}}
               containerSx={biographyContentStyles.imageContainer}
               captionSx={biographyContentStyles.leftImageCaption}
               sizes={biographyContentStyles[item.additionalImage.size]}

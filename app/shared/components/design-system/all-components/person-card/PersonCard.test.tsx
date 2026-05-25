@@ -1,28 +1,128 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 
 import PersonCard from './PersonCard';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
-const person = {
-  imgURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0fsVF1anYNoKb2rvT998PTshQppsUr9Ydhg&s',
-  name: 'Тетяна Гомон',
-  description:
-    'Спадкоємиця композитора, співзасновниця і голова Фундації, піаністка-камералістка і музикознавиця, кандидатка мистецтвознавства'
+type MockTipTapContentProps = {
+  data: TipTapDoc | string;
+  nodeRenderers?: Record<string, (children: React.ReactNode) => React.ReactNode>;
 };
 
-describe('Person Card', () => {
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
+  )
+}));
+
+jest.mock('~/shared/components/tip-tap-content/nodes', () => ({
+  renderData: jest.fn((input: unknown) => {
+    if (typeof input === 'object' && input !== null) return input;
+    return {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [{ type: TipTapNodeTypes.text, text: String(input) }]
+        }
+      ]
+    };
+  })
+}));
+
+jest.mock('~/shared/components/tip-tap-content/TipTapContent', () => ({
+  __esModule: true,
+  default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
+    const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
+
+    const isObjectDoc = typeof data === 'object' && data !== null && 'content' in data;
+    const isString = typeof data === 'string' ? data : undefined;
+
+    const rawText = isObjectDoc ? data.content?.[0]?.content?.[0]?.text : isString;
+
+    const isLocalizedObject = rawText && typeof rawText === 'object';
+    const resolvedText: string = isLocalizedObject
+      ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
+      : (rawText as string) || 'Fallback Text';
+
+    return (
+      <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(resolvedText) : resolvedText}</div>
+    );
+  }
+}));
+
+const defaultProps = {
+  imgURL: '/valid-image.jpg',
+  name: 'Тетяна Гомон',
+  description: 'Спадкоємиця композитора, співзасновниця і голова Фундації'
+};
+
+const makeTipTapDoc = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [{ type: TipTapNodeTypes.text, text }]
+    }
+  ]
+});
+
+describe('PersonCard', () => {
   beforeEach(() => {
-    render(<PersonCard imgURL={person.imgURL} name={person.name} description={person.description} />);
+    jest.clearAllMocks();
   });
 
-  it('should display photo', () => {
-    expect(screen.getByAltText(person.name)).toBeInTheDocument();
+  describe('Component Rendering Variations', () => {
+    it('should correctly output standard profile elements when fed plain string properties', () => {
+      render(<PersonCard {...defaultProps} />);
+
+      const img = screen.getByTestId('next-image');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('alt', 'Person photo');
+      expect(img).toHaveAttribute('src', defaultProps.imgURL);
+
+      expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
+      expect(screen.getByText(defaultProps.description)).toBeInTheDocument();
+    });
+
+    it('should directly render TipTapDoc objects if passed instead of strings', () => {
+      render(
+        <PersonCard
+          imgURL="/valid.jpg"
+          name={makeTipTapDoc('TipTap Name Data')}
+          description={makeTipTapDoc('TipTap Description Data')}
+        />
+      );
+
+      expect(screen.getByText('TipTap Name Data')).toBeInTheDocument();
+      expect(screen.getByText('TipTap Description Data')).toBeInTheDocument();
+    });
   });
 
-  it('should display name', () => {
-    expect(screen.getByText(person.name)).toBeInTheDocument();
-  });
+  describe('Image Fallback Mechanics', () => {
+    it('should cycle the image asset src token and style rules to standard global fallbacks on error', () => {
+      render(<PersonCard {...defaultProps} />);
+      const img = screen.getByTestId('next-image');
 
-  it('should display description', () => {
-    expect(screen.getByText(person.description)).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', '/valid-image.jpg');
+      expect(img).toHaveStyle('object-fit: cover');
+
+      fireEvent.error(img);
+      expect(img).toHaveAttribute('src', '/images/light-logo.svg');
+      expect(img).toHaveStyle('object-fit: contain');
+
+      fireEvent.error(img);
+      expect(img).toHaveAttribute('src', '/images/light-logo.svg');
+    });
+
+    it('should intercept the processing tree to prioritize a custom fallbackSrc if supplied', () => {
+      render(<PersonCard {...defaultProps} fallbackSrc="/custom-fallback.jpg" />);
+      const img = screen.getByTestId('next-image');
+
+      fireEvent.error(img);
+      expect(img).toHaveAttribute('src', '/custom-fallback.jpg');
+    });
   });
 });

@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 import { PageStatus } from '~/types/enums/common.enums';
 
-import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
-import { ImageSchema, QuoteSchema } from '~/validators/pagesSchemas/pages/_common.schema';
+import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import { ImageSchema, TipTapQuoteSchema } from '~/validators/pagesSchemas/pages/_common.schema';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 const IntroSectionBlockSchema = z.object({
-  title: translatedFieldSchema,
+  title: translatedTipTapSchema,
   image: ImageSchema,
-  quote: QuoteSchema
+  quote: TipTapQuoteSchema
 });
 
 const FoundationInfoBlockSchema = z.object({
@@ -20,44 +20,44 @@ const FoundationInfoBlockSchema = z.object({
 });
 
 const OurMissionBlockSchema = z.object({
-  title: translatedFieldSchema,
+  title: translatedTipTapSchema,
   smallImage: ImageSchema,
   bigImage: ImageSchema,
   list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }))
 });
 
 const OurGoalsBlockSchema = z.object({
-  title: translatedFieldSchema,
+  title: translatedTipTapSchema,
   goals: z.array(
     z.object({
-      title: translatedFieldSchema,
-      description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
+      title: translatedTipTapSchema,
+      description: translatedTipTapSchema
     })
   )
 });
 
 const LiatoshynskyOfficeBlockSchema = z.object({
-  quote: QuoteSchema
+  quote: TipTapQuoteSchema
 });
 
 const WhatWeDoBlockSchema = z.object({
-  title: translatedFieldSchema,
+  title: translatedTipTapSchema,
   items: z.array(
     z.object({
-      title: translatedFieldSchema,
-      description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
+      title: translatedTipTapSchema,
+      description: translatedTipTapSchema
     })
   )
 });
 
 const FoundationFoundersBlockSchema = z.object({
   titleText: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  listTitle: translatedFieldSchema,
+  listTitle: translatedTipTapSchema,
   members: z.array(
     z.object({
       photo: ImageSchema,
-      name: translatedFieldSchema,
-      description: translatedFieldSchema
+      name: translatedTipTapSchema,
+      description: translatedTipTapSchema
     })
   )
 });
