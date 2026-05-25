@@ -4,23 +4,40 @@ import Typography from '@mui/material/Typography';
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 import QuoteBlock from '~/components/Quote/Quote';
 
+import TipTapContent from '../../tip-tap-content/TipTapContent';
 import { styles } from './IntroSection.styles';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { IIntroSection } from '~/types/page/about-us.types';
+
+const titleRenderer = (children: React.ReactNode) => (
+  <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
+    {children}
+  </Typography>
+);
 
 export function IntroSection({ data }: { readonly data: IIntroSection }) {
   const { title, image, quote } = data;
 
   return (
     <Box sx={styles.container} data-testid="IntroSection">
-      <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
-        {title}
-      </Typography>
+      {typeof title === 'string' ? (
+        <Typography variant="h1" sx={styles.title} data-testid="IntroSection-title">
+          {title}
+        </Typography>
+      ) : (
+        <TipTapContent
+          data={title}
+          nodeRenderers={{
+            [TipTapNodeTypes.paragraph]: titleRenderer
+          }}
+        />
+      )}
       <Box sx={styles.photoContainer} data-testid="IntroSection-photoContainer">
         {image && (
           <ImageWithCaption
             src={image.generatedSrc}
             alt={image.alt}
-            caption={image.caption ?? ''}
+            caption={image.caption ?? {}}
             sizes={{
               width: { xs: 224, sm: 457, md: 569, lg: 718, xl: 816, xxl: 979 },
               height: { xs: 130, sm: 264, md: 300 }

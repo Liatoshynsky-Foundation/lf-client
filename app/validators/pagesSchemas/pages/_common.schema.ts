@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { translatedFieldSchema } from '~/validators/constants';
+import { translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
 
 const BaseImageSchema = z.object({
   src: z.string(),
-  alt: translatedFieldSchema,
-  caption: translatedFieldSchema.nullable()
+  alt: translatedTipTapSchema,
+  caption: translatedTipTapSchema.nullable()
 });
 
 export const ImageSchema = BaseImageSchema.transform((image) => ({
@@ -16,4 +16,9 @@ export const ImageSchema = BaseImageSchema.transform((image) => ({
 export const QuoteSchema = z.object({
   text: translatedFieldSchema,
   source: translatedFieldSchema
+});
+
+export const TipTapQuoteSchema = z.object({
+  text: translatedTipTapSchema,
+  source: translatedTipTapSchema
 });

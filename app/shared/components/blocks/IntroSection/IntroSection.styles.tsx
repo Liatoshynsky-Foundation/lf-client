@@ -16,8 +16,6 @@ export const styles = {
 
   title: {
     ...AppTypography.oswald64Semibold,
-    display: 'flex',
-    alignSelf: 'center',
     fontSize: {
       xs: '40px',
       md: '64px'

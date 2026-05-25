@@ -26,7 +26,7 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
       continue;
     }
 
-    return node.content.every((childNode) => typeof childNode.text === 'string' && childNode.text.trim() !== '');
+    return node.content.every((childNode) => typeof childNode.text === 'string' && childNode.text !== '');
   }
 
   return false;

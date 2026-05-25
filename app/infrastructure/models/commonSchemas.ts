@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 export const translatedFieldSchema = new mongoose.Schema(
   {
-    uk: { type: String, required: true },
-    en: { type: String, required: true }
+    uk: { type: mongoose.Schema.Types.Mixed, required: true },
+    en: { type: mongoose.Schema.Types.Mixed, required: true }
   },
   { _id: false }
 );

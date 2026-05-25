@@ -1,3 +1,5 @@
+import { JSONContent } from '@tiptap/react';
+
 import type { TipTapDoc } from '../types/tiptap.types';
 
 export enum ContentType {
@@ -20,8 +22,8 @@ interface ChronologyListItem {
 }
 interface BaseImage {
   src: string;
-  alt: string;
-  caption: string | null;
+  alt: JSONContent | string;
+  caption: JSONContent | string | null;
 }
 
 interface AdvancedImage extends BaseImage {

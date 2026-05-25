@@ -26,7 +26,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
         <ImageWithCaption
           src={smallImage.generatedSrc}
           alt={smallImage.alt}
-          caption={smallImage.caption ?? ''}
+          caption={smallImage.caption ?? {}}
           captionSx={styles.smallCaptionSx}
           align="left"
           sizes={{
