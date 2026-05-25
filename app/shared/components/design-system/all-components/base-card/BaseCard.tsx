@@ -3,22 +3,16 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './BaseCard.styles';
 
+import { type CropRect } from '~/lib/utils/cropUtils';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
 
 export type Variant = 'news' | 'press';
-
-export type CropRect = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
 
 export interface BaseCardProps {
   image: string;
@@ -29,30 +23,6 @@ export interface BaseCardProps {
   href: string;
   variant: Variant;
   dataTestId?: string;
-}
-
-function buildCroppedStyle(
-  crop: CropRect,
-  natW: number,
-  natH: number,
-  containerW: number,
-  containerH: number
-): React.CSSProperties {
-  const scaleX = containerW / crop.width;
-  const scaleY = containerH / crop.height;
-  const scale = Math.max(scaleX, scaleY);
-  const translateX = -(crop.x * scale) + (containerW - crop.width * scale) / 2;
-  const translateY = -(crop.y * scale) + (containerH - crop.height * scale) / 2;
-  return {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: natW,
-    height: natH,
-    maxWidth: 'none',
-    transformOrigin: '0 0',
-    transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`
-  };
 }
 
 const BUTTON_CONFIG = {
@@ -74,39 +44,7 @@ export default function BaseCard({
   const buttonConfig = BUTTON_CONFIG[variant];
   const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const [natSize, setNatSize] = useState({ w: 0, h: 0 });
-  const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
-      setContainerSize({ w: entry.contentRect.width, h: entry.contentRect.height });
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!crop) return;
-    const img = imgRef.current;
-    if (img?.complete && img.naturalWidth) {
-      setNatSize({ w: img.naturalWidth, h: img.naturalHeight });
-    }
-  }, [crop]);
-
-  const handleImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    setNatSize({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight });
-  }, []);
-
-  const croppedImgStyle = useMemo((): React.CSSProperties => {
-    if (!natSize.w || !natSize.h || !containerSize.w || !containerSize.h) {
-      return { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' };
-    }
-    return buildCroppedStyle(crop!, natSize.w, natSize.h, containerSize.w, containerSize.h);
-  }, [crop, natSize, containerSize]);
+  const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
 
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
