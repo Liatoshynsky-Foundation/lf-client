@@ -36,6 +36,7 @@ export async function POST(request: Request) {
       200
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error processing collaboration request:', error);
     return errorResponse(['An unexpected error occurred. Please try again later.'], 500);
   }

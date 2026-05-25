@@ -1,11 +1,10 @@
-'use server';
-
 import { NextRequest, NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
 import { parseLocale } from '~/lib/utils/translation/parseLocale';
+import logger from '~/middleware/logger/logger';
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,7 +21,9 @@ export async function GET(req: NextRequest) {
     ]);
 
     return NextResponse.json({ yearRange, genres, categories });
-  } catch {
-    return NextResponse.json(errors.FILTERS_FETCH_FAILED, { status: 500 });
+  } catch (error) {
+    logger.error('[API:GET:filters] Failed to fetch filters data (years, categories, or genres)', error);
+
+    return NextResponse.json({ message: errors.FILTERS_FETCH_FAILED }, { status: 500 });
   }
 }

@@ -64,18 +64,14 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
   const searchParams = useSearchParams();
 
   const activeTab = useMemo(() => {
-    const tab = searchParams.get('tab') ?? 'news';
-    return tab;
+    return searchParams.get('tab') ?? 'news';
   }, [searchParams]);
 
   const handleTabChange = useCallback(
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set('tab', value);
-
-      router.replace(`${ROUTES.NEWS}?${params.toString()}`, {
-        scroll: false
-      });
+      router.replace(`${ROUTES.NEWS}?${params.toString()}`, { scroll: false });
     },
     [router, searchParams]
   );
@@ -97,27 +93,26 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
           onTabChange={handleTabChange}
         />
       </Box>
-      {activeTab === 'news' && (
-        <>
-          {newsData.length > 0 ? (
-            <MediaList dataTestId={activeTab[0].toUpperCase()} mediaData={newsData as any} variant="news" />
-          ) : (
-            <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
-          )}
-        </>
-      )}
+
+      {activeTab === 'news' &&
+        (newsData.length > 0 ? (
+          <MediaList dataTestId={activeTab[0].toUpperCase()} mediaData={newsData} variant="news" />
+        ) : (
+          <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
+        ))}
 
       {activeTab === 'events' && events && <EventsTab eventsData={events} />}
 
-      {activeTab === 'press' && (
-        <>
-          {mediaMentionsData.length > 0 ? (
-            <MediaList dataTestId={activeTab[0].toUpperCase()} mediaData={mediaMentionsData as any} variant="press" />
-          ) : (
-            <EmptyState dataTestId="EmptyState-press" title={t('press.title')} description={t('press.description')} />
-          )}
-        </>
-      )}
+      {activeTab === 'press' &&
+        (mediaMentionsData.length > 0 ? (
+          <MediaList
+            dataTestId={activeTab[0].toUpperCase()}
+            mediaData={mediaMentionsData as newsPressCardItem[]}
+            variant="press"
+          />
+        ) : (
+          <EmptyState dataTestId="EmptyState-press" title={t('press.title')} description={t('press.description')} />
+        ))}
     </Box>
   );
 }

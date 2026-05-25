@@ -15,6 +15,7 @@ import { styles } from './layout.styles';
 import { Cookies } from '~/types/types/common.types';
 
 import { routing } from '~/i18n/routing';
+import logger from '~/middleware/logger/logger';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import Header from '~/shared/components/Header/Header.server';
@@ -47,28 +48,36 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: Loc
   const { lang } = await params;
   setRequestLocale(lang);
 
-  const t = await getTranslations('meta');
-  const brand = t('brand');
+  try {
+    const t = await getTranslations('meta');
+    const brand = t('brand');
 
-  return {
-    title: {
-      default: brand,
-      template: `%s | ${brand}`
-    },
-    openGraph: {
-      siteName: brand,
+    return {
       title: {
         default: brand,
         template: `%s | ${brand}`
+      },
+      openGraph: {
+        siteName: brand,
+        title: {
+          default: brand,
+          template: `%s | ${brand}`
+        }
+      },
+      twitter: {
+        title: {
+          default: brand,
+          template: `%s | ${brand}`
+        }
       }
-    },
-    twitter: {
-      title: {
-        default: brand,
-        template: `%s | ${brand}`
-      }
-    }
-  };
+    };
+  } catch (error) {
+    logger.error(`[RootLayout:generateMetadata] Failed to fetch translations for lang: ${lang}`, error);
+    return {
+      title: 'Liatoshynsky Foundation',
+      description: 'Liatoshynsky Foundation Official Website'
+    };
+  }
 }
 
 interface RootLayoutParams {
@@ -83,11 +92,18 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
   }
 
   const cookieList = await cookies();
+  const rawCookieConsent = cookieList.get('cookie_consent')?.value;
   let cookieConsent: Cookies | null = null;
-  try {
-    cookieConsent = JSON.parse(cookieList.get('cookie_consent')?.value ?? '') as Cookies;
-  } catch {
-    cookieConsent = null;
+  if (rawCookieConsent) {
+    try {
+      cookieConsent = JSON.parse(rawCookieConsent) as Cookies;
+    } catch (error) {
+      logger.warn('[RootLayout] Failed to parse cookie_consent JSON', {
+        error,
+        rawCookieConsent
+      });
+      cookieConsent = null;
+    }
   }
 
   return (

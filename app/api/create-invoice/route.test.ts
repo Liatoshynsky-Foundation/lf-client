@@ -89,7 +89,7 @@ describe('Create Invoice API Route (POST)', () => {
 
     await POST(mockReq as any);
 
-    expect(mockConsume).toHaveBeenCalledWith('');
+    expect(mockConsume).toHaveBeenCalledWith('unknown');
     expect(mockConsume).toHaveReturned();
   });
 
@@ -116,7 +116,7 @@ describe('Create Invoice API Route (POST)', () => {
 
     const res = await POST(mockReq as any);
 
-    expect(errorResponse).toHaveBeenCalledWith(['Invalid donation amount'], 400);
+    expect(errorResponse).toHaveBeenCalledWith(['Invalid donation amount. Must be between 1 and 1000.'], 400);
     expect(res.status).toBe(400);
   });
 

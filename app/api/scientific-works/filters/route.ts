@@ -4,6 +4,7 @@ import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
 import { parseLocale } from '~/lib/utils/translation/parseLocale';
+import logger from '~/middleware/logger/logger';
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,7 +23,15 @@ export async function GET(req: NextRequest) {
       yearRange,
       authors
     });
-  } catch {
-    return NextResponse.json(errors.FILTERS_FETCH_FAILED, { status: 500 });
+  } catch (error) {
+    logger.error('[API:GET:scientific-works:filters] Failed to fetch scientific works filters', error);
+
+    return NextResponse.json(
+      {
+        code: errors.FILTERS_FETCH_FAILED.code,
+        message: errors.FILTERS_FETCH_FAILED.message
+      },
+      { status: 500 }
+    );
   }
 }

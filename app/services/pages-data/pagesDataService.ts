@@ -1,10 +1,12 @@
 import { Locale } from 'next-intl';
+import { ZodError } from 'zod';
 
 import { PageSlug, SchemaFactory } from './schema-factory';
 import { PageDataMap } from '~/types/page/pagesBase.type';
 import { Result, WrapError, WrapSuccess } from '~/types/types/result';
 
 import { PagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repo';
+import logger from '~/middleware/logger/logger';
 
 const makeComposed = (get: PagesDataRepository['getBySlug']) => {
   return async <S extends PageSlug>(slug: S, locale: Locale): Promise<Result<PageDataMap[S]>> => {
@@ -21,10 +23,19 @@ const makeComposed = (get: PagesDataRepository['getBySlug']) => {
     try {
       return WrapSuccess(schema.parse(page));
     } catch (err) {
+      if (err instanceof ZodError) {
+        logger.error(`[PagesDataService] Schema validation failed for slug "${slug}" [${locale}]:`, err.flatten());
+
+        const issues = err.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(', ');
+        return WrapError(`Validation error on fields: ${issues}`);
+      }
+
       if (err instanceof Error) {
+        logger.error(`[PagesDataService] Unexpected error parsing slug "${slug}":`, err);
         return WrapError(err.message);
       }
-      console.error('Unknown parsing error:', err);
+
+      logger.error(`[PagesDataService] Unknown error parsing slug "${slug}":`, err);
       return WrapError('Unknown parsing error');
     }
   };

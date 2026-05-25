@@ -65,6 +65,9 @@ export async function GET() {
       return NextResponse.json(healthDetails, { status: 503 });
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('[HealthCheck:GET] Database health check failed:', e);
+
     healthDetails.dependencies.database.message = errors.FAILED_TO_CONNECT_DB;
     healthDetails.dependencies.database.details = { e };
     return NextResponse.json(healthDetails, { status: 503 });

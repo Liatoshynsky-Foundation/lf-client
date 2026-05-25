@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 
 import { emailService } from './emailService';
 
+import logger from '~/middleware/logger/logger';
+
 jest.mock('nodemailer');
 
 describe('EmailService', () => {
@@ -47,16 +49,16 @@ describe('EmailService', () => {
     });
     it('should handle sendMail error (catch block coverage)', async () => {
       mockTransporter.sendMail.mockRejectedValueOnce(new Error('SMTP error'));
-      const spyError = jest.spyOn(console, 'error').mockImplementation();
+
+      const spyError = jest.spyOn(logger, 'error').mockImplementation();
 
       const res = await emailService.sendEmail({ to: 'a@a.com', subject: 's', html: 'h' });
 
       expect(res.success).toBe(false);
-      expect(spyError).toHaveBeenCalled();
+      expect(spyError).toHaveBeenCalledWith(expect.stringContaining('Critical error'), expect.any(Error));
 
       spyError.mockRestore();
     });
-
     it('should reuse transporter if it exists (singleton coverage)', async () => {
       (emailService as any).transporter = null;
 

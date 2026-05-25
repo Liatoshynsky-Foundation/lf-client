@@ -24,8 +24,13 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json({ code, message, details: error.flatten() }, { status });
     }
+
     if (error instanceof ResponseError) {
-      return NextResponse.json({ code: error.code, message: error.message, details: error.details }, { status: 502 });
+      logger.error(`[Header:GET] External service communication error: ${error.message}`, error);
+
+      const status = 'status' in error && typeof error.status === 'number' ? error.status : 502;
+
+      return NextResponse.json({ code: error.code, message: error.message, details: error.details }, { status });
     }
 
     const { code, message, status } = errors.SERVER_ERROR;

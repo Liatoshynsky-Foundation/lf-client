@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 
 import { generateCollaborationEmail, generateContactEmail } from './emails/emails';
 
+import logger from '~/middleware/logger/logger';
 export interface EmailOptions {
   to: string;
   subject: string;
@@ -86,8 +87,7 @@ class EmailService {
         previewUrl: previewUrl || undefined
       };
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error sending email:', error);
+      logger.error('[EmailService:sendEmail] Critical error during email dispatch:', error);
       return { success: false };
     }
   }

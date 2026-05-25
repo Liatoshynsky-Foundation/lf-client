@@ -1,5 +1,6 @@
 import { BlobServiceClient, BlockBlobClient, ContainerClient } from '@azure/storage-blob';
 import { createHash } from 'node:crypto';
+import { ZodError } from 'zod';
 
 import { errors } from '~/constants/errors';
 
@@ -70,38 +71,46 @@ export const createAzureStorageService = () => {
         const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);
         return blockBlobClient.url;
       } catch (error) {
-        logger.error(errors.BLOB_DOES_NOT_EXIST, error);
+        const logMessage =
+          error instanceof ZodError ? 'Validation failed for blob path config' : errors.BLOB_DOES_NOT_EXIST;
+        logger.error(`[AzureStorage:constructBlobUrl] ${logMessage}`, error);
         throw error;
       }
     },
     streamBlob: async (url: string, rangeHeader: string | null): Promise<Response> => {
-      const azureResponse = await fetch(url, {
-        method: 'GET',
-        headers: rangeHeader ? { Range: rangeHeader } : {},
-        next: { revalidate: 0 }
-      });
+      try {
+        const azureResponse = await fetch(url, {
+          method: 'GET',
+          headers: rangeHeader ? { Range: rangeHeader } : {},
+          next: { revalidate: 0 }
+        });
 
-      if (!azureResponse.ok) {
+        if (!azureResponse.ok) {
+          logger.error(`[AzureStorage:streamBlob] Azure responded with error: ${azureResponse.status}`);
+          return new Response(azureResponse.body, {
+            status: azureResponse.status,
+            statusText: azureResponse.statusText
+          });
+        }
+
+        const headers = new Headers();
+        headers.set('Content-Type', azureResponse.headers.get('Content-Type') ?? 'application/octet-stream');
+        headers.set('Content-Length', azureResponse.headers.get('Content-Length') ?? '');
+        if (azureResponse.headers.has('Content-Range')) {
+          headers.set('Content-Range', azureResponse.headers.get('Content-Range')!);
+        }
+        headers.set('Accept-Ranges', 'bytes');
+        headers.set('Cache-Control', 'public, max-age=604800, immutable');
+
         return new Response(azureResponse.body, {
           status: azureResponse.status,
-          statusText: azureResponse.statusText
+          statusText: azureResponse.statusText,
+          headers
         });
+      } catch (error) {
+        logger.error('[AzureStorage:streamBlob] Critical network failure while streaming from Azure:', error);
+        throw error;
       }
-
-      const headers = new Headers();
-      headers.set('Content-Type', azureResponse.headers.get('Content-Type') ?? 'application/octet-stream');
-      headers.set('Content-Length', azureResponse.headers.get('Content-Length') ?? '');
-      if (azureResponse.headers.has('Content-Range')) {
-        headers.set('Content-Range', azureResponse.headers.get('Content-Range')!);
-      }
-      headers.set('Accept-Ranges', 'bytes');
-      headers.set('Cache-Control', 'public, max-age=604800, immutable');
-
-      return new Response(azureResponse.body, {
-        status: azureResponse.status,
-        statusText: azureResponse.statusText,
-        headers
-      });
     }
   };
 };

@@ -22,17 +22,24 @@ const buildBridge = (pathIndex: number, stepIndex: number): Interpolator => {
   const currentLogo = logoMatrix[stepIndex];
   const nextLogo = logoMatrix[(stepIndex + 1) % logoMatrix.length];
 
-  const startPath = currentLogo[pathIndex];
-  const endPath = nextLogo[pathIndex];
+  const startPath = currentLogo[pathIndex] || '';
+  const endPath = nextLogo[pathIndex] || '';
 
   try {
     const startShapes = splitPathString(startPath);
     const endShapes = splitPathString(endPath);
+
     return interpolateAll(startShapes, endShapes, {
       maxSegmentLength: 5,
       single: true
     });
-  } catch {
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      //we don't want to spam logger with these warnings, but it's useful to have them in dev console for debugging
+      `[WordMorpher] Flubber failed to interpolate path at index ${pathIndex} between step ${stepIndex} and next. Falled back to static path.`,
+      error
+    );
     return (_t) => startPath;
   }
 };
@@ -76,7 +83,9 @@ export const WordMorpher: FC<WordMorpherProps> = ({ onComplete, testID = 'word-m
 
   const onCompleteRef = useRef(onComplete);
 
-  useEffect(() => (onCompleteRef.current = onComplete), [onComplete]);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     let autoplayTimer: ReturnType<typeof setInterval>;

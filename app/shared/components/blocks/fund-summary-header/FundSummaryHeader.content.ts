@@ -6,42 +6,34 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
 import { ROUTES } from '~/shared/components/constants/routes';
 
-function createDescriptionText(ukText: string, enText: string) {
+function createDescriptionText(ukText: string, enText: string): unknown {
   return {
     uk: {
-      type: TipTapNodeTypes.doc as const,
+      type: TipTapNodeTypes.doc,
       content: [
         {
-          type: TipTapNodeTypes.paragraph as const,
+          type: TipTapNodeTypes.paragraph,
           content: [
             {
-              type: TipTapNodeTypes.text as const,
+              type: TipTapNodeTypes.text,
               text: ukText,
-              marks: [
-                {
-                  type: 'bold'
-                }
-              ]
-            } as any
+              marks: [{ type: 'bold' }]
+            }
           ]
         }
       ]
     },
     en: {
-      type: TipTapNodeTypes.doc as const,
+      type: TipTapNodeTypes.doc,
       content: [
         {
-          type: TipTapNodeTypes.paragraph as const,
+          type: TipTapNodeTypes.paragraph,
           content: [
             {
-              type: TipTapNodeTypes.text as const,
+              type: TipTapNodeTypes.text,
               text: enText,
-              marks: [
-                {
-                  type: 'bold'
-                }
-              ]
-            } as any
+              marks: [{ type: 'bold' }]
+            }
           ]
         }
       ]
@@ -55,7 +47,7 @@ function createFundItem(ukTitle: string, enTitle: string, ukDescription: string,
       uk: ukTitle,
       en: enTitle
     },
-    description: createDescriptionText(ukDescription, enDescription) as any
+    description: createDescriptionText(ukDescription, enDescription)
   };
 }
 
@@ -73,7 +65,7 @@ export const fundSummaryTitle: Record<Locale, string> = {
   en: 'Fund 2. Personal Documents'
 };
 
-export const fundSummaryContent: FundSummaryHeaderData = {
+export const fundSummaryContent = {
   items: [
     createFundItem('Кількість описів', 'Number of inventories', '2', '2'),
     createFundItem(
@@ -105,4 +97,4 @@ export const fundSummaryContent: FundSummaryHeaderData = {
     ),
     createFundItem('Хронологічні межі', 'Chronological boundaries', '1895-1971', '1895-1971')
   ]
-};
+} as unknown as FundSummaryHeaderData;

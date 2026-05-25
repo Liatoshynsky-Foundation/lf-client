@@ -190,8 +190,8 @@ const compositionsRepository = {
     });
 
     const opusTitles = await Opus.aggregate(opusPipeline).exec();
-
-    const allTitlesMap = new Map<string, any>();
+    type AggregatedItem = (typeof compositionTitles)[number];
+    const allTitlesMap = new Map<string, AggregatedItem>();
 
     [...compositionTitles, ...opusTitles].forEach((item) => {
       const key = item._id.toString();
