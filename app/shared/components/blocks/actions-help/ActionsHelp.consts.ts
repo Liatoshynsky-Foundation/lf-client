@@ -84,6 +84,7 @@ export async function getActionsHelpData() {
   try {
     link = await getNavigationLink(ROUTES.COOPERATION, 'cooperation');
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.warn('Could not get navigation link:', err);
   }
 

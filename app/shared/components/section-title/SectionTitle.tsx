@@ -42,7 +42,9 @@ const createTitleRenderer = (config: TitleConfig) => {
 const SectionTitle: React.FC<SectionTitleProps> = ({ icon = true, mb, title, gridColumn, sx, dataTestId }) => {
   const sizesAttribute = generateSizesAttribute(imageSizes);
   const locale = useLocale() as Locale;
-  const testIdProps = dataTestId ? { 'data-testid': `${dataTestId}-title` } : {};
+  const testIdProps = useMemo(() => {
+    return dataTestId ? { 'data-testid': `${dataTestId}-title` } : {};
+  }, [dataTestId]);
 
   const paragraphRenderer = useMemo(() => {
     return createTitleRenderer({ gridColumn, dataTestId: testIdProps });

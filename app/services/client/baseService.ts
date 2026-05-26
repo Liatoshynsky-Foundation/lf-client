@@ -27,6 +27,46 @@ const getRequestBody = (method: HttpMethod, data: unknown, isFormData: boolean):
   return isFormData ? getFormDataBody(data as FormData) : getJsonBody(data);
 };
 
+const handleHttpError = async (response: Response): Promise<never> => {
+  let errorData: ErrorResponse;
+  try {
+    const text = await response.text();
+    errorData = text
+      ? (JSON.parse(text) as ErrorResponse)
+      : { code: `HTTP_${response.status}`, message: response.statusText || 'Empty error response' };
+  } catch {
+    // eslint-disable-next-line no-console
+    console.error(`[baseService:request] Failed to parse error JSON for status ${response.status}`);
+    errorData = {
+      code: `HTTP_${response.status}`,
+      message: response.statusText || 'Failed to parse error response'
+    };
+  }
+  throw new ResponseError(errorData);
+};
+
+const handleFetchError = (error: unknown, url: string): never => {
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    throw new ResponseError(errors.REQUEST_TIMEOUT);
+  }
+  if (error instanceof ResponseError) {
+    throw error;
+  }
+  if (error instanceof TypeError) {
+    throw new ResponseError({
+      code: 'NETWORK_ERROR',
+      message: 'Network request failed. Check your internet connection.'
+    });
+  }
+  // eslint-disable-next-line no-console
+  console.error(`[baseService:request] Unexpected fetch crash on ${url}:`, error);
+
+  throw new ResponseError({
+    code: 'UNKNOWN_ERROR',
+    message: 'An unexpected error occurred.'
+  });
+};
+
 export const baseService = {
   request: async <T = unknown>({
     data,
@@ -40,9 +80,7 @@ export const baseService = {
     const timeoutId = timeout ? setTimeout(() => controller.abort(), timeout) : null;
 
     const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
-
-    const fetchHeaders: HeadersInit = isFormData ? getFormDataHeaders(headers) : getJsonHeaders(headers);
-
+    const fetchHeaders = isFormData ? getFormDataHeaders(headers) : getJsonHeaders(headers);
     const body = getRequestBody(method, data, isFormData);
 
     try {
@@ -54,24 +92,12 @@ export const baseService = {
       });
 
       if (!response.ok) {
-        const errorData = (await response.json()) as ErrorResponse;
-        throw new ResponseError(errorData);
+        await handleHttpError(response);
       }
 
-      return responseType === 'blob' ? ((await response.blob()) as T) : ((await response.json()) as T);
+      return responseType === 'blob' ? ((await response.blob()) as unknown as T) : ((await response.json()) as T);
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new ResponseError(errors.REQUEST_TIMEOUT);
-      }
-
-      if (error instanceof ResponseError) {
-        throw error;
-      }
-
-      throw new ResponseError({
-        code: 'UNKNOWN_ERROR',
-        message: 'An unexpected error occurred.'
-      });
+      return handleFetchError(error, url);
     } finally {
       if (timeoutId) clearTimeout(timeoutId);
     }

@@ -24,6 +24,18 @@ import { TitleOption } from '~/types/types/composition.types';
 
 import { normalizeSearch } from '~/lib/utils/normalizeSearch';
 
+const getOptionLabel = <T extends TitleOption>(option: T | string): string => {
+  if (typeof option === 'string') return option;
+
+  const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
+
+  if (option.kind === 'opus' && option.opusNumber) {
+    return `Op. ${option.opusNumber} — ${titleStr}`;
+  }
+
+  return titleStr;
+};
+
 interface SearchProps<T> {
   search: string;
   setSearch: (value: string) => void;
@@ -64,9 +76,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
   const handleInputChange = useCallback(
     (_: SyntheticEvent, v: string) => {
       if (v.length > 200) return;
-
       if (!opened) setOpened(true);
-
       setInputValue(v);
     },
     [opened]
@@ -75,9 +85,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
   const handleSelect = useCallback(
     (_: SyntheticEvent, v: T | null, __: AutocompleteChangeReason, ___: AutocompleteChangeDetails<T> | undefined) => {
       setValue(v);
-
-      const label = typeof v?.title === 'string' ? v.title : v?.title?.en || v?.title?.uk || '';
-
+      const label = getOptionLabel(v ?? '');
       setInputValue(label);
       setSearch(normalizeSearch(label));
       setOpened(false);
@@ -108,13 +116,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
         key={key}
         {...rest}
         disableGutters
-        sx={{
-          height: 64,
-          padding: 0,
-          display: 'flex',
-          alignItems: 'center',
-          whiteSpace: 'normal'
-        }}
+        sx={{ height: 64, padding: 0, display: 'flex', alignItems: 'center', whiteSpace: 'normal' }}
       >
         <Typography
           variant="customMedium16"
@@ -134,49 +136,37 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
     );
   }, []);
 
-  const getOptionLabel = (option: T | string) => {
-    if (typeof option === 'string') return option;
-
-    const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
-
-    if (option.kind === 'opus' && option.opusNumber) {
-      return `Op. ${option.opusNumber} — ${titleStr}`;
-    }
-
-    return titleStr;
-  };
-
   const filterOptions = useCallback((options: T[], { inputValue }: { inputValue: string }) => {
     const trimmedInput = inputValue.trim().toLowerCase();
     if (!trimmedInput) return options;
 
     const words = trimmedInput.split(/\s+/).filter(Boolean);
 
-    const filtered = options.filter((option) => {
-      const label = getOptionLabel(option).toLowerCase();
-      return words.every((word) => label.includes(word));
-    });
+    return options
+      .filter((option) => {
+        const label = getOptionLabel(option).toLowerCase();
+        return words.every((word) => label.includes(word));
+      })
+      .sort((a, b) => {
+        const aLabel = getOptionLabel(a).toLowerCase();
+        const bLabel = getOptionLabel(b).toLowerCase();
 
-    return filtered.sort((a, b) => {
-      const aLabel = getOptionLabel(a).toLowerCase();
-      const bLabel = getOptionLabel(b).toLowerCase();
+        if (aLabel === trimmedInput) return -1;
+        if (bLabel === trimmedInput) return 1;
 
-      if (aLabel === trimmedInput) return -1;
-      if (bLabel === trimmedInput) return 1;
+        if (aLabel.startsWith(trimmedInput) && !bLabel.startsWith(trimmedInput)) return -1;
+        if (!aLabel.startsWith(trimmedInput) && bLabel.startsWith(trimmedInput)) return 1;
 
-      if (aLabel.startsWith(trimmedInput) && !bLabel.startsWith(trimmedInput)) return -1;
-      if (!aLabel.startsWith(trimmedInput) && bLabel.startsWith(trimmedInput)) return 1;
+        const aIndex = aLabel.indexOf(trimmedInput);
+        const bIndex = bLabel.indexOf(trimmedInput);
 
-      const aIndex = aLabel.indexOf(trimmedInput);
-      const bIndex = bLabel.indexOf(trimmedInput);
+        if (aIndex !== bIndex) return aIndex - bIndex;
 
-      if (aIndex !== bIndex) return aIndex - bIndex;
-
-      return aLabel.localeCompare(bLabel, ['uk', 'en'], {
-        sensitivity: 'base',
-        numeric: true
+        return aLabel.localeCompare(bLabel, ['uk', 'en'], {
+          sensitivity: 'base',
+          numeric: true
+        });
       });
-    });
   }, []);
 
   return (

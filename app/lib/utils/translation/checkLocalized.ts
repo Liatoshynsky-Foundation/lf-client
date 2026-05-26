@@ -4,12 +4,14 @@ type Localized = {
 };
 
 export function isLocalized(value: unknown): value is Localized {
+  const v = value as Record<string, unknown>;
+
   return (
     typeof value === 'object' &&
     value !== null &&
-    'en' in value &&
-    'uk' in value &&
-    typeof (value as any).en === 'string' &&
-    typeof (value as any).uk === 'string'
+    'en' in v &&
+    'uk' in v &&
+    typeof v.en === 'string' &&
+    typeof v.uk === 'string'
   );
 }

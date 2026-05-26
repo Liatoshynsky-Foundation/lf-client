@@ -83,7 +83,7 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (globalThis.window !== undefined && !globalThis.window.Wayforpay) {
+    if (typeof globalThis !== 'undefined' && (globalThis as { Wayforpay?: unknown }).Wayforpay && document.body) {
       const script = document.createElement('script');
       script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
       document.body.appendChild(script);
@@ -111,16 +111,23 @@ function DonationForm() {
 
   useEffect(() => {
     const donateIfReady = async () => {
+      if (!selectedAmount || !captchaToken) return;
+
+      const amountToProcess = selectedAmount;
+      const tokenToProcess = captchaToken;
+
+      setSelectedAmount(null);
+      setCaptchaToken(null);
+
       try {
-        if (!selectedAmount || !captchaToken) return;
-        await donate({ amount: selectedAmount, captchaToken });
-        setSelectedAmount(null);
-        setCaptchaToken(null);
-      } catch {
-        setSelectedAmount(null);
+        await donate({ amount: amountToProcess, captchaToken: tokenToProcess });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('[UI:DonationForm] Donation process failed:', error);
         setShowCaptcha(false);
       }
     };
+
     donateIfReady();
   }, [selectedAmount, captchaToken, donate]);
 
@@ -145,6 +152,7 @@ function DonationForm() {
       </Typography>
     </Button>
   ));
+
   const currencyItems = currencies.map((c) => (
     <MenuItem key={c} value={c}>
       <Typography variant="body1">{c.toUpperCase()}</Typography>

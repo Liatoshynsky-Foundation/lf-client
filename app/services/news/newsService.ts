@@ -1,6 +1,9 @@
 import { Locale } from 'next-intl';
 
+import { loggerErrors } from '~/constants/errors';
+
 import type { NewsRepository } from '~/infrastructure/repositories/news/news.repo';
+import logger from '~/middleware/logger/logger';
 import { ArraySchema } from '~/validators/constants';
 import { LocalizeSchema } from '~/validators/localization';
 import { newsListItemSchema, newsSchema } from '~/validators/news.schema';
@@ -19,16 +22,29 @@ export const createNewsService = ({ newsRepository }: NewsServiceDeps) => ({
       }
 
       return ArraySchema(LocalizeSchema(newsListItemSchema, locale)).parse(news);
-    } catch {
-      return [];
+    } catch (error) {
+      logger.error(
+        `[SERVICE:News:getAllPublishedNews] Failed to fetch or parse news. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
+        error
+      );
+      return []; //ONLY AS FALLBACK
     }
   },
 
   async getNewsBySlug(slug: string, locale: Locale) {
-    const news = await newsRepository.getNewsBySlug(slug);
-    if (!news) return null;
+    try {
+      const news = await newsRepository.getNewsBySlug(slug);
+      if (!news) return null;
 
-    return LocalizeSchema(newsSchema, locale).parse(news);
+      return LocalizeSchema(newsSchema, locale).parse(news);
+    } catch (error) {
+      logger.error(
+        `[SERVICE:News:getNewsBySlug] Failed to fetch or parse news by slug: ${slug}. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
+        error
+      );
+
+      return null; // same here
+    }
   }
 });
 

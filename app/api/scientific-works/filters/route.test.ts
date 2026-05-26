@@ -57,9 +57,11 @@ describe('Scientific Works Filters API', () => {
 
     const res = await GET(req);
 
-    expect(res.status).toBe(500);
-
     const data = await res.json();
-    expect(data).toEqual(errors.FILTERS_FETCH_FAILED);
+    expect(data).toEqual({
+      code: errors.FILTERS_FETCH_FAILED.code,
+      message: errors.FILTERS_FETCH_FAILED.message
+    });
+    expect(res.status).toBe(500);
   });
 });

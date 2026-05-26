@@ -1,6 +1,30 @@
-import * as util from 'util';
+jest.mock('~/middleware/logger/logger', () => ({
+  __esModule: true,
+  default: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn()
+  },
+  logger: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn()
+  }
+}));
 
-// 1. Мокаем зависимости
+jest.mock('mongodb', () => ({
+  MongoClient: jest.fn().mockImplementation(() => ({
+    connect: jest.fn(),
+    db: jest.fn().mockReturnValue({
+      collection: jest.fn().mockReturnValue({
+        find: jest.fn(),
+        findOne: jest.fn()
+      })
+    })
+  })),
+  ObjectId: jest.fn().mockImplementation((id) => id)
+}));
+import * as util from 'util';
 const mockFundsService = {
   getFunds: jest.fn(),
   getFundById: jest.fn(),

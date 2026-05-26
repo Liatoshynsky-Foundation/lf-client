@@ -16,6 +16,22 @@ jest.mock('swiper/modules', () => ({
   Autoplay: (_props: any) => null
 }));
 
+jest.mock('~/middleware/logger/logger', () => ({
+  __esModule: true,
+  default: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    warning: jest.fn()
+  },
+  logger: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    warning: jest.fn()
+  }
+}));
+
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: () => false
 }));

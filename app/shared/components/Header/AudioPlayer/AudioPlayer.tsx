@@ -32,7 +32,7 @@ export default function AudioPlayer() {
   const animationRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
-  const dataArrayRef = useRef<Uint8Array | null>(null);
+  const dataArrayRef = useRef<Uint8Array<ArrayBuffer> | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   const setupAudioAnalyzer = useCallback(() => {
@@ -55,7 +55,7 @@ export default function AudioPlayer() {
       analyser.connect(audioContext.destination);
     }
 
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const dataArray = new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount));
 
     audioContextRef.current = audioContext;
     analyserRef.current = analyser;
@@ -135,10 +135,15 @@ export default function AudioPlayer() {
         if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
           setupAudioAnalyzer();
         }
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
         animateBars();
         setError(null);
-      } catch {
+      } catch (err) {
         setError('Playback failed');
+        // eslint-disable-next-line no-console
+        console.error('[UI:AudioPlayer] Playback invocation failed:', err);
       }
     };
 
@@ -152,6 +157,13 @@ export default function AudioPlayer() {
         animationRef.current = null;
       }
     }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
   }, [isPlaying, src, setupAudioAnalyzer, animateBars]);
 
   const handlePopoverToggle = useCallback(() => {

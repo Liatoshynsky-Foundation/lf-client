@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { tableClientService } from '~/services/client/tableService';
 import type { TableParams } from '~/shared/hooks/use-table-filters/useTableFilters';
@@ -22,20 +22,6 @@ type UseFilterAutocompleteConfig<P extends TableParams, O> = {
  *
  * Calls `tableClientService.getTableStaticData(endpoint, locale, params)` and returns `{ options, loading }`.
  * On error, `options` becomes `[]`.
- *
- * @example
- * ```ts
- * type TitlesResponse = { titles: string[] };
- *
- * const params = useMemo(() => ({ search, author }), [search, author]);
- * const selectTitles = useCallback((json: unknown) => (json as TitlesResponse).titles, []);
- *
- * const { options, loading } = useFilterAutocomplete<typeof params, string>({
- *   endpoint: ApiRoutes.SCIENTIFIC_WORKS_TITLES,
- *   params,
- *   select: selectTitles
- * });
- * ```
  */
 export function useFilterAutocomplete<P extends TableParams, O>({
   endpoint,
@@ -48,6 +34,13 @@ export function useFilterAutocomplete<P extends TableParams, O>({
   const [options, setOptions] = useState<O[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const selectRef = useRef(select);
+  useEffect(() => {
+    selectRef.current = select;
+  }, [select]);
+
+  const serializedParams = JSON.stringify(params);
+
   useEffect(() => {
     if (!enabled) return;
 
@@ -56,11 +49,15 @@ export function useFilterAutocomplete<P extends TableParams, O>({
     const fetchOptions = async () => {
       setLoading(true);
       try {
-        const json = await tableClientService.getTableStaticData<unknown>(endpoint, locale, params);
-        const nextOptions = select ? select(json) : (json as O[]);
+        const currentParams = JSON.parse(serializedParams) as P;
+        const json = await tableClientService.getTableStaticData<unknown>(endpoint, locale, currentParams);
+
+        const nextOptions = selectRef.current ? selectRef.current(json) : (json as O[]);
 
         if (!isCancelled) setOptions(nextOptions);
-      } catch {
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`[useFilterAutocomplete] Fetching failed for endpoint: ${endpoint}`, error);
         if (!isCancelled) setOptions([]);
       } finally {
         if (!isCancelled) setLoading(false);
@@ -72,7 +69,7 @@ export function useFilterAutocomplete<P extends TableParams, O>({
     return () => {
       isCancelled = true;
     };
-  }, [endpoint, locale, enabled, select, params]);
+  }, [endpoint, locale, enabled, serializedParams]);
 
   return { options, loading };
 }

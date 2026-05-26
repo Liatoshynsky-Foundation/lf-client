@@ -2,7 +2,7 @@
 
 import { Box, Link, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import TooltipCustom from '~/ds-components/tooltip/Tooltip';
@@ -52,11 +52,22 @@ function CopyLink({
     try {
       await navigator.clipboard.writeText(String(value));
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), delay);
-    } catch {
+    } catch (error) {
       setIsCopied(false);
+      // eslint-disable-next-line no-console
+      console.error('[UI:CopyLink] Failed to copy value to clipboard:', error);
     }
   };
+
+  useEffect(() => {
+    if (!isCopied) return;
+
+    const timer = setTimeout(() => {
+      setIsCopied(false);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [isCopied, delay]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -64,6 +75,7 @@ function CopyLink({
       handleCopy();
     }
   };
+
   const variant = size === 'small' || size === 'medium' ? 'customSemiBold16' : 'customSemiBold20';
   const copyIconSize = iconSizes[size];
   const copyLinkStyles = getCopyLinkStyles(type);

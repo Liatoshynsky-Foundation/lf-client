@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
+import logger from '~/middleware/logger/logger';
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,6 +18,7 @@ export async function GET(req: NextRequest) {
       title: string | Record<string, string>;
       [key: string]: unknown;
     };
+
     if (!fundId && !caseId) {
       const funds = await fundsService.getFunds();
       const translatedFunds = funds.map((fund: FundData) => ({
@@ -49,14 +51,18 @@ export async function GET(req: NextRequest) {
       if (!fund) {
         return NextResponse.json({ success: false, error: errors.NOT_FOUND }, { status: 404 });
       }
+
       const translatedFund = {
         ...fund,
         number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
         title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
       };
+
       return NextResponse.json({ success: true, data: translatedFund });
     }
-  } catch {
+  } catch (error) {
+    logger.error('[API:GET:funds] Critical error while fetching funds/cases data', error);
+
     return NextResponse.json({ success: false, error: errors.FUNDS_FETCH_FAILED }, { status: 500 });
   }
 }

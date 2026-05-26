@@ -39,8 +39,10 @@ export const CopyButton = <T extends HTMLElement = HTMLElement>({
     try {
       await navigator.clipboard.writeText(targetRef.current.textContent);
       setIsCopied(true);
-    } catch {
+    } catch (error) {
       setIsCopied(false);
+      // eslint-disable-next-line no-console
+      console.error('[UI:CopyButton] Failed to copy text to clipboard:', error);
     }
   };
 
