@@ -25,6 +25,12 @@ interface EventsTabProps {
   tabSx?: object;
 }
 
+const getEventTimestamp = (endDate?: string | null, startDate?: string | null) => {
+  if (endDate) return new Date(endDate).getTime();
+  if (startDate) return new Date(startDate).getTime();
+  return 0;
+};
+
 const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const locale = useLocale();
   const t = useTranslations('common');
@@ -32,30 +38,14 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const breakpoint = useBreakpoints();
 
   const events = useMemo(() => {
-    const nowTime = new Date().getTime();
+    const nowTime = Date.now();
 
     const upcomingEvents = eventsData
-      .filter((e) => {
-        const dateToCheck = e.eventDateTimeEnd
-          ? new Date(e.eventDateTimeEnd).getTime()
-          : e.eventDateTimeStart
-            ? new Date(e.eventDateTimeStart).getTime()
-            : 0;
-
-        return dateToCheck >= nowTime;
-      })
+      .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) >= nowTime)
       .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
 
     const completedEvents = eventsData
-      .filter((e) => {
-        const dateToCheck = e.eventDateTimeEnd
-          ? new Date(e.eventDateTimeEnd).getTime()
-          : e.eventDateTimeStart
-            ? new Date(e.eventDateTimeStart).getTime()
-            : 0;
-
-        return dateToCheck < nowTime;
-      })
+      .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) < nowTime)
       .sort((a, b) => {
         const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
         const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
@@ -102,14 +92,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   return (
     <Box ref={tabRef} sx={{ ...styles.container, ...tabSx }} data-testid="EventsTab">
       {paginatedData.map((event) => {
-        const isCompleted = (() => {
-          const dateToCheck = event.eventDateTimeEnd
-            ? new Date(event.eventDateTimeEnd).getTime()
-            : event.eventDateTimeStart
-              ? new Date(event.eventDateTimeStart).getTime()
-              : 0;
-          return dateToCheck < new Date().getTime();
-        })();
+        const isCompleted = getEventTimestamp(event.eventDateTimeEnd, event.eventDateTimeStart) < Date.now();
 
         const cardActions = [{ label: 'Переглянути', href: `/news/${event.slug}` }];
 

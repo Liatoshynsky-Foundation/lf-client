@@ -9,10 +9,14 @@ jest.mock('next/image', () => ({
   default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="next-image" />
 }));
 
+const observeMock = jest.fn();
+const unobserveMock = jest.fn();
+const disconnectMock = jest.fn();
+
 globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn()
+  observe: observeMock,
+  unobserve: unobserveMock,
+  disconnect: disconnectMock
 }));
 
 jest.mock('next-intl', () => ({
@@ -208,12 +212,13 @@ describe('EventItem', () => {
   });
 
   describe('Crop functionality', () => {
+    beforeEach(() => {
+      observeMock.mockClear();
+      unobserveMock.mockClear();
+      disconnectMock.mockClear();
+    });
+
     afterEach(() => {
-      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
-        observe: jest.fn(),
-        unobserve: jest.fn(),
-        disconnect: jest.fn()
-      }));
       Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 0 });
       Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 0 });
     });
@@ -239,14 +244,10 @@ describe('EventItem', () => {
     });
 
     it('should disconnect ResizeObserver on unmount', () => {
-      const disconnectMock = jest.fn();
-      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
-        observe: jest.fn(),
-        unobserve: jest.fn(),
-        disconnect: disconnectMock
-      }));
+      const crop = { x: 10, y: 10, width: 100, height: 100 };
+      const propsWithCrop = { ...baseProps, image: { ...baseProps.image, crop } };
 
-      const { unmount } = render(<EventItem {...baseProps} />);
+      const { unmount } = render(<EventItem {...propsWithCrop} />);
       unmount();
 
       expect(disconnectMock).toHaveBeenCalled();
@@ -277,6 +278,12 @@ describe('EventItem', () => {
 
       expect(img.style.transform).toContain('translate');
       expect(img.style.transform).toContain('scale');
+
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: observeMock,
+        unobserve: unobserveMock,
+        disconnect: disconnectMock
+      }));
     });
   });
 });

@@ -1,5 +1,7 @@
 import { Locale } from 'next-intl';
 
+import { loggerErrors } from '~/constants/errors';
+
 import eventsRepositoryObj from '~/infrastructure/repositories/events/events.repository';
 import logger from '~/middleware/logger/logger';
 import { ArraySchema } from '~/validators/constants';
@@ -21,7 +23,10 @@ export const createEventsService = ({ eventsRepository }: EventsServiceDeps) => 
 
       return ArraySchema(LocalizeSchema(eventListItemSchema, locale)).parse(events);
     } catch (error) {
-      logger.error('Failed to get published events', { error });
+      logger.error(
+        `[SERVICE:Events:getAllPublishedEvents] Failed to fetch or parse events. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
+        error
+      );
       return [];
     }
   },
@@ -33,7 +38,10 @@ export const createEventsService = ({ eventsRepository }: EventsServiceDeps) => 
 
       return LocalizeSchema(eventSchema, locale).parse(event);
     } catch (error) {
-      logger.error('Failed to get or parse event by slug (${slug}):', { error });
+      logger.error(
+        `[SERVICE:Events:getEventBySlug] Failed to fetch or parse event by slug: ${slug}. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
+        error
+      );
       return null;
     }
   }
