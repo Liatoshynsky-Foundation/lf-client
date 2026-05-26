@@ -88,9 +88,11 @@ export const WordMorpher: FC<WordMorpherProps> = ({ onComplete, testID = 'word-m
   }, [onComplete]);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
     let autoplayTimer: ReturnType<typeof setInterval>;
 
     const handleAnimationComplete = () => {
+      document.body.style.overflow = '';
       clearInterval(autoplayTimer);
       setTimeout(() => {
         onCompleteRef.current?.();
