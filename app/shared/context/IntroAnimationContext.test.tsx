@@ -6,7 +6,7 @@ import { IntroAnimationProvider, useIntroAnimation } from './IntroAnimationConte
 const mockGetItem = jest.fn();
 const mockSetItem = jest.fn();
 
-Object.defineProperty(window, 'sessionStorage', {
+Object.defineProperty(globalThis, 'sessionStorage', {
   value: {
     getItem: mockGetItem,
     setItem: mockSetItem

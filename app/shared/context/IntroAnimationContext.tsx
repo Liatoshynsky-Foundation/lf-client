@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 interface IntroAnimationContextType {
   hasSeenIntro: boolean;
@@ -22,16 +22,21 @@ export const IntroAnimationProvider = ({ children }: { children: React.ReactNode
     setIsInitialized(true);
   }, []);
 
-  const markIntroAsSeen = () => {
+  const markIntroAsSeen = useCallback(() => {
     setHasSeenIntro(true);
     sessionStorage.setItem('hasSeenIntro', 'true');
-  };
+  }, []);
 
-  return (
-    <IntroAnimationContext.Provider value={{ hasSeenIntro, markIntroAsSeen, isInitialized }}>
-      {children}
-    </IntroAnimationContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      hasSeenIntro,
+      markIntroAsSeen,
+      isInitialized
+    }),
+    [hasSeenIntro, markIntroAsSeen, isInitialized]
   );
+
+  return <IntroAnimationContext.Provider value={contextValue}>{children}</IntroAnimationContext.Provider>;
 };
 
 export const useIntroAnimation = () => {
