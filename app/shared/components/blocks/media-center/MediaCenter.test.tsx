@@ -6,6 +6,8 @@ import MediaCenter from './MediaCenter';
 
 let searchParamsValue = new URLSearchParams('');
 
+type MediaCenterProps = React.ComponentProps<typeof MediaCenter>;
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     replace: jest.fn((url: string) => {
@@ -14,6 +16,11 @@ jest.mock('next/navigation', () => ({
     })
   }),
   useSearchParams: () => searchParamsValue
+}));
+
+jest.mock('next-intl', () => ({
+  useLocale: () => 'uk',
+  useTranslations: () => (key: string) => key
 }));
 
 jest.mock('~/shared/components/design-system/all-components/media-list/MediaList', () => {
@@ -40,6 +47,12 @@ jest.mock('~/ds-components/tabs/Tabs', () => ({
   )
 }));
 
+globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn()
+}));
+
 describe('MediaCenter Component Full Coverage', () => {
   beforeEach(() => {
     searchParamsValue = new URLSearchParams('');
@@ -47,21 +60,35 @@ describe('MediaCenter Component Full Coverage', () => {
   });
 
   it('should render news list by default using real constants', () => {
-    render(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />);
+    render(
+      <MediaCenter
+        newsData={mediaData.mockNewsList as unknown as MediaCenterProps['newsData']}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={[]}
+      />
+    );
 
     expect(screen.getByTestId('media-list-news')).toBeInTheDocument();
   });
 
   it('should switch to "press" tab and render press list', async () => {
     const { rerender } = render(
-      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+      <MediaCenter
+        newsData={mediaData.mockNewsList as unknown as MediaCenterProps['newsData']}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={[]}
+      />
     );
 
     const pressTab = screen.getByText(/Ми у ЗМІ/i);
     fireEvent.click(pressTab);
 
     rerender(
-      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+      <MediaCenter
+        newsData={mediaData.mockNewsList as unknown as MediaCenterProps['newsData']}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={[]}
+      />
     );
 
     await waitFor(() => {
@@ -71,7 +98,11 @@ describe('MediaCenter Component Full Coverage', () => {
 
   it('should switch to "events" tab and trigger events loading (useEffect coverage)', async () => {
     const { rerender } = render(
-      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+      <MediaCenter
+        newsData={mediaData.mockNewsList as unknown as MediaCenterProps['newsData']}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={[]}
+      />
     );
 
     const eventsTab = screen.getByText(/Події/i);
@@ -80,7 +111,11 @@ describe('MediaCenter Component Full Coverage', () => {
     searchParamsValue = new URLSearchParams('tab=events');
 
     rerender(
-      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={mediaData.mockPressList as any} />
+      <MediaCenter
+        newsData={mediaData.mockNewsList as unknown as MediaCenterProps['newsData']}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={mediaData.mockEventsList as unknown as MediaCenterProps['eventsData']}
+      />
     );
 
     await waitFor(() => {
@@ -91,17 +126,25 @@ describe('MediaCenter Component Full Coverage', () => {
   });
 
   it('should show empty state when news data is empty', () => {
-    render(<MediaCenter newsData={[]} mediaMentionsData={mediaData.mockPressList as any} />);
+    render(
+      <MediaCenter
+        newsData={[]}
+        mediaMentionsData={mediaData.mockPressList as unknown as MediaCenterProps['mediaMentionsData']}
+        eventsData={[]}
+      />
+    );
     expect(screen.getByTestId('EmptyState-news')).toBeInTheDocument();
   });
 
   it('should show empty state when media mentions data is empty', async () => {
-    const { rerender } = render(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} />);
+    const { rerender } = render(
+      <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} eventsData={[]} />
+    );
 
     const pressTab = screen.getByText(/Ми у ЗМІ/i);
     fireEvent.click(pressTab);
 
-    rerender(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} />);
+    rerender(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} eventsData={[]} />);
 
     await waitFor(() => {
       expect(screen.getByTestId('EmptyState-press')).toBeInTheDocument();

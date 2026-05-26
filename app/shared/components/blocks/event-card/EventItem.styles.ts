@@ -40,10 +40,10 @@ export const styles: Record<string, SxProps<Theme>> = {
       lg: 'row'
     },
     alignItems: 'stretch',
-    justifySelf: 'end',
+    justifySelf: 'start',
     justifyContent: {
       xs: 'space-between',
-      lg: 'flex-end'
+      lg: 'space-between'
     },
     gap: {
       xs: '8px',
@@ -72,6 +72,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   dateRange: {
+    whiteSpace: 'nowrap',
     fontFamily: 'var(--font-oswald)',
     fontWeight: 600,
     fontSize: {
@@ -105,7 +106,8 @@ export const styles: Record<string, SxProps<Theme>> = {
       md: '28px'
     },
     lineHeight: '135%',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    color: mainHexPallete.brown[500]
   },
 
   imageWrapper: {
@@ -146,12 +148,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       lg: '214px'
     },
     overflow: 'hidden',
-    transform: 'skewY(-2deg)',
-    transformOrigin: 'center',
     flexShrink: 0,
     ml: {
       lg: 'auto'
-    }
+    },
+    clipPath: 'polygon(0% 5.5%, 100% 0%, 100% 94.5%, 0% 100%)'
   },
 
   content: {

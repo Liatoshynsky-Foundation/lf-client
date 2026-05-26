@@ -3,19 +3,19 @@
 import { Box } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { z } from 'zod';
 
 import { CustomTabs } from '~/ds-components/tabs/Tabs';
 
 import { ROUTES } from '../../constants/routes';
 import EventsTab from '../../events-tab/EventsTab';
-import { EventItemFixture, MOCK_EVENT_ITEMS } from '../event-card/EventItem.fixture';
 import { styles } from './MediaCenter.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import MediaList from '~/shared/components/design-system/all-components/media-list/MediaList';
+import { eventListItemSchema } from '~/validators/events.schema';
 import { Localize } from '~/validators/localization';
 import { mediaMentionListItemSchema } from '~/validators/mediaMention.schema';
 import { newsListItemSchema } from '~/validators/news.schema';
@@ -51,15 +51,16 @@ export type newsPressCardItem = {
 
 type LocalizedNewsItem = Localize<z.infer<typeof newsListItemSchema>>;
 type MediaMentionItem = z.infer<typeof mediaMentionListItemSchema>;
+type EventItem = Localize<z.infer<typeof eventListItemSchema>>;
 
 interface MediaCenterProps {
   readonly newsData: LocalizedNewsItem[];
   readonly mediaMentionsData: MediaMentionItem[];
+  readonly eventsData: EventItem[];
 }
 
-function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>) {
+function MediaCenter({ newsData, mediaMentionsData, eventsData }: Readonly<MediaCenterProps>) {
   const t = useTranslations('media.emptyState');
-  const [events, setEvents] = useState<EventItemFixture[] | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -75,12 +76,6 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
     },
     [router, searchParams]
   );
-
-  useEffect(() => {
-    if (activeTab === 'events' && !events) {
-      setEvents(MOCK_EVENT_ITEMS);
-    }
-  }, [activeTab, events]);
 
   return (
     <Box data-testid="MediaCenter" sx={styles.mediaContainer}>
@@ -101,7 +96,19 @@ function MediaCenter({ newsData, mediaMentionsData }: Readonly<MediaCenterProps>
           <EmptyState dataTestId="EmptyState-news" title={t('news.title')} description={t('news.description')} />
         ))}
 
-      {activeTab === 'events' && events && <EventsTab eventsData={events} />}
+      {activeTab === 'events' && (
+        <>
+          {eventsData?.length > 0 ? (
+            <EventsTab eventsData={eventsData} />
+          ) : (
+            <EmptyState
+              dataTestId="EmptyState-events"
+              title={t('events.title')}
+              description={t('events.description')}
+            />
+          )}
+        </>
+      )}
 
       {activeTab === 'press' &&
         (mediaMentionsData.length > 0 ? (

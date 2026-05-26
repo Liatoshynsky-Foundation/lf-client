@@ -38,16 +38,18 @@ const News = async ({ params }: Readonly<Language>) => {
   }
 
   const container = createRequestContainer();
+  const eventsService = container.resolve('eventsService');
   const newsService = container.resolve('newsService');
   const mediaMentionService = container.resolve('mediaMentionService');
 
   const newsData = await newsService.getAllPublishedNews(locale);
+  const eventsData = await eventsService.getAllPublishedEvents(locale);
   const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions();
 
   return (
     <MainLayout withLines>
       <MediaIntroSection />
-      <MediaCenter newsData={newsData} mediaMentionsData={mediaMentionsData} />
+      <MediaCenter eventsData={eventsData} newsData={newsData} mediaMentionsData={mediaMentionsData} />
     </MainLayout>
   );
 };

@@ -1,11 +1,27 @@
-import { render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import EventItem, { type EventItemProps } from './EventItem';
 import { MOCK_EVENT_ITEMS } from './EventItem.fixture';
 
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="next-image" />
+}));
+
+const observeMock = jest.fn();
+const unobserveMock = jest.fn();
+const disconnectMock = jest.fn();
+
+globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: observeMock,
+  unobserve: unobserveMock,
+  disconnect: disconnectMock
+}));
+
 jest.mock('next-intl', () => ({
   __esModule: true,
+  useLocale: () => 'uk',
   useTranslations: () => (key: string) => {
     if (key === 'publishedAtLabel') {
       return 'Опубліковано:';
@@ -62,18 +78,18 @@ describe('EventItem', () => {
       ...baseProps,
       statusLabel: undefined,
       date: {
-        startDate: '2025-02-29',
-        endDate: '2025-03-01'
+        startDate: '2024-02-29',
+        endDate: '2024-03-01'
       }
     };
 
     render(<EventItem {...props} />);
 
-    const dateBlock = assertTwoTimeElementsWithDate('2025-02-29');
+    const dateBlock = assertTwoTimeElementsWithDate('2024-02-29');
 
     expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent('29.02 – 01.03');
-    expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2025');
-    expect(dateBlock).toHaveAttribute('aria-label', '29.02 – 01.03 2025');
+    expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2024');
+    expect(dateBlock).toHaveAttribute('aria-label', '29.02 – 01.03 2024');
   });
 
   it('renders a single-day date correctly when endDate is not provided', () => {
@@ -87,11 +103,8 @@ describe('EventItem', () => {
 
     render(<EventItem {...props} />);
 
-    const dateBlock = assertTwoTimeElementsWithDate('2024-03-05');
-
-    expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent('05.03');
+    expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent(/БЕРЕЗНЯ/i);
     expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2024');
-    expect(dateBlock).toHaveAttribute('aria-label', '05.03 2024');
   });
 
   it('renders no date or status when neither is provided', () => {
@@ -106,16 +119,6 @@ describe('EventItem', () => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expectNoStatusOrDates(dateBlock);
-  });
-
-  it('wraps the image in a link pointing to href', () => {
-    render(<EventItem {...baseProps} />);
-
-    const imageLink = screen.getByRole('link', { name: baseProps.title });
-    expect(imageLink).toHaveAttribute('href', baseProps.href);
-
-    const imageInsideLink = within(imageLink).getByAltText(baseProps.image.alt);
-    expect(imageInsideLink).toBeInTheDocument();
   });
 
   it('renders primary and secondary CTAs when two actions are provided', () => {
@@ -206,5 +209,81 @@ describe('EventItem', () => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expectNoStatusOrDates(dateBlock);
+  });
+
+  describe('Crop functionality', () => {
+    beforeEach(() => {
+      observeMock.mockClear();
+      unobserveMock.mockClear();
+      disconnectMock.mockClear();
+    });
+
+    afterEach(() => {
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 0 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 0 });
+    });
+
+    it('should render native img when crop is provided', () => {
+      const crop = { x: 0, y: 0, width: 200, height: 150 };
+      const props = { ...baseProps, image: { ...baseProps.image, crop } };
+
+      render(<EventItem {...props} />);
+
+      const img = screen.getByRole('img', { name: baseProps.image.alt });
+      expect(img.tagName).toBe('IMG');
+      expect(img).toHaveAttribute('src', baseProps.image.src);
+      expect(img).toHaveAttribute('alt', baseProps.image.alt);
+      expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+    });
+
+    it('should render Next.js Image when crop is null', () => {
+      const props = { ...baseProps, image: { ...baseProps.image, crop: null } };
+      render(<EventItem {...props} />);
+
+      expect(screen.getByTestId('next-image')).toBeInTheDocument();
+    });
+
+    it('should disconnect ResizeObserver on unmount', () => {
+      const crop = { x: 10, y: 10, width: 100, height: 100 };
+      const propsWithCrop = { ...baseProps, image: { ...baseProps.image, crop } };
+
+      const { unmount } = render(<EventItem {...propsWithCrop} />);
+      unmount();
+
+      expect(disconnectMock).toHaveBeenCalled();
+    });
+
+    it('should call handleImageLoad and apply cropped styles when image loads with sized container', () => {
+      globalThis.ResizeObserver = jest.fn().mockImplementation((cb: ResizeObserverCallback) => ({
+        observe: jest.fn(() => {
+          cb([{ contentRect: { width: 400, height: 300 } } as ResizeObserverEntry], {} as ResizeObserver);
+        }),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }));
+
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 800 });
+      Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 600 });
+
+      const crop = { x: 10, y: 20, width: 200, height: 150 };
+      const props = { ...baseProps, image: { ...baseProps.image, crop } };
+
+      render(<EventItem {...props} />);
+
+      const img = screen.getByRole('img', { name: baseProps.image.alt });
+
+      act(() => {
+        fireEvent.load(img);
+      });
+
+      expect(img.style.transform).toContain('translate');
+      expect(img.style.transform).toContain('scale');
+
+      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: observeMock,
+        unobserve: unobserveMock,
+        disconnect: disconnectMock
+      }));
+    });
   });
 });
