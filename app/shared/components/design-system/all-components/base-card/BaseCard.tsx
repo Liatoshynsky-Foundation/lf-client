@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
@@ -25,6 +26,19 @@ export interface BaseCardProps {
   dataTestId?: string;
 }
 
+const FALLBACK_IMAGE = '/images/media-card-placeholder.png';
+
+const isValidUrl = (url: string | null | undefined): url is string => {
+  if (!url) return false;
+  if (url.startsWith('/')) return true;
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const BUTTON_CONFIG = {
   news: { showIcon: false },
   press: { showIcon: true }
@@ -45,14 +59,35 @@ export default function BaseCard({
   const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
 
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
+  const initialSrc = isValidUrl(image) ? image : FALLBACK_IMAGE;
+  const [imageSrc, setImageSrc] = useState<string>(initialSrc);
+
+  useEffect(() => {
+    setImageSrc(isValidUrl(image) ? image : FALLBACK_IMAGE);
+  }, [image]);
 
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
       <Box ref={containerRef} sx={styles.imageContainer} data-testid={`${dataTestId}-imageContainer`}>
         {crop ? (
-          <img ref={imgRef} src={image} alt={title} loading="lazy" onLoad={handleImageLoad} style={croppedImgStyle} />
+          <img
+            ref={imgRef}
+            src={image}
+            alt={title}
+            loading="lazy"
+            onLoad={handleImageLoad}
+            style={croppedImgStyle}
+            onError={() => setImageSrc(FALLBACK_IMAGE)}
+          />
         ) : (
-          <Image src={image} alt={title} fill style={styles.image} sizes="(max-width: 768px) 100vw, 33vw" />
+          <Image
+            src={imageSrc}
+            alt={title}
+            fill
+            style={styles.image}
+            sizes="(max-width: 768px) 100vw, 33vw"
+            onError={() => setImageSrc(FALLBACK_IMAGE)}
+          />
         )}
       </Box>
 
