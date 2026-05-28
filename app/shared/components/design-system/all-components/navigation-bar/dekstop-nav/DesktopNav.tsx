@@ -76,11 +76,7 @@ const DesktopNav = ({
 
     const groupIndex = navLabels.findIndex((group) => group.links.some((link) => isPathWithin(link.href, currentPath)));
 
-    if (groupIndex !== -1) {
-      setActiveButton(groupIndex);
-    } else {
-      setActiveButton(undefined);
-    }
+    setActiveButton(groupIndex >= 0 ? groupIndex : undefined);
   }, [normalizedPath, navLabels, specialNav]);
 
   useEffect(() => {
