@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import type { SVGProps } from 'react';
+import type { AnchorHTMLAttributes, SVGProps } from 'react';
 
 import DesktopNav from './DesktopNav';
 
@@ -7,7 +7,12 @@ import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 jest.mock('~/i18n/navigation', () => ({
-  usePathname: jest.fn(() => ROUTES.HOME)
+  usePathname: jest.fn(() => ROUTES.HOME),
+  Link: ({ children, href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  )
 }));
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg.tsx', () => ({
