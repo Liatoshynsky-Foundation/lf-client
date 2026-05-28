@@ -18,14 +18,14 @@ const stickHeights = [
 ];
 
 export default function AudioPlayer() {
-  const { src, trackName, isPlaying, togglePlay } = useAudioPlayer();
+  const { src, trackName, isPlaying, togglePlay, isPlayerOpen, openPlayer, closePlayer } = useAudioPlayer();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const anchorEl = isPlayerOpen ? buttonRef.current : null;
   const [error, setError] = useState<string | null>(null);
 
   const barRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -97,7 +97,7 @@ export default function AudioPlayer() {
       }
     };
 
-    const handleEnded = () => setAnchorEl(null);
+    const handleEnded = () => closePlayer();
     const handleError = () => setError('Error loading audio file.');
     const handleLoadedMetadata = () => {
       loadDuration();
@@ -115,7 +115,7 @@ export default function AudioPlayer() {
       audio.removeEventListener('error', handleError);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [src]);
+  }, [src, closePlayer]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -167,8 +167,12 @@ export default function AudioPlayer() {
   }, [isPlaying, src, setupAudioAnalyzer, animateBars]);
 
   const handlePopoverToggle = useCallback(() => {
-    setAnchorEl((prev) => (prev ? null : buttonRef.current));
-  }, []);
+    if (isPlayerOpen) {
+      closePlayer();
+    } else {
+      openPlayer();
+    }
+  }, [isPlayerOpen, openPlayer, closePlayer]);
 
   const onSeek = useCallback((newProgress: number) => {
     const audio = audioRef.current;
@@ -177,8 +181,8 @@ export default function AudioPlayer() {
   }, []);
 
   const closePopover = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
+    closePlayer();
+  }, [closePlayer]);
 
   return (
     <>
