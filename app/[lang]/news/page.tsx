@@ -47,7 +47,7 @@ const News = async ({ params }: Readonly<Language>) => {
   const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions();
 
   return (
-    <MainLayout withLines>
+    <MainLayout>
       <MediaIntroSection />
       <MediaCenter eventsData={eventsData} newsData={newsData} mediaMentionsData={mediaMentionsData} />
     </MainLayout>

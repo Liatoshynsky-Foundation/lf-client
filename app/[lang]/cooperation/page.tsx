@@ -58,19 +58,17 @@ export default async function CollaborationPage({ params }: Readonly<Language>) 
   }
 
   return (
-    <>
-      <MainLayout withLines>
-        <CollaborationIntro
-          title={collaborationIntroPageData[lang].title}
-          subtitle={collaborationIntroPageData[lang].subtitle}
-          contentAbove={collaborationIntroPageData[lang].contentAbove}
-          content={collaborationIntroPageData[lang].content}
-        />
-        {page.blocks.partnershipFormats && <PartnershipFormats data={page.blocks.partnershipFormats} />}
-        <CollaborationInfo />
-        <OurPartners />
-      </MainLayout>
+    <MainLayout withLines>
+      <CollaborationIntro
+        title={collaborationIntroPageData[lang].title}
+        subtitle={collaborationIntroPageData[lang].subtitle}
+        contentAbove={collaborationIntroPageData[lang].contentAbove}
+        content={collaborationIntroPageData[lang].content}
+      />
+      {page.blocks.partnershipFormats && <PartnershipFormats data={page.blocks.partnershipFormats} />}
+      <CollaborationInfo />
+      <OurPartners />
       <OfferCollaboration />
-    </>
+    </MainLayout>
   );
 }
