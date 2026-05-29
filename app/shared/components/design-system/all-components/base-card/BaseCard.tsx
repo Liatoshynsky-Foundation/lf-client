@@ -34,7 +34,9 @@ const isValidUrl = (url: string | null | undefined): url is string => {
   try {
     new URL(url);
     return true;
-  } catch {
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(`[BaseCard:isValidUrl] Failed to parse image URL: ${url} `, error);
     return false;
   }
 };
