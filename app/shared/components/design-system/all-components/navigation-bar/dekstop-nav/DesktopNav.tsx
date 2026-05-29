@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
@@ -13,7 +12,7 @@ import { styles } from './DesktopNav.styles';
 import type { ScrollDirection } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
-import { usePathname } from '~/i18n/navigation';
+import { Link, usePathname } from '~/i18n/navigation';
 import { isPathWithin, normalizePath } from '~/lib/utils/navPath';
 import ChevronDown from '~/public/icons/chevron-down.svg';
 import ChevronUp from '~/public/icons/chevron-up.svg';
@@ -145,7 +144,7 @@ const DesktopNav = ({
   });
 
   const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
-    <Link href={item.href} key={`${item.href}-${index}`} passHref>
+    <Link href={item.href} key={`${item.href}-${index}`}>
       <CustomMenuItem sx={styles.menuItem} onClick={handleDropdownClose}>
         {item.label}
       </CustomMenuItem>

@@ -1,5 +1,4 @@
 import { Button } from '@mui/material';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import MobileMenuOverlay from './mobile-overlay/MobileOverlay';
@@ -7,6 +6,7 @@ import { styles } from './MobileNav.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
+import { usePathname } from '~/i18n/navigation';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MobileNavProps {
