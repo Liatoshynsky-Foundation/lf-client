@@ -10,7 +10,7 @@ const BaseImageSchema = z.object({
 
 export const ImageSchema = BaseImageSchema.transform((image) => ({
   ...image,
-  generatedSrc: `/api/blob-url?folderName=photos&blobName=${image.src}`
+  generatedSrc: image.src.startsWith('http') ? image.src : `/api/blob-url?folderName=photos&blobName=${image.src}`
 }));
 
 export const QuoteSchema = z.object({
