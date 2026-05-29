@@ -1,3 +1,5 @@
+import { LocalizedString } from '~/types/types/common.types';
+
 export enum EventStatus {
   Draft = 'draft',
   Published = 'published',
@@ -8,27 +10,15 @@ export enum EventStatus {
 
 export type EventImageDTO = {
   src: string;
-  alt: {
-    uk: string;
-    en: string;
-  };
-  caption: {
-    uk: string;
-    en: string;
-  };
+  alt: LocalizedString;
+  caption: LocalizedString;
   isTmp: boolean;
 };
 
 export type EventDTO = {
   _id: string;
-  title: {
-    uk: string;
-    en: string;
-  };
-  description: {
-    uk: string;
-    en: string;
-  };
+  title: LocalizedString;
+  description: LocalizedString;
   content: {
     uk: object;
     en: object;
@@ -43,10 +33,7 @@ export type EventDTO = {
   eventLink: string;
   eventDateTimeStart: string | null;
   eventDateTimeEnd: string | null;
-  ticketUrl: {
-    uk: string | null;
-    en: string | null;
-  } | null;
+  ticketUrl: Record<'uk' | 'en', string | null> | null;
   createdAt?: string;
   updatedAt?: string;
 };

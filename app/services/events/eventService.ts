@@ -29,14 +29,19 @@ export const createEventService = ({ eventRepository }: EventServiceDeps) => ({
   },
 
   async getEventBySlug(slug: string, locale: Locale) {
-    const event = await eventRepository.getEventBySlug(slug);
-    if (!event) return null;
+    try {
+      const event = await eventRepository.getEventBySlug(slug);
+      if (!event) return null;
 
-    const { ticketUrl, ...eventRest } = event;
-    const localizedEvent = LocalizeSchema(eventSchema.omit({ ticketUrl: true }), locale).parse(eventRest);
-    const localizedTicketUrl = ticketUrl ? (ticketUrl[locale] ?? null) : null;
+      const { ticketUrl, ...eventRest } = event;
+      const localizedEvent = LocalizeSchema(eventSchema.omit({ ticketUrl: true }), locale).parse(eventRest);
+      const localizedTicketUrl = ticketUrl ? (ticketUrl[locale] ?? null) : null;
 
-    return { ...localizedEvent, ticketUrl: localizedTicketUrl };
+      return { ...localizedEvent, ticketUrl: localizedTicketUrl };
+    } catch (error) {
+      logger.error(errors.EVENT_FETCH_BY_SLUG_FAILED, error);
+      return null;
+    }
   }
 });
 

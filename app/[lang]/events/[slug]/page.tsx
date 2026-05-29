@@ -20,7 +20,10 @@ type EventDetailPageProps = { params: Promise<EventDetailPageParams> };
 function formatTimeFromIso(iso: string | null | undefined): string | null {
   if (!iso) return null;
   const match = /T(\d{2}):(\d{2})/.exec(iso);
-  return match ? `${match[1]}:${match[2]}` : null;
+  if (match) return `${match[1]}:${match[2]}`;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
 }
 
 function EventRegistrationBlock({
@@ -49,14 +52,22 @@ function EventRegistrationBlock({
     <Box sx={styles.registrationBlock}>
       {parsed && date && (
         <Box sx={{ mb: '24px' }}>
-          <Typography sx={styles.fieldLabel}>{dateLabel}</Typography>
-          <Typography sx={styles.fieldValue}>{date}</Typography>
+          <Typography variant="customRegular16" sx={styles.fieldLabel}>
+            {dateLabel}
+          </Typography>
+          <Typography variant="customSemiBold18Compact" sx={styles.fieldValue}>
+            {date}
+          </Typography>
         </Box>
       )}
       {parsed && time && (
         <Box sx={{ mb: registerUrl ? '32px' : 0 }}>
-          <Typography sx={styles.fieldLabel}>{timeLabel}</Typography>
-          <Typography sx={styles.fieldValue}>{time}</Typography>
+          <Typography variant="customRegular16" sx={styles.fieldLabel}>
+            {timeLabel}
+          </Typography>
+          <Typography variant="customSemiBold18Compact" sx={styles.fieldValue}>
+            {time}
+          </Typography>
         </Box>
       )}
       {registerUrl && (
@@ -113,8 +124,10 @@ export default async function EventDetailPage({ params }: Readonly<EventDetailPa
 
   if (!event) notFound();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const blocks = ((event.content as any)?.content?.blocks ?? []) as BlockNoteBlock[];
+  interface ApiContentResponse {
+    content?: { blocks: BlockNoteBlock[] };
+  }
+  const blocks = (event.content as ApiContentResponse)?.content?.blocks ?? [];
 
   const t = await getTranslations('events');
   const displayDate = event.publishedAt ? (formatIsoDateToDdMmYy(event.publishedAt) ?? '') : '';

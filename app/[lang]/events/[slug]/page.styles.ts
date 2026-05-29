@@ -10,19 +10,9 @@ export const styles = {
     marginLeft: { md: 'calc((100% - 584px) * 3 / 12 + 115px)' }
   },
   fieldLabel: {
-    fontFamily: 'Mulish',
-    fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '150%',
-    letterSpacing: 0,
     color: mainHexPallete.brown[500]
   },
   fieldValue: {
-    fontFamily: 'Mulish',
-    fontWeight: 600,
-    fontSize: '18px',
-    lineHeight: '110%',
-    letterSpacing: 0,
     color: mainHexPallete.black,
     mt: '2px'
   },
@@ -38,11 +28,6 @@ export const styles = {
     height: '40px',
     bgcolor: mainHexPallete.black,
     color: mainHexPallete.white,
-    fontFamily: 'Mulish',
-    fontWeight: 500,
-    fontSize: '16px',
-    lineHeight: '150%',
-    letterSpacing: 0,
     textTransform: 'uppercase',
     '&:hover': { bgcolor: mainHexPallete.brown[900] }
   }

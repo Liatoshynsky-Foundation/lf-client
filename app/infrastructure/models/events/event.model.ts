@@ -4,31 +4,26 @@ import { EventDTO, EventStatus } from '~/domain/dto/event.dto';
 
 export interface IEventDocument extends Omit<EventDTO, '_id'>, Document {}
 
+const localizedString = (options: Record<string, unknown> = {}) => ({
+  uk: { type: String, ...options },
+  en: { type: String, ...options }
+});
+
+const localizedObject = (options: Record<string, unknown> = {}) => ({
+  uk: { type: Object, ...options },
+  en: { type: Object, ...options }
+});
+
 const eventSchema = new Schema<IEventDocument>(
   {
-    title: {
-      uk: { type: String, required: true },
-      en: { type: String, required: true }
-    },
-    description: {
-      uk: { type: String },
-      en: { type: String }
-    },
-    content: {
-      uk: { type: Object, required: true },
-      en: { type: Object, required: true }
-    },
+    title: localizedString({ required: true }),
+    description: localizedString(),
+    content: localizedObject({ required: true }),
     slug: { type: String, required: true, index: true, unique: true },
     coverImage: {
       src: { type: String, required: true },
-      alt: {
-        uk: { type: String, required: true },
-        en: { type: String, required: true }
-      },
-      caption: {
-        uk: { type: String, required: true },
-        en: { type: String, required: true }
-      },
+      alt: localizedString({ required: true }),
+      caption: localizedString({ required: true }),
       isTmp: { type: Boolean, default: false }
     },
     status: {
@@ -44,10 +39,7 @@ const eventSchema = new Schema<IEventDocument>(
     eventLink: { type: String, required: true },
     eventDateTimeStart: { type: Date, default: null },
     eventDateTimeEnd: { type: Date, default: null },
-    ticketUrl: {
-      uk: { type: String, default: null },
-      en: { type: String, default: null }
-    }
+    ticketUrl: localizedString({ default: null })
   },
   {
     timestamps: true,

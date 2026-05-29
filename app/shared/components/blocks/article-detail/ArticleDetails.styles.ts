@@ -1,5 +1,7 @@
+import { mulish } from '~/ds-components/theme/Theme';
+
 const smallLabel = {
-  fontFamily: 'Mulish',
+  fontFamily: mulish.style.fontFamily,
   fontWeight: 500,
   fontSize: { xs: '12px', md: '16px' },
   lineHeight: '150%'
@@ -13,7 +15,7 @@ export const styles = {
     marginRight: { xs: 0, sm: 'auto', md: 0 },
     mb: { xs: '80px', md: '130px' },
     '& .MuiTypography-body1': {
-      fontFamily: 'Mulish',
+      fontFamily: mulish.style.fontFamily,
       fontWeight: 400,
       lineHeight: '160%',
       fontSize: '20px'
@@ -36,7 +38,7 @@ export const styles = {
   contentColumn: {
     width: { xs: '100%', md: '57%' },
     '& .MuiTypography-body1': {
-      fontFamily: 'Mulish',
+      fontFamily: mulish.style.fontFamily,
       fontWeight: 400,
       lineHeight: '160%',
       fontSize: '20px'
@@ -60,7 +62,7 @@ export const styles = {
     width: '100%'
   },
   newsTitle: {
-    fontFamily: 'Mulish',
+    fontFamily: mulish.style.fontFamily,
     fontWeight: 600,
     fontSize: { xs: '24px', md: '40px' },
     lineHeight: '150%',
