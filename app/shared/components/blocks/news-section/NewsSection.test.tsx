@@ -11,8 +11,6 @@ import { createRequestContainer } from '~/di/container';
 import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { ROUTES } from '~/shared/components/constants/routes';
 
-// Mock dependencies
-// yep, here we are mocking :)
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn(() =>
     Promise.resolve((key: string) => {
@@ -111,7 +109,7 @@ describe('NewsSection Component Full Coverage', () => {
   it('should render correctly with REAL data from .data.tsx', async () => {
     setupMockContainer([baseNews]);
 
-    const Component = await NewsSection({ ...newsSectionData, locale: 'uk' as Locale });
+    const Component = await NewsSection({ ...newsSectionData, locale: 'uk' });
     render(Component as React.ReactElement);
 
     expect(screen.getByText(/НоВиНи ФунДаЦІЇ/i)).toBeInTheDocument();

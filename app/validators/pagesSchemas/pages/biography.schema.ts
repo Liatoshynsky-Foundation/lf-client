@@ -72,7 +72,7 @@ const HeroImageSchema = z
   })
   .transform((image) => ({
     ...image,
-    generatedSrc: `/api/blob-url?folderName=photos&blobName=${image.src}`
+    generatedSrc: image.src.startsWith('http') ? image.src : `/api/blob-url?folderName=photos&blobName=${image.src}`
   }));
 
 const HeroSectionBlockSchema = z.object({

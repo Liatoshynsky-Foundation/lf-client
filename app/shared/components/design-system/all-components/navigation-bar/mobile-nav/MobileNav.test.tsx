@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { usePathname } from 'next/navigation';
 
 import MobileNav from './MobileNav';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
 import { NavigationDTO } from '~/domain/dto/navigation.dto';
+import { usePathname } from '~/i18n/navigation';
 
-jest.mock('next/navigation', () => ({
+jest.mock('~/i18n/navigation', () => ({
   usePathname: jest.fn(),
   useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })
 }));

@@ -20,6 +20,7 @@ import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrap
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import Header from '~/shared/components/Header/Header.server';
 import { AudioPlayerProvider } from '~/shared/context/AudioPlayerContext';
+import { IntroAnimationProvider } from '~/shared/context/IntroAnimationContext';
 import QueryProvider from '~/shared/providers/QueryProvider';
 
 const geistSans = Geist({
@@ -117,16 +118,18 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
             <ThemeProvider>
               <QueryProvider>
                 <AudioPlayerProvider>
-                  <Box sx={styles.container}>
-                    <Header />
-                    <Box sx={styles.childrenBox}>{children}</Box>
-                    <Footer />
-                  </Box>
-                  <CookieModalWrapper
-                    consent_cookie={cookieConsent}
-                    trackingId={process.env.TRACKING_ID || ''}
-                    gtmId={process.env.GTM_ID || ''}
-                  />
+                  <IntroAnimationProvider>
+                    <Box sx={styles.container}>
+                      <Header />
+                      <Box sx={styles.childrenBox}>{children}</Box>
+                      <Footer />
+                    </Box>
+                    <CookieModalWrapper
+                      consent_cookie={cookieConsent}
+                      trackingId={process.env.TRACKING_ID || ''}
+                      gtmId={process.env.GTM_ID || ''}
+                    />
+                  </IntroAnimationProvider>
                 </AudioPlayerProvider>
               </QueryProvider>
             </ThemeProvider>

@@ -51,9 +51,12 @@ const NewsSection: React.FC<Props> = async ({ locale, title, textContent, button
 
   const newsCards = newsList.map((news) => {
     const formattedDate = news.publishedAt ? (formatIsoDateToDdMmYy(news.publishedAt) ?? '') : '';
+    const rawSrc = news.coverImage.src;
+    const imageSrc = rawSrc.startsWith('http') ? rawSrc : `/api/blob-url?folderName=photos&blobName=${rawSrc}`;
 
     return {
-      image: news.coverImage.src,
+      image: imageSrc,
+      crop: news.coverImage.crop ?? null,
       title: news.title,
       publicationDate: formattedDate,
       description: news.description,

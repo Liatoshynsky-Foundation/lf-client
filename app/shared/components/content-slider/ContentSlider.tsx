@@ -58,6 +58,7 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
           <SwiperSlide key={card.href}>
             <BaseCard
               image={card.image}
+              crop={card.crop}
               title={card.title}
               publicationDate={card.publicationDate}
               description={card.description}
