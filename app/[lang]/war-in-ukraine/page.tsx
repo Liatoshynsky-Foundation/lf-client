@@ -64,7 +64,7 @@ export default function WarInUkraine() {
         buttonText="Підтримати"
         description={yermolenkoDoc[locale]}
         buttons={yermolenkoLinks}
-        showMainButton={false}
+        showMainButton={true}
         sx={{ marginBottom: 12 }}
         showShortButtonsText={false}
       />
