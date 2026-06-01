@@ -6,15 +6,39 @@ import { FC, ReactNode, useState } from 'react';
 import { wordEightPaths } from './logoSVGPaths';
 import { WordMorpher } from './WordMorpher';
 
+import { useIntroAnimation } from '~/shared/context/IntroAnimationContext';
+
 interface IntroAnimationProps {
   children: ReactNode;
   testID?: string;
 }
 
 export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'intro-animation' }) => {
+  const { hasSeenIntro, markIntroAsSeen, isInitialized } = useIntroAnimation();
+
   const [showIntro, setShowIntro] = useState(true);
   const [showExpansion, setShowExpansion] = useState(false);
   const [showContent, setShowContent] = useState(false);
+
+  if (!isInitialized) {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: '#ffffff',
+          zIndex: 9999
+        }}
+      />
+    );
+  }
+
+  if (hasSeenIntro) {
+    return <>{children}</>;
+  }
 
   const expansionVariants = {
     initial: {
@@ -56,6 +80,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'in
         onExitComplete={() => {
           setShowContent(true);
           setShowExpansion(false);
+          markIntroAsSeen();
         }}
       >
         {showExpansion && (

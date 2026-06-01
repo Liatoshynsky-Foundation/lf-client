@@ -34,6 +34,37 @@ export const styles = {
       xs: '100%',
       sm: '400px',
       md: '501px'
+    },
+
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      background: mainHexPallete.blue[200],
+      clipPath: `
+    polygon(
+      0% calc(5.5%),
+      100% 0%,
+      100% calc(0% + 1px),
+      0% calc(5.5% + 1px)
+    )
+  `,
+      zIndex: 1
+    },
+
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      background: mainHexPallete.blue[200],
+      clipPath: `
+    polygon(
+      0% calc(100% - 1px),
+      100% calc(94.5% - 1px),
+      100% 94.5%,
+      0% 100%
+    )
+  `
     }
   },
 
