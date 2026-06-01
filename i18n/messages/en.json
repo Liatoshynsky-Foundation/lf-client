@@ -41,6 +41,7 @@
       "emailRequired": "Please enter your email address",
       "emailInvalid": "Please enter a valid email address",
       "phoneNumberInvalid": "Check the phone number format",
+      "nameInvalid": "The name may contain only letters, apostrophe, hyphen and spaces",
       "policyRequired": "You must agree to continue",
       "nameRequired": "This field is required",
       "nameMaxLength": "The name cannot exceed 50 characters",

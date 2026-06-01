@@ -40,6 +40,7 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   const { isMobile, isTablet } = useBreakpoints();
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const nameRegex = /^[\p{L}'’ -]+$/u;
 
   const phoneSchema = z
     .string()
@@ -60,7 +61,8 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
       .trim()
       .min(1, tErrors('nameRequired'))
       .min(2, tErrors('nameMinLength'))
-      .max(50, tErrors('nameMaxLength')),
+      .max(50, tErrors('nameMaxLength'))
+      .regex(nameRegex, tErrors('nameInvalid')),
     email: z.string().min(1, tErrors('emailRequired')).email(tErrors('emailInvalid')),
     phoneNumber: phoneSchema.optional(),
     message: z
