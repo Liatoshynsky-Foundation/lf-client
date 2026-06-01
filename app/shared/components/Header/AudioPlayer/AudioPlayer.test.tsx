@@ -70,8 +70,11 @@ describe('AudioPlayer', () => {
       src: 'test-audio.mp3',
       trackName: 'Test Track',
       isPlaying: false,
+      isPlayerOpen: false,
       playTrack: mockPlayTrack,
-      togglePlay: mockTogglePlay
+      togglePlay: mockTogglePlay,
+      openPlayer: jest.fn(),
+      closePlayer: jest.fn()
     };
   });
 
@@ -88,9 +91,10 @@ describe('AudioPlayer', () => {
   });
 
   it('should open popover when button is clicked', () => {
-    renderComponent();
+    const mockOpenPlayer = jest.fn();
+    renderComponent({ isPlayerOpen: false, openPlayer: mockOpenPlayer });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
-    expect(screen.getByText(mockContextValue.trackName)).toBeInTheDocument();
+    expect(mockOpenPlayer).toHaveBeenCalled();
   });
 
   it('should update currentTime and progress on timeupdate', () => {
