@@ -30,7 +30,7 @@ const imagesPaths = {
 };
 
 const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButton }) => {
-  const { isPlaying, togglePlay } = useAudioPlayer();
+  const { isPlaying, togglePlay, openPlayer } = useAudioPlayer();
   const bp = useBreakpoints();
 
   const heroContent = <HeroSectionQuoteBlock heroQuote={heroQuote} heroQuoteSource={heroQuoteSource} />;
@@ -39,7 +39,10 @@ const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButt
     <Box sx={heroSectionStyles.heroSection} data-testid="hero-section">
       <BoxButton
         testID="hero-playback-button"
-        onClick={togglePlay}
+        onClick={() => {
+          togglePlay();
+          openPlayer();
+        }}
         cursorContent={{
           text: isPlaying ? playbackButton.stopPlayback : playbackButton.startPlayback,
           iconSrc: isPlaying ? imagesPaths.pauseIcon : imagesPaths.playIcon

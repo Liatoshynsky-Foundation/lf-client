@@ -10,8 +10,11 @@ export type AudioPlayerContextType = {
   src: string;
   trackName: string;
   isPlaying: boolean;
+  isPlayerOpen: boolean;
   playTrack: (src: string, trackName: string) => void;
   togglePlay: () => void;
+  openPlayer: () => void;
+  closePlayer: () => void;
 };
 
 export const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
@@ -33,15 +36,23 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     setIsPlaying((prev) => !prev);
   }, []);
 
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+
+  const openPlayer = useCallback(() => setIsPlayerOpen(true), []);
+  const closePlayer = useCallback(() => setIsPlayerOpen(false), []);
+
   const value = useMemo(
     () => ({
       src,
       trackName,
       isPlaying,
+      isPlayerOpen,
       playTrack,
-      togglePlay
+      togglePlay,
+      openPlayer,
+      closePlayer
     }),
-    [src, trackName, isPlaying, playTrack, togglePlay]
+    [src, trackName, isPlaying, isPlayerOpen, playTrack, togglePlay, openPlayer, closePlayer]
   );
 
   return <AudioPlayerContext.Provider value={value}>{children}</AudioPlayerContext.Provider>;

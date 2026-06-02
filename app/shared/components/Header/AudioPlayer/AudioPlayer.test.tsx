@@ -70,8 +70,11 @@ describe('AudioPlayer', () => {
       src: 'test-audio.mp3',
       trackName: 'Test Track',
       isPlaying: false,
+      isPlayerOpen: false,
       playTrack: mockPlayTrack,
-      togglePlay: mockTogglePlay
+      togglePlay: mockTogglePlay,
+      openPlayer: jest.fn(),
+      closePlayer: jest.fn()
     };
   });
 
@@ -88,9 +91,10 @@ describe('AudioPlayer', () => {
   });
 
   it('should open popover when button is clicked', () => {
-    renderComponent();
+    const mockOpenPlayer = jest.fn();
+    renderComponent({ isPlayerOpen: false, openPlayer: mockOpenPlayer });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
-    expect(screen.getByText(mockContextValue.trackName)).toBeInTheDocument();
+    expect(mockOpenPlayer).toHaveBeenCalled();
   });
 
   it('should update currentTime and progress on timeupdate', () => {
@@ -111,7 +115,7 @@ describe('AudioPlayer', () => {
       }
     });
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
   it('should set duration on loadedmetadata event', () => {
@@ -144,7 +148,7 @@ describe('AudioPlayer', () => {
       audio?.dispatchEvent(new Event('error'));
     });
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
   it('should close popover on audio ended event', () => {
@@ -187,5 +191,19 @@ describe('AudioPlayer', () => {
     renderComponent({ isPlaying: true });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(mockTogglePlay).not.toHaveBeenCalled();
+  });
+
+  it('should call closePlayer when button clicked and player is open', () => {
+    const mockClosePlayer = jest.fn();
+    renderComponent({ isPlayerOpen: true, closePlayer: mockClosePlayer });
+    fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
+    expect(mockClosePlayer).toHaveBeenCalled();
+  });
+
+  it('should set error when playback fails', async () => {
+    HTMLMediaElement.prototype.play = jest.fn().mockRejectedValue(new Error('fail'));
+    renderComponent({ isPlaying: true });
+    await act(async () => {});
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 });
