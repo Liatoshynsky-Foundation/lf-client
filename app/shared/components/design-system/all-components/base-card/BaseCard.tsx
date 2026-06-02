@@ -63,6 +63,7 @@ export default function BaseCard({
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
   const initialSrc = isValidUrl(image) ? image : FALLBACK_IMAGE;
   const [imageSrc, setImageSrc] = useState<string>(initialSrc);
+  const isFallbackImage = imageSrc === FALLBACK_IMAGE;
 
   useEffect(() => {
     setImageSrc(isValidUrl(image) ? image : FALLBACK_IMAGE);
@@ -74,11 +75,11 @@ export default function BaseCard({
         {crop ? (
           <img
             ref={imgRef}
-            src={image}
+            src={imageSrc}
             alt={title}
             loading="lazy"
             onLoad={handleImageLoad}
-            style={croppedImgStyle}
+            style={isFallbackImage ? styles.fallbackImage : croppedImgStyle}
             onError={() => setImageSrc(FALLBACK_IMAGE)}
           />
         ) : (
