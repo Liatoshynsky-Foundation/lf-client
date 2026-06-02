@@ -1,3 +1,5 @@
+import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
+
 export const styles = {
   mainContainer: (hideHeader: boolean) => ({
     display: 'flex',
@@ -11,7 +13,7 @@ export const styles = {
     },
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: theme.zIndex.appBar,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100vw',
@@ -36,7 +38,7 @@ export const styles = {
       xs: 'translate(-17px)',
       sm: 'translate(-22px)'
     },
-    zIndex: 1000
+    zIndex: theme.zIndex.appBar
   },
   navigationContainer: {
     marginRight: { xl: '35px', xxl: '70px' },
@@ -50,8 +52,8 @@ export const styles = {
     display: 'flex',
     justifyContent: 'end',
     alignItems: 'center',
-    gap: '20px',
-    zIndex: 1000
+    zIndex: theme.zIndex.appBar,
+    gap: '20px'
   },
   navWrapper: {
     display: 'flex',

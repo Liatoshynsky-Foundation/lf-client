@@ -166,6 +166,18 @@ declare module '@mui/material/Button' {
     tertiary: true;
   }
 }
+
+declare module '@mui/material/styles' {
+  interface ZIndex {
+    introAnimationBackground: number;
+    introAnimationExpansion: number;
+    mobileOverlay: number;
+    mobileNavButton: number;
+    modalCloseButton: number;
+    stickyYearsTab: number;
+    cursor: number;
+  }
+}
 export const theme = createTheme({
   palette: {
     primary: {
@@ -204,6 +216,15 @@ export const theme = createTheme({
       sm: 768,
       xs: 0
     }
+  },
+  zIndex: {
+    introAnimationBackground: 3000,
+    introAnimationExpansion: 2999,
+    mobileOverlay: 1099,
+    mobileNavButton: 3000,
+    modalCloseButton: 100,
+    stickyYearsTab: 50,
+    cursor: 9999
   },
   typography: {
     h1: {
