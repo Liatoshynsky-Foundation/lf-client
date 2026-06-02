@@ -73,6 +73,15 @@ export const styles = {
     objectPosition: '45% 48%'
   },
 
+  fallbackImage: {
+    position: 'absolute' as const,
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover' as const,
+    objectPosition: '45% 48%'
+  },
+
   content: {
     display: 'flex',
     flexDirection: 'column',
