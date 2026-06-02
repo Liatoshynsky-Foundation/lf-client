@@ -220,11 +220,12 @@ export const theme = createTheme({
   zIndex: {
     introAnimationBackground: 3000,
     introAnimationExpansion: 2999,
-    mobileOverlay: 1099,
-    mobileNavButton: 3000,
+    mobileOverlay: 1050,
+    appBar: 1100,
+    mobileNavButton: 1100,
     modalCloseButton: 100,
     stickyYearsTab: 50,
-    cursor: 9999
+    cursor: 9000
   },
   typography: {
     h1: {
