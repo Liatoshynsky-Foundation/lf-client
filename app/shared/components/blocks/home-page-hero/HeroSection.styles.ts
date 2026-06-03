@@ -1,3 +1,5 @@
+import { theme } from '../../design-system/all-components/theme/Theme';
+
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 
 export const heroSectionStyles = {
@@ -91,7 +93,7 @@ export const heroSectionStyles = {
     position: 'fixed',
     transform: 'translate(-50%, -50%)',
     pointerEvents: 'none',
-    zIndex: 9999,
+    zIndex: theme.zIndex.cursor,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

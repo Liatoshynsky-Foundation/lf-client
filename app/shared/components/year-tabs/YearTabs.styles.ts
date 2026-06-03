@@ -1,3 +1,5 @@
+import { theme } from '../design-system/all-components/theme/Theme';
+
 export const styles = {
   buttonGroup: {
     position: 'fixed',
@@ -6,7 +8,7 @@ export const styles = {
     transform: 'translate(-50%)',
     borderRadius: '48px',
     p: '4px',
-    zIndex: 10,
+    zIndex: theme.zIndex.stickyYearsTab,
 
     '& [aria-label="indicator"]': {
       height: 'calc(100% - 8px)',

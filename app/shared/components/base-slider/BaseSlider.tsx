@@ -3,6 +3,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Box, SxProps, Theme } from '@mui/material';
 import React, { useId } from 'react';
+import type { Swiper as SwiperType } from 'swiper';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperModule, SwiperOptions } from 'swiper/types';
@@ -25,6 +26,8 @@ interface CommonBaseSliderProps<T> {
   navButtonSx?: SxProps<Theme>;
   swiperStyle?: React.CSSProperties;
   slideStyle?: React.CSSProperties;
+  onSwiper?: (swiper: SwiperType) => void;
+  onSlideFocus?: (index: number) => void;
   dataTestId?: string;
 }
 
@@ -59,6 +62,8 @@ export const BaseSlider = <T,>(props: BaseSliderProps<T>): React.ReactElement =>
     navButtonSx,
     swiperStyle,
     slideStyle,
+    onSwiper,
+    onSlideFocus,
     dataTestId
   } = props;
 
@@ -107,9 +112,14 @@ export const BaseSlider = <T,>(props: BaseSliderProps<T>): React.ReactElement =>
         speed={speed}
         autoplay={autoplay ?? false}
         style={swiperStyle}
+        onSwiper={onSwiper}
       >
         {items.map((item, index) => (
-          <SwiperSlide key={getItemKey(item, index)} style={slideStyle}>
+          <SwiperSlide
+            key={getItemKey(item, index)}
+            style={slideStyle}
+            onFocusCapture={onSlideFocus ? () => onSlideFocus(index) : undefined}
+          >
             {renderItem(item, index)}
           </SwiperSlide>
         ))}

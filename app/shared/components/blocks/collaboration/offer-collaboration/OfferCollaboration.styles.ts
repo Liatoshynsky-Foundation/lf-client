@@ -3,7 +3,12 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 export const styles = {
   mainContainer: {
     position: 'relative',
-    width: '100%'
+    width: '100vw',
+    left: '50%',
+    right: '50%',
+    marginLeft: '-50vw',
+    marginRight: '-50vw',
+    gridColumn: '1 / -1'
   },
   paper: {
     position: 'absolute',

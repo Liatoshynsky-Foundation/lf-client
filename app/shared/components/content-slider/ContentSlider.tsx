@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import type { Swiper as SwiperType } from 'swiper';
 
 import type { BaseCardProps } from '~/ds-components/base-card/BaseCard';
 import BaseCard from '~/ds-components/base-card/BaseCard';
@@ -24,6 +25,8 @@ const sliderBreakpoints = {
 };
 
 export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = 'news', prevLabel, nextLabel }) => {
+  const swiperRef = React.useRef<SwiperType | null>(null);
+
   const renderCard = (card: ContentSliderCard): React.ReactNode => (
     <BaseCard
       image={card.image}
@@ -39,6 +42,14 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
 
   const getCardKey = (card: ContentSliderCard): string => card.href;
 
+  const handleSwiper = (swiper: SwiperType): void => {
+    swiperRef.current = swiper;
+  };
+
+  const handleSlideFocus = (index: number): void => {
+    swiperRef.current?.slideTo(index);
+  };
+
   return (
     <BaseSlider<ContentSliderCard>
       items={cards}
@@ -51,6 +62,8 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
       navContainerSx={styles.navigationContainer}
       prevLabel={prevLabel}
       nextLabel={nextLabel}
+      onSwiper={handleSwiper}
+      onSlideFocus={handleSlideFocus}
     />
   );
 };

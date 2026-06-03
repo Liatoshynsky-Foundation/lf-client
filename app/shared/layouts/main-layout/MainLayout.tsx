@@ -11,9 +11,10 @@ export interface MainLayoutProps extends BoxProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ withLines = false, lineColor, children, sx, ...props }) => {
   return (
-    <Box sx={[styles, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
+    <Box sx={[styles.wrapper, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
       {withLines && <ColumnGuides lineColor={lineColor} />}
-      {children}
+
+      <Box sx={styles.grid}>{children}</Box>
     </Box>
   );
 };

@@ -41,7 +41,7 @@ export default async function FundDetailsPage({ params }: Readonly<FundDetailsPa
   const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
 
   return (
-    <MainLayout withLines>
+    <MainLayout>
       <FundSummaryHeader
         backLinkUrl={fundSummaryBacklinkUrl}
         backLinkText={fundSummaryBacklinkText[locale]}
