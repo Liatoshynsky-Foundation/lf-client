@@ -13,7 +13,7 @@ export const styles = {
     },
     left: 0,
     right: 0,
-    zIndex: theme.zIndex.appBar,
+    zIndex: theme.zIndex.headerAppBar,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100vw',
@@ -38,7 +38,7 @@ export const styles = {
       xs: 'translate(-17px)',
       sm: 'translate(-22px)'
     },
-    zIndex: theme.zIndex.appBar
+    zIndex: theme.zIndex.headerAppBar
   },
   navigationContainer: {
     marginRight: { xl: '35px', xxl: '70px' },
@@ -52,7 +52,7 @@ export const styles = {
     display: 'flex',
     justifyContent: 'end',
     alignItems: 'center',
-    zIndex: theme.zIndex.appBar,
+    zIndex: theme.zIndex.headerAppBar,
     gap: '20px'
   },
   navWrapper: {

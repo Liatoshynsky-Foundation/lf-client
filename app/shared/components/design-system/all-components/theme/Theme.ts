@@ -172,6 +172,7 @@ declare module '@mui/material/styles' {
     introAnimationBackground: number;
     introAnimationExpansion: number;
     mobileOverlay: number;
+    headerAppBar: number;
     mobileNavButton: number;
     modalCloseButton: number;
     stickyYearsTab: number;
@@ -221,7 +222,7 @@ export const theme = createTheme({
     introAnimationBackground: 3000,
     introAnimationExpansion: 2999,
     mobileOverlay: 1050,
-    appBar: 1100,
+    headerAppBar: 1100,
     mobileNavButton: 1100,
     modalCloseButton: 100,
     stickyYearsTab: 50,
