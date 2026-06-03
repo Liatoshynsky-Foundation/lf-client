@@ -42,6 +42,8 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
   const nameRegex = /^[\p{L}'’ -]+$/u;
 
+  const normalizeNameSpaces = (value: string) => value.trim().replace(/\s+/g, ' ');
+
   const phoneSchema = z
     .string()
     .trim()
@@ -58,11 +60,15 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   const schema = z.object({
     name: z
       .string()
-      .trim()
-      .min(1, tErrors('nameRequired'))
-      .min(2, tErrors('nameMinLength'))
-      .max(50, tErrors('nameMaxLength'))
-      .regex(nameRegex, tErrors('nameInvalid')),
+      .transform(normalizeNameSpaces)
+      .pipe(
+        z
+          .string()
+          .min(1, tErrors('nameRequired'))
+          .min(2, tErrors('nameMinLength'))
+          .max(50, tErrors('nameMaxLength'))
+          .regex(nameRegex, tErrors('nameInvalid'))
+      ),
     email: z.string().min(1, tErrors('emailRequired')).email(tErrors('emailInvalid')),
     phoneNumber: phoneSchema.optional(),
     message: z
@@ -93,6 +99,7 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
     }
   });
 
+  const nameField = register('name');
   const phoneField = register('phoneNumber');
 
   const nameLength = watch('name')?.length || 0;
@@ -118,6 +125,12 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
     reset();
   };
 
+  const handleNameBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const normalizedValue = normalizeNameSpaces(e.target.value);
+    setValue('name', normalizedValue, { shouldValidate: true });
+    nameField.onBlur(e);
+  };
+
   return (
     <>
       <Box component="form" onSubmit={handleSubmit(onValid)}>
@@ -127,7 +140,8 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
         <Box sx={styles.textFieldsContainer}>
           <TextField
             label={t('name')}
-            {...register('name')}
+            {...nameField}
+            onBlur={handleNameBlur}
             error={!!errors.name || (isNameAtMaxLength && showNameMaxMessage)}
             helperText={
               errors.name?.message || (isNameAtMaxLength && showNameMaxMessage ? tErrors('nameMaxLength') : '')
