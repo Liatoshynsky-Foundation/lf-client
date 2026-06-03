@@ -46,6 +46,16 @@ export const eventsCtaLabel = {
   en: 'View all events'
 };
 
+export const eventsPrevLabel = {
+  uk: 'Попередня подія',
+  en: 'Previous event'
+};
+
+export const eventsNextLabel = {
+  uk: 'Наступна подія',
+  en: 'Next event'
+};
+
 const COMMON_TITLE = {
   uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
   en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'

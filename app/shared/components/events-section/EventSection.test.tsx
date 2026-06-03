@@ -59,6 +59,8 @@ const defaultProps = {
   publishDateLabel: 'Дата публікації',
   viewLabel: 'Дивитись',
   regLabel: 'Реєстрація',
+  prevLabel: 'Попередня подія',
+  nextLabel: 'Наступна подія',
   events: mockEvents
 };
 
@@ -118,14 +120,11 @@ describe('EventSection', () => {
       });
     });
 
-    it('should render mobile slider navigation containers', () => {
-      const { container } = render(<EventSection {...defaultProps} />);
+    it('should render mobile slider navigation buttons', () => {
+      render(<EventSection {...defaultProps} />);
 
-      const prevBtn = container.querySelector('.event-prev');
-      const nextBtn = container.querySelector('.event-next');
-
-      expect(prevBtn).toBeInTheDocument();
-      expect(nextBtn).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Попередня подія' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Наступна подія' })).toBeInTheDocument();
     });
 
     it('should show registration link in mobile view if provided', () => {

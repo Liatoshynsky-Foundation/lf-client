@@ -77,6 +77,8 @@ const mockProps = {
     en: 'View All News'
   },
   buttonLink: ROUTES.NEWS,
+  prevLabel: 'Попередня новина',
+  nextLabel: 'Наступна новина',
   locale: 'uk' as Locale
 };
 
@@ -109,7 +111,12 @@ describe('NewsSection Component Full Coverage', () => {
   it('should render correctly with REAL data from .data.tsx', async () => {
     setupMockContainer([baseNews]);
 
-    const Component = await NewsSection({ ...newsSectionData, locale: 'uk' });
+    const Component = await NewsSection({
+      ...newsSectionData,
+      prevLabel: 'Попередня новина',
+      nextLabel: 'Наступна новина',
+      locale: 'uk'
+    });
     render(Component as React.ReactElement);
 
     expect(screen.getByText(/НоВиНи ФунДаЦІЇ/i)).toBeInTheDocument();

@@ -1,14 +1,11 @@
 'use client';
-import 'swiper/css';
-import 'swiper/css/navigation';
 import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
-import { Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { styles } from './EventSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { BaseSlider } from '~/shared/components/base-slider';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 
 interface EventItem {
@@ -29,10 +26,12 @@ interface Props {
   publishDateLabel: string;
   viewLabel: string;
   regLabel: string;
+  prevLabel: string;
+  nextLabel: string;
   events: EventItem[];
 }
 
-const formatResponsiveDate = (dateStr: string) => {
+const formatResponsiveDate = (dateStr: string): React.ReactNode => {
   const year = dateStr.slice(-4);
 
   if (Number.isNaN(Number(year))) return dateStr;
@@ -71,6 +70,7 @@ const formatResponsiveDate = (dateStr: string) => {
     </>
   );
 };
+
 const EventSection: React.FC<Props> = ({
   title,
   text,
@@ -79,11 +79,56 @@ const EventSection: React.FC<Props> = ({
   publishDateLabel,
   viewLabel,
   regLabel,
+  prevLabel,
+  nextLabel,
   events
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const displayedEvents = events.slice(0, 3);
+
+  const renderEventCard = (event: EventItem, options: { isSlide: boolean }): React.ReactNode => (
+    <Box sx={options.isSlide ? { ...styles.eventItem, width: '100%', mb: 0 } : styles.eventItem}>
+      <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
+      <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
+      <Box sx={styles.eventInfo}>
+        <Typography variant="h4" sx={styles.eventTitle}>
+          {event.title}
+        </Typography>
+        <Typography sx={styles.publishDate}>
+          {publishDateLabel}: {event.publishDate}
+        </Typography>
+        <Typography sx={styles.eventDescription}>{event.description}</Typography>
+        <Box sx={options.isSlide ? { ...styles.buttonGroup, display: 'flex', gap: 1, mt: 2 } : styles.buttonGroup}>
+          <Button
+            variant="outlined"
+            fullWidth={options.isSlide}
+            sx={options.isSlide ? undefined : styles.actionButton}
+            href={`/events/${event.id}`}
+          >
+            {viewLabel}
+          </Button>
+          {event.regLink && (
+            <Button
+              variant="text"
+              href={event.regLink}
+              sx={styles.regButton}
+              endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
+            >
+              {options.isSlide ? (
+                <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                  {regLabel}
+                </Box>
+              ) : (
+                regLabel
+              )}
+            </Button>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+
   return (
     <Box component="section" sx={styles.sectionContainer} data-testid="EventsSection">
       <Typography variant="h2" sx={styles.title}>
@@ -103,92 +148,21 @@ const EventSection: React.FC<Props> = ({
       />
 
       {isMobile ? (
-        <Box sx={styles.sliderWrapper}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', mb: '20px' }}>
-            <Box className="event-prev" sx={styles.navButton}>
-              <Box component="img" src="/icons/arrow-left.svg" alt="Previous" sx={{ width: 20, height: 20 }} />
-            </Box>
-            <Box className="event-next" sx={styles.navButton}>
-              <Box component="img" src="/icons/arrow-right.svg" alt="Next" sx={{ width: 20, height: 20 }} />
-            </Box>
-          </Box>
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              prevEl: '.event-prev',
-              nextEl: '.event-next'
-            }}
-            spaceBetween={40}
-            slidesPerView={1.2}
-          >
-            {displayedEvents.map((event) => (
-              <SwiperSlide key={event.id}>
-                <Box sx={{ ...styles.eventItem, width: '100%', mb: 0 }}>
-                  <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
-                  <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
-                  <Box sx={styles.eventInfo}>
-                    <Typography variant="h4" sx={styles.eventTitle}>
-                      {event.title}
-                    </Typography>
-                    <Typography sx={styles.publishDate}>
-                      {publishDateLabel}: {event.publishDate}
-                    </Typography>
-                    <Typography sx={styles.eventDescription}>{event.description}</Typography>
-
-                    <Box sx={{ ...styles.buttonGroup, display: 'flex', gap: 1, mt: 2 }}>
-                      <Button variant="outlined" fullWidth href={`/events/${event.id}`}>
-                        {viewLabel}
-                      </Button>
-                      {event.regLink && (
-                        <Button
-                          variant="text"
-                          href={event.regLink}
-                          sx={styles.regButton}
-                          endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
-                        >
-                          <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
-                            {regLabel}
-                          </Box>
-                        </Button>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </Box>
+        <BaseSlider<EventItem>
+          items={displayedEvents}
+          renderItem={(event) => renderEventCard(event, { isSlide: true })}
+          getItemKey={(event) => event.id}
+          slidesPerView={1.2}
+          spaceBetween={40}
+          containerSx={styles.sliderWrapper}
+          navContainerSx={styles.sliderNavContainer}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+        />
       ) : (
         <Box sx={styles.eventsList}>
           {displayedEvents.map((event) => (
-            <Box key={event.id} sx={styles.eventItem}>
-              <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
-              <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
-              <Box sx={styles.eventInfo}>
-                <Typography variant="h4" sx={styles.eventTitle}>
-                  {event.title}
-                </Typography>
-                <Typography sx={styles.publishDate}>
-                  {publishDateLabel}: {event.publishDate}
-                </Typography>
-                <Typography sx={styles.eventDescription}>{event.description}</Typography>
-                <Box sx={styles.buttonGroup}>
-                  <Button variant="outlined" sx={styles.actionButton} href={`/events/${event.id}`}>
-                    {viewLabel}
-                  </Button>
-                  {event.regLink && (
-                    <Button
-                      variant="text"
-                      href={event.regLink}
-                      sx={styles.regButton}
-                      endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
-                    >
-                      {regLabel}
-                    </Button>
-                  )}
-                </Box>
-              </Box>
-            </Box>
+            <React.Fragment key={event.id}>{renderEventCard(event, { isSlide: false })}</React.Fragment>
           ))}
         </Box>
       )}
