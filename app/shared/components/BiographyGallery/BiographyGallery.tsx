@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material';
 import type { Locale } from 'next-intl';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 
@@ -29,21 +29,31 @@ interface BiographyGalleryProps {
 
 interface FrameProps {
   images: FrameImage[];
-  onHoverChange: (paused: boolean) => void;
+  interactive: boolean;
+  onPauseChange: (paused: boolean) => void;
+  onPhotoKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
-const Frame: React.FC<FrameProps> = ({ images, onHoverChange }) => {
+const PHOTOS_PER_FRAME = 5;
+const FOCUSABLE_PHOTO_SELECTOR = '[data-biography-photo="true"]';
+
+const Frame: React.FC<FrameProps> = ({ images, interactive, onPauseChange, onPhotoKeyDown }) => {
   return (
-    <Box sx={styles.frame} data-testid="BiographyGallery-frame">
+    <Box sx={styles.frame} data-testid="BiographyGallery-frame" aria-hidden={!interactive}>
       {images.map((img) => {
         const hasCaption = Boolean(img.caption);
-        const captionForRender = hasCaption ? img.caption : '\u00A0';
+        const captionForRender = hasCaption ? img.caption : ' ';
 
         return (
           <Box
             key={img.id}
-            onMouseEnter={() => onHoverChange(true)}
-            onMouseLeave={() => onHoverChange(false)}
+            tabIndex={interactive ? 0 : -1}
+            data-biography-photo={interactive ? 'true' : undefined}
+            onMouseEnter={() => onPauseChange(true)}
+            onMouseLeave={() => onPauseChange(false)}
+            onFocus={() => onPauseChange(true)}
+            onBlur={() => onPauseChange(false)}
+            onKeyDown={onPhotoKeyDown}
             sx={{
               ...styles.imageWrapper,
               alignSelf: img.alignSelf,
@@ -74,11 +84,13 @@ const Frame: React.FC<FrameProps> = ({ images, onHoverChange }) => {
   );
 };
 
-const PHOTOS_PER_FRAME = 5;
-
-function chunk<T>(arr: T[], size: number) {
+function chunk<T>(arr: T[], size: number): T[][] {
   const res: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) res.push(arr.slice(i, i + size));
+
+  for (let i = 0; i < arr.length; i += size) {
+    res.push(arr.slice(i, i + size));
+  }
+
   return res;
 }
 
@@ -86,8 +98,34 @@ export default function BiographyGallery({
   images,
   durationSec = 60,
   frameRepeats = 4
-}: Readonly<BiographyGalleryProps>) {
+}: Readonly<BiographyGalleryProps>): React.ReactElement {
   const [paused, setPaused] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const handlePhotoKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+      return;
+    }
+
+    const root = rootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const focusables = Array.from(root.querySelectorAll<HTMLDivElement>(FOCUSABLE_PHOTO_SELECTOR));
+    const currentIndex = focusables.indexOf(event.currentTarget);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const delta = event.key === 'ArrowRight' ? 1 : -1;
+    const nextIndex = (currentIndex + delta + focusables.length) % focusables.length;
+    focusables[nextIndex]?.focus();
+  }, []);
 
   const trackContent = useMemo(() => {
     const framesImages = chunk(images, PHOTOS_PER_FRAME);
@@ -96,18 +134,34 @@ export default function BiographyGallery({
     const out: React.ReactNode[] = [];
 
     for (let i = 0; i < framesToRender.length; i += 1) {
-      out.push(<Frame key={`frame-a-${i}`} images={framesToRender[i]} onHoverChange={setPaused} />);
+      out.push(
+        <Frame
+          key={`frame-a-${i}`}
+          images={framesToRender[i]}
+          interactive
+          onPauseChange={setPaused}
+          onPhotoKeyDown={handlePhotoKeyDown}
+        />
+      );
     }
 
     for (let i = 0; i < framesToRender.length; i += 1) {
-      out.push(<Frame key={`frame-b-${i}`} images={framesToRender[i]} onHoverChange={setPaused} />);
+      out.push(
+        <Frame
+          key={`frame-b-${i}`}
+          images={framesToRender[i]}
+          interactive={false}
+          onPauseChange={setPaused}
+          onPhotoKeyDown={handlePhotoKeyDown}
+        />
+      );
     }
 
     return out;
-  }, [images, frameRepeats]);
+  }, [images, frameRepeats, handlePhotoKeyDown]);
 
   return (
-    <Box sx={styles.root} data-testid="BiographyGallery">
+    <Box ref={rootRef} sx={styles.root} data-testid="BiographyGallery">
       <Box sx={styles.track(durationSec, paused)} data-testid="BiographyGallery-track">
         {trackContent}
       </Box>

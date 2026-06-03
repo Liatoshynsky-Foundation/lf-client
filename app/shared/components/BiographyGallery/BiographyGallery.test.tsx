@@ -40,8 +40,60 @@ describe('BiographyGallery Folder 100% Coverage', () => {
 
     fireEvent.mouseEnter(firstWrapper);
     fireEvent.mouseLeave(firstWrapper);
+    fireEvent.focus(firstWrapper);
+    fireEvent.blur(firstWrapper);
 
     expect(ImageWithCaptionMock).toHaveBeenCalled();
+  });
+
+  it('marks primary photo wrappers as focusable and duplicates as inert', () => {
+    const images = buildFrameImages(biographyGalleryPhotos.slice(0, 1));
+    render(<BiographyGallery images={images} frameRepeats={1} />);
+
+    const wrappers = screen.getAllByTestId(/BiographyGallery-photoWrapper/);
+    const primary = wrappers.slice(0, wrappers.length / 2);
+    const duplicates = wrappers.slice(wrappers.length / 2);
+
+    primary.forEach((el) => {
+      expect(el).toHaveAttribute('tabindex', '0');
+      expect(el).toHaveAttribute('data-biography-photo', 'true');
+    });
+    duplicates.forEach((el) => {
+      expect(el).toHaveAttribute('tabindex', '-1');
+      expect(el).not.toHaveAttribute('data-biography-photo');
+    });
+  });
+
+  it('moves focus between primary photos on ArrowRight and ArrowLeft, wrapping at the edges', () => {
+    const images = buildFrameImages(biographyGalleryPhotos.slice(0, 3));
+    render(<BiographyGallery images={images} frameRepeats={1} />);
+
+    const focusables = document.querySelectorAll<HTMLDivElement>('[data-biography-photo="true"]');
+    expect(focusables.length).toBe(3);
+
+    focusables[0].focus();
+    fireEvent.keyDown(focusables[0], { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(focusables[1]);
+
+    fireEvent.keyDown(focusables[1], { key: 'ArrowLeft' });
+    expect(document.activeElement).toBe(focusables[0]);
+
+    fireEvent.keyDown(focusables[0], { key: 'ArrowLeft' });
+    expect(document.activeElement).toBe(focusables[2]);
+
+    fireEvent.keyDown(focusables[2], { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(focusables[0]);
+  });
+
+  it('ignores non-arrow keys in keyboard handler', () => {
+    const images = buildFrameImages(biographyGalleryPhotos.slice(0, 2));
+    render(<BiographyGallery images={images} frameRepeats={1} />);
+
+    const focusables = document.querySelectorAll<HTMLDivElement>('[data-biography-photo="true"]');
+    focusables[0].focus();
+    fireEvent.keyDown(focusables[0], { key: 'Enter' });
+
+    expect(document.activeElement).toBe(focusables[0]);
   });
 
   it('covers chunking logic for incomplete frames', () => {
