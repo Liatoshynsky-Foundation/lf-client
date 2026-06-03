@@ -3,6 +3,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Box } from '@mui/material';
 import React from 'react';
+import type { Swiper as SwiperType } from 'swiper';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -19,6 +20,7 @@ export interface ContentSliderProps {
 }
 
 export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = 'news' }) => {
+  const swiperRef = React.useRef<SwiperType | null>(null);
   return (
     <Box sx={styles.sliderContainer}>
       <Box sx={styles.navigationContainer}>
@@ -32,6 +34,9 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
 
       <Swiper
         modules={[Navigation]}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
@@ -54,8 +59,13 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
           }
         }}
       >
-        {cards.map((card) => (
-          <SwiperSlide key={card.href}>
+        {cards.map((card, index) => (
+          <SwiperSlide
+            key={card.href}
+            onFocusCapture={() => {
+              swiperRef.current?.slideTo(index);
+            }}
+          >
             <BaseCard
               image={card.image}
               crop={card.crop}
