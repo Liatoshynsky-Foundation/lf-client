@@ -1,4 +1,5 @@
 import { mainHexPallete } from '../../../theme/colors';
+import { theme } from '../../../theme/Theme';
 
 const columnBase = {
   display: 'flex',
@@ -22,7 +23,7 @@ export const styles = {
     width: '100vw',
     height: '100vh',
     backgroundColor: mainHexPallete.yellow[500],
-    zIndex: 900,
+    zIndex: theme.zIndex.mobileOverlay,
     clipPath: {
       xs: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
       sm: 'polygon(0 0, 100% 0, 100% 94%, 0 100%)'

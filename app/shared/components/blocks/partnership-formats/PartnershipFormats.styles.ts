@@ -1,5 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+import { theme } from '../../design-system/all-components/theme/Theme';
 import { PartnershipImageType } from '~/types/page/cooperation.types';
 
 type ImageConfig = {
@@ -469,7 +470,7 @@ const baseStyles = {
     position: 'absolute',
     width: '30px',
     height: '30px',
-    zIndex: '100',
+    zIndex: theme.zIndex.modalCloseButton,
     top: {
       xs: '10px',
       lg: '16px'

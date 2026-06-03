@@ -6,6 +6,7 @@ import { FC, ReactNode, useState } from 'react';
 import { wordEightPaths } from './logoSVGPaths';
 import { WordMorpher } from './WordMorpher';
 
+import { theme } from '~/shared/components/design-system/all-components/theme/Theme';
 import { useIntroAnimation } from '~/shared/context/IntroAnimationContext';
 
 interface IntroAnimationProps {
@@ -30,7 +31,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'in
           width: '100vw',
           height: '100vh',
           backgroundColor: '#ffffff',
-          zIndex: 9999
+          zIndex: theme.zIndex.introAnimationBackground
         }}
       />
     );
@@ -65,7 +66,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'in
               width: '100vw',
               height: '100vh',
               backgroundColor: '#ffffff',
-              zIndex: 9999,
+              zIndex: theme.zIndex.introAnimationBackground,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -96,7 +97,7 @@ export const IntroAnimation: FC<IntroAnimationProps> = ({ children, testID = 'in
               width: '100vw',
               height: '100vh',
               backgroundColor: '#ffffff',
-              zIndex: 9998,
+              zIndex: theme.zIndex.introAnimationExpansion,
               pointerEvents: 'none',
               display: 'flex',
               alignItems: 'center',

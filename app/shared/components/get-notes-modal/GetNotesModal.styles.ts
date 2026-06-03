@@ -1,3 +1,4 @@
+import { theme } from '../design-system/all-components/theme/Theme';
 import { GetNotesState } from '~/types/enums/getNotes.enums';
 
 export const styles = {
@@ -64,7 +65,7 @@ export const styles = {
       position: 'absolute',
       width: '30px',
       height: '30px',
-      zIndex: '100',
+      zIndex: theme.zIndex.modalCloseButton,
       right: '23px'
     };
     if (state === GetNotesState.LIST) {

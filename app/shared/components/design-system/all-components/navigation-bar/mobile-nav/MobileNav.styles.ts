@@ -1,5 +1,7 @@
 import { backgroundColors } from '~/ds-components/theme/colors';
 
+import { theme } from '../../theme/Theme';
+
 export const styles = {
   iconButton: (isMobile: boolean) => ({
     borderRadius: '32px',
@@ -7,7 +9,7 @@ export const styles = {
     height: isMobile ? '40px' : '52px',
     backgroundColor: 'rgb(238, 238, 237) !important',
     border: `${isMobile ? 4 : 6}px solid ${backgroundColors.white}`,
-    zIndex: 3000,
+    zIndex: theme.zIndex.mobileNavButton,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
