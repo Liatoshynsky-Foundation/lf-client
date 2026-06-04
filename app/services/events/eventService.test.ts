@@ -43,8 +43,6 @@ describe('eventService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── getAllPublishedEvents ────────────────────────────────────────────────────
-
   describe('getAllPublishedEvents', () => {
     it('fetches and localizes published events', async () => {
       eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseEventMock] as any);
@@ -90,8 +88,6 @@ describe('eventService', () => {
       expect(result).toEqual([]);
     });
   });
-
-  // ─── getEventBySlug ──────────────────────────────────────────────────────────
 
   describe('getEventBySlug', () => {
     it('returns null when event is not found', async () => {

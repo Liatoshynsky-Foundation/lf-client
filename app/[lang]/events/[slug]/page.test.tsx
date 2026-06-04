@@ -69,8 +69,6 @@ const mockEvent = {
   content: { content: { blocks: mockBlocks } }
 };
 
-// ─── generateMetadata ────────────────────────────────────────────────────────
-
 describe('generateMetadata', () => {
   beforeEach(() => {
     mockGetEventBySlug.mockReset();
@@ -111,8 +109,6 @@ describe('generateMetadata', () => {
     expect(metadata).toEqual(expect.objectContaining({ title: 'Event not found' }));
   });
 });
-
-// ─── EventDetailPage ─────────────────────────────────────────────────────────
 
 describe('EventDetailPage', () => {
   beforeEach(() => {
@@ -274,8 +270,6 @@ describe('EventDetailPage', () => {
     expect(getByRole('link')).toHaveAttribute('href', 'https://eventlink.example.com');
   });
 });
-
-// ─── EventRegistrationBlock ───────────────────────────────────────────────────
 
 describe('EventRegistrationBlock', () => {
   beforeEach(() => {
