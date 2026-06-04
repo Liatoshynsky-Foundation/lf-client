@@ -21,7 +21,8 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn(),
-  getLocale: jest.fn()
+  getLocale: jest.fn(),
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key)
 }));
 
 jest.mock('~/di/container', () => ({

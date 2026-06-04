@@ -35,6 +35,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const locale = useLocale();
   const t = useTranslations('common');
   const tEmpty = useTranslations('media.emptyState');
+  const tEvents = useTranslations('events');
   const breakpoint = useBreakpoints();
 
   const events = useMemo(() => {
@@ -94,12 +95,12 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
       {paginatedData.map((event) => {
         const isCompleted = getEventTimestamp(event.eventDateTimeEnd, event.eventDateTimeStart) < Date.now();
 
-        const cardActions = [{ label: 'Переглянути', href: `/news/${event.slug}` }];
+        const cardActions = [{ label: tEvents('viewButton'), href: `/events/${event.slug}` }];
 
         if (!isCompleted && event.ticketUrl) {
           const regLink = typeof event.ticketUrl === 'string' ? event.ticketUrl : event.ticketUrl[locale];
           if (regLink) {
-            cardActions.push({ label: 'Реєстрація', href: regLink });
+            cardActions.push({ label: tEvents('registerButton'), href: regLink });
           }
         }
 

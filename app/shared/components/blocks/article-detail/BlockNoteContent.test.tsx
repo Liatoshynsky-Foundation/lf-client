@@ -218,7 +218,7 @@ describe('BlockNoteContent', () => {
     it('renders image with correct src and alt from caption', () => {
       const block = makeBlock({ type: 'image', props: { url: 'https://example.com/photo.jpg', caption: 'A photo' } });
       render(<BlockNoteContent blocks={[block]} />);
-      const img = screen.getByTestId('next-image');
+      const img = screen.getByRole('img');
       expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg');
       expect(img).toHaveAttribute('alt', 'A photo');
     });

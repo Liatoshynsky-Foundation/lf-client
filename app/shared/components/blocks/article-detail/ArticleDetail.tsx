@@ -1,4 +1,6 @@
 import { Box, Typography } from '@mui/material';
+import { getTranslations } from 'next-intl/server';
+import type { ReactNode } from 'react';
 
 import CustomLink from '~/ds-components/link/CustomLink';
 
@@ -14,32 +16,55 @@ export type ArticleDetailProps = {
   date?: string;
   title: string;
   blocks: BlockNoteBlock[];
+  backLabel: string;
+  backPath: string;
+  registrationBlock?: ReactNode;
 };
 
-export function ArticleDetail({ lang, date, title, blocks }: Readonly<ArticleDetailProps>) {
+export async function ArticleDetail({
+  lang,
+  date,
+  title,
+  blocks,
+  backLabel,
+  backPath,
+  registrationBlock
+}: Readonly<ArticleDetailProps>) {
+  const t = await getTranslations('common');
   return (
     <MainLayout withLines>
       <Box sx={styles.newsHeader}>
         <CustomLink
           sx={styles.backLink}
           labelSx={styles.backLinkLabel}
-          path={`/${lang}/news`}
+          path={`/${lang}${backPath}`}
           startIcon={<SvgImage src="/icons/arrow-left.svg" alt="" width={24} height={24} />}
         >
-          Повернутись до новин
+          {backLabel}
         </CustomLink>
         <Box sx={styles.newsHeaderTopRow}>
           <Typography variant="h1" sx={styles.newsTitle}>
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={styles.publicDate}>
-            Опубліковано: {date}
-          </Typography>
+          {date && (
+            <Typography variant="body2" color="text.secondary" sx={styles.publicDate}>
+              {t('publishedAtLabel')} {date}
+            </Typography>
+          )}
         </Box>
       </Box>
-      <Box sx={styles.container}>
-        <BlockNoteContent blocks={blocks} />
-      </Box>
+      {registrationBlock ? (
+        <Box sx={styles.bodyRow}>
+          <Box sx={styles.registrationColumn}>{registrationBlock}</Box>
+          <Box sx={styles.contentColumn}>
+            <BlockNoteContent blocks={blocks} />
+          </Box>
+        </Box>
+      ) : (
+        <Box sx={styles.container}>
+          <BlockNoteContent blocks={blocks} />
+        </Box>
+      )}
     </MainLayout>
   );
 }

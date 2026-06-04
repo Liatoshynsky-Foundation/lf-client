@@ -66,6 +66,9 @@ export const createAzureStorageService = () => {
     constructBlobUrl: (folderName: string, blobName: string): string => {
       try {
         zFolderNameSchema.parse(folderName);
+        if (blobName.startsWith('https://')) {
+          return blobName;
+        }
         const blobNameHash = createHash('sha256').update(blobName).digest('hex');
         const containerClient = getContainerClient();
         const blockBlobClient = getFullPathToBlob(containerClient, folderName, blobNameHash);

@@ -5,6 +5,7 @@ export const ROUTES = {
   ARCHIVE: '/archive',
   ABOUT_US: '/about-us',
   NEWS: '/news',
+  EVENTS: '/events',
   CONTACTS: '/contacts',
   BIOGRAPHY: '/biography',
   ARTISTRY: '/artistry',

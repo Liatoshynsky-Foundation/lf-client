@@ -39,7 +39,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({
       component={NextLinkComposed}
       disableElevation
       disableRipple
-      to={{ pathname: path }}
+      to={path}
       data-testid={dataTestId}
       aria-label={ariaLabel}
     >
