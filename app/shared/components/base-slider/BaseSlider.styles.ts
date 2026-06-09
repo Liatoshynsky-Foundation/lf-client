@@ -13,6 +13,10 @@ export const baseSliderStyles = {
     mb: '24px'
   },
 
+  // Swiper's navigation stylesheet (`swiper/css/navigation`) applies its own
+  // absolute positioning, fixed sizing and margins to the navigation buttons.
+  // `!important` is required to override those built-in styles so the buttons
+  // render inside our custom static flex layout instead.
   navButton: {
     position: 'static !important',
     width: '64px !important',

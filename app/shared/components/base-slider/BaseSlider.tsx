@@ -67,7 +67,7 @@ export const BaseSlider = <T,>(props: BaseSliderProps<T>): React.ReactElement =>
     dataTestId
   } = props;
 
-  const reactId = useId().replace(/:/g, '');
+  const reactId = useId().replaceAll(':', '');
   const prevClass = `base-slider-prev-${reactId}`;
   const nextClass = `base-slider-next-${reactId}`;
 

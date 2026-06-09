@@ -27,7 +27,7 @@ export default function OurPartnersSlider({
   autoScroll = false,
   autoScrollInterval = 3000
 }: OurPartnersSliderProps): React.ReactElement | null {
-  if (!partners || !partners.length) return null;
+  if (!partners?.length) return null;
 
   const renderPartner = (partner: Partner): React.ReactNode => (
     <Box sx={styles.slideItem}>
