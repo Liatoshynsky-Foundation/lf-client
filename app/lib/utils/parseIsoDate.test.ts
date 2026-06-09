@@ -61,20 +61,16 @@ describe('parseIsoDate', () => {
     expect(result).toBeNull();
   });
 
-  it('returns null when segments are missing (e.g. "YYYY-MM")', () => {
+  it('parses YYYY-MM as the first day of that month', () => {
     const result = parseIsoDate('2025-02');
 
-    expect(result).toBeNull();
+    expect(result).toEqual({ day: '01', month: '02', year: '2025' });
   });
 
-  it('is tolerant to extra trailing characters after the date', () => {
+  it('returns null for a date string with unrecognised trailing characters', () => {
     const result = parseIsoDate('2023-07-15-extra-stuff');
 
-    expect(result).toEqual({
-      day: '15',
-      month: '07',
-      year: '2023'
-    });
+    expect(result).toBeNull();
   });
 });
 
@@ -99,10 +95,14 @@ describe('formatIsoDateToDdMmYy', () => {
 
   it('returns null for invalid date strings', () => {
     expect(formatIsoDateToDdMmYy('not-a-date')).toBeNull();
-    expect(formatIsoDateToDdMmYy('2025-02')).toBeNull();
+    expect(formatIsoDateToDdMmYy('2023-07-15-extra-stuff')).toBeNull();
     expect(formatIsoDateToDdMmYy('')).toBeNull();
     expect(formatIsoDateToDdMmYy('   ')).toBeNull();
     expect(formatIsoDateToDdMmYy(null)).toBeNull();
     expect(formatIsoDateToDdMmYy(undefined)).toBeNull();
+  });
+
+  it('formats YYYY-MM as the first day of that month', () => {
+    expect(formatIsoDateToDdMmYy('2025-02')).toBe('01.02.25');
   });
 });

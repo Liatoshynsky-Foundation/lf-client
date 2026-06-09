@@ -364,13 +364,28 @@ gitGraph
 
 #### Team UA-5353
 
-[![@MykolaMak](https://avatars.githubusercontent.com/u/40358197?v=4&size=250)](https://github.com/MykolaMak)
 [![@dest411](https://avatars.githubusercontent.com/u/146329542?v=4&size=250)](https://github.com/dest411)
 [![@kandyba](https://avatars.githubusercontent.com/u/11414249?v=4&size=250)](https://github.com/kandyba)
 [![@Jevgan](https://avatars.githubusercontent.com/u/134773983?v=4&size=250)](https://github.com/Jevgan)
 [![@navimov](https://avatars.githubusercontent.com/u/108539100?v=4&size=250)](https://github.com/navimov)
 [![@Fedorieieva](https://avatars.githubusercontent.com/u/115637318?v=4&size=250)](https://github.com/Fedorieieva)
 [![@Th0mas-H0ward](https://avatars.githubusercontent.com/u/86684680?v=4&size=250)](https://github.com/Th0mas-H0ward)
+
+#### Team UA-5354
+
+[![@annak413](https://avatars.githubusercontent.com/u/126970705?v=4&size=250)](https://github.com/annak413)
+[![@LightOrden](https://avatars.githubusercontent.com/u/88787118?v=4&size=250)](https://github.com/LightOrden)
+[![@varenichek22](https://avatars.githubusercontent.com/u/141062073?v=4&size=250)](https://github.com/varenichek22)
+[![@dmitryzh100](https://avatars.githubusercontent.com/u/171498292?v=4&size=250)](https://github.com/dmitryzh100)
+[![@telare](https://avatars.githubusercontent.com/u/123264591?v=4&size=250)](https://github.com/telare)
+[![@yuliiayarova](https://avatars.githubusercontent.com/u/239369502?v=4&size=250)](https://github.com/yuliiayarova)
+[![@vladashvch](https://avatars.githubusercontent.com/u/144835895?v=4&size=250)](https://github.com/vladashvch)
+[![@pALINchuk](https://avatars.githubusercontent.com/u/104020656?v=4&size=250)](https://github.com/pALINchuk)
+[![@Halyna-Trush](https://avatars.githubusercontent.com/u/216411684?v=4&size=250)](https://github.com/Halyna-Trush)
+[![@Yushchyk-Roman](https://avatars.githubusercontent.com/u/182556428?v=4&size=250)](https://github.com/Yushchyk-Roman)
+[![@Fronik123](https://avatars.githubusercontent.com/u/81983712?v=4&size=250)](https://github.com/Fronik123)
+[![@premiumderyn](https://avatars.githubusercontent.com/u/219176726?v=4&size=250)](https://github.com/premiumderyn)
+[![@dianajnxv](https://avatars.githubusercontent.com/u/121499947?v=4&size=250)](https://github.com/dianajnxv)
 
 ### DevOps team
 

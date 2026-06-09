@@ -66,6 +66,8 @@ export const styles = {
     color: mainHexPallete.black,
     overflowWrap: 'anywhere',
     transition: 'color 0.2s ease',
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    gap: '8px',
     '&:hover': {
       color: mainHexPallete.burgundy[800],
       cursor: 'pointer'
