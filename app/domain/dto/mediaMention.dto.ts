@@ -1,9 +1,9 @@
 export enum MediaMentionStatus {
-  Draft = 'DRAFT',
-  Published = 'PUBLISHED',
-  Hidden = 'HIDDEN',
-  Archived = 'ARCHIVED',
-  Editing = 'EDITING'
+  Draft = 'draft',
+  Published = 'published',
+  Hidden = 'hidden',
+  Archived = 'archived',
+  Editing = 'editing'
 }
 
 export type MediaMentionCoverImageDTO = {
@@ -11,6 +11,12 @@ export type MediaMentionCoverImageDTO = {
   alt?: string;
   width?: number;
   height?: number;
+  crop?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null;
 };
 
 export type MediaMentionMetaDTO = {
@@ -33,5 +39,5 @@ export type MediaMentionDTO = {
 
 export type MediaMentionListItemDTO = Pick<
   MediaMentionDTO,
-  '_id' | 'title' | 'description' | 'slug' | 'coverImage' | 'publishedAt' | 'meta'
+  '_id' | 'url' | 'title' | 'description' | 'slug' | 'coverImage' | 'publishedAt' | 'meta'
 >;

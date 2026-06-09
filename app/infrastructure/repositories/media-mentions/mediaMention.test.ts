@@ -20,7 +20,8 @@ const createFakeId = () => '65f1d5f2' + Date.now().toString(16).slice(-8);
 const mockMongooseChain = (resolvedValue: any) => ({
   select: jest.fn().mockReturnThis(),
   sort: jest.fn().mockReturnThis(),
-  lean: jest.fn().mockResolvedValue(resolvedValue)
+  lean: jest.fn().mockReturnThis(),
+  exec: jest.fn().mockResolvedValue(resolvedValue)
 });
 
 const validMentionData = {
@@ -75,7 +76,10 @@ describe('mediaMentionRepository', () => {
 
       const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention');
 
-      expect(MediaMentionModel.findOne).toHaveBeenCalledWith({ slug: 'test-media-mention' });
+      expect(MediaMentionModel.findOne).toHaveBeenCalledWith({
+        slug: 'test-media-mention',
+        status: MediaMentionStatus.Published
+      });
 
       if (!result) throw new Error('Result is null');
 
