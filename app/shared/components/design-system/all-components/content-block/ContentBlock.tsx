@@ -1,5 +1,4 @@
-import { Theme } from '@emotion/react';
-import { Box, SxProps, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 
 import { styles } from './ContentBlock.styles';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
@@ -46,13 +45,19 @@ const createListParagraph = (paragraphSx?: SxProps<Theme>) => {
 function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
+  const combinedSx: SxProps<Theme> = [
+    textStyles.blockDescription,
+    styles.textContent,
+    ...(Array.isArray(textSx) ? textSx : [textSx])
+  ];
+
   if (typeof data === 'string') {
-    return <Typography sx={{ ...textStyles.blockDescription, ...styles.textContent, ...textSx }}>{data}</Typography>;
+    return <Typography sx={combinedSx}>{data}</Typography>;
   }
 
   if (Array.isArray(data)) {
     return data.map(({ id, text }) => (
-      <Typography key={id} sx={{ ...textStyles.blockDescription, ...styles.textContent, ...textSx }}>
+      <Typography key={id} sx={combinedSx}>
         {text}
       </Typography>
     ));
@@ -62,11 +67,7 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
     <TipTapContent
       data={data}
       nodeRenderers={{
-        paragraph: createParagraph({
-          ...textStyles.blockDescription,
-          ...styles.textContent,
-          ...textSx
-        })
+        paragraph: createParagraph(combinedSx)
       }}
     />
   );
@@ -75,23 +76,21 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
 function renderList(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
+  const combinedListSx: SxProps<Theme> = [styles.textContent, ...(Array.isArray(textSx) ? textSx : [textSx])];
+
   if (typeof data === 'string') {
-    return <ListItem sx={{ ...styles.textContent, ...textSx, maxWidth: '900px' }} text={data} />;
+    return <ListItem sx={[...combinedListSx, { maxWidth: '900px' }]} text={data} />;
   }
 
   if (Array.isArray(data)) {
-    return data.map(({ id, text }) => <ListItem key={id} sx={{ ...styles.textContent, ...textSx }} text={text} />);
+    return data.map(({ id, text }) => <ListItem key={id} sx={combinedListSx} text={text} />);
   }
 
   return (
     <TipTapContent
       data={data}
       nodeRenderers={{
-        paragraph: createListParagraph({
-          ...styles.textContent,
-          ...textSx,
-          maxWidth: '900px'
-        })
+        paragraph: createListParagraph([...combinedListSx, { maxWidth: '900px' }])
       }}
     />
   );
@@ -108,7 +107,10 @@ export default function ContentBlock({
   dataTestId
 }: ContentBlockProps) {
   return (
-    <Box sx={{ ...styles.container, ...containerSx }} data-testid={dataTestId}>
+    <Box
+      sx={[styles.container, ...(Array.isArray(containerSx) ? containerSx : [containerSx])]}
+      data-testid={dataTestId}
+    >
       {title && <SectionTitle icon={true} title={title} mb={0} gridColumn={{ xs: '2/ -1', sm: '4/ -1', md: '6/-1' }} />}
       {renderTextBlock(description, textSx)}
       {renderList(list, textSx)}

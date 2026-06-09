@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   card: {
     position: 'relative',
@@ -29,10 +31,7 @@ export const styles = {
       xs: 500,
       md: 600
     },
-    fontSize: {
-      xs: '16px',
-      md: '18px'
-    },
+    fontSize: commonSx.layout.typography.bodyMedium,
     lineHeight: '130%',
     letterSpacing: '0px',
     color: mainHexPallete.black,

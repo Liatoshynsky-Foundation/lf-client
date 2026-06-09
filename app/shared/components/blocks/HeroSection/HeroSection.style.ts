@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const heroSectionStyles = {
   mainContainer: {
     width: '100%',
@@ -40,7 +42,7 @@ export const heroSectionStyles = {
     width: '100%',
     fontFamily: 'Oswald',
     fontWeight: 600,
-    fontSize: { xs: '40px', md: '64px' },
+    fontSize: commonSx.layout.typography.heroTitle,
     lineHeight: '120%',
     letterSpacing: { xs: '-2%', md: '0%' },
     verticalAlign: 'middle',

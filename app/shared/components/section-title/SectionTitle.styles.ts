@@ -1,4 +1,5 @@
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const imageSizes = {
   width: {
@@ -41,7 +42,7 @@ export const styles = {
   },
   title: (gridColumn?: object) => ({
     ...AppTypography.oswald28Bold,
-    fontSize: { xs: '20px', md: '28px' },
+    fontSize: commonSx.layout.typography.sectionTitle,
     color: '#190D03',
     letterSpacing: '0px',
     gridColumn: gridColumn ?? { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }

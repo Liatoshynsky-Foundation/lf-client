@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   mainContainer: {
     display: 'grid',
@@ -49,7 +51,7 @@ export const styles = {
     whiteSpace: 'pre-line',
     fontWeight: 600,
     lineHeight: '150%',
-    fontSize: { xs: '16px', md: '20px' },
+    fontSize: commonSx.layout.typography.bodyLarge,
     width: '91px'
   },
   valueContainer: {
@@ -60,7 +62,7 @@ export const styles = {
   },
   value: {
     fontFamily: 'Mulish, Sans-serif',
-    fontSize: { xs: '16px', md: '20px' },
+    fontSize: commonSx.layout.typography.bodyLarge,
     fontWeight: 600,
     lineHeight: '150%',
     color: mainHexPallete.black,

@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   gridContainer: {
     display: 'grid',
@@ -9,22 +11,13 @@ export const styles = {
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     mt: { xs: '56px', sm: '104px', md: '128px' }
   },
   typography: {
     textAlign: 'left',
     gridColumn: { xs: '1', sm: '4 / 9', md: '6 / -1' },
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
     color: mainHexPallete.brown[700]
   },
   papersContainer: {
