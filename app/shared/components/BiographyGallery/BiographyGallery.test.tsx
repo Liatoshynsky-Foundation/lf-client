@@ -15,6 +15,11 @@ jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
   default: (props: any) => ImageWithCaptionMock(props)
 }));
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'uk'
+}));
+
 describe('BiographyGallery Folder 100% Coverage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -101,5 +106,28 @@ describe('BiographyGallery Folder 100% Coverage', () => {
     render(<BiographyGallery images={images} frameRepeats={1} />);
 
     expect(screen.getAllByTestId('image-with-caption')).toHaveLength(6);
+  });
+
+  it('exposes the gallery as a labelled group for screen readers', () => {
+    const images = buildFrameImages(biographyGalleryPhotos.slice(0, 1));
+    render(<BiographyGallery images={images} frameRepeats={1} />);
+
+    const root = screen.getByTestId('BiographyGallery');
+
+    expect(root).toHaveAttribute('role', 'group');
+    expect(root).toHaveAttribute('aria-roledescription', 'roleDescription');
+    expect(root).toHaveAttribute('aria-label', 'navigationHint');
+  });
+
+  it('labels each photo wrapper as an image for assistive technologies', () => {
+    const images = buildFrameImages(biographyGalleryPhotos.slice(0, 1));
+    render(<BiographyGallery images={images} frameRepeats={1} />);
+
+    const wrappers = screen.getAllByTestId(/BiographyGallery-photoWrapper/);
+
+    wrappers.forEach((wrapper) => {
+      expect(wrapper).toHaveAttribute('role', 'img');
+      expect(wrapper.getAttribute('aria-label')).toBeTruthy();
+    });
   });
 });

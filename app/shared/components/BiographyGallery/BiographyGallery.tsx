@@ -1,13 +1,15 @@
 'use client';
 
 import { Box } from '@mui/material';
-import type { Locale } from 'next-intl';
+import { type Locale, useLocale, useTranslations } from 'next-intl';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import ImageWithCaption from '~/components/image-with-caption/ImageWithCaption';
 
 import { styles } from './BiographyGallery.styles';
 import type { ElementSizes } from '~/types/types/common.types';
+
+import { getPlainString } from '~/lib/utils/tiptapHelpers';
 
 type LocalizedString = Record<Locale, string>;
 
@@ -30,14 +32,15 @@ interface BiographyGalleryProps {
 interface FrameProps {
   images: FrameImage[];
   interactive: boolean;
+  locale: Locale;
   onPauseChange: (paused: boolean) => void;
-  onPhotoKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onPhotoKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 const PHOTOS_PER_FRAME = 5;
 const FOCUSABLE_PHOTO_SELECTOR = '[data-biography-photo="true"]';
 
-const Frame: React.FC<FrameProps> = ({ images, interactive, onPauseChange, onPhotoKeyDown }) => {
+const Frame: React.FC<FrameProps> = ({ images, interactive, locale, onPauseChange, onPhotoKeyDown }) => {
   return (
     <Box sx={styles.frame} data-testid="BiographyGallery-frame" aria-hidden={!interactive}>
       {images.map((img) => {
@@ -47,13 +50,15 @@ const Frame: React.FC<FrameProps> = ({ images, interactive, onPauseChange, onPho
         return (
           <Box
             key={img.id}
+            role="img"
+            aria-label={getPlainString(img.alt, locale)}
             tabIndex={interactive ? 0 : -1}
             data-biography-photo={interactive ? 'true' : undefined}
             onMouseEnter={() => onPauseChange(true)}
             onMouseLeave={() => onPauseChange(false)}
             onFocus={() => onPauseChange(true)}
             onBlur={() => onPauseChange(false)}
-            onKeyDown={onPhotoKeyDown}
+            onKeyDown={interactive ? onPhotoKeyDown : undefined}
             sx={{
               ...styles.imageWrapper,
               alignSelf: img.alignSelf,
@@ -99,6 +104,8 @@ export default function BiographyGallery({
   durationSec = 60,
   frameRepeats = 4
 }: Readonly<BiographyGalleryProps>): React.ReactElement {
+  const t = useTranslations('biography.gallery');
+  const locale = useLocale() as Locale;
   const [paused, setPaused] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -139,6 +146,7 @@ export default function BiographyGallery({
           key={`frame-a-${i}`}
           images={framesToRender[i]}
           interactive
+          locale={locale}
           onPauseChange={setPaused}
           onPhotoKeyDown={handlePhotoKeyDown}
         />
@@ -151,17 +159,24 @@ export default function BiographyGallery({
           key={`frame-b-${i}`}
           images={framesToRender[i]}
           interactive={false}
+          locale={locale}
           onPauseChange={setPaused}
-          onPhotoKeyDown={handlePhotoKeyDown}
         />
       );
     }
 
     return out;
-  }, [images, frameRepeats, handlePhotoKeyDown]);
+  }, [images, frameRepeats, handlePhotoKeyDown, locale]);
 
   return (
-    <Box ref={rootRef} sx={styles.root} data-testid="BiographyGallery">
+    <Box
+      ref={rootRef}
+      role="group"
+      aria-roledescription={t('roleDescription')}
+      aria-label={t('navigationHint')}
+      sx={styles.root}
+      data-testid="BiographyGallery"
+    >
       <Box sx={styles.track(durationSec, paused)} data-testid="BiographyGallery-track">
         {trackContent}
       </Box>
