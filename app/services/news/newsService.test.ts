@@ -63,12 +63,29 @@ describe('newsService', () => {
       expect(newsRepositoryMock.getAllPublishedNews).toHaveBeenCalled();
     });
 
-    it('should return empty array if repository returns null or empty', async () => {
+    it('should return empty array if repository returns empty array', async () => {
       newsRepositoryMock.getAllPublishedNews.mockResolvedValue([]);
 
       const result = await newsService.getAllPublishedNews(locale);
 
       expect(result).toEqual([]);
+    });
+
+    it('should return empty array if repository returns null', async () => {
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue(null as any);
+
+      const result = await newsService.getAllPublishedNews(locale);
+
+      expect(result).toEqual([]);
+    });
+
+    it('should localize to en locale', async () => {
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([baseNewsMock] as any);
+
+      const result = await newsService.getAllPublishedNews('en');
+
+      expect(result[0].title).toBe('Title');
+      expect(result[0].description).toBe('Desc');
     });
 
     it('should return empty array if repository throws (catch block coverage)', async () => {
@@ -98,6 +115,23 @@ describe('newsService', () => {
       const result = await newsService.getNewsBySlug('non-existent', locale);
 
       expect(result).toBeNull();
+    });
+
+    it('should return localized news for en locale', async () => {
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(baseNewsMock as any);
+
+      const result = await newsService.getNewsBySlug('news-1', 'en');
+
+      expect(result?.title).toBe('Title');
+      expect(result?.description).toBe('Desc');
+    });
+
+    it('should call repository with the provided slug', async () => {
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(null);
+
+      await newsService.getNewsBySlug('specific-slug', locale);
+
+      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('specific-slug');
     });
   });
 });

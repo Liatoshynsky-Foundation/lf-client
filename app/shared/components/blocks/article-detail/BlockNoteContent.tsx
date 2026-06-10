@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
 import { Fragment } from 'react';
+
+import { CroppedBlockImage } from './CroppedBlockImage';
 
 type TextStyles = {
   bold?: boolean;
@@ -130,16 +131,18 @@ function renderBlock(block: BlockNoteBlock): React.ReactNode {
     case 'image': {
       const src = block.props.url as string;
       const alt = (block.props.caption as string) ?? '';
+      const cropData = (block.props.cropData as string) ?? '{}';
+      const blockWidth = (block.props.width as number) ?? 512;
       if (!src) return null;
       return (
-        <Box key={block.id} sx={{ position: 'relative', width: '100%', height: { xs: '240px', md: '400px' }, my: 3 }}>
-          <Image src={src} alt={alt} fill style={{ objectFit: 'contain' }} />
-          {alt && (
-            <Typography variant="caption" component="figcaption" sx={{ mt: 1, textAlign: 'center', display: 'block' }}>
-              {alt}
-            </Typography>
-          )}
-        </Box>
+        <CroppedBlockImage
+          key={block.id}
+          src={src}
+          alt={alt}
+          caption={alt}
+          cropData={cropData}
+          blockWidth={blockWidth}
+        />
       );
     }
 

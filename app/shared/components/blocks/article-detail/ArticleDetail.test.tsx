@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+import type { ArticleDetailProps } from './ArticleDetail';
 import { ArticleDetail } from './ArticleDetail';
 import type { BlockNoteBlock } from './BlockNoteContent';
 
@@ -41,11 +42,12 @@ const mockBlocks: BlockNoteBlock[] = [
   }
 ];
 
-const baseProps = {
+const baseProps: ArticleDetailProps = {
   lang: 'uk',
-  coverImage: { src: 'https://example.com/image.jpg', alt: 'Cover' },
   title: 'Лятошинський. 30 років після запису',
-  blocks: mockBlocks
+  blocks: mockBlocks,
+  backLabel: 'Повернутись до новин',
+  backPath: '/news'
 };
 
 describe('ArticleDetail', () => {
@@ -53,46 +55,76 @@ describe('ArticleDetail', () => {
     capturedBlockNoteBlocks = undefined;
   });
 
-  it('renders inside MainLayout', () => {
-    render(<ArticleDetail {...baseProps} />);
+  it('renders inside MainLayout', async () => {
+    render(await ArticleDetail(baseProps));
     expect(screen.getByTestId('MainLayout')).toBeInTheDocument();
   });
 
-  it('renders the article title', () => {
-    render(<ArticleDetail {...baseProps} />);
+  it('renders the article title', async () => {
+    render(await ArticleDetail(baseProps));
     expect(screen.getByText(baseProps.title)).toBeInTheDocument();
   });
 
-  it('renders the back link with correct path for lang', () => {
-    render(<ArticleDetail {...baseProps} lang="uk" />);
-    const link = screen.getByTestId('BackLink');
-    expect(link).toHaveAttribute('href', '/uk/news');
+  it('renders the back link with correct path for uk lang', async () => {
+    render(await ArticleDetail({ ...baseProps, lang: 'uk' }));
+    expect(screen.getByTestId('BackLink')).toHaveAttribute('href', '/uk/news');
   });
 
-  it('renders the back link with correct path for different lang', () => {
-    render(<ArticleDetail {...baseProps} lang="en" />);
-    const link = screen.getByTestId('BackLink');
-    expect(link).toHaveAttribute('href', '/en/news');
+  it('renders the back link with correct path for en lang', async () => {
+    render(await ArticleDetail({ ...baseProps, lang: 'en' }));
+    expect(screen.getByTestId('BackLink')).toHaveAttribute('href', '/en/news');
   });
 
-  it('renders publication date with prefix when date is provided', () => {
-    render(<ArticleDetail {...baseProps} date="01.05.24" />);
-    expect(screen.getByText(/Опубліковано:.*01\.05\.24/)).toBeInTheDocument();
+  it('renders back link label from backLabel prop', async () => {
+    render(await ArticleDetail(baseProps));
+    expect(screen.getByText('Повернутись до новин')).toBeInTheDocument();
   });
 
-  it('renders without crashing when date is not provided', () => {
-    render(<ArticleDetail {...baseProps} date={undefined} />);
-    expect(screen.getByText(baseProps.title)).toBeInTheDocument();
+  it('renders publication date with translation prefix when date is provided', async () => {
+    render(await ArticleDetail({ ...baseProps, date: '01.05.24' }));
+    expect(screen.getByText(/publishedAtLabel.*01\.05\.24/)).toBeInTheDocument();
   });
 
-  it('passes blocks to BlockNoteContent', () => {
-    render(<ArticleDetail {...baseProps} />);
+  it('does not render date section when date is not provided', async () => {
+    render(await ArticleDetail(baseProps));
+    expect(screen.queryByText(/publishedAtLabel/)).not.toBeInTheDocument();
+  });
+
+  it('passes blocks to BlockNoteContent', async () => {
+    render(await ArticleDetail(baseProps));
     expect(screen.getByTestId('BlockNoteContent')).toBeInTheDocument();
     expect(capturedBlockNoteBlocks).toEqual(mockBlocks);
   });
 
-  it('passes empty blocks array to BlockNoteContent when blocks is empty', () => {
-    render(<ArticleDetail {...baseProps} blocks={[]} />);
+  it('passes empty blocks array to BlockNoteContent when blocks is empty', async () => {
+    render(await ArticleDetail({ ...baseProps, blocks: [] }));
     expect(capturedBlockNoteBlocks).toEqual([]);
+  });
+
+  it('renders registrationBlock when provided', async () => {
+    render(
+      await ArticleDetail({
+        ...baseProps,
+        registrationBlock: <div data-testid="RegBlock">Register</div>
+      })
+    );
+    expect(screen.getByTestId('RegBlock')).toBeInTheDocument();
+  });
+
+  it('renders BlockNoteContent alongside registrationBlock when provided', async () => {
+    render(
+      await ArticleDetail({
+        ...baseProps,
+        registrationBlock: <div data-testid="RegBlock">Register</div>
+      })
+    );
+    expect(screen.getByTestId('RegBlock')).toBeInTheDocument();
+    expect(screen.getByTestId('BlockNoteContent')).toBeInTheDocument();
+  });
+
+  it('renders BlockNoteContent without registrationBlock when not provided', async () => {
+    render(await ArticleDetail(baseProps));
+    expect(screen.getByTestId('BlockNoteContent')).toBeInTheDocument();
+    expect(screen.queryByTestId('RegBlock')).not.toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { ZodError } from 'zod';
 
 import { errors } from '~/constants/errors';
 
@@ -62,6 +63,31 @@ describe('azureStorageService', () => {
     jest.clearAllMocks();
   });
 
+  describe('getClient', () => {
+    it('should reuse the existing blobServiceClient on subsequent calls', async () => {
+      const { BlobServiceClient } = jest.requireMock('@azure/storage-blob');
+      const service = createAzureStorageService();
+
+      await service.uploadFile(folderName, blobName, buffer, contentType);
+      await service.uploadFile(folderName, blobName, buffer, contentType);
+
+      expect(BlobServiceClient).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw when AZURE_SAS_URL is not set', async () => {
+      const originalUrl = process.env.AZURE_SAS_URL;
+      process.env.AZURE_SAS_URL = '';
+
+      try {
+        await expect(createAzureStorageService().uploadFile(folderName, blobName, buffer, contentType)).rejects.toThrow(
+          errors.AZURE_URL_NOT_DEFINED
+        );
+      } finally {
+        process.env.AZURE_SAS_URL = originalUrl;
+      }
+    });
+  });
+
   describe('uploadFile', () => {
     it('should upload file successfully', async () => {
       await expect(
@@ -103,6 +129,40 @@ describe('azureStorageService', () => {
       const url = createAzureStorageService().constructBlobUrl(folderName, blobName);
       expect(url).toBe(expectedUrl);
       expect(mockExists).not.toHaveBeenCalled();
+    });
+
+    it('should return blobName directly when it is already a full https URL', () => {
+      const r2Url = 'https://pub-xxx.r2.dev/photos/1777307314020-image.png';
+      const url = createAzureStorageService().constructBlobUrl(folderName, r2Url);
+      expect(url).toBe(r2Url);
+    });
+
+    it('should log error and rethrow when constructing URL fails', () => {
+      const { zFolderNameSchema } = jest.requireMock('~/validators/blob.schema');
+      const parseError = new Error('Invalid folder name');
+      (zFolderNameSchema.parse as jest.Mock).mockImplementationOnce(() => {
+        throw parseError;
+      });
+
+      expect(() => createAzureStorageService().constructBlobUrl(folderName, blobName)).toThrow(parseError);
+      expect(logger.error).toHaveBeenCalledWith(
+        `[AzureStorage:constructBlobUrl] ${errors.BLOB_DOES_NOT_EXIST}`,
+        parseError
+      );
+    });
+
+    it('should log validation message when a ZodError is thrown', () => {
+      const { zFolderNameSchema } = jest.requireMock('~/validators/blob.schema');
+      const zodError = new ZodError([]);
+      (zFolderNameSchema.parse as jest.Mock).mockImplementationOnce(() => {
+        throw zodError;
+      });
+
+      expect(() => createAzureStorageService().constructBlobUrl(folderName, blobName)).toThrow(zodError);
+      expect(logger.error).toHaveBeenCalledWith(
+        '[AzureStorage:constructBlobUrl] Validation failed for blob path config',
+        zodError
+      );
     });
   });
 
@@ -208,6 +268,24 @@ describe('azureStorageService', () => {
         status: 404,
         statusText: 'Not Found'
       });
+    });
+
+    it('should use fallback Content-Type and Content-Length when headers return null', async () => {
+      const mockAzureHeaders = {
+        get: jest.fn().mockReturnValue(null),
+        has: jest.fn().mockReturnValue(false)
+      };
+      mockFetch.mockResolvedValue({
+        ok: true,
+        status: 200,
+        headers: mockAzureHeaders,
+        body: 'audio data'
+      });
+
+      await createAzureStorageService().streamBlob(mockUrl, null);
+
+      expect(mockSetHeader).toHaveBeenCalledWith('Content-Type', 'application/octet-stream');
+      expect(mockSetHeader).toHaveBeenCalledWith('Content-Length', '');
     });
 
     it('should throw an error if fetch itself fails', async () => {
