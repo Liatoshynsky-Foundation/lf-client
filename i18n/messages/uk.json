@@ -352,6 +352,10 @@
   "biography": {
     "heroSection": {
       "title": "ЖиТтєПиС ЛятОшИнсьКогО"
+    },
+    "gallery": {
+      "roleDescription": "галерея зображень",
+      "navigationHint": "Використовуйте стрілки для навігації між фото"
     }
   },
   "news": {
