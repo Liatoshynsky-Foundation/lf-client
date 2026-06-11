@@ -352,6 +352,10 @@
   "biography": {
     "heroSection": {
       "title": "Liatoshynsky’s Life Story"
+    },
+    "gallery": {
+      "roleDescription": "image gallery",
+      "navigationHint": "Use the arrow keys to navigate between photos"
     }
   },
   "news": {
