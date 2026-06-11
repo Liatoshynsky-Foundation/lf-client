@@ -13,7 +13,7 @@ const getLocalizedText = (field: ILocalizedString | string | undefined, locale: 
 const safeGetIsoDate = (dateData: any): string | null => {
   if (!dateData) return null;
   const parsedDate = new Date(dateData);
-  return isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
 };
 
 const mediaMentionRepository = {
