@@ -8,11 +8,15 @@ jest.mock('swiper/css/navigation', () => ({}));
 
 jest.mock('swiper/react', () => ({
   Swiper: ({ children }: { children: React.ReactNode }) => <div data-testid="swiper-mock">{children}</div>,
-  SwiperSlide: ({ children, onFocusCapture }: { children: React.ReactNode; onFocusCapture?: () => void }) => (
-    <div data-testid="swiper-slide" role="group" tabIndex={0} onFocus={onFocusCapture}>
-      {children}
-    </div>
-  )
+  SwiperSlide: ({ children, onFocusCapture }: { children: React.ReactNode; onFocusCapture?: () => void }) => {
+    const focusProps = onFocusCapture ? { onFocus: onFocusCapture } : {};
+
+    return (
+      <div data-testid="swiper-slide" {...focusProps}>
+        {children}
+      </div>
+    );
+  }
 }));
 
 jest.mock('swiper/modules', () => ({
