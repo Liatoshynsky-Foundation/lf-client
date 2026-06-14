@@ -1,8 +1,6 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { hexButtonGroupColors } from '~/ds-components/theme/colors';
-
 export const StyledIndicator = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette' && prop !== 'animate'
 })<{
@@ -11,7 +9,7 @@ export const StyledIndicator = styled(Box, {
   palette: 'primary' | 'secondary' | 'tertiary';
   animate?: boolean;
 }>(({ left, width, palette, animate = true }) => {
-  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
+  const isPrimary = palette === 'primary';
 
   return {
     height: 'calc(100% - 8px)',
@@ -20,8 +18,8 @@ export const StyledIndicator = styled(Box, {
     borderRadius: '9999px',
     transition: animate ? 'all 0.3s ease' : 'none',
     zIndex: 0,
-    backgroundColor: paletteValues.selectedButtonColor,
-    color: paletteValues.selectedButtonTextColor,
+    backgroundColor: isPrimary ? 'black' : 'white',
+    color: isPrimary ? 'white' : 'black',
     left,
     width
   };
@@ -34,14 +32,16 @@ export const StyledButtonItem = styled(Box, {
   palette: 'primary' | 'secondary' | 'tertiary';
   size: 'small' | 'big';
 }>(({ active, palette, size }) => {
-  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
+  const isPrimary = palette === 'primary';
+  const activeTextColor = isPrimary ? 'white' : 'black';
+  const inactiveTextColor = 'black';
 
   return {
     display: 'inline-flex',
     alignItems: 'center',
     height: '100%',
     borderRadius: '9999px',
-    color: active ? paletteValues.selectedButtonTextColor : paletteValues.buttonTextColor,
+    color: active ? activeTextColor : inactiveTextColor,
     fontFamily: 'inherit',
     cursor: 'pointer',
     position: 'relative',

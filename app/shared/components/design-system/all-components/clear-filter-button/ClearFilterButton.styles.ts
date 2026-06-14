@@ -1,5 +1,3 @@
-import { mainHexPallete, rgbaClearFilterButton } from '~/ds-components/theme/colors';
-
 export const styles = {
   button: {
     lineHeight: '140%',
@@ -7,7 +5,7 @@ export const styles = {
     borderRadius: '8px',
     display: 'flex',
     justifyContent: 'flex-start',
-    color: rgbaClearFilterButton.defaultTextColor,
+    color: 'red.600',
     paddingRight: '14px',
     paddingLeft: '14px',
 
@@ -16,15 +14,15 @@ export const styles = {
     },
 
     '&:hover': {
-      backgroundColor: mainHexPallete.red[50]
+      backgroundColor: 'red.50'
     },
 
     '&:focus-visible': {
-      color: mainHexPallete.red[700]
+      color: 'red.700'
     },
 
     '&:active': {
-      color: mainHexPallete.red[700]
+      color: 'red.700'
     }
   }
 };

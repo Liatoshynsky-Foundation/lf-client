@@ -1,61 +1,45 @@
-const Colors = {
-  white: '#FCFCFC',
-  black: '#190D03',
-  gray: '#63666E',
-  lightGray: '#D9DCE8',
-  yellow: '#FCBD28',
-  error: '#E63C14',
-
-  hoverTransparent: '#FCFCFC29',
-  focusTransparent: '#FCFCFC57',
-  pressTransparent: '#FFFFFF1F',
-  hoverOutlined: '#F7F5F1',
-  activeOutlined: '#D3CAC0',
-  hoverError: '#E63C1414',
-  activeError: '#E63C143D'
-};
-
 const PrimaryIconStyles = {
-  color: Colors.black,
-  backgroundColor: Colors.white,
+  color: 'black',
+  backgroundColor: 'white',
   '&:hover': {
-    backgroundColor: Colors.hoverOutlined
+    backgroundColor: 'brown.50'
   },
   '&:active': {
-    backgroundColor: Colors.activeOutlined
+    backgroundColor: 'brown.200'
   },
   '&:disabled': {
-    color: Colors.gray
+    color: 'blue.700'
   }
 };
 
 const SecondaryIconStyles = {
-  color: Colors.white,
-  backgroundColor: Colors.black,
+  color: 'white',
+  backgroundColor: 'black',
   '&:hover': {
-    backgroundColor: Colors.hoverTransparent
+    backgroundColor: 'rgba(255, 255, 255, 0.16)'
   },
   '&:focused': {
-    backgroundColor: Colors.focusTransparent
+    backgroundColor: 'rgba(255, 255, 255, 0.34)'
   },
   '&:pressed': {
-    backgroundColor: Colors.pressTransparent
+    backgroundColor: 'rgba(255, 255, 255, 0.12)'
   },
   '&:disabled': {
-    color: Colors.gray
+    color: 'blue.700'
   }
 };
+
 export const IconButtonStyles = {
   primary: {
     fontSize: '0',
-    color: Colors.white,
-    backgroundColor: Colors.black,
+    color: 'white',
+    backgroundColor: 'black',
     '&:hover': {
-      backgroundColor: Colors.black
+      backgroundColor: 'black'
     },
     '&:disabled': {
-      color: Colors.gray,
-      backgroundColor: Colors.lightGray
+      color: 'blue.700',
+      backgroundColor: 'blue.200'
     }
   },
   primaryIcon: {
@@ -65,62 +49,65 @@ export const IconButtonStyles = {
   primaryOutlined: {
     fontSize: '0',
     ...PrimaryIconStyles,
-    border: '1px black solid'
+    border: '1px solid',
+    borderColor: 'black'
   },
   secondary: {
     fontSize: '0',
-    color: Colors.black,
-    backgroundColor: Colors.white,
+    color: 'black',
+    backgroundColor: 'white',
     '&:hover': {
-      backgroundColor: Colors.white
+      backgroundColor: 'white'
     },
     '&:disabled': {
-      color: Colors.gray,
-      backgroundColor: Colors.lightGray
+      color: 'blue.700',
+      backgroundColor: 'blue.200'
     }
   },
   secondaryIcon: {
     fontSize: '0',
-    SecondaryIconStyles
+    ...SecondaryIconStyles
   },
   secondaryOutlined: {
     fontSize: '0',
-    SecondaryIconStyles,
-    border: '1px white solid'
+    ...SecondaryIconStyles,
+    border: '1px solid',
+    borderColor: 'white'
   },
   tertiary: {
     fontSize: '0',
-    color: Colors.black,
-    backgroundColor: Colors.yellow,
+    color: 'black',
+    backgroundColor: 'yellow.500',
     '&:hover': {
-      color: Colors.white,
-      backgroundColor: Colors.black
+      color: 'white',
+      backgroundColor: 'black'
     },
     '&:focused': {
-      color: Colors.black,
-      backgroundColor: Colors.yellow
+      // Исправили :focused
+      color: 'black',
+      backgroundColor: 'yellow.500'
     },
     '&:active': {
-      color: Colors.black,
-      backgroundColor: Colors.yellow
+      color: 'black',
+      backgroundColor: 'yellow.500'
     },
     '&:disabled': {
-      color: Colors.gray,
-      backgroundColor: Colors.lightGray
+      color: 'blue.700',
+      backgroundColor: 'blue.200'
     }
   },
   error: {
     fontSize: '0',
-    color: Colors.error,
-    backgroundColor: Colors.white,
+    color: 'error.main',
+    backgroundColor: 'white',
     '&:hover': {
-      backgroundColor: Colors.hoverError
+      backgroundColor: 'rgba(230, 60, 20, 0.08)'
     },
     '&:active': {
-      backgroundColor: Colors.activeError
+      backgroundColor: 'rgba(230, 60, 20, 0.24)'
     },
     '&:disabled': {
-      color: Colors.gray
+      color: 'blue.700'
     }
   }
 };

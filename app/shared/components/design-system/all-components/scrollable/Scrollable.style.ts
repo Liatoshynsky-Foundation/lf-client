@@ -1,7 +1,5 @@
 import { Box, styled } from '@mui/material';
 
-import { mainHexPallete } from '../theme/colors';
-
 export const NativeScrollableContent = styled(Box)({
   width: '100%',
   height: '100%',
@@ -13,12 +11,12 @@ export const NativeScrollableContent = styled(Box)({
     background: 'transparent'
   },
   '&::-webkit-scrollbar-thumb': {
-    backgroundColor: mainHexPallete.blue[400],
+    backgroundColor: 'blue.400',
     borderRadius: '16px',
     border: '3px solid transparent',
     backgroundClip: 'content-box',
     '&:hover': {
-      backgroundColor: mainHexPallete.black
+      backgroundColor: 'black'
     }
   }
 });

@@ -1,18 +1,8 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-import { oswald } from '~/ds-components/theme/Theme';
-
 const ellipsisStyles = {
   display: '-webkit-box',
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
   textOverflow: 'ellipsis'
-} as const;
-
-const textBaseStyles = {
-  fontFamily: 'Mulish, sans-serif',
-  fontSize: '16px',
-  fontWeight: 400,
-  lineHeight: '150%'
 } as const;
 
 export const styles = {
@@ -40,7 +30,7 @@ export const styles = {
       content: '""',
       position: 'absolute',
       inset: 0,
-      background: mainHexPallete.blue[200],
+      background: 'blue.200',
       clipPath: `
     polygon(
       0% calc(5.5%),
@@ -56,7 +46,7 @@ export const styles = {
       content: '""',
       position: 'absolute',
       inset: 0,
-      background: mainHexPallete.blue[200],
+      background: 'blue.200',
       clipPath: `
     polygon(
       0% calc(100% - 1px),
@@ -91,26 +81,19 @@ export const styles = {
   },
 
   title: {
-    fontFamily: oswald.style.fontFamily,
-    fontSize: { xs: '18px', md: '20px' },
-    fontWeight: 700,
-    lineHeight: '150%',
     textTransform: 'uppercase',
-    color: mainHexPallete.black,
+    color: 'black',
     ...ellipsisStyles,
     WebkitLineClamp: 2,
     marginBottom: { sm: '6px', md: '8px', lg: '9px', xxl: '6px' }
   },
 
   date: {
-    ...textBaseStyles,
-    fontWeight: 500,
-    color: mainHexPallete.brown[600]
+    color: 'brown.600'
   },
 
   description: {
-    ...textBaseStyles,
-    color: mainHexPallete.black,
+    color: 'black',
     ...ellipsisStyles,
     WebkitLineClamp: 3,
     marginBottom: { xs: '8px', sm: '11px', md: '9px', lg: '8px', xl: '10px' }

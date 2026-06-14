@@ -1,7 +1,7 @@
 import type { SxProps, Theme } from '@mui/material';
 
-import { rgbaTabColors } from '~/ds-components/theme/colors';
 const gutter = '24px';
+
 export const styles: Record<string, SxProps<Theme>> = {
   container: {
     display: 'block',
@@ -36,14 +36,14 @@ export const styles: Record<string, SxProps<Theme>> = {
         bottom: 0,
         width: '100%',
         height: '2px',
-        backgroundColor: rgbaTabColors.defaultLineColor,
+        backgroundColor: 'background.default',
         zIndex: 1
       }
     },
 
     '& .MuiTabs-indicator': {
       height: '2px',
-      backgroundColor: rgbaTabColors.activeLineColor,
+      backgroundColor: 'black',
       bottom: 0,
       zIndex: 2
     },
@@ -53,35 +53,27 @@ export const styles: Record<string, SxProps<Theme>> = {
         xs: '0 0 auto',
         sm: '1 1 0'
       },
-
-      textTransform: 'none',
       justifyContent: 'center',
-      padding: '12px 28px',
 
-      fontFamily: 'Mulish, sans-serif',
       fontSize: { xs: '16px', md: '18px' },
-      fontWeight: 600,
-      lineHeight: '150%',
-      letterSpacing: '0px',
-      whiteSpace: 'nowrap',
 
-      color: rgbaTabColors.defaultTextColor,
+      color: 'blue.700',
 
       '&:hover': {
-        color: rgbaTabColors.hoveredTextColor
+        color: 'blue.800'
       },
       '&:active': {
-        color: rgbaTabColors.pressedTextColor
+        color: 'blue.900'
       },
       '&.Mui-selected': {
-        color: rgbaTabColors.activeTextColor
+        color: 'black'
       }
     }
   },
 
   indicator: {
     height: '2px',
-    backgroundColor: rgbaTabColors.activeLineColor,
+    backgroundColor: 'black',
     bottom: 0,
     zIndex: 2
   }

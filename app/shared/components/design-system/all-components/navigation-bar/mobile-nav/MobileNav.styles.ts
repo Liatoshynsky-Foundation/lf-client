@@ -1,5 +1,3 @@
-import { backgroundColors } from '~/ds-components/theme/colors';
-
 import { theme } from '../../theme/Theme';
 
 export const styles = {
@@ -7,8 +5,9 @@ export const styles = {
     borderRadius: '32px',
     width: isMobile ? '88px' : '112px',
     height: isMobile ? '40px' : '52px',
-    backgroundColor: 'rgb(238, 238, 237) !important',
-    border: `${isMobile ? 4 : 6}px solid ${backgroundColors.white}`,
+    backgroundColor: 'brown.100 !important',
+    border: `${isMobile ? 4 : 6}px solid`,
+    borderColor: 'white',
     zIndex: theme.zIndex.mobileNavButton,
     display: 'flex',
     alignItems: 'center',

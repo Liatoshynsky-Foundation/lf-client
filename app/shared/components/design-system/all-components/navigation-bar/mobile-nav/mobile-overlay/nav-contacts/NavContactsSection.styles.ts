@@ -1,5 +1,4 @@
 import { AppTypography } from '~/constants';
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 
 export const styles = {
   links: {
@@ -11,7 +10,7 @@ export const styles = {
     ...AppTypography.mulish18Regular,
     fontSize: { xs: '16px', md: '18px' },
     lineHeight: { xs: '150%', md: '160%' },
-    color: mainHexPallete.brown[700],
+    color: 'brown.700',
     display: { xs: 'none', sm: 'block' }
   },
   socialMediaBox: {
