@@ -1,5 +1,7 @@
 import type { Locale } from 'next-intl';
 
+import { IMAGES } from '~/shared/constants/assets';
+
 type LocalizedString = Record<Locale, string>;
 
 export interface GalleryPhotoData {
@@ -12,7 +14,7 @@ export interface GalleryPhotoData {
 export const biographyGalleryPhotos: GalleryPhotoData[] = [
   {
     id: 'bio-1',
-    src: '/images/biography-gallery/1.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(1),
     alt: {
       uk: 'Портрет Бориса Лятошинського, 1910-ті роки',
       en: 'Portrait of Borys Liatoshynsky, 1910s'
@@ -24,7 +26,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-2',
-    src: '/images/biography-gallery/2.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(2),
     alt: {
       uk: 'Борис Лятошинський у молоді роки',
       en: 'Borys Liatoshynsky in his youth'
@@ -36,7 +38,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-3',
-    src: '/images/biography-gallery/3.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(3),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -45,7 +47,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-4',
-    src: '/images/biography-gallery/4.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(4),
     alt: {
       uk: 'Борис Лятошинський у 1950-х роках',
       en: 'Borys Liatoshynsky in the 1950s'
@@ -57,7 +59,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-5',
-    src: '/images/biography-gallery/5.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(5),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -66,7 +68,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-6',
-    src: '/images/biography-gallery/6.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(6),
     alt: {
       uk: 'Борис Лятошинський сидить на лавці в Празі',
       en: 'Borys Liatoshynsky sitting on a bench in Prague'
@@ -78,7 +80,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-7',
-    src: '/images/biography-gallery/7.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(7),
     alt: {
       uk: 'Борис Лятошинський з котами на дачі в Ворзелі',
       en: 'Borys Liatoshynsky with cats at his summer house in Vorzel'
@@ -90,7 +92,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-8',
-    src: '/images/biography-gallery/8.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(8),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -99,7 +101,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-9',
-    src: '/images/biography-gallery/9.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(9),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -108,7 +110,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-10',
-    src: '/images/biography-gallery/10.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(10),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -117,7 +119,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-11',
-    src: '/images/biography-gallery/11.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(11),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -126,7 +128,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-12',
-    src: '/images/biography-gallery/12.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(12),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -135,7 +137,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-13',
-    src: '/images/biography-gallery/13.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(13),
     alt: {
       uk: 'Борис Лятошинський з Ігорем Белзою на дачі',
       en: 'Borys Liatoshynsky with Igor Belza at the summer house'
@@ -147,7 +149,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-14',
-    src: '/images/biography-gallery/14.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(14),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -156,7 +158,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-15',
-    src: '/images/biography-gallery/15.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(15),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -165,7 +167,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-16',
-    src: '/images/biography-gallery/16.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(16),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -174,7 +176,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-17',
-    src: '/images/biography-gallery/17.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(17),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -183,7 +185,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-18',
-    src: '/images/biography-gallery/18.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(18),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -192,7 +194,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-19',
-    src: '/images/biography-gallery/19.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(19),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'
@@ -201,7 +203,7 @@ export const biographyGalleryPhotos: GalleryPhotoData[] = [
   },
   {
     id: 'bio-20',
-    src: '/images/biography-gallery/20.png',
+    src: IMAGES.MAIN_BIOGRAPHY_GALLERY(20),
     alt: {
       uk: 'Архівне фото Бориса Лятошинського',
       en: 'Archival photograph of Borys Liatoshynsky'

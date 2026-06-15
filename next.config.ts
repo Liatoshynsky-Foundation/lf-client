@@ -4,7 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const AZURE_SAS_URL = process.env.AZURE_SAS_URL;
 const azureHostname = AZURE_SAS_URL ? new URL(AZURE_SAS_URL).hostname : null;
 
-const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL;
+const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL ?? process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
 const storageHostname = STORAGE_BASE_URL ? new URL(STORAGE_BASE_URL).hostname : null;
 
 const nextConfig: NextConfig = {
