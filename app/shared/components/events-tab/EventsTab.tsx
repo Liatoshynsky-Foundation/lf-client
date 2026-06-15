@@ -11,7 +11,7 @@ import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { styles } from './EventsTab.style';
 
-import { getEventTimestamp, sortEvents } from '~/lib/utils/events';
+import { mapEventToCardProps, sortEvents } from '~/lib/utils/events';
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import { IMAGES } from '~/shared/constants/assets';
@@ -75,37 +75,16 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   return (
     <Box ref={tabRef} sx={{ ...styles.container, ...tabSx }} data-testid="EventsTab">
       {paginatedData.map((event) => {
-        const isCompleted = getEventTimestamp(event.eventDateTimeEnd, event.eventDateTimeStart) < Date.now();
-
-        const cardActions = [{ label: tEvents('viewButton'), href: `/events/${event.slug}` }];
-
-        if (!isCompleted && event.ticketUrl) {
-          const regLink = typeof event.ticketUrl === 'string' ? event.ticketUrl : event.ticketUrl[locale];
-          if (regLink) {
-            cardActions.push({ label: tEvents('registerButton'), href: regLink });
-          }
-        }
-
-        return (
-          <EventItem
-            key={event._id}
-            title={event.title}
-            description={event.description}
-            image={{
-              src: event.coverImage?.src || IMAGES.PLACEHOLDER,
-              alt: event.coverImage?.alt || 'Зображення події',
-              crop: event.coverImage?.crop
-            }}
-            href={`/events/${event.slug}`}
-            date={{
-              startDate: event.eventDateTimeStart ? new Date(event.eventDateTimeStart).toISOString() : '',
-              endDate: event.eventDateTimeEnd ? new Date(event.eventDateTimeEnd).toISOString() : undefined
-            }}
-            statusLabel={isCompleted ? t('completedEvent') : undefined}
-            publishedAt={event.publishedAt ? new Date(event.publishedAt).toISOString() : ''}
-            actions={cardActions}
-          />
+        const cardProps = mapEventToCardProps(
+          event,
+          locale,
+          t('completedEvent'),
+          tEvents('viewButton'),
+          tEvents('registerButton'),
+          'numeric'
         );
+
+        return <EventItem key={event._id} {...cardProps} />;
       })}
 
       <Box sx={styles.paginationWrapper} data-testid="EventsTab-paginationWrapper">

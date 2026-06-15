@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { styles } from './EventSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { getEventTimestamp, sortEvents } from '~/lib/utils/events';
+import { mapEventToCardProps, sortEvents } from '~/lib/utils/events';
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import { eventListItemSchema } from '~/validators/events.schema';
@@ -42,38 +42,16 @@ const EventSection: React.FC<Props> = ({ title, text, ctaLabel, ctaHref, viewLab
   const displayedEvents = sortedEvents.slice(0, 3);
 
   const renderEventItem = (event: RawEventItem) => {
-    const isCompleted = getEventTimestamp(event.eventDateTimeEnd, event.eventDateTimeStart) < Date.now();
-
-    const cardActions = [{ label: viewLabel, href: `/events/${event.slug}` }];
-
-    if (!isCompleted && event.ticketUrl) {
-      const regLink = typeof event.ticketUrl === 'string' ? event.ticketUrl : event.ticketUrl[locale];
-      if (regLink) {
-        cardActions.push({ label: regLabel, href: regLink });
-      }
-    }
-
-    return (
-      <EventItem
-        key={event._id}
-        title={event.title}
-        description={event.description}
-        image={{
-          src: event.coverImage?.src || '/images/placeholder.png',
-          alt: event.coverImage?.alt || 'Зображення події',
-          crop: event.coverImage?.crop
-        }}
-        href={`/events/${event.slug}`}
-        date={{
-          startDate: event.eventDateTimeStart ? new Date(event.eventDateTimeStart).toISOString() : '',
-          endDate: event.eventDateTimeEnd ? new Date(event.eventDateTimeEnd).toISOString() : undefined
-        }}
-        dateVariant={isDesktop ? 'text' : 'numeric'}
-        statusLabel={isCompleted ? t('completedEvent') : undefined}
-        publishedAt={event.publishedAt ? new Date(event.publishedAt).toISOString() : ''}
-        actions={cardActions}
-      />
+    const cardProps = mapEventToCardProps(
+      event,
+      locale,
+      t('completedEvent'),
+      viewLabel,
+      regLabel,
+      isDesktop ? 'text' : 'numeric'
     );
+
+    return <EventItem key={event._id} {...cardProps} />;
   };
 
   return (
