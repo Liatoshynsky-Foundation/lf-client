@@ -60,6 +60,11 @@ type EventItemDateLabels = {
   ariaLabel: string;
 };
 
+const formatTextMonth = (d: Date, locale: string) => d.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
+
+const formatNumeric = (d: Date) =>
+  `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+
 const buildEventItemDateLabels = (
   date: EventItemDate,
   locale: string,
@@ -67,46 +72,43 @@ const buildEventItemDateLabels = (
 ): EventItemDateLabels | null => {
   if (!date.startDate) return null;
 
-  const startDateObj = new Date(date.startDate);
-  if (Number.isNaN(startDateObj.getTime())) return null;
-  let yearLabel = startDateObj.getFullYear().toString();
+  const start = new Date(date.startDate);
+  if (Number.isNaN(start.getTime())) return null;
+
+  const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
+  const startYear = start.getFullYear();
+
+  if (!date.endDate) {
+    const rangeLabel = formatTextMonth(start, dateLocale);
+    const yearLabel = startYear.toString();
+    return { rangeLabel, yearLabel, ariaLabel: `${rangeLabel} ${yearLabel}` };
+  }
+
+  const end = new Date(date.endDate);
+  const endYear = end.getFullYear();
+  const isSameYear = startYear === endYear;
 
   let rangeLabel = '';
-  const finalYearLabel = yearLabel;
-  const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
+  let yearLabel = startYear.toString();
 
-  const formatTextMonth = (d: Date) => d.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long' });
-
-  if (date.endDate) {
-    const endDateObj = new Date(date.endDate);
-
-    if (dateVariant === 'text') {
-      if (startDateObj.getFullYear() !== endDateObj.getFullYear()) {
-        rangeLabel = `${formatTextMonth(startDateObj)} ${startDateObj.getFullYear()} –\n${formatTextMonth(endDateObj)} ${endDateObj.getFullYear()}`;
-        yearLabel = '';
-      } else {
-        rangeLabel = `${formatTextMonth(startDateObj)} –\n${formatTextMonth(endDateObj)}`;
-      }
+  if (dateVariant === 'text') {
+    if (isSameYear) {
+      rangeLabel = `${formatTextMonth(start, dateLocale)} –\n${formatTextMonth(end, dateLocale)}`;
     } else {
-      const formatNumeric = (d: Date) =>
-        `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-
-      if (startDateObj.getFullYear() !== endDateObj.getFullYear()) {
-        const formatWithYear = (d: Date) => `${formatNumeric(d)}.${d.getFullYear()}`;
-        rangeLabel = `${formatWithYear(startDateObj)} –\n${formatWithYear(endDateObj)}`;
-        yearLabel = '';
-      } else {
-        rangeLabel = `${formatNumeric(startDateObj)} – ${formatNumeric(endDateObj)}`;
-      }
+      rangeLabel = `${formatTextMonth(start, dateLocale)} ${startYear} –\n${formatTextMonth(end, dateLocale)} ${endYear}`;
+      yearLabel = '';
     }
+  } else if (isSameYear) {
+    rangeLabel = `${formatNumeric(start)} – ${formatNumeric(end)}`;
   } else {
-    rangeLabel = formatTextMonth(startDateObj);
+    rangeLabel = `${formatNumeric(start)}.${startYear} –\n${formatNumeric(end)}.${endYear}`;
+    yearLabel = '';
   }
 
   return {
     rangeLabel,
-    yearLabel: finalYearLabel,
-    ariaLabel: `${rangeLabel} ${finalYearLabel}`
+    yearLabel,
+    ariaLabel: `${rangeLabel} ${yearLabel}`.trim()
   };
 };
 
@@ -162,10 +164,10 @@ const EventItem = ({
             <>
               <Typography component="p" sx={styles.dateRange} data-testid="EventItem-dateRange">
                 <time dateTime={startDateTime}>
-                  {dateLabels.rangeLabel.split('\n').map((line, index, array) => (
-                    <span key={index}>
+                  {dateLabels.rangeLabel.split('\n').map((line, index) => (
+                    <span key={`${line}-${index}`}>
                       {line}
-                      {index < array.length - 1 && <br />}
+                      {index < dateLabels.rangeLabel.split('\n').length - 1 && <br />}
                     </span>
                   ))}
                 </time>

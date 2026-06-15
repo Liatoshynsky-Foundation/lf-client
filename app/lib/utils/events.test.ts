@@ -20,7 +20,7 @@ describe('events utils', () => {
 
     it('should return 0 if both dates are not provided', () => {
       expect(getEventTimestamp(null, null)).toBe(0);
-      expect(getEventTimestamp(undefined, undefined)).toBe(0);
+      expect(getEventTimestamp()).toBe(0);
     });
   });
 
