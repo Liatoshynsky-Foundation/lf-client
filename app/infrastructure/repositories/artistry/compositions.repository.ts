@@ -13,6 +13,8 @@ import { compositionSchema, compositionTitlesSchema } from '~/validators/artistr
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
 
+const OPUS_REGEX = /^(op|bo)[.-]?\s*(\d+(?:\.\d+)?)/i;
+
 function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
   return words.map((word) => ({
     $or: fields.map((field) => ({
@@ -26,6 +28,21 @@ function buildAllWordsPresent<T>(words: string[], fieldGroups: string[][]): Filt
 
   return {
     $or: andClauses.map((clauses) => ({ $and: clauses }))
+  };
+}
+
+function parseOpus(opusStr?: string) {
+  if (!opusStr) return null;
+
+  const trimmedStr = opusStr.trim();
+  const match = OPUS_REGEX.exec(trimmedStr);
+
+  if (!match) return null;
+
+  return {
+    prefix: match[1].toLowerCase(),
+    num: Number.parseFloat(match[2]),
+    rest: trimmedStr.slice(match[0].length)
   };
 }
 
@@ -92,7 +109,7 @@ const compositionsRepository = {
       {
         $unwind: {
           path: '$opusData',
-          preserveNullAndEmptyArrays: true
+          preserveNullAndEmptyArrays: false
         }
       }
     ];
@@ -108,9 +125,14 @@ const compositionsRepository = {
       );
     }
 
-    const categoryKeys = namedFilterHelper(category);
-    if (categoryKeys.length) {
-      const categoryDocs = await Category.find({ key: { $in: categoryKeys } })
+    const allCategoryKeys: string[] = namedFilterHelper(category);
+    const specialKeys = new Set<string>(['with-opus', 'without-opus']);
+
+    const regularCategoryKeys = allCategoryKeys.filter((key: string) => !specialKeys.has(key));
+    const selectedSpecialKeys = allCategoryKeys.filter((key: string) => specialKeys.has(key));
+
+    if (regularCategoryKeys.length > 0) {
+      const categoryDocs = await Category.find({ key: { $in: regularCategoryKeys } })
         .select('_id')
         .lean();
       const categoryIds = categoryDocs.map((d) => d._id);
@@ -119,6 +141,16 @@ const compositionsRepository = {
         compMatch.push({ categories: { $in: categoryIds } });
       } else {
         return [];
+      }
+    }
+
+    if (selectedSpecialKeys.length > 0) {
+      const isWithOpus = selectedSpecialKeys.includes('with-opus');
+      const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
+
+      if (!(isWithOpus && isWithoutOpus)) {
+        const regexPattern = isWithOpus ? /^op/i : /^bo/i;
+        compMatch.push({ 'opusData.number': { $regex: regexPattern } } as FilterQuery<CompositionDTO>);
       }
     }
 
@@ -200,7 +232,7 @@ const compositionsRepository = {
       }
     });
 
-    const allTitles = Array.from(allTitlesMap.values());
+    const allTitles = Array.from(allTitlesMap.values()).filter((item) => parseOpus(item.opusNumber) !== null);
 
     return ArraySchema(compositionTitlesSchema).parse(allTitles);
   },
@@ -239,17 +271,41 @@ const compositionsRepository = {
       conditions.push({ genres: { $in: genresIds } });
     }
 
-    const readyCategoryArray = namedFilterHelper(filters?.categories);
-    if (readyCategoryArray.length > 0) {
-      const categoryIds = await Category.find({ key: { $in: readyCategoryArray } })
+    const allCategoryKeys: string[] = namedFilterHelper(filters?.categories) || [];
+    const specialKeys = new Set<string>(['with-opus', 'without-opus']);
+
+    const regularCategoryKeys = allCategoryKeys.filter((key: string) => !specialKeys.has(key));
+    const selectedSpecialKeys = allCategoryKeys.filter((key: string) => specialKeys.has(key));
+
+    if (regularCategoryKeys.length > 0) {
+      const categoryIds = await Category.find({ key: { $in: regularCategoryKeys } })
         .select('_id')
         .lean();
 
       conditions.push({ categories: { $in: categoryIds } });
     }
 
+    if (selectedSpecialKeys.length > 0) {
+      const isWithOpus = selectedSpecialKeys.includes('with-opus');
+      const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
+
+      if (!(isWithOpus && isWithoutOpus)) {
+        const regexPattern = isWithOpus ? /^op/i : /^bo/i;
+
+        const matchingOpuses = await Opus.find({ number: { $regex: regexPattern } })
+          .select('_id')
+          .lean();
+
+        const matchingOpusIds = matchingOpuses.map((o) => o._id);
+
+        conditions.push({ opusId: { $in: matchingOpusIds } });
+      }
+    }
+
     const readyYearObject = yearHelper(filters?.years);
     if (readyYearObject) conditions.push({ year: { $gte: readyYearObject.min, $lte: readyYearObject.max } });
+
+    conditions.push({ opusId: { $exists: true, $ne: null } });
 
     let query: Query = {};
     if (conditions.length === 1) query = conditions[0];
@@ -263,7 +319,24 @@ const compositionsRepository = {
 
     if (!compositions || compositions.length === 0) return [];
 
-    return ArraySchema(compositionSchema).parse(compositions);
+    const parsedCompositions = ArraySchema(compositionSchema)
+      .parse(compositions)
+      .filter((comp) => parseOpus(comp.opusId?.number) !== null);
+
+    return parsedCompositions.sort((a, b) => {
+      const parsedA = parseOpus(a.opusId?.number)!;
+      const parsedB = parseOpus(b.opusId?.number)!;
+
+      if (parsedA.prefix !== parsedB.prefix) {
+        return parsedA.prefix === 'op' ? -1 : 1;
+      }
+      if (parsedA.num !== parsedB.num) {
+        return parsedA.num - parsedB.num;
+      }
+      const cleanA = parsedA.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const cleanB = parsedB.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return cleanA.localeCompare(cleanB, undefined, { numeric: true, sensitivity: 'base' });
+    });
   }
 };
 
