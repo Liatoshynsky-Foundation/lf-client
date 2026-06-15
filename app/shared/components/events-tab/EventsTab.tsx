@@ -11,6 +11,7 @@ import { usePagination } from '~/hooks/use-pagination/usePagination';
 
 import { styles } from './EventsTab.style';
 
+import { getEventTimestamp, sortEvents } from '~/lib/utils/events';
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
 import { IMAGES } from '~/shared/constants/assets';
@@ -26,12 +27,6 @@ interface EventsTabProps {
   tabSx?: object;
 }
 
-const getEventTimestamp = (endDate?: string | null, startDate?: string | null) => {
-  if (endDate) return new Date(endDate).getTime();
-  if (startDate) return new Date(startDate).getTime();
-  return 0;
-};
-
 const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const locale = useLocale();
   const t = useTranslations('common');
@@ -40,21 +35,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
   const breakpoint = useBreakpoints();
 
   const events = useMemo(() => {
-    const nowTime = Date.now();
-
-    const upcomingEvents = eventsData
-      .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) >= nowTime)
-      .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
-
-    const completedEvents = eventsData
-      .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) < nowTime)
-      .sort((a, b) => {
-        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-        return dateB - dateA;
-      });
-
-    return [...upcomingEvents, ...completedEvents];
+    return sortEvents(eventsData);
   }, [eventsData]);
 
   const { hasMore, paginatedData, currentPage, totalPages, visiblePages, handleLoadMore, handlePageChange } =
@@ -115,7 +96,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
               alt: event.coverImage?.alt || 'Зображення події',
               crop: event.coverImage?.crop
             }}
-            href={`/news/${event.slug}`}
+            href={`/events/${event.slug}`}
             date={{
               startDate: event.eventDateTimeStart ? new Date(event.eventDateTimeStart).toISOString() : '',
               endDate: event.eventDateTimeEnd ? new Date(event.eventDateTimeEnd).toISOString() : undefined

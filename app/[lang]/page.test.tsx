@@ -46,6 +46,19 @@ jest.mock(
       return <div data-testid="events" />;
     }
 );
+jest.mock('~/di/container', () => ({
+  createRequestContainer: jest.fn(() => ({
+    resolve: jest.fn((serviceName) => {
+      if (serviceName === 'eventsService') {
+        return {
+          getAllPublishedEvents: jest.fn().mockResolvedValue([])
+        };
+      }
+      return {};
+    })
+  })),
+  container: { resolve: jest.fn() }
+}));
 jest.mock(
   '~/components/blocks/news-section/NewsSection',
   () =>
@@ -88,10 +101,6 @@ jest.mock('~/shared/components/blocks/home-page-hero/animation', () => ({
   }
 }));
 
-jest.mock('~/di/container', () => ({
-  createRequestContainer: jest.fn(() => ({ resolve: jest.fn() })),
-  container: { resolve: jest.fn() }
-}));
 jest.mock('~/services/pages-data/resolvePageData', () => ({
   resolvePageData: jest.fn().mockResolvedValue('MOCK_RESULT')
 }));

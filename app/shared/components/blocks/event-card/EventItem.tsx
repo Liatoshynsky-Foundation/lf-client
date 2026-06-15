@@ -3,7 +3,9 @@
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
@@ -14,6 +16,20 @@ import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
+
+const FALLBACK_IMAGE = '/images/media-card-placeholder.png';
+
+const isValidUrl = (url: string | null | undefined): url is string => {
+  if (!url) return false;
+  if (url.startsWith('/')) return true;
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    console.warn(`[EventItem:isValidUrl] Failed to parse image URL: ${url} `, error);
+    return false;
+  }
+};
 
 export type EventItemDate = {
   startDate: string;
@@ -27,6 +43,7 @@ export type EventItemAction = {
 
 export type EventItemProps = {
   date?: EventItemDate;
+  dateVariant?: 'numeric' | 'text';
   statusLabel?: string;
   title: string;
   publishedAt: string;
@@ -43,47 +60,65 @@ type EventItemDateLabels = {
   ariaLabel: string;
 };
 
-const buildEventItemDateLabels = (date: EventItemDate, locale: string): EventItemDateLabels | null => {
+const buildEventItemDateLabels = (
+  date: EventItemDate,
+  locale: string,
+  dateVariant: 'numeric' | 'text' = 'numeric'
+): EventItemDateLabels | null => {
   if (!date.startDate) return null;
 
   const startDateObj = new Date(date.startDate);
   if (Number.isNaN(startDateObj.getTime())) return null;
-  const yearLabel = startDateObj.getFullYear().toString();
+  let yearLabel = startDateObj.getFullYear().toString();
 
   let rangeLabel = '';
+  const finalYearLabel = yearLabel;
+  const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
+
+  const formatTextMonth = (d: Date) => d.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long' });
 
   if (date.endDate) {
     const endDateObj = new Date(date.endDate);
 
-    const formatNumeric = (d: Date) =>
-      `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+    if (dateVariant === 'text') {
+      if (startDateObj.getFullYear() !== endDateObj.getFullYear()) {
+        rangeLabel = `${formatTextMonth(startDateObj)} ${startDateObj.getFullYear()} –\n${formatTextMonth(endDateObj)} ${endDateObj.getFullYear()}`;
+        yearLabel = '';
+      } else {
+        rangeLabel = `${formatTextMonth(startDateObj)} –\n${formatTextMonth(endDateObj)}`;
+      }
+    } else {
+      const formatNumeric = (d: Date) =>
+        `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
 
-    rangeLabel = `${formatNumeric(startDateObj)} – ${formatNumeric(endDateObj)}`;
+      if (startDateObj.getFullYear() !== endDateObj.getFullYear()) {
+        const formatWithYear = (d: Date) => `${formatNumeric(d)}.${d.getFullYear()}`;
+        rangeLabel = `${formatWithYear(startDateObj)} –\n${formatWithYear(endDateObj)}`;
+        yearLabel = '';
+      } else {
+        rangeLabel = `${formatNumeric(startDateObj)} – ${formatNumeric(endDateObj)}`;
+      }
+    }
   } else {
-    const dateLocale = locale === 'en' ? 'en-US' : 'uk-UA';
-
-    const formattedDate = startDateObj.toLocaleDateString(dateLocale, {
-      day: 'numeric',
-      month: 'long'
-    });
-
-    rangeLabel = formattedDate.toUpperCase();
+    rangeLabel = formatTextMonth(startDateObj);
   }
 
   return {
     rangeLabel,
-    yearLabel,
-    ariaLabel: `${rangeLabel} ${yearLabel}`
+    yearLabel: finalYearLabel,
+    ariaLabel: `${rangeLabel} ${finalYearLabel}`
   };
 };
 
 const EventItem = ({
   date,
+  dateVariant = 'numeric',
   statusLabel,
   title,
   publishedAt,
   description,
   image,
+  href,
   actions,
   sx
 }: Readonly<EventItemProps>) => {
@@ -92,7 +127,7 @@ const EventItem = ({
   const locale = useLocale();
 
   const hasStatus = Boolean(statusLabel);
-  const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date, locale) : null;
+  const dateLabels = !hasStatus && date?.startDate ? buildEventItemDateLabels(date, locale, dateVariant) : null;
   const startDateTime = date?.startDate ?? '';
 
   const groupAriaLabel = hasStatus ? statusLabel : dateLabels?.ariaLabel;
@@ -104,6 +139,14 @@ const EventItem = ({
   const formattedPublishedAt = formatIsoDateToDdMmYy(publishedAt) ?? publishedAt;
 
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(image.crop);
+
+  const initialSrc = isValidUrl(image.src) ? image.src : FALLBACK_IMAGE;
+  const [imageSrc, setImageSrc] = useState<string>(initialSrc);
+  const isFallbackImage = imageSrc === FALLBACK_IMAGE;
+
+  useEffect(() => {
+    setImageSrc(isValidUrl(image.src) ? image.src : FALLBACK_IMAGE);
+  }, [image.src]);
 
   return (
     <Box component="article" sx={rootSx} data-testid="EventItem-root">
@@ -118,7 +161,14 @@ const EventItem = ({
           {!hasStatus && dateLabels && (
             <>
               <Typography component="p" sx={styles.dateRange} data-testid="EventItem-dateRange">
-                <time dateTime={startDateTime}>{dateLabels.rangeLabel}</time>
+                <time dateTime={startDateTime}>
+                  {dateLabels.rangeLabel.split('\n').map((line, index, array) => (
+                    <span key={index}>
+                      {line}
+                      {index < array.length - 1 && <br />}
+                    </span>
+                  ))}
+                </time>
               </Typography>
 
               {dateLabels.yearLabel && (
@@ -129,22 +179,31 @@ const EventItem = ({
             </>
           )}
         </Box>
-
         <Box sx={styles.imageWrapper}>
-          <Box sx={styles.imageFrame} ref={containerRef}>
-            {image.crop ? (
-              <img
-                ref={imgRef}
-                src={image.src}
-                alt={image.alt}
-                loading="lazy"
-                onLoad={handleImageLoad}
-                style={croppedImgStyle}
-              />
-            ) : (
-              <Image src={image.src} alt={image.alt} fill sizes="295px" style={{ objectFit: 'cover' }} />
-            )}
-          </Box>
+          <Link href={href} style={{ display: 'block', width: '100%', height: '100%' }} tabIndex={-1}>
+            <Box sx={styles.imageFrame} ref={containerRef}>
+              {image.crop && !isFallbackImage ? (
+                <img
+                  ref={imgRef}
+                  src={imageSrc}
+                  alt={image.alt}
+                  loading="lazy"
+                  onLoad={handleImageLoad}
+                  style={croppedImgStyle}
+                  onError={() => setImageSrc(FALLBACK_IMAGE)}
+                />
+              ) : (
+                <Image
+                  src={imageSrc}
+                  alt={image.alt}
+                  fill
+                  sizes="295px"
+                  style={{ objectFit: 'cover' }}
+                  onError={() => setImageSrc(FALLBACK_IMAGE)}
+                />
+              )}
+            </Box>
+          </Link>
         </Box>
       </Box>
 
