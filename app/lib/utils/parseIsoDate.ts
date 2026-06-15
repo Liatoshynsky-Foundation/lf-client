@@ -10,13 +10,15 @@ export const parseIsoDate = (isoDate: string | null | undefined): ParsedIsoDate 
   const trimmed = isoDate.trim();
   if (!trimmed) return null;
 
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(trimmed);
+  const date = new Date(trimmed);
 
-  if (!match) {
+  if (Number.isNaN(date.getTime())) {
     return null;
   }
 
-  const [, year, month, day] = match;
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear());
 
   return { day, month, year };
 };

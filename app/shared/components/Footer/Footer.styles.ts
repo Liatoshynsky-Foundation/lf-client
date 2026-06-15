@@ -5,7 +5,7 @@ export const styles = {
     overflow: 'hidden',
     paddingTop: 'calc(100vw * 0.035)',
     marginTop: 'calc((100vw * 0.035) * -1)',
-    zIndex: '2',
+    zIndex: 2,
     left: 0
   },
   backgroundBox: {

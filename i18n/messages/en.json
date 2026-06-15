@@ -80,7 +80,8 @@
     "goHome": "Return to home",
     "viewMore": "View More",
     "copied": "Copied",
-    "completedEvent": "Completed event"
+    "completedEvent": "Completed event",
+    "publishedAtLabel": "Published:"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -351,12 +352,24 @@
   "biography": {
     "heroSection": {
       "title": "Liatoshynsky’s Life Story"
+    },
+    "gallery": {
+      "roleDescription": "image gallery",
+      "navigationHint": "Use the arrow keys to navigate between photos"
     }
   },
   "news": {
     "publishedAtLabel": "Published:",
+    "backLabel": "Back to news",
     "viewButton": "View",
     "goToButton": "Go to"
+  },
+  "events": {
+    "eventDateLabel": "Event date:",
+    "eventTimeLabel": "Event time:",
+    "viewButton": "View",
+    "registerButton": "Register",
+    "backLabel": "Back to events"
   },
   "meta": {
     "brand": "Liatoshynsky Foundation",

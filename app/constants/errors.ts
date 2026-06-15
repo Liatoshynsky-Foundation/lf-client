@@ -48,6 +48,8 @@ export const errors = {
     message: 'Failed to fetch funds',
     status: 500
   },
+  EVENTS_FETCH_FAILED: 'Failed to fetch events',
+  EVENT_FETCH_BY_SLUG_FAILED: 'Failed to fetch event by slug',
   USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider',
   NOT_FOUND: 'This resource was not found',
   CAPTCHA_FAILED: 'Captcha verification failed'
@@ -66,7 +68,8 @@ export const envErrors = {
 
 export const loggerErrors = {
   ZOD_VALIDATION_ERROR: 'Zod validation error:',
-  UNEXPECTED_HEADER_ERROR: 'Unexpected error in header API:'
+  UNEXPECTED_HEADER_ERROR: 'Unexpected error in header API:',
+  CROP_DATA_PARSE_FAILED: 'CroppedBlockImage: failed to parse cropData'
 };
 
 export const LocalizationErrors = {
