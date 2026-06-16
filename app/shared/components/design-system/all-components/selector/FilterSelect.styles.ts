@@ -2,6 +2,18 @@ import { SxProps } from '@mui/material';
 
 export const filterSelectStyles = {
   root: (variant: 'filled' | 'outlined', disabled: boolean): SxProps => {
+    let backgroundColor = 'blue.200';
+    if (disabled) {
+      backgroundColor = 'blue.75';
+    } else if (variant === 'outlined') {
+      backgroundColor = 'transparent';
+    }
+
+    let borderColor = undefined;
+    if (variant === 'outlined') {
+      borderColor = disabled ? 'blue.200' : 'black';
+    }
+
     return {
       display: 'flex',
       alignItems: 'center',
@@ -12,13 +24,11 @@ export const filterSelectStyles = {
       padding: '6px 8px 6px 16px',
       cursor: disabled ? 'not-allowed' : 'pointer',
       transition: 'background-color 0.2s',
-
       typography: 'customSemiBold16',
 
-      backgroundColor: disabled ? 'blue.75' : variant === 'outlined' ? 'transparent' : 'blue.200',
-
+      backgroundColor,
       border: variant === 'outlined' ? '1px solid' : 'none',
-      borderColor: variant === 'outlined' ? (disabled ? 'blue.200' : 'black') : undefined
+      borderColor
     };
   },
 
