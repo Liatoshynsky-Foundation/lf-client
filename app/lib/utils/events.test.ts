@@ -25,14 +25,7 @@ describe('events utils', () => {
   });
 
   describe('sortEvents', () => {
-    beforeAll(() => {
-      jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-06-14T12:00:00Z'));
-    });
-
-    afterAll(() => {
-      jest.useRealTimers();
-    });
+    const FIXED_TIME = new Date('2026-06-14T12:00:00Z').getTime();
 
     it('should sort upcoming events first (closest to furthest) and completed events last (newest to oldest)', () => {
       const futureClose = { _id: 'future-close', eventDateTimeStart: '2026-06-15T10:00:00Z' } as RawEventItem;
@@ -41,7 +34,7 @@ describe('events utils', () => {
       const pastOld = { _id: 'past-old', eventDateTimeStart: '2026-01-01T10:00:00Z' } as RawEventItem;
 
       const unsortedEvents = [pastOld, futureFar, pastRecent, futureClose];
-      const sorted = sortEvents(unsortedEvents);
+      const sorted = sortEvents(unsortedEvents, FIXED_TIME);
 
       expect(sorted[0]._id).toBe('future-close');
       expect(sorted[1]._id).toBe('future-far');
@@ -53,7 +46,7 @@ describe('events utils', () => {
       const eventA = { _id: 'A', eventDateTimeStart: '2026-06-15T10:00:00Z' } as RawEventItem;
       const eventB = { _id: 'B', eventDateTimeStart: '2026-06-16T10:00:00Z' } as RawEventItem;
 
-      const sorted = sortEvents([eventB, eventA]);
+      const sorted = sortEvents([eventB, eventA], FIXED_TIME);
 
       expect(sorted[0]._id).toBe('A');
       expect(sorted[1]._id).toBe('B');
@@ -63,7 +56,7 @@ describe('events utils', () => {
       const eventA = { _id: 'A', eventDateTimeStart: '2026-06-10T10:00:00Z' } as RawEventItem;
       const eventB = { _id: 'B', eventDateTimeStart: '2026-05-10T10:00:00Z' } as RawEventItem;
 
-      const sorted = sortEvents([eventB, eventA]);
+      const sorted = sortEvents([eventB, eventA], FIXED_TIME);
 
       expect(sorted[0]._id).toBe('A');
       expect(sorted[1]._id).toBe('B');

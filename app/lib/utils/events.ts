@@ -12,15 +12,13 @@ export const getEventTimestamp = (endDate?: string | null, startDate?: string | 
   return 0;
 };
 
-export const sortEvents = (events: RawEventItem[]) => {
-  const nowTime = Date.now();
-
+export const sortEvents = (events: RawEventItem[], now = Date.now()) => {
   const upcomingEvents = events
-    .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) >= nowTime)
+    .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) >= now)
     .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
 
   const completedEvents = events
-    .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) < nowTime)
+    .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) < now)
     .sort((a, b) => {
       const dateA = getEventTimestamp(a.eventDateTimeEnd, a.eventDateTimeStart);
       const dateB = getEventTimestamp(b.eventDateTimeEnd, b.eventDateTimeStart);
