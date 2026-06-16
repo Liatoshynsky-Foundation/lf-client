@@ -22,7 +22,7 @@ export const styles = {
   subtitle: {
     ...AppTypography.oswald28Bold,
     fontSize: { xs: '20px', md: '28px' },
-    color: '#190D03',
+    color: 'black',
     letterSpacing: '0px',
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   },

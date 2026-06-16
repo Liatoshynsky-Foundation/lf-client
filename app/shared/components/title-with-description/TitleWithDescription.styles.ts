@@ -12,7 +12,7 @@ export const Gap = {
 export const Typography = {
   blockTitle: {
     fontFamily: 'Mulish',
-    color: '#190D03',
+    color: 'black',
     fontWeight: 700,
     lineHeight: '140%',
     fontSize: { xs: '16px', md: '20px' }
@@ -20,7 +20,7 @@ export const Typography = {
 
   blockDescription: {
     fontFamily: 'Mulish',
-    color: '#190D03',
+    color: 'black',
     fontWeight: 400,
     lineHeight: { xs: '150%', md: '160%' },
     fontSize: { xs: '16px', md: '20px' }

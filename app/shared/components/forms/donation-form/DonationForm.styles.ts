@@ -1,12 +1,13 @@
-import { mainHexPallete, rgbaTextFieldColors } from '../../design-system/all-components/theme/colors';
+import { rgbaTextFieldColors } from '../../design-system/all-components/theme/colors';
 import { mulish } from '../../design-system/all-components/theme/Theme';
 
 export const style = {
   paper: {
-    background: mainHexPallete.brown[100],
+    background: 'brown.100',
     width: { xs: '100vw', sm: '490px' },
     height: '100%',
-    borderLeft: `4px solid ${mainHexPallete.yellow[500]}`,
+    borderLeft: '4px solid',
+    borderColor: 'yellow.500',
     gridColumn: '1/-1',
     ml: { xs: '-24px', sm: 0 },
     mt: { sm: '40px' }
@@ -53,7 +54,7 @@ export const style = {
     fontWeight: 600,
     lineHeight: '90%',
     letterSpacing: '0px',
-    color: mainHexPallete.brown[700],
+    color: 'brown.700',
     fontFamily: mulish.style.fontFamily,
     maxHeight: { xs: '66px', sm: '81px' },
     pb: '15px',
@@ -69,7 +70,7 @@ export const style = {
       margin: 0
     },
     '& input::placeholder': {
-      color: mainHexPallete.brown[700],
+      color: 'brown.700',
       opacity: 1
     }
   },
@@ -88,13 +89,13 @@ export const style = {
     },
     '& .MuiSelect-select .MuiTypography-root': {
       fontWeight: 700,
-      WebkitTextFillColor: mainHexPallete.black,
+      WebkitTextFillColor: 'black',
       lineHeight: 2
     }
   },
   currencySuggestion: {
     alignSelf: 'center',
-    color: mainHexPallete.brown[600],
+    color: 'brown.600',
     fontSize: '16px',
     fontWeight: 400
   },

@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
-
 export const styles = {
   wrapper: {
     display: 'grid',
@@ -34,7 +32,7 @@ export const styles = {
     alignSelf: 'end',
     px: 0,
     '& hover': {
-      backgroundColor: mainHexPallete.yellow[500],
+      backgroundColor: 'yellow.500',
       color: '#000'
     }
   },

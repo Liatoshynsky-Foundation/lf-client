@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 
-import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
+import { rgbButtonColors } from '~/ds-components/theme/colors';
 
 export const CustomBorderTextField = styled(TextField)(({ theme }) => {
   const buttonLikeTransition =
@@ -12,18 +12,18 @@ export const CustomBorderTextField = styled(TextField)(({ theme }) => {
     'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, border-radius 0.3s ease';
 
   return {
-    borderColor: `${mainHexPallete.black} !important`,
+    borderColor: `${'black'} !important`,
     '& .MuiOutlinedInput-root': {
-      borderColor: `${mainHexPallete.black} !important`,
+      borderColor: `${'black'} !important`,
       transition: `${buttonLikeTransition}, width 0.6s ease`,
       '& fieldset': {
-        borderColor: `${mainHexPallete.black} !important`
+        borderColor: `${'black'} !important`
       },
       '&:hover fieldset': {
-        borderColor: `${mainHexPallete.black} !important`
+        borderColor: `${'black'} !important`
       },
       '&.Mui-focused fieldset': {
-        borderColor: `${mainHexPallete.black} !important`
+        borderColor: `${'black'} !important`
       }
     },
     '&.search-collapsed .MuiOutlinedInput-root:hover': {

@@ -1,5 +1,3 @@
-import { AppTypography } from '~/constants';
-
 export const styles = {
   mainContainer: {
     gridColumn: '1 / -1',
@@ -10,7 +8,7 @@ export const styles = {
     zIndex: 0,
     marginRight: '-50vw',
     width: '100vw',
-    backgroundColor: '#FCBD28',
+    backgroundColor: 'yellow.500',
     transform: 'skewY(-2deg)',
     transformOrigin: 'top left'
   },
@@ -51,7 +49,8 @@ export const styles = {
       md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
       xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
-    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
+    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' },
+    color: 'black'
   },
 
   additionalTextStyle: {
@@ -60,13 +59,14 @@ export const styles = {
       md: '18px'
     },
     lineHeight: { xs: '150%', md: '160%' },
-    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
+    gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' },
+    color: 'black'
   },
 
   subTitle: {
-    ...AppTypography.oswald28Bold,
-    fontSize: { md: '42px', lg: '48px' },
-    fontWeight: { md: 600 },
+    fontFamily: '"Oswald", sans-serif',
+    fontSize: { xs: '28px', md: '42px', lg: '48px' },
+    fontWeight: { xs: 700, md: 600 },
     lineHeight: { xs: '150%', md: '120%' },
     letterSpacing: '0%',
     textTransform: { xs: 'uppercase', md: 'none' },
@@ -77,8 +77,8 @@ export const styles = {
     maxWidth: { xs: '247px' },
     minWidth: { xs: '247px' },
     '&:hover': {
-      backgroundColor: '#292828',
-      color: '#fff'
+      backgroundColor: 'black',
+      color: 'white'
     }
   }
 };

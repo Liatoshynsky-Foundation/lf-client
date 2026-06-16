@@ -1,8 +1,6 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   buttonGroup: {
-    backgroundColor: mainHexPallete.brown[50],
+    backgroundColor: 'brown.50',
     p: '4px',
     height: '36px',
     width: { xs: '100%', sm: 'fit-content' },
@@ -42,7 +40,7 @@ export const styles = {
 
     '& h6.MuiTypography-root': {
       lineHeight: '150%',
-      color: mainHexPallete.brown[500],
+      color: 'brown.500',
       width: { xs: '100%', sm: '115px' },
       flexShrink: 0
     },

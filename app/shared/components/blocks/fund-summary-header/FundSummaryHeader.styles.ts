@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
-
 import { AppTypography } from '~/constants';
 
 export const TITLE_GRID_COLUMN = { xs: '1 / -1' } as const;
@@ -92,6 +90,6 @@ export const styles = {
 
   itemTitle: {
     ...AppTypography.mulish16Regular,
-    color: mainHexPallete.brown[600]
+    color: 'brown.600'
   }
 };

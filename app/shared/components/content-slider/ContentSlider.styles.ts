@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   sliderContainer: {
     position: 'relative',
@@ -36,7 +34,8 @@ export const styles = {
     width: '64px !important',
     height: '48px !important',
     borderRadius: '100px',
-    border: `2px solid ${mainHexPallete.black}`,
+    border: '2px solid',
+    borderColor: 'black',
     backgroundColor: 'transparent',
     cursor: 'pointer',
     display: 'flex',
@@ -57,7 +56,7 @@ export const styles = {
       transition: 'filter 0.3s ease-in-out'
     },
     '&:hover': {
-      backgroundColor: mainHexPallete.black,
+      backgroundColor: 'black',
       '& img': {
         filter: 'brightness(0) invert(1)'
       }

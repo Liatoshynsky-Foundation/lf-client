@@ -1,5 +1,3 @@
-const black = '#190D03';
-
 export const styles = {
   container: {
     display: 'grid',
@@ -44,7 +42,7 @@ export const styles = {
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
     fontSize: { xs: '14px', sm: '16px', md: '26px' },
-    color: black,
+    color: 'black',
     fontWeight: 700,
     lineHeight: '180%'
   },
@@ -52,7 +50,7 @@ export const styles = {
     fontFamily: 'var(--font-mulish)',
     textTransform: 'uppercase',
     fontSize: { xs: '14px', sm: '16px', md: '26px' },
-    color: black,
+    color: 'black',
     fontWeight: 400,
     lineHeight: '180%',
     '& span:nth-child(2)': {

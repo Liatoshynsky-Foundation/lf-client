@@ -1,7 +1,5 @@
 import { theme } from '../../design-system/all-components/theme/Theme';
 
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
-
 export const heroSectionStyles = {
   imageTextGap: {
     xs: '16px',
@@ -113,7 +111,7 @@ export const heroSectionStyles = {
     fontWeight: '600',
     fontSize: '16px',
     letterSpacing: '-2%',
-    color: mainHexPallete?.brown?.[700] || '#574139'
+    color: 'brown.700'
   },
 
   contentWrapper: {

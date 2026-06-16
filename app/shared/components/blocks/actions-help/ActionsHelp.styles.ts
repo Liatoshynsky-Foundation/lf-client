@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   gridContainer: {
     display: 'grid',
@@ -25,7 +23,7 @@ export const styles = {
       md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
       xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
     },
-    color: mainHexPallete.brown[700]
+    color: 'brown.700'
   },
   papersContainer: {
     display: 'grid',

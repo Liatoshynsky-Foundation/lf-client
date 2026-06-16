@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
+import { rgbButtonColors } from '~/ds-components/theme/colors';
 
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
@@ -107,7 +107,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     lineHeight: '135%',
     textTransform: 'uppercase',
-    color: mainHexPallete.brown[500]
+    color: 'brown.500'
   },
 
   imageWrapper: {
@@ -187,7 +187,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '16px',
     fontWeight: 500,
     lineHeight: '150%',
-    color: mainHexPallete.blue[700]
+    color: 'blue.700'
   },
 
   description: {
@@ -229,7 +229,8 @@ export const styles: Record<string, SxProps<Theme>> = {
     py: '8px',
     height: '40px',
     borderRadius: '28px',
-    border: `1px solid ${mainHexPallete.black}`,
+    border: '1px solid',
+    borderColor: 'black',
     transition: 'background-color 0.35s ease',
     '&:hover': {
       backgroundColor: rgbButtonColors.primaryOutlinedHoveredBackground
@@ -243,7 +244,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     lineHeight: '150%',
     letterSpacing: 0,
     transition: 'color 0.35s ease',
-    color: mainHexPallete.black,
+    color: 'black',
     '&:hover': {
       borderBottom: 'none'
     }
@@ -275,7 +276,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     borderStyle: 'solid',
     borderColor: {
-      xs: mainHexPallete.black,
+      xs: 'black',
       sm: 'transparent'
     },
 
@@ -285,10 +286,10 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
 
     '&:hover .MuiTypography-root': {
-      color: mainHexPallete.burgundy[800],
+      color: 'burgundy.800',
       borderBottom: {
         xs: 'none',
-        sm: `1px solid ${mainHexPallete.burgundy[800]}`
+        sm: `1px solid ${'burgundy.800'}`
       }
     }
   },
@@ -302,7 +303,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontWeight: 400,
     fontSize: '16px',
     lineHeight: '110%',
-    color: mainHexPallete.black,
+    color: 'black',
     borderBottom: '1px solid transparent',
     transition: 'color 0.35s ease, border-color 0.35s ease',
     '&:hover': {
