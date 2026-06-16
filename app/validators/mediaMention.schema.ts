@@ -6,7 +6,16 @@ const mediaMentionCoverImageSchema = z.object({
   src: z.string(),
   alt: z.string().optional(),
   width: z.number().optional(),
-  height: z.number().optional()
+  height: z.number().optional(),
+  crop: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+      width: z.number(),
+      height: z.number()
+    })
+    .nullable()
+    .optional()
 });
 
 const mediaMentionMetaSchema = z.object({

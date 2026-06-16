@@ -44,7 +44,7 @@ const News = async ({ params }: Readonly<Language>) => {
 
   const newsData = await newsService.getAllPublishedNews(locale);
   const eventsData = await eventsService.getAllPublishedEvents(locale);
-  const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions();
+  const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions(lang as 'uk' | 'en');
 
   return (
     <MainLayout>

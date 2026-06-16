@@ -1,30 +1,65 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-import { MediaMentionDTO, MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
+import { MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
 
-export interface IMediaMentionDocument extends Omit<MediaMentionDTO, '_id'>, Document {}
+export interface ILocalizedString {
+  uk: string;
+  en?: string;
+}
+
+export interface IMediaMentionDocument extends Document {
+  url: string;
+  title: ILocalizedString;
+  description: ILocalizedString;
+  slug: string;
+  coverImage: {
+    src: string;
+    alt?: ILocalizedString | string;
+    width?: number;
+    height?: number;
+    crop?: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    } | null;
+  };
+  status: MediaMentionStatus;
+  publishedAt?: Date | null;
+  meta: {
+    views: number;
+  };
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 const mediaMentionSchema = new Schema<IMediaMentionDocument>(
   {
     url: { type: String, required: true, unique: true },
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    title: {
+      uk: { type: String, required: true },
+      en: { type: String }
+    },
+    description: {
+      uk: { type: String, required: true },
+      en: { type: String }
+    },
     slug: { type: String, required: true, index: true, unique: true },
     coverImage: {
       src: { type: String, required: true },
-      alt: { type: String },
+      alt: { type: Schema.Types.Mixed },
       width: { type: Number },
-      height: { type: Number }
+      height: { type: Number },
+      crop: {
+        x: { type: Number },
+        y: { type: Number },
+        width: { type: Number },
+        height: { type: Number }
+      }
     },
     status: {
       type: String,
-      enum: [
-        MediaMentionStatus.Draft,
-        MediaMentionStatus.Published,
-        MediaMentionStatus.Hidden,
-        MediaMentionStatus.Archived,
-        MediaMentionStatus.Editing
-      ],
+      enum: Object.values(MediaMentionStatus),
       required: true,
       default: MediaMentionStatus.Draft
     },
