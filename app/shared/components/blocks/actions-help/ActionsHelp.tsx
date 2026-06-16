@@ -46,6 +46,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
           key={paper.title[locale]}
           title={paper.title}
           description={paper.description}
+          locale={locale}
         />
       )),
       <ButtonCard
