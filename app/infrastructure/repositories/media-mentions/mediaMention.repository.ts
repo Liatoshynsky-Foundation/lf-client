@@ -10,9 +10,9 @@ const getLocalizedText = (field: ILocalizedString | string | undefined, locale: 
   return field[locale] || field.uk || '';
 };
 
-const safeGetIsoDate = (dateData: any): string | null => {
+const safeGetIsoDate = (dateData: unknown): string | null => {
   if (!dateData) return null;
-  const parsedDate = new Date(dateData);
+  const parsedDate = new Date(dateData as string | number | Date);
   return Number.isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
 };
 
