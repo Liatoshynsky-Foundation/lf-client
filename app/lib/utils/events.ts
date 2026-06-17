@@ -51,7 +51,7 @@ export const mapEventToCardProps = (
     title: event.title,
     description: event.description,
     image: {
-      src: event.coverImage?.src || '/images/placeholder.png',
+      src: event.coverImage?.src || '',
       alt: event.coverImage?.alt || 'Зображення події',
       crop: event.coverImage?.crop
     },

@@ -14,7 +14,6 @@ import { styles } from './EventsTab.style';
 import { mapEventToCardProps, sortEvents } from '~/lib/utils/events';
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
-import { IMAGES } from '~/shared/constants/assets';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { eventListItemSchema } from '~/validators/events.schema';
 import { Localize } from '~/validators/localization';

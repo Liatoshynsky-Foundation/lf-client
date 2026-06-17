@@ -142,7 +142,7 @@ describe('events utils', () => {
 
       const props = mapEventToCardProps(minimalEvent, 'uk', 'Завершена подія', 'Переглянути', 'Реєстрація');
 
-      expect(props.image.src).toBe('/images/placeholder.png');
+      expect(props.image.src).toBe('');
       expect(props.image.alt).toBe('Зображення події');
       expect(props.date?.startDate).toBe('');
       expect(props.publishedAt).toBe('');
