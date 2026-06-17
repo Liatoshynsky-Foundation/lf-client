@@ -9,6 +9,7 @@ import { HeroSectionQuoteBlock } from './hero-section-quote-block/HeroSectionQuo
 import { heroSectionStyles } from './HeroSection.styles';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { IMAGES } from '~/shared/constants/assets';
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -22,8 +23,8 @@ export type Props = {
 };
 
 const imagesPaths = {
-  heroBackgroundImage: '/images/main-page-hero-section/hero-background-image.png',
-  heroCharacterImage: '/images/main-page-hero-section/hero-character-image.png',
+  heroBackgroundImage: IMAGES.MAIN_HERO_BACKGROUND_IMAGE,
+  heroCharacterImage: IMAGES.MAIN_HERO_CHARACTER_IMAGE,
   textLogo: '/images/main-page-hero-section/textLogo.svg',
   pauseIcon: '/images/main-page-hero-section/pause-icon.svg',
   playIcon: '/images/main-page-hero-section/play-icon.svg'

@@ -13,6 +13,7 @@ import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import { SkewedBlock } from '~/shared/components/design-system/all-components/skewed-block/SkewedBlock';
 import { styles } from '~/shared/components/Quote/Quote.styles';
+import { IMAGES } from '~/shared/constants/assets';
 
 const TermsOfUse = () => {
   const t = useTranslations('termsOfUse');
@@ -39,7 +40,7 @@ const TermsOfUse = () => {
           {t('seeMore')}
         </Box>
         <SkewedBlock
-          image="/images/liatoshynsky.png"
+          image={IMAGES.TERMS_LIATOSHYNSKY}
           backgroundSize="cover"
           isBackground
           height={skewedBlockHeight}

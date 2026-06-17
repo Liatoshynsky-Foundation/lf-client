@@ -13,6 +13,7 @@ import { styles } from './EventsTab.style';
 
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import EmptyState from '~/shared/components/design-system/all-components/empty-state/EmptyState';
+import { IMAGES } from '~/shared/constants/assets';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { eventListItemSchema } from '~/validators/events.schema';
 import { Localize } from '~/validators/localization';
@@ -110,7 +111,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
             title={event.title}
             description={event.description}
             image={{
-              src: event.coverImage?.src || '/images/placeholder.png',
+              src: event.coverImage?.src || IMAGES.PLACEHOLDER,
               alt: event.coverImage?.alt || 'Зображення події',
               crop: event.coverImage?.crop
             }}
