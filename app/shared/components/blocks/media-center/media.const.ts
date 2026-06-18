@@ -2,6 +2,7 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { IMAGES } from '~/shared/constants/assets';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -46,7 +47,7 @@ export const mockNewsList = [
     },
     slug: 'news-title-1',
     coverImage: {
-      src: '/images/placeholder.png',
+      src: IMAGES.PLACEHOLDER,
       alt: 'Альтернативний текст для зображення 1',
 
       caption: 'Підпис до зображення 1',
@@ -84,7 +85,7 @@ export const mockPressList = [
     },
     slug: 'press-title-1',
     coverImage: {
-      src: '/images/placeholder.png',
+      src: IMAGES.PLACEHOLDER,
       alt: 'Альтернативний текст для зображення 1',
 
       caption: 'Підпис до зображення 1',
@@ -108,7 +109,7 @@ export const mockEventsList = [
     description: 'Опис події',
     slug: 'event-title-1',
     coverImage: {
-      src: '/images/placeholder.png',
+      src: IMAGES.PLACEHOLDER,
       alt: 'Альтернативний текст',
       caption: 'Підпис',
       isTmp: false

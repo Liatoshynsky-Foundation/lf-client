@@ -5,15 +5,17 @@ import Logo from '~/ds-components/logo/Logo';
 
 import { ImageData } from '~/types/types/officeMedia';
 
+import { IMAGES } from '~/shared/constants/assets';
+
 interface OfficeMedia {
   dataTestId?: string;
 }
 
 const OfficeMedia: React.FC<OfficeMedia> = ({ dataTestId }) => {
   const images: ImageData[] = [
-    { src: '/images/office-media/lf-office1.png', alt: 'Фото 1', styleKey: 'photo1' },
-    { src: '/images/office-media/lf-office2.png', alt: 'Фото 2', styleKey: 'photo2' },
-    { src: '/images/office-media/lf-office3.png', alt: 'Фото 3', styleKey: 'photo3' }
+    { src: IMAGES.MEDIA_LF_OFFICE(1), alt: 'Фото 1', styleKey: 'photo1' },
+    { src: IMAGES.MEDIA_LF_OFFICE(2), alt: 'Фото 2', styleKey: 'photo2' },
+    { src: IMAGES.MEDIA_LF_OFFICE(3), alt: 'Фото 3', styleKey: 'photo3' }
   ];
 
   return (

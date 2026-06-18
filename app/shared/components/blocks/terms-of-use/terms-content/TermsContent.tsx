@@ -20,6 +20,7 @@ import ButtonContentBlock from './button-content-block/ButtonContentBlock';
 import { ROUTES } from '~/shared/components/constants/routes';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import { SkewedBlock } from '~/shared/components/design-system/all-components/skewed-block/SkewedBlock';
+import { IMAGES } from '~/shared/constants/assets';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 const TermsContent = () => {
@@ -69,7 +70,7 @@ const TermsContent = () => {
         data-testid="TermsContent-imageBlock"
       >
         <SkewedBlock
-          image="/images/retro-collage.jpg"
+          image={IMAGES.TERMS_RETRO_COLLAGE}
           backgroundSize="cover"
           height={{ xs: '90%', sm: '100%' }}
           isBackground
