@@ -46,22 +46,13 @@ export const styles = {
   eventsList: {
     gridColumn: '1 / -1',
     gridRow: '3',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '56px',
-    mt: '80px',
-    width: '100%'
-  },
-
-  eventItem: {
-    display: { xs: 'flex', md: 'grid' },
-    flexDirection: 'column',
-    gridTemplateRows: { xs: 'auto auto', sm: 'auto auto', md: 'auto auto', lg: '1fr' },
+    display: 'grid',
     gridTemplateColumns: {
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
+      xs: '1fr',
+      sm: 'subgrid'
     },
-    columnGap: { xs: '16px', sm: '24px', md: '40px' },
+    rowGap: { xs: '48px', md: '56px' },
+    mt: '80px',
     width: '100%'
   },
 

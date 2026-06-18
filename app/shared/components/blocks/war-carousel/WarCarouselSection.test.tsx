@@ -43,6 +43,6 @@ describe('WarCarouselSection', () => {
     render(<WarCarouselSection />);
 
     const img1 = screen.getByAltText('Carousel Image 1');
-    expect(img1).toHaveAttribute('src', '/images/war-in-ukraine-page/carousel/photo-1.png');
+    expect(img1).toHaveAttribute('src', '/photos/war-in-ukraine-carousel-1.png');
   });
 });
