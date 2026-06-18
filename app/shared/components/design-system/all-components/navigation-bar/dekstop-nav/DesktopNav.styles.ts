@@ -22,7 +22,7 @@ export const styles = {
   },
   buttonGroup: {
     height: '40px',
-    backgroundColor: 'blue.50',
+    backgroundColor: 'grey.250',
     p: '4px'
   },
   buttonGroupBackground: {
@@ -36,7 +36,7 @@ export const styles = {
     gap: '8px'
   },
   warInUkraineWrapper: {
-    backgroundColor: 'blue.50',
+    backgroundColor: 'grey.250',
     borderRadius: '999px',
     height: '40px',
     display: 'flex',
@@ -55,7 +55,7 @@ export const styles = {
     height: '32px',
 
     '&:hover': {
-      backgroundColor: 'blue.100'
+      backgroundColor: 'grey.350'
     },
     '&:focus': {
       backgroundColor: 'black',

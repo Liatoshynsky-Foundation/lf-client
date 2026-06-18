@@ -1,3 +1,5 @@
+import { colors } from '@mui/material';
+
 export const mainHexPallete = {
   blue: {
     50: '#F9FAFB', // rgba(249, 250, 251, 1)
@@ -59,21 +61,21 @@ export const mainHexPallete = {
     800: '#600E0F', // rgba(96, 14, 15, 1)
     900: '#3D0607' // rgba(61, 6, 7, 1)
   },
+  grey: {
+    ...colors.grey,
+    250: '#EAE9E8', // backgroundColors.offWhite rgb(234, 233, 232)
+    350: '#D1CFCD', // primaryHoveredBackground rgb(209, 207, 205)
+    375: '#D0CECC' // backgroundColorslightGray rgb(208, 206, 204)
+  },
   black: '#190d03', // rgba(25, 13, 3, 1)
   white: '#FCFCFC' // rgba(252, 252, 252, 1)
-};
-
-export const backgroundColors = {
-  white: '#FCFCFC',
-  offWhite: '#EAE9E8',
-  lightGray: '#D0CECC'
 };
 
 export const rgbButtonColors = {
   primaryFilledHoveredBackground: 'rgb(52,41,33)',
   primaryOutlinedHoveredBackground: 'rgba(25, 13, 3, 0.08)',
   primaryOutlinedPressedBackground: 'rgba(25, 13, 3, 0.1)',
-  primaryHoveredBackground: 'rgba(209, 207, 205)',
+  primaryHoveredBackground: '#d1cfcd', // rgba(209, 207, 205, 1)
   transparent: 'transparent',
   primaryTextHovered: 'rgb(243,243,242)',
   primaryTextPressed: '#D1CFCD',

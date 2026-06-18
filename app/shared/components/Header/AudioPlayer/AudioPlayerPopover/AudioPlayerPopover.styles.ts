@@ -1,6 +1,6 @@
 export const styles = {
   popoverPaper: {
-    backgroundColor: 'blue.900',
+    backgroundColor: 'grey.900',
     color: 'white',
     borderRadius: '16px',
     padding: '16px',
@@ -37,7 +37,7 @@ export const styles = {
     position: 'relative',
     width: '100%',
     height: 2,
-    backgroundColor: 'blue.700',
+    backgroundColor: 'grey.700',
     borderRadius: 2,
     cursor: 'pointer',
     marginTop: 1,

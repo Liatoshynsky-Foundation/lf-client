@@ -5,7 +5,7 @@ export const styles = {
     borderRadius: '32px',
     width: isMobile ? '88px' : '112px',
     height: isMobile ? '40px' : '52px',
-    backgroundColor: 'brown.100 !important',
+    backgroundColor: `${theme.palette.grey[200]} !important`,
     border: `${isMobile ? 4 : 6}px solid`,
     borderColor: 'white',
     zIndex: theme.zIndex.mobileNavButton,

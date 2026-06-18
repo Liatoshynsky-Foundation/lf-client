@@ -115,6 +115,14 @@ declare module '@mui/material/styles' {
   }
 }
 
+declare module '@mui/material/styles' {
+  interface Color {
+    250?: string;
+    350?: string;
+    375?: string;
+  }
+}
+
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     tertiary: true;
