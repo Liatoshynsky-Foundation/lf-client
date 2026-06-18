@@ -1,3 +1,5 @@
+import { alpha, SxProps, Theme } from '@mui/material/styles';
+
 const PrimaryIconStyles = {
   color: 'black',
   backgroundColor: 'white',
@@ -12,22 +14,22 @@ const PrimaryIconStyles = {
   }
 };
 
-const SecondaryIconStyles = {
+const SecondaryIconStyles = (theme: Theme) => ({
   color: 'white',
   backgroundColor: 'black',
   '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.16)'
+    backgroundColor: alpha(theme.palette.primary.contrastText, 0.16)
   },
   '&:focused': {
-    backgroundColor: 'rgba(255, 255, 255, 0.34)'
+    backgroundColor: alpha(theme.palette.primary.contrastText, 0.34)
   },
   '&:pressed': {
-    backgroundColor: 'rgba(255, 255, 255, 0.12)'
+    backgroundColor: alpha(theme.palette.primary.contrastText, 0.12)
   },
   '&:disabled': {
     color: 'blue.700'
   }
-};
+});
 
 export const IconButtonStyles = {
   primary: {
@@ -96,18 +98,18 @@ export const IconButtonStyles = {
       backgroundColor: 'blue.200'
     }
   },
-  error: {
+  error: ((theme: Theme) => ({
     fontSize: '0',
     color: 'error.main',
     backgroundColor: 'white',
     '&:hover': {
-      backgroundColor: 'rgba(230, 60, 20, 0.08)'
+      backgroundColor: alpha(theme.palette.error.main, 0.08)
     },
     '&:active': {
-      backgroundColor: 'rgba(230, 60, 20, 0.24)'
+      backgroundColor: alpha(theme.palette.error.main, 0.08)
     },
     '&:disabled': {
       color: 'blue.700'
     }
-  }
+  })) as SxProps<Theme>
 };

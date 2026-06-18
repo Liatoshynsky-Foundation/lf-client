@@ -1,7 +1,9 @@
-export const baseChipStyles = (variant: 'filled' | 'outlined') => {
+import { alpha, SxProps, Theme } from '@mui/material/styles';
+
+export const baseChipStyles = (variant: 'filled' | 'outlined'): SxProps<Theme> => {
   const isOutlined = variant === 'outlined';
 
-  return {
+  return (theme: Theme) => ({
     height: 28,
     maxWidth: 115,
     fontSize: '16px',
@@ -19,10 +21,10 @@ export const baseChipStyles = (variant: 'filled' | 'outlined') => {
     justifyContent: 'space-between',
 
     '&:hover': {
-      backgroundColor: isOutlined ? 'rgba(25, 13, 3, 0.24)' : 'blue.50'
+      backgroundColor: isOutlined ? alpha(theme.palette.primary.main, 0.24) : 'blue.50'
     },
     '&:active': {
-      backgroundColor: isOutlined ? 'rgba(25, 13, 3, 0.24)' : 'blue.100'
+      backgroundColor: isOutlined ? alpha(theme.palette.primary.main, 0.24) : 'blue.100'
     },
     '&.Mui-disabled': {
       backgroundColor: isOutlined ? 'transparent' : 'blue.50',
@@ -46,5 +48,5 @@ export const baseChipStyles = (variant: 'filled' | 'outlined') => {
         cursor: 'default'
       }
     }
-  };
+  });
 };
