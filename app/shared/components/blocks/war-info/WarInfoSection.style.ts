@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const style = {
   gridContainer: {
     display: { sm: 'grid' },
@@ -7,12 +9,7 @@ export const style = {
 
   textBlockContainer: {
     gridColumn: { xs: '1 / -1', sm: '1 / -1', md: '6 / 13', lg: '6 / 13' },
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 6px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumnNarrow,
     alignSelf: { md: 'end', lg: 'end' },
     marginTop: { sm: '40px', lg: '155px' },
     marginBottom: { xs: '80px', lg: '96px' },
@@ -42,10 +39,7 @@ export const style = {
       lg: '156px'
     },
     mb: { xs: '40px', sm: '0px' },
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    },
+    fontSize: commonSx.layout.typography.heroTitle,
     width: { sm: '343px', lg: '393px' }
   },
 

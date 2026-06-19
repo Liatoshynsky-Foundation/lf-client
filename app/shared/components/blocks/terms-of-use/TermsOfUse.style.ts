@@ -1,6 +1,8 @@
 import { alignments, quoteColors } from '../../Quote/Quote.styles';
 import { Align } from '~/types/types/quoteComponent';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 const quoteSizes = {
   height: { xs: '279px', sm: '293px', md: '315px', lg: '266px', xl: '266px' },
   width: { xs: '300px', md: '408px', lg: '430px', xl: '442px' },
@@ -21,16 +23,8 @@ export const style = {
   gridContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    }
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap
   },
   textBlockContainer: {
     gridColumn: {
@@ -79,10 +73,7 @@ export const style = {
       md: '156px'
     },
     mb: { xs: '44px', sm: '0px' },
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    },
+    fontSize: commonSx.layout.typography.heroTitle,
     width: { md: '570px', lg: '560px' }
   },
 

@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   container: {
     display: 'flex',
@@ -9,7 +11,7 @@ export const styles = {
   title: {
     marginBottom: '8px',
     whiteSpace: 'pre-wrap',
-    fontSize: { xs: '40px', md: '64px' }
+    fontSize: commonSx.layout.typography.heroTitle
   },
   subtitle: {
     marginBottom: '16px',

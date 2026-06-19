@@ -1,11 +1,12 @@
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   mainContainer: {
     display: 'grid',
     gridTemplateColumns: { xs: 'repeat(4,1fr)', sm: 'repeat(8, 1fr)', md: 'repeat(12, 1fr)' },
     gridColumn: '1 / -1',
-    columnGap: { xs: '16px', sm: '24px', md: '40px' },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     rowGap: { xs: '24px' }
   },
   title: {
@@ -20,11 +21,6 @@ export const styles = {
   },
   textStyle: {
     gridColumn: '1 / -1',
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 14px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    }
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumnCompact
   }
 };

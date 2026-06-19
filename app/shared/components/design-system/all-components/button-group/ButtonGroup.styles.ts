@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 
 import { hexButtonGroupColors } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const StyledIndicator = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'left' && prop !== 'width' && prop !== 'palette' && prop !== 'animate'
 })<{
@@ -14,8 +16,7 @@ export const StyledIndicator = styled(Box, {
   const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
 
   return {
-    height: 'calc(100% - 8px)',
-    top: 4,
+    ...commonSx.layout.activeTabIndicator,
     position: 'absolute',
     borderRadius: '9999px',
     transition: animate ? 'all 0.3s ease' : 'none',

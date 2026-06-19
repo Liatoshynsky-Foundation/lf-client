@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   buttonGroup: {
     backgroundColor: mainHexPallete.brown[50],
@@ -18,7 +20,7 @@ export const styles = {
       flex: { xs: 1, sm: 'unset' }
     },
     '& [aria-label="indicator"]': {
-      height: 'calc(100% - 8px)',
+      height: commonSx.layout.activeTabIndicator,
       top: 4
     }
   },

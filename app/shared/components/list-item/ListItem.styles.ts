@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   listItem: {
     display: 'flex',
@@ -34,7 +36,7 @@ export const styles = {
   },
   typography: {
     fontFamily: 'Mulish',
-    fontSize: { xs: '16px', md: '20px' },
+    fontSize: commonSx.layout.typography.bodyLarge,
     fontWeight: 400,
     lineHeight: { xs: '150%', md: '160%' },
     letterSpacing: '0px',

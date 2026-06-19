@@ -1,5 +1,7 @@
 import type { Theme } from '@mui/material';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const enhancedTableStyles = {
   root: {
     display: 'flex',
@@ -46,7 +48,7 @@ export const enhancedTableStyles = {
 
   loadMoreButton: {
     p: { xs: '12px 56.5px', sm: '12px 89.5px', md: '16px 48px' },
-    fontSize: { xs: '16px', md: '18px' },
+    fontSize: commonSx.layout.typography.bodyMedium,
     fontWeight: { xs: '500', md: '600' }
   }
 } as const;

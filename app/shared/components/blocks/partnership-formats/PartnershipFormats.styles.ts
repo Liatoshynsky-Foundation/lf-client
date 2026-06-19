@@ -3,6 +3,8 @@ import type { SxProps, Theme } from '@mui/material/styles';
 import { theme } from '../../design-system/all-components/theme/Theme';
 import { PartnershipImageType } from '~/types/page/cooperation.types';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 type ImageConfig = {
   container: SxProps<Theme>;
   wrapper: SxProps<Theme>;
@@ -382,16 +384,8 @@ const baseStyles = {
   },
   descriptionContainer: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap,
     gridColumn: '1 / -1',
     mt: {
       md: '40px',
@@ -404,11 +398,7 @@ const baseStyles = {
     }
   },
   descriptionText: {
-    textIndent: {
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumnFromSm,
     gridColumn: {
       xs: '1 / -1',
       sm: '4 / -1',
@@ -417,20 +407,12 @@ const baseStyles = {
     }
   },
   descriptionTypography: {
-    fontSize: { xs: '16px', md: '20px' }
+    fontSize: commonSx.layout.typography.bodyLarge
   },
   buttonContainer: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap,
     gridColumn: '1 / -1'
   },
   button: {

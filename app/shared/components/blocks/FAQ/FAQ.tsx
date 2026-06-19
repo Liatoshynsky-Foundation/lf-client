@@ -11,6 +11,7 @@ import { styles } from './FAQ.styles';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
+import { commonSx } from '~/shared/styles/commonSx';
 
 type FaqItemProps = {
   title: {
@@ -45,11 +46,7 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
     <Box sx={styles.gridContainer} data-testid="Faq">
       <SectionTitle
         sx={{
-          gridTemplateColumns: {
-            xs: 'repeat(4, 1fr)',
-            sm: 'repeat(8, 1fr)',
-            md: 'repeat(12, 1fr)'
-          }
+          gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns
         }}
         title={t('title')}
         mb={48}

@@ -1,6 +1,7 @@
 import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
 
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const TITLE_GRID_COLUMN = { xs: '1 / -1' } as const;
 export const TITLE_SX = {
@@ -48,16 +49,8 @@ export const styles = {
 
   contentGrid: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap,
     gridColumn: '1 / -1'
   },
 

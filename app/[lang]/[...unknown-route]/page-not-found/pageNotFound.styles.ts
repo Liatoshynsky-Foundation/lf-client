@@ -1,5 +1,6 @@
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { Typography } from '~/shared/components/title-with-description/TitleWithDescription.styles';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   mainContainer: {
@@ -17,10 +18,7 @@ export const styles = {
     color: mainHexPallete.black,
     whiteSpace: 'pre-line',
     mb: '16px',
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    }
+    fontSize: commonSx.layout.typography.heroTitle
   },
 
   blockDescription: {
