@@ -43,8 +43,6 @@ export const styles = {
     width: '100%'
   },
 
-<<<<<<< HEAD
-=======
   eventItem: {
     display: { xs: 'flex', md: 'grid' },
     flexDirection: 'column',
@@ -165,7 +163,6 @@ export const styles = {
     pr: '20px',
     textTransform: 'none'
   },
->>>>>>> d7c2305 (refactor: extract global MUI grid styles and typography)
   navButton: {
     position: 'static !important',
     width: '64px !important',
