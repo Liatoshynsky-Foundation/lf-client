@@ -52,6 +52,7 @@ export type Condition = {
   categories?: { $in?: Array<string | number | Record<string, unknown>> };
   genres?: { $in?: Array<string | number | Record<string, unknown>> };
   year?: { $gte: number; $lte: number };
+  opusId?: { $exists?: boolean; $ne?: null; $in?: unknown[] };
 };
 
 export type Query = Condition | { $and: Condition[] } | Record<string, unknown>;
