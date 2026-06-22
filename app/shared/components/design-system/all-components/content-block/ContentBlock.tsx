@@ -28,16 +28,16 @@ type ContentBlockProps = Readonly<{
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
   const ParagraphRenderer = (children: React.ReactNode) => (
-    <Typography sx={{ display: 'block', ...paragraphSx } as object}>{children}</Typography>
+    <Typography sx={[{ display: 'block' }, ...(Array.isArray(paragraphSx) ? paragraphSx : [paragraphSx])]}>
+      {children}
+    </Typography>
   );
   ParagraphRenderer.displayName = 'ParagraphRenderer';
   return ParagraphRenderer;
 };
 
 const createListParagraph = (paragraphSx?: SxProps<Theme>) => {
-  const ParagraphRenderer = (children: React.ReactNode) => (
-    <ListItem sx={{ ...styles.textContent, ...paragraphSx } as object} text={children as string} />
-  );
+  const ParagraphRenderer = (children: React.ReactNode) => <ListItem sx={paragraphSx} text={children as string} />;
   ParagraphRenderer.displayName = 'ListParagraphRenderer';
   return ParagraphRenderer;
 };
@@ -45,11 +45,11 @@ const createListParagraph = (paragraphSx?: SxProps<Theme>) => {
 function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
-  const combinedSx: SxProps<Theme> = {
-    ...textStyles.blockDescription,
-    ...styles.textContent,
-    ...textSx
-  };
+  const combinedSx: SxProps<Theme> = [
+    textStyles.blockDescription,
+    styles.textContent,
+    ...(Array.isArray(textSx) ? textSx : [textSx])
+  ];
 
   if (typeof data === 'string') {
     return <Typography sx={combinedSx}>{data}</Typography>;
@@ -76,26 +76,21 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
 function renderList(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
 
-  const combinedListSx: SxProps<Theme> = {
-    ...styles.textContent,
-    ...textSx
-  };
+  const flatTextSx = Array.isArray(textSx) ? textSx : [textSx];
 
   if (typeof data === 'string') {
-    return <ListItem sx={{ ...combinedListSx, maxWidth: '900px' } as object} text={data} />;
+    return <ListItem sx={[styles.textContent, ...flatTextSx, { maxWidth: '900px' }]} text={data} />;
   }
 
   if (Array.isArray(data)) {
-    return data.map(({ id, text }) => (
-      <ListItem key={id} sx={{ ...styles.textContent, ...textSx } as object} text={text} />
-    ));
+    return data.map(({ id, text }) => <ListItem key={id} sx={[styles.textContent, ...flatTextSx]} text={text} />);
   }
 
   return (
     <TipTapContent
       data={data}
       nodeRenderers={{
-        paragraph: createListParagraph({ ...combinedListSx, maxWidth: '900px' } as object)
+        paragraph: createListParagraph([styles.textContent, ...flatTextSx, { maxWidth: '900px' }])
       }}
     />
   );
