@@ -50,18 +50,10 @@ export const commonSx = {
       }
     },
     typography: {
-      heroTitle: {
-        fontSize: { xs: '40px', md: '64px' }
-      },
-      sectionTitle: {
-        fontSize: { xs: '20px', md: '28px' }
-      },
-      bodyLarge: {
-        fontSize: { xs: '16px', md: '20px' }
-      },
-      bodyMedium: {
-        fontSize: { xs: '16px', md: '18px' }
-      }
+      heroTitle: { xs: '40px', md: '64px' },
+      sectionTitle: { xs: '20px', md: '28px' },
+      bodyLarge: { xs: '16px', md: '20px' },
+      bodyMedium: { xs: '16px', md: '18px' }
     },
     activeTabIndicator: {
       height: 'calc(100% - 8px)',

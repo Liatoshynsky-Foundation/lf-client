@@ -13,8 +13,7 @@ export const styles = {
     zIndex: theme.zIndex.stickyYearsTab,
 
     '& [aria-label="indicator"]': {
-      height: commonSx.layout.activeTabIndicator,
-      top: 4
+      ...commonSx.layout.activeTabIndicator
     }
   },
   yearButton: {

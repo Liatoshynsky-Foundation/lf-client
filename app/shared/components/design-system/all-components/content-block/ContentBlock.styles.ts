@@ -3,7 +3,6 @@ import { commonSx } from '~/shared/styles/commonSx';
 export const styles = {
   container: {
     display: 'grid',
-    gridTemplateColumns: { xs: 'repeat(4,1fr)', sm: 'repeat(8,1fr)', md: 'repeat(12, 1fr)' },
     gridColumn: '1 / -1',
     rowGap: { xs: '16px', sm: '20px', md: '40px' },
     columnGap: commonSx.layout.standardGrid.columnGap

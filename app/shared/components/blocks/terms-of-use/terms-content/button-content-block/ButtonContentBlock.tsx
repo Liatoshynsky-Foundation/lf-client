@@ -8,6 +8,7 @@ import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import Button from '~/shared/components/design-system/all-components/button/Button';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
+import { commonSx } from '~/shared/styles/commonSx';
 
 type ButtonContentBlockProps = {
   buttonText: string;
@@ -30,7 +31,10 @@ const ButtonContentBlock = ({
   sx,
   containerSx,
   textSx,
-  textContainerSx = { marginBottom: { xs: '24px', md: '0px' } },
+  textContainerSx = {
+    ...commonSx.layout.standardGrid,
+    marginBottom: { xs: '24px', md: '0px' }
+  },
   buttonContainerSx,
   link,
   additionalDescription,
@@ -62,7 +66,12 @@ const ButtonContentBlock = ({
       <ContentBlock
         textSx={textSx}
         description={content}
-        containerSx={textContainerSx}
+        containerSx={
+          {
+            ...commonSx.layout.standardGrid,
+            ...textContainerSx
+          } as SxProps<Theme>
+        }
         additionalDescription={additionalDescription}
         additionalTextSx={additionalTextSx}
       />
