@@ -5,6 +5,8 @@ import { HeroSection } from './HeroSection';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { IMAGES } from '~/shared/constants/assets';
+
 const mockResizeObserverObserve = jest.fn();
 const mockResizeObserverUnobserve = jest.fn();
 const mockResizeObserverDisconnect = jest.fn();
@@ -73,7 +75,7 @@ const biographyHeroData = {
     source: 'З листа Бориса Лятошинського до Валерія Польового від 23 січня 1965 року'
   },
   image: {
-    src: '/images/liatoshynsky-hero-section.png',
+    src: IMAGES.BIOGRAPHY_LIATOSHYNSKY_HERO_SECTION,
     alt: 'Борис Лятошинський з котами на дачі в Ворзелі',
     caption: {
       mainText: 'Борис Лятошинський з котами на дачі в Ворзелі.',

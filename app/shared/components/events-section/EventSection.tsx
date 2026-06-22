@@ -1,25 +1,23 @@
 'use client';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { z } from 'zod';
 
 import { styles } from './EventSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { mapEventToCardProps, sortEvents } from '~/lib/utils/events';
+import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
+import { eventListItemSchema } from '~/validators/events.schema';
+import { Localize } from '~/validators/localization';
 
-interface EventItem {
-  id: string;
-  date: string;
-  title: string;
-  description: string;
-  image: string;
-  publishDate: string;
-  regLink?: string;
-}
+type RawEventItem = Localize<z.infer<typeof eventListItemSchema>>;
 
 interface Props {
   title: string;
@@ -29,61 +27,33 @@ interface Props {
   publishDateLabel: string;
   viewLabel: string;
   regLabel: string;
-  events: EventItem[];
+  events: RawEventItem[];
 }
 
-const formatResponsiveDate = (dateStr: string) => {
-  const year = dateStr.slice(-4);
-
-  if (Number.isNaN(Number(year))) return dateStr;
-
-  const separator = dateStr.slice(-5, -4);
-  const hasSeparator = separator === '.' || separator === ' ';
-
-  const mainPart = hasSeparator ? dateStr.slice(0, -5) : dateStr.slice(0, -4);
-  const finalSeparator = hasSeparator ? separator : '';
-
-  return (
-    <>
-      {mainPart}
-      <Box
-        component="span"
-        sx={{
-          display: {
-            xs: 'inline',
-            '@media (min-width: 1280px)': { display: 'none' }
-          }
-        }}
-      >
-        {finalSeparator}
-      </Box>
-      <Box
-        component="span"
-        sx={{
-          display: {
-            xs: 'inline',
-            '@media (min-width: 1280px)': { display: 'block' }
-          }
-        }}
-      >
-        {year}
-      </Box>
-    </>
-  );
-};
-const EventSection: React.FC<Props> = ({
-  title,
-  text,
-  ctaLabel,
-  ctaHref,
-  publishDateLabel,
-  viewLabel,
-  regLabel,
-  events
-}) => {
+const EventSection: React.FC<Props> = ({ title, text, ctaLabel, ctaHref, viewLabel, regLabel, events }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const displayedEvents = events.slice(0, 3);
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+
+  const locale = useLocale();
+  const t = useTranslations('common');
+
+  const sortedEvents = sortEvents(events);
+  const displayedEvents = sortedEvents.slice(0, 3);
+
+  const renderEventItem = (event: RawEventItem) => {
+    const cardProps = mapEventToCardProps(
+      event,
+      locale,
+      t('completedEvent'),
+      viewLabel,
+      regLabel,
+      isDesktop ? 'text' : 'numeric'
+    );
+
+    return <EventItem key={event._id} {...cardProps} />;
+  };
+
   return (
     <Box component="section" sx={styles.sectionContainer} data-testid="EventsSection">
       <Typography variant="h2" sx={styles.title}>
@@ -122,75 +92,12 @@ const EventSection: React.FC<Props> = ({
             slidesPerView={1.2}
           >
             {displayedEvents.map((event) => (
-              <SwiperSlide key={event.id}>
-                <Box sx={{ ...styles.eventItem, width: '100%', mb: 0 }}>
-                  <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
-                  <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
-                  <Box sx={styles.eventInfo}>
-                    <Typography variant="h4" sx={styles.eventTitle}>
-                      {event.title}
-                    </Typography>
-                    <Typography sx={styles.publishDate}>
-                      {publishDateLabel}: {event.publishDate}
-                    </Typography>
-                    <Typography sx={styles.eventDescription}>{event.description}</Typography>
-
-                    <Box sx={{ ...styles.buttonGroup, display: 'flex', gap: 1, mt: 2 }}>
-                      <Button variant="outlined" fullWidth href={`/events/${event.id}`}>
-                        {viewLabel}
-                      </Button>
-                      {event.regLink && (
-                        <Button
-                          variant="text"
-                          href={event.regLink}
-                          sx={styles.regButton}
-                          endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
-                        >
-                          <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
-                            {regLabel}
-                          </Box>
-                        </Button>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-              </SwiperSlide>
+              <SwiperSlide key={event._id}>{renderEventItem(event)}</SwiperSlide>
             ))}
           </Swiper>
         </Box>
       ) : (
-        <Box sx={styles.eventsList}>
-          {displayedEvents.map((event) => (
-            <Box key={event.id} sx={styles.eventItem}>
-              <Typography sx={styles.eventDate}>{formatResponsiveDate(event.date)}</Typography>
-              <Box component="img" src={event.image} alt={event.title} sx={styles.eventImage} />
-              <Box sx={styles.eventInfo}>
-                <Typography variant="h4" sx={styles.eventTitle}>
-                  {event.title}
-                </Typography>
-                <Typography sx={styles.publishDate}>
-                  {publishDateLabel}: {event.publishDate}
-                </Typography>
-                <Typography sx={styles.eventDescription}>{event.description}</Typography>
-                <Box sx={styles.buttonGroup}>
-                  <Button variant="outlined" sx={styles.actionButton} href={`/events/${event.id}`}>
-                    {viewLabel}
-                  </Button>
-                  {event.regLink && (
-                    <Button
-                      variant="text"
-                      href={event.regLink}
-                      sx={styles.regButton}
-                      endIcon={<Box component="img" src="/icons/vector.svg" sx={{ width: 20, height: 20 }} />}
-                    >
-                      {regLabel}
-                    </Button>
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          ))}
-        </Box>
+        <Box sx={styles.eventsList}>{displayedEvents.map((event) => renderEventItem(event))}</Box>
       )}
     </Box>
   );

@@ -1,3 +1,5 @@
+import { IMAGES } from '~/shared/constants/assets';
+
 export const volunteerDonationData = {
   title: 'На автівки для ЗСУ',
   paymentMethods: [
@@ -10,6 +12,6 @@ export const volunteerDonationData = {
       value: 'Ukraine.resisting@gmail.com'
     }
   ],
-  imageSrc: '/images/volunteer-donation.png',
+  imageSrc: IMAGES.WAR_IN_UKRAINE_VOLUNTEER_DONATION,
   caption: 'Володимир Єрмоленко разом з дружиною Тетяною Огарковою'
 };

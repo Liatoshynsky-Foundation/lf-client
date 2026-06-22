@@ -3,6 +3,8 @@ import { PaymentMethod } from '~/components/blocks/volunteer-donation/VolunteerD
 import { TipTapDoc } from '~/types/types/tiptap.types';
 import { boldText, makeDoc, normalText } from '~/utils/tiptapHelpers';
 
+import { IMAGES } from '~/shared/constants/assets';
+
 type Localized<T> = {
   uk: T;
   en: T;
@@ -164,7 +166,7 @@ export const carsForAFUData = {
     uk: 'НА АВТІВКИ ДЛЯ ЗСУ:',
     en: 'FOR THE ARMED FORCES OF UKRAINE:'
   },
-  imageSrc: '/images/war-in-ukraine-page/photo-1.png',
+  imageSrc: IMAGES.WAR_IN_UKRAINE_VOLUNTEER_DONATION,
   caption: {
     uk: 'Володимир Єрмоленко разом з дружиною Тетяною Огарковою',
     en: 'Volodymyr Yermolenko with his wife Tetiana Ogarkova'

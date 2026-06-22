@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { styles } from './WarCarouselSection.styles';
 
 import Carousel from '~/shared/components/design-system/all-components/carousel/Carousel';
+import { IMAGES } from '~/shared/constants/assets';
 
 const WarCarouselSection = () => {
   const t = useTranslations('warCarousel');
@@ -11,19 +12,19 @@ const WarCarouselSection = () => {
   const images = [
     {
       id: 1,
-      src: '/images/war-in-ukraine-page/carousel/photo-1.png',
+      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(1),
       alt: 'Carousel Image 1',
       description: t('photo1')
     },
     {
       id: 2,
-      src: '/images/war-in-ukraine-page/carousel/photo-2.png',
+      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(2),
       alt: 'Carousel Image 2',
       description: t('photo2')
     },
     {
       id: 3,
-      src: '/images/war-in-ukraine-page/carousel/photo-3.png',
+      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(3),
       alt: 'Carousel Image 3',
       description: t('photo3')
     }
