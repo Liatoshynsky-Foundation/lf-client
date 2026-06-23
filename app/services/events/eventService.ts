@@ -3,8 +3,8 @@ import { Locale } from 'next-intl';
 import { errors } from '~/constants/errors';
 
 import type { EventRepository } from '~/infrastructure/repositories/events/event.repo';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
-import { ArraySchema } from '~/validators/constants';
 import { eventListItemSchema, eventSchema } from '~/validators/event.schema';
 import { LocalizeSchema } from '~/validators/localization';
 
@@ -21,7 +21,13 @@ export const createEventService = ({ eventRepository }: EventServiceDeps) => ({
         return [];
       }
 
-      return ArraySchema(LocalizeSchema(eventListItemSchema, locale)).parse(events);
+      const { validItems, invalidCount } = parseArraySafely(events, LocalizeSchema(eventListItemSchema, locale));
+
+      if (invalidCount > 0) {
+        logger.warn(`[SERVICE:Events:getAllPublishedEvents] Skipped ${invalidCount} invalid event records`);
+      }
+
+      return validItems;
     } catch (error) {
       logger.error(errors.EVENTS_FETCH_FAILED, error);
       return [];

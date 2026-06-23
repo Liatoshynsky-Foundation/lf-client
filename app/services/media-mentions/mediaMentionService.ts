@@ -1,8 +1,8 @@
 import { loggerErrors } from '~/constants/errors';
 
 import type { MediaMentionRepository } from '~/infrastructure/repositories/media-mentions/mediaMention.repo';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
-import { ArraySchema } from '~/validators/constants';
 import { mediaMentionListItemSchema, mediaMentionSchema } from '~/validators/mediaMention.schema';
 
 interface MediaMentionServiceDeps {
@@ -18,7 +18,15 @@ export const createMediaMentionService = ({ mediaMentionRepository }: MediaMenti
         return [];
       }
 
-      return ArraySchema(mediaMentionListItemSchema).parse(mediaMentions);
+      const { validItems, invalidCount } = parseArraySafely(mediaMentions, mediaMentionListItemSchema);
+
+      if (invalidCount > 0) {
+        logger.warn(
+          `[SERVICE:MediaMentions:getAllPublishedMediaMentions] Skipped ${invalidCount} invalid media mentions records`
+        );
+      }
+
+      return validItems;
     } catch (error) {
       logger.error(
         `[SERVICE:MediaMentions:getAllPublishedMediaMentions] Failed to fetch or parse media mentions. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
