@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const parseArraySafely = <T>(items: unknown[], schema: z.ZodSchema<T>) => {
-  const validItems: T[] = [];
+export const parseArraySafely = <TSchema extends z.ZodTypeAny>(items: unknown[], schema: TSchema) => {
+  const validItems: z.infer<TSchema>[] = [];
   let invalidCount = 0;
 
   items.forEach((item) => {
