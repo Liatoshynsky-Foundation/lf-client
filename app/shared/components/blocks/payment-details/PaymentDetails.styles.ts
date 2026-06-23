@@ -20,8 +20,7 @@ export const styles = {
       flex: { xs: 1, sm: 'unset' }
     },
     '& [aria-label="indicator"]': {
-      height: commonSx.layout.activeTabIndicator,
-      top: 4
+      ...commonSx.layout.activeTabIndicator
     }
   },
 

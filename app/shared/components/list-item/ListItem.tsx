@@ -1,18 +1,18 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { styles } from './ListItem.styles';
 
 interface ListItemProps {
   text: string | React.ReactNode;
-  sx?: object;
+  sx?: SxProps<Theme>;
 }
 
 const ListItem: React.FC<ListItemProps> = ({ text, sx }) => {
   return (
-    <Box sx={{ ...styles.listItem, ...sx }}>
+    <Box sx={[styles.listItem, ...(Array.isArray(sx) ? sx : [sx])]}>
       <Box sx={styles.bulletIcon}>
         <Box sx={styles.bulletMobile} aria-hidden={true}>
           <SvgImage src="/icons/bullet-small.svg" alt="" width={12} height={12} />

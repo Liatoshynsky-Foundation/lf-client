@@ -10,6 +10,8 @@ import PartnerGrid from './partner-grid/PartnerGrid';
 import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
 import { partnersMock } from './partners.data';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export default function OurPartners() {
   const t = useTranslations('warSupport.ourPartners');
 
@@ -26,7 +28,13 @@ export default function OurPartners() {
         sx={styles.titleContainer}
         mb={43}
       />
-      <ContentBlock textSx={styles.text} description={t('description')} />
+      <ContentBlock
+        containerSx={{
+          ...commonSx.layout.standardGrid
+        }}
+        textSx={styles.text}
+        description={t('description')}
+      />
 
       <Box sx={styles.xsGrid}>
         {partners.map((partner) => (

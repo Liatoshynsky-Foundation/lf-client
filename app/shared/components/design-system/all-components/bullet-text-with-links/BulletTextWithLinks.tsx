@@ -86,7 +86,9 @@ export default function BulletTextWithLinks({
       )}
       <Box sx={styles.contentBox} data-testid="BulletTextWithLinks-contentBox">
         <ContentBlock
-          containerSx={{ columnGap: commonSx.layout.standardGrid.columnGap }}
+          containerSx={{
+            ...commonSx.layout.standardGrid
+          }}
           dataTestId="BulletTextWithLinks-content"
           description={description}
           textSx={{ gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' } }}
