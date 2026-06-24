@@ -37,7 +37,7 @@ export const styles: Record<string, SxProps<Theme>> = {
         bottom: 0,
         width: '100%',
         height: '2px',
-        backgroundColor: 'background.default',
+        backgroundColor: 'grey.150',
         zIndex: 1
       }
     },
@@ -54,6 +54,8 @@ export const styles: Record<string, SxProps<Theme>> = {
         xs: '0 0 auto',
         sm: '1 1 0'
       },
+
+      textTransform: 'none',
       justifyContent: 'center',
 
       fontFamily: 'Mulish, sans-serif',
@@ -63,7 +65,7 @@ export const styles: Record<string, SxProps<Theme>> = {
       letterSpacing: '0px',
       whiteSpace: 'nowrap',
 
-      color: 'blue.700',
+      color: 'blue.500',
 
       '&:hover': {
         color: 'blue.800'

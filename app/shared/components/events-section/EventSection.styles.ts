@@ -1,4 +1,5 @@
 import { navButtonStyles } from '../content-slider/ContentSlider.styles';
+
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {

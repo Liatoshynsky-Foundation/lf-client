@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   container: {
     display: 'grid',

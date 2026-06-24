@@ -63,6 +63,7 @@ export const mainHexPallete = {
   },
   grey: {
     ...colors.grey,
+    150: '#dcdde5', //
     250: '#EAE9E8', // backgroundColors.offWhite rgb(234, 233, 232)
     350: '#D1CFCD', // primaryHoveredBackground rgb(209, 207, 205)
     375: '#D0CECC' // backgroundColorslightGray rgb(208, 206, 204)

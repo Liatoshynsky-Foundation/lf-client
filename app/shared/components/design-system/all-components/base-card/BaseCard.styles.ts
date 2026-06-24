@@ -1,8 +1,17 @@
+import { oswald } from '~/ds-components/theme/Theme';
+
 const ellipsisStyles = {
   display: '-webkit-box',
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
   textOverflow: 'ellipsis'
+} as const;
+
+const textBaseStyles = {
+  fontFamily: 'Mulish, sans-serif',
+  fontSize: '16px',
+  fontWeight: 400,
+  lineHeight: '150%'
 } as const;
 
 export const styles = {
@@ -81,6 +90,10 @@ export const styles = {
   },
 
   title: {
+    fontFamily: oswald.style.fontFamily,
+    fontSize: { xs: '18px', md: '20px' },
+    fontWeight: 700,
+    lineHeight: '150%',
     textTransform: 'uppercase',
     color: 'black',
     ...ellipsisStyles,
@@ -89,10 +102,13 @@ export const styles = {
   },
 
   date: {
+    ...textBaseStyles,
+    fontWeight: 500,
     color: 'brown.600'
   },
 
   description: {
+    ...textBaseStyles,
     color: 'black',
     ...ellipsisStyles,
     WebkitLineClamp: 3,

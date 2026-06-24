@@ -1,5 +1,3 @@
-import { theme } from '../../../theme/Theme';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 const columnBase = {

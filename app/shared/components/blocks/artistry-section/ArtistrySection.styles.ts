@@ -1,4 +1,3 @@
-import { AppTypography } from '~/constants';
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {

@@ -1,6 +1,5 @@
 import { commonSx } from '~/shared/styles/commonSx';
 
-
 export const getStyles = (color: 'black' | 'brown') => ({
   mainContainer: {
     display: 'grid',
