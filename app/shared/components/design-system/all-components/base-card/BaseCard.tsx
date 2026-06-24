@@ -99,9 +99,11 @@ export default function BaseCard({
           {title}
         </Typography>
 
-        <Typography sx={styles.date} data-testid={`${dataTestId}-date`}>
-          {t('publishedAtLabel')} {publicationDate}
-        </Typography>
+        {publicationDate && (
+          <Typography sx={styles.date} data-testid={`${dataTestId}-date`}>
+            {t('publishedAtLabel')} {publicationDate}
+          </Typography>
+        )}
 
         <Typography sx={styles.description} data-testid={`${dataTestId}-description`}>
           {description}

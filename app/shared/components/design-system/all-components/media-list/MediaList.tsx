@@ -7,6 +7,7 @@ import BaseCard, { Variant } from '../base-card/BaseCard';
 import Pagination from '../pagination/Pagination';
 import { styles } from './MediaList.styles';
 
+import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { newsPressCardItem } from '~/shared/components/blocks/media-center/MediaCenter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { usePagination } from '~/shared/hooks/use-pagination/usePagination';
@@ -71,7 +72,11 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
               image={newsItem.coverImage.src}
               crop={newsItem.coverImage.crop ?? null}
               title={newsItem.title}
-              publicationDate={new Date(newsItem.publishedAt || '').toLocaleDateString('uk-UA')}
+              publicationDate={
+                formatIsoDateToDdMmYy(
+                  newsItem.publishedAt instanceof Date ? newsItem.publishedAt.toISOString() : newsItem.publishedAt
+                ) ?? ''
+              }
             />
           );
         })}

@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   wrapper: {
     display: 'grid',
@@ -7,7 +9,7 @@ export const styles = {
       xs: ' "image"  "content" "buttons"',
       sm: '"buttons content" '
     },
-    columnGap: { xs: '16px', sm: '24px', md: '40px' },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     rowGap: { xs: '13px', sm: '17px', md: '20px' },
     alignItems: 'start',
     height: 'fit-content'

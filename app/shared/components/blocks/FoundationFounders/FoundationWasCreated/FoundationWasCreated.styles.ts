@@ -1,18 +1,12 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 const black = '#190D03';
 
 export const styles = {
   container: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap,
     width: '100%',
     mt: {
       xs: '13px',

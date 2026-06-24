@@ -1,17 +1,10 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   sectionContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    ...commonSx.layout.standardGrid,
     width: '100%',
     my: { xs: '80px' }
   },
@@ -39,20 +32,18 @@ export const styles = {
   },
 
   textStyle: {
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
     gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
   eventsList: {
     gridColumn: '1 / -1',
     gridRow: '3',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '56px',
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: '1fr',
+      sm: 'subgrid'
+    },
+    rowGap: { xs: '48px', md: '56px' },
     mt: '80px',
     width: '100%'
   },
@@ -65,7 +56,7 @@ export const styles = {
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
-    columnGap: { xs: '16px', sm: '24px', md: '40px' },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     width: '100%'
   },
 
@@ -176,30 +167,5 @@ export const styles = {
     color: '#190D03',
     pr: '20px',
     textTransform: 'none'
-  },
-  regButton: {
-    textTransform: 'none',
-    pl: { xs: '0px', sm: '20px' },
-    p: { xs: 0, sm: '8px 24px' },
-    fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: 1.1,
-    display: 'flex',
-    gap: '4px',
-    minWidth: { xs: '40px', sm: 'auto' },
-    width: { xs: '40px', sm: 'auto' },
-    height: { xs: '40px', sm: 'auto' },
-    borderRadius: { xs: '50%', sm: '30px' },
-    border: { xs: '1px solid #190D03', sm: 'none' },
-    alignItems: 'center',
-    justifyContent: 'center',
-    textDecoration: 'none',
-    '& .MuiButton-endIcon': {
-      m: 0,
-      '& img': {
-        width: 20,
-        height: 20
-      }
-    }
   }
 };

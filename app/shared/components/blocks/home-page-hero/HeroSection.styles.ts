@@ -1,6 +1,7 @@
 import { theme } from '../../design-system/all-components/theme/Theme';
 
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const heroSectionStyles = {
   imageTextGap: {
@@ -120,16 +121,8 @@ export const heroSectionStyles = {
     position: 'relative' as const,
     zIndex: 10,
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap,
     px: {
       xs: '24px',
       sm: '56px',

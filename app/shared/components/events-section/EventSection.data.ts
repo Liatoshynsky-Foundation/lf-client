@@ -2,6 +2,7 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 import { ROUTES } from '~/shared/components/constants/routes';
+import { IMAGES } from '~/shared/constants/assets';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -77,7 +78,7 @@ export const mockEventsData = {
       },
       title: COMMON_TITLE,
       description: COMMON_DESC,
-      image: '/images/event-section1.png',
+      image: IMAGES.MAIN_EVENT_SECTION(1),
       publishDate: {
         uk: '05.05.25',
         en: '05.05.25'
@@ -98,7 +99,7 @@ export const mockEventsData = {
         uk: 'З чого розпочинається підготовка до виконання будь-якого музичного твору? Відповідь є простою до банальності – треба взяти ноти. Однак, часто у випадках з творами українських композиторів ця банальність перетворюється в справжнє дет...',
         en: 'Where does the preparation for the performance of any musical work begin? The answer is simple to the point of banality – you need to get the sheet music. However, in cases with works by Ukrainian composers, this banality often turns into a real det...'
       },
-      image: '/images/event-section2.png',
+      image: IMAGES.MAIN_EVENT_SECTION(2),
       publishDate: {
         uk: '06.05.25',
         en: '06.05.25'
@@ -113,7 +114,7 @@ export const mockEventsData = {
       },
       title: COMMON_TITLE,
       description: COMMON_DESC,
-      image: '/images/event-section3.png',
+      image: IMAGES.MAIN_EVENT_SECTION(3),
       publishDate: {
         uk: '05.05.25',
         en: '05.05.25'
@@ -128,7 +129,7 @@ export const mockEventsData = {
       },
       title: COMMON_TITLE,
       description: COMMON_DESC,
-      image: '/images/event-section1.png',
+      image: IMAGES.MAIN_EVENT_SECTION(1),
       publishDate: {
         uk: '05.05.25',
         en: '05.05.25'

@@ -13,6 +13,8 @@ import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 import { SkewedBlock } from '~/shared/components/design-system/all-components/skewed-block/SkewedBlock';
 import { styles } from '~/shared/components/Quote/Quote.styles';
+import { IMAGES } from '~/shared/constants/assets';
+import { commonSx } from '~/shared/styles/commonSx';
 
 const TermsOfUse = () => {
   const t = useTranslations('termsOfUse');
@@ -39,7 +41,7 @@ const TermsOfUse = () => {
           {t('seeMore')}
         </Box>
         <SkewedBlock
-          image="/images/liatoshynsky.png"
+          image={IMAGES.TERMS_LIATOSHYNSKY}
           backgroundSize="cover"
           isBackground
           height={skewedBlockHeight}
@@ -67,7 +69,10 @@ const TermsOfUse = () => {
         <ContentBlock
           title={t('generalProvisionsTitle')}
           description={rulesDoc[locale]}
-          containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }}
+          containerSx={{
+            ...commonSx.layout.standardGrid,
+            marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
+          }}
         />
         <TermsContent />
       </Box>

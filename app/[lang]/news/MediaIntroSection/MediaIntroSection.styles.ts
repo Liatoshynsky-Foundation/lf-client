@@ -1,19 +1,13 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   gridContainer: {
     mt: '80px',
     mb: { xs: '64px', sm: '56px', md: '72px' },
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    }
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap
   },
   textBlockContainer: {
     pt: { xs: '40px', sm: '16px', lg: '44px' },
@@ -44,19 +38,11 @@ export const styles = {
     //   md: '156px'
     // },
     // mb: { xs: '44px', sm: '0px' },
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    }
+    fontSize: commonSx.layout.typography.heroTitle
     // width: { md: '570px', lg: '560px' }
   },
   longText: {
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
     gridColumn: '1 / -1'
   }
 };

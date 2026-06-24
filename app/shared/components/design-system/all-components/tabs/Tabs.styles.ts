@@ -1,6 +1,8 @@
 import type { SxProps, Theme } from '@mui/material';
 
 import { rgbaTabColors } from '~/ds-components/theme/colors';
+
+import { commonSx } from '~/shared/styles/commonSx';
 const gutter = '24px';
 export const styles: Record<string, SxProps<Theme>> = {
   container: {
@@ -59,7 +61,7 @@ export const styles: Record<string, SxProps<Theme>> = {
       padding: '12px 28px',
 
       fontFamily: 'Mulish, sans-serif',
-      fontSize: { xs: '16px', md: '18px' },
+      fontSize: commonSx.layout.typography.bodyMedium,
       fontWeight: 600,
       lineHeight: '150%',
       letterSpacing: '0px',

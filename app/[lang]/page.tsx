@@ -31,8 +31,7 @@ import {
   eventsPublishDateLabel,
   eventsRegLabel,
   eventsTitle,
-  eventsViewLabel,
-  mockEventsData
+  eventsViewLabel
 } from '~/components/events-section/EventSection.data';
 import FoundationSection from '~/components/foundation-section/FoundationSection';
 import {
@@ -51,6 +50,7 @@ import { isProductionMode } from '~/utils/isProductionMode';
 
 // --- Layouts & Utils ---
 import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
+import { createRequestContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
@@ -79,9 +79,13 @@ export default async function Home({ params }: Readonly<Language>) {
     return <UnderDevelopment />;
   }
 
-  const [pageResult, t] = await Promise.all([
+  const container = createRequestContainer();
+  const eventsService = container.resolve('eventsService');
+
+  const [pageResult, t, eventsData] = await Promise.all([
     resolvePageData('about-us', lang),
-    getTranslations('home.liatoshynskyOffice')
+    getTranslations('home.liatoshynskyOffice'),
+    eventsService.getAllPublishedEvents(lang)
   ]);
 
   if (isError(pageResult)) {
@@ -95,16 +99,6 @@ export default async function Home({ params }: Readonly<Language>) {
   }
 
   const liatochynskyBlocks = page.blocks;
-
-  const eventsForCurrentLang = mockEventsData.events.map((event) => ({
-    id: event.id,
-    image: event.image,
-    regLink: event.regLink,
-    date: event.date[lang],
-    title: event.title[lang],
-    description: event.description[lang],
-    publishDate: event.publishDate[lang]
-  }));
 
   const blocks = {
     HeroSection: {
@@ -140,13 +134,13 @@ export default async function Home({ params }: Readonly<Language>) {
       title: eventsTitle[lang],
       text: eventsMainText[lang],
       ctaLabel: eventsCtaLabel[lang],
-      ctaHref: `${ROUTES.NEWS}#events`,
-      publishDateLabes: eventsPublishDateLabel[lang],
+      ctaHref: `${ROUTES.NEWS}?tab=events`,
+      publishDateLabel: eventsPublishDateLabel[lang],
       viewLabel: eventsViewLabel[lang],
       regLabel: eventsRegLabel[lang],
       prevLabel: eventsPrevLabel[lang],
       nextLabel: eventsNextLabel[lang],
-      events: eventsForCurrentLang
+      events: eventsData
     },
     NewsSection: {
       title: newsSectionData.title,
@@ -214,7 +208,7 @@ export default async function Home({ params }: Readonly<Language>) {
           events={blocks.EventSection.events}
           ctaHref={blocks.EventSection.ctaHref}
           ctaLabel={blocks.EventSection.ctaLabel}
-          publishDateLabel={blocks.EventSection.publishDateLabes}
+          publishDateLabel={blocks.EventSection.publishDateLabel}
           viewLabel={blocks.EventSection.viewLabel}
           regLabel={blocks.EventSection.regLabel}
           prevLabel={blocks.EventSection.prevLabel}

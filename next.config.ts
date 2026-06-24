@@ -4,7 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const AZURE_SAS_URL = process.env.AZURE_SAS_URL;
 const azureHostname = AZURE_SAS_URL ? new URL(AZURE_SAS_URL).hostname : null;
 
-const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL;
+const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL ?? process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
 const storageHostname = STORAGE_BASE_URL ? new URL(STORAGE_BASE_URL).hostname : null;
 
 const nextConfig: NextConfig = {
@@ -14,12 +14,11 @@ const nextConfig: NextConfig = {
       ...(storageHostname
         ? [{ protocol: 'https' as const, hostname: storageHostname, port: '', pathname: '/**' }]
         : []),
-      //dev only! remove in production
+
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**'
+        hostname: 'pub-2b50c59c64954ab89b7837f9f4607e12.r2.dev',
+        pathname: '/photos/**'
       }
     ]
   },

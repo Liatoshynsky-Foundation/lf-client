@@ -13,6 +13,8 @@ import TextCard from '~/ds-components/text-card/TextCard';
 import { styles } from './ActionsHelp.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 interface ActionsHelpProps {
   title: { uk: string; en: string };
   subtitle: TipTapDoc;
@@ -46,6 +48,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
           key={paper.title[locale]}
           title={paper.title}
           description={paper.description}
+          locale={locale}
         />
       )),
       <ButtonCard
@@ -83,11 +86,7 @@ const ActionsHelp = ({ data }: { readonly data: Readonly<ActionsHelpProps> }) =>
     <Box sx={styles.gridContainer} data-testid="ActionsHelp">
       <SectionTitle
         sx={{
-          gridTemplateColumns: {
-            xs: 'repeat(4, 1fr)',
-            sm: 'repeat(8, 1fr)',
-            md: 'repeat(12, 1fr)'
-          }
+          gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns
         }}
         title={title}
         mb={52}

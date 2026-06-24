@@ -2,6 +2,8 @@ import type { SxProps, Theme } from '@mui/material/styles';
 
 import { mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     display: 'grid',
@@ -75,10 +77,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     whiteSpace: 'nowrap',
     fontFamily: 'var(--font-oswald)',
     fontWeight: 600,
-    fontSize: {
-      xs: '20px',
-      md: '28px'
-    },
+    fontSize: commonSx.layout.typography.sectionTitle,
     lineHeight: '135%',
     textTransform: 'uppercase'
   },
@@ -86,10 +85,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   yearLabel: {
     fontFamily: 'var(--font-oswald)',
     fontWeight: 600,
-    fontSize: {
-      xs: '20px',
-      md: '28px'
-    },
+    fontSize: commonSx.layout.typography.sectionTitle,
     lineHeight: '135%',
     textTransform: 'uppercase',
     mt: {
@@ -101,10 +97,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   status: {
     fontFamily: 'var(--font-oswald)',
     fontWeight: 600,
-    fontSize: {
-      xs: '20px',
-      md: '28px'
-    },
+    fontSize: commonSx.layout.typography.sectionTitle,
     lineHeight: '135%',
     textTransform: 'uppercase',
     color: mainHexPallete.brown[500]
@@ -192,10 +185,7 @@ export const styles: Record<string, SxProps<Theme>> = {
 
   description: {
     fontFamily: 'var(--font-mulish)',
-    fontSize: {
-      xs: '16px',
-      md: '18px'
-    },
+    fontSize: commonSx.layout.typography.bodyMedium,
     fontWeight: 400,
     lineHeight: '150%',
     my: {

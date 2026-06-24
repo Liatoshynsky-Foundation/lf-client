@@ -1,4 +1,5 @@
 import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   root: {
@@ -17,7 +18,7 @@ export const styles = {
   },
 
   titleMain: {
-    fontSize: { xs: '40px', md: '64px' },
+    fontSize: commonSx.layout.typography.heroTitle,
     lineHeight: '120%'
   },
 

@@ -1,14 +1,12 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles: Record<string, SxProps<Theme>> = {
   gridContainer: {
     display: 'grid',
     gridTemplateColumns: 'subgrid',
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     gridColumn: '1 / -1',
     mt: {
       xs: '32px',

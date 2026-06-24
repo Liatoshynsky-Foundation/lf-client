@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   container: {
     gridColumn: '1 / -1',
@@ -23,7 +25,7 @@ export const styles = {
   loadMoreButton: {
     width: { xs: '100%', sm: 'auto' },
     p: { xs: '8px 24px', md: '16px 48px' },
-    fontSize: { xs: '16px', md: '18px' },
+    fontSize: commonSx.layout.typography.bodyMedium,
     fontWeight: { xs: '500', md: '600' }
   }
 };

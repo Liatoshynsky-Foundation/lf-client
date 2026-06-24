@@ -1,10 +1,11 @@
 import type { BaseCardProps } from '~/ds-components/base-card/BaseCard';
 
 import { getDynamicRoute } from '~/shared/components/constants/routes';
+import { IMAGES } from '~/shared/constants/assets';
 
 export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: 'Концерт до 130-річчя Бориса Лятошинського',
     publicationDate: '15.01.25',
     description:
@@ -12,7 +13,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
     href: getDynamicRoute.newsItem('concert-130-anniversary')
   },
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: 'Презентація нового запису Третьої симфонії',
     publicationDate: '10.01.25',
     description:
@@ -20,7 +21,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
     href: getDynamicRoute.newsItem('third-symphony-recording')
   },
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: 'Відкриття виставки архівних матеріалів',
     publicationDate: '05.01.25',
     description:
@@ -31,7 +32,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
 
 export const mockPressCards: Omit<BaseCardProps, 'variant'>[] = [
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: '«Золотий Обруч»: майже детективна історія',
     publicationDate: '05.05.25',
     description:
@@ -39,14 +40,14 @@ export const mockPressCards: Omit<BaseCardProps, 'variant'>[] = [
     href: '#'
   },
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: 'Радіо Культура: Інтервю з головою Фундації',
     publicationDate: '15.12.24',
     description: 'Тетяна Гомон розповідає про діяльність Фундації та плани на 2025 рік у програмі "Музичний світ".',
     href: '#'
   },
   {
-    image: '/images/placeholder.png',
+    image: IMAGES.PLACEHOLDER,
     title: 'Український тиждень: Спадщина майстра',
     publicationDate: '10.12.24',
     description: 'Огляд нових публікацій та досліджень творчості Бориса Лятошинського за останні роки.',

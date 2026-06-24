@@ -31,7 +31,7 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
   async getAllCompositions(
     locale: Locale,
     search?: string,
-    filters?: { opuses?: Array<string | number>; genres?: string[]; years?: { min?: number; max?: number } }
+    filters?: { categories?: string[]; genres?: string[]; years?: { min?: number; max?: number } }
   ) {
     const allSongs = await compositionsRepo.getAllCompositions(search, filters);
     if (!allSongs) return [];

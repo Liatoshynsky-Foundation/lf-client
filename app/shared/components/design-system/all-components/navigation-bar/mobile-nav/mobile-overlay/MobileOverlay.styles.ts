@@ -1,6 +1,8 @@
 import { mainHexPallete } from '../../../theme/colors';
 import { theme } from '../../../theme/Theme';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 const columnBase = {
   display: 'flex',
   flexDirection: 'column',
@@ -33,13 +35,9 @@ export const styles = {
   overlayContent: {
     display: 'grid',
 
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
 
-    columnGap: { xs: '16px', sm: '24px', md: '40px' },
+    columnGap: commonSx.layout.standardGrid.columnGap,
 
     paddingInline: { xs: '24px', sm: '56px', md: '72px' },
     paddingTop: { xs: '63px', sm: '112px', md: '112px' },

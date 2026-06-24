@@ -15,6 +15,7 @@ import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
 import FacebookIcon from '~/public/icons/facebook.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+import { commonSx } from '~/shared/styles/commonSx';
 
 type LocalizedString = {
   uk: string;
@@ -85,7 +86,9 @@ export default function BulletTextWithLinks({
       )}
       <Box sx={styles.contentBox} data-testid="BulletTextWithLinks-contentBox">
         <ContentBlock
-          containerSx={{ columnGap: { xs: '16px', sm: '24px', md: '40px' } }}
+          containerSx={{
+            ...commonSx.layout.standardGrid
+          }}
           dataTestId="BulletTextWithLinks-content"
           description={description}
           textSx={{ gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' } }}

@@ -1,5 +1,7 @@
 import { mainHexPallete } from '~/ds-components/theme/colors';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   mainContainer: {
     position: 'relative',
@@ -27,15 +29,7 @@ export const styles = {
     pr: { sm: '57px', md: '72px', xxl: '206px', ultra: '303px' },
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    }
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap
   }
 };

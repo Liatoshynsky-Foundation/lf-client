@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 const colorText = {
   black: '#190d03',
   brown: '#574139'
@@ -34,10 +36,7 @@ export const getStyles = (color: 'black' | 'brown') => ({
       md: '44px'
     },
     mb: { xs: '44px', sm: '0px' },
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    }
+    fontSize: commonSx.layout.typography.heroTitle
   },
 
   quoteSection: {
