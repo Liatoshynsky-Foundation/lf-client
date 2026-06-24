@@ -1,5 +1,7 @@
 import type { Variant } from '~/types/types/titleWithDescriptionComponent';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const Sizes = {
   goals: '100%',
   whatWeDo: '100%'
@@ -15,7 +17,7 @@ export const Typography = {
     color: 'black',
     fontWeight: 700,
     lineHeight: '140%',
-    fontSize: { xs: '16px', md: '20px' }
+    fontSize: commonSx.layout.typography.bodyLarge
   },
 
   blockDescription: {
@@ -23,7 +25,7 @@ export const Typography = {
     color: 'black',
     fontWeight: 400,
     lineHeight: { xs: '150%', md: '160%' },
-    fontSize: { xs: '16px', md: '20px' }
+    fontSize: commonSx.layout.typography.bodyLarge
   }
 };
 

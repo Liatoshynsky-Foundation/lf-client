@@ -21,6 +21,16 @@ export const newsSectionTextContent: LocalizedTipTapDoc = {
   ])
 };
 
+export const newsSliderPrevLabel = {
+  uk: 'Попередня новина',
+  en: 'Previous news item'
+};
+
+export const newsSliderNextLabel = {
+  uk: 'Наступна новина',
+  en: 'Next news item'
+};
+
 export const newsSectionData = {
   title: {
     uk: 'НоВиНи ФунДаЦІЇ',

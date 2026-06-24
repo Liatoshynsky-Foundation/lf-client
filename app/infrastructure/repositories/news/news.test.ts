@@ -79,12 +79,14 @@ describe('newsRepository', () => {
       expect(result).toEqual([]);
     });
 
-    it('should throw Zod error if data is invalid', async () => {
+    it('should return data without validation if news contains invalid fields', async () => {
       const invalidData = [{ ...validNewsData, title: 123 }];
 
       (NewsModel.find as jest.Mock).mockReturnValue(mockMongooseChain(invalidData));
 
-      await expect(newsRepository.getAllPublishedNews()).rejects.toThrow();
+      const result = await newsRepository.getAllPublishedNews();
+
+      expect(result).toEqual(invalidData);
     });
   });
 
@@ -110,12 +112,14 @@ describe('newsRepository', () => {
       expect(result.slug).toBe(validNewsData.slug);
     });
 
-    it('should throw Zod error if single news data is invalid', async () => {
+    it('should return single news without validation if it contains invalid fields', async () => {
       const invalidData = { ...validNewsData, title: 123 };
 
       (NewsModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(invalidData));
 
-      await expect(newsRepository.getNewsBySlug('test-news-slug')).rejects.toThrow();
+      const result = await newsRepository.getNewsBySlug('test-news-slug');
+
+      expect(result).toEqual(invalidData);
     });
   });
 });

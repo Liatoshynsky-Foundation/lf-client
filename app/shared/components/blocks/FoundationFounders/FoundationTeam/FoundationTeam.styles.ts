@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const getSpan = (start: number, span: number) => `${start} / span ${span}`;
 
 export const styles = {
@@ -26,7 +28,7 @@ export const styles = {
     color: '#190D03',
     fontFamily: 'var(--font-oswald)',
     fontWeight: 700,
-    fontSize: { xs: '20px', md: '28px' },
+    fontSize: commonSx.layout.typography.sectionTitle,
     lineHeight: '160%',
     textTransform: 'uppercase',
     letterSpacing: 0,

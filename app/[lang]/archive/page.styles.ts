@@ -1,20 +1,14 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   pageWrapper: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
     rowGap: 0,
     alignItems: 'start',
     gridAutoRows: 'min-content',
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     paddingTop: {
       xs: '80px',
       sm: '89px',

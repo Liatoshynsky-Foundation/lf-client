@@ -2,6 +2,8 @@ import { ResponsiveStyleValue, SxProps, Theme } from '@mui/system';
 
 import type { Align } from '~/types/types/quoteComponent';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const quoteSizes = {
   height: 'fit-content',
   width: { xs: '272px', sm: '231px', md: '305px', lg: '367px', xl: '408px' },
@@ -32,7 +34,7 @@ export const alignments = {
 export const quoteTextStyles = {
   fontWeight: 500,
   lineHeight: '150%',
-  fontSize: { xs: '16px', md: '18px' },
+  fontSize: commonSx.layout.typography.bodyMedium,
   letterSpacing: 0
 };
 

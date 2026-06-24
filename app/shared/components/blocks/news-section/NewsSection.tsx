@@ -28,10 +28,20 @@ interface Props {
     en: string;
   };
   buttonLink: string;
+  prevLabel: string;
+  nextLabel: string;
   locale: Locale;
 }
 
-const NewsSection: React.FC<Props> = async ({ locale, title, textContent, buttonText, buttonLink }) => {
+const NewsSection: React.FC<Props> = async ({
+  locale,
+  title,
+  textContent,
+  buttonText,
+  buttonLink,
+  prevLabel,
+  nextLabel
+}) => {
   const t = await getTranslations('media.emptyState');
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
@@ -83,7 +93,7 @@ const NewsSection: React.FC<Props> = async ({ locale, title, textContent, button
         link={buttonLink}
       />
 
-      <ContentSlider cards={newsCards} variant="news" />
+      <ContentSlider cards={newsCards} variant="news" prevLabel={prevLabel} nextLabel={nextLabel} />
     </Box>
   );
 };

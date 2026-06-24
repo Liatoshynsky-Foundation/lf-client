@@ -1,84 +1,69 @@
 'use client';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { Box } from '@mui/material';
 import React from 'react';
 import type { Swiper as SwiperType } from 'swiper';
-import { Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import type { BaseCardProps } from '~/ds-components/base-card/BaseCard';
 import BaseCard from '~/ds-components/base-card/BaseCard';
 
 import { styles } from './ContentSlider.styles';
 
-import { SvgImage } from '~/shared/components/svg-image/SvgImage';
+import { BaseSlider } from '~/shared/components/base-slider';
 
 export interface ContentSliderProps {
   cards: Omit<BaseCardProps, 'variant'>[];
   variant?: 'news' | 'press';
+  prevLabel: string;
+  nextLabel: string;
 }
 
-export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = 'news' }) => {
-  const swiperRef = React.useRef<SwiperType | null>(null);
-  return (
-    <Box sx={styles.sliderContainer}>
-      <Box sx={styles.navigationContainer}>
-        <Box className="swiper-button-prev" sx={styles.navButton}>
-          <SvgImage src="/icons/arrow-left.svg" alt="Previous" width={20} height={20} />
-        </Box>
-        <Box className="swiper-button-next" sx={styles.navButton}>
-          <SvgImage src="/icons/arrow-right.svg" alt="Next" width={20} height={20} />
-        </Box>
-      </Box>
+type ContentSliderCard = Omit<BaseCardProps, 'variant'>;
 
-      <Swiper
-        modules={[Navigation]}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        navigation={{
-          prevEl: '.swiper-button-prev',
-          nextEl: '.swiper-button-next'
-        }}
-        spaceBetween={40}
-        slidesPerView={1.2}
-        centeredSlides={false}
-        breakpoints={{
-          600: {
-            slidesPerView: 1.5,
-            spaceBetween: 24
-          },
-          900: {
-            slidesPerView: 2.2,
-            spaceBetween: 40
-          },
-          1200: {
-            slidesPerView: 3,
-            spaceBetween: 40
-          }
-        }}
-      >
-        {cards.map((card, index) => (
-          <SwiperSlide
-            key={card.href}
-            onFocusCapture={() => {
-              swiperRef.current?.slideTo(index);
-            }}
-          >
-            <BaseCard
-              image={card.image}
-              crop={card.crop}
-              title={card.title}
-              publicationDate={card.publicationDate}
-              description={card.description}
-              href={card.href}
-              variant={variant}
-              dataTestId={card.dataTestId}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Box>
+const sliderBreakpoints = {
+  600: { slidesPerView: 1.5, spaceBetween: 24 },
+  900: { slidesPerView: 2.2, spaceBetween: 40 },
+  1200: { slidesPerView: 3, spaceBetween: 40 }
+};
+
+export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = 'news', prevLabel, nextLabel }) => {
+  const swiperRef = React.useRef<SwiperType | null>(null);
+
+  const renderCard = (card: ContentSliderCard): React.ReactNode => (
+    <BaseCard
+      image={card.image}
+      crop={card.crop}
+      title={card.title}
+      publicationDate={card.publicationDate}
+      description={card.description}
+      href={card.href}
+      variant={variant}
+      dataTestId={card.dataTestId}
+    />
+  );
+
+  const getCardKey = (card: ContentSliderCard): string => card.href;
+
+  const handleSwiper = (swiper: SwiperType): void => {
+    swiperRef.current = swiper;
+  };
+
+  const handleSlideFocus = (index: number): void => {
+    swiperRef.current?.slideTo(index);
+  };
+
+  return (
+    <BaseSlider<ContentSliderCard>
+      items={cards}
+      renderItem={renderCard}
+      getItemKey={getCardKey}
+      slidesPerView={1.2}
+      spaceBetween={40}
+      breakpoints={sliderBreakpoints}
+      containerSx={styles.sliderContainer}
+      navContainerSx={styles.navigationContainer}
+      prevLabel={prevLabel}
+      nextLabel={nextLabel}
+      onSwiper={handleSwiper}
+      onSlideFocus={handleSlideFocus}
+    />
   );
 };

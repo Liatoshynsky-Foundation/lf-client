@@ -17,6 +17,8 @@ import { IconButtonVariant } from '~/types/enums/common.enums';
 import { GetNotesState } from '~/types/enums/getNotes.enums';
 import { Notes } from '~/types/types/getNotes.types';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 type GetNotesModalProps = {
   composition: string;
   notes: Notes[];
@@ -34,7 +36,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   switch (state) {
     case GetNotesState.LIST:
       title = (
-        <Typography variant="h2" sx={{ fontSize: { xs: '40px', md: '64px' } }}>
+        <Typography variant="h2" sx={{ fontSize: commonSx.layout.typography.heroTitle }}>
           {t('notesList.title')}
         </Typography>
       );
@@ -45,7 +47,10 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
     case GetNotesState.FORM:
       title = (
         <Box data-testid="GetNotesModal" sx={{ mb: '8px' }}>
-          <Typography variant="h4" sx={{ mb: 2, textTransform: 'uppercase', fontSize: { xs: '20px', md: '28px' } }}>
+          <Typography
+            variant="h4"
+            sx={{ mb: 2, textTransform: 'uppercase', fontSize: commonSx.layout.typography.sectionTitle }}
+          >
             {t('form.title')}
           </Typography>
           <Typography
@@ -54,7 +59,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
             sx={{
               textIndent: { xs: 'calc(50% - 100px)', md: 'calc(50% - 50px)' },
               display: 'block',
-              fontSize: { xs: '16px', md: '18px' }
+              fontSize: commonSx.layout.typography.bodyMedium
             }}
           >
             {t('form.subtitle')}

@@ -59,22 +59,24 @@ const mockCards = [
   }
 ];
 
+const labelProps = { prevLabel: 'Previous news item', nextLabel: 'Next news item' };
+
 describe('ContentSlider Component', () => {
   it('should render slider component', () => {
-    render(<ContentSlider cards={mockCards} />);
+    render(<ContentSlider cards={mockCards} {...labelProps} />);
 
     expect(screen.getByTestId('swiper')).toBeInTheDocument();
   });
 
   it('should render navigation buttons', () => {
-    render(<ContentSlider cards={mockCards} />);
+    render(<ContentSlider cards={mockCards} {...labelProps} />);
 
-    expect(screen.getByAltText('Previous')).toBeInTheDocument();
-    expect(screen.getByAltText('Next')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Previous news item' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next news item' })).toBeInTheDocument();
   });
 
   it('should render all cards', () => {
-    render(<ContentSlider cards={mockCards} />);
+    render(<ContentSlider cards={mockCards} {...labelProps} />);
 
     expect(screen.getByText('News Title 1 - news')).toBeInTheDocument();
     expect(screen.getByText('News Title 2 - news')).toBeInTheDocument();
@@ -82,26 +84,26 @@ describe('ContentSlider Component', () => {
   });
 
   it('should render correct number of slides', () => {
-    render(<ContentSlider cards={mockCards} />);
+    render(<ContentSlider cards={mockCards} {...labelProps} />);
 
     const slides = screen.getAllByTestId('swiper-slide');
     expect(slides).toHaveLength(3);
   });
 
   it('should use default variant "news" when not specified', () => {
-    render(<ContentSlider cards={[mockCards[0]]} />);
+    render(<ContentSlider cards={[mockCards[0]]} {...labelProps} />);
 
     expect(screen.getByText('News Title 1 - news')).toBeInTheDocument();
   });
 
   it('should use custom variant when provided', () => {
-    render(<ContentSlider cards={[mockCards[0]]} variant="press" />);
+    render(<ContentSlider cards={[mockCards[0]]} variant="press" {...labelProps} />);
 
     expect(screen.getByText('News Title 1 - press')).toBeInTheDocument();
   });
 
   it('should pass correct props to BaseCard', () => {
-    render(<ContentSlider cards={mockCards} />);
+    render(<ContentSlider cards={mockCards} {...labelProps} />);
 
     expect(screen.getByTestId('news-card-1')).toBeInTheDocument();
     expect(screen.getByTestId('news-card-2')).toBeInTheDocument();
@@ -109,7 +111,7 @@ describe('ContentSlider Component', () => {
   });
 
   it('should render empty slider when no cards provided', () => {
-    render(<ContentSlider cards={[]} />);
+    render(<ContentSlider cards={[]} {...labelProps} />);
 
     expect(screen.getByTestId('swiper')).toBeInTheDocument();
     expect(screen.queryAllByTestId('swiper-slide')).toHaveLength(0);

@@ -1,8 +1,6 @@
 import { EventStatus } from '~/domain/dto/event.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import EventModel from '~/infrastructure/models/events/event.model';
-import { ArraySchema } from '~/validators/constants';
-import { eventListItemSchema, eventSchema } from '~/validators/event.schema';
 
 const eventRepository = {
   async getAllPublishedEvents() {
@@ -13,21 +11,13 @@ const eventRepository = {
       .sort({ eventDateTimeStart: -1 })
       .lean();
 
-    if (!events) {
-      return [];
-    }
-
-    return ArraySchema(eventListItemSchema).parse(events);
+    return events ?? [];
   },
 
   async getEventBySlug(slug: string) {
     await dbConnect();
 
-    const event = await EventModel.findOne({ slug }).lean();
-
-    if (!event) return null;
-
-    return eventSchema.parse(event);
+    return EventModel.findOne({ slug }).lean();
   }
 };
 

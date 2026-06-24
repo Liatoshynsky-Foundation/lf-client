@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   wrapper: {
     display: 'contents'
@@ -7,10 +9,7 @@ export const styles = {
     mb: { xs: '48px', sm: '32px' },
     gridColumn: '1 / -1',
     mt: { xs: '80px', sm: '108px', md: '156px', lg: '121px' },
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    }
+    fontSize: commonSx.layout.typography.heroTitle
   },
 
   donationFormWrapper: {

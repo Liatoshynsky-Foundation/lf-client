@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   gridContainer: {
     display: 'grid',
@@ -7,11 +9,7 @@ export const styles = {
       sm: 'repeat(8, 1fr)',
       md: 'repeat(12, 1fr)'
     },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     m: { xs: '56px 0 96px 0', sm: '104px 0', md: '128px 0 160px 0' }
   },
   contacts: {

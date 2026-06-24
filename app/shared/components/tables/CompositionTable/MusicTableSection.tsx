@@ -237,8 +237,8 @@ export default function MusicTableSection() {
     ],
     [
       params.category,
-      params.genre,
       categoryCount,
+      params.genre,
       genreCount,
       staticFilters,
       isYearActive,

@@ -1,4 +1,5 @@
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   links: {
@@ -8,7 +9,7 @@ export const styles = {
   },
   mediaTitles: {
     ...AppTypography.mulish18Regular,
-    fontSize: { xs: '16px', md: '18px' },
+    fontSize: commonSx.layout.typography.bodyMedium,
     lineHeight: { xs: '150%', md: '160%' },
     color: 'brown.700',
     display: { xs: 'none', sm: 'block' }
@@ -19,11 +20,11 @@ export const styles = {
     gap: { sm: '8px', md: '10px' }
   },
   contactLabel: {
-    fontSize: { sm: '16px', md: '18px' },
+    fontSize: commonSx.layout.typography.bodyMedium,
     lineHeight: { sm: '150%', md: '160%' }
   },
   contactLink: {
-    fontSize: { xs: '16px', md: '18px' },
+    fontSize: commonSx.layout.typography.bodyMedium,
     height: { xs: '34px', sm: '44px', md: '24px' },
     display: 'flex',
     alignItems: 'center'

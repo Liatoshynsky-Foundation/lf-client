@@ -1,5 +1,7 @@
 import { theme } from '../design-system/all-components/theme/Theme';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   buttonGroup: {
     position: 'fixed',
@@ -11,8 +13,7 @@ export const styles = {
     zIndex: theme.zIndex.stickyYearsTab,
 
     '& [aria-label="indicator"]': {
-      height: 'calc(100% - 8px)',
-      top: 4
+      ...commonSx.layout.activeTabIndicator
     }
   },
   yearButton: {

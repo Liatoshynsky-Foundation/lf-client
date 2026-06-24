@@ -1,19 +1,11 @@
 import { navButtonStyles } from '../content-slider/ContentSlider.styles';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   sectionContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    ...commonSx.layout.standardGrid,
     width: '100%',
     my: { xs: '80px' }
   },
@@ -22,6 +14,12 @@ export const styles = {
     width: '100%',
     minWidth: 0,
     overflow: 'hidden'
+  },
+  sliderNavContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '10px',
+    mb: '20px'
   },
   title: {
     gridColumn: '1 / -1',
@@ -35,12 +33,7 @@ export const styles = {
   },
 
   textStyle: {
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
     gridColumn: { xs: '1/ -1', sm: '4/ -1', md: '6/-1' }
   },
   eventsList: {
@@ -53,6 +46,18 @@ export const styles = {
     },
     rowGap: { xs: '48px', md: '56px' },
     mt: '80px',
+    width: '100%'
+  },
+
+  eventItem: {
+    display: { xs: 'flex', md: 'grid' },
+    flexDirection: 'column',
+    gridTemplateRows: { xs: 'auto auto', sm: 'auto auto', md: 'auto auto', lg: '1fr' },
+    gridTemplateColumns: {
+      sm: 'repeat(8, 1fr)',
+      md: 'repeat(12, 1fr)'
+    },
+    columnGap: commonSx.layout.standardGrid.columnGap,
     width: '100%'
   },
 

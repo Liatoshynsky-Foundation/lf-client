@@ -1,5 +1,7 @@
 import { CSSProperties } from 'react';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   container: {
     width: { xs: '258px', md: '296px' },
@@ -35,7 +37,7 @@ export const styles = {
     lineHeight: '140%'
   },
   description: {
-    fontSize: { xs: '16px', md: '20px' },
+    fontSize: commonSx.layout.typography.bodyLarge,
     fontWeight: 400,
     lineHeight: { xs: '150%', md: '160%' },
     textAlign: 'left',

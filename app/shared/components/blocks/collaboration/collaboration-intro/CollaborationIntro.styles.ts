@@ -1,19 +1,11 @@
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   container: {
     height: '0%',
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    },
+    ...commonSx.layout.standardGrid,
     gridColumn: '1 / -1',
     mt: { xs: '80px', md: '172px', lg: '180px' },
     mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' },
@@ -21,7 +13,7 @@ export const styles = {
   },
   subtitle: {
     ...AppTypography.oswald28Bold,
-    fontSize: { xs: '20px', md: '28px' },
+    fontSize: commonSx.layout.typography.sectionTitle,
     color: 'black',
     letterSpacing: '0px',
     gridColumn: { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
@@ -29,12 +21,7 @@ export const styles = {
   textAbove: {
     lineHeight: '160%',
     gridColumn: '1 / -1',
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 4px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1728px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
     mt: { xs: '16px', md: '32px' }
   },
   text: {
@@ -45,7 +32,7 @@ export const styles = {
     alignSelf: 'start',
     mb: { sm: '0px', md: '34px' },
     gridColumn: { xs: '1 / -1', md: '1 / 3' },
-    fontSize: { xs: '40px', md: '64px' }
+    fontSize: commonSx.layout.typography.heroTitle
   },
   textContainer: {
     gridColumn: { xs: '1 / -1', sm: '4 / 9', md: '6 / 13' },

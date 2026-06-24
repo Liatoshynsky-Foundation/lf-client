@@ -1,5 +1,6 @@
 import type { SxProps, Theme } from '@mui/material';
 
+import { commonSx } from '~/shared/styles/commonSx';
 const gutter = '24px';
 
 export const styles: Record<string, SxProps<Theme>> = {
@@ -55,7 +56,12 @@ export const styles: Record<string, SxProps<Theme>> = {
       },
       justifyContent: 'center',
 
-      fontSize: { xs: '16px', md: '18px' },
+      fontFamily: 'Mulish, sans-serif',
+      fontSize: commonSx.layout.typography.bodyMedium,
+      fontWeight: 600,
+      lineHeight: '150%',
+      letterSpacing: '0px',
+      whiteSpace: 'nowrap',
 
       color: 'blue.700',
 

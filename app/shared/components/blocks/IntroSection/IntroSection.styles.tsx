@@ -1,4 +1,5 @@
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   container: {
@@ -16,10 +17,7 @@ export const styles = {
 
   title: {
     ...AppTypography.oswald64Semibold,
-    fontSize: {
-      xs: '40px',
-      md: '64px'
-    },
+    fontSize: commonSx.layout.typography.heroTitle,
     margin: {
       xs: '0 0 66px',
       sm: '20px 0 68px',

@@ -39,10 +39,12 @@ export const newsSchema = z.object({
   publishedAt: z.coerce
     .date()
     .nullable()
+    .catch(null)
     .transform((date) => date?.toISOString() ?? null),
   newsDate: z.coerce
     .date()
     .nullable()
+    .catch(null)
     .transform((date) => date?.toISOString() ?? null),
   title: translatedFieldSchema,
   description: translatedFieldSchema,

@@ -1,6 +1,7 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
 import { AppTypography } from '~/constants';
+import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   titleWrapper: {
@@ -41,23 +42,13 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
     gridRow: '2',
     fontSize: { xs: '16px', sm: '18px', md: '20px' },
     lineHeight: 1.6,
-    textIndent: {
-      xs: 'calc((100vw - 48px) / 4 * 1 + 6px)',
-      sm: 'calc((100vw - 112px) / 8 * 3 - 11px)',
-      md: 'calc((100vw - 144px) / 12 * 3 + 11px)',
-      xxl: 'calc((1448px - 144px) / 12 * 3 + 11px)'
-    },
+    textIndent: commonSx.layout.textIndent.textIndentThirdColumnNarrow,
     mb: { xs: '40px', md: '64px' }
   },
   agreementParagraph: {
     gridColumn: { xs: '1/-1', sm: '1/7', md: '1/11', lg: '1 / 9' },
     gridRow: '3',
     fontSize: { xs: '16px', sm: '18px', md: '20px' },
-    textIndent: {
-      xs: '0px',
-      sm: 'calc((100vw - 112px) / 8 * 1 + 3px)',
-      md: 'calc((100vw - 144px) / 12 * 1 + 40px)',
-      lg: 'calc((1448px - 144px) / 12 * 1 + 3px)'
-    }
+    textIndent: commonSx.layout.textIndent.textIndentFirstColumnNarrow
   }
 });

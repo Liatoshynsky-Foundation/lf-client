@@ -1,5 +1,7 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles: Record<string, SxProps<Theme>> = {
   wrapper: {
     width: '100%',
@@ -21,15 +23,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
-    columnGap: {
-      xs: '16px',
-      sm: '24px',
-      md: '40px'
-    }
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
+    columnGap: commonSx.layout.standardGrid.columnGap
   }
 };

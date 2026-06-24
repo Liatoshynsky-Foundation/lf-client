@@ -3,8 +3,8 @@ import { Locale } from 'next-intl';
 import { loggerErrors } from '~/constants/errors';
 
 import type { NewsRepository } from '~/infrastructure/repositories/news/news.repo';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
-import { ArraySchema } from '~/validators/constants';
 import { LocalizeSchema } from '~/validators/localization';
 import { newsListItemSchema, newsSchema } from '~/validators/news.schema';
 
@@ -21,7 +21,13 @@ export const createNewsService = ({ newsRepository }: NewsServiceDeps) => ({
         return [];
       }
 
-      return ArraySchema(LocalizeSchema(newsListItemSchema, locale)).parse(news);
+      const { validItems, invalidCount } = parseArraySafely(news, LocalizeSchema(newsListItemSchema, locale));
+
+      if (invalidCount > 0) {
+        logger.warn(`[SERVICE:News:getAllPublishedNews] Skipped ${invalidCount} invalid news records`);
+      }
+
+      return validItems;
     } catch (error) {
       logger.error(
         `[SERVICE:News:getAllPublishedNews] Failed to fetch or parse news. ${loggerErrors.ZOD_VALIDATION_ERROR}`,

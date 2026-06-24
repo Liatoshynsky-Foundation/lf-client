@@ -1,3 +1,5 @@
+import { commonSx } from '~/shared/styles/commonSx';
+
 export const styles = {
   footerContainer: {
     position: 'absolute',
@@ -36,11 +38,7 @@ export const styles = {
     },
     margin: '0 auto',
     display: 'grid',
-    gridTemplateColumns: {
-      xs: 'repeat(4, 1fr)',
-      sm: 'repeat(8, 1fr)',
-      md: 'repeat(12, 1fr)'
-    },
+    gridTemplateColumns: commonSx.layout.standardGrid.gridTemplateColumns,
     gridTemplateRows: {
       xs: 'auto auto auto 1fr auto auto auto',
       lg: 'auto'

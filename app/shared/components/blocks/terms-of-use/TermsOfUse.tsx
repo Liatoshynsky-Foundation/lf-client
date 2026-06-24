@@ -14,6 +14,7 @@ import ContentBlock from '~/shared/components/design-system/all-components/conte
 import { SkewedBlock } from '~/shared/components/design-system/all-components/skewed-block/SkewedBlock';
 import { styles } from '~/shared/components/Quote/Quote.styles';
 import { IMAGES } from '~/shared/constants/assets';
+import { commonSx } from '~/shared/styles/commonSx';
 
 const TermsOfUse = () => {
   const t = useTranslations('termsOfUse');
@@ -68,7 +69,10 @@ const TermsOfUse = () => {
         <ContentBlock
           title={t('generalProvisionsTitle')}
           description={rulesDoc[locale]}
-          containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }}
+          containerSx={{
+            ...commonSx.layout.standardGrid,
+            marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
+          }}
         />
         <TermsContent />
       </Box>

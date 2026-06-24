@@ -1,23 +1,15 @@
 'use client';
-import 'swiper/css';
-import 'swiper/css/navigation';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
-import { Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { z } from 'zod';
 
 import { styles } from './EventSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { mapEventToCardProps, sortEvents } from '~/lib/utils/events';
+import { mapEventToCardProps, RawEventItem, sortEvents } from '~/lib/utils/events';
+import { BaseSlider } from '~/shared/components/base-slider';
 import EventItem from '~/shared/components/blocks/event-card/EventItem';
 import ButtonContentBlock from '~/shared/components/blocks/terms-of-use/terms-content/button-content-block/ButtonContentBlock';
-import { eventListItemSchema } from '~/validators/events.schema';
-import { Localize } from '~/validators/localization';
-
-type RawEventItem = Localize<z.infer<typeof eventListItemSchema>>;
 
 interface Props {
   title: string;
@@ -27,10 +19,22 @@ interface Props {
   publishDateLabel: string;
   viewLabel: string;
   regLabel: string;
+  prevLabel: string;
+  nextLabel: string;
   events: RawEventItem[];
 }
 
-const EventSection: React.FC<Props> = ({ title, text, ctaLabel, ctaHref, viewLabel, regLabel, events }) => {
+const EventSection: React.FC<Props> = ({
+  title,
+  text,
+  ctaLabel,
+  ctaHref,
+  viewLabel,
+  regLabel,
+  prevLabel,
+  nextLabel,
+  events
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
@@ -41,7 +45,7 @@ const EventSection: React.FC<Props> = ({ title, text, ctaLabel, ctaHref, viewLab
   const sortedEvents = sortEvents(events);
   const displayedEvents = sortedEvents.slice(0, 3);
 
-  const renderEventItem = (event: RawEventItem) => {
+  const renderEventItem = (event: RawEventItem): React.ReactNode => {
     const cardProps = mapEventToCardProps(
       event,
       locale,
@@ -73,29 +77,17 @@ const EventSection: React.FC<Props> = ({ title, text, ctaLabel, ctaHref, viewLab
       />
 
       {isMobile ? (
-        <Box sx={styles.sliderWrapper}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', mb: '20px' }}>
-            <Box className="event-prev" sx={styles.navButton}>
-              <Box component="img" src="/icons/arrow-left.svg" alt="Previous" sx={{ width: 20, height: 20 }} />
-            </Box>
-            <Box className="event-next" sx={styles.navButton}>
-              <Box component="img" src="/icons/arrow-right.svg" alt="Next" sx={{ width: 20, height: 20 }} />
-            </Box>
-          </Box>
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              prevEl: '.event-prev',
-              nextEl: '.event-next'
-            }}
-            spaceBetween={40}
-            slidesPerView={1.2}
-          >
-            {displayedEvents.map((event) => (
-              <SwiperSlide key={event._id}>{renderEventItem(event)}</SwiperSlide>
-            ))}
-          </Swiper>
-        </Box>
+        <BaseSlider<RawEventItem>
+          items={displayedEvents}
+          renderItem={renderEventItem}
+          getItemKey={(event) => event._id}
+          slidesPerView={1.2}
+          spaceBetween={40}
+          containerSx={styles.sliderWrapper}
+          navContainerSx={styles.sliderNavContainer}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+        />
       ) : (
         <Box sx={styles.eventsList}>{displayedEvents.map((event) => renderEventItem(event))}</Box>
       )}
