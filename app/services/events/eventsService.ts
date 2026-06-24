@@ -3,8 +3,8 @@ import { Locale } from 'next-intl';
 import { loggerErrors } from '~/constants/errors';
 
 import eventsRepositoryObj from '~/infrastructure/repositories/events/events.repository';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
-import { ArraySchema } from '~/validators/constants';
 import { eventListItemSchema, eventSchema } from '~/validators/events.schema';
 import { LocalizeSchema } from '~/validators/localization';
 
@@ -21,7 +21,13 @@ export const createEventsService = ({ eventsRepository }: EventsServiceDeps) => 
         return [];
       }
 
-      return ArraySchema(LocalizeSchema(eventListItemSchema, locale)).parse(events);
+      const { validItems, invalidCount } = parseArraySafely(events, LocalizeSchema(eventListItemSchema, locale));
+
+      if (invalidCount > 0) {
+        logger.warn(`[SERVICE:Events:getAllPublishedEvents] Skipped ${invalidCount} invalid event records`);
+      }
+
+      return validItems;
     } catch (error) {
       logger.error(
         `[SERVICE:Events:getAllPublishedEvents] Failed to fetch or parse events. ${loggerErrors.ZOD_VALIDATION_ERROR}`,

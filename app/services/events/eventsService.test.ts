@@ -17,6 +17,10 @@ jest.mock('~/validators/constants', () => ({
 
 jest.mock('~/validators/localization', () => ({
   LocalizeSchema: jest.fn(() => ({
+    safeParse: jest.fn((data) => ({
+      success: true,
+      data
+    })),
     parse: jest.fn((data) => data)
   }))
 }));

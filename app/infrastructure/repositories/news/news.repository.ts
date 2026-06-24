@@ -1,8 +1,6 @@
 import { NewsStatus } from '~/domain/dto/news.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import NewsModel from '~/infrastructure/models/news/news.model';
-import { ArraySchema } from '~/validators/constants';
-import { newsListItemSchema, newsSchema } from '~/validators/news.schema';
 
 const newsRepository = {
   async getAllPublishedNews() {
@@ -13,21 +11,13 @@ const newsRepository = {
       .sort({ publishedAt: -1 })
       .lean();
 
-    if (!news) {
-      return [];
-    }
-
-    return ArraySchema(newsListItemSchema).parse(news);
+    return news ?? [];
   },
 
   async getNewsBySlug(slug: string) {
     await dbConnect();
 
-    const news = await NewsModel.findOne({ slug }).lean();
-
-    if (!news) return null;
-
-    return newsSchema.parse(news);
+    return NewsModel.findOne({ slug }).lean();
   }
 };
 
