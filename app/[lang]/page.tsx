@@ -16,11 +16,18 @@ import HeroSection from '~/components/blocks/home-page-hero/HeroSection';
 import { heroQuote, heroQuoteSource, playbackButton } from '~/components/blocks/home-page-hero/HeroSection.data';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import NewsSection from '~/components/blocks/news-section/NewsSection';
-import { newsSectionData, newsSectionTextContent } from '~/components/blocks/news-section/NewsSection.data';
+import {
+  newsSectionData,
+  newsSectionTextContent,
+  newsSliderNextLabel,
+  newsSliderPrevLabel
+} from '~/components/blocks/news-section/NewsSection.data';
 import EventSection from '~/components/events-section/EventSection';
 import {
   eventsCtaLabel,
   eventsMainText,
+  eventsNextLabel,
+  eventsPrevLabel,
   eventsPublishDateLabel,
   eventsRegLabel,
   eventsTitle,
@@ -131,13 +138,17 @@ export default async function Home({ params }: Readonly<Language>) {
       publishDateLabel: eventsPublishDateLabel[lang],
       viewLabel: eventsViewLabel[lang],
       regLabel: eventsRegLabel[lang],
+      prevLabel: eventsPrevLabel[lang],
+      nextLabel: eventsNextLabel[lang],
       events: eventsData
     },
     NewsSection: {
       title: newsSectionData.title,
       textContent: newsSectionTextContent,
       buttonText: newsSectionData.buttonText,
-      buttonLink: newsSectionData.buttonLink
+      buttonLink: newsSectionData.buttonLink,
+      prevLabel: newsSliderPrevLabel[lang],
+      nextLabel: newsSliderNextLabel[lang]
     },
     CooperationSection: {
       title: cooperationSectionData.title,
@@ -200,6 +211,8 @@ export default async function Home({ params }: Readonly<Language>) {
           publishDateLabel={blocks.EventSection.publishDateLabel}
           viewLabel={blocks.EventSection.viewLabel}
           regLabel={blocks.EventSection.regLabel}
+          prevLabel={blocks.EventSection.prevLabel}
+          nextLabel={blocks.EventSection.nextLabel}
         />
       )}
 
@@ -209,6 +222,8 @@ export default async function Home({ params }: Readonly<Language>) {
           textContent={blocks.NewsSection.textContent}
           buttonText={blocks.NewsSection.buttonText}
           buttonLink={blocks.NewsSection.buttonLink}
+          prevLabel={blocks.NewsSection.prevLabel}
+          nextLabel={blocks.NewsSection.nextLabel}
           locale={lang}
         />
       )}
