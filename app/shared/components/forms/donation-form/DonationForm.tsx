@@ -83,11 +83,11 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    if (typeof globalThis.window === 'undefined') {
       return;
     }
 
-    if (window.Wayforpay) {
+    if (globalThis.window.Wayforpay) {
       return;
     }
 
@@ -98,7 +98,7 @@ function DonationForm() {
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      script.remove();
     };
   }, []);
 
