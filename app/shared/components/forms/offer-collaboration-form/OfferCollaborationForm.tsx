@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { styles } from './OfferCollaborationForm.styles';
 
+import logger from '~/middleware/logger/logger';
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 
@@ -39,6 +40,7 @@ export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: 
         throw new Error('Помилка відправки');
       }
     } catch (error) {
+      logger.error(error);
       throw error;
     } finally {
       setIsSubmitting(false);
