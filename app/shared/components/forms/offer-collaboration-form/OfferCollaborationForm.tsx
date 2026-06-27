@@ -1,11 +1,10 @@
 'use client';
 
-import { SxProps, Theme, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { useState } from 'react';
 
 import { styles } from './OfferCollaborationForm.styles';
 
-import logger from '~/middleware/logger/logger';
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 
@@ -25,9 +24,11 @@ interface ContactFormData {
 
 export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: Readonly<OfferCollaborationFormProps>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    setErrorMessage(null);
     try {
       const response = await fetch('/api/collaboration', {
         method: 'POST',
@@ -36,11 +37,13 @@ export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: 
       });
 
       if (!response.ok) {
-        if (response.status === 429) throw new Error('Забагато запитів. Спробуйте пізніше.');
-        throw new Error('Помилка відправки');
+        const message =
+          response.status === 429 ? 'Забагато запитів. Спробуйте пізніше.' : 'Помилка відправки. Спробуйте ще раз.';
+        setErrorMessage(message);
+        throw new Error(message);
       }
     } catch (error) {
-      logger.error(error);
+      setErrorMessage((prev) => prev || 'Сталася помилка з’єднання. Перевірте інтернет.');
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -56,6 +59,13 @@ export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: 
         {formSubtitle}
       </Typography>
       <ContactForm onSubmit={handleSubmit} disabled={isSubmitting} />
+      {errorMessage && (
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography color="error" variant="body2" sx={{ fontWeight: 'bold' }}>
+            {errorMessage}
+          </Typography>
+        </Box>
+      )}
     </PaperComponent>
   );
 }
