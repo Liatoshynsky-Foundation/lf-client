@@ -3,10 +3,10 @@
 import { SxProps, Theme, Typography } from '@mui/material';
 import { useState } from 'react';
 
-import ContactForm from '~/components/forms/contact-form/ContactForm';
-
-import PaperComponent from '../../paper-component/PaperComponent';
 import { styles } from './OfferCollaborationForm.styles';
+
+import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
+import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 
 interface OfferCollaborationFormProps {
   formTitle?: string;
@@ -14,47 +14,32 @@ interface OfferCollaborationFormProps {
   sx?: SxProps<Theme>;
 }
 
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+  policy: boolean;
+  phoneNumber?: string;
+}
+
 export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: Readonly<OfferCollaborationFormProps>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (data: {
-    name: string;
-    email: string;
-    message: string;
-    policy: boolean;
-    phoneNumber?: string;
-  }) => {
+  const handleSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
-
     try {
       const response = await fetch('/api/collaboration', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          message: data.message
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to submit collaboration request:', result.errors);
-        throw new Error('Failed to submit collaboration request');
-      }
-
-      if (result.previewUrl) {
-        // eslint-disable-next-line no-console
-        console.log('Email preview URL:', result.previewUrl);
+        if (response.status === 429) throw new Error('Забагато запитів. Спробуйте пізніше.');
+        throw new Error('Помилка відправки');
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error submitting collaboration request:', error);
+      throw error;
     } finally {
       setIsSubmitting(false);
     }
