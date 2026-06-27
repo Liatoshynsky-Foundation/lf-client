@@ -11,37 +11,41 @@ import { isProductionMode } from '~/utils/isProductionMode';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
-  default: () => <div>Foundation founders</div>
+  default: ({ data }: any) => <div>FoundationFounders section: {data.listTitle}</div>
 }));
 
 jest.mock('~/components/blocks/FoundationInfo/FoundationInfo', () => ({
   __esModule: true,
-  default: () => <div>Foundation info</div>
+  default: ({ data }: any) => <div>FoundationInfo section: {data.ourName}</div>
 }));
 
 jest.mock('~/components/blocks/IntroSection/IntroSection', () => ({
   __esModule: true,
-  IntroSection: () => <div>Intro section</div>
+  IntroSection: ({ data }: any) => <div>IntroSection section: {data.title}</div>
 }));
 
 jest.mock('~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice', () => ({
   __esModule: true,
-  default: () => <div>Liatoshynsky office</div>
+  default: ({ data, t }: any) => (
+    <div>
+      LiatoshynskyOffice section: {data.quote.text} (t: {t('test-key')})
+    </div>
+  )
 }));
 
 jest.mock('~/components/blocks/our-goals/OurGoals', () => ({
   __esModule: true,
-  default: () => <div>Our goals</div>
+  default: ({ data }: any) => <div>OurGoals section: {data.title}</div>
 }));
 
 jest.mock('~/components/blocks/our-mission/OurMission', () => ({
   __esModule: true,
-  default: () => <div>Our mission</div>
+  default: ({ data }: any) => <div>OurMission section: {data.title}</div>
 }));
 
 jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
   __esModule: true,
-  default: () => <div>What we do</div>
+  default: ({ data }: any) => <div>WhatWeDo section: {data.title}</div>
 }));
 
 jest.mock('~/components/under-development/UnderDevelopment', () => ({
@@ -53,7 +57,9 @@ jest.mock('~/services/pages-data/resolvePageData');
 jest.mock('~/lib/utils/errorPageFactory', () => ({
   ErrorPageFactory: jest.fn(() => <div data-testid="error-page">Error: No page found</div>)
 }));
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound');
+jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
+  PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
+}));
 
 describe('Home page', () => {
   const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
@@ -93,21 +99,30 @@ describe('Home page', () => {
     const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
     render(ui);
 
-    expect(screen.queryByText(/Intro section/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
   });
 
   it('renders blocks when page exists and calls resolvePageData', async () => {
     resolvePageData.mockResolvedValueOnce(
       WrapSuccess({
         blocks: {
-          IntroSection: {},
-          FoundationInfo: {},
-          OurMission: {},
-          OurGoals: {},
-          LiatoshynskyOffice: {},
-          WhatWeDo: {},
-          FoundationFounders: {}
-        }
+          IntroSection: { title: 'Intro Title' },
+          FoundationInfo: { ourName: 'Foundation Info Name' },
+          OurMission: { title: 'Our Mission Title' },
+          OurGoals: { title: 'Our Goals Title' },
+          LiatoshynskyOffice: { quote: { text: 'Office Quote' } },
+          WhatWeDo: { title: 'What We Do Title' },
+          FoundationFounders: { listTitle: 'Founders Title' }
+        },
+        blocksOrder: [
+          'IntroSection',
+          'FoundationInfo',
+          'OurMission',
+          'OurGoals',
+          'LiatoshynskyOffice',
+          'WhatWeDo',
+          'FoundationFounders'
+        ]
       })
     );
     getTranslations.mockResolvedValue((key: string) => key);
@@ -117,7 +132,20 @@ describe('Home page', () => {
 
     expect(setRequestLocale).toHaveBeenCalledWith('en');
     expect(resolvePageData).toHaveBeenCalledWith('about-us', 'en');
-    expect(screen.getByText(/Our mission/i)).toBeInTheDocument();
+
+    const expectedBlocks = [
+      /IntroSection section: Intro Title/i,
+      /FoundationInfo section: Foundation Info Name/i,
+      /OurMission section: Our Mission Title/i,
+      /OurGoals section: Our Goals Title/i,
+      /LiatoshynskyOffice section: Office Quote \(t: test-key\)/i,
+      /WhatWeDo section: What We Do Title/i,
+      /FoundationFounders section: Founders Title/i
+    ];
+
+    expectedBlocks.forEach((pattern) => {
+      expect(screen.getByText(pattern)).toBeInTheDocument();
+    });
   });
 
   it('returns ErrorPage from factory when page is missing', async () => {

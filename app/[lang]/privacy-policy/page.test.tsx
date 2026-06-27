@@ -23,29 +23,70 @@ jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
   PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
 }));
 
-jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => {
-  const MockIntro = ({ title }: { title: string }) => <div>Intro section: {title}</div>;
-  MockIntro.displayName = 'IntroSection';
-  return MockIntro;
-});
+jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>Intro section: {data.title}</div>
+}));
 
-jest.mock('~/components/blocks/privacy-policy/policy-section/PolicySection', () => {
-  const MockPolicy = ({ title }: { title?: string }) => <div>Policy section: {title ?? 'untitled'}</div>;
-  MockPolicy.displayName = 'PolicySection';
-  return MockPolicy;
-});
+jest.mock('~/components/blocks/privacy-policy/data-we-collect/DataWeCollect', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>DataWeCollect section: {data.title}</div>
+}));
 
-jest.mock('~/layouts/main-layout/MainLayout', () => {
-  const MockLayout = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-  MockLayout.displayName = 'MainLayout';
-  return MockLayout;
-});
+jest.mock('~/components/blocks/privacy-policy/data-usage/DataUsage', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>DataUsage section: {data.title}</div>
+}));
 
-jest.mock('~/components/under-development/UnderDevelopment', () => {
-  const MockUnderDev = () => <div data-testid="under-dev">Under Development</div>;
-  MockUnderDev.displayName = 'UnderDevelopment';
-  return MockUnderDev;
-});
+jest.mock('~/components/blocks/privacy-policy/cookies/Cookies', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>Cookies section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/google-auth/GoogleAuth', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>GoogleAuth section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/social-networks/SocialNetworks', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>SocialNetworks section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/targeted-ads/TargetedAds', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>TargetedAds section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/newsletter-subscription/NewsletterSubscription', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>NewsletterSubscription section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/data-retention/DataRetention', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>DataRetention section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/user-rights/UserRights', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>UserRights section: {data.title}</div>
+}));
+
+jest.mock('~/components/blocks/privacy-policy/contact-us/ContactUs', () => ({
+  __esModule: true,
+  default: ({ data }: any) => <div>ContactUs section: {data.title}</div>
+}));
+
+jest.mock('~/layouts/main-layout/MainLayout', () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+}));
+
+jest.mock('~/components/under-development/UnderDevelopment', () => ({
+  __esModule: true,
+  default: () => <div data-testid="under-dev">Under Development</div>
+}));
 
 describe('PrivacyPolicy page', () => {
   const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
@@ -81,15 +122,44 @@ describe('PrivacyPolicy page', () => {
           DataRetention: { title: 'Data Retention', description: {} },
           UserRights: { title: 'Your Rights', description: {}, list: [], note: {} },
           ContactUs: { title: 'Contact Us', description: {} }
-        }
+        },
+        blocksOrder: [
+          'IntroSection',
+          'DataWeCollect',
+          'DataUsage',
+          'Cookies',
+          'GoogleAuth',
+          'SocialNetworks',
+          'TargetedAds',
+          'NewsletterSubscription',
+          'DataRetention',
+          'UserRights',
+          'ContactUs'
+        ]
       })
     );
 
     render(await PrivacyPolicy({ params: mockParams }));
 
     expect(resolvePageData).toHaveBeenCalledWith('privacy-policy', 'en');
-    expect(screen.getByText(/Intro section: Privacy Policy/i)).toBeInTheDocument();
-    expect(screen.getByText(/Policy section: Data We Collect/i)).toBeInTheDocument();
+
+    const expectedBlocks = [
+      /Intro section: Privacy Policy/i,
+      /DataWeCollect section: Data We Collect/i,
+      /DataUsage section: How We Use Data/i,
+      /Cookies section: Cookies/i,
+      /GoogleAuth section: Google Auth/i,
+      /SocialNetworks section: Social Networks/i,
+      /TargetedAds section: Targeted Ads/i,
+      /NewsletterSubscription section: Newsletter/i,
+      /DataRetention section: Data Retention/i,
+      /UserRights section: Your Rights/i,
+      /ContactUs section: Contact Us/i
+    ];
+
+    expectedBlocks.forEach((pattern) => {
+      expect(screen.getByText(pattern)).toBeInTheDocument();
+    });
   });
 
   it('should render UnderDevelopment in production mode', async () => {
