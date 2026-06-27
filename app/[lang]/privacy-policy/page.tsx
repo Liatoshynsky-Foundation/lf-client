@@ -2,8 +2,17 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
+import ContactUs from '~/components/blocks/privacy-policy/contact-us/ContactUs';
+import Cookies from '~/components/blocks/privacy-policy/cookies/Cookies';
+import DataRetention from '~/components/blocks/privacy-policy/data-retention/DataRetention';
+import DataUsage from '~/components/blocks/privacy-policy/data-usage/DataUsage';
+import DataWeCollect from '~/components/blocks/privacy-policy/data-we-collect/DataWeCollect';
+import GoogleAuth from '~/components/blocks/privacy-policy/google-auth/GoogleAuth';
 import IntroSection from '~/components/blocks/privacy-policy/intro-section/IntroSection';
-import PolicySection from '~/components/blocks/privacy-policy/policy-section/PolicySection';
+import NewsletterSubscription from '~/components/blocks/privacy-policy/newsletter-subscription/NewsletterSubscription';
+import SocialNetworks from '~/components/blocks/privacy-policy/social-networks/SocialNetworks';
+import TargetedAds from '~/components/blocks/privacy-policy/targeted-ads/TargetedAds';
+import UserRights from '~/components/blocks/privacy-policy/user-rights/UserRights';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
@@ -31,6 +40,22 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
+const BLOCKS_MAP: Record<string, ({ data }: any) => React.JSX.Element> = {
+  IntroSection,
+  DataWeCollect,
+  DataUsage,
+  Cookies,
+  GoogleAuth,
+  SocialNetworks,
+  TargetedAds,
+  NewsletterSubscription,
+  DataRetention,
+  UserRights,
+  ContactUs
+};
+
+const getBlockComponentById = (blockId: string) => BLOCKS_MAP[blockId];
+
 export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
@@ -52,106 +77,31 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   }
 
   const blocks = page.blocks;
+  const blocksOrder = page.blocksOrder;
 
   return (
     <MainLayout withLines>
-      {blocks.IntroSection && (
-        <IntroSection
-          title={page.title}
-          trustAndSecurity={blocks.IntroSection.trustAndSecurity}
-          agreement={blocks.IntroSection.agreement}
-          dataTestId="PrivacyPolicy-intro"
-        />
-      )}
+      {blocksOrder &&
+        blocksOrder.length > 0 &&
+        blocksOrder.map((blockId) => {
+          const Component = getBlockComponentById(blockId);
+          const blockData = blocks[blockId];
+          if (!Component || !blockData) return null;
 
-      {blocks.DataWeCollect && (
-        <PolicySection
-          title={blocks.DataWeCollect.title}
-          description={blocks.DataWeCollect.description}
-          sections={blocks.DataWeCollect.sections}
-          note={blocks.DataWeCollect.note}
-          dataTestId="PrivacyPolicy-dataWeCollect"
-        />
-      )}
+          if (blockId === 'IntroSection') {
+            return (
+              <Component
+                key={blockId}
+                data={{
+                  title: page.title,
+                  ...blockData
+                }}
+              />
+            );
+          }
 
-      {blocks.DataUsage && (
-        <PolicySection
-          title={blocks.DataUsage.title}
-          description={blocks.DataUsage.description}
-          list={blocks.DataUsage.list}
-          dataTestId="PrivacyPolicy-dataUsage"
-        />
-      )}
-
-      {blocks.Cookies && (
-        <PolicySection
-          title={blocks.Cookies.title}
-          description={blocks.Cookies.description}
-          list={blocks.Cookies.list}
-          note={blocks.Cookies.note}
-          dataTestId="PrivacyPolicy-cookies"
-        />
-      )}
-
-      {blocks.GoogleAuth && (
-        <PolicySection
-          title={blocks.GoogleAuth.title}
-          description={blocks.GoogleAuth.description}
-          list={blocks.GoogleAuth.list}
-          note={blocks.GoogleAuth.note}
-          dataTestId="PrivacyPolicy-googleAuth"
-        />
-      )}
-
-      {blocks.SocialNetworks && (
-        <PolicySection
-          title={blocks.SocialNetworks.title}
-          note={blocks.SocialNetworks.description}
-          dataTestId="PrivacyPolicy-socialNetworks"
-        />
-      )}
-
-      {blocks.TargetedAds && (
-        <PolicySection
-          title={blocks.TargetedAds.title}
-          note={blocks.TargetedAds.description}
-          dataTestId="PrivacyPolicy-targetedAds"
-        />
-      )}
-
-      {blocks.NewsletterSubscription && (
-        <PolicySection
-          title={blocks.NewsletterSubscription.title}
-          note={blocks.NewsletterSubscription.description}
-          dataTestId="PrivacyPolicy-newsletter"
-        />
-      )}
-
-      {blocks.DataRetention && (
-        <PolicySection
-          title={blocks.DataRetention.title}
-          note={blocks.DataRetention.description}
-          dataTestId="PrivacyPolicy-dataRetention"
-        />
-      )}
-
-      {blocks.UserRights && (
-        <PolicySection
-          title={blocks.UserRights.title}
-          description={blocks.UserRights.description}
-          list={blocks.UserRights.list}
-          note={blocks.UserRights.note}
-          dataTestId="PrivacyPolicy-userRights"
-        />
-      )}
-
-      {blocks.ContactUs && (
-        <PolicySection
-          title={blocks.ContactUs.title}
-          description={blocks.ContactUs.description}
-          dataTestId="PrivacyPolicy-contactUs"
-        />
-      )}
+          return <Component key={blockId} data={blockData} />;
+        })}
     </MainLayout>
   );
 }

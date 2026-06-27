@@ -7,24 +7,29 @@ import { type TipTapDoc } from '~/types/types/tiptap.types';
 
 import { PolicyContent } from '~/shared/components/blocks/privacy-policy/policy-content/PolicyContent';
 
-type IntroSectionProps = {
-  title: string;
-  trustAndSecurity?: TipTapDoc;
-  agreement?: TipTapDoc;
-  dataTestId?: string;
-};
+interface IntroSectionProps {
+  data: {
+    title: string;
+    trustAndSecurity?: TipTapDoc;
+    agreement?: TipTapDoc;
+  };
+}
 
-export default function IntroSection({ title, trustAndSecurity, agreement, dataTestId }: Readonly<IntroSectionProps>) {
+const DATA_TEST_ID = 'PrivacyPolicy-intro';
+
+export default function IntroSection({ data }: Readonly<IntroSectionProps>) {
+  const { title, trustAndSecurity, agreement } = data;
+
   return (
     <>
-      <Box sx={styles(theme).titleWrapper} data-testid={dataTestId}>
-        <Typography variant="h1" sx={styles(theme).title} data-testid={`${dataTestId}-title`}>
+      <Box sx={styles(theme).titleWrapper} data-testid={DATA_TEST_ID}>
+        <Typography variant="h1" sx={styles(theme).title} data-testid={`${DATA_TEST_ID}-title`}>
           {title}
         </Typography>
       </Box>
 
       {(trustAndSecurity || agreement) && (
-        <Box sx={styles(theme).introGrid} data-testid={`${dataTestId}-content`}>
+        <Box sx={styles(theme).introGrid} data-testid={`${DATA_TEST_ID}-content`}>
           {trustAndSecurity && (
             <PolicyContent doc={trustAndSecurity} paragraphSx={styles(theme).trustAndSecurityParagraph} />
           )}

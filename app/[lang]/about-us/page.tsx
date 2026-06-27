@@ -36,6 +36,18 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
+const BLOCKS_MAP: Record<string, ({ data }: any) => React.JSX.Element> = {
+  IntroSection,
+  FoundationInfo,
+  OurMission,
+  OurGoals,
+  LiatoshynskyOffice,
+  WhatWeDo,
+  FoundationFounders
+};
+
+const getBlockComponentById = (blockId: string) => BLOCKS_MAP[blockId];
+
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
@@ -60,16 +72,23 @@ export default async function Home({ params }: Readonly<Language>) {
   }
 
   const blocks = page.blocks;
+  const blocksOrder = page.blocksOrder;
 
   return (
     <MainLayout withLines>
-      {blocks.IntroSection && <IntroSection data={blocks.IntroSection} />}
-      {blocks.FoundationInfo && <FoundationInfo data={blocks.FoundationInfo} />}
-      {blocks.OurMission && <OurMission data={blocks.OurMission} />}
-      {blocks.OurGoals && <OurGoals data={blocks.OurGoals} />}
-      {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} />}
-      {blocks.WhatWeDo && <WhatWeDo data={blocks.WhatWeDo} />}
-      {blocks.FoundationFounders && <FoundationFounders data={blocks.FoundationFounders} />}
+      {blocksOrder &&
+        blocksOrder.length > 0 &&
+        blocksOrder.map((blockId) => {
+          const Component = getBlockComponentById(blockId);
+          const blockData = blocks[blockId];
+          if (!Component || !blockData) return null;
+
+          if (blockId === 'LiatoshynskyOffice') {
+            return <Component key={blockId} data={blockData} t={t} />;
+          }
+
+          return <Component key={blockId} data={blockData} />;
+        })}
     </MainLayout>
   );
 }
