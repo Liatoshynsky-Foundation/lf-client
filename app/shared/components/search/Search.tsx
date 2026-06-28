@@ -219,7 +219,14 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
               style: getIconStyle(isMobile, focused),
               startAdornment: (
                 <InputAdornment position="start">
-                  <Box sx={iconStyles} onClick={() => inputRef.current?.focus()}>
+                  <Box
+                    sx={iconStyles}
+                    onClick={() => {
+                      inputRef.current?.focus();
+                      setSearch(normalizeSearch(inputValue));
+                      setOpened(false);
+                    }}
+                  >
                     <SvgImage src="/icons/search-static.svg" width={24} height={24} alt="search" />
                   </Box>
                 </InputAdornment>
