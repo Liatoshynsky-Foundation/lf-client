@@ -10,7 +10,7 @@ import { isProductionMode } from '~/lib/utils/isProductionMode';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
-interface PageBuilder<TBlocks> {
+export interface PageBuilderProps<TBlocks> {
   lang: 'en' | 'uk';
   slug: 'about-us' | 'privacy-policy';
   renderBlock: ({
@@ -23,7 +23,7 @@ interface PageBuilder<TBlocks> {
   }) => React.JSX.Element | null;
 }
 
-export default async function PageBuilder<TBlocks>({ lang, slug, renderBlock }: Readonly<PageBuilder<TBlocks>>) {
+export default async function PageBuilder<TBlocks>({ lang, slug, renderBlock }: Readonly<PageBuilderProps<TBlocks>>) {
   setRequestLocale(lang);
 
   if (isProductionMode()) {
