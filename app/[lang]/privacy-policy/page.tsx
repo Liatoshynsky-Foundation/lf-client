@@ -16,6 +16,7 @@ import UserRights from '~/components/blocks/privacy-policy/user-rights/UserRight
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
+import { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
@@ -40,21 +41,24 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
-const BLOCKS_MAP: Record<string, ({ data }: any) => React.JSX.Element> = {
-  IntroSection,
-  DataWeCollect,
-  DataUsage,
-  Cookies,
-  GoogleAuth,
-  SocialNetworks,
-  TargetedAds,
-  NewsletterSubscription,
-  DataRetention,
-  UserRights,
-  ContactUs
+type RendererProps = {
+  blocks: PrivacyPolicyPage['blocks'];
+  title: string;
 };
 
-const getBlockComponentById = (blockId: string) => BLOCKS_MAP[blockId];
+const BLOCKS_RENDERER: Record<keyof PrivacyPolicyPage['blocks'], (data: RendererProps) => React.JSX.Element> = {
+  IntroSection: ({ blocks, title }) => <IntroSection data={blocks.IntroSection} title={title} />,
+  DataWeCollect: ({ blocks }) => <DataWeCollect data={blocks.DataWeCollect} />,
+  DataUsage: ({ blocks }) => <DataUsage data={blocks.DataUsage} />,
+  Cookies: ({ blocks }) => <Cookies data={blocks.Cookies} />,
+  GoogleAuth: ({ blocks }) => <GoogleAuth data={blocks.GoogleAuth} />,
+  SocialNetworks: ({ blocks }) => <SocialNetworks data={blocks.SocialNetworks} />,
+  TargetedAds: ({ blocks }) => <TargetedAds data={blocks.TargetedAds} />,
+  NewsletterSubscription: ({ blocks }) => <NewsletterSubscription data={blocks.NewsletterSubscription} />,
+  DataRetention: ({ blocks }) => <DataRetention data={blocks.DataRetention} />,
+  UserRights: ({ blocks }) => <UserRights data={blocks.UserRights} />,
+  ContactUs: ({ blocks }) => <ContactUs data={blocks.ContactUs} />
+};
 
 export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
@@ -84,23 +88,13 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
       {blocksOrder &&
         blocksOrder.length > 0 &&
         blocksOrder.map((blockId) => {
-          const Component = getBlockComponentById(blockId);
-          const blockData = blocks[blockId];
-          if (!Component || !blockData) return null;
+          const id = blockId as keyof PrivacyPolicyPage['blocks'];
 
-          if (blockId === 'IntroSection') {
-            return (
-              <Component
-                key={blockId}
-                data={{
-                  title: page.title,
-                  ...blockData
-                }}
-              />
-            );
-          }
+          const Component = BLOCKS_RENDERER[id];
 
-          return <Component key={blockId} data={blockData} />;
+          if (!Component) return null;
+
+          return <Component key={id} blocks={blocks} title={page.title} />;
         })}
     </MainLayout>
   );

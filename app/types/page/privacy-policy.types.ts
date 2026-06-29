@@ -1,12 +1,8 @@
 import { PrivacyPolicyPage } from './pagesBase.type';
-import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 export interface IntroSectionProps {
-  data: {
-    title: string;
-    trustAndSecurity?: TipTapDoc;
-    agreement?: TipTapDoc;
-  };
+  title: string;
+  data: PrivacyPolicyPage['blocks']['IntroSection'];
 }
 
 export interface DataWeCollectProps {

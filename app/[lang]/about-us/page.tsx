@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
+import type { useTranslations } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import FoundationFounders from '~/components/blocks/FoundationFounders/FoundationFounders';
 import FoundationInfo from '~/components/blocks/FoundationInfo/FoundationInfo';
-import { IntroSection } from '~/components/blocks/IntroSection/IntroSection';
 import LiatoshynskyOffice from '~/components/blocks/Liatoshynsky-office/LiatoshynskyOffice';
 import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
@@ -12,6 +12,7 @@ import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
+import { IAboutUsPage } from '~/types/page/about-us.types';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
@@ -20,6 +21,7 @@ import { isProductionMode } from '~/utils/isProductionMode';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
+import { IntroSection } from '~/shared/components/blocks/IntroSection/IntroSection';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
@@ -36,17 +38,20 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
-const BLOCKS_MAP: Record<string, ({ data }: any) => React.JSX.Element> = {
-  IntroSection,
-  FoundationInfo,
-  OurMission,
-  OurGoals,
-  LiatoshynskyOffice,
-  WhatWeDo,
-  FoundationFounders
+type RendererProps = {
+  blocks: IAboutUsPage['blocks'];
+  t: ReturnType<typeof useTranslations>;
 };
 
-const getBlockComponentById = (blockId: string) => BLOCKS_MAP[blockId];
+const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
+  IntroSection: ({ blocks }) => <IntroSection data={blocks.IntroSection} />,
+  FoundationInfo: ({ blocks }) => <FoundationInfo data={blocks.FoundationInfo} />,
+  OurMission: ({ blocks }) => <OurMission data={blocks.OurMission} />,
+  OurGoals: ({ blocks }) => <OurGoals data={blocks.OurGoals} />,
+  LiatoshynskyOffice: ({ blocks, t }) => <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} />,
+  WhatWeDo: ({ blocks }) => <WhatWeDo data={blocks.WhatWeDo} />,
+  FoundationFounders: ({ blocks }) => <FoundationFounders data={blocks.FoundationFounders} />
+};
 
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
@@ -79,15 +84,13 @@ export default async function Home({ params }: Readonly<Language>) {
       {blocksOrder &&
         blocksOrder.length > 0 &&
         blocksOrder.map((blockId) => {
-          const Component = getBlockComponentById(blockId);
-          const blockData = blocks[blockId];
-          if (!Component || !blockData) return null;
+          const id = blockId as keyof IAboutUsPage['blocks'];
 
-          if (blockId === 'LiatoshynskyOffice') {
-            return <Component key={blockId} data={blockData} t={t} />;
-          }
+          const Component = BLOCKS_RENDERER[id];
 
-          return <Component key={blockId} data={blockData} />;
+          if (!Component) return null;
+
+          return <Component key={blockId} blocks={blocks} t={t} />;
         })}
     </MainLayout>
   );

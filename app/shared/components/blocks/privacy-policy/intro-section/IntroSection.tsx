@@ -9,8 +9,8 @@ import { PolicyContent } from '~/shared/components/blocks/privacy-policy/policy-
 
 const DATA_TEST_ID = 'PrivacyPolicy-intro';
 
-export default function IntroSection({ data }: Readonly<IntroSectionProps>) {
-  const { title, trustAndSecurity, agreement } = data;
+export default function IntroSection({ title, data }: Readonly<IntroSectionProps>) {
+  const { trustAndSecurity, agreement } = data;
 
   return (
     <>
