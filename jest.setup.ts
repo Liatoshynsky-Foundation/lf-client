@@ -64,3 +64,31 @@ jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn().mockResolvedValue(() => undefined)
 }));
+
+jest.mock('mongoose', () => {
+  const actualMongoose = jest.requireActual('mongoose');
+  return {
+    ...actualMongoose,
+    connect: jest.fn().mockResolvedValue(true),
+    connection: {
+      on: jest.fn(),
+      once: jest.fn(),
+      close: jest.fn().mockResolvedValue(true),
+      readyState: 1
+    },
+    disconnect: jest.fn().mockResolvedValue(true)
+  };
+});
+
+jest.mock('@azure/storage-blob', () => ({
+  BlobServiceClient: {
+    fromConnectionString: jest.fn().mockReturnValue({
+      getContainerClient: jest.fn().mockReturnValue({
+        getBlockBlobClient: jest.fn().mockReturnValue({
+          upload: jest.fn().mockResolvedValue({}),
+          uploadData: jest.fn().mockResolvedValue({})
+        })
+      })
+    })
+  }
+}));
