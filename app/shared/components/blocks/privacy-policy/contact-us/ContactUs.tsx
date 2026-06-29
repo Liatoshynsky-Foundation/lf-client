@@ -1,13 +1,7 @@
-import React from 'react';
-
 import PolicySection from '../policy-section/PolicySection';
-import type { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
+import { ContactUsProps } from '~/types/page/privacy-policy.types';
 
-interface ContactUsProps {
-  readonly data: PrivacyPolicyPage['blocks']['ContactUs'];
-}
-
-export default function ContactUs({ data }: ContactUsProps) {
+export default function ContactUs({ data }: Readonly<ContactUsProps>) {
   const { title, description } = data;
   return <PolicySection title={title} description={description} dataTestId="PrivacyPolicy-contactUs" />;
 }

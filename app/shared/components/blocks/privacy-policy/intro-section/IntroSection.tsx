@@ -3,17 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { theme } from '~/ds-components/theme/Theme';
 
 import { styles } from './IntroSection.styles';
-import { type TipTapDoc } from '~/types/types/tiptap.types';
+import type { IntroSectionProps } from '~/types/page/privacy-policy.types';
 
 import { PolicyContent } from '~/shared/components/blocks/privacy-policy/policy-content/PolicyContent';
-
-interface IntroSectionProps {
-  data: {
-    title: string;
-    trustAndSecurity?: TipTapDoc;
-    agreement?: TipTapDoc;
-  };
-}
 
 const DATA_TEST_ID = 'PrivacyPolicy-intro';
 

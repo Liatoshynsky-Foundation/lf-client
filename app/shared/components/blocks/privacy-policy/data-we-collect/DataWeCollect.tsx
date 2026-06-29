@@ -1,13 +1,7 @@
-import React from 'react';
-
 import PolicySection from '../policy-section/PolicySection';
-import type { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
+import type { DataWeCollectProps } from '~/types/page/privacy-policy.types';
 
-interface DataWeCollectProps {
-  readonly data: PrivacyPolicyPage['blocks']['DataWeCollect'];
-}
-
-export default function DataWeCollect({ data }: DataWeCollectProps) {
+export default function DataWeCollect({ data }: Readonly<DataWeCollectProps>) {
   const { title, description, sections, note } = data;
   return (
     <PolicySection
