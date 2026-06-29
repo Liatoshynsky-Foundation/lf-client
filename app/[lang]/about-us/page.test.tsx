@@ -1,8 +1,5 @@
-import { render, screen } from '@testing-library/react';
-
+import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
 import Home from './page';
-
-import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: jest.fn()
@@ -62,27 +59,5 @@ jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
 jest.mock('~/shared/components/page-builder/PageBuilder');
 
 describe('AbousUs page', () => {
-  it('should correctly pass lang, slug & renderComponent to the PageBuilder', async () => {
-    const lang = 'uk';
-    const slug = 'about-us';
-    const ui = await Home({
-      params: Promise.resolve({
-        lang
-      })
-    });
-
-    render(ui);
-
-    expect(PageBuilder).toHaveBeenCalledWith(
-      expect.objectContaining({
-        lang,
-        slug,
-        renderBlock: expect.any(Function)
-      }),
-      undefined
-    );
-    expect(screen.getByTestId('pagebuilder')).toBeInTheDocument();
-    expect(screen.getByTestId('pagebuilder-lang')).toHaveTextContent(JSON.stringify(lang));
-    expect(screen.getByTestId('pagebuilder-slug')).toHaveTextContent(JSON.stringify(slug));
-  });
+  runCommonPageTests(Home, 'about-us');
 });

@@ -1,9 +1,7 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
 import PrivacyPolicy from './page';
-
-import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
@@ -68,27 +66,5 @@ jest.mock('~/components/blocks/privacy-policy/contact-us/ContactUs', () => ({
 jest.mock('~/shared/components/page-builder/PageBuilder');
 
 describe('PrivacyPolicy page', () => {
-  it('should correctly pass lang, slug & renderComponent to the PageBuilder', async () => {
-    const lang = 'uk';
-    const slug = 'privacy-policy';
-    const ui = await PrivacyPolicy({
-      params: Promise.resolve({
-        lang
-      })
-    });
-
-    render(ui);
-
-    expect(PageBuilder).toHaveBeenCalledWith(
-      expect.objectContaining({
-        lang,
-        slug,
-        renderBlock: expect.any(Function)
-      }),
-      undefined
-    );
-    expect(screen.getByTestId('pagebuilder')).toBeInTheDocument();
-    expect(screen.getByTestId('pagebuilder-lang')).toHaveTextContent(JSON.stringify(lang));
-    expect(screen.getByTestId('pagebuilder-slug')).toHaveTextContent(JSON.stringify(slug));
-  });
+  runCommonPageTests(PrivacyPolicy, 'privacy-policy');
 });
