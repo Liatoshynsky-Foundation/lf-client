@@ -1,13 +1,12 @@
 import { render, screen } from '@testing-library/react';
 
-import Home, { generateMetadata } from './page';
-import { WrapError, WrapSuccess } from '~/types/types/result';
+import Home from './page';
+
+import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: jest.fn()
 }));
-
-import { isProductionMode } from '~/utils/isProductionMode';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -60,102 +59,30 @@ jest.mock('~/lib/utils/errorPageFactory', () => ({
 jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
   PageNotFound: () => <div data-testid="not-found-page">Page Not Found</div>
 }));
+jest.mock('~/shared/components/page-builder/PageBuilder');
 
-describe('Home page', () => {
-  const { resolvePageData } = jest.requireMock('~/services/pages-data/resolvePageData') as {
-    resolvePageData: jest.Mock;
-  };
-  const { setRequestLocale, getTranslations } = jest.requireMock('next-intl/server') as {
-    setRequestLocale: jest.Mock;
-    getTranslations: jest.Mock;
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (isProductionMode as jest.Mock).mockReturnValue(false);
-  });
-
-  it('should generate correct metadata (lines 25-36)', async () => {
-    const mockParams = Promise.resolve({ lang: 'uk' as any });
-    const metadata = await generateMetadata({ params: mockParams });
-
-    expect(metadata).toBeDefined();
-    expect(metadata.title).toBeDefined();
-  });
-
-  it('should render UnderDevelopment in production mode (lines 43-44)', async () => {
-    (isProductionMode as jest.Mock).mockReturnValue(true);
-
-    const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
-    render(ui);
-
-    expect(screen.getByTestId('under-development')).toBeInTheDocument();
-    expect(screen.queryByText(/Intro section/i)).not.toBeInTheDocument();
-  });
-
-  it('should render PageNotFound when UnwrapResult is null (lines 58-59)', async () => {
-    resolvePageData.mockResolvedValueOnce(WrapSuccess(null));
-
-    const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
-    render(ui);
-
-    expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
-  });
-
-  it('renders blocks when page exists and calls resolvePageData', async () => {
-    resolvePageData.mockResolvedValueOnce(
-      WrapSuccess({
-        blocks: {
-          IntroSection: { title: 'Intro Title' },
-          FoundationInfo: { ourName: 'Foundation Info Name' },
-          OurMission: { title: 'Our Mission Title' },
-          OurGoals: { title: 'Our Goals Title' },
-          LiatoshynskyOffice: { quote: { text: 'Office Quote' } },
-          WhatWeDo: { title: 'What We Do Title' },
-          FoundationFounders: { listTitle: 'Founders Title' }
-        },
-        blocksOrder: [
-          'IntroSection',
-          'FoundationInfo',
-          'OurMission',
-          'OurGoals',
-          'LiatoshynskyOffice',
-          'WhatWeDo',
-          'FoundationFounders'
-        ]
+describe('AbousUs page', () => {
+  it('should correctly pass lang, slug & renderComponent to the PageBuilder', async () => {
+    const lang = 'uk';
+    const slug = 'about-us';
+    const ui = await Home({
+      params: Promise.resolve({
+        lang
       })
-    );
-    getTranslations.mockResolvedValue((key: string) => key);
-
-    const ui = await Home({ params: Promise.resolve({ lang: 'en' }) });
-    render(ui);
-
-    expect(setRequestLocale).toHaveBeenCalledWith('en');
-    expect(resolvePageData).toHaveBeenCalledWith('about-us', 'en');
-
-    const expectedBlocks = [
-      /IntroSection section: Intro Title/i,
-      /FoundationInfo section: Foundation Info Name/i,
-      /OurMission section: Our Mission Title/i,
-      /OurGoals section: Our Goals Title/i,
-      /LiatoshynskyOffice section: Office Quote \(t: test-key\)/i,
-      /WhatWeDo section: What We Do Title/i,
-      /FoundationFounders section: Founders Title/i
-    ];
-
-    expectedBlocks.forEach((pattern) => {
-      expect(screen.getByText(pattern)).toBeInTheDocument();
     });
-  });
 
-  it('returns ErrorPage from factory when page is missing', async () => {
-    resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
-
-    const ui = await Home({ params: Promise.resolve({ lang: 'uk' }) });
     render(ui);
 
-    expect(resolvePageData).toHaveBeenCalledWith('about-us', 'uk');
-
-    expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
+    expect(PageBuilder).toHaveBeenCalledWith(
+      expect.objectContaining({
+        lang,
+        slug,
+        renderBlock: expect.any(Function)
+      }),
+      undefined
+    );
+    expect(screen.getByTestId('pagebuilder')).toBeInTheDocument();
+    expect(screen.getByTestId('pagebuilder-lang')).toHaveTextContent(JSON.stringify(lang));
+    expect(screen.getByTestId('pagebuilder-slug')).toHaveTextContent(JSON.stringify(slug));
   });
 });
