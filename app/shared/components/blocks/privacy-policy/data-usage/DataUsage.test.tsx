@@ -5,17 +5,22 @@ import React from 'react';
 import DataUsage from './DataUsage';
 import type { DataUsageProps } from '~/types/page/privacy-policy.types';
 
+import { mockLocalizedTipTapDoc } from '~/shared/components/blocks/privacy-policy/__mocks__/utils';
+
 jest.mock('../policy-section/PolicySection');
 
 describe('DataUsage block', () => {
   it('should render PolicySection with correct props', () => {
+    const mockList = [mockLocalizedTipTapDoc('List Item 1')];
     const mockData: DataUsageProps['data'] = {
       title: 'Mock Title',
-      description: {} as any,
-      list: []
+      description: mockLocalizedTipTapDoc('Mock Description'),
+      list: mockList
     };
 
     render(<DataUsage data={mockData} />);
-    expect(screen.getByTestId('PrivacyPolicy-dataUsage')).toHaveTextContent('Mock Title');
+    expect(screen.getByTestId('mock-title')).toHaveTextContent('Mock Title');
+    expect(screen.getByTestId('mock-description')).toHaveTextContent(JSON.stringify(mockData.description));
+    expect(screen.getByTestId('mock-list-item-0')).toHaveTextContent(JSON.stringify(mockList[0]));
   });
 });

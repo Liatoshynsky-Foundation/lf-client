@@ -1,20 +1,6 @@
+import type { PolicySectionProps } from '../PolicySection';
+
 import { getDocKey } from '~/lib/utils/getDocKey';
-
-export interface SectionItem {
-  subtitle?: any;
-  description?: any;
-  list?: any[];
-  note?: any;
-}
-
-interface PolicySectionProps {
-  title?: string;
-  description?: any;
-  list?: any[];
-  note?: any;
-  sections?: SectionItem[];
-  dataTestId?: string;
-}
 
 export default function PolicySection({
   title,
@@ -31,7 +17,7 @@ export default function PolicySection({
       {list && (
         <ul data-testid="mock-list">
           {list.map((item, idx) => (
-            <li key={idx} data-testid={`mock-list-item-${idx}`}>
+            <li key={getDocKey(item) ?? `mock-list-${idx}`} data-testid={`mock-list-item-${idx}`}>
               {JSON.stringify(item)}
             </li>
           ))}
@@ -50,7 +36,10 @@ export default function PolicySection({
                 {section.list && (
                   <ul data-testid="mock-section-list">
                     {section.list.map((li, liIdx) => (
-                      <li key={liIdx} data-testid={`mock-section-list-item-${liIdx}`}>
+                      <li
+                        key={getDocKey(li) ?? `mock-section-list-${idx}`}
+                        data-testid={`mock-section-list-item-${liIdx}`}
+                      >
                         {JSON.stringify(li)}
                       </li>
                     ))}
