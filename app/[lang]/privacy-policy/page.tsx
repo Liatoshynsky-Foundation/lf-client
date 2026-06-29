@@ -13,19 +13,13 @@ import NewsletterSubscription from '~/components/blocks/privacy-policy/newslette
 import SocialNetworks from '~/components/blocks/privacy-policy/social-networks/SocialNetworks';
 import TargetedAds from '~/components/blocks/privacy-policy/targeted-ads/TargetedAds';
 import UserRights from '~/components/blocks/privacy-policy/user-rights/UserRights';
-import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
-import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
-import { isError, UnwrapResult } from '~/types/types/result';
 import { createSeoMeta } from '~/utils/createSeoMeta';
-import { isProductionMode } from '~/utils/isProductionMode';
 
-import MainLayout from '~/layouts/main-layout/MainLayout';
-import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
-import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { ROUTES } from '~/shared/components/constants/routes';
+import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -62,40 +56,24 @@ const BLOCKS_RENDERER: Record<keyof PrivacyPolicyPage['blocks'], (data: Renderer
 
 export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
-  setRequestLocale(lang);
 
-  if (isProductionMode()) {
-    return <UnderDevelopment />;
-  }
+  const renderComponent = ({
+    blockId,
+    blocks,
+    title
+  }: {
+    blockId: keyof PrivacyPolicyPage['blocks'];
+    blocks: PrivacyPolicyPage['blocks'];
+    title?: string;
+  }) => {
+    const id = blockId;
 
-  const pageResult = await resolvePageData('privacy-policy', lang);
+    const Component = BLOCKS_RENDERER[id];
 
-  if (isError(pageResult)) {
-    return ErrorPageFactory(pageResult.error);
-  }
+    if (!Component) return null;
 
-  const page = UnwrapResult(pageResult);
+    return <Component key={id} blocks={blocks} title={title ?? ''} />;
+  };
 
-  if (!page) {
-    return <PageNotFound />;
-  }
-
-  const blocks = page.blocks;
-  const blocksOrder = page.blocksOrder;
-
-  return (
-    <MainLayout withLines>
-      {blocksOrder &&
-        blocksOrder.length > 0 &&
-        blocksOrder.map((blockId) => {
-          const id = blockId as keyof PrivacyPolicyPage['blocks'];
-
-          const Component = BLOCKS_RENDERER[id];
-
-          if (!Component) return null;
-
-          return <Component key={id} blocks={blocks} title={page.title} />;
-        })}
-    </MainLayout>
-  );
+  return <PageBuilder lang={lang} slug="privacy-policy" renderBlock={renderComponent} />;
 }
