@@ -1,13 +1,9 @@
 import React from 'react';
 
 import PolicySection from '../policy-section/PolicySection';
-import type { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
+import type { UserRightsProps } from '~/types/page/privacy-policy.types';
 
-interface UserRightsProps {
-  readonly data: PrivacyPolicyPage['blocks']['UserRights'];
-}
-
-export default function UserRights({ data }: UserRightsProps) {
+export default function UserRights({ data }: Readonly<UserRightsProps>) {
   const { title, description, list, note } = data;
   return (
     <PolicySection

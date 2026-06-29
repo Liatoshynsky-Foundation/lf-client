@@ -1,13 +1,9 @@
 import React from 'react';
 
 import PolicySection from '../policy-section/PolicySection';
-import type { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
+import type { SocialNetworksProps } from '~/types/page/privacy-policy.types';
 
-interface SocialNetworksProps {
-  readonly data: PrivacyPolicyPage['blocks']['SocialNetworks'];
-}
-
-export default function SocialNetworks({ data }: SocialNetworksProps) {
+export default function SocialNetworks({ data }: Readonly<SocialNetworksProps>) {
   const { title, description } = data;
   return <PolicySection title={title} note={description} dataTestId="PrivacyPolicy-socialNetworks" />;
 }
