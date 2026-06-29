@@ -83,11 +83,23 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (typeof globalThis !== 'undefined' && (globalThis as { Wayforpay?: unknown }).Wayforpay && document.body) {
-      const script = document.createElement('script');
-      script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
-      document.body.appendChild(script);
+    if (globalThis.window === undefined) {
+      return;
     }
+
+    if (globalThis.window.Wayforpay) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://secure.wayforpay.com/server/pay-widget.js';
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
   }, []);
 
   const handleDonateClick = (amount: number) => {
