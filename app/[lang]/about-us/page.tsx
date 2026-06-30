@@ -63,9 +63,9 @@ export default async function Home({ params }: Readonly<Language>) {
     <PageBuilder<IAboutUsPage>
       lang={lang}
       slug="about-us"
-      renderBlock={({ blockId, blocks }) => (
+      renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
         <BlockRenderer
-          key={blockId}
+          key={uniqueRenderKey}
           blockId={blockId}
           blocks={blocks}
           rendererMap={BLOCKS_RENDERER}

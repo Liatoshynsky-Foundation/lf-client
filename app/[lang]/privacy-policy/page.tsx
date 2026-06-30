@@ -62,8 +62,14 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
     <PageBuilder<PrivacyPolicyPage>
       lang={lang}
       slug="privacy-policy"
-      renderBlock={({ blockId, blocks, title }) => (
-        <BlockRenderer key={blockId} blockId={blockId} title={title} blocks={blocks} rendererMap={BLOCKS_RENDERER} />
+      renderBlock={({ blockId, blocks, title, uniqueRenderKey }) => (
+        <BlockRenderer
+          key={uniqueRenderKey}
+          blockId={blockId}
+          title={title}
+          blocks={blocks}
+          rendererMap={BLOCKS_RENDERER}
+        />
       )}
     />
   );

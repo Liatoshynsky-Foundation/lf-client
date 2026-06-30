@@ -19,11 +19,13 @@ export interface PageBuilderProps<TPages extends PossiblePages> {
   slug: TPages['slug'];
   renderBlock: ({
     blockId,
-    blocks
+    blocks,
+    uniqueRenderKey
   }: {
     blockId: string;
     blocks: TPages['blocks'];
     title?: string;
+    uniqueRenderKey: string;
   }) => React.JSX.Element | null;
 }
 type ValidSlug = 'about-us' | 'privacy-policy';
@@ -59,14 +61,16 @@ export default async function PageBuilder<TPages extends PossiblePages>({
     return <PageNotFound />;
   }
 
-  const blocks = page.blocks as TPages['blocks'];
+  const blocks = page.blocks;
   const blocksOrder = page.blocksOrder;
 
   return (
     <MainLayout withLines>
       {blocksOrder &&
         blocksOrder.length > 0 &&
-        blocksOrder.map((blockId) => renderBlock({ blockId, blocks, title: page.title }))}
+        blocksOrder.map((blockId, index) =>
+          renderBlock({ blockId, blocks, title: page.title, uniqueRenderKey: `${blockId}-${index}` })
+        )}
     </MainLayout>
   );
 }

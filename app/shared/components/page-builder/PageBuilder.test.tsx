@@ -36,13 +36,13 @@ jest.mock('~/shared/layouts/main-layout/MainLayout', () => ({
   default: ({ children }: any) => <div data-testid="main-layout">{children}</div>
 }));
 
-const defaultProps: PageBuilderProps<unknown> = {
+const defaultProps: PageBuilderProps<any> = {
   lang: 'en',
   slug: 'about-us',
   renderBlock: jest.fn(() => null)
 };
 
-const renderComponent = async (props: Partial<PageBuilderProps<unknown>> = {}) => {
+const renderComponent = async (props: Partial<PageBuilderProps<any>> = {}) => {
   const mergedProps = {
     ...defaultProps,
     ...props
@@ -97,7 +97,9 @@ describe('PageBuilder', () => {
     expect(resolvePageData).toHaveBeenCalledWith(slug, lang);
     expect(renderBlock).toHaveBeenCalledWith({
       blockId: 'IntroSection',
-      blocks: mockedBlocks
+      blocks: mockedBlocks,
+      title: mockedPageData.title,
+      uniqueRenderKey: 'IntroSection-0'
     });
     expect(renderBlock).toHaveBeenCalledTimes(2);
     expect(screen.getByTestId('main-layout')).toBeInTheDocument();
@@ -111,5 +113,12 @@ describe('PageBuilder', () => {
     expect(resolvePageData).toHaveBeenCalledWith('about-us', 'uk');
 
     expect(screen.getByText(/Error: No page found/i)).toBeInTheDocument();
+  });
+
+  it('should early return if slug is not valid', async () => {
+    await renderComponent({ lang: 'uk', slug: 'non-existed-slug' });
+
+    expect(resolvePageData).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('main-layout')).not.toBeInTheDocument();
   });
 });
