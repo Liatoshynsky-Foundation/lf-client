@@ -12,22 +12,40 @@ import { isProductionMode } from '~/lib/utils/isProductionMode';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
-export type PossibleBlocks = IAboutUsPage['blocks'] | PrivacyPolicyPage['blocks'];
-export interface PageBuilderProps<TBlocks extends PossibleBlocks> {
-  lang: 'en' | 'uk';
-  slug: 'about-us' | 'privacy-policy';
-  renderBlock: ({ blockId, blocks }: { blockId: string; blocks: TBlocks; title?: string }) => React.JSX.Element | null;
-}
+export type PossiblePages = IAboutUsPage | PrivacyPolicyPage;
 
-export default async function PageBuilder<TBlocks extends PossibleBlocks>({
+export interface PageBuilderProps<TPages extends PossiblePages> {
+  lang: 'en' | 'uk';
+  slug: TPages['slug'];
+  renderBlock: ({
+    blockId,
+    blocks
+  }: {
+    blockId: string;
+    blocks: TPages['blocks'];
+    title?: string;
+  }) => React.JSX.Element | null;
+}
+type ValidSlug = 'about-us' | 'privacy-policy';
+
+const isValidSlug = (slug: string): slug is ValidSlug => {
+  if (!['about-us', 'privacy-policy'].includes(slug)) {
+    return false;
+  }
+  return true;
+};
+
+export default async function PageBuilder<TPages extends PossiblePages>({
   lang,
   slug,
   renderBlock
-}: Readonly<PageBuilderProps<TBlocks>>) {
+}: Readonly<PageBuilderProps<TPages>>) {
   setRequestLocale(lang);
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
+
+  if (!isValidSlug(slug)) return null;
 
   const pageResult = await resolvePageData(slug, lang);
 
@@ -41,7 +59,7 @@ export default async function PageBuilder<TBlocks extends PossibleBlocks>({
     return <PageNotFound />;
   }
 
-  const blocks = page.blocks as TBlocks;
+  const blocks = page.blocks as TPages['blocks'];
   const blocksOrder = page.blocksOrder;
 
   return (

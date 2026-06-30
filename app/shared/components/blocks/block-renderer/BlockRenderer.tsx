@@ -1,27 +1,19 @@
 import { ComponentType } from 'react';
 
-import { PossibleBlocks } from '../../page-builder/PageBuilder';
-
-type RendererProps<TBlocks extends PossibleBlocks> = {
-  blocks: TBlocks;
+type RendererProps<T> = {
+  blocks: T;
   title: string;
 };
 
-export interface BlockRendererProps<TBlocks extends PossibleBlocks> {
+export interface BlockRendererProps<T> {
   blockId: string;
-  blocks: TBlocks;
+  blocks: T;
   title?: string;
-  rendererMap: Record<keyof TBlocks, ComponentType<RendererProps<TBlocks>>>;
-  namesMap?: Record<string, keyof TBlocks>;
+  rendererMap: Record<keyof T, ComponentType<RendererProps<T>>>;
+  namesMap?: Record<string, keyof T>;
 }
 
-export function BlockRenderer<TBlocks extends PossibleBlocks>({
-  blockId,
-  blocks,
-  title,
-  rendererMap,
-  namesMap
-}: Readonly<BlockRendererProps<TBlocks>>) {
+export function BlockRenderer<T>({ blockId, blocks, title, rendererMap, namesMap }: Readonly<BlockRendererProps<T>>) {
   const id = namesMap && blockId in namesMap ? namesMap[blockId] : blockId;
 
   if (!(id in rendererMap)) {
@@ -29,7 +21,7 @@ export function BlockRenderer<TBlocks extends PossibleBlocks>({
     return null;
   }
 
-  const Component = rendererMap[id as keyof TBlocks] as React.ElementType;
+  const Component = rendererMap[id] as React.ElementType;
 
   return <Component key={id as string} blocks={blocks} title={title ?? ''} />;
 }

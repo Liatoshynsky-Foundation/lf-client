@@ -59,7 +59,7 @@ export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
 
   return (
-    <PageBuilder<PrivacyPolicyPage['blocks']>
+    <PageBuilder<PrivacyPolicyPage>
       lang={lang}
       slug="privacy-policy"
       renderBlock={({ blockId, blocks, title }) => (

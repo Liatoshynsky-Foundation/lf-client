@@ -60,7 +60,7 @@ export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
 
   return (
-    <PageBuilder<IAboutUsPage['blocks']>
+    <PageBuilder<IAboutUsPage>
       lang={lang}
       slug="about-us"
       renderBlock={({ blockId, blocks }) => (
