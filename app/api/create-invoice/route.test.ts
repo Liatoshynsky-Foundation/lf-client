@@ -22,6 +22,17 @@ jest.mock('~/config', () => ({
   }
 }));
 
+const mockCreateDonationOrder = jest.fn();
+
+jest.mock('~/infrastructure/repositories/way-for-pay/donationOrder.repository', () => ({
+  __esModule: true,
+  default: () => ({
+    create: mockCreateDonationOrder,
+    findByOrderReference: jest.fn(),
+    updateStatus: jest.fn()
+  })
+}));
+
 describe('Create Invoice API Route (POST)', () => {
   let POST: any;
   let nextServer: any;
@@ -48,6 +59,7 @@ describe('Create Invoice API Route (POST)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockConsume.mockImplementation(() => Promise.resolve({}));
+    mockCreateDonationOrder.mockResolvedValue({});
   });
 
   it('should return 429 when rate limit exceeded', async () => {
@@ -104,6 +116,15 @@ describe('Create Invoice API Route (POST)', () => {
     expect(mockConsume).toHaveBeenCalledWith('127.0.0.1');
     expect(res.status).toBe(200);
     expect(res._testData.amount).toBe(500);
+    expect(mockCreateDonationOrder).toHaveBeenCalledWith({
+      orderReference: 'DON-test-uuid-123',
+      amount: 500,
+      currency: 'UAH',
+      language: 'EN',
+      productName: ['Donation'],
+      productCount: [1],
+      productPrice: [500]
+    });
   });
 
   it('should return 400 for invalid donation amount', async () => {
