@@ -18,6 +18,7 @@ import { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
+import { createBlockRenderer } from '~/lib/utils/createBlockRenderer';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
@@ -54,26 +55,10 @@ const BLOCKS_RENDERER: Record<keyof PrivacyPolicyPage['blocks'], (data: Renderer
   ContactUs: ({ blocks }) => <ContactUs data={blocks.ContactUs} />
 };
 
+const renderComponent = createBlockRenderer<PrivacyPolicyPage['blocks']>({ BLOCKS_RENDERER });
+
 export default async function PrivacyPolicy({ params }: Readonly<Language>) {
   const { lang } = await params;
-
-  const renderComponent = ({
-    blockId,
-    blocks,
-    title
-  }: {
-    blockId: keyof PrivacyPolicyPage['blocks'];
-    blocks: PrivacyPolicyPage['blocks'];
-    title?: string;
-  }) => {
-    const id = blockId;
-
-    const Component = BLOCKS_RENDERER[id];
-
-    if (!Component) return null;
-
-    return <Component key={id} blocks={blocks} title={title ?? ''} />;
-  };
 
   return <PageBuilder lang={lang} slug="privacy-policy" renderBlock={renderComponent} />;
 }

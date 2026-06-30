@@ -13,6 +13,7 @@ import { IAboutUsPage } from '~/types/page/about-us.types';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
+import { createBlockRenderer } from '~/lib/utils/createBlockRenderer';
 import { IntroSection } from '~/shared/components/blocks/IntroSection/IntroSection';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
@@ -35,6 +36,16 @@ type RendererProps = {
   blocks: IAboutUsPage['blocks'];
 };
 
+const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
+  intro: 'IntroSection',
+  foundation: 'FoundationInfo',
+  mission: 'OurMission',
+  goals: 'OurGoals',
+  office: 'LiatoshynskyOffice',
+  'what-we-do': 'WhatWeDo',
+  founders: 'FoundationFounders'
+};
+
 const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
   IntroSection: ({ blocks }) => <IntroSection data={blocks.IntroSection} />,
   FoundationInfo: ({ blocks }) => <FoundationInfo data={blocks.FoundationInfo} />,
@@ -45,24 +56,10 @@ const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProp
   FoundationFounders: ({ blocks }) => <FoundationFounders data={blocks.FoundationFounders} />
 };
 
+const renderComponent = createBlockRenderer<IAboutUsPage['blocks']>({ BLOCKS_RENDERER, BLOCK_NAMES_MAP });
+
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
-
-  const renderComponent = ({
-    blockId,
-    blocks
-  }: {
-    blockId: keyof IAboutUsPage['blocks'];
-    blocks: IAboutUsPage['blocks'];
-  }) => {
-    const id = blockId;
-
-    const Component = BLOCKS_RENDERER[id];
-
-    if (!Component) return null;
-
-    return <Component key={blockId} blocks={blocks} />;
-  };
 
   return <PageBuilder lang={lang} slug="about-us" renderBlock={renderComponent} />;
 }

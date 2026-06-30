@@ -13,19 +13,11 @@ import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 export interface PageBuilderProps<TBlocks> {
   lang: 'en' | 'uk';
   slug: 'about-us' | 'privacy-policy';
-  renderBlock: ({
-    blockId,
-    blocks
-  }: {
-    blockId: keyof TBlocks;
-    blocks: TBlocks;
-    title?: string;
-  }) => React.JSX.Element | null;
+  renderBlock: ({ blockId, blocks }: { blockId: string; blocks: TBlocks; title?: string }) => React.JSX.Element | null;
 }
 
 export default async function PageBuilder<TBlocks>({ lang, slug, renderBlock }: Readonly<PageBuilderProps<TBlocks>>) {
   setRequestLocale(lang);
-
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
@@ -47,9 +39,7 @@ export default async function PageBuilder<TBlocks>({ lang, slug, renderBlock }: 
 
   return (
     <MainLayout withLines>
-      {blocksOrder &&
-        blocksOrder.length > 0 &&
-        blocksOrder.map((blockId) => renderBlock({ blockId: blockId as keyof TBlocks, blocks }))}
+      {blocksOrder && blocksOrder.length > 0 && blocksOrder.map((blockId) => renderBlock({ blockId, blocks }))}
     </MainLayout>
   );
 }
