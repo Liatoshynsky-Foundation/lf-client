@@ -2,7 +2,7 @@ import { PrivacyPolicyPage } from './pagesBase.type';
 
 export interface IntroSectionProps {
   title: string;
-  data: PrivacyPolicyPage['blocks']['IntroSection'];
+  data: Partial<PrivacyPolicyPage['blocks']['IntroSection']>;
 }
 
 export interface DataWeCollectProps {
