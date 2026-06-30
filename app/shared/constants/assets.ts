@@ -5,8 +5,6 @@ export const IMAGES = {
   TERMS_LIATOSHYNSKY: `${PUBLIC_STORAGE_BASE_URL}/photos/terms-liatoshynsky.png`,
   TERMS_RETRO_COLLAGE: `${PUBLIC_STORAGE_BASE_URL}/photos/terms-retro-collage.jpg`,
   MAIN_FOUNDATION_SECTION: `${PUBLIC_STORAGE_BASE_URL}/photos/main-foundation-section.jpg`,
-  MAIN_HERO_BACKGROUND_IMAGE: `${PUBLIC_STORAGE_BASE_URL}/photos/main-hero-background-image.png`,
-  MAIN_HERO_CHARACTER_IMAGE: `${PUBLIC_STORAGE_BASE_URL}/photos/main-hero-character-image.png`,
   MAIN_EVENT_SECTION: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/main-event-section-${index}.png`,
   WAR_IN_UKRAINE_VOLUNTEER_DONATION: `${PUBLIC_STORAGE_BASE_URL}/photos/war-in-ukraine-volunteer-donation.png`,
   WAR_IN_UKRAINE_CAROUSEL: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/war-in-ukraine-carousel-${index}.png`,
