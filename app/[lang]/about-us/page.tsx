@@ -13,7 +13,7 @@ import { IAboutUsPage } from '~/types/page/about-us.types';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
-import { createBlockRenderer } from '~/lib/utils/createBlockRenderer';
+import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { IntroSection } from '~/shared/components/blocks/IntroSection/IntroSection';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
@@ -56,10 +56,22 @@ const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProp
   FoundationFounders: ({ blocks }) => <FoundationFounders data={blocks.FoundationFounders} />
 };
 
-const renderComponent = createBlockRenderer<IAboutUsPage['blocks']>({ BLOCKS_RENDERER, BLOCK_NAMES_MAP });
-
 export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
 
-  return <PageBuilder lang={lang} slug="about-us" renderBlock={renderComponent} />;
+  return (
+    <PageBuilder<IAboutUsPage['blocks']>
+      lang={lang}
+      slug="about-us"
+      renderBlock={({ blockId, blocks }) => (
+        <BlockRenderer
+          key={blockId}
+          blockId={blockId}
+          blocks={blocks}
+          rendererMap={BLOCKS_RENDERER}
+          namesMap={BLOCK_NAMES_MAP}
+        />
+      )}
+    />
+  );
 }
