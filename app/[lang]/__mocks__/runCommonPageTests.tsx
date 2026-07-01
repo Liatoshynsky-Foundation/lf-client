@@ -80,3 +80,48 @@ export const testGeneratePageMetadata = async (
     locale: 'en'
   });
 };
+
+interface TestReturnBlockRendererArgs {
+  PageComponent: ({ params }: Readonly<Language>) => Promise<React.JSX.Element>;
+  rendererKeys: string[];
+  namesMap?: Record<string, string>;
+  title?: string;
+}
+
+export const testReturnBlockRenderer = async ({
+  PageComponent,
+  rendererKeys,
+  namesMap,
+  title
+}: TestReturnBlockRendererArgs) => {
+  const Page = await PageComponent({ params: Promise.resolve({ lang: 'en' }) });
+  const mockBlocks = { IntroSection: { title: 'Test' } } as any;
+
+  const renderedBlockElement = Page.props.renderBlock({
+    blockId: 'IntroSection',
+    blocks: mockBlocks,
+    title: 'Global Title',
+    uniqueRenderKey: 'key-1'
+  });
+
+  const expectedRendererMap: Record<string, any> = {};
+  rendererKeys.forEach((key) => {
+    expectedRendererMap[key] = expect.any(Function);
+  });
+
+  const expectedProps: any = {
+    blockId: 'IntroSection',
+    blocks: mockBlocks,
+    rendererMap: expect.objectContaining(expectedRendererMap)
+  };
+
+  if (title) {
+    expectedProps.title = title;
+  }
+
+  if (namesMap) {
+    expectedProps.namesMap = expect.objectContaining(namesMap);
+  }
+
+  expect(renderedBlockElement.props).toEqual(expect.objectContaining(expectedProps));
+};

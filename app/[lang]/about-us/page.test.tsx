@@ -1,5 +1,9 @@
-import { testGeneratePageMetadata, testPassLangSlugToPageBuilder } from '../__mocks__/runCommonPageTests';
-import Home, { generateMetadata } from './page';
+import {
+  testGeneratePageMetadata,
+  testPassLangSlugToPageBuilder,
+  testReturnBlockRenderer
+} from '../__mocks__/runCommonPageTests';
+import Home, { BLOCK_NAMES_MAP, generateMetadata } from './page';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -51,5 +55,21 @@ describe('AbousUs page', () => {
 
   it('should correctly generate page metadata', async () => {
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.aboutUs', '/');
+  });
+
+  it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER with BLOCK_NAMES_MAP', async () => {
+    await testReturnBlockRenderer({
+      PageComponent: Home,
+      rendererKeys: [
+        'IntroSection',
+        'FoundationInfo',
+        'OurMission',
+        'OurGoals',
+        'LiatoshynskyOffice',
+        'WhatWeDo',
+        'FoundationFounders'
+      ],
+      namesMap: BLOCK_NAMES_MAP
+    });
   });
 });

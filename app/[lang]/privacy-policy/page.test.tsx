@@ -1,6 +1,8 @@
-import React from 'react';
-
-import { testGeneratePageMetadata, testPassLangSlugToPageBuilder } from '../__mocks__/runCommonPageTests';
+import {
+  testGeneratePageMetadata,
+  testPassLangSlugToPageBuilder,
+  testReturnBlockRenderer
+} from '../__mocks__/runCommonPageTests';
 import PrivacyPolicy, { generateMetadata } from './page';
 interface MockProps {
   data: {
@@ -74,5 +76,25 @@ describe('PrivacyPolicy page', () => {
 
   it('should correctly generate page metadata', async () => {
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.privacyPolicy', '/privacy-policy');
+  });
+
+  it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER', async () => {
+    await testReturnBlockRenderer({
+      PageComponent: PrivacyPolicy,
+      rendererKeys: [
+        'IntroSection',
+        'DataWeCollect',
+        'DataUsage',
+        'Cookies',
+        'GoogleAuth',
+        'SocialNetworks',
+        'TargetedAds',
+        'NewsletterSubscription',
+        'DataRetention',
+        'UserRights',
+        'ContactUs'
+      ],
+      title: 'Global Title'
+    });
   });
 });
