@@ -1,11 +1,14 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 
 import ContactUs from './ContactUs';
 import type { ContactUsProps } from '~/types/page/privacy-policy.types';
 
-import { mockLocalizedTipTapDoc } from '~/shared/components/blocks/privacy-policy/__mocks__/utils';
+import {
+  assertPolicySectionProps,
+  mockLocalizedTipTapDoc
+} from '~/shared/components/blocks/privacy-policy/__mocks__/utils';
 
 jest.mock('../policy-section/PolicySection');
 
@@ -17,7 +20,6 @@ describe('ContactUs block', () => {
     };
 
     render(<ContactUs data={mockData} />);
-    expect(screen.getByTestId('mock-title')).toHaveTextContent('Mock Title');
-    expect(screen.getByTestId('mock-description')).toHaveTextContent(JSON.stringify(mockData.description));
+    assertPolicySectionProps(mockData);
   });
 });
