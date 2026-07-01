@@ -3,7 +3,7 @@ import {
   testPassLangSlugToPageBuilder,
   testReturnBlockRenderer
 } from '../__mocks__/runCommonPageTests';
-import Home, { BLOCK_NAMES_MAP, generateMetadata } from './page';
+import Home, { generateMetadata } from './page';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -69,7 +69,15 @@ describe('AbousUs page', () => {
         'WhatWeDo',
         'FoundationFounders'
       ],
-      namesMap: BLOCK_NAMES_MAP
+      namesMap: {
+        intro: 'IntroSection',
+        foundation: 'FoundationInfo',
+        mission: 'OurMission',
+        goals: 'OurGoals',
+        office: 'LiatoshynskyOffice',
+        'what-we-do': 'WhatWeDo',
+        founders: 'FoundationFounders'
+      }
     });
   });
 });

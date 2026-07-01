@@ -18,6 +18,14 @@ describe('DataWeCollect block', () => {
       {
         subtitle: mockLocalizedTipTapDoc('Section Subtitle'),
         list: [mockLocalizedTipTapDoc('Section List Item 1')]
+      },
+      {
+        subtitle: mockLocalizedTipTapDoc('Section Subtitle 2'),
+        list: [mockLocalizedTipTapDoc('Section List 1 Item 2')]
+      },
+      {
+        subtitle: mockLocalizedTipTapDoc('Section Subtitle 3'),
+        list: [mockLocalizedTipTapDoc('Section List 1 Item 1')]
       }
     ];
     const mockData: DataWeCollectProps['data'] = {

@@ -17,11 +17,11 @@ export function BlockRenderer<T>({ blockId, blocks, title, rendererMap, namesMap
   const id = namesMap && blockId in namesMap ? namesMap[blockId] : blockId;
 
   if (!(id in rendererMap)) {
-    console.warn(`Block ID "${id as string}" is missing from BLOCKS_RENDERER`);
+    console.warn(`Block ID "${String(id)}" is missing from BLOCKS_RENDERER`);
     return null;
   }
 
   const Component = rendererMap[id] as React.ElementType;
 
-  return <Component key={id as string} blocks={blocks} title={title ?? ''} />;
+  return <Component key={id} blocks={blocks} title={title ?? ''} />;
 }

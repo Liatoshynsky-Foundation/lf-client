@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { z } from 'zod';
 
+import { getDocKey } from '~/lib/utils/getDocKey';
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
@@ -34,23 +35,34 @@ export const assertPolicySectionProps = (mockData: any, options: AssertionOption
   }
 
   if (mockData.sections) {
-    mockData.sections.forEach((section: any) => {
+    mockData.sections.forEach((section: any, idx: number) => {
+      const sectionId = getDocKey(section.subtitle) ?? getDocKey(section.description) ?? `section-${idx}`;
+      const sectionContainer = screen.getByTestId(`mock-section-${sectionId}`);
+
       if (section.subtitle) {
-        expect(screen.getByTestId('mock-section-subtitle')).toHaveTextContent(JSON.stringify(section.subtitle));
+        expect(within(sectionContainer).getByTestId('mock-section-subtitle')).toHaveTextContent(
+          JSON.stringify(section.subtitle)
+        );
       }
 
       if (section.description) {
-        expect(screen.getByTestId('mock-section-description')).toHaveTextContent(JSON.stringify(section.description));
+        expect(within(sectionContainer).getByTestId('mock-section-description')).toHaveTextContent(
+          JSON.stringify(section.description)
+        );
       }
 
       if (section.list) {
         section.list.forEach((li: any, liIdx: number) => {
-          expect(screen.getByTestId(`mock-section-list-item-${liIdx}`)).toHaveTextContent(JSON.stringify(li));
+          expect(within(sectionContainer).getByTestId(`mock-section-list-item-${liIdx}`)).toHaveTextContent(
+            JSON.stringify(li)
+          );
         });
       }
 
       if (section.note) {
-        expect(screen.getByTestId('mock-section-note')).toHaveTextContent(JSON.stringify(section.note));
+        expect(within(sectionContainer).getByTestId('mock-section-note')).toHaveTextContent(
+          JSON.stringify(section.note)
+        );
       }
     });
   }

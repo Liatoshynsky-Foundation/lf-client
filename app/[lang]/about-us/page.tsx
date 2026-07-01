@@ -36,7 +36,7 @@ type RendererProps = {
   blocks: IAboutUsPage['blocks'];
 };
 
-export const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
+const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
   intro: 'IntroSection',
   foundation: 'FoundationInfo',
   mission: 'OurMission',
