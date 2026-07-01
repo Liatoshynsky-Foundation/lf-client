@@ -55,7 +55,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
           <img
             ref={imgRef}
             src={src}
-            alt="Person photo"
+            alt="Person"
             onLoad={handleImageLoad}
             onError={handleError}
             style={croppedImgStyle}
@@ -63,7 +63,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
           />
         ) : (
           <Image
-            alt="Person photo"
+            alt="Person"
             src={src}
             width={185}
             height={166}
