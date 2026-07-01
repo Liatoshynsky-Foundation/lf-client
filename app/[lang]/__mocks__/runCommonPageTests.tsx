@@ -4,12 +4,18 @@ import { Language } from '~/types/types/language';
 
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => key)
+}));
+
+jest.mock('~/shared/components/page-builder/PageBuilder');
+
 export const runCommonPageTests = (
   PageComponent: ({ params }: Readonly<Language>) => Promise<React.JSX.Element>,
   slug: string,
   lang: 'uk' | 'en' = 'uk'
 ) => {
-  it('should correctly pass lang, slug & renderComponent to the PageBuilder', async () => {
+  it('should correctly pass lang, slug to the PageBuilder', async () => {
     const ui = await PageComponent({
       params: Promise.resolve({
         lang

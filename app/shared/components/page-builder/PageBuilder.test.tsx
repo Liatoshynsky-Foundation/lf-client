@@ -6,7 +6,6 @@ import { WrapError, WrapSuccess } from '~/types/types/result';
 import { isProductionMode } from '~/lib/utils/isProductionMode';
 
 jest.mock('next-intl/server', () => ({
-  getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn().mockResolvedValue(() => undefined)
 }));
 
