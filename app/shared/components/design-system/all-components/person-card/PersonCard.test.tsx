@@ -80,7 +80,7 @@ describe('PersonCard', () => {
 
       const img = screen.getByTestId('next-image');
       expect(img).toBeInTheDocument();
-      expect(img).toHaveAttribute('alt', 'Person photo');
+      expect(img).toHaveAttribute('alt', 'Person');
       expect(img).toHaveAttribute('src', defaultProps.imgURL);
 
       expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
