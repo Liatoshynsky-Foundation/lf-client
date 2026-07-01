@@ -1,9 +1,7 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
 import PrivacyPolicy, { generateMetadata } from './page';
-import { createSeoMeta } from '~/utils/createSeoMeta';
 interface MockProps {
   data: {
     title: string;
@@ -65,47 +63,10 @@ jest.mock('~/components/blocks/privacy-policy/contact-us/ContactUs', () => ({
   default: ({ data }: MockProps) => <div>ContactUs section: {data.title}</div>
 }));
 
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getTranslations: jest.fn()
-}));
-
-jest.mock('~/utils/createSeoMeta', () => ({
-  createSeoMeta: jest.fn((meta) => meta)
-}));
-
-jest.mock('~/shared/components/constants/routes', () => ({
-  ROUTES: {
-    PRIVACY_POLICY: '/privacy-policy'
-  }
-}));
-
 describe('PrivacyPolicy page', () => {
-  runCommonPageTests(PrivacyPolicy, 'privacy-policy');
-
-  it('should correctly generate page metadata', async () => {
-    const mockT = jest.fn((key) => `translated_${key}`);
-    (getTranslations as jest.Mock).mockResolvedValueOnce(mockT);
-    const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }) });
-    expect(setRequestLocale).toHaveBeenCalledWith('en');
-
-    expect(getTranslations).toHaveBeenCalledWith('meta.pages.privacyPolicy');
-
-    expect(mockT).toHaveBeenCalledWith('title');
-    expect(mockT).toHaveBeenCalledWith('description');
-
-    expect(createSeoMeta).toHaveBeenCalledWith({
-      title: 'translated_title',
-      description: 'translated_description',
-      url: '/privacy-policy',
-      locale: 'en'
-    });
-
-    expect(meta).toEqual({
-      title: 'translated_title',
-      description: 'translated_description',
-      url: '/privacy-policy',
-      locale: 'en'
-    });
+  runCommonPageTests(PrivacyPolicy, 'privacy-policy', {
+    expectedUrl: '/privacy-policy',
+    generateMetadata,
+    translationKey: 'meta.pages.privacyPolicy'
   });
 });
