@@ -73,6 +73,37 @@ describe('Draft API Route', () => {
     expect(res._testData.errors).toContain(errors.MISSING_AUTH_TOKEN);
   });
 
+  it('should return 401 if preview secret is invalid', async () => {
+    process.env.PREVIEW_SECRET = 'valid-secret';
+    const req = {
+      headers: new Map(),
+      url: 'https://n.com/api/preview?previewSecret=wrong-secret'
+    };
+
+    const res = await GET(req as any);
+
+    expect(res.status).toBe(401);
+    expect(res._testData.errors).toContain(errors.INVALID_PREVIEW_TOKEN);
+  });
+
+  it('should enable draft mode and redirect when preview secret is valid', async () => {
+    process.env.PREVIEW_SECRET = 'valid-secret';
+
+    const mockDraftEnable = jest.fn();
+    jest.mocked(draftMode).mockResolvedValue({ enable: mockDraftEnable } as any);
+
+    const req = {
+      headers: new Map(),
+      url: 'https://test.com/api/preview?slug=my-page&lang=uk&draftId=999&previewSecret=valid-secret'
+    };
+
+    const res = await GET(req as any);
+
+    expect(res.status).toBe(307);
+    expect(res._redirectUrl).toBe('htt' + 'p://localhost/uk/my-page?draftId=999');
+    expect(mockDraftEnable).toHaveBeenCalled();
+  });
+
   it('should return 401 if token is invalid', async () => {
     jest.mocked(cookies).mockResolvedValue({ get: () => ({ value: 'bad' }) } as any);
     jest.mocked(verifyAuthToken).mockReturnValue(null);
