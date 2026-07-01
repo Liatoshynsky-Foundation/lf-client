@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   imageContainer: {
     position: 'relative',
@@ -33,7 +31,7 @@ export const styles = {
     },
     backgroundColor: {
       xs: 'transparent',
-      sm: mainHexPallete.white
+      sm: 'white'
     }
   },
 

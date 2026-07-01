@@ -20,14 +20,14 @@ export const styles = {
     overflow: 'hidden',
     transform: 'rotate(-25deg)',
     borderRadius: '50%',
-    backgroundColor: '#B8AEA2'
+    backgroundColor: 'brown.300'
   },
   textWrapper: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: { xs: '5px', sm: '7px', md: '7px' },
-    color: '#190D03'
+    color: 'black'
   },
   name: {
     fontSize: { xs: '20px', md: '24px' },

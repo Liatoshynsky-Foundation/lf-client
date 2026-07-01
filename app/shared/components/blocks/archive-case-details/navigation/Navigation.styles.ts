@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     gridColumn: '1 / -1',
@@ -45,11 +43,11 @@ export const styles: Record<string, SxProps<Theme>> = {
       xs: 'center',
       sm: 'space-between'
     },
-    color: mainHexPallete.black,
+    color: 'black',
     borderRadius: '28px',
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: mainHexPallete.black,
+    borderColor: 'black',
     padding: {
       xs: '0',
       sm: '8px 20px'
@@ -61,7 +59,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
 
     '&:hover': {
-      background: mainHexPallete.blue[100]
+      background: 'blue.100'
     }
   },
 
@@ -96,7 +94,7 @@ export const styles: Record<string, SxProps<Theme>> = {
       xs: '0px',
       sm: '46px'
     },
-    color: mainHexPallete.blue[700]
+    color: 'blue.700'
   },
 
   navMetaRight: {
@@ -105,7 +103,7 @@ export const styles: Record<string, SxProps<Theme>> = {
       xs: '0px',
       sm: '46px'
     },
-    color: mainHexPallete.blue[700]
+    color: 'blue.700'
   },
 
   navCaseIndex: {

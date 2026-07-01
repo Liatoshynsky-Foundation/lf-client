@@ -1,8 +1,6 @@
-import { mainHexPallete } from '../theme/colors';
-
 export const BreadCrumbsStyles = {
   typography: {
-    color: mainHexPallete.black
+    color: 'black'
   },
   box: {
     '&hover': {

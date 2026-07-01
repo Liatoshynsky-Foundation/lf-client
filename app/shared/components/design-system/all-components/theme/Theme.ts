@@ -98,10 +98,28 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/styles' {
   interface Palette {
     tertiary: Palette['primary'];
+    yellow: Record<number, string>;
+    blue: Record<number, string>;
+    red: Record<number, string>;
+    brown: Record<number, string>;
+    burgundy: Record<number, string>;
   }
 
   interface PaletteOptions {
     tertiary?: PaletteOptions['primary'];
+    yellow?: Record<number, string>;
+    blue?: Record<number, string>;
+    red?: Record<number, string>;
+    brown?: Record<number, string>;
+    burgundy?: Record<number, string>;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Color {
+    250?: string;
+    350?: string;
+    375?: string;
   }
 }
 

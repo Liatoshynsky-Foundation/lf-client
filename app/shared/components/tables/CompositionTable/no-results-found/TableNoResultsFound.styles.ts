@@ -1,5 +1,3 @@
-import { colors } from '@mui/material';
-
 import { AppTypography } from '~/constants';
 
 const styles = {
@@ -30,7 +28,7 @@ const styles = {
     height: { xs: 72, sm: 48 },
     ml: { sm: '10px', md: '90px', lg: '140px', xl: '0px' },
     letterSpacing: '0%',
-    color: colors.brown[800]
+    color: 'brown.800'
   },
   h4: {
     fontSize: { xs: 40, sm: 40, md: 48, lg: 48, xl: 48 },

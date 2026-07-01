@@ -44,7 +44,7 @@ export const styles = {
     fontStyle: 'italic',
     letterSpacing: '0%',
     textAlign: align,
-    color: '#63666E',
+    color: 'blue.700',
     mt: { xs: '8px', md: '16px' },
     maxWidth: { ...sizes.width },
     gridColumn: '1 / -1'

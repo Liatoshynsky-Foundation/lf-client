@@ -15,7 +15,7 @@ export const styles = {
     left: '50%',
     width: '402px',
     height: '337px',
-    background: 'rgba(252, 189, 40, 1)',
+    background: 'yellow.500',
     transform: 'translate(-50%, -50%) rotate(-2deg)',
     transition: 'all 0.3s ease-in-out'
   },

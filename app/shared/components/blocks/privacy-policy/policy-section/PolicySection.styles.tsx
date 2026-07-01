@@ -1,8 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
 import { AppTypography } from '~/constants';
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
-
 export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   root: {
     display: 'grid',
@@ -21,7 +19,7 @@ export const styles = (theme: Theme): Record<string, SxProps<Theme>> => ({
   },
   description: {
     ...AppTypography.mulish20Regular,
-    color: mainHexPallete.brown[600],
+    color: 'brown.600',
     [theme.breakpoints.down('md')]: {
       ...AppTypography.mulish18Regular
     },
