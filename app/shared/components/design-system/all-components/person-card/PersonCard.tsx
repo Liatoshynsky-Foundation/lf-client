@@ -8,14 +8,17 @@ import { styles } from './PersonCard.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { type CropRect } from '~/lib/utils/cropUtils';
 import { renderData } from '~/shared/components/tip-tap-content/nodes';
 import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
+import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
 
 interface PersonCardProps {
   imgURL: string;
   name: string | TipTapDoc;
   description: string | TipTapDoc;
   fallbackSrc?: string;
+  crop?: CropRect | null;
 }
 
 const DEFAULT_FALLBACK = '/images/light-logo.svg';
@@ -25,9 +28,10 @@ const renderBlock = (sx: SxProps<Theme>) => {
   return Block;
 };
 
-const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fallbackSrc = DEFAULT_FALLBACK }) => {
+const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fallbackSrc = DEFAULT_FALLBACK, crop }) => {
   const [src, setSrc] = useState<string>(imgURL);
   const [failed, setFailed] = useState(false);
+  const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
 
   const handleError = () => {
     if (!failed) {
@@ -46,16 +50,28 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
 
   return (
     <Box sx={styles.container}>
-      <Box sx={styles.photoWrapper}>
-        <Image
-          alt="Person photo"
-          src={src}
-          width={185}
-          height={166}
-          style={{ ...styles.image, objectFit: failed ? 'contain' : 'cover' }}
-          onError={handleError}
-          loading="lazy"
-        />
+      <Box ref={containerRef} sx={{ ...styles.photoWrapper, position: 'relative', overflow: 'hidden' }}>
+        {crop ? (
+          <img
+            ref={imgRef}
+            src={src}
+            alt="Person photo"
+            onLoad={handleImageLoad}
+            onError={handleError}
+            style={croppedImgStyle}
+            loading="lazy"
+          />
+        ) : (
+          <Image
+            alt="Person photo"
+            src={src}
+            width={185}
+            height={166}
+            style={{ ...styles.image, objectFit: failed ? 'contain' : 'cover' }}
+            onError={handleError}
+            loading="lazy"
+          />
+        )}
       </Box>
 
       {name && (

@@ -2,11 +2,14 @@ import { JSONContent } from '@tiptap/react';
 
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import type { CropRect } from '~/lib/utils/cropUtils';
+
 export interface IImageBlock {
   src: string;
   alt: JSONContent | string;
   generatedSrc: string;
   caption?: JSONContent | string | null;
+  crop?: CropRect | null;
 }
 
 export interface IQuoteBlock {
