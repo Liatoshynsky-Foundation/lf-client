@@ -6,6 +6,17 @@ jest.mock('~/ds-components/button/Button');
 
 jest.mock('next/image');
 
+const mockTranslations = {
+  title: 'CoMing SoOn',
+  description:
+    'Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English version will appear very soon.',
+  button: 'Return to Ukrainian'
+};
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => mockTranslations[key as keyof typeof mockTranslations] || key
+}));
+
 const mockPush = jest.fn();
 const mockPathname = jest.fn();
 
