@@ -1,4 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
 import { oswald } from '~/ds-components/theme/Theme';
 
 const ellipsisStyles = {
@@ -40,7 +39,7 @@ export const styles = {
       content: '""',
       position: 'absolute',
       inset: 0,
-      background: mainHexPallete.blue[200],
+      background: 'blue.200',
       clipPath: `
     polygon(
       0% calc(5.5%),
@@ -56,7 +55,7 @@ export const styles = {
       content: '""',
       position: 'absolute',
       inset: 0,
-      background: mainHexPallete.blue[200],
+      background: 'blue.200',
       clipPath: `
     polygon(
       0% calc(100% - 1px),
@@ -96,7 +95,7 @@ export const styles = {
     fontWeight: 700,
     lineHeight: '150%',
     textTransform: 'uppercase',
-    color: mainHexPallete.black,
+    color: 'black',
     ...ellipsisStyles,
     WebkitLineClamp: 2,
     marginBottom: { sm: '6px', md: '8px', lg: '9px', xxl: '6px' }
@@ -105,12 +104,12 @@ export const styles = {
   date: {
     ...textBaseStyles,
     fontWeight: 500,
-    color: mainHexPallete.brown[600]
+    color: 'brown.600'
   },
 
   description: {
     ...textBaseStyles,
-    color: mainHexPallete.black,
+    color: 'black',
     ...ellipsisStyles,
     WebkitLineClamp: 3,
     marginBottom: { xs: '8px', sm: '11px', md: '9px', lg: '8px', xl: '10px' }

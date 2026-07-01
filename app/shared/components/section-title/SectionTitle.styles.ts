@@ -43,7 +43,7 @@ export const styles = {
   title: (gridColumn?: object) => ({
     ...AppTypography.oswald28Bold,
     fontSize: commonSx.layout.typography.sectionTitle,
-    color: '#190D03',
+    color: 'black',
     letterSpacing: '0px',
     gridColumn: gridColumn ?? { xs: '2 / -1', sm: '4 / -1', md: '6 / -1' }
   })

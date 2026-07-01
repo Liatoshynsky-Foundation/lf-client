@@ -1,10 +1,8 @@
-import { mainHexPallete } from '../theme/colors';
-
 export const styles = {
   container: {
     width: '294px',
     height: '386px',
-    backgroundColor: mainHexPallete.yellow[200],
+    backgroundColor: 'yellow.200',
     px: '34px',
     pt: '34px',
     pb: '48px',
@@ -22,7 +20,7 @@ export const styles = {
     flexDirection: 'column'
   },
   title: {
-    marginBottom: '16px',
+    mb: '16px',
     flexShrink: 0
   },
   listContainer: {
@@ -36,9 +34,6 @@ export const styles = {
     alignItems: 'flex-start'
   },
   listIcon: {
-    marginTop: '6px'
-  },
-  listText: {
-    lineHeight: 1.5
+    mt: '6px'
   }
 };

@@ -1,5 +1,3 @@
-import { mainHexPallete } from '../../theme/colors';
-
 export const styles = {
   container: {
     borderRadius: '8px',
@@ -23,7 +21,7 @@ export const styles = {
     width: '117px'
   },
   divider: {
-    background: mainHexPallete.white,
+    background: 'white',
     mt: '8px',
     mb: '8px'
   },

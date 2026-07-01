@@ -1,8 +1,6 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 const commonTextStyle = {
   fontFamily: 'Mulish, Sans-serif',
-  color: mainHexPallete.black,
+  color: 'black',
   letterSpacing: '0px',
   whiteSpace: 'pre-line',
   fontSize: { xs: '16px', sm: '16px' }

@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -46,7 +44,7 @@ export const styles = {
   },
   label: {
     fontFamily: 'Mulish, Sans-serif',
-    color: mainHexPallete.brown[600],
+    color: 'brown.600',
     letterSpacing: '0px',
     whiteSpace: 'pre-line',
     fontWeight: 600,
@@ -65,17 +63,17 @@ export const styles = {
     fontSize: commonSx.layout.typography.bodyLarge,
     fontWeight: 600,
     lineHeight: '150%',
-    color: mainHexPallete.black,
+    color: 'black',
     overflowWrap: 'anywhere',
     transition: 'color 0.2s ease',
     alignItems: { xs: 'flex-start', sm: 'center' },
     gap: '8px',
     '&:hover': {
-      color: mainHexPallete.burgundy[800],
+      color: 'burgundy.800',
       cursor: 'pointer'
     },
     '&:active': {
-      color: mainHexPallete.black
+      color: 'black'
     }
   },
   img: {
@@ -121,7 +119,7 @@ export const imageSizes = {
     },
     top: { xs: 16, sm: 20, md: 36, lg: 38, xl: 40 },
     left: { xs: 16, sm: 26, md: 41, lg: 40, xl: 40 },
-    color: mainHexPallete.blue[300]
+    color: 'blue.300'
   },
   imageSx: {
     width: { xs: '100%', ultra: '1001px' },

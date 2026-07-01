@@ -129,7 +129,7 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
       </Box>
       <Box sx={styles.carouselFooterStyles}>
         <Box key={images[activeIndex].description} sx={styles.captionStyles} data-testid="carousel-caption">
-          <Typography sx={styles.exactCaptionStyles} variant="caption">
+          <Typography sx={styles.captionStyles} variant="customItalic14">
             {images[activeIndex]?.description}
           </Typography>
         </Box>
