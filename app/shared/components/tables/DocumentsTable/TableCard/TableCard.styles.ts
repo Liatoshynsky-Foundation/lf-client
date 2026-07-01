@@ -6,7 +6,8 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderBottom: '1px solid rgba(217, 220, 232, 1)',
+    borderBottom: '1px solid',
+    borderColor: 'blue.200',
     maxHeight: '300px'
   },
   contentBox: {
@@ -18,7 +19,7 @@ export const styles = {
     ...AppTypography.mulish16Italic,
     lineHeight: '125%',
     fontWeight: 600,
-    color: 'rgba(110, 90, 81, 1)',
+    color: 'brown.600',
     mb: '4px'
   },
   name: {
@@ -30,7 +31,7 @@ export const styles = {
     ...AppTypography.mulish16Italic,
     lineHeight: '100%',
     fontWeight: 600,
-    color: 'rgba(110, 90, 81, 1)'
+    color: 'brown.800'
   },
   labelValue: {
     ...AppTypography.mulish16Regular,

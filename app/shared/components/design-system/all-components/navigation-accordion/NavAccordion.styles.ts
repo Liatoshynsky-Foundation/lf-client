@@ -1,17 +1,15 @@
-import { mainHexPallete } from '../theme/colors';
-
 export const textStates = {
   default: {
-    color: mainHexPallete.brown[900]
+    color: 'burgundy.900'
   },
   hover: {
-    '@media (min-width: 900px)': { color: mainHexPallete.burgundy[700] }
+    '@media (min-width: 900px)': { color: 'burgundy.700' }
   },
   pressed: {
-    color: mainHexPallete.burgundy[900]
+    color: 'burgundy.900'
   },
   active: {
-    color: mainHexPallete.burgundy[700]
+    color: 'burgundy.700'
   }
 };
 
@@ -39,14 +37,14 @@ export const styles = {
     '&:hover': {
       ...textStates.hover,
       '& svg *': {
-        stroke: mainHexPallete.burgundy[700]
+        stroke: 'burgundy.700'
       }
     },
 
     '&:active': {
       ...textStates.pressed,
       '& svg *': {
-        stroke: mainHexPallete.burgundy[900]
+        stroke: 'burgundy.900'
       }
     }
   },

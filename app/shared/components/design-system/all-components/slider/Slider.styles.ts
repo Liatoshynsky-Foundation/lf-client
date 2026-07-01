@@ -1,11 +1,3 @@
-const commonColors = {
-  primary: '#FCBD28',
-  primaryHover: 'rgba(0, 0, 0, 0.08)',
-  secondary: '#FFA500',
-  disabled: '#B2BEBE',
-  valueLabelBackground: '#63666E'
-};
-
 const commonThumbSizes = {
   small: '12px',
   big: '20px'
@@ -33,8 +25,8 @@ export const sliderStyles = {
     transform: 'translateX(-50%)',
     fontSize: (size: 'small' | 'big') => (size === 'small' ? '10px' : '14px'),
     fontWeight: 'bold',
-    background: commonColors.valueLabelBackground,
-    color: '#fff',
+    backgroundColor: 'blue.700',
+    color: 'background.default',
     padding: '2px 6px',
     borderRadius: '4px',
     '&::after': {
@@ -47,22 +39,23 @@ export const sliderStyles = {
       height: 0,
       borderLeft: '6px solid transparent',
       borderRight: '6px solid transparent',
-      borderTop: `6px solid ${commonColors.valueLabelBackground}`
+      borderTop: '6px solid',
+      borderTopColor: 'blue.700'
     }
   },
   slider: {
-    color: commonColors.primary,
+    color: 'tertiary.main',
     '& .MuiSlider-thumb': {
       width: (size: 'small' | 'big') => commonThumbSizes[size],
       height: (size: 'small' | 'big') => commonThumbSizes[size],
-      backgroundColor: commonColors.primary,
+      backgroundColor: 'tertiary.main',
       '&:hover': {
-        boxShadow: `0px 0px 0px 8px ${commonColors.primaryHover}`
+        boxShadow: '0px 0px 0px 8px rgba(25, 13, 3, 0.08)'
       }
     },
     '& .MuiSlider-track': {
       height: (size: 'small' | 'big') => commonTrackRailHeights[size],
-      backgroundColor: commonColors.primary
+      backgroundColor: 'tertiary.main'
     },
     '& .MuiSlider-rail': {
       height: (size: 'small' | 'big') => commonTrackRailHeights[size]
@@ -71,22 +64,22 @@ export const sliderStyles = {
       width: '2px',
       height: '2px',
       borderRadius: '50%',
-      backgroundColor: commonColors.primary
+      backgroundColor: 'tertiary.main'
     },
     '& .MuiSlider-markActive': {
-      backgroundColor: commonColors.secondary
+      backgroundColor: 'yellow.600'
     },
     '&.Mui-disabled .MuiSlider-thumb': {
-      backgroundColor: commonColors.disabled
+      backgroundColor: 'text.disabled'
     },
     '&.Mui-disabled .MuiSlider-track': {
-      backgroundColor: commonColors.disabled
+      backgroundColor: 'text.disabled'
     },
     '&.Mui-disabled .MuiSlider-rail': {
-      backgroundColor: commonColors.disabled
+      backgroundColor: 'text.disabled'
     },
     '&.Mui-disabled .MuiSlider-mark': {
-      backgroundColor: commonColors.disabled
+      backgroundColor: 'text.disabled'
     }
   },
   minMaxContainer: {

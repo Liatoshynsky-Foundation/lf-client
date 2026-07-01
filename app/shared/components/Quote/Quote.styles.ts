@@ -12,11 +12,11 @@ export const quoteSizes = {
 };
 
 export const quoteColors = {
-  burgundy: '#600E0F',
-  black: '#190D03',
-  sourceText: '#52545A',
-  white: '#FFF'
-};
+  burgundy: 'burgundy.800',
+  black: 'black',
+  sourceText: 'blue.800',
+  white: 'white'
+} as const;
 
 export const alignments = {
   left: {
@@ -32,7 +32,6 @@ export const alignments = {
 };
 
 export const quoteTextStyles = {
-  fontFamily: 'Mulish',
   fontWeight: 500,
   lineHeight: '150%',
   fontSize: commonSx.layout.typography.bodyMedium,
@@ -40,7 +39,6 @@ export const quoteTextStyles = {
 };
 
 export const sourceTextStyles = {
-  fontFamily: 'Mulish',
   fontWeight: 500,
   lineHeight: '140%',
   fontStyle: 'italic',
@@ -75,7 +73,6 @@ export const styles = {
   mainText: (color: keyof typeof quoteColors, align: Align) => ({
     ...quoteTextStyles,
     color: quoteColors[color],
-    fontFamily: 'Mulish',
     fontStyle: 'normal',
     textAlign: alignments[align].textAlign
   }),

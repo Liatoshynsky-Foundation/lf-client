@@ -1,5 +1,3 @@
-import { backgroundColors, hexButtonGroupColors, mainHexPallete, rgbButtonColors } from '~/ds-components/theme/colors';
-
 export const styles = {
   iconButtonSx: {
     background: 'none',
@@ -24,20 +22,21 @@ export const styles = {
   },
   buttonGroup: {
     height: '40px',
-    backgroundColor: backgroundColors.offWhite,
+    backgroundColor: 'grey.250',
     p: '4px'
   },
   buttonGroupBackground: {
-    backgroundColor: backgroundColors.white,
+    backgroundColor: 'white',
     borderRadius: '999px',
-    border: `6px solid ${backgroundColors.white}`,
+    border: '6px solid',
+    borderColor: 'white',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px'
   },
   warInUkraineWrapper: {
-    backgroundColor: backgroundColors.offWhite,
+    backgroundColor: 'grey.250',
     borderRadius: '999px',
     height: '40px',
     display: 'flex',
@@ -49,25 +48,25 @@ export const styles = {
     backgroundColor: 'transparent',
     verticalAlign: 'middle',
     fontWeight: 'normal',
-    color: hexButtonGroupColors.primary.buttonTextColor,
+    color: 'black',
     lineHeight: '140%',
     letterSpacing: 0,
     padding: '0 16px',
     height: '32px',
 
     '&:hover': {
-      backgroundColor: rgbButtonColors.primaryHoveredBackground
+      backgroundColor: 'grey.350'
     },
     '&:focus': {
-      backgroundColor: mainHexPallete.black,
-      color: mainHexPallete.white
+      backgroundColor: 'black',
+      color: 'white'
     }
   },
   warInUkraineButtonActive: {
-    backgroundColor: mainHexPallete.black,
-    color: mainHexPallete.white,
+    backgroundColor: 'black',
+    color: 'white',
     '&:hover': {
-      backgroundColor: mainHexPallete.black
+      backgroundColor: 'black'
     }
   }
 };

@@ -1,5 +1,3 @@
-import { backgroundColors } from '~/ds-components/theme/colors';
-
 export const styles = {
   controls: (isMobile: boolean) => ({
     display: isMobile ? 'none' : 'flex',
@@ -9,10 +7,11 @@ export const styles = {
   backgroundContainer: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: backgroundColors.white,
+    backgroundColor: 'white',
     maxHeight: '52px',
     borderRadius: '40px',
-    border: `6px solid ${backgroundColors.white}`,
+    border: '6px solid ',
+    borderColor: 'white',
     gap: '16px'
   }
 };

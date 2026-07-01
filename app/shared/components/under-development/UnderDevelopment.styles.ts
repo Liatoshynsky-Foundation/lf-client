@@ -1,8 +1,8 @@
 export const styles = {
   wrapper: {
     bgcolor: {
-      xs: '#FCFCFC',
-      sm: '#F2EEE8'
+      xs: 'white',
+      sm: 'blue.75'
     }
   },
 
@@ -19,7 +19,7 @@ export const styles = {
     height: { xs: '380px', sm: '439px', md: '551px' },
     bgcolor: {
       xs: 'transparent',
-      sm: '#FCFCFC'
+      sm: 'white'
     }
   },
 
@@ -56,7 +56,6 @@ export const styles = {
     mb: '24px',
     fontSize: '16px',
     fontWeight: 500,
-    fontFamily: 'Mulish',
     lineHeight: { xs: '150%' }
   },
 
