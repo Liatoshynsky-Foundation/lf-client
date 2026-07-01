@@ -1,4 +1,4 @@
-import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
+import { testGeneratePageMetadata, testPassLangSlugToPageBuilder } from '../__mocks__/runCommonPageTests';
 import Home, { generateMetadata } from './page';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
@@ -41,9 +41,15 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
 }));
 
 describe('AbousUs page', () => {
-  runCommonPageTests(Home, 'about-us', {
-    expectedUrl: '/',
-    generateMetadata,
-    translationKey: 'meta.pages.aboutUs'
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should correctly pass lang, slug to the PageBuilder', async () => {
+    await testPassLangSlugToPageBuilder(Home, 'about-us');
+  });
+
+  it('should correctly generate page metadata', async () => {
+    await testGeneratePageMetadata(generateMetadata, 'meta.pages.aboutUs', '/');
   });
 });

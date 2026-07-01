@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
+import { testGeneratePageMetadata, testPassLangSlugToPageBuilder } from '../__mocks__/runCommonPageTests';
 import PrivacyPolicy, { generateMetadata } from './page';
 interface MockProps {
   data: {
@@ -64,9 +64,15 @@ jest.mock('~/components/blocks/privacy-policy/contact-us/ContactUs', () => ({
 }));
 
 describe('PrivacyPolicy page', () => {
-  runCommonPageTests(PrivacyPolicy, 'privacy-policy', {
-    expectedUrl: '/privacy-policy',
-    generateMetadata,
-    translationKey: 'meta.pages.privacyPolicy'
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should correctly pass lang, slug to the PageBuilder', async () => {
+    await testPassLangSlugToPageBuilder(PrivacyPolicy, 'privacy-policy');
+  });
+
+  it('should correctly generate page metadata', async () => {
+    await testGeneratePageMetadata(generateMetadata, 'meta.pages.privacyPolicy', '/privacy-policy');
   });
 });

@@ -25,64 +25,58 @@ jest.mock('~/shared/components/constants/routes', () => ({
   }
 }));
 
-export const runCommonPageTests = (
+export const testPassLangSlugToPageBuilder = async (
   PageComponent: ({ params }: Readonly<Language>) => Promise<React.JSX.Element>,
   slug: string,
-  metaOptions?: {
-    generateMetadata: (params: Readonly<Language>) => Promise<Metadata>;
-    translationKey: string;
-    expectedUrl: string;
-  },
   lang: 'uk' | 'en' = 'uk'
 ) => {
-  it('should correctly pass lang, slug to the PageBuilder', async () => {
-    const ui = await PageComponent({
-      params: Promise.resolve({
-        lang
-      })
-    });
-
-    render(ui);
-
-    expect(PageBuilder).toHaveBeenCalledWith(
-      expect.objectContaining({
-        lang,
-        slug,
-        renderBlock: expect.any(Function)
-      }),
-      undefined
-    );
-    expect(screen.getByTestId('pagebuilder')).toBeInTheDocument();
-    expect(screen.getByTestId('pagebuilder-lang')).toHaveTextContent(JSON.stringify(lang));
-    expect(screen.getByTestId('pagebuilder-slug')).toHaveTextContent(JSON.stringify(slug));
+  const ui = await PageComponent({
+    params: Promise.resolve({
+      lang
+    })
   });
 
-  if (metaOptions) {
-    it('should correctly generate page metadata', async () => {
-      const { expectedUrl, generateMetadata, translationKey } = metaOptions;
-      const mockT = jest.fn((key) => `translated_${key}`);
-      (getTranslations as jest.Mock).mockResolvedValueOnce(mockT);
-      const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }) });
-      expect(setRequestLocale).toHaveBeenCalledWith('en');
+  render(ui);
 
-      expect(getTranslations).toHaveBeenCalledWith(translationKey);
+  expect(PageBuilder).toHaveBeenCalledWith(
+    expect.objectContaining({
+      lang,
+      slug,
+      renderBlock: expect.any(Function)
+    }),
+    undefined
+  );
+  expect(screen.getByTestId('pagebuilder')).toBeInTheDocument();
+  expect(screen.getByTestId('pagebuilder-lang')).toHaveTextContent(JSON.stringify(lang));
+  expect(screen.getByTestId('pagebuilder-slug')).toHaveTextContent(JSON.stringify(slug));
+};
 
-      expect(mockT).toHaveBeenCalledWith('title');
-      expect(mockT).toHaveBeenCalledWith('description');
+export const testGeneratePageMetadata = async (
+  generateMetadata: (params: Readonly<Language>) => Promise<Metadata>,
+  translationKey: string,
+  expectedUrl: string
+) => {
+  const mockT = jest.fn((key) => `translated_${key}`);
+  (getTranslations as jest.Mock).mockResolvedValueOnce(mockT);
+  const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }) });
+  expect(setRequestLocale).toHaveBeenCalledWith('en');
 
-      expect(createSeoMeta).toHaveBeenCalledWith({
-        title: 'translated_title',
-        description: 'translated_description',
-        url: expectedUrl,
-        locale: 'en'
-      });
+  expect(getTranslations).toHaveBeenCalledWith(translationKey);
 
-      expect(meta).toEqual({
-        title: 'translated_title',
-        description: 'translated_description',
-        url: expectedUrl,
-        locale: 'en'
-      });
-    });
-  }
+  expect(mockT).toHaveBeenCalledWith('title');
+  expect(mockT).toHaveBeenCalledWith('description');
+
+  expect(createSeoMeta).toHaveBeenCalledWith({
+    title: 'translated_title',
+    description: 'translated_description',
+    url: expectedUrl,
+    locale: 'en'
+  });
+
+  expect(meta).toEqual({
+    title: 'translated_title',
+    description: 'translated_description',
+    url: expectedUrl,
+    locale: 'en'
+  });
 };
