@@ -15,7 +15,7 @@ export const styles = {
     left: '0',
     width: '100vw',
     height: '150%',
-    backgroundColor: '#FCBD28',
+    backgroundColor: 'yellow.500',
     transform: 'skewY(-2deg)',
     transformOrigin: 'top left',
     zIndex: 0

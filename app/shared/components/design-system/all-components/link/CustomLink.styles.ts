@@ -1,7 +1,7 @@
 export const linkStyles = {
   button: {
     cursor: 'pointer',
-    color: '#52545A',
+    color: 'blue.800',
     display: 'flex',
     borderRadius: 0,
     '&:hover': {
@@ -16,7 +16,8 @@ export const linkStyles = {
     alignItems: 'flex-end',
     justifyContent: 'center',
     '&:hover': {
-      borderBottom: '1px solid'
+      borderBottom: '1px solid',
+      borderBottomColor: 'currentColor'
     }
   }
 };

@@ -40,6 +40,6 @@ export const styles = {
     fontWeight: 400,
     lineHeight: { xs: '150%', md: '160%' },
     letterSpacing: '0px',
-    color: '#190D03'
+    color: 'black'
   }
 };

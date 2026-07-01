@@ -1,7 +1,5 @@
 import { SxProps, Theme } from '@mui/material';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const playCellSx: SxProps<Theme> = (theme) => ({
   display: 'flex',
   alignItems: 'center',
@@ -20,7 +18,7 @@ export const playCellSx: SxProps<Theme> = (theme) => ({
 });
 
 export const headerTypographySx: SxProps<Theme> = {
-  color: mainHexPallete.blue[800]
+  color: 'blue.800'
 };
 
 export const actionsCellContainerSx: SxProps<Theme> = {

@@ -1,5 +1,3 @@
-import { mainHexPallete } from '../theme/colors';
-
 export const styles = {
   container: (width?: number, height?: number) => ({
     position: 'relative',
@@ -15,7 +13,7 @@ export const styles = {
     height: height ?? '100%',
     top: 0,
     left: 0,
-    backgroundColor: mainHexPallete.yellow[300],
+    backgroundColor: 'yellow.300',
     zIndex: 1
   })
 };

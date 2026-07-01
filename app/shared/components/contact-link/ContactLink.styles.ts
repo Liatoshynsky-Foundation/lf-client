@@ -1,9 +1,6 @@
 import type { SxProps, Theme } from '@mui/material';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 const commonLinkBaseStyles = {
-  fontFamily: 'Mulish, Sans-serif',
   fontSize: '16px',
   fontWeight: 600,
   lineHeight: '110%',
@@ -12,32 +9,29 @@ const commonLinkBaseStyles = {
 };
 
 const commonTextStyle = {
-  fontFamily: 'Mulish, Sans-serif',
-  color: mainHexPallete.black,
+  color: 'black',
   letterSpacing: '0px',
   whiteSpace: 'pre-line',
   fontSize: { xs: '16px', sm: '16px' }
 };
 
-const getCommonLinkStates = (palette = mainHexPallete) => ({
-  color: palette.black,
+const commonLinkStates = {
+  color: 'black',
   '&:hover': {
-    color: '#5F0E0F',
+    color: 'burgundy.800',
     cursor: 'pointer'
   },
 
   '&:active': {
-    color: palette.black
+    color: 'black'
   },
 
   '&.Mui-disabled, &[aria-disabled="true"]': {
-    color: palette.blue[500],
+    color: 'blue.500',
     pointerEvents: 'none',
     textDecoration: 'none'
   }
-});
-
-const commonLinkStates = getCommonLinkStates(mainHexPallete);
+};
 
 export const getContentBoxStyle = (direction: 'row' | 'column'): SxProps<Theme> => ({
   display: 'flex',
@@ -68,12 +62,12 @@ export const styles = {
 
   weakText: {
     ...commonTextStyle,
-    color: mainHexPallete.brown[700]
+    color: 'brown.700'
   },
 
   weakTextSmall: {
     ...commonTextStyle,
-    color: mainHexPallete.brown[700],
+    color: 'brown.700',
     marginRight: '4px'
   },
 
