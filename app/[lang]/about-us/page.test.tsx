@@ -1,5 +1,8 @@
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
 import { runCommonPageTests } from '../__mocks__/runCommonPageTests';
-import Home from './page';
+import Home, { generateMetadata } from './page';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -40,6 +43,51 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
   default: ({ data }: any) => <div>WhatWeDo section: {data.title}</div>
 }));
 
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn(),
+  getTranslations: jest.fn()
+}));
+
+jest.mock('~/utils/createSeoMeta', () => ({
+  createSeoMeta: jest.fn((meta) => meta)
+}));
+
+jest.mock('~/shared/components/constants/routes', () => ({
+  ROUTES: {
+    HOME: '/'
+  }
+}));
+
 describe('AbousUs page', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   runCommonPageTests(Home, 'about-us');
+
+  it('should correctly generate page metadata', async () => {
+    const mockT = jest.fn((key) => `translated_${key}`);
+
+    (getTranslations as jest.Mock).mockResolvedValueOnce(mockT);
+    const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }) });
+    expect(setRequestLocale).toHaveBeenCalledWith('en');
+
+    expect(getTranslations).toHaveBeenCalledWith('meta.pages.aboutUs');
+
+    expect(mockT).toHaveBeenCalledWith('title');
+    expect(mockT).toHaveBeenCalledWith('description');
+
+    expect(createSeoMeta).toHaveBeenCalledWith({
+      title: 'translated_title',
+      description: 'translated_description',
+      url: '/',
+      locale: 'en'
+    });
+
+    expect(meta).toEqual({
+      title: 'translated_title',
+      description: 'translated_description',
+      url: '/',
+      locale: 'en'
+    });
+  });
 });
