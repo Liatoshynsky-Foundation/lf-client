@@ -9,7 +9,7 @@ import OurGoals from '~/components/blocks/our-goals/OurGoals';
 import OurMission from '~/components/blocks/our-mission/OurMission';
 import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
-import { IAboutUsPage } from '~/types/page/about-us.types';
+import { AboutUsPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
 }
 
 type RendererProps = {
-  blocks: IAboutUsPage['blocks'];
+  blocks: AboutUsPage['blocks'];
 };
 
 const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
@@ -60,7 +60,7 @@ export default async function Home({ params }: Readonly<Language>) {
   const { lang } = await params;
 
   return (
-    <PageBuilder<IAboutUsPage>
+    <PageBuilder<AboutUsPage>
       lang={lang}
       slug="about-us"
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
