@@ -1,4 +1,4 @@
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'node:crypto';
 
 export const isValidPreviewSecret = (secret: string): boolean => {
   const expected = process.env.PREVIEW_SECRET;
