@@ -14,6 +14,15 @@ function generateSignature(signatureBase: string, secretKey: string) {
   return crypto.createHmac('md5', secretKey).update(signatureBase, 'utf8').digest('hex');
 }
 
+class CallbackError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string
+  ) {
+    super(message);
+  }
+}
+
 async function parseCallbackBody(request: NextRequest) {
   const contentType = request.headers.get('content-type');
 
@@ -21,7 +30,7 @@ async function parseCallbackBody(request: NextRequest) {
     const validation = validateWithZod(await request.json(), wayForPayCallbackSchema);
 
     if (!validation.valid) {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+      throw new CallbackError(400, 'bad payload');
     }
 
     return validation.value;
@@ -33,7 +42,7 @@ async function parseCallbackBody(request: NextRequest) {
     const entries = [...formData.entries()];
 
     if (entries.length !== 1) {
-      return NextResponse.json({ error: 'unexpected form payload' }, { status: 400 });
+      throw new CallbackError(400, 'unexpected form payload');
     }
 
     const [jsonString] = entries[0];
@@ -43,19 +52,19 @@ async function parseCallbackBody(request: NextRequest) {
     try {
       body = JSON.parse(jsonString);
     } catch {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+      throw new CallbackError(400, 'bad payload');
     }
 
     const validation = validateWithZod(body, wayForPayCallbackSchema);
 
     if (!validation.valid) {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+      throw new CallbackError(400, 'bad payload');
     }
 
     return validation.value;
   }
 
-  return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
+  throw new CallbackError(415, 'unsupported media type');
 }
 
 const statusMap = {
@@ -72,13 +81,17 @@ export async function POST(request: NextRequest) {
     donationOrderRepository
   });
 
-  const parsedBody = await parseCallbackBody(request);
+  let body;
 
-  if (parsedBody instanceof NextResponse) {
-    return parsedBody;
+  try {
+    body = await parseCallbackBody(request);
+  } catch (error) {
+    if (error instanceof CallbackError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+
+    throw error;
   }
-
-  const body = parsedBody;
 
   const {
     merchantAccount,
