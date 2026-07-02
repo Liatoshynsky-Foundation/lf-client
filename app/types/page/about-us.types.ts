@@ -71,18 +71,3 @@ export interface IFoundationFounders {
     description: string | TipTapDoc;
   }[];
 }
-
-export interface IAboutUsPage {
-  slug: string;
-  title: string;
-  status: string;
-  blocks: {
-    IntroSection: IIntroSection;
-    FoundationInfo: IFoundationInfo;
-    OurMission: IOurMission;
-    OurGoals: IOurGoals;
-    LiatoshynskyOffice: ILiatoshynskyOffice;
-    WhatWeDo: IWhatWeDo;
-    FoundationFounders: IFoundationFounders;
-  };
-}
