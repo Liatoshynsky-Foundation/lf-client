@@ -30,7 +30,7 @@ export default function CroppedImage({
   onError,
   loading = 'lazy',
   sizes
-}: CroppedImageProps) {
+}: Readonly<CroppedImageProps>) {
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
 
   return (
@@ -58,8 +58,8 @@ export default function CroppedImage({
           src={src}
           alt={alt}
           fill={fill}
-          width={!fill ? width : undefined}
-          height={!fill ? height : undefined}
+          width={fill ? undefined : width}
+          height={fill ? undefined : height}
           style={imageStyle}
           onError={onError}
           loading={loading}
