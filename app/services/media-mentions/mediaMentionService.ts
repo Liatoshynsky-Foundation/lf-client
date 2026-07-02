@@ -10,9 +10,9 @@ interface MediaMentionServiceDeps {
 }
 
 export const createMediaMentionService = ({ mediaMentionRepository }: MediaMentionServiceDeps) => ({
-  async getAllPublishedMediaMentions(locale: 'uk' | 'en' = 'uk') {
+  async getAllPublishedMediaMentions(_locale: 'uk' | 'en' = 'uk') {
     try {
-      const mediaMentions = await mediaMentionRepository.getAllPublishedMediaMentions(locale);
+      const mediaMentions = await mediaMentionRepository.getAllPublishedMediaMentions();
 
       if (mediaMentions.length === 0) {
         return [];
@@ -36,9 +36,9 @@ export const createMediaMentionService = ({ mediaMentionRepository }: MediaMenti
     }
   },
 
-  async getMediaMentionBySlug(slug: string, locale: 'uk' | 'en' = 'uk') {
+  async getMediaMentionBySlug(slug: string, _locale: 'uk' | 'en' = 'uk') {
     try {
-      const mediaMention = await mediaMentionRepository.getMediaMentionBySlug(slug, locale);
+      const mediaMention = await mediaMentionRepository.getMediaMentionBySlug(slug);
       if (!mediaMention) return null;
 
       return mediaMentionSchema.parse(mediaMention);
