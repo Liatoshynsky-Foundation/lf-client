@@ -14,6 +14,50 @@ function generateSignature(signatureBase: string, secretKey: string) {
   return crypto.createHmac('md5', secretKey).update(signatureBase, 'utf8').digest('hex');
 }
 
+async function parseCallbackBody(request: NextRequest) {
+  const contentType = request.headers.get('content-type');
+
+  if (contentType?.includes('application/json')) {
+    const validation = validateWithZod(await request.json(), wayForPayCallbackSchema);
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    return validation.value;
+  }
+
+  if (contentType?.includes('application/x-www-form-urlencoded')) {
+    const formData = await request.formData();
+
+    const entries = [...formData.entries()];
+
+    if (entries.length !== 1) {
+      return NextResponse.json({ error: 'unexpected form payload' }, { status: 400 });
+    }
+
+    const [jsonString] = entries[0];
+
+    let body;
+
+    try {
+      body = JSON.parse(jsonString);
+    } catch {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    const validation = validateWithZod(body, wayForPayCallbackSchema);
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    return validation.value;
+  }
+
+  return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
+}
+
 const statusMap = {
   Approved: DonationOrderStatus.Paid,
   Declined: DonationOrderStatus.Declined,
@@ -28,45 +72,13 @@ export async function POST(request: NextRequest) {
     donationOrderRepository
   });
 
-  const contentType = request.headers.get('content-type');
+  const parsedBody = await parseCallbackBody(request);
 
-  let body;
-
-  if (contentType?.includes('application/json')) {
-    const validation = validateWithZod(await request.json(), wayForPayCallbackSchema);
-
-    if (!validation.valid) {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
-    }
-
-    body = validation.value;
-  } else if (contentType?.includes('application/x-www-form-urlencoded')) {
-    const formData = await request.formData();
-
-    const entries = [...formData.entries()];
-
-    if (entries.length !== 1) {
-      return NextResponse.json({ error: 'unexpected form payload' }, { status: 400 });
-    }
-
-    const [jsonString, _] = entries[0];
-
-    try {
-      body = JSON.parse(jsonString);
-    } catch {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
-    }
-
-    const validation = validateWithZod(body, wayForPayCallbackSchema);
-
-    if (!validation.valid) {
-      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
-    }
-
-    body = validation.value;
-  } else {
-    return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
+  if (parsedBody instanceof NextResponse) {
+    return parsedBody;
   }
+
+  const body = parsedBody;
 
   const {
     merchantAccount,
