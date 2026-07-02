@@ -8,7 +8,9 @@ import { WayforPayInvoice } from '~/types/types/wayForPay';
 import { errorResponse } from '~/utils/apiResponse';
 
 import { WayForPay } from '~/config';
+import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
 import logger from '~/middleware/logger/logger';
+import { createWayForPayService } from '~/services/way-for-pay/wayForPayService';
 
 const rateLimiter = new RateLimiterMemory({
   points: 5,
@@ -38,6 +40,8 @@ export async function POST(request: NextRequest) {
       return errorResponse(['Unsupported currency'], 400);
     }
 
+    const callbackUrl = `${WayForPay.DOMAIN_NAME}/api/wayforpay/callback`;
+
     const data: WayforPayInvoice = {
       merchantAccount: WayForPay.MERCHANT_ACCOUNT,
       merchantDomainName: WayForPay.DOMAIN_NAME,
@@ -49,7 +53,8 @@ export async function POST(request: NextRequest) {
       productCount: [1],
       productPrice: [amount],
       language: lang === 'en' ? 'EN' : 'UA',
-      merchantCallbackUrl: `${WayForPay.DOMAIN_NAME}/api/wayforpay/callback`
+
+      serviceUrl: callbackUrl
     };
 
     // ⚠️ IMPORTANT:
@@ -71,6 +76,22 @@ export async function POST(request: NextRequest) {
       .createHmac('md5', WayForPay.MERCHANT_SECRET_KEY)
       .update(signatureBase)
       .digest('hex');
+
+    const donationOrderRepository = newDonationOrderRepository();
+
+    const wayForPayService = createWayForPayService({
+      donationOrderRepository
+    });
+
+    await wayForPayService.createDonationOrder({
+      orderReference: data.orderReference,
+      amount: data.amount,
+      currency: data.currency,
+      language: data.language,
+      productName: data.productName,
+      productCount: data.productCount,
+      productPrice: data.productPrice
+    });
 
     return NextResponse.json({ ...data, merchantSignature });
   } catch (error) {
