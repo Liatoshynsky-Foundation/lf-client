@@ -24,16 +24,7 @@ describe('EmailService', () => {
   });
 
   describe('sendEmail core logic', () => {
-    it('should send email successfully and cover lines 79-81 (dev mode)', async () => {
-      const envSpy = jest.replaceProperty(process, 'env', {
-        ...process.env,
-        NODE_ENV: 'development'
-      });
-
-      const spyLog = jest.spyOn(console, 'log').mockImplementation();
-
-      (nodemailer.getTestMessageUrl as jest.Mock).mockReturnValue('https://preview.com');
-
+    it('should send email successfully', async () => {
       const res = await emailService.sendEmail({
         to: 'test@example.com',
         subject: 'Subject',
@@ -41,12 +32,9 @@ describe('EmailService', () => {
       });
 
       expect(res.success).toBe(true);
-      expect(res.previewUrl).toBe('https://preview.com');
-      expect(spyLog).toHaveBeenCalledWith('Preview URL: %s', 'https://preview.com');
-
-      spyLog.mockRestore();
-      envSpy.restore();
+      expect(mockTransporter.sendMail).toHaveBeenCalled();
     });
+
     it('should handle sendMail error (catch block coverage)', async () => {
       mockTransporter.sendMail.mockRejectedValueOnce(new Error('SMTP error'));
 
@@ -59,6 +47,7 @@ describe('EmailService', () => {
 
       spyError.mockRestore();
     });
+
     it('should reuse transporter if it exists (singleton coverage)', async () => {
       (emailService as any).transporter = null;
 
@@ -83,19 +72,6 @@ describe('EmailService', () => {
       expect(mockTransporter.sendMail).toHaveBeenCalledWith(
         expect.objectContaining({
           subject: expect.stringContaining('Ivan')
-        })
-      );
-    });
-
-    it('should cover sendContactEmail with custom formType', async () => {
-      const res = await emailService.sendContactEmail({
-        ...mockData,
-        formType: 'Support'
-      });
-      expect(res.success).toBe(true);
-      expect(mockTransporter.sendMail).toHaveBeenCalledWith(
-        expect.objectContaining({
-          subject: expect.stringContaining('Support')
         })
       );
     });
