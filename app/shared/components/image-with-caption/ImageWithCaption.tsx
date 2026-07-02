@@ -2,7 +2,6 @@
 
 import { Box, BoxProps, Breakpoint, Typography, TypographyProps } from '@mui/material';
 import { JSONContent } from '@tiptap/react';
-import Image from 'next/image';
 import { Locale, useLocale } from 'next-intl';
 import React, { useMemo } from 'react';
 
@@ -15,7 +14,7 @@ import { ElementSizes } from '~/types/types/common.types';
 import { type CropRect } from '~/lib/utils/cropUtils';
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { extractTextFromTipTap, getPlainString, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
-import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
+import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
 
 export interface BorderProps {
   sizes: ElementSizes;
@@ -76,7 +75,6 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
 }) => {
   const sizesAttribute = generateSizesAttribute(sizes);
   const locale = useLocale() as Locale;
-  const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
 
   const paragraphRenderer = useMemo(() => {
     return createCaptionRenderer({
@@ -93,22 +91,16 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
 
   return (
     <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']} data-testid={dataTestId}>
-      <Box
-        ref={containerRef}
-        sx={{ ...styles.imageContainer(sizes), ...imageSx, position: 'relative', overflow: 'hidden' } as BoxProps['sx']}
-      >
+      <Box sx={{ ...styles.imageContainer(sizes), ...imageSx } as BoxProps['sx']}>
         {border && <Box sx={styles.border(border)} data-testid="img-border" />}
-        {crop ? (
-          <img ref={imgRef} src={src} alt={resolvedAltText} onLoad={handleImageLoad} style={croppedImgStyle} />
-        ) : (
-          <Image
-            style={styles.image as React.CSSProperties}
-            src={src}
-            fill
-            alt={resolvedAltText}
-            sizes={sizesAttribute}
-          />
-        )}
+        <CroppedImage
+          src={src}
+          alt={resolvedAltText}
+          crop={crop}
+          fill={!crop}
+          imageStyle={styles.image as React.CSSProperties}
+          sizes={sizesAttribute}
+        />
       </Box>
 
       {caption &&

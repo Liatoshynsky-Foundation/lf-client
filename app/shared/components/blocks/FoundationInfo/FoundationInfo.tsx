@@ -1,7 +1,5 @@
-'use client';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Image from 'next/image';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
@@ -10,11 +8,10 @@ import { styles } from './FoundationInfo.styles';
 import { IFoundationInfo } from '~/types/page/about-us.types';
 
 import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
-import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
+import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
 
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
   const { image, ourOrganisation, ourName, ourBelief } = data;
-  const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(image?.crop);
 
   const organisationParagraph = (children: React.ReactNode) => (
     <Typography sx={styles.explanationText} data-testid="FoundationInfo-explanationText">
@@ -77,36 +74,24 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         }}
       />
 
-      <Box
-        ref={containerRef}
-        sx={{ ...styles.bodyImage, position: 'relative', overflow: 'hidden' }}
-        data-testid="FoundationInfo-bodyImage"
-      >
-        {image &&
-          (image.crop ? (
-            <img
-              ref={imgRef}
-              src={image.generatedSrc}
-              alt={extractTextFromTipTap(image.alt)}
-              onLoad={handleImageLoad}
-              style={croppedImgStyle}
-            />
-          ) : (
-            <Image
-              src={image.generatedSrc}
-              alt={extractTextFromTipTap(image.alt)}
-              fill={false}
-              width={410}
-              height={490}
-              style={{
-                width: '100%',
-                height: 'auto',
-                objectFit: 'cover',
-                objectPosition: 'top',
-                position: 'relative'
-              }}
-            />
-          ))}
+      <Box sx={styles.bodyImage} data-testid="FoundationInfo-bodyImage">
+        {image && (
+          <CroppedImage
+            src={image.generatedSrc}
+            alt={extractTextFromTipTap(image.alt)}
+            crop={image.crop}
+            fill={false}
+            width={410}
+            height={490}
+            imageStyle={{
+              width: '100%',
+              height: 'auto',
+              objectFit: 'cover',
+              objectPosition: 'top',
+              position: 'relative'
+            }}
+          />
+        )}
       </Box>
     </Box>
   );
