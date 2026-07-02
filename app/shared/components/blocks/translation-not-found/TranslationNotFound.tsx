@@ -23,7 +23,7 @@ export default function TranslationNotFound({ redirectLocale = 'uk' }: Readonly<
 
   const handleRedirect = () => {
     if (!pathname) return;
-    const newPath = `/${redirectLocale}` + pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?\//, '/');
+    const newPath = `/${redirectLocale}` + pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?(?:\/|$)/, '/');
     router.push(newPath);
   };
 
@@ -31,7 +31,7 @@ export default function TranslationNotFound({ redirectLocale = 'uk' }: Readonly<
     <ColoredLayout
       sx={styles.layout}
       wrapperSx={styles.wrapperLayout}
-      gridSx={{ display: 'flex', justifyContent: 'center' }}
+      gridSx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}
     >
       <PaperComponent childrenSx={styles.container} sx={styles.wrapper}>
         <Box sx={styles.imageContainer}>

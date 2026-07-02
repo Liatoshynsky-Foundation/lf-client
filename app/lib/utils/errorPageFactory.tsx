@@ -8,7 +8,7 @@ export function ErrorPageFactory(error: string) {
   }
 
   if (error.includes(LocalizationErrors.MISSING_UK_ERROR)) {
-    return <TranslationNotFound redirectLocale={'en'} />;
+    return <TranslationNotFound redirectLocale="en" />;
   }
   throw new Error(`Unexpected error when fetching page: ${error}`);
 }
