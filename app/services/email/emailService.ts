@@ -59,6 +59,8 @@ class EmailService {
     const { html, text } = generateCollaborationEmail(data);
 
     return this.sendEmail({
+      // TODO: REMOVE THAT CODE: Temporary using env variable. Once the contact form collection is ready in MongoDB,
+      // create a dedicated function to fetch this email string from the database and use it here.
       to: process.env.CONTACT_EMAIL || 'liatoshynsky@gmail.com',
       subject: `New Collaboration Request from ${data.name}`,
       html,
