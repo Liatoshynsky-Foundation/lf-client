@@ -63,7 +63,7 @@ const mockDataWithImage: IFoundationInfo = {
 
 describe('FoundationInfo', () => {
   it('should render the FoundationInfo with text', () => {
-    render(FoundationInfo({ data: mockDataWithImage }));
+    render(<FoundationInfo data={mockDataWithImage} />);
 
     expect(screen.getByText('ourOrganisation текст')).toBeInTheDocument();
     expect(screen.getByText('ourName текст')).toBeInTheDocument();

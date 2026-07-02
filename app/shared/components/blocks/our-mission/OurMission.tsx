@@ -27,6 +27,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
           src={smallImage.generatedSrc}
           alt={smallImage.alt}
           caption={smallImage.caption ?? {}}
+          crop={smallImage.crop}
           captionSx={styles.smallCaptionSx}
           align="left"
           sizes={{
@@ -43,6 +44,7 @@ const OurMission = ({ data }: { data: IOurMission }) => {
           src={bigImage.generatedSrc}
           alt={bigImage.alt}
           caption={bigImage.caption ?? ''}
+          crop={bigImage.crop}
           captionSx={styles.bigCaptionSx}
           sizes={{
             width: { xs: 224, sm: 457, md: 569, lg: 718, xl: 816, xxl: 979, ultra: 816 },

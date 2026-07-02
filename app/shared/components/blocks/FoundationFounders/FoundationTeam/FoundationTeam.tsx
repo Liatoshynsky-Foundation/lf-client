@@ -57,7 +57,12 @@ const FoundationTeam: React.FC<FoundationTeamProps> = ({ title, team, dataTestId
             <React.Fragment key={uniqueKey}>
               {index === 0 && fallback}
 
-              <PersonCard name={member.name} description={member.description} imgURL={member.photo.generatedSrc} />
+              <PersonCard
+                name={member.name}
+                description={member.description}
+                imgURL={member.photo.generatedSrc}
+                crop={member.photo.crop}
+              />
 
               {(index + 1) % 2 === 0 && fallback}
             </React.Fragment>
