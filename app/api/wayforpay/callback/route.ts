@@ -3,11 +3,12 @@ import crypto from 'node:crypto';
 
 import { WayForPay } from '~/config';
 import { DonationOrderStatus, PaymentProvider } from '~/domain/dto/donationOrder.dto';
-import { WayForPayCallbackDTO } from '~/domain/dto/wayForPayCallback.dto';
 import type { UpdateDonationOrderStatusInput } from '~/infrastructure/repositories/way-for-pay/donationOrder.repo';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
+import { validateWithZod } from '~/lib/utils/validateRequestData';
 import logger from '~/middleware/logger/logger';
 import { createWayForPayService } from '~/services/way-for-pay/wayForPayService';
+import { wayForPayCallbackSchema } from '~/validators/wayForPayCallback.schema';
 
 function generateSignature(signatureBase: string, secretKey: string) {
   return crypto.createHmac('md5', secretKey).update(signatureBase, 'utf8').digest('hex');
@@ -27,10 +28,45 @@ export async function POST(request: NextRequest) {
     donationOrderRepository
   });
 
-  if (!request.headers.get('content-type')?.includes('application/json')) {
+  const contentType = request.headers.get('content-type');
+
+  let body;
+
+  if (contentType?.includes('application/json')) {
+    const validation = validateWithZod(await request.json(), wayForPayCallbackSchema);
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    body = validation.value;
+  } else if (contentType?.includes('application/x-www-form-urlencoded')) {
+    const formData = await request.formData();
+
+    const entries = [...formData.entries()];
+
+    if (entries.length !== 1) {
+      return NextResponse.json({ error: 'unexpected form payload' }, { status: 400 });
+    }
+
+    const [jsonString, _] = entries[0];
+
+    try {
+      body = JSON.parse(jsonString);
+    } catch {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    const validation = validateWithZod(body, wayForPayCallbackSchema);
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: 'bad payload' }, { status: 400 });
+    }
+
+    body = validation.value;
+  } else {
     return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
   }
-  const body: WayForPayCallbackDTO = await request.json();
 
   const {
     merchantAccount,
@@ -44,18 +80,6 @@ export async function POST(request: NextRequest) {
     reason,
     merchantSignature
   } = body;
-
-  if (
-    !merchantAccount ||
-    !orderReference ||
-    amount === undefined ||
-    !currency ||
-    !transactionStatus ||
-    reasonCode === undefined ||
-    !merchantSignature
-  ) {
-    return NextResponse.json({ error: 'bad payload' }, { status: 400 });
-  }
 
   logger.info('[API:POST:wayforpay/callback] WayForPay callback received', {
     orderReference,

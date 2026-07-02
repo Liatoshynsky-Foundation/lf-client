@@ -40,6 +40,8 @@ export async function POST(request: NextRequest) {
       return errorResponse(['Unsupported currency'], 400);
     }
 
+    const callbackUrl = `${WayForPay.DOMAIN_NAME}/api/wayforpay/callback`;
+
     const data: WayforPayInvoice = {
       merchantAccount: WayForPay.MERCHANT_ACCOUNT,
       merchantDomainName: WayForPay.DOMAIN_NAME,
@@ -51,7 +53,8 @@ export async function POST(request: NextRequest) {
       productCount: [1],
       productPrice: [amount],
       language: lang === 'en' ? 'EN' : 'UA',
-      merchantCallbackUrl: `${WayForPay.DOMAIN_NAME}/api/wayforpay/callback`
+
+      serviceUrl: callbackUrl
     };
 
     // ⚠️ IMPORTANT:

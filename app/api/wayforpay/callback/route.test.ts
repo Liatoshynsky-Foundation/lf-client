@@ -42,6 +42,17 @@ function createSignature(
     .digest('hex');
 }
 
+const validPayload = {
+  merchantAccount: 'test_merch_n1',
+  orderReference: 'DON-1',
+  amount: 100,
+  currency: 'UAH',
+  authCode: 'AUTH123',
+  cardPan: '444455******1111',
+  transactionStatus: 'Approved',
+  reasonCode: 1100
+};
+
 const mockFindDonationOrder = jest.fn();
 const mockUpdateDonationOrderStatus = jest.fn();
 
@@ -131,13 +142,8 @@ describe('WayForPay Callback API Route (POST)', () => {
 
   it('should return 403 for invalid signature', async () => {
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      transactionStatus: 'Approved',
-      reasonCode: 1100,
-      merchantSignature: 'wrong'
+      ...validPayload,
+      merchantSignature: '12345678901234567890123456789012'
     });
 
     const res = await POST(req);
@@ -150,14 +156,7 @@ describe('WayForPay Callback API Route (POST)', () => {
     mockFindDonationOrder.mockResolvedValue(null);
 
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      authCode: 'AUTH123',
-      cardPan: '444455******1111',
-      transactionStatus: 'Approved',
-      reasonCode: 1100,
+      ...validPayload,
       merchantSignature: createSignature()
     });
 
@@ -175,14 +174,7 @@ describe('WayForPay Callback API Route (POST)', () => {
     });
 
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      authCode: 'AUTH123',
-      cardPan: '444455******1111',
-      transactionStatus: 'Approved',
-      reasonCode: 1100,
+      ...validPayload,
       merchantSignature: createSignature()
     });
 
@@ -194,14 +186,7 @@ describe('WayForPay Callback API Route (POST)', () => {
 
   it('should update donation order when payment is approved', async () => {
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      authCode: 'AUTH123',
-      cardPan: '444455******1111',
-      transactionStatus: 'Approved',
-      reasonCode: 1100,
+      ...validPayload,
       merchantSignature: createSignature()
     });
 
@@ -224,14 +209,8 @@ describe('WayForPay Callback API Route (POST)', () => {
 
   it('should update donation order without payment info when payment is declined', async () => {
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      authCode: 'AUTH123',
-      cardPan: '444455******1111',
+      ...validPayload,
       transactionStatus: 'Declined',
-      reasonCode: 1100,
       merchantSignature: createSignature({
         transactionStatus: 'Declined'
       })
@@ -251,14 +230,7 @@ describe('WayForPay Callback API Route (POST)', () => {
 
   it('should return acknowledgement response', async () => {
     const req = createRequest('application/json', {
-      merchantAccount: 'test_merch_n1',
-      orderReference: 'DON-1',
-      amount: 100,
-      currency: 'UAH',
-      authCode: 'AUTH123',
-      cardPan: '444455******1111',
-      transactionStatus: 'Approved',
-      reasonCode: 1100,
+      ...validPayload,
       merchantSignature: createSignature()
     });
 
@@ -274,5 +246,15 @@ describe('WayForPay Callback API Route (POST)', () => {
         time: expect.any(Number)
       })
     );
+  });
+  it('should return 400 for invalid merchant signature format', async () => {
+    const req = createRequest('application/json', {
+      ...validPayload,
+      merchantSignature: 'wrong'
+    });
+
+    const res = await POST(req);
+
+    expect(res.status).toBe(400);
   });
 });
