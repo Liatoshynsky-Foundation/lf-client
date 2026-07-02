@@ -40,10 +40,7 @@ export default async function Biography({ params }: Readonly<Language>): Promise
     return <UnderDevelopment />;
   }
 
-  const [pageResult, t] = await Promise.all([
-    resolvePageData('biography', lang),
-    getTranslations('home.liatoshynskyOffice')
-  ]);
+  const pageResult = await resolvePageData('biography', lang);
 
   if (isError(pageResult)) {
     return ErrorPageFactory(pageResult.error);
@@ -64,7 +61,7 @@ export default async function Biography({ params }: Readonly<Language>): Promise
       {blocks.heroSection && <HeroSection data={blocks.heroSection} years={years} />}
       {blocks.biographyContent && <BiographyContent data={blocks.biographyContent} />}
       <div id="timeline-hide-sentinel" style={{ height: '1px' }} />
-      {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} t={t} sx={{ mb: '80px' }} />}
+      {blocks.LiatoshynskyOffice && <LiatoshynskyOffice data={blocks.LiatoshynskyOffice} sx={{ mb: '80px' }} />}
     </MainLayout>
   );
 }
