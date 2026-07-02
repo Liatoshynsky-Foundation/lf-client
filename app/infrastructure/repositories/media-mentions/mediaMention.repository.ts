@@ -7,7 +7,7 @@ import { ArraySchema } from '~/validators/constants';
 import { mediaMentionListItemSchema, mediaMentionSchema } from '~/validators/mediaMention.schema';
 
 const mediaMentionRepository = {
-  async getAllPublishedMediaMentions() {
+  async getAllPublishedMediaMentions(_locale: string) {
     await dbConnect();
 
     const mediaMentions = await MediaMentionModel.find({ status: MediaMentionStatus.Published })
@@ -23,7 +23,7 @@ const mediaMentionRepository = {
     return ArraySchema(mediaMentionListItemSchema).parse(transformedMediaMentions);
   },
 
-  async getMediaMentionBySlug(slug: string) {
+  async getMediaMentionBySlug(slug: string, _locale: string) {
     await dbConnect();
 
     const mediaMention = await MediaMentionModel.findOne({ slug, status: MediaMentionStatus.Published }).lean();
