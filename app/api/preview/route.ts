@@ -6,29 +6,39 @@ import { errors } from '~/constants/errors';
 import { baseUrl } from '~/config';
 import { errorResponse } from '~/lib/utils/apiResponse';
 import { corsError, withCORS } from '~/lib/utils/cors';
+import { isValidPreviewSecret } from '~/lib/utils/isValidPreviewSecret';
 import { verifyAuthToken } from '~/lib/utils/verifyAuthToken';
+
+const isAdminUser = (type: string) => type === 'admin' || type === 'superadmin';
 
 export async function GET(request: Request) {
   const origin = request.headers.get('origin') || '*';
-
-  const cookieStore = await cookies();
-  const tokenFromCookies = cookieStore.get('accessToken')?.value;
-
-  if (!tokenFromCookies) {
-    return corsError(origin, errorResponse([errors.MISSING_AUTH_TOKEN], 401));
-  }
-
-  const user = verifyAuthToken(tokenFromCookies);
-
-  if (!user) {
-    return corsError(origin, errorResponse([errors.INVALID_TOKEN], 401));
-  }
-
-  if (user.type !== 'admin' && user.type !== 'superadmin') {
-    return corsError(origin, errorResponse([errors.ACCESS_DENIED], 403));
-  }
-
   const { searchParams } = new URL(request.url);
+  const previewSecret = searchParams.get('previewSecret');
+
+  if (previewSecret) {
+    if (!isValidPreviewSecret(previewSecret)) {
+      return corsError(origin, errorResponse([errors.INVALID_PREVIEW_TOKEN], 401));
+    }
+  } else {
+    const cookieStore = await cookies();
+    const tokenFromCookies = cookieStore.get('accessToken')?.value;
+
+    if (!tokenFromCookies) {
+      return corsError(origin, errorResponse([errors.MISSING_AUTH_TOKEN], 401));
+    }
+
+    const user = verifyAuthToken(tokenFromCookies);
+
+    if (!user) {
+      return corsError(origin, errorResponse([errors.INVALID_TOKEN], 401));
+    }
+
+    if (!isAdminUser(user.type)) {
+      return corsError(origin, errorResponse([errors.ACCESS_DENIED], 403));
+    }
+  }
+
   const slug = searchParams.get('slug');
   const lang = searchParams.get('lang');
   const draftId = searchParams.get('draftId');
