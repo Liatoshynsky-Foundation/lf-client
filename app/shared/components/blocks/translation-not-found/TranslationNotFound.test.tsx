@@ -82,7 +82,7 @@ describe('TranslationNotFound', () => {
     render(<TranslationNotFound redirectLocale="en" />);
 
     expect(screen.getByText(/НеЗаБаРоМ/i)).toBeInTheDocument();
-    expect(screen.getByText(/українська версія з'явиться дуже скоро/i)).toBeInTheDocument();
+    expect(screen.getByText(/українська версія з’явиться дуже скоро./i)).toBeInTheDocument();
 
     const button = screen.getByRole('button');
     fireEvent.click(button);
@@ -91,7 +91,7 @@ describe('TranslationNotFound', () => {
   });
 
   it.each([
-    { locale: 'Ukrainian', code: 'uk', expectedTexts: [/НеЗаБаРоМ/i, /українська версія з'явиться дуже скоро./i] },
+    { locale: 'Ukrainian', code: 'uk', expectedTexts: [/НеЗаБаРоМ/i, /українська версія з’явиться дуже скоро./i] },
     { locale: 'English', code: 'en', expectedTexts: [/coming soon/i, /english version will appear very soon./i] }
   ])('should show $locale translation when locale is $code', ({ code, expectedTexts }) => {
     (useTranslations as jest.Mock).mockReturnValue((key: string) => {
