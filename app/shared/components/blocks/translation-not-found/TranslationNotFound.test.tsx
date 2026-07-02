@@ -111,4 +111,15 @@ describe('TranslationNotFound', () => {
 
     expect(mockPush).toHaveBeenCalledWith('/uk/foo/bar');
   });
+
+  it('should early return if no pathname', () => {
+    mockPathname.mockReturnValueOnce(null);
+
+    render(<TranslationNotFound />);
+
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+
+    expect(mockPush).not.toHaveBeenCalled();
+  });
 });
