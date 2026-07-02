@@ -51,7 +51,7 @@ describe('mediaMentionRepository', () => {
     it('should return published media mentions and parse them via Zod', async () => {
       (MediaMentionModel.find as jest.Mock).mockReturnValue(mockMongooseChain([validMentionData]));
 
-      const result = await mediaMentionRepository.getAllPublishedMediaMentions();
+      const result = await mediaMentionRepository.getAllPublishedMediaMentions('uk');
 
       expect(MediaMentionModel.find).toHaveBeenCalledWith({ status: MediaMentionStatus.Published });
       expect(result).toHaveLength(1);
@@ -66,7 +66,7 @@ describe('mediaMentionRepository', () => {
     it('should return null if mention not found', async () => {
       (MediaMentionModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(null));
 
-      const result = await mediaMentionRepository.getMediaMentionBySlug('non-existent');
+      const result = await mediaMentionRepository.getMediaMentionBySlug('non-existent', 'uk');
 
       expect(result).toBeNull();
     });
@@ -74,7 +74,7 @@ describe('mediaMentionRepository', () => {
     it('should return media mention details and parse via Zod', async () => {
       (MediaMentionModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(validMentionData));
 
-      const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention');
+      const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention', 'uk');
 
       expect(MediaMentionModel.findOne).toHaveBeenCalledWith({
         slug: 'test-media-mention',
