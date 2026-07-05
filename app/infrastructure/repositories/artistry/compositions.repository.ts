@@ -8,12 +8,11 @@ import { Category } from '~/infrastructure/models/artistry/artistryCategoriesDat
 import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import { parseFullOpus as parseOpus } from '~/lib/utils/opusParser';
 import { namedFilterHelper, searchHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
 import { compositionSchema, compositionTitlesSchema } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
-
-const OPUS_REGEX = /^(op|bo)[.-]?\s*(\d+(?:\.\d+)?)/i;
 
 function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
   return words.map((word) => ({
@@ -28,21 +27,6 @@ function buildAllWordsPresent<T>(words: string[], fieldGroups: string[][]): Filt
 
   return {
     $or: andClauses.map((clauses) => ({ $and: clauses }))
-  };
-}
-
-function parseOpus(opusStr?: string) {
-  if (!opusStr) return null;
-
-  const trimmedStr = opusStr.trim();
-  const match = OPUS_REGEX.exec(trimmedStr);
-
-  if (!match) return null;
-
-  return {
-    prefix: match[1].toLowerCase(),
-    num: Number.parseFloat(match[2]),
-    rest: trimmedStr.slice(match[0].length)
   };
 }
 
@@ -149,7 +133,7 @@ const compositionsRepository = {
       const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
 
       if (!(isWithOpus && isWithoutOpus)) {
-        const regexPattern = isWithOpus ? /^op/i : /^bo/i;
+        const regexPattern = isWithOpus ? /^op/i : /^sine op/i;
         compMatch.push({ 'opusData.number': { $regex: regexPattern } } as FilterQuery<CompositionDTO>);
       }
     }
@@ -290,7 +274,7 @@ const compositionsRepository = {
       const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
 
       if (!(isWithOpus && isWithoutOpus)) {
-        const regexPattern = isWithOpus ? /^op/i : /^bo/i;
+        const regexPattern = isWithOpus ? /^op/i : /^sine op/i;
 
         const matchingOpuses = await Opus.find({ number: { $regex: regexPattern } })
           .select('_id')

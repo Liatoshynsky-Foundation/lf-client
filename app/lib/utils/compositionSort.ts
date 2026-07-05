@@ -1,34 +1,32 @@
 import { Composition } from '~/types/types/composition.types';
 
-export const isLatin = (text: string): boolean => /[A-Za-z]/.test(text);
+import { parseFullOpus } from '~/lib/utils/opusParser';
 
-export const parseOpus = (opus: string): number | null => {
-  const match = /Op\.\s?(\d+)/i.exec(opus);
-  return match ? parseInt(match[1], 10) : null;
-};
+export const isLatin = (text: string): boolean => /[A-Za-z]/.test(text);
 
 export const compareOpus = (a: string, b: string): number => {
   if (a === b) {
     return 0;
   }
 
-  const opusA = parseOpus(a);
-  const opusB = parseOpus(b);
+  const parsedA = parseFullOpus(a);
+  const parsedB = parseFullOpus(b);
 
-  if (opusA === null || opusB === null) {
+  if (parsedA === null || parsedB === null) {
     throw new Error(`Invalid opus number: ${a} or ${b}`);
   }
 
-  if (opusA === opusB) {
-    if (a.endsWith('bis')) {
-      return 1;
-    }
-    if (b.endsWith('bis')) {
-      return -1;
-    }
+  if (parsedA.prefix !== parsedB.prefix) {
+    return parsedA.prefix === 'op' ? -1 : 1;
   }
 
-  return opusA - opusB;
+  if (parsedA.num !== parsedB.num) {
+    return parsedA.num - parsedB.num;
+  }
+
+  const cleanA = parsedA.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanB = parsedB.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return cleanA.localeCompare(cleanB, undefined, { numeric: true, sensitivity: 'base' });
 };
 
 export const compareLang = (a: string, b: string): number => {
