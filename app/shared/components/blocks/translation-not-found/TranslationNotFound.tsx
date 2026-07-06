@@ -28,11 +28,7 @@ export default function TranslationNotFound({ redirectLocale = 'uk' }: Readonly<
   };
 
   return (
-    <ColoredLayout
-      sx={styles.layout}
-      wrapperSx={styles.wrapperLayout}
-      gridSx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}
-    >
+    <ColoredLayout sx={styles.layout} wrapperSx={styles.wrapperLayout} gridSx={styles.gridLayout}>
       <PaperComponent childrenSx={styles.container} sx={styles.wrapper}>
         <Box sx={styles.imageContainer}>
           <Image alt="filimon-translator" src="/images/filimon-translator.png" layout="fill" objectFit="contain" />
