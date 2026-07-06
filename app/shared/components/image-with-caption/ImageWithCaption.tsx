@@ -2,7 +2,6 @@
 
 import { Box, BoxProps, Breakpoint, Typography, TypographyProps } from '@mui/material';
 import { JSONContent } from '@tiptap/react';
-import Image from 'next/image';
 import { Locale, useLocale } from 'next-intl';
 import React, { useMemo } from 'react';
 
@@ -12,8 +11,10 @@ import { styles } from './ImageWithCaption.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { ElementSizes } from '~/types/types/common.types';
 
+import { type CropRect } from '~/lib/utils/cropUtils';
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { extractTextFromTipTap, getPlainString, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
+import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
 
 export interface BorderProps {
   sizes: ElementSizes;
@@ -28,6 +29,7 @@ interface ImageWithCaptionProps {
   src: string;
   alt: string | LocalizedString | JSONContent;
   caption: string | LocalizedString | JSONContent | null;
+  crop?: CropRect | null;
   sizes: ElementSizes;
   border?: BorderProps;
   align?: 'left' | 'right';
@@ -62,6 +64,7 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
   alt,
   sizes,
   caption,
+  crop,
   border,
   align = 'right',
   containerSx = {},
@@ -90,11 +93,12 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
     <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']} data-testid={dataTestId}>
       <Box sx={{ ...styles.imageContainer(sizes), ...imageSx } as BoxProps['sx']}>
         {border && <Box sx={styles.border(border)} data-testid="img-border" />}
-        <Image
-          style={styles.image as React.CSSProperties}
+        <CroppedImage
           src={src}
-          fill
           alt={resolvedAltText}
+          crop={crop}
+          fill={!crop}
+          imageStyle={styles.image as React.CSSProperties}
           sizes={sizesAttribute}
         />
       </Box>

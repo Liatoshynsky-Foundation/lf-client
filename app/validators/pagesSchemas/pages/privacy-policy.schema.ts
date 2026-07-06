@@ -100,6 +100,7 @@ export const PrivacyPolicyPageSchema = z.object({
   title: translatedFieldSchema,
   status: z.nativeEnum(PageStatus),
   blocks: PrivacyPolicyBlock,
+  blocksOrder: z.array(z.string()).min(1),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   _id: mongoObjectIdSchema
