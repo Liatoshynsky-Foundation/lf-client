@@ -10,7 +10,7 @@ import type {
 
 interface WayForPayServiceDeps {
   donationOrderRepository: DonationOrderRepository;
-  paymentEventRepository: PaymentEventRepository;
+  paymentEventRepository?: PaymentEventRepository;
 }
 
 export const createWayForPayService = ({ donationOrderRepository, paymentEventRepository }: WayForPayServiceDeps) => ({
@@ -20,7 +20,13 @@ export const createWayForPayService = ({ donationOrderRepository, paymentEventRe
 
   updateDonationOrderStatus: (input: UpdateDonationOrderStatusInput) => donationOrderRepository.updateStatus(input),
 
-  createPaymentEventIfNotExists: (input: CreatePaymentEventInput) => paymentEventRepository.createIfNotExists(input)
+  createPaymentEventIfNotExists: (input: CreatePaymentEventInput) => {
+    if (!paymentEventRepository) {
+      throw new Error('PaymentEventRepository is not configured');
+    }
+
+    return paymentEventRepository.createIfNotExists(input);
+  }
 });
 
 export type WayForPayService = ReturnType<typeof createWayForPayService>;
