@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     gridColumn: {
@@ -32,7 +30,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '16px',
     fontWeight: 400,
     lineHeight: '150%',
-    color: mainHexPallete.brown[500]
+    color: 'brown.500'
   },
 
   metaValue: {
@@ -40,6 +38,6 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '18px',
     fontWeight: 600,
     lineHeight: '110%',
-    color: mainHexPallete.black
+    color: 'black'
   }
 };

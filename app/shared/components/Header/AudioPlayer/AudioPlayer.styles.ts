@@ -3,12 +3,12 @@ export const styles = {
     position: 'relative'
   },
   eqButton: {
-    color: '#5F0E0F'
+    color: 'red.900'
   },
   icon: {
     width: 2,
     borderRadius: 1,
-    backgroundColor: '#5F0E0F'
+    backgroundColor: 'red.900'
   },
   iconStatic: {
     fontSize: 28

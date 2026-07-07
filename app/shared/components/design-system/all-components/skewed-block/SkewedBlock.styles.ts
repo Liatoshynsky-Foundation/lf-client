@@ -1,4 +1,3 @@
-import { mainHexPallete } from '../theme/colors';
 export const styles = {
   mainContainer: {
     transform: 'skewY(-2deg)',
@@ -12,7 +11,7 @@ export const styles = {
   caption: (align: 'left' | 'right') => ({
     fontSize: { xs: '12px', sm: '14px', md: '16px' },
     textAlign: align,
-    color: mainHexPallete.blue[700],
+    color: 'blue.700',
     gridColumn: '1 / -1',
     transform: 'skewY(2deg)',
     paddingRight: '24px',

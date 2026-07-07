@@ -21,5 +21,6 @@ namespace NodeJS {
     SMTP_PASSWORD?: string;
     SMTP_FROM?: string;
     CONTACT_EMAIL?: string;
+    PREVIEW_SECRET?: string;
   }
 }

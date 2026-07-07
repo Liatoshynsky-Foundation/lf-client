@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -17,7 +15,7 @@ export const styles = {
     left: 0,
     zIndex: 0,
     height: '100%',
-    backgroundColor: mainHexPallete.brown[100]
+    backgroundColor: 'brown.100'
   },
   container: {
     position: 'relative',

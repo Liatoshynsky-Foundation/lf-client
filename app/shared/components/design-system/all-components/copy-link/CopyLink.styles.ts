@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 const commonCopyLinkBaseStyles = {
   fontFamily: 'Mulish, Sans-serif',
   transition: 'color 0.2s ease',
@@ -16,21 +14,21 @@ interface ColorConfig {
   disabledColor: string;
 }
 
-const getColorConfig = (type: 'primary' | 'secondary', palette = mainHexPallete): ColorConfig => {
+const getColorConfig = (type: 'primary' | 'secondary'): ColorConfig => {
   if (type === 'primary') {
     return {
-      defaultColor: palette.black,
-      hoverColor: palette.burgundy[800],
-      activeColor: palette.black,
-      disabledColor: palette.blue[500]
+      defaultColor: 'black',
+      hoverColor: 'burgundy.800',
+      activeColor: 'black',
+      disabledColor: 'blue.500'
     };
   }
 
   return {
-    defaultColor: palette.blue[800],
-    hoverColor: palette.black,
-    activeColor: palette.blue[800],
-    disabledColor: palette.blue[500]
+    defaultColor: 'blue.800',
+    hoverColor: 'black',
+    activeColor: 'blue.800',
+    disabledColor: 'blue.500'
   };
 };
 
@@ -76,22 +74,18 @@ export const getCopyLinkStyles = (type: 'primary' | 'secondary' = 'primary') => 
   };
 };
 
-export const getIconStroke = (
-  type: 'primary' | 'secondary' = 'primary',
-  disabled: boolean = false,
-  palette = mainHexPallete
-) => {
+export const getIconStroke = (type: 'primary' | 'secondary' = 'primary', disabled: boolean = false) => {
   if (disabled) {
-    return palette.blue[500];
+    return 'blue.500';
   }
   if (type === 'secondary') {
-    return palette.blue[800];
+    return 'blue.800';
   }
-  return palette.black;
+  return 'black';
 };
 
-export const getMobileDisabledStyles = (palette = mainHexPallete) => ({
-  color: palette.blue[500],
+export const getMobileDisabledStyles = () => ({
+  color: 'blue.500',
   pointerEvents: 'none',
   cursor: 'not-allowed'
 });

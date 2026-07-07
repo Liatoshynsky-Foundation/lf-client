@@ -1,5 +1,3 @@
-import { mainHexPallete } from '../design-system/all-components/theme/colors';
-
 const container = {
   display: 'grid',
   gridTemplateColumns: 'repeat(12, 1fr)'
@@ -22,7 +20,7 @@ export const styles = {
   },
   quoteContainer: {
     position: 'relative',
-    color: mainHexPallete.burgundy[800],
+    color: 'burgundy.800',
     '&::before': {
       content: '""',
       display: 'block',
@@ -48,7 +46,7 @@ export const styles = {
   }),
   quoteText: {
     gridColumn: '6/-1',
-    color: mainHexPallete.burgundy[800],
+    color: 'burgundy.800',
     textIndent: '112px'
   }
 };

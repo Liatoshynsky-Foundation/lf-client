@@ -1,13 +1,12 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
-import { hexToRGBA } from '~/lib/utils/hexToRGBA';
-
-const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+import type { Theme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 
 export const enhancedTableHeaderStyles = {
-  row: {
-    borderBottom: `1px solid ${borderWithOpacity}`
-  },
+  row: (theme: Theme) => ({
+    borderBottom: '1px solid',
+    borderColor: alpha(theme.palette.blue?.[200] || '#D9DCE8', 0.4)
+  }),
+
   cell: {
     py: 3,
     px: 0,

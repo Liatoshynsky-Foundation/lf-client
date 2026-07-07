@@ -82,6 +82,19 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
     [opened]
   );
 
+  const handleClearSearch = () => {
+    setValue(null);
+    setInputValue('');
+    setSearch('');
+    setOpened(false);
+  };
+
+  const handleTriggerSearch = () => {
+    inputRef.current?.focus();
+    setSearch(normalizeSearch(inputValue));
+    setOpened(false);
+  };
+
   const handleSelect = useCallback(
     (_: SyntheticEvent, v: T | null, __: AutocompleteChangeReason, ___: AutocompleteChangeDetails<T> | undefined) => {
       setValue(v);
@@ -219,7 +232,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
               style: getIconStyle(isMobile, focused),
               startAdornment: (
                 <InputAdornment position="start">
-                  <Box sx={iconStyles} onClick={() => inputRef.current?.focus()}>
+                  <Box sx={iconStyles} onClick={handleTriggerSearch}>
                     <SvgImage src="/icons/search-static.svg" width={24} height={24} alt="search" />
                   </Box>
                 </InputAdornment>
@@ -227,15 +240,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
               endAdornment: (
                 <InputAdornment position="end">
                   {(inputValue.trim().length > 0 || value !== null) && (
-                    <Box
-                      sx={iconStyles}
-                      onClick={() => {
-                        setValue(null);
-                        setInputValue('');
-                        setSearch('');
-                        setOpened(false);
-                      }}
-                    >
+                    <Box sx={iconStyles} onClick={handleClearSearch}>
                       <SvgImage src="/icons/close-icon.svg" width={24} height={24} alt="clear" />
                     </Box>
                   )}

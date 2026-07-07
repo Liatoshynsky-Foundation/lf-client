@@ -1,5 +1,4 @@
 const textBase = {
-  fontFamily: 'Mulish',
   fontWeight: 400,
   fontSize: {
     xs: '18px',
@@ -12,7 +11,6 @@ const textBase = {
 };
 
 const textHeading = {
-  fontFamily: 'Mulish',
   fontWeight: 800,
   fontSize: {
     xs: '18px',

@@ -3,13 +3,20 @@ import { Mulish, Oswald } from 'next/font/google';
 
 import {
   accordionColorsRgb,
+  alertColors,
+  badgeColors,
+  chipsColors,
   hexButtonGroupColors,
   hexCheckboxColors,
   mainHexPallete,
   rgbaMenuItemColors,
   rgbaSwitchColors,
   rgbaTextFieldColors,
-  rgbButtonColors
+  rgbButtonColors,
+  selectorColors,
+  tabsColors,
+  toolbarColors,
+  tooltipColors
 } from '~/ds-components/theme/colors';
 
 const { palette } = createTheme();
@@ -18,6 +25,11 @@ const createColor = (mainColor: string) => augmentColor({ color: { main: mainCol
 
 export const oswald = Oswald({ subsets: ['latin'] });
 export const mulish = Mulish({ subsets: ['latin'] });
+
+export const fontFamilies = {
+  body: mulish.style.fontFamily,
+  display: oswald.style.fontFamily
+};
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
@@ -31,8 +43,23 @@ declare module '@mui/material/styles' {
   }
 }
 
+declare module '@mui/material/Paper' {
+  interface PaperPropsVariantOverrides {
+    discardChangesModal: true;
+  }
+}
+
 declare module '@mui/material' {
   interface TypographyPropsVariantOverrides {
+    displayXl: true;
+    displayLg: true;
+    displayMd: true;
+    bodyLg: true;
+    bodyMd: true;
+    bodySm: true;
+    textMd: true;
+    textSm: true;
+    h7: true;
     customBold32: true;
     customSemiBold20: true;
     customBold20: true;
@@ -51,28 +78,16 @@ declare module '@mui/material' {
   }
 }
 declare module '@mui/material/styles' {
-  interface TypographyVariantsOptions {
-    customBold32?: React.CSSProperties;
-    customSemiBold20?: React.CSSProperties;
-    customBold20?: React.CSSProperties;
-    customItalic18?: React.CSSProperties;
-    customMedium18?: React.CSSProperties;
-    customBold16?: React.CSSProperties;
-    customMedium16?: React.CSSProperties;
-    customItalic16?: React.CSSProperties;
-    customCaption?: React.CSSProperties;
-    customItalic14?: React.CSSProperties;
-    customSemiBold16?: React.CSSProperties;
-    customSemiBold18?: React.CSSProperties;
-    customBold25: React.CSSProperties;
-    customBold236?: React.CSSProperties;
-    customBold132?: React.CSSProperties;
-    customBold114?: React.CSSProperties;
-    customBold48?: React.CSSProperties;
-    customRegular16?: React.CSSProperties;
-    customSemiBold18Compact?: React.CSSProperties;
-  }
   interface TypographyVariants {
+    displayXl: React.CSSProperties;
+    displayLg: React.CSSProperties;
+    displayMd: React.CSSProperties;
+    bodyLg: React.CSSProperties;
+    bodyMd: React.CSSProperties;
+    bodySm: React.CSSProperties;
+    textMd: React.CSSProperties;
+    textSm: React.CSSProperties;
+    h7: React.CSSProperties;
     customCaption: React.CSSProperties;
     customBold32: React.CSSProperties;
     customBold20: React.CSSProperties;
@@ -93,15 +108,83 @@ declare module '@mui/material/styles' {
     customRegular16: React.CSSProperties;
     customSemiBold18Compact: React.CSSProperties;
   }
+
+  interface TypographyVariantsOptions {
+    displayXl?: React.CSSProperties;
+    displayLg?: React.CSSProperties;
+    displayMd?: React.CSSProperties;
+    bodyLg?: React.CSSProperties;
+    bodyMd?: React.CSSProperties;
+    bodySm?: React.CSSProperties;
+    textMd?: React.CSSProperties;
+    textSm?: React.CSSProperties;
+    h7?: React.CSSProperties;
+    customBold32?: React.CSSProperties;
+    customSemiBold20?: React.CSSProperties;
+    customBold20?: React.CSSProperties;
+    customItalic18?: React.CSSProperties;
+    customMedium18?: React.CSSProperties;
+    customBold16?: React.CSSProperties;
+    customMedium16?: React.CSSProperties;
+    customItalic16?: React.CSSProperties;
+    customCaption?: React.CSSProperties;
+    customItalic14?: React.CSSProperties;
+    customSemiBold16?: React.CSSProperties;
+    customSemiBold18?: React.CSSProperties;
+    customBold25: React.CSSProperties;
+    customBold236?: React.CSSProperties;
+    customBold132?: React.CSSProperties;
+    customBold114?: React.CSSProperties;
+    customBold48?: React.CSSProperties;
+    customRegular16?: React.CSSProperties;
+    customSemiBold18Compact?: React.CSSProperties;
+  }
 }
 
 declare module '@mui/material/styles' {
   interface Palette {
     tertiary: Palette['primary'];
+    yellow: Record<number, string>;
+    blue: Record<number, string>;
+    red: Record<number, string>;
+    brown: Record<number, string>;
+    burgundy: Record<number, string>;
   }
 
   interface PaletteOptions {
     tertiary?: PaletteOptions['primary'];
+    yellow?: Record<number, string>;
+    blue?: Record<number, string>;
+    red?: Record<number, string>;
+    brown?: Record<number, string>;
+    burgundy?: Record<number, string>;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Color {
+    250?: string;
+    350?: string;
+    375?: string;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface CustomPalette {
+    tertiary: PaletteColorOptions;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface ZIndex {
+    introAnimationBackground: number;
+    introAnimationExpansion: number;
+    mobileOverlay: number;
+    headerAppBar: number;
+    mobileNavButton: number;
+    modalCloseButton: number;
+    stickyYearsTab: number;
+    cursor: number;
   }
 }
 
@@ -161,30 +244,13 @@ const textFieldFontStyles = {
   fontFamily: mulish.style.fontFamily
 };
 
-declare module '@mui/material/styles' {
-  interface CustomPalette {
-    tertiary: PaletteColorOptions;
-  }
-}
+export const baseTextStyles = {
+  fontFamily: fontFamilies.body,
+  fontSize: '16px',
+  fontWeight: 500,
+  lineHeight: 1.5
+};
 
-declare module '@mui/material/Button' {
-  interface ButtonPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-declare module '@mui/material/styles' {
-  interface ZIndex {
-    introAnimationBackground: number;
-    introAnimationExpansion: number;
-    mobileOverlay: number;
-    headerAppBar: number;
-    mobileNavButton: number;
-    modalCloseButton: number;
-    stickyYearsTab: number;
-    cursor: number;
-  }
-}
 export const theme = createTheme({
   palette: {
     primary: {
@@ -235,6 +301,60 @@ export const theme = createTheme({
     cursor: 9000
   },
   typography: {
+    fontFamily: fontFamilies.body,
+    fontSize: 16,
+
+    displayXl: {
+      fontFamily: fontFamilies.display,
+      fontSize: '236px',
+      fontWeight: 500,
+      lineHeight: 1
+    },
+    displayLg: {
+      fontFamily: fontFamilies.display,
+      fontSize: '132px',
+      fontWeight: 500,
+      lineHeight: 1
+    },
+    displayMd: {
+      fontFamily: fontFamilies.display,
+      fontSize: '114px',
+      fontWeight: 500,
+      lineHeight: 1
+    },
+    h7: {
+      fontFamily: fontFamilies.body,
+      fontSize: '20px',
+      fontStyle: 'bold',
+      fontWeight: 700,
+      lineHeight: 1.4
+    },
+    bodyLg: {
+      fontFamily: fontFamilies.body,
+      fontSize: '24px',
+      fontWeight: 400,
+      lineHeight: 1.6
+    },
+    bodyMd: {
+      fontFamily: fontFamilies.body,
+      fontSize: '20px',
+      fontWeight: 400,
+      lineHeight: 1.6
+    },
+    bodySm: {
+      fontFamily: fontFamilies.body,
+      fontSize: '18px',
+      fontWeight: 400,
+      lineHeight: 1.6
+    },
+    textMd: baseTextStyles,
+    textSm: {
+      ...baseTextStyles,
+      fontSize: '14px',
+      letterSpacing: '0.17px',
+      lineHeight: 1.3
+    },
+
     h1: {
       fontFamily: oswald.style.fontFamily,
       fontSize: '116px',
@@ -426,9 +546,22 @@ export const theme = createTheme({
     }
   },
   components: {
+    // ------------------------------------------------------------------
+    // MuiTypography — client's variantMapping takes precedence; admin's
+    // mappings for its own new variants (displayXl, bodyLg, etc.) are
+    // merged in alongside, since the client never declared those.
+    // ------------------------------------------------------------------
     MuiTypography: {
       defaultProps: {
         variantMapping: {
+          displayXl: 'h2',
+          displayLg: 'h2',
+          displayMd: 'h2',
+          bodyLg: 'p',
+          bodyMd: 'p',
+          bodySm: 'p',
+          textMd: 'p',
+          textSm: 'p',
           customBold32: 'p',
           customSemiBold20: 'p',
           customBold20: 'p',
@@ -925,6 +1058,456 @@ export const theme = createTheme({
           fontSize: '12px',
           '&.Mui-error': {
             color: rgbaTextFieldColors.errorBorderBottom
+          }
+        }
+      }
+    },
+
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+          fontSize: '12px',
+          fontWeight: 500
+        }
+      },
+      variants: [
+        {
+          props: { color: 'default', variant: 'standard' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: 'transparent',
+              color: badgeColors.standardDefaultValue
+            }
+          }
+        },
+        {
+          props: { color: 'primary', variant: 'standard' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: badgeColors.standardPrimaryBg,
+              color: badgeColors.standardPrimaryValue
+            }
+          }
+        },
+        {
+          props: { color: 'primary', variant: 'dot' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: badgeColors.dotPrimaryBg
+            }
+          }
+        },
+        {
+          props: { color: 'secondary', variant: 'standard' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: 'transparent',
+              color: badgeColors.standardSecondaryValue
+            }
+          }
+        },
+        {
+          props: { color: 'error', variant: 'standard' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: badgeColors.standardErrorBg,
+              color: badgeColors.standardErrorValue
+            }
+          }
+        },
+        {
+          props: { color: 'error', variant: 'dot' },
+          style: {
+            '& .MuiBadge-badge': {
+              backgroundColor: badgeColors.dotErrorBg
+            }
+          }
+        }
+      ]
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontFamily: fontFamilies.body,
+          fontSize: '14px',
+          fontWeight: 500,
+          lineHeight: 1.3,
+          letterSpacing: 0.17,
+          color: chipsColors.normalText,
+          borderRadius: '20px'
+        },
+
+        sizeSmall: {
+          height: 'auto',
+          padding: '6px 8px',
+
+          '& .MuiChip-label': {
+            padding: 0
+          },
+
+          '& .MuiChip-icon': {
+            margin: 0,
+            marginRight: '4px'
+          }
+        },
+
+        deleteIcon: {
+          color: 'inherit',
+          '&:hover': {
+            color: 'inherit',
+            opacity: 0.7
+          }
+        }
+      },
+      variants: [
+        {
+          props: { variant: 'filled' },
+          style: {
+            backgroundColor: chipsColors.filledDefaultBg,
+            border: 'none',
+
+            '&:hover': {
+              backgroundColor: chipsColors.filledHoveredBg,
+              color: chipsColors.normalText
+            },
+            '&:active': {
+              backgroundColor: chipsColors.filledPressedBg
+            },
+            '&.Mui-disabled': {
+              backgroundColor: chipsColors.filledDisabledBg,
+              opacity: 1
+            }
+          }
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            backgroundColor: 'transparent',
+            border: `1px solid ${chipsColors.outlineNormalBorder}`,
+
+            '&:hover': {
+              backgroundColor: chipsColors.outlineHoveredBg
+            },
+            '&:active': {
+              backgroundColor: chipsColors.outlinePressedBg
+            },
+            '&.Mui-disabled': {
+              borderColor: chipsColors.outlineDisabledBorder,
+              color: chipsColors.outlineDisabledText,
+              opacity: 1
+            }
+          }
+        }
+      ]
+    },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        root: {
+          backgroundColor: toolbarColors.default,
+          borderRadius: '4px',
+          border: `1px solid ${toolbarColors.border}`,
+
+          '& .MuiToggleButtonGroup-grouped': {
+            border: 'none',
+            borderRadius: 0,
+
+            '&:not(:first-of-type)': {
+              borderLeft: `1px solid ${toolbarColors.border}`
+            },
+
+            '&:first-of-type': {
+              borderTopLeftRadius: 'inherit',
+              borderBottomLeftRadius: 'inherit'
+            },
+            '&:last-of-type': {
+              borderTopRightRadius: 'inherit',
+              borderBottomRightRadius: 'inherit'
+            }
+          }
+        }
+      }
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          color: toolbarColors.textColor,
+
+          '&:hover': {
+            backgroundColor: toolbarColors.hovered
+          },
+          '&.Mui-selected': {
+            backgroundColor: toolbarColors.focused,
+            color: 'inherit',
+            '&:hover': {
+              backgroundColor: toolbarColors.focused
+            }
+          }
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          color: selectorColors.standardTextColor
+        }
+      },
+      variants: [
+        {
+          props: { variant: 'filled' },
+          style: {
+            backgroundColor: selectorColors.filledBg,
+            borderRadius: '8px',
+            '&:before, &:after': { display: 'none' },
+
+            '& .MuiChip-root': {
+              backgroundColor: selectorColors.filledChipsBg,
+              color: selectorColors.filledChipsContent
+            }
+          }
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            '& .MuiChip-root': {
+              backgroundColor: selectorColors.outlineDefaultChipsBg,
+              color: selectorColors.outlineDefaultTextColor,
+
+              '& .MuiChip-deleteIcon': {
+                color: selectorColors.outlineDefaultTextColor
+              }
+            }
+          }
+        }
+      ]
+    },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          minHeight: '40px',
+          borderBottom: `1px solid ${tabsColors.baseUnderline}`
+        },
+        indicator: {
+          backgroundColor: tabsColors.active,
+          height: '2px'
+        }
+      }
+    },
+    MuiTab: {
+      defaultProps: {
+        disableRipple: true
+      },
+      styleOverrides: {
+        root: {
+          ...baseTextStyles,
+          textTransform: 'none',
+          minHeight: '40px',
+          padding: '6px 28px 14px',
+          fontWeight: 600,
+          minWidth: '80px',
+          color: tabsColors.unactive,
+          '&:hover': {
+            color: tabsColors.hovered
+          },
+          '&:active': {
+            color: tabsColors.pressed
+          },
+
+          '&.Mui-selected': {
+            color: tabsColors.active,
+            fontWeight: 600
+          },
+          '&.Mui-disabled': {
+            color: tabsColors.disabled
+          }
+        }
+      }
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          position: 'relative',
+          fontSize: '18px',
+          fontFamily: fontFamilies.body,
+          lineHeight: 1.5,
+          borderWidth: 1,
+          borderStyle: 'solid',
+          borderColor: 'transparent',
+          borderRadius: '12px',
+          boxShadow: `0 1px 3px ${alertColors.shadow}`,
+          minWidth: '320px'
+        },
+        message: {
+          padding: 0,
+          margin: 0,
+          ...baseTextStyles,
+          fontWeight: 400
+        },
+        icon: {
+          margin: '2px 8px 0 0',
+          display: 'flex',
+          alignItems: 'center',
+          alignSelf: 'flex-start',
+          '& svg': {
+            width: '26px',
+            height: '26px'
+          }
+        },
+        action: {
+          padding: 0,
+          marginTop: '6px',
+          alignItems: 'flex-start',
+          alignSelf: 'flex-start',
+          flexShrink: 0
+        }
+      },
+      variants: [
+        {
+          props: { severity: 'error', variant: 'filled' },
+          style: {
+            backgroundColor: alertColors.filled.errorBg,
+            color: alertColors.filled.errorText,
+            '& .MuiAlert-icon': {
+              color: alertColors.filled.errorIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'warning', variant: 'filled' },
+          style: {
+            backgroundColor: alertColors.filled.warningBg,
+            color: alertColors.filled.warningText,
+            '& .MuiAlert-icon': {
+              color: alertColors.filled.warningIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'info', variant: 'filled' },
+          style: {
+            backgroundColor: alertColors.filled.infoBg,
+            color: alertColors.filled.infoText,
+            '& .MuiAlert-icon': {
+              color: alertColors.filled.infoIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'success', variant: 'filled' },
+          style: {
+            backgroundColor: alertColors.filled.successBg,
+            color: alertColors.filled.successText,
+            '& .MuiAlert-icon': {
+              color: alertColors.filled.successIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'error', variant: 'outlined' },
+          style: {
+            backgroundColor: alertColors.outlined.errorBg,
+            color: alertColors.outlined.errorText,
+            borderColor: alertColors.outlined.errorBorder,
+            '& .MuiAlert-icon': {
+              color: alertColors.outlined.errorIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'warning', variant: 'outlined' },
+          style: {
+            backgroundColor: alertColors.outlined.warningBg,
+            color: alertColors.outlined.warningText,
+            borderColor: alertColors.outlined.warningBorder,
+            '& .MuiAlert-icon': {
+              color: alertColors.outlined.warningIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'info', variant: 'outlined' },
+          style: {
+            backgroundColor: alertColors.outlined.infoBg,
+            color: alertColors.outlined.infoText,
+            borderColor: alertColors.outlined.infoBorder,
+            '& .MuiAlert-icon': {
+              color: alertColors.outlined.infoIcon
+            }
+          }
+        },
+        {
+          props: { severity: 'success', variant: 'outlined' },
+          style: {
+            backgroundColor: alertColors.outlined.successBg,
+            color: alertColors.outlined.successText,
+            borderColor: alertColors.outlined.successBorder,
+            '& .MuiAlert-icon': {
+              color: alertColors.outlined.successIcon
+            }
+          }
+        }
+      ]
+    },
+    MuiAlertTitle: {
+      styleOverrides: {
+        root: {
+          ...baseTextStyles,
+          fontSize: '18px',
+          margin: 0,
+          marginBottom: '4px'
+        }
+      }
+    },
+    MuiModal: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      }
+    },
+    MuiPaper: {
+      variants: [
+        {
+          props: { variant: 'discardChangesModal' },
+          style: {
+            maxWidth: '630px',
+            maxHeight: '280px',
+            padding: '40px 64px',
+            borderRadius: '32px',
+            backgroundColor: mainHexPallete.white,
+            overflowY: 'auto',
+            outline: 'none'
+          }
+        }
+      ]
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: ({ theme }) => ({
+          ...theme.typography.caption,
+
+          backgroundColor: tooltipColors.defaultBg,
+          color: tooltipColors.defaultText,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          borderRadius: '20px',
+          padding: '4px 16px',
+          boxShadow: `0px 4px 4px 0px ${tooltipColors.defaultShadow}`
+        }),
+
+        arrow: {
+          color: tooltipColors.defaultBg
+        }
+      }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          'html:has(&)': {
+            scrollbarGutter: 'stable',
+            overflow: 'hidden'
           }
         }
       }

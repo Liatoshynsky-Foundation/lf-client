@@ -4,7 +4,7 @@ export const styles: Record<string, SxProps> = {
   footer: {
     width: '100%',
     maxWidth: '100%',
-    color: '#190D03',
+    color: 'black',
     display: 'grid',
     gridTemplateColumns: {
       xs: '1fr',

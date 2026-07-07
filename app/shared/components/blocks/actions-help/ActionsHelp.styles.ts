@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -18,7 +16,7 @@ export const styles = {
     textAlign: 'left',
     gridColumn: { xs: '1', sm: '4 / 9', md: '6 / -1' },
     textIndent: commonSx.layout.textIndent.textIndentThirdColumn,
-    color: mainHexPallete.brown[700]
+    color: 'brown.700'
   },
   papersContainer: {
     display: 'grid',
