@@ -55,6 +55,7 @@ const validPayload = {
 
 const mockFindDonationOrder = jest.fn();
 const mockUpdateDonationOrderStatus = jest.fn();
+const mockCreatePaymentEventIfNotExists = jest.fn();
 
 jest.mock('~/config', () => ({
   WayForPay: {
@@ -65,11 +66,17 @@ jest.mock('~/config', () => ({
 jest.mock('~/services/way-for-pay/wayForPayService', () => ({
   createWayForPayService: jest.fn(() => ({
     findDonationOrder: mockFindDonationOrder,
-    updateDonationOrderStatus: mockUpdateDonationOrderStatus
+    updateDonationOrderStatus: mockUpdateDonationOrderStatus,
+    createPaymentEventIfNotExists: mockCreatePaymentEventIfNotExists
   }))
 }));
 
 jest.mock('~/infrastructure/repositories/way-for-pay/donationOrder.repository', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({}))
+}));
+
+jest.mock('~/infrastructure/repositories/way-for-pay/paymentEvent.repository', () => ({
   __esModule: true,
   default: jest.fn(() => ({}))
 }));
@@ -120,6 +127,7 @@ describe('WayForPay Callback API Route (POST)', () => {
     });
 
     mockUpdateDonationOrderStatus.mockResolvedValue(undefined);
+    mockCreatePaymentEventIfNotExists.mockResolvedValue(true);
   });
 
   it('should return 415 for unsupported media type', async () => {
@@ -196,6 +204,16 @@ describe('WayForPay Callback API Route (POST)', () => {
 
     expect(mockFindDonationOrder).toHaveBeenCalledWith('DON-1');
 
+    expect(mockCreatePaymentEventIfNotExists).toHaveBeenCalledWith({
+      orderReference: 'DON-1',
+      transactionStatus: 'Approved',
+      authCode: 'AUTH123',
+      reasonCode: 1100,
+      payload: expect.objectContaining({
+        orderReference: 'DON-1'
+      })
+    });
+
     expect(mockUpdateDonationOrderStatus).toHaveBeenCalledWith(
       expect.objectContaining({
         orderReference: 'DON-1',
@@ -220,6 +238,7 @@ describe('WayForPay Callback API Route (POST)', () => {
 
     expect(res.status).toBe(200);
 
+    expect(mockCreatePaymentEventIfNotExists).toHaveBeenCalled();
     expect(mockUpdateDonationOrderStatus).toHaveBeenCalledWith({
       orderReference: 'DON-1',
       status: 'Declined',
@@ -256,5 +275,31 @@ describe('WayForPay Callback API Route (POST)', () => {
     const res = await POST(req);
 
     expect(res.status).toBe(400);
+    expect((res as any)._testData.error).toBe('bad payload');
+  });
+
+  it('should ignore duplicate callback without updating donation order', async () => {
+    mockCreatePaymentEventIfNotExists.mockResolvedValue(false);
+
+    const req = createRequest('application/json', {
+      ...validPayload,
+      merchantSignature: createSignature()
+    });
+
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+
+    expect(mockUpdateDonationOrderStatus).not.toHaveBeenCalled();
+    expect(mockCreatePaymentEventIfNotExists).toHaveBeenCalledTimes(1);
+
+    expect((res as any)._testData).toEqual(
+      expect.objectContaining({
+        orderReference: 'DON-1',
+        status: 'accept',
+        signature: expect.any(String),
+        time: expect.any(Number)
+      })
+    );
   });
 });

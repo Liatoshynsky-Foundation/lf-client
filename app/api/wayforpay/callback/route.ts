@@ -5,6 +5,7 @@ import { WayForPay } from '~/config';
 import { DonationOrderStatus, PaymentProvider } from '~/domain/dto/donationOrder.dto';
 import type { UpdateDonationOrderStatusInput } from '~/infrastructure/repositories/way-for-pay/donationOrder.repo';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
+import newPaymentEventRepository from '~/infrastructure/repositories/way-for-pay/paymentEvent.repository';
 import { validateWithZod } from '~/lib/utils/validateRequestData';
 import logger from '~/middleware/logger/logger';
 import { createWayForPayService } from '~/services/way-for-pay/wayForPayService';
@@ -74,11 +75,30 @@ const statusMap = {
   InProcessing: DonationOrderStatus.InProcessing
 };
 
+function createAcknowledgementResponse(orderReference: string, secretKey: string) {
+  const time = Math.floor(Date.now() / 1000);
+  const status = 'accept';
+
+  const signature = generateSignature([orderReference, status, String(time)].join(';'), secretKey);
+
+  return NextResponse.json(
+    {
+      orderReference,
+      status,
+      time,
+      signature
+    },
+    { status: 200 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   const donationOrderRepository = newDonationOrderRepository();
+  const paymentEventRepository = newPaymentEventRepository();
 
   const wayForPayService = createWayForPayService({
-    donationOrderRepository
+    donationOrderRepository,
+    paymentEventRepository
   });
 
   let body;
@@ -142,6 +162,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'amount/currency mismatch' }, { status: 422 });
   }
 
+  const isNewPaymentEvent = await wayForPayService.createPaymentEventIfNotExists({
+    orderReference,
+    transactionStatus,
+    authCode: authCode ?? '',
+    reasonCode,
+    payload: body
+  });
+
+  if (!isNewPaymentEvent) {
+    logger.info('[API:POST:wayforpay/callback] Duplicate callback ignored', {
+      orderReference,
+      transactionStatus,
+      authCode
+    });
+
+    return createAcknowledgementResponse(orderReference, WayForPay.MERCHANT_SECRET_KEY);
+  }
+  logger.info('[API:POST:wayforpay/callback] Payment event stored', {
+    orderReference,
+    transactionStatus,
+    authCode
+  });
+
   const nextStatus = statusMap[transactionStatus] ?? DonationOrderStatus.Pending;
 
   const updateData: UpdateDonationOrderStatusInput = {
@@ -164,20 +207,5 @@ export async function POST(request: NextRequest) {
     status: nextStatus
   });
 
-  const time = Math.floor(Date.now() / 1000);
-  const status = 'accept';
-
-  const ackBase = [orderReference, status, String(time)].join(';');
-
-  const signature = generateSignature(ackBase, WayForPay.MERCHANT_SECRET_KEY);
-
-  return NextResponse.json(
-    {
-      orderReference,
-      status,
-      time,
-      signature
-    },
-    { status: 200 }
-  );
+  return createAcknowledgementResponse(orderReference, WayForPay.MERCHANT_SECRET_KEY);
 }
