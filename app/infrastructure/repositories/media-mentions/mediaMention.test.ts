@@ -20,8 +20,7 @@ const createFakeId = () => '65f1d5f2' + Date.now().toString(16).slice(-8);
 const mockMongooseChain = <T>(resolvedValue: T) => ({
   select: jest.fn().mockReturnThis(),
   sort: jest.fn().mockReturnThis(),
-  lean: jest.fn().mockReturnThis(),
-  exec: jest.fn().mockResolvedValue(resolvedValue)
+  lean: jest.fn().mockResolvedValue(resolvedValue)
 });
 
 const validMentionData = {
