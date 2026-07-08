@@ -86,7 +86,7 @@ export const BaseSlider = <T,>(props: BaseSliderProps<T>): React.ReactElement =>
             type="button"
             aria-label={props.prevLabel}
             className={prevClass}
-            sx={[baseSliderStyles.navButton, ...sxToArray(navButtonSx)]}
+            sx={[baseSliderStyles.navButtonPrev, ...sxToArray(navButtonSx)]}
           >
             <Box component="img" src="/icons/arrow-left.svg" alt="" sx={baseSliderStyles.navIcon} />
           </Box>
@@ -95,7 +95,7 @@ export const BaseSlider = <T,>(props: BaseSliderProps<T>): React.ReactElement =>
             type="button"
             aria-label={props.nextLabel}
             className={nextClass}
-            sx={[baseSliderStyles.navButton, ...sxToArray(navButtonSx)]}
+            sx={[baseSliderStyles.navButtonNext, ...sxToArray(navButtonSx)]}
           >
             <Box component="img" src="/icons/arrow-right.svg" alt="" sx={baseSliderStyles.navIcon} />
           </Box>
