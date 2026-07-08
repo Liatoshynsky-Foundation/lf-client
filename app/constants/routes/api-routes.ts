@@ -9,5 +9,6 @@ export const ApiRoutes = {
   SCIENTIFIC_WORKS_TITLES: '/api/scientific-works/titles',
   VERIFY: '/api/verify',
   CREATE_INVOICE: '/api/create-invoice',
-  TURNSTILE: '/api/config'
-};
+  TURNSTILE: '/api/config',
+  CONTACT: '/api/contact'
+} as const;

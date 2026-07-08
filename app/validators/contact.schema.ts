@@ -17,5 +17,6 @@ export const contactApiSchema = z.object({
       message: 'Invalid phone format'
     }),
   message: z.string().trim().min(10).max(1000),
-  policy: z.literal(true)
+  policy: z.literal(true),
+  formType: z.string().trim().optional()
 });

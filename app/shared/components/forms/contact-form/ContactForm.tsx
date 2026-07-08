@@ -22,14 +22,16 @@ import { useAutoHideMessage } from '~/shared/hooks/use-auto-hide-message/useAuto
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
 
+export type ContactFormData = {
+  name: string;
+  email: string;
+  message: string;
+  policy: boolean;
+  phoneNumber?: string;
+};
+
 type ContactFormProps = {
-  onSubmit: (data: {
-    name: string;
-    email: string;
-    message: string;
-    policy: boolean;
-    phoneNumber?: string;
-  }) => void | Promise<void>;
+  onSubmit: (data: ContactFormData) => void | Promise<void>;
   disabled?: boolean;
 };
 

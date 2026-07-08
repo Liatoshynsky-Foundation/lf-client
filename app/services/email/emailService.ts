@@ -1,7 +1,7 @@
 import type { Transporter } from 'nodemailer';
 import nodemailer from 'nodemailer';
 
-import { generateCollaborationEmail } from './emails/emails';
+import { generateContactEmail } from './emails/emails';
 
 import logger from '~/middleware/logger/logger';
 
@@ -21,7 +21,7 @@ class EmailService {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT) || 465,
-      secure: true,
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
@@ -50,19 +50,22 @@ class EmailService {
     }
   }
 
-  async sendCollaborationEmail(data: {
-    name: string;
-    email: string;
-    phoneNumber?: string;
-    message: string;
-  }): Promise<{ success: boolean }> {
-    const { html, text } = generateCollaborationEmail(data);
+  async sendContactEmail(
+    data: {
+      name: string;
+      email: string;
+      phoneNumber?: string;
+      message: string;
+    },
+    formType: string = 'Collaboration'
+  ): Promise<{ success: boolean }> {
+    const { html, text } = generateContactEmail({ ...data, formType });
 
     return this.sendEmail({
       // TODO: REMOVE THAT CODE: Temporary using env variable. Once the contact form collection is ready in MongoDB,
       // create a dedicated function to fetch this email string from the database and use it here.
       to: process.env.CONTACT_EMAIL || 'liatoshynsky@gmail.com',
-      subject: `New Collaboration Request from ${data.name}`,
+      subject: `New ${formType} Request from ${data.name}`,
       html,
       text
     });

@@ -1,12 +1,12 @@
 'use client';
 
 import { Box, SxProps, Theme, Typography } from '@mui/material';
-import { useState } from 'react';
 
 import { styles } from './OfferCollaborationForm.styles';
 
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 import PaperComponent from '~/shared/components/paper-component/PaperComponent';
+import { useContactForm } from '~/shared/hooks/use-contact-form/useContactForm';
 
 interface OfferCollaborationFormProps {
   formTitle?: string;
@@ -14,41 +14,8 @@ interface OfferCollaborationFormProps {
   sx?: SxProps<Theme>;
 }
 
-interface ContactFormData {
-  name: string;
-  email: string;
-  message: string;
-  policy: boolean;
-  phoneNumber?: string;
-}
-
 export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: Readonly<OfferCollaborationFormProps>) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handleSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    setErrorMessage(null);
-    try {
-      const response = await fetch('/api/collaboration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        const message =
-          response.status === 429 ? 'Забагато запитів. Спробуйте пізніше.' : 'Помилка відправки. Спробуйте ще раз.';
-        setErrorMessage(message);
-        throw new Error(message);
-      }
-    } catch (error) {
-      setErrorMessage((prev) => prev || 'Сталася помилка з’єднання. Перевірте інтернет.');
-      throw error;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { errorMessage, handleSubmit, isSubmitting } = useContactForm({ formType: 'Collaboration' });
 
   return (
     <PaperComponent sx={{ ...sx }} data-testid="OfferCollaborationForm">
