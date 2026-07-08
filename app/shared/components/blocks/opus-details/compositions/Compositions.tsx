@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 import type { OpusComposition } from '../opusDetails.types';
+import Section from '../section/Section';
 import SheetMusicButton from '../sheet-music-button/SheetMusicButton';
 import { styles } from './Compositions.styles';
 
@@ -12,17 +13,7 @@ export type CompositionsProps = {
 
 const Compositions = ({ heading, compositions, viewSheetMusicLabel }: Readonly<CompositionsProps>) => {
   return (
-    <Box sx={styles.root} data-testid="OpusDetails-compositions">
-      <Box sx={styles.headingRow}>
-        <Box sx={styles.accent} aria-hidden>
-          <Box sx={styles.noteHead} />
-        </Box>
-
-        <Typography component="h2" sx={styles.heading}>
-          {heading}
-        </Typography>
-      </Box>
-
+    <Section heading={heading} dataTestId="OpusDetails-compositions" rootSx={styles.spacing}>
       <Box component="ul" sx={styles.list} data-testid="OpusDetails-compositionsList">
         {compositions.map((composition) => (
           <Box component="li" key={composition.id} sx={styles.item}>
@@ -43,7 +34,7 @@ const Compositions = ({ heading, compositions, viewSheetMusicLabel }: Readonly<C
           </Box>
         ))}
       </Box>
-    </Box>
+    </Section>
   );
 };
 

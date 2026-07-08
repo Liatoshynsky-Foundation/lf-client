@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
-import BackLink from './back-link/BackLink';
+import BackLink from '~/components/blocks/archive-case-details/back-link/BackLink';
+
 import Compositions from './compositions/Compositions';
 import Description from './description/Description';
 import DescriptionPlaceholder from './description/DescriptionPlaceholder';
