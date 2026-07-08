@@ -59,14 +59,11 @@ function MediaCenter({ newsData, mediaMentionsData, eventsData }: Readonly<Media
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabs = useMemo(
-    () => [
-      { id: 'news', label: tTabs('news') },
-      { id: 'events', label: tTabs('events') },
-      { id: 'press', label: tTabs('press') }
-    ],
-    [tTabs]
-  );
+  const tabs = [
+    { id: 'news', label: tTabs('news') },
+    { id: 'events', label: tTabs('events') },
+    { id: 'press', label: tTabs('press') }
+  ];
 
   const activeTab = useMemo(() => {
     return searchParams.get('tab') ?? 'news';
