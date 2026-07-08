@@ -1,8 +1,7 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
-
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
+import FormError from '~/shared/components/forms/form-error/FormError';
 import { useContactForm } from '~/shared/hooks/use-contact-form/useContactForm';
 
 interface GetNotesFormProps {
@@ -15,13 +14,7 @@ export default function GetNotesForm({ onSuccess }: Readonly<GetNotesFormProps>)
   return (
     <>
       <ContactForm onSubmit={handleSubmit} disabled={isSubmitting} />
-      {errorMessage && (
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Typography color="error" variant="body2" sx={{ fontWeight: 'bold' }}>
-            {errorMessage}
-          </Typography>
-        </Box>
-      )}
+      {errorMessage && <FormError errorMessage={errorMessage} />}
     </>
   );
 }

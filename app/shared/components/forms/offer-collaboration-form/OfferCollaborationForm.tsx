@@ -1,10 +1,11 @@
 'use client';
 
-import { Box, SxProps, Theme, Typography } from '@mui/material';
+import { SxProps, Theme, Typography } from '@mui/material';
 
 import { styles } from './OfferCollaborationForm.styles';
 
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
+import FormError from '~/shared/components/forms/form-error/FormError';
 import PaperComponent from '~/shared/components/paper-component/PaperComponent';
 import { useContactForm } from '~/shared/hooks/use-contact-form/useContactForm';
 
@@ -26,13 +27,7 @@ export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: 
         {formSubtitle}
       </Typography>
       <ContactForm onSubmit={handleSubmit} disabled={isSubmitting} />
-      {errorMessage && (
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Typography color="error" variant="body2" sx={{ fontWeight: 'bold' }}>
-            {errorMessage}
-          </Typography>
-        </Box>
-      )}
+      {errorMessage && <FormError errorMessage={errorMessage} />}
     </PaperComponent>
   );
 }
