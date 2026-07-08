@@ -20,12 +20,6 @@ import { Localize } from '~/validators/localization';
 import { mediaMentionListItemSchema } from '~/validators/mediaMention.schema';
 import { newsListItemSchema } from '~/validators/news.schema';
 
-const tabs = [
-  { id: 'news', label: 'Новини' },
-  { id: 'events', label: 'Події' },
-  { id: 'press', label: 'Ми у ЗМІ' }
-];
-
 type newsCardItemImage = {
   src: string;
   alt?: string;
@@ -61,8 +55,15 @@ interface MediaCenterProps {
 
 function MediaCenter({ newsData, mediaMentionsData, eventsData }: Readonly<MediaCenterProps>) {
   const t = useTranslations('media.emptyState');
+  const tTabs = useTranslations('media.tabs');
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const tabs = [
+    { id: 'news', label: tTabs('news') },
+    { id: 'events', label: tTabs('events') },
+    { id: 'press', label: tTabs('press') }
+  ];
 
   const activeTab = useMemo(() => {
     return searchParams.get('tab') ?? 'news';
