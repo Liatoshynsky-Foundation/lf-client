@@ -349,6 +349,29 @@
       "viewPdf": "Переглянути PDF"
     }
   },
+  "opusDetails": {
+    "back": "Повернутися до творів",
+    "meta": {
+      "number": "Опус:",
+      "date": "Дата створення:",
+      "genre": "Жанр:"
+    },
+    "buttons": {
+      "viewSheetMusic": "Переглянути ноти"
+    },
+    "compositions": {
+      "title": "Твори:"
+    },
+    "videos": {
+      "title": "Версії виконання опусу:",
+      "thumbnailAlt": "Відео виконання опусу на YouTube"
+    },
+    "placeholder": {
+      "title": "СкоРо БуДе",
+      "subtitle": "Ця сторінка ще доповнюється. Наш кіт-архіваріус уже працює над описом твору",
+      "imageAlt": "Кіт-архіваріус"
+    }
+  },
   "biography": {
     "heroSection": {
       "title": "ЖиТтєПиС ЛятОшИнсьКогО"

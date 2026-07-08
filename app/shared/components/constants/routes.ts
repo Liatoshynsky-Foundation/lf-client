@@ -18,7 +18,8 @@ export const ROUTES = {
 export const getDynamicRoute = {
   archiveFund: (id: string | number) => `${ROUTES.ARCHIVE}/${id}`,
   archiveCase: (fundId: string | number, caseId: string | number) => `${ROUTES.ARCHIVE}/${fundId}/${caseId}`,
-  newsItem: (slug: string) => `${ROUTES.NEWS}/${slug}`
+  newsItem: (slug: string) => `${ROUTES.NEWS}/${slug}`,
+  opus: (id: string | number) => `${ROUTES.ARTISTRY}/${id}`
 };
 
 export type RouteValue = (typeof ROUTES)[keyof typeof ROUTES];

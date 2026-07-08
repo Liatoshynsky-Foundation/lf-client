@@ -1,4 +1,4 @@
-import { FilterQuery, PipelineStage } from 'mongoose';
+import type { FilterQuery, PipelineStage, Types } from 'mongoose';
 
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
@@ -14,6 +14,48 @@ import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
 
 const OPUS_REGEX = /^(op|bo)[.-]?\s*(\d+(?:\.\d+)?)/i;
+const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
+
+type TranslatedFieldLean = { uk: string; en: string };
+
+type OpusDescriptionLean = { uk?: string; en?: string } | null;
+
+type OpusLean = {
+  _id: Types.ObjectId | string;
+  number: string;
+  title: TranslatedFieldLean;
+  releaseYear?: number;
+  genre?: string | null;
+  description?: OpusDescriptionLean;
+  movements?: string[];
+  sheetMusicUrl?: string | null;
+  videoLinks?: string[];
+};
+
+type GenreLean = {
+  _id: Types.ObjectId | string;
+  key: string;
+  name: TranslatedFieldLean;
+};
+
+type SheetMusicLean = {
+  url: string;
+  isFree: boolean;
+};
+
+type OpusCompositionLean = {
+  _id: Types.ObjectId | string;
+  title: TranslatedFieldLean;
+  year?: number;
+  order?: number;
+  genres?: GenreLean[];
+  sheetMusic?: SheetMusicLean[];
+};
+
+export type OpusWithCompositionsLean = {
+  opus: OpusLean;
+  compositions: OpusCompositionLean[];
+};
 
 function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
   return words.map((word) => ({
@@ -235,6 +277,27 @@ const compositionsRepository = {
     const allTitles = Array.from(allTitlesMap.values()).filter((item) => parseOpus(item.opusNumber) !== null);
 
     return ArraySchema(compositionTitlesSchema).parse(allTitles);
+  },
+
+  async getOpusById(id: string): Promise<OpusWithCompositionsLean | null> {
+    await dbConnect();
+
+    if (!OBJECT_ID_REGEX.test(id)) {
+      return null;
+    }
+
+    const opus = await Opus.findById(id).lean<OpusLean | null>();
+
+    if (!opus) {
+      return null;
+    }
+
+    const compositions = await Compositions.find({ opusId: id })
+      .populate('genres')
+      .sort({ order: 1, createdAt: 1 })
+      .lean<OpusCompositionLean[]>();
+
+    return { opus, compositions };
   },
 
   async getAllCompositions(

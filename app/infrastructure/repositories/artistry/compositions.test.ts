@@ -23,7 +23,7 @@ jest.mock('~/infrastructure/models/artistry/artistryCategoriesData', () => ({
   Category: { find: jest.fn() }
 }));
 jest.mock('~/infrastructure/models/artistry/artistryOpusData', () => ({
-  Opus: { find: jest.fn(), aggregate: jest.fn() }
+  Opus: { find: jest.fn(), aggregate: jest.fn(), findById: jest.fn() }
 }));
 
 const compositionsRepository = newCompositionsRepository();
@@ -31,6 +31,7 @@ const compositionsRepository = newCompositionsRepository();
 const mockMongooseChain = (resolvedValue: any) => ({
   select: jest.fn().mockReturnThis(),
   populate: jest.fn().mockReturnThis(),
+  sort: jest.fn().mockReturnThis(),
   lean: jest.fn().mockResolvedValue(resolvedValue)
 });
 
@@ -146,6 +147,49 @@ describe('compositionsRepository', () => {
       (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
       const res = await compositionsRepository.getAllCompositions();
       expect(res).toEqual([]);
+    });
+  });
+
+  describe('getOpusById', () => {
+    const opusDoc = {
+      _id: validMongoId,
+      number: 'bo.16',
+      title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
+      releaseYear: 1929
+    };
+
+    const compositionDoc = {
+      _id: validMongoId,
+      title: { uk: 'Після бою', en: 'After the battle' },
+      year: 1929,
+      genres: [],
+      sheetMusic: []
+    };
+
+    it('should return null when the id is not a valid ObjectId', async () => {
+      const result = await compositionsRepository.getOpusById('not-a-valid-id');
+
+      expect(result).toBeNull();
+      expect(Opus.findById).not.toHaveBeenCalled();
+    });
+
+    it('should return null when the opus is not found', async () => {
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(null));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+
+      expect(result).toBeNull();
+      expect(Opus.findById).toHaveBeenCalledWith(validMongoId);
+    });
+
+    it('should return the opus with its compositions', async () => {
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(opusDoc));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([compositionDoc]));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+
+      expect(result).toEqual({ opus: opusDoc, compositions: [compositionDoc] });
+      expect(Compositions.find).toHaveBeenCalledWith({ opusId: validMongoId });
     });
   });
 });

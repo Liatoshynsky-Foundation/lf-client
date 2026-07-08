@@ -8,7 +8,7 @@ const opusSchema = new mongoose.Schema(
     title: { type: translatedFieldSchema, required: true },
     releaseYear: { type: Number }
   },
-  { timestamps: true }
+  { timestamps: true, collection: 'opus' }
 );
 
 export const Opus = mongoose.models.Opus ?? mongoose.model('Opus', opusSchema);
