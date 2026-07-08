@@ -17,7 +17,7 @@ export type SectionItem = {
   note?: TipTapDoc;
 };
 
-type PolicySectionProps = {
+export type PolicySectionProps = {
   title?: string;
   description?: TipTapDoc;
   list?: TipTapDoc[];

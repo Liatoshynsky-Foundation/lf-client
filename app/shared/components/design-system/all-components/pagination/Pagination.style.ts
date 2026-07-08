@@ -1,7 +1,4 @@
 import type { SxProps, Theme } from '@mui/material';
-
-import { mainHexPallete } from '../theme/colors';
-
 export type PaginationItemType = 'page' | 'previous' | 'next';
 
 const responsiveSize: SxProps<Theme> = {
@@ -11,7 +8,7 @@ const responsiveSize: SxProps<Theme> = {
 
 const arrowButtonBase: SxProps<Theme> = {
   ...responsiveSize,
-  border: `1px solid ${mainHexPallete.black}`,
+  border: `1px solid ${'black'}`,
   borderRadius: '50%'
 };
 
@@ -24,7 +21,7 @@ export const paginationStyles: {
       border: 'none',
       borderRadius: '50%',
       '&.Mui-selected': {
-        backgroundColor: mainHexPallete.blue[200]
+        backgroundColor: 'blue.200'
       }
     },
     previous: {

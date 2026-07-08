@@ -2,11 +2,14 @@ import { JSONContent } from '@tiptap/react';
 
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import type { CropRect } from '~/lib/utils/cropUtils';
+
 export interface IImageBlock {
   src: string;
   alt: JSONContent | string;
   generatedSrc: string;
   caption?: JSONContent | string | null;
+  crop?: CropRect | null;
 }
 
 export interface IQuoteBlock {
@@ -67,19 +70,4 @@ export interface IFoundationFounders {
     name: string | TipTapDoc;
     description: string | TipTapDoc;
   }[];
-}
-
-export interface IAboutUsPage {
-  slug: string;
-  title: string;
-  status: string;
-  blocks: {
-    IntroSection: IIntroSection;
-    FoundationInfo: IFoundationInfo;
-    OurMission: IOurMission;
-    OurGoals: IOurGoals;
-    LiatoshynskyOffice: ILiatoshynskyOffice;
-    WhatWeDo: IWhatWeDo;
-    FoundationFounders: IFoundationFounders;
-  };
 }

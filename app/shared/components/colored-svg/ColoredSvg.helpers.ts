@@ -6,6 +6,12 @@ export function isSize(size: string) {
 }
 
 export function isColor(color: string) {
+  if (color === 'none' || color === 'transparent') return true;
+  const muiTokenPattern = /^[a-zA-Z]+(\.[a-zA-Z0-9]+)?$/;
+  if (muiTokenPattern.test(color)) {
+    return true;
+  }
+
   const wslessColor = color.replaceAll(/\s+/g, '');
 
   const hexPattern = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
@@ -24,5 +30,6 @@ export function isColor(color: string) {
       return rgbParts.every((value) => value >= 0 && value <= 255);
     }
   }
-  return hexPattern.test(color);
+
+  return false;
 }

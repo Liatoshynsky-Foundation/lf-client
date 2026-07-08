@@ -32,6 +32,6 @@ describe('TitleWithQuote', () => {
     render(<TitleWithQuote {...defaultProps} color="black" />);
 
     const title = screen.getByText('Тестовий заголовок');
-    expect(title).toHaveStyle({ color: '#190d03' });
+    expect(title).toHaveStyle({ color: 'black' });
   });
 });

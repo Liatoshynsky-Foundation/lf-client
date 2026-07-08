@@ -77,13 +77,10 @@ export const styles = {
   },
   captionStyles: {
     width: SIZES.activeWidth,
-    color: 'rgba(99, 102, 110, 1)',
+    color: 'blue.700',
     textAlign: 'end',
     opacity: 0,
     animation: `${fadeIn} 1s ease forwards`
-  },
-  exactCaptionStyles: {
-    fontSize: '14px'
   },
   dotsContainerStyles: {
     display: 'flex',
@@ -128,7 +125,7 @@ export const styles = {
     width: '8px',
     height: '8px',
     borderRadius: '50%',
-    backgroundColor: isActive ? 'rgba(25, 13, 3, 1)' : 'rgba(211, 202, 192, 1)',
+    backgroundColor: isActive ? 'black' : 'brown.200',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     '&:hover': {

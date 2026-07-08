@@ -1,10 +1,5 @@
 import { commonSx } from '~/shared/styles/commonSx';
 
-const colorText = {
-  black: '#190d03',
-  brown: '#574139'
-};
-
 export const getStyles = (color: 'black' | 'brown') => ({
   mainContainer: {
     display: 'grid',
@@ -28,7 +23,9 @@ export const getStyles = (color: 'black' | 'brown') => ({
     fontWeight: 600,
     lineHeight: 'normal',
     letterSpacing: '0px',
-    color: colorText[color],
+
+    color: color === 'black' ? 'black' : 'brown.700',
+
     whiteSpace: 'pre-line',
     mt: {
       xs: '80px',

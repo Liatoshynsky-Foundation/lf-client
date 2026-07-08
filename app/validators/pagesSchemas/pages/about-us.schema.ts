@@ -78,6 +78,7 @@ export const AboutUsPageSchema = z.object({
   title: translatedFieldSchema,
   status: z.nativeEnum(PageStatus),
   blocks: AboutUsBlock,
+  blocksOrder: z.array(z.string()).min(1),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   _id: mongoObjectIdSchema

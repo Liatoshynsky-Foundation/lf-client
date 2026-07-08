@@ -1,6 +1,5 @@
 import { theme } from '../../design-system/all-components/theme/Theme';
 
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const heroSectionStyles = {
@@ -114,7 +113,7 @@ export const heroSectionStyles = {
     fontWeight: '600',
     fontSize: '16px',
     letterSpacing: '-2%',
-    color: mainHexPallete?.brown?.[700] || '#574139'
+    color: 'brown.700'
   },
 
   contentWrapper: {

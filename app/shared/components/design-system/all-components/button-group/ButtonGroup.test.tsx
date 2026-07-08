@@ -2,8 +2,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { hexButtonGroupColors } from '~/ds-components/theme/colors';
-
 import ButtonGroup from './ButtonGroup';
 
 const buttonClickHandlers = {
@@ -90,7 +88,7 @@ describe('ButtonGroup', () => {
 
     it('should apply default palette color styles', () => {
       const button1 = screen.getByText('Button 1').parentElement!;
-      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
+      expect(button1).toHaveStyle('color: black');
     });
 
     it('should update active button styles on click', async () => {
@@ -99,12 +97,12 @@ describe('ButtonGroup', () => {
       const button2 = screen.getByText('Button 2').parentElement!;
 
       await user.click(button1);
-      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
-      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
+      expect(button1).toHaveStyle('color: white');
+      expect(button2).toHaveStyle('color: black');
 
       await user.click(button2);
-      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
-      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
+      expect(button2).toHaveStyle('color: white');
+      expect(button1).toHaveStyle('color: black');
     });
 
     it('should call correct onClick handlers when buttons are clicked', async () => {
@@ -128,7 +126,7 @@ describe('ButtonGroup', () => {
 
       expect(computedStyle.left).toBe(button2.dataset.offsetLeft + 'px');
       expect(computedStyle.width).toBe(button2.dataset.offsetWidth + 'px');
-      expect(button2.parentElement).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button2.parentElement).toHaveStyle('color: white;');
     });
 
     it('should reset indicator position when defaultActiveButton is out of bounds', () => {
@@ -148,7 +146,7 @@ describe('ButtonGroup', () => {
       const indicator = screen.getByLabelText('indicator');
       const computedStyle = window.getComputedStyle(indicator);
 
-      expect(button3).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button3).toHaveStyle('color: white');
       expect(computedStyle.left).toBe('210px');
       expect(computedStyle.width).toBe('90px');
 
@@ -157,7 +155,7 @@ describe('ButtonGroup', () => {
       const updatedIndicator = screen.getByLabelText('indicator');
       const updatedStyle = window.getComputedStyle(updatedIndicator);
 
-      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
+      expect(button2).toHaveStyle('color: white');
       expect(updatedStyle.left).toBe('120px');
       expect(updatedStyle.width).toBe('80px');
     });
@@ -171,8 +169,8 @@ describe('ButtonGroup', () => {
       const button1 = screen.getByText('Button 1').parentElement!;
       const button2 = screen.getByText('Button 2').parentElement!;
 
-      expect(button1).toHaveStyle(`color: ${hexButtonGroupColors.primary.selectedButtonTextColor}`);
-      expect(button2).toHaveStyle(`color: ${hexButtonGroupColors.primary.buttonTextColor}`);
+      expect(button1).toHaveStyle('color: white');
+      expect(button2).toHaveStyle('color: black');
     });
   });
 });

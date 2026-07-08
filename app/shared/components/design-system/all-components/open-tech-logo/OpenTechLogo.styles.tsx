@@ -5,7 +5,7 @@ export const styles = {
     alignItems: 'center',
     flexDirection: 'column',
     fontFamily: 'Proxima Nova',
-    backgroundColor: '#FCFCFC',
+    backgroundColor: 'white',
     padding: {
       xs: '8px 16px',
       sm: '6px 12px',
@@ -22,6 +22,6 @@ export const styles = {
     letterSpacing: '0%',
     whiteSpace: 'nowrap',
     alignSelf: 'flex-start',
-    color: '#000000'
+    color: 'black'
   }
 };

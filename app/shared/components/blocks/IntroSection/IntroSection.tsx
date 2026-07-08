@@ -38,6 +38,7 @@ export function IntroSection({ data }: { readonly data: IIntroSection }) {
             src={image.generatedSrc}
             alt={image.alt}
             caption={image.caption ?? {}}
+            crop={image.crop}
             sizes={{
               width: { xs: 224, sm: 457, md: 569, lg: 718, xl: 816, xxl: 979 },
               height: { xs: 130, sm: 264, md: 300 }
