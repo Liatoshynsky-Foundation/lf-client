@@ -11,6 +11,7 @@ import newNewsRepository from '~/infrastructure/repositories/news/news.repositor
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
+import newPaymentEventRepository from '~/infrastructure/repositories/way-for-pay/paymentEvent.repository';
 
 export type RepositoriesModule = {
   foundationInfoRepo: ReturnType<typeof newFoundationInfoRepo>;
@@ -24,6 +25,7 @@ export type RepositoriesModule = {
   eventsRepo: typeof eventsRepository;
   eventRepository: ReturnType<typeof newEventRepository>;
   donationOrderRepository: ReturnType<typeof newDonationOrderRepository>;
+  paymentEventRepository: ReturnType<typeof newPaymentEventRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -38,6 +40,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     mediaMentionRepository: asFunction(newMediaMentionRepository).scoped(),
     eventsRepo: asValue(eventsRepository),
     eventRepository: asFunction(newEventRepository).scoped(),
-    donationOrderRepository: asFunction(newDonationOrderRepository).scoped()
+    donationOrderRepository: asFunction(newDonationOrderRepository).scoped(),
+    paymentEventRepository: asFunction(newPaymentEventRepository).scoped()
   });
 };
