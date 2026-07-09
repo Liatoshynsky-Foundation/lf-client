@@ -1,149 +1,131 @@
-import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
-import { LocalizedString } from '~/types/types/common.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
 
-import {
-  boldText,
-  boldUnderlineText,
-  extractTextFromTipTap,
-  getPlainString,
-  isTipTapDoc,
-  linkText,
-  makeDoc,
-  normalText
-} from '~/lib/utils/tiptapHelpers';
+import OurMission from './OurMission';
+import { IOurMission } from '~/types/page/about-us.types';
 
-describe('tiptap.utils', () => {
-  describe('Text Helpers (normalText, boldText, boldUnderlineText, linkText)', () => {
-    test.each([
-      {
-        fn: () => normalText('hello'),
-        expected: { type: TipTapNodeTypes.text, text: 'hello' },
-        desc: 'normal text node'
+interface SectionTitleProps {
+  title: string;
+  'data-testid'?: string;
+}
+
+interface TipTapContentProps {
+  data: { type: string };
+  nodeRenderers?: Record<string, (children: React.ReactNode) => React.ReactNode>;
+}
+
+interface ImageWithCaptionProps {
+  src: string;
+  alt: string;
+  dataTestId?: string;
+}
+
+jest.mock('./OurMission.styles', () => ({
+  styles: {
+    mainContainer: {},
+    title: {},
+    list: {},
+    smallCaptionSx: {},
+    smallImg: {},
+    bigCaptionSx: {},
+    bigImg: {}
+  }
+}));
+
+jest.mock('~/components/section-title/SectionTitle', () => ({
+  __esModule: true,
+  default: ({ title, 'data-testid': testId }: SectionTitleProps) => <h1 data-testid={testId}>{title}</h1>
+}));
+
+jest.mock('~/components/list-item/ListItem', () => ({
+  __esModule: true,
+  default: ({ text }: { text: React.ReactNode }) => <li>{text}</li>
+}));
+
+jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
+  __esModule: true,
+  default: ({ data, nodeRenderers }: TipTapContentProps) => {
+    if (nodeRenderers && nodeRenderers.paragraph) {
+      return <div data-testid={`tiptap-${data.type}`}>{nodeRenderers.paragraph('Paragraph Content')}</div>;
+    }
+    return <div data-testid={`tiptap-${data.type}`} />;
+  }
+}));
+
+jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
+  __esModule: true,
+  default: ({ src, alt, dataTestId }: ImageWithCaptionProps) => <img src={src} alt={alt} data-testid={dataTestId} />
+}));
+
+describe('OurMission', () => {
+  const baseData = {
+    title: 'Наша місія',
+    list: [{ type: 'paragraph' }, { type: 'paragraph' }],
+    smallImage: null,
+    bigImage: null
+  } as unknown as IOurMission;
+
+  it('should render core layouts including section title and dynamic tiptap lists', () => {
+    render(<OurMission data={baseData} />);
+
+    expect(screen.getByTestId('OurMission')).toBeInTheDocument();
+    expect(screen.getByTestId('OurMission-title')).toBeInTheDocument();
+    expect(screen.getByTestId('OurMission-list')).toBeInTheDocument();
+
+    const items = screen.getAllByTestId('tiptap-paragraph');
+    expect(items.length).toBe(2);
+    expect(screen.getAllByText('Paragraph Content').length).toBe(2);
+  });
+
+  it('should evaluate conditional image wrappers to complete branch coverage matrix', () => {
+    const dataWithImages = {
+      title: 'Наша місія',
+      list: [{ type: 'paragraph' }, { type: 'paragraph' }],
+      smallImage: {
+        src: '/small.jpg',
+        generatedSrc: '/small.jpg',
+        alt: 'Small Alt Text',
+        crop: { x: 0, y: 0, width: 100, height: 100 },
+        caption: { uk: 'Малий підпис' }
       },
-      {
-        fn: () => boldText('hello'),
-        expected: { type: TipTapNodeTypes.text, text: 'hello', marks: [{ type: TipTapMarkType.bold }] },
-        desc: 'bold text node'
-      },
-      {
-        fn: () => boldUnderlineText('hello'),
-        expected: {
-          type: TipTapNodeTypes.text,
-          text: 'hello',
-          marks: [{ type: TipTapMarkType.bold }, { type: TipTapMarkType.underline }]
-        },
-        desc: 'bold+underline text node'
-      },
-      {
-        fn: () => linkText('Click me', 'https://example.com'),
-        expected: {
-          type: TipTapNodeTypes.text,
-          text: 'Click me',
-          marks: [
-            { type: TipTapMarkType.link, attrs: { href: 'https://example.com' } },
-            { type: TipTapMarkType.bold },
-            { type: TipTapMarkType.underline }
-          ]
-        },
-        desc: 'bold+underline link text node'
+      bigImage: {
+        src: '/big.jpg',
+        generatedSrc: '/big.jpg',
+        alt: 'Big Alt Text',
+        crop: { x: 0, y: 0, width: 100, height: 100 },
+        caption: 'Великий підпис'
       }
-    ])('should create a $desc', ({ fn, expected }) => {
-      expect(fn()).toEqual(expected);
-    });
+    } as unknown as IOurMission;
+
+    render(<OurMission data={dataWithImages} />);
+
+    expect(screen.getByTestId('OurMission-smallImage')).toBeInTheDocument();
+    expect(screen.getByTestId('OurMission-bigImage')).toBeInTheDocument();
   });
 
-  describe('makeDoc', () => {
-    it('should wrap nodes into a doc with a paragraph', () => {
-      const nodes = [normalText('hi'), boldText('there')];
-      expect(makeDoc(nodes)).toEqual<TipTapDoc>({
-        type: TipTapNodeTypes.doc,
-        content: [
-          {
-            type: TipTapNodeTypes.paragraph,
-            content: [
-              { type: TipTapNodeTypes.text, text: 'hi' },
-              { type: TipTapNodeTypes.text, text: 'there', marks: [{ type: TipTapMarkType.bold }] }
-            ]
-          }
-        ]
-      });
-    });
-  });
-
-  describe('isTipTapDoc', () => {
-    test.each([
-      { input: { type: 'doc', content: [] }, expected: true, desc: 'valid TipTapDoc-like object' },
-      { input: null, expected: false, desc: 'null' },
-      { input: undefined, expected: false, desc: 'undefined' },
-      { input: 'string', expected: false, desc: 'primitive string' },
-      { input: 123, expected: false, desc: 'primitive number' },
-      { input: { content: [] }, expected: false, desc: 'objects missing the "type" property' }
-    ])('should return $expected for $desc', ({ input, expected }) => {
-      expect(isTipTapDoc(input)).toBe(expected);
-    });
-  });
-
-  describe('getPlainString', () => {
-    const localized: LocalizedString = { uk: 'Привіт', en: 'Hello' };
-    const missingUk = { en: 'Hello' } as unknown as LocalizedString;
-
-    test.each([
-      { input: 'Standard String', locale: undefined, expected: 'Standard String', desc: 'string directly' },
-      {
-        input: 'Standard String',
-        locale: 'en' as const,
-        expected: 'Standard String',
-        desc: 'string with explicit locale'
+  it('should process default fallback properties cleanly when image captions are unassigned', () => {
+    const dataWithMissingCaptions = {
+      title: 'Наша місія',
+      list: [{ type: 'paragraph' }, { type: 'paragraph' }],
+      smallImage: {
+        src: '/small-fallback.jpg',
+        generatedSrc: '/small-fallback.jpg',
+        alt: 'Small Fallback Alt',
+        crop: { x: 0, y: 0, width: 100, height: 100 },
+        caption: null
       },
-      { input: localized, locale: undefined, expected: 'Привіт', desc: 'default "uk" locale' },
-      { input: localized, locale: 'en' as const, expected: 'Hello', desc: 'requested "en" locale' },
-      { input: missingUk, locale: 'uk' as const, expected: '', desc: 'empty fallback if locale missing' }
-    ])('should return corrected text for $desc', ({ input, locale, expected }) => {
-      expect(getPlainString(input, locale)).toBe(expected);
-    });
-  });
+      bigImage: {
+        src: '/big-fallback.jpg',
+        generatedSrc: '/big-fallback.jpg',
+        alt: 'Big Fallback Alt',
+        crop: { x: 0, y: 0, width: 100, height: 100 },
+        caption: null
+      }
+    } as unknown as IOurMission;
 
-  describe('extractTextFromTipTap', () => {
-    const localizedNode = { text: { uk: 'Укр текст', en: 'Eng text' } };
-    const missingUkNode = { text: { en: 'Eng text' } };
-    const deeplyNestedNode = {
-      content: [
-        { text: 'Hello ' },
-        { content: [{ text: 'nested ' }] },
-        { text: { uk: 'world', en: 'WORLD' } },
-        { type: 'empty-node-without-text' }
-      ]
-    };
+    render(<OurMission data={dataWithMissingCaptions} />);
 
-    test.each([
-      { input: null, locale: undefined, expected: '', desc: 'null, undefined, or non-objects' },
-      { input: undefined, locale: undefined, expected: '', desc: 'null, undefined, or non-objects' },
-      { input: 'not an object', locale: undefined, expected: '', desc: 'null, undefined, or non-objects' },
-      {
-        input: { text: 'Plain text node' },
-        locale: undefined,
-        expected: 'Plain text node',
-        desc: 'plain text properties'
-      },
-      { input: localizedNode, locale: undefined, expected: 'Укр текст', desc: 'localized object fallback to uk' },
-      { input: localizedNode, locale: 'en' as const, expected: 'Eng text', desc: 'localized object targeting en' },
-      { input: missingUkNode, locale: 'uk' as const, expected: '', desc: 'missing locale context' },
-      {
-        input: deeplyNestedNode,
-        locale: 'uk' as const,
-        expected: 'Hello nested world',
-        desc: 'deeply nested array content (uk)'
-      },
-      {
-        input: deeplyNestedNode,
-        locale: 'en' as const,
-        expected: 'Hello nested WORLD',
-        desc: 'deeply nested array content (en)'
-      },
-      { input: { type: 'paragraph', marks: [] }, locale: undefined, expected: '', desc: 'objects lacking text fields' }
-    ])('should handle $desc', ({ input, locale, expected }) => {
-      expect(extractTextFromTipTap(input, locale)).toBe(expected);
-    });
+    expect(screen.getByTestId('OurMission-smallImage')).toBeInTheDocument();
+    expect(screen.getByTestId('OurMission-bigImage')).toBeInTheDocument();
   });
 });

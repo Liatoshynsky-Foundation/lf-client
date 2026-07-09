@@ -33,10 +33,6 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
 }
 
 function validTranslatedField(value: Record<string, unknown>, locale: Locale, path?: string): boolean {
-  if (!(locale in value)) {
-    return false;
-  }
-
   const fieldValue = value[locale];
 
   if (typeof fieldValue === 'string') {
@@ -56,10 +52,9 @@ function validTranslatedField(value: Record<string, unknown>, locale: Locale, pa
   return false;
 }
 
-function translationErrorFactory(locale: Locale, path?: string): Error {
+function translationErrorFactory(locale: Locale, path: string): Error {
   const baseMessage = locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR;
-  const message = path ? `${baseMessage} at path: ${path}` : baseMessage;
-  return new Error(message);
+  return new Error(`${baseMessage} at path: ${path}`);
 }
 
 export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale) {
