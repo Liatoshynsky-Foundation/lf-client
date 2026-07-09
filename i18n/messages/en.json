@@ -155,6 +155,11 @@
   },
   "media": {
     "title": "NeWs, EveNtS aNd MeDia",
+    "tabs": {
+      "news": "News",
+      "events": "Events",
+      "press": "Media"
+    },
     "emptyState": {
       "news": {
         "title": "No news yet",
