@@ -319,6 +319,11 @@
     "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
     "button": "Return to home"
   },
+  "translationNotFound": {
+    "title": "CoMing SoOn",
+    "description": "Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English version will appear very soon.",
+    "button": "Return to Ukrainian"
+  },
   "warSupport": {
     "title": "RuSSiA'S WaR AgAiNsT UkRaInIaNs",
     "ourPartners": {
