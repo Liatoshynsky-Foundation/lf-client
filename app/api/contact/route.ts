@@ -63,7 +63,6 @@ export async function POST(request: Request) {
     return successResponse(payload, 200);
   } catch (error) {
     if (error instanceof Error && error.name === 'ZodError') {
-      console.log(error);
       return errorResponse(['Invalid form data.'], 400);
     }
     return errorResponse(['An unexpected error occurred.'], 500);

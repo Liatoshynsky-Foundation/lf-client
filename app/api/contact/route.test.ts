@@ -76,6 +76,20 @@ describe('Contact API Route (POST)', () => {
     expect(emailService.sendContactEmail).not.toHaveBeenCalled();
   });
 
+  it('should return 500 if validation fails due to unexpected error', async () => {
+    const error = new Error('failed');
+    error.name = 'OtherName';
+    (contactApiSchema.parse as jest.Mock).mockImplementation(() => {
+      throw error;
+    });
+
+    const req = mockRequest({ name: 'A' });
+    await POST(req);
+
+    expect(errorResponse).toHaveBeenCalledWith(['An unexpected error occurred.'], 500);
+    expect(emailService.sendContactEmail).not.toHaveBeenCalled();
+  });
+
   it('should return 500 if email service fails', async () => {
     (contactApiSchema.parse as jest.Mock).mockReturnValue({
       name: 'Test',
