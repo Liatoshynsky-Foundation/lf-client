@@ -2,13 +2,16 @@ import { EventStatus } from '~/domain/dto/event.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import EventModel from '~/infrastructure/models/events/event.model';
 
+const EVENT_LIST_FIELDS =
+  '_id slug status publishedAt eventDateTimeStart eventDateTimeEnd title description coverImage meta ticketUrl';
+
 const eventRepository = {
   async getAllPublishedEvents() {
     await dbConnect();
 
     const events = await EventModel.find({ status: EventStatus.Published })
-      .select('_id title description slug coverImage meta eventDateTimeStart eventDateTimeEnd')
-      .sort({ eventDateTimeStart: -1 })
+      .select(EVENT_LIST_FIELDS)
+      .sort({ publishedAt: -1 })
       .lean();
 
     return events ?? [];
@@ -17,7 +20,7 @@ const eventRepository = {
   async getEventBySlug(slug: string) {
     await dbConnect();
 
-    return EventModel.findOne({ slug }).lean();
+    return EventModel.findOne({ slug, status: EventStatus.Published }).lean();
   }
 };
 
