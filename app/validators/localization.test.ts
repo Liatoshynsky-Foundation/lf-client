@@ -109,12 +109,21 @@ describe('LocalizeSchema', () => {
     );
   });
 
-  it('should fail validation workflows if internal localized mapping returns unsupported non-object types', async () => {
+  it('should fail validation workflows if internal localized mapping returns unsupported boolean type', async () => {
     const schema = z.object({ status: z.unknown() });
     const transformer = LocalizeSchema(schema, 'en' as Locale);
     const data = { status: { en: true } };
     await expect(transformer.parseAsync(data)).rejects.toThrow(
       `${LocalizationErrors.MISSING_EN_ERROR} at path: root.status`
+    );
+  });
+
+  it('should fail validation workflows if internal localized mapping returns unsupported number type', async () => {
+    const schema = z.object({ count: z.unknown() });
+    const transformer = LocalizeSchema(schema, 'en' as Locale);
+    const data = { count: { en: 42, uk: 42 } };
+    await expect(transformer.parseAsync(data)).rejects.toThrow(
+      `${LocalizationErrors.MISSING_EN_ERROR} at path: root.count`
     );
   });
 
@@ -179,5 +188,40 @@ describe('LocalizeSchema', () => {
     await expect(transformer.parseAsync(data)).rejects.toThrow(
       `${LocalizationErrors.MISSING_UK_ERROR} at path: root.title`
     );
+  });
+
+  it('should continue loop when tiptap node content is missing', async () => {
+    const schema = z.object({ body: z.record(z.unknown()) });
+    const transformer = LocalizeSchema(schema, 'en' as Locale);
+    const data = {
+      body: {
+        en: {
+          content: [{ type: 'paragraph' }, { type: 'paragraph', content: [{ type: 'text', text: 'text' }] }]
+        }
+      }
+    };
+    const result = await transformer.parseAsync(data);
+    expect(result).toEqual({ body: data.body.en });
+  });
+
+  it('should throw error if non optional field path evaluates to empty string inside root array mapping', async () => {
+    const schema = z.array(z.unknown());
+    const transformer = LocalizeSchema(schema, 'en' as Locale);
+    const invalidData = [{ description: { en: '' } }];
+
+    await expect(transformer.parseAsync(invalidData)).rejects.toThrow(
+      `${LocalizationErrors.MISSING_EN_ERROR} at path: root[0].description`
+    );
+  });
+
+  it('should process objects created with null prototype or non plain objects cleanly', async () => {
+    const schema = z.unknown();
+    const transformer = LocalizeSchema(schema, 'en' as Locale);
+
+    const customObj = Object.create(null) as Record<string, string>;
+    customObj.key = 'value';
+
+    const result = await transformer.parseAsync(customObj);
+    expect(result).toEqual(customObj);
   });
 });

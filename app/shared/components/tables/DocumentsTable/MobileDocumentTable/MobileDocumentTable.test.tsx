@@ -4,18 +4,26 @@ import React from 'react';
 import MobileDocumentTable from './MobileDocumentTable';
 import { DocumentRecord } from '~/types/types/document.types';
 
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { usePagination } from '~/shared/hooks/use-pagination/usePagination';
+
+interface TableCardListProps {
+  paginatedData: DocumentRecord[];
+  tableRef?: React.RefObject<HTMLDivElement | null>;
+}
+
+interface ControlPanelProps {
+  tableName: string;
+}
+
+interface PaginationProps {
+  onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
+}
 
 jest.mock('~/shared/components/tables/DocumentsTable/TableCardList/TableCardList', () => ({
   __esModule: true,
-  default: ({
-    paginatedData,
-    tableRef
-  }: {
-    paginatedData: DocumentRecord[];
-    tableRef?: React.RefObject<HTMLDivElement>;
-  }) => (
-    <div ref={tableRef as any} data-testid="table-card-list">
+  default: ({ paginatedData, tableRef }: TableCardListProps) => (
+    <div ref={tableRef as React.RefObject<HTMLDivElement>} data-testid="table-card-list">
       {paginatedData.length} cards
     </div>
   )
@@ -27,14 +35,22 @@ jest.mock('next-intl', () => ({
 
 jest.mock('~/shared/components/enhanced-table/control-panel/ControlPanel', () => ({
   __esModule: true,
-  default: ({ tableName }: { tableName: string }) => <div data-testid="control-panel">{tableName}</div>
+  default: ({ tableName }: ControlPanelProps) => <div data-testid="control-panel">{tableName}</div>
 }));
 
 jest.mock('~/shared/components/design-system/all-components/pagination/Pagination', () => ({
   __esModule: true,
-  default: ({ onChange }: { onChange: (event: React.ChangeEvent<unknown>, page: number) => void }) => (
+  default: ({ onChange }: PaginationProps) => (
     <button onClick={(e) => onChange(e as React.ChangeEvent<unknown>, 2)}>Go to page 2</button>
   )
+}));
+
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    isMobile: false,
+    isTablet: false
+  }))
 }));
 
 const handlePageChangeMock = jest.fn();
@@ -49,19 +65,38 @@ const mockData: DocumentRecord[] = [
   { id: '6', cipher: 'C6', name: 'Name6', dates: '2025', sheets: 6, contentDescription: 'Content6', pdfUrl: null }
 ];
 
+const mockPagesArray = Array.of(1, 2);
+
 jest.mock('~/shared/hooks/use-pagination/usePagination', () => ({
   usePagination: jest.fn(() => ({
     paginatedData: mockData.slice(0, 5),
     hasMore: true,
     currentPage: 1,
     totalPages: 2,
-    visiblePages: [1],
+    visiblePages: mockPagesArray,
     handleLoadMore: handleLoadMoreMock,
     handlePageChange: handlePageChangeMock
   }))
 }));
 
 describe('MobileDocumentTable', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useBreakpoints as jest.Mock).mockReturnValue({
+      isMobile: false,
+      isTablet: false
+    });
+    (usePagination as jest.Mock).mockReturnValue({
+      paginatedData: mockData.slice(0, 5),
+      hasMore: true,
+      currentPage: 1,
+      totalPages: 2,
+      visiblePages: mockPagesArray,
+      handleLoadMore: handleLoadMoreMock,
+      handlePageChange: handlePageChangeMock
+    });
+  });
+
   test('should render without crashing', () => {
     render(<MobileDocumentTable data={mockData} tableName="Test Table" />);
     expect(screen.getByTestId('control-panel')).toBeInTheDocument();
@@ -86,22 +121,22 @@ describe('MobileDocumentTable', () => {
     expect(handleLoadMoreMock).toHaveBeenCalled();
   });
 
-  test('calls scrollIntoView when page changes', () => {
+  test('calls scrollIntoView when page changes and verifies element scrolling method execution branches', () => {
     const { rerender } = render(<MobileDocumentTable data={mockData} tableName="Documents" itemsPerPage={5} />);
 
-    const tableWrapper = screen.getByTestId('table-card-list').parentElement;
-    if (!tableWrapper) throw new Error('Table wrapper not found');
-
-    tableWrapper.scrollIntoView = jest.fn();
+    const tableElement = screen.getByTestId('table-card-list');
+    const mockScrollIntoView = jest.fn();
+    tableElement.scrollIntoView = mockScrollIntoView;
 
     const goToPage2Button = screen.getByText('Go to page 2');
     fireEvent.click(goToPage2Button);
-    (usePagination as jest.Mock).mockReturnValueOnce({
+
+    (usePagination as jest.Mock).mockReturnValue({
       paginatedData: mockData.slice(0, 5),
       hasMore: true,
       currentPage: 2,
       totalPages: 2,
-      visiblePages: [1, 2],
+      visiblePages: mockPagesArray,
       handleLoadMore: handleLoadMoreMock,
       handlePageChange: handlePageChangeMock
     });
@@ -109,5 +144,40 @@ describe('MobileDocumentTable', () => {
     rerender(<MobileDocumentTable data={mockData} tableName="Documents" itemsPerPage={5} />);
 
     expect(handlePageChangeMock).toHaveBeenCalledWith(2);
+    expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+  });
+
+  test('should skip scroll behavior safely if the native scrollIntoView function object wrapper is completely undefined', () => {
+    const { rerender } = render(<MobileDocumentTable data={mockData} tableName="Documents" itemsPerPage={5} />);
+
+    const tableElement = screen.getByTestId('table-card-list');
+    Object.defineProperty(tableElement, 'scrollIntoView', { value: undefined, writable: true });
+
+    const goToPage2Button = screen.getByText('Go to page 2');
+    fireEvent.click(goToPage2Button);
+
+    (usePagination as jest.Mock).mockReturnValue({
+      paginatedData: mockData.slice(0, 5),
+      hasMore: true,
+      currentPage: 2,
+      totalPages: 2,
+      visiblePages: mockPagesArray,
+      handleLoadMore: handleLoadMoreMock,
+      handlePageChange: handlePageChangeMock
+    });
+
+    rerender(<MobileDocumentTable data={mockData} tableName="Documents" itemsPerPage={5} />);
+
+    expect(handlePageChangeMock).toHaveBeenCalledWith(2);
+  });
+
+  test('should cover mobile breakpoint siblingCount branch condition layout when running on small viewports', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({
+      isMobile: true,
+      isTablet: false
+    });
+
+    render(<MobileDocumentTable data={mockData} tableName="Documents" itemsPerPage={5} />);
+    expect(screen.getByTestId('control-panel')).toBeInTheDocument();
   });
 });

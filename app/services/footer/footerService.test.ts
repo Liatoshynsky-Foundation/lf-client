@@ -1,6 +1,7 @@
 import type { Locale } from 'next-intl';
 
-import { createFooterService } from '~/services/footer/footerService';
+import { createFooterService } from './footerService';
+
 import { ROUTES } from '~/shared/components/constants/routes';
 
 describe('footerService (composed)', () => {
@@ -76,8 +77,8 @@ describe('footerService (composed)', () => {
   };
 
   const footerService = createFooterService({
-    foundationInfoRepo: foundationInfoServiceMock,
-    navigationRepo: navigationServiceMock
+    foundationInfoRepo: foundationInfoServiceMock as unknown as any,
+    navigationRepo: navigationServiceMock as unknown as any
   });
 
   afterEach(() => {
@@ -130,5 +131,24 @@ describe('footerService (composed)', () => {
     const result = await footerService.getFooterData('en' as Locale);
 
     expect(result.socialLinks).toEqual([]);
+  });
+
+  it('should fallback to empty string when supportButtonLink property resolves to undefined fields', async () => {
+    foundationInfoServiceMock.getSupportButtonLink.mockResolvedValueOnce({
+      supportButtonLink: undefined
+    });
+
+    const result = await footerService.getFooterData('en' as Locale);
+    expect(result.supportButtonLink).toBe('');
+  });
+
+  it('should fallback to empty array layout configurations when public links resolve to null objects', async () => {
+    foundationInfoServiceMock.getPublicInfo.mockResolvedValueOnce({
+      ...mockPublicInfoRaw,
+      links: undefined
+    });
+
+    const result = await footerService.getFooterData('en' as Locale);
+    expect(result.publicInfo.links).toEqual([]);
   });
 });

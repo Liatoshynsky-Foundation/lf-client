@@ -32,15 +32,13 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
   return false;
 }
 
-function validTranslatedField(value: Record<string, unknown>, locale: Locale, path?: string): boolean {
+function validTranslatedField(value: Record<string, unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
   if (typeof fieldValue === 'string') {
-    if (fieldValue === '' && path) {
-      const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption');
-      if (isOptionalField) {
-        return true;
-      }
+    const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption');
+    if (fieldValue === '' && isOptionalField) {
+      return true;
     }
     return fieldValue !== '';
   }
@@ -51,7 +49,6 @@ function validTranslatedField(value: Record<string, unknown>, locale: Locale, pa
 
   return false;
 }
-
 function translationErrorFactory(locale: Locale, path: string): Error {
   const baseMessage = locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR;
   return new Error(`${baseMessage} at path: ${path}`);

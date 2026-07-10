@@ -13,6 +13,11 @@ type GenericProps = {
   style?: React.CSSProperties;
   testID?: string;
   onComplete?: () => void;
+  variants?: Record<string, unknown>;
+  initial?: string | Record<string, unknown>;
+  animate?: string | Record<string, unknown>;
+  exit?: Record<string, unknown>;
+  transition?: Record<string, unknown>;
 };
 
 type GlobalWithTriggers = typeof globalThis & {
@@ -64,7 +69,9 @@ jest.mock('framer-motion', () => {
       return <>{children}</>;
     },
     motion: {
-      div: MockMotionDiv
+      get div() {
+        return MockMotionDiv;
+      }
     }
   };
 });
@@ -166,5 +173,30 @@ describe('IntroAnimation', () => {
     expect(screen.queryByTestId('custom-intro-expansion')).not.toBeInTheDocument();
     expect(mockMarkIntroAsSeen).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId('child-content')).toBeInTheDocument();
+  });
+
+  it('should use default testID when not provided explicitly', () => {
+    (useIntroAnimation as jest.Mock).mockReturnValue({
+      isInitialized: true,
+      hasSeenIntro: false,
+      markIntroAsSeen: mockMarkIntroAsSeen
+    });
+
+    render(
+      <IntroAnimation>
+        <div data-testid="child-content">Content</div>
+      </IntroAnimation>
+    );
+
+    expect(screen.getByTestId('intro-animation-overlay')).toBeInTheDocument();
+    expect(screen.getByTestId('intro-animation-word-morpher')).toBeInTheDocument();
+
+    act(() => {
+      if (customGlobal.triggerWordMorpherComplete) {
+        customGlobal.triggerWordMorpherComplete();
+      }
+    });
+
+    expect(screen.getByTestId('intro-animation-expansion')).toBeInTheDocument();
   });
 });

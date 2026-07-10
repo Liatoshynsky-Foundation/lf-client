@@ -6,7 +6,7 @@ import { BoxButton } from './BoxButton';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-interface BoxProps {
+interface MockBoxProps {
   children?: React.ReactNode;
   'data-testid'?: string;
   onClick?: () => void;
@@ -14,33 +14,41 @@ interface BoxProps {
   onMouseEnter?: () => void;
 }
 
-interface CursorButtonProps {
+interface MockCursorButtonProps {
   testID?: string;
-  isHovering?: boolean;
+  textConfig?: { content: string; sx: Record<string, unknown> };
+  iconConfig?: { src: string; width: number; height: number };
+  customSX?: Record<string, unknown>;
 }
 
 jest.mock('../../HeroSection.styles', () => ({
   heroSectionStyles: {
-    cursorButtonText: {},
-    cursorButton: {}
+    cursorButtonText: { color: 'red' },
+    cursorButton: { position: 'absolute' }
   }
 }));
 
-const MockBox = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ children, 'data-testid': testId, onClick, onKeyDown, onMouseEnter }, ref) => (
-    <div ref={ref} data-testid={testId} onClick={onClick} onKeyDown={onKeyDown} onMouseEnter={onMouseEnter}>
-      {children}
-    </div>
-  )
-);
-MockBox.displayName = 'MockBox';
-
-jest.mock('@mui/material', () => ({
-  Box: MockBox
-}));
+jest.mock('@mui/material', () => {
+  const MockBoxComponent = React.forwardRef(
+    (
+      { children, 'data-testid': testId, onClick, onKeyDown, onMouseEnter }: MockBoxProps,
+      ref: React.ForwardedRef<HTMLDivElement>
+    ) => (
+      <div ref={ref} data-testid={testId} onClick={onClick} onKeyDown={onKeyDown} onMouseEnter={onMouseEnter}>
+        {children}
+      </div>
+    )
+  );
+  MockBoxComponent.displayName = 'MockBox';
+  return {
+    Box: MockBoxComponent
+  };
+});
 
 jest.mock('../CursorButton/CursorButton', () => ({
-  CursorButton: ({ testID, isHovering }: CursorButtonProps) => <div data-testid={testID} data-hovering={isHovering} />
+  CursorButton: ({ testID, textConfig, iconConfig }: MockCursorButtonProps) => (
+    <div data-testid={testID} data-text={textConfig?.content} data-has-icon={!!iconConfig} />
+  )
 }));
 
 jest.mock('../useButtonCursor', () => ({
@@ -82,7 +90,22 @@ describe('BoxButton', () => {
     );
 
     expect(screen.getByTestId('box-button')).toBeInTheDocument();
-    expect(screen.getByTestId('box-button-cursor')).toBeInTheDocument();
+    const cursor = screen.getByTestId('box-button-cursor');
+    expect(cursor).toBeInTheDocument();
+    expect(cursor).toHaveAttribute('data-text', 'Play');
+    expect(cursor).toHaveAttribute('data-has-icon', 'true');
+  });
+
+  it('should handle cursorContent text when object is provided without iconSrc check defaults', () => {
+    render(
+      <BoxButton onClick={mockOnClick} cursorContent={undefined}>
+        <span>Content</span>
+      </BoxButton>
+    );
+
+    const cursor = screen.getByTestId('box-button-cursor');
+    expect(cursor).toHaveAttribute('data-text', '');
+    expect(cursor).toHaveAttribute('data-has-icon', 'false');
   });
 
   it('should prevent custom cursor generation and avoid assigning hover listeners on mobile viewport', () => {
@@ -145,5 +168,16 @@ describe('BoxButton', () => {
       fireEvent.click(button);
       fireEvent.keyDown(button, { key: 'Enter' });
     }).not.toThrow();
+  });
+
+  it('should accept and apply customSX and explicit testID props', () => {
+    render(
+      <BoxButton testID="custom-id" customSX={{ margin: 2 }}>
+        <span>Content</span>
+      </BoxButton>
+    );
+
+    expect(screen.getByTestId('custom-id')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-id-cursor')).toBeInTheDocument();
   });
 });
