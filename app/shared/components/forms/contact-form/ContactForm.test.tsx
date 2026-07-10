@@ -1,9 +1,20 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { ROUTES } from '../../constants/routes';
 import ContactForm from './ContactForm';
+
+jest.mock('~/components/get-notes-modal/notes-confirmation-modal/NotesConfirmModal', () => ({
+  __esModule: true,
+  default: (props: any) => <div data-testid="fake-notes-confirm-modal">{props.title}</div>
+}));
+
+jest.mock('../../paper-component/PaperComponent', () => ({
+  __esModule: true,
+  default: ({ children }: any) => <div>{children}</div>
+}));
 
 jest.mock('public/icons/info-error.svg', () => {
   return function InfoErrorIcon() {
@@ -12,6 +23,7 @@ jest.mock('public/icons/info-error.svg', () => {
 });
 
 jest.mock('next-intl', () => ({
+  __esModule: true,
   useTranslations: () => (key: string) => {
     const messages: Record<string, string> = {
       name: 'Імя',
@@ -31,6 +43,11 @@ jest.mock('next-intl', () => ({
     };
     return messages[key] || key;
   }
+}));
+
+jest.mock('~/components/modal-component/ModalComponent', () => ({
+  __esModule: true,
+  default: (props: any) => <button onClick={props.onClose} data-testid="fake-close-modal-trigger" />
 }));
 
 jest.mock('~/i18n/navigation', () => ({
@@ -83,9 +100,39 @@ describe('ContactForm', () => {
 
   it('should render a submit button', () => {
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
-    if (!submit) {
-      throw new Error('Expected a submit button to be present.');
-    }
+    expect(submit).toBeInTheDocument();
+  });
+
+  it('should call handleBlur when input is blurred', async () => {
+    const user = userEvent.setup();
+    const nameInput = screen.getByLabelText('Імя');
+
+    await user.click(nameInput);
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText('nameRequired')).toBeInTheDocument();
+    });
+  });
+
+  it('should call handleClose when the close button is clicked in modal after successful validation', async () => {
+    const user = userEvent.setup();
+    fillInput('Імя', 'Vlad');
+    fillInput('Електронна адреса (email) *', 'v@mail.com');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
+    submitForm();
+
+    const closeModalButton = await screen.findByTestId('fake-close-modal-trigger');
+    expect(closeModalButton).toBeInTheDocument();
+
+    await user.click(closeModalButton);
+    await waitFor(() => {
+      expect(screen.queryByTestId('fake-close-modal-trigger')).not.toBeInTheDocument();
+    });
+
+    const checkbox = screen.queryByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
   });
 
   it('should show errors when incorrect inputs', async () => {
