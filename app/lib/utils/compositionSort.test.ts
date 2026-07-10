@@ -1,4 +1,5 @@
-import { compareLang, compareOpus, compositionSort, isLatin, parseOpus } from './compositionSort';
+import { compareLang, compareOpus, compositionSort, isLatin } from './compositionSort';
+import { parseOpus } from './opusParser';
 import { Composition, Opus } from '~/types/types/composition.types';
 
 const createComposition = (params: Partial<Composition>): Composition => {
@@ -96,14 +97,20 @@ describe('Composition sorting function', () => {
       expect(compareOpus('Op. 25', 'Op. 25')).toBe(0);
     });
 
-    it('should consider the "bis" flag so that an opus with "bis" comes later', () => {
+    it('should consider suffixes and prefixes in sorting order', () => {
       expect(compareOpus('Op. 25 bis', 'Op. 25')).toBeGreaterThan(0);
       expect(compareOpus('Op. 25', 'Op. 25 bis')).toBeLessThan(0);
+      expect(compareOpus('Op. 25', 'sine op. 5')).toBeLessThan(0);
+      expect(compareOpus('sine op. 5', 'Op. 25')).toBeGreaterThan(0);
+      expect(compareOpus('sine op. 5', 'sine op. 10')).toBeLessThan(0);
+      expect(compareOpus('sine op. 3 bis', 'sine op. 3')).toBeGreaterThan(0);
+      expect(compareOpus('Op. 15 v2', 'Op. 15 v1')).toBeGreaterThan(0);
     });
 
     it('should throw an error for invalid opus numbers', () => {
       expect(() => compareOpus('Op. not a number', 'Op. 25')).toThrow();
-      expect(() => compareOpus('Op. 25', 'Op. not a number')).toThrow();
+      expect(() => compareOpus('bo. 5', 'Op. 25')).toThrow();
+      expect(() => compareOpus('b/o. 5', 'Op. 25')).toThrow();
     });
   });
 
@@ -125,8 +132,11 @@ describe('Composition sorting function', () => {
   describe('parseOpus', () => {
     it('should parse opus correctly', () => {
       expect(parseOpus('Op. 25')).toBe(25);
-      expect(parseOpus('Op. 10')).toBe(10);
+      expect(parseOpus('sine op. 10')).toBe(10);
       expect(parseOpus('Op. 100 bis')).toBe(100);
+      expect(parseOpus('sine op. 3 bis')).toBe(3);
+      expect(parseOpus('bo. 5')).toBeNull();
+      expect(parseOpus('b/o. 5')).toBeNull();
       expect(parseOpus('Op. not a number')).toBeNull();
     });
   });
