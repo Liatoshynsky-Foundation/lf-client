@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import { FilterSelect } from './FilterSelect';
@@ -85,5 +85,52 @@ describe('FilterSelect', () => {
     render(<FilterSelect label="Disabled" options={mockOptions} disabled />);
     fireEvent.click(screen.getByText('Disabled'));
     expect(screen.queryByText('First')).not.toBeInTheDocument();
+  });
+
+  it('should close menu and call requestAnimationFrame when dropdown is closed to cover lines 58-59', () => {
+    const rafSpy = jest.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+
+    render(<FilterSelect label="Select" options={mockOptions} />);
+    fireEvent.click(screen.getByText('Select'));
+
+    const backdrop = document.querySelector('.MuiBackdrop-root') as HTMLElement;
+    fireEvent.click(backdrop);
+
+    expect(rafSpy).toHaveBeenCalled();
+    rafSpy.mockRestore();
+  });
+
+  it('should not select new option when maxSelections is reached to cover line 73', () => {
+    const onAdd = jest.fn();
+    render(
+      <FilterSelect label="Select" options={mockOptions} defaultValues={['first']} maxSelections={1} onAdd={onAdd} />
+    );
+    fireEvent.click(screen.getByText('Select'));
+    fireEvent.click(screen.getByText('Second'));
+
+    expect(onAdd).not.toHaveBeenCalled();
+  });
+
+  it('should stop propagation when chip itself is clicked to cover line 131', () => {
+    render(<FilterSelect label="Select" options={mockOptions} defaultValues={['first']} />);
+    fireEvent.click(screen.getByText('1 обрано'));
+
+    expect(screen.getByText('1 обрано')).toBeInTheDocument();
+  });
+
+  it('should close menu when trigger is clicked while menu is open to cover line 54', async () => {
+    render(<FilterSelect label="Select" options={mockOptions} />);
+
+    fireEvent.click(screen.getByText('Select'));
+    expect(screen.getByText('First')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Select'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('First')).not.toBeInTheDocument();
+    });
   });
 });

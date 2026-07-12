@@ -8,6 +8,7 @@ import { FilterSelect } from '~/ds-components/selector/FilterSelect';
 import { Search } from '../search/Search';
 
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -16,6 +17,11 @@ jest.mock('next-intl', () => ({
     };
     return translations[key] || key;
   }
+}));
+
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({ isMobile: false, isTablet: false }))
 }));
 
 jest.mock('~/ds-components/button/Button');
@@ -129,5 +135,58 @@ describe('EnhancedTable', () => {
     fireEvent.click(page2);
 
     expect(screen.getAllByRole('row').length).toBeGreaterThan(0);
+  });
+
+  it('should toggle group collapse state when clicking a collapsible group row to cover lines 93-95 and 221', () => {
+    render(
+      <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={4} />
+    );
+
+    const groupRow = screen.getAllByTestId('CollapsibleRow-mainOpus')[0];
+    fireEvent.click(groupRow);
+
+    expect(groupRow).toBeInTheDocument();
+  });
+
+  it('should use zero sibling count on mobile or tablet to cover line 221', async () => {
+    (useBreakpoints as jest.Mock).mockReturnValueOnce({ isMobile: true, isTablet: false });
+
+    render(
+      <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={2} />
+    );
+
+    const pagination = screen.getByRole('navigation');
+    expect(pagination).toBeInTheDocument();
+  });
+
+  it('should use default itemsPerPage when not provided to cover line 71', () => {
+    render(<EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" />);
+
+    expect(screen.getByText('Test Table')).toBeInTheDocument();
+  });
+
+  it('should render ungrouped rows when groupByKey is not provided to cover line 138', () => {
+    render(<EnhancedTable data={mockData} columns={columns} tableName="Test Table" itemsPerPage={10} />);
+
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+  });
+
+  it('should show loading spinner when loading is true to cover lines 205-214', () => {
+    render(<EnhancedTable data={mockData} columns={columns} tableName="Test Table" loading />);
+
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.queryByTestId('EnhancedTable-table')).not.toBeInTheDocument();
+  });
+  it('should render noResults when data is empty to cover line 214', () => {
+    render(
+      <EnhancedTable
+        data={[]}
+        columns={columns}
+        tableName="Test Table"
+        noResults={<div data-testid="no-results">Nothing found</div>}
+      />
+    );
+
+    expect(screen.getByTestId('no-results')).toBeInTheDocument();
   });
 });

@@ -66,7 +66,7 @@ export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale
     if (Array.isArray(value)) {
       return value.map((item, idx) => localizeValue(item, `${path}[${idx}]`));
     }
-    if (typeof value === 'object' && value !== null && Object.getPrototypeOf(value) === Object.prototype) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, localizeValue(v, `${path}.${k}`)]));
     }
     return value;

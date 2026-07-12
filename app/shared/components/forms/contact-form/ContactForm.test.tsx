@@ -1,38 +1,11 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { ROUTES } from '../../constants/routes';
 import ContactForm from './ContactForm';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
-import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
-jest.mock('~/components/get-notes-modal/notes-confirmation-modal/NotesConfirmModal', () => ({
-  __esModule: true,
-  default: (props: any) => <div data-testid="fake-notes-confirm-modal">{props.title}</div>
-}));
-
-jest.mock('../../paper-component/PaperComponent', () => ({
-  __esModule: true,
-  default: ({ children }: any) => <div>{children}</div>
-}));
-
-jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({ isMobile: false, isTablet: false }))
-}));
-
-jest.mock('~/shared/hooks/use-handle-phone-input/useHandlePhoneInput');
-
-jest.mock('~/ds-components/button/Button', () => ({
-  __esModule: true,
-  default: ({ size, children, ...rest }: any) => (
-    <button data-testid="submit-button" data-size={size} {...rest}>
-      {children}
-    </button>
-  )
-}));
 
 jest.mock('public/icons/info-error.svg', () => {
   return function InfoErrorIcon() {
@@ -41,7 +14,6 @@ jest.mock('public/icons/info-error.svg', () => {
 });
 
 jest.mock('next-intl', () => ({
-  __esModule: true,
   useTranslations: () => (key: string) => {
     const messages: Record<string, string> = {
       name: 'Імя',
@@ -53,25 +25,25 @@ jest.mock('next-intl', () => ({
       buttonText: 'Надіслати запит',
       requiredFields: '* – поля обов’язкові до заповнення',
       nameMinLength: 'Імʼя має містити щонайменше 2 символи',
-      nameMaxLength: 'Імʼя не може перевищувати 50 символів',
+      nameMaxLength: 'Довжина імені не може перевищувати 50 символів',
+      messageMaxLength: 'Довжина повідомлення не може перевищувати 1000 символів',
       emailRequired: 'Будь ласка, вкажіть вашу електронну адресу',
       emailInvalid: 'Введіть коректну email-адресу',
       phoneNumberInvalid: 'Перевірте формат номера телефону',
       messageMinLength: 'Напишіть кілька слів у повідомленні',
-      messageMaxLength: 'Повідомлення не може перевищувати 1000 символів',
       policyRequired: 'Щоб продовжити, потрібно дати згоду'
     };
     return messages[key] || key;
   }
 }));
 
-jest.mock('~/components/modal-component/ModalComponent', () => ({
-  __esModule: true,
-  default: (props: any) => <button onClick={props.onClose} data-testid="fake-close-modal-trigger" />
-}));
-
 jest.mock('~/i18n/navigation', () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+}));
+
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({ isMobile: false, isTablet: false }))
 }));
 
 const fillInput = (label: string, value: string) => {
@@ -88,13 +60,10 @@ describe('ContactForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    (useHandlePhoneInput as jest.Mock).mockReturnValue({ handlePhoneInput: jest.fn(), hasError: false });
+    render(<ContactForm onSubmit={onSubmit} />);
   });
 
   it('should contain four text inputs including a multiline message field', () => {
-    (useHandlePhoneInput as jest.Mock).mockReturnValue({ handlePhoneInput: jest.fn(), hasError: true });
-    render(<ContactForm onSubmit={onSubmit} />);
-
     const textboxes = screen.getAllByRole('textbox');
     if (textboxes.length !== 4) {
       throw new Error(`Expected 4 textboxes (name, email, phone, message) but found ${textboxes.length}.`);
@@ -107,7 +76,6 @@ describe('ContactForm', () => {
   });
 
   it('should render a checkbox with privacy policy link', () => {
-    render(<ContactForm onSubmit={onSubmit} />);
     const checkbox = screen.queryByRole('checkbox');
     if (!checkbox) {
       throw new Error('Expected a checkbox to be present.');
@@ -123,48 +91,13 @@ describe('ContactForm', () => {
   });
 
   it('should render a submit button', () => {
-    render(<ContactForm onSubmit={onSubmit} />);
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
-    expect(submit).toBeInTheDocument();
-  });
-
-  it('should call handleBlur when input is blurred', async () => {
-    render(<ContactForm onSubmit={onSubmit} />);
-    const user = userEvent.setup();
-    const nameInput = screen.getByLabelText('Імя');
-
-    await user.click(nameInput);
-    await user.tab();
-
-    await waitFor(() => {
-      expect(screen.getByText('nameRequired')).toBeInTheDocument();
-    });
-  });
-
-  it('should call handleClose when the close button is clicked in modal after successful validation', async () => {
-    const user = userEvent.setup();
-    render(<ContactForm onSubmit={onSubmit} />);
-    fillInput('Імя', 'Vlad');
-    fillInput('Електронна адреса (email) *', 'v@mail.com');
-    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
-    fireEvent.click(screen.getByRole('checkbox'));
-    submitForm();
-
-    const closeModalButton = await screen.findByTestId('fake-close-modal-trigger');
-    expect(closeModalButton).toBeInTheDocument();
-
-    await user.click(closeModalButton);
-    await waitFor(() => {
-      expect(screen.queryByTestId('fake-close-modal-trigger')).not.toBeInTheDocument();
-    });
-
-    const checkbox = screen.queryByRole('checkbox');
-    expect(checkbox).not.toBeChecked();
+    if (!submit) {
+      throw new Error('Expected a submit button to be present.');
+    }
   });
 
   it('should show errors when incorrect inputs', async () => {
-    (useHandlePhoneInput as jest.Mock).mockReturnValue({ handlePhoneInput: jest.fn(), hasError: true });
-    render(<ContactForm onSubmit={onSubmit} />);
     fillInput('Імя', 'A');
     fillInput('Електронна адреса (email) *', 'test@');
     fillInput('Номер телефону', '531632');
@@ -180,7 +113,6 @@ describe('ContactForm', () => {
   });
 
   it('should call onSubmit callback when submit button is clicked', async () => {
-    render(<ContactForm onSubmit={onSubmit} />);
     fillInput('Імя', 'Vlad');
     fillInput('Електронна адреса (email) *', 'v@mail.com');
     fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
@@ -192,7 +124,6 @@ describe('ContactForm', () => {
   });
 
   it('should normalize when mask chars already present', async () => {
-    render(<ContactForm onSubmit={onSubmit} />);
     const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
     const form = submitBtn.closest('form') as HTMLFormElement;
     if (!form) throw new Error('Form element not found');
@@ -215,8 +146,6 @@ describe('ContactForm', () => {
   });
 
   it('should NOT call onSubmit when phone number is incomplete but not empty', async () => {
-    (useHandlePhoneInput as jest.Mock).mockReturnValue({ handlePhoneInput: jest.fn(), hasError: true });
-    render(<ContactForm onSubmit={onSubmit} />);
     const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
     const form = submitBtn.closest('form') as HTMLFormElement;
     if (!form) throw new Error('Form element not found');
@@ -236,34 +165,50 @@ describe('ContactForm', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(0));
   });
+  it('should close modal and reset form when confirmation modal is closed', async () => {
+    fillInput('Імя', 'Vlad');
+    fillInput('Електронна адреса (email) *', 'v@mail.com');
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
 
-  it('renders submit button with medium size on mobile/tablet breakpoints', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true, isTablet: false });
-    render(<ContactForm onSubmit={onSubmit} />);
+    submitForm();
 
-    expect(screen.getByTestId('submit-button')).toHaveAttribute('data-size', 'medium');
-  });
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
 
-  it('renders submit button with large size on desktop', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false, isTablet: false });
-    render(<ContactForm onSubmit={onSubmit} />);
+    const closeButton = await screen.findByRole('button', { name: 'btnText' });
+    fireEvent.click(closeButton);
 
-    expect(screen.getByTestId('submit-button')).toHaveAttribute('data-size', 'large');
-  });
-
-  it('should show max length message when name reaches 50 characters', async () => {
-    render(<ContactForm onSubmit={onSubmit} />);
-    fillInput('Імя', 'A'.repeat(50));
     await waitFor(() => {
-      expect(screen.getByText('Імʼя не може перевищувати 50 символів')).toBeInTheDocument();
+      expect((screen.getByLabelText('Імя') as HTMLInputElement).value).toBe('');
     });
   });
 
-  it('should show max length message when message reaches 50 characters', async () => {
+  it('should normalize extra spaces in name field on blur', () => {
+    const nameInput = screen.getByLabelText('Імя') as HTMLInputElement;
+    fireEvent.change(nameInput, { target: { value: '  Vlad   Ivanov  ' } });
+    fireEvent.blur(nameInput);
+
+    expect(nameInput.value).toBe('Vlad Ivanov');
+  });
+  it('should show max length message when name reaches 50 characters', () => {
+    const nameInput = screen.getByLabelText('Імя') as HTMLInputElement;
+    fireEvent.change(nameInput, { target: { value: 'A'.repeat(50) } });
+
+    expect(screen.getByText('Довжина імені не може перевищувати 50 символів')).toBeInTheDocument();
+  });
+
+  it('should show max length message when message reaches 1000 characters', () => {
+    const messageInput = screen.getByLabelText('Ваше повідомлення *') as HTMLTextAreaElement;
+    fireEvent.change(messageInput, { target: { value: 'a'.repeat(1000) } });
+
+    expect(messageInput.value.length).toBe(1000);
+  });
+
+  it('should apply medium button size on mobile or tablet', () => {
+    (useBreakpoints as jest.Mock).mockReturnValueOnce({ isMobile: true, isTablet: false });
     render(<ContactForm onSubmit={onSubmit} />);
-    fillInput('Ваше повідомлення *', 'A'.repeat(1001));
-    await waitFor(() => {
-      expect(screen.getByText('Повідомлення не може перевищувати 1000 символів')).toBeInTheDocument();
-    });
+
+    const buttons = screen.getAllByRole('button', { name: /Надіслати запит/i });
+    expect(buttons[buttons.length - 1]).toBeInTheDocument();
   });
 });

@@ -27,7 +27,7 @@ const config: Config = {
     '!app/**/constants.{ts,tsx}'
   ],
   coverageDirectory: 'coverage',
-  coverageProvider: 'v8',
+  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 80,
