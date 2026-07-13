@@ -140,6 +140,34 @@ describe('OpusGroupMenu', () => {
     });
   });
 
+  it('should show the copied feedback after a successful Share', async () => {
+    render(<OpusGroupMenu group={buildGroup()} />);
+
+    openMenu();
+    fireEvent.click(screen.getByRole('menuitem', { name: /share/i }));
+
+    expect(await screen.findByText('copied')).toBeInTheDocument();
+  });
+
+  it('should log an error and skip the copied feedback when the clipboard write fails', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    Object.assign(navigator, {
+      clipboard: { writeText: jest.fn().mockRejectedValue(new Error('denied')) }
+    });
+
+    render(<OpusGroupMenu group={buildGroup()} />);
+
+    openMenu();
+    fireEvent.click(screen.getByRole('menuitem', { name: /share/i }));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+    expect(screen.queryByText('copied')).not.toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
+
   it('should route to the opus details page on View details', () => {
     render(<OpusGroupMenu group={buildGroup()} />);
 

@@ -31,6 +31,7 @@ const mockRawCompositions = [
       number: 'op. 1',
       title: { en: 'First Opus', uk: 'Перший опус' },
       releaseYear: 2022,
+      youtubeUrl: 'https://youtube.com/playlist?list=abc',
       createdAt: new Date('2022-01-01'),
       updatedAt: new Date('2022-01-01')
     },
@@ -80,6 +81,27 @@ describe('artistryService', () => {
       const result = await artistryService.getAllCompositions(locale, '');
       expect(result[0].name).toBe('Красива пісня');
       expect(result[0].opusTitle).toBe('Перший опус');
+    });
+
+    it('should expose opus id and youtube url for compositions with an opus', async () => {
+      compositionServiceMock.getAllCompositions.mockResolvedValue(mockRawCompositions);
+
+      const result = await artistryService.getAllCompositions('uk', '');
+
+      expect(result[0].opusId).toBe('63f8b3b7a8b3d6c1b3e8e4c1');
+      expect(result[0].opusYoutubeUrl).toBe('https://youtube.com/playlist?list=abc');
+    });
+
+    it('should leave opus fields undefined for compositions without an opus', async () => {
+      const { opusId: _, ...compositionWithoutOpus } = mockRawCompositions[0];
+      compositionServiceMock.getAllCompositions.mockResolvedValue([compositionWithoutOpus]);
+
+      const result = await artistryService.getAllCompositions('uk', '');
+
+      expect(result[0].opus).toBeUndefined();
+      expect(result[0].opusId).toBeUndefined();
+      expect(result[0].opusTitle).toBeUndefined();
+      expect(result[0].opusYoutubeUrl).toBeUndefined();
     });
 
     it('should return empty array if null returned', async () => {
