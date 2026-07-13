@@ -76,4 +76,13 @@ describe('HeroSectionQuoteBlock', () => {
     expect(quoteEl).toBeInTheDocument();
     expect(quoteEl.getAttribute('data-align-right')).toBe('false');
   });
+
+  it('should use default testID value when it is not provided to cover default parameter branch', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
+
+    render(<HeroSectionQuoteBlock heroQuote="Default ID Quote" heroQuoteSource="Author" />);
+
+    expect(screen.getByTestId('hero-section-quote-block')).toBeInTheDocument();
+    expect(screen.getByTestId('hero-section-quote-block-quote')).toBeInTheDocument();
+  });
 });

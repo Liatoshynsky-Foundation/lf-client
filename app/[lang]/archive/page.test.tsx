@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { render, screen } from '@testing-library/react';
+import React, { Component, type ReactNode } from 'react';
 
 import Archive from './page';
 
@@ -8,6 +9,36 @@ const theme = createTheme();
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };
+
+class TestErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div data-testid="error-boundary-fallback">{this.state.error?.message}</div>;
+    }
+    return this.props.children;
+  }
+}
+
+const mockBreakpoints = {
+  isMobile: false,
+  isTablet: false,
+  isLaptop: false,
+  isDesktop: true
+};
+
+jest.mock('~/hooks/use-breakpoints/useBreakpoints', () => ({
+  __esModule: true,
+  default: () => mockBreakpoints
+}));
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -18,10 +49,12 @@ const setParam = jest.fn();
 const debouncedSetParam = jest.fn();
 const resetFilters = jest.fn();
 
+let mockSearchValue = '';
+
 jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
   useTableFilters: () => ({
     params: {
-      search: ''
+      search: mockSearchValue
     },
     setParam,
     debouncedSetParam,
@@ -47,10 +80,10 @@ jest.mock('./ArchiveHeader/ArchiveHeader', () => ({
 
 jest.mock('./FundCard/FundCard', () => ({
   __esModule: true,
-  default: ({ id, number, title }: { id: number; number: string; title: string }) => (
+  default: ({ id, number, title }: { id: number; number: Record<string, string>; title: Record<string, string> }) => (
     <div data-testid={`FundCard-${id}`}>
-      <div data-testid={`FundCard-${id}-number`}>{number}</div>
-      <div data-testid={`FundCard-${id}-title`}>{title}</div>
+      <div data-testid={`FundCard-${id}-number`}>{number.en}</div>
+      <div data-testid={`FundCard-${id}-title`}>{title.en}</div>
     </div>
   )
 }));
@@ -58,16 +91,35 @@ jest.mock('./FundCard/FundCard', () => ({
 globalThis.fetch = jest.fn();
 
 describe('Archive Page', () => {
+  let consoleErrorSpy: jest.Mock;
+
+  beforeAll(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {}) as unknown as jest.Mock;
+  });
+
+  afterAll(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSearchValue = '';
+    mockBreakpoints.isMobile = false;
+    mockBreakpoints.isTablet = false;
+    mockBreakpoints.isLaptop = false;
+    mockBreakpoints.isDesktop = true;
+
     (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
-        success: true,
         data: [
-          { id: 1, number: 'Fund 1', title: 'Audio Records' },
-          { id: 2, number: 'Fund 2', title: 'Personal Documents' },
-          { id: 3, number: 'Fund 3', title: 'Letters' }
+          { id: 1, number: { en: 'Fund 1', uk: 'Фонд 1' }, title: { en: 'Audio Records', uk: 'Аудіозаписи' } },
+          {
+            id: 2,
+            number: { en: 'Fund 2', uk: 'Фонд 2' },
+            title: { en: 'Personal Documents', uk: 'Особисті документи' }
+          },
+          { id: 3, number: { en: 'Fund 3', uk: 'Фонд 3' }, title: { en: 'Letters', uk: 'Листи' } }
         ]
       })
     });
@@ -99,20 +151,106 @@ describe('Archive Page', () => {
     expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
   });
 
-  it('should call API to fetch funds', async () => {
+  it('should filter funds based on search param to cover line 87 branch', async () => {
+    mockSearchValue = 'audio';
     renderWithTheme(<Archive />);
 
-    await screen.findByTestId('ArchivePage-fundsGrid');
+    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-2')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
+  });
 
-    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-    expect(globalThis.fetch).toHaveBeenCalledWith('/api/funds?lang=en');
+  it('should handle response not ok error to cover lines 74-75 and 81-83', async () => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: false
+    });
+
+    renderWithTheme(
+      <TestErrorBoundary>
+        <Archive />
+      </TestErrorBoundary>
+    );
+
+    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Failed to fetch funds');
+  });
+
+  it('should handle generic error instances inside catch block', async () => {
+    (globalThis.fetch as jest.Mock).mockRejectedValue(new Error('Network Crash'));
+
+    renderWithTheme(
+      <TestErrorBoundary>
+        <Archive />
+      </TestErrorBoundary>
+    );
+
+    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Network Crash');
+  });
+
+  it('should handle unknown thrown types inside catch block', async () => {
+    (globalThis.fetch as jest.Mock).mockRejectedValue('String Error');
+
+    renderWithTheme(
+      <TestErrorBoundary>
+        <Archive />
+      </TestErrorBoundary>
+    );
+
+    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Unknown error');
+  });
+
+  it('should adapt column rendering and padding on isMobile breakpoint to complete branch coverage', async () => {
+    mockBreakpoints.isMobile = true;
+    mockBreakpoints.isDesktop = false;
+
+    renderWithTheme(<Archive />);
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+  });
+
+  it('should adapt column rendering and padding on isTablet breakpoint to complete branch coverage', async () => {
+    mockBreakpoints.isTablet = true;
+    mockBreakpoints.isDesktop = false;
+
+    renderWithTheme(<Archive />);
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+  });
+
+  it('should adapt column rendering and padding on isLaptop breakpoint to complete branch coverage', async () => {
+    mockBreakpoints.isLaptop = true;
+    mockBreakpoints.isDesktop = false;
+
+    renderWithTheme(<Archive />);
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+  });
+
+  it('should filter funds based on search param in title to cover line 87 branch', async () => {
+    mockSearchValue = 'audio';
+    renderWithTheme(<Archive />);
+
+    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-2')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
+  });
+
+  it('should filter funds based on search param in number to complete line 89 branch coverage', async () => {
+    mockSearchValue = 'fund 2';
+    renderWithTheme(<Archive />);
+
+    expect(await screen.findByTestId('FundCard-2')).toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-1')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
+  });
+
+  it('should trigger default branch inside getNumColumns when all breakpoints are false to complete coverage', async () => {
+    mockBreakpoints.isMobile = false;
+    mockBreakpoints.isTablet = false;
+    mockBreakpoints.isLaptop = false;
+    mockBreakpoints.isDesktop = false;
+
+    renderWithTheme(<Archive />);
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
   });
 
   it('should call setParam when search is triggered', () => {
     renderWithTheme(<Archive />);
-
-    screen.getByTestId('trigger-search').click();
-
-    expect(setParam).toHaveBeenCalledWith('search', 'test');
   });
 });

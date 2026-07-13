@@ -183,7 +183,13 @@ describe('EnhancedTable', () => {
         data={[]}
         columns={columns}
         tableName="Test Table"
-        noResults={<div data-testid="no-results">Nothing found</div>}
+        noResults={
+          <tr>
+            <td>
+              <div data-testid="no-results">Nothing found</div>
+            </td>
+          </tr>
+        }
       />
     );
 

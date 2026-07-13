@@ -13,7 +13,7 @@ export interface CookiePreferencesModalProps {
   open: boolean;
   onClose: () => void;
   saveSettings: () => void;
-  checked: boolean;
+  checked?: boolean;
   onChecked: (value: boolean) => void;
 }
 

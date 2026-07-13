@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 
 import { ROUTES } from '../constants/routes';
 import YearTabs from './YearTabs';
@@ -23,13 +24,27 @@ jest.mock('~/components/year-tabs/constants', () => ({
   years: ['2025', '2024', '2023']
 }));
 
+type MockButtonGroupProps = {
+  buttons: React.ReactNode;
+  'data-testid'?: string;
+  sx?: Record<string, unknown>;
+  activeButton?: number;
+};
+
 jest.mock('~/ds-components/button-group/ButtonGroup', () => ({
   __esModule: true,
-  default: ({ buttons, 'data-testid': dataTestId, sx, activeButton }: any) => (
-    <div data-testid={dataTestId} style={sx} data-active-index={activeButton}>
-      {buttons}
-    </div>
-  )
+  default: ({ buttons, 'data-testid': dataTestId, sx, activeButton }: MockButtonGroupProps) => {
+    const inlineStyle =
+      sx && typeof sx === 'object'
+        ? Object.fromEntries(Object.entries(sx).filter(([key]) => !key.startsWith('&')))
+        : undefined;
+
+    return (
+      <div data-testid={dataTestId} style={inlineStyle} data-active-index={activeButton}>
+        {buttons}
+      </div>
+    );
+  }
 }));
 
 const mockScrollTo = jest.fn();
@@ -235,7 +250,7 @@ describe('YearTabs', () => {
     } as unknown as IntersectionObserverEntry;
 
     act(() => {
-      yearObserver!.callback([mockEntry, mockEntryFar], null as any);
+      yearObserver!.callback([mockEntry, mockEntryFar], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '2');
@@ -260,7 +275,7 @@ describe('YearTabs', () => {
     } as unknown as IntersectionObserverEntry;
 
     act(() => {
-      yearObserver!.callback([mockEntry], null as any);
+      yearObserver!.callback([mockEntry], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '1');
@@ -270,7 +285,7 @@ describe('YearTabs', () => {
     });
 
     act(() => {
-      yearObserver!.callback([mockEntry], null as any);
+      yearObserver!.callback([mockEntry], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '2');
@@ -288,7 +303,7 @@ describe('YearTabs', () => {
 
   it('should remove scroll event listener on unmount', () => {
     const mockRemoveEventListener = jest.fn();
-    globalThis.removeEventListener = mockRemoveEventListener as any;
+    globalThis.removeEventListener = mockRemoveEventListener as unknown as typeof globalThis.removeEventListener;
 
     const { unmount } = render(<YearTabs years={MOCK_YEARS} />);
     unmount();
@@ -320,10 +335,10 @@ describe('YearTabs', () => {
           {
             target: sentinel,
             boundingClientRect: { top: 0 },
-            rootBounds: { bottom: 800 } as any
+            rootBounds: { bottom: 800 } as unknown as DOMRect
           } as unknown as IntersectionObserverEntry
         ],
-        null as any
+        {} as unknown as IntersectionObserver
       );
     });
 

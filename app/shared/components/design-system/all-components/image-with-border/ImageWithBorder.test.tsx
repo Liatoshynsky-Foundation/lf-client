@@ -31,4 +31,25 @@ describe('ImageWithBorder', () => {
     const borderBox = boxes[1];
     expect(borderBox).toHaveStyle({ width: '8px' });
   });
+
+  it('should render image in fill mode when width and height are not provided', () => {
+    render(<ImageWithBorder image="/image.png" alt="Fill image" />);
+
+    const image = screen.getByAltText('Fill image');
+
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', '/image.png');
+  });
+
+  it('should use default borderWidth when it is not provided', () => {
+    const { container } = render(
+      <ImageWithBorder image="/image.png" width={400} height={700} alt="Image description" />
+    );
+
+    const borderBox = container.querySelectorAll('div')[1];
+
+    expect(borderBox).toHaveStyle({
+      width: '8px'
+    });
+  });
 });

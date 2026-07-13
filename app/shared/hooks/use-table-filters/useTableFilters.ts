@@ -32,7 +32,7 @@ export function useTableFilters<P extends TableParams>(initialParams: P) {
         return;
       }
 
-      const url = qs ? `${pathname}${qs}` : pathname;
+      const url = `${pathname}${qs}`;
       router.replace(url, { scroll: false });
     },
     [router, pathname]

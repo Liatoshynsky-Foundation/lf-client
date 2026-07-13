@@ -2,12 +2,13 @@ import { alpha, styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 
 export const CustomBorderTextField = styled(TextField)(({ theme }) => {
-  const buttonLikeTransition =
-    theme?.transitions?.create?.(['background-color', 'border-color', 'box-shadow', 'color', 'border-radius'], {
+  const buttonLikeTransition = theme.transitions.create(
+    ['background-color', 'border-color', 'box-shadow', 'color', 'border-radius'],
+    {
       duration: theme.transitions.duration.short,
       easing: theme.transitions.easing.easeInOut
-    }) ??
-    'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, border-radius 0.3s ease';
+    }
+  );
 
   return {
     borderColor: `${theme.palette.primary.main} !important`,

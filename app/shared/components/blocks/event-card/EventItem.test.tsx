@@ -6,7 +6,15 @@ import { MOCK_EVENT_ITEMS } from './EventItem.fixture';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="next-image" />
+  default: ({
+    src,
+    alt,
+    onError
+  }: {
+    src: string;
+    alt: string;
+    onError?: React.ReactEventHandler<HTMLImageElement>;
+  }) => <img src={src} alt={alt} data-testid="next-image" onError={onError} />
 }));
 
 const observeMock = jest.fn();
@@ -19,9 +27,11 @@ globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: disconnectMock
 }));
 
+let mockLocale = 'uk';
+
 jest.mock('next-intl', () => ({
   __esModule: true,
-  useLocale: () => 'uk',
+  useLocale: () => mockLocale,
   useTranslations: () => (key: string) => {
     if (key === 'publishedAtLabel') {
       return 'Опубліковано:';
@@ -32,7 +42,13 @@ jest.mock('next-intl', () => ({
 }));
 
 describe('EventItem', () => {
-  const { props: baseProps } = MOCK_EVENT_ITEMS[0];
+  const baseProps: EventItemProps = {
+    ...MOCK_EVENT_ITEMS[0].props,
+    image: {
+      ...MOCK_EVENT_ITEMS[0].props.image,
+      src: '/images/test.png'
+    }
+  };
 
   const assertTwoTimeElementsWithDate = (expectedDate: string) => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
@@ -92,6 +108,29 @@ describe('EventItem', () => {
     expect(dateBlock).toHaveAttribute('aria-label', '29.02 – 01.03 2024');
   });
 
+  it('renders numeric date range across different years', () => {
+    const props: EventItemProps = {
+      ...baseProps,
+      statusLabel: undefined,
+      date: {
+        startDate: '2023-12-30',
+        endDate: '2024-01-02'
+      }
+    };
+
+    render(<EventItem {...props} />);
+
+    const dateBlock = screen.getByTestId('EventItem-dateBlock');
+    const timeElements = dateBlock.querySelectorAll('time');
+
+    expect(timeElements).toHaveLength(1);
+    expect(timeElements[0]).toHaveAttribute('dateTime', '2023-12-30');
+
+    expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent('30.12.2023 –02.01.2024');
+    expect(screen.queryByTestId('EventItem-year')).toBeNull();
+    expect(dateBlock).toHaveAttribute('aria-label', '30.12.2023 –\n02.01.2024');
+  });
+
   it('renders a single-day date correctly when endDate is not provided', () => {
     const props: EventItemProps = {
       ...baseProps,
@@ -122,7 +161,10 @@ describe('EventItem', () => {
   });
 
   it('renders primary and secondary CTAs when two actions are provided', () => {
-    const { props: twoActionsProps } = MOCK_EVENT_ITEMS[1];
+    const twoActionsProps: EventItemProps = {
+      ...MOCK_EVENT_ITEMS[1].props,
+      image: { ...MOCK_EVENT_ITEMS[1].props.image, src: '/images/test.png' }
+    };
     render(<EventItem {...twoActionsProps} />);
 
     const [primaryAction, secondaryAction] = twoActionsProps.actions!;
@@ -181,7 +223,9 @@ describe('EventItem', () => {
 
     expect(screen.getByTestId('EventItem-status')).toHaveTextContent('Завершена подія');
 
-    expect(dateBlock.querySelectorAll('time')).toHaveLength(0);
+    dateBlock.querySelectorAll('time').forEach((el) => {
+      expect(el).not.toBeInTheDocument();
+    });
     expect(screen.queryByTestId('EventItem-dateRange')).toBeNull();
     expect(screen.queryByTestId('EventItem-year')).toBeNull();
 
@@ -209,6 +253,29 @@ describe('EventItem', () => {
     const dateBlock = screen.getByTestId('EventItem-dateBlock');
 
     expectNoStatusOrDates(dateBlock);
+  });
+
+  it('falls back to raw publishedAt string when formatIsoDateToDdMmYy returns null', () => {
+    const props: EventItemProps = { ...baseProps, publishedAt: 'invalid-date-string' };
+
+    render(<EventItem {...props} />);
+
+    expect(screen.getByTestId('EventItem-publishedAt')).toHaveTextContent('Опубліковано: invalid-date-string');
+  });
+
+  it('triggers console.warn and applies fallback on invalid url text scheme to cover line 29-30', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const props: EventItemProps = {
+      ...baseProps,
+      image: { ...baseProps.image, src: 'http_invalid_:\\\\example.com' }
+    };
+
+    render(<EventItem {...props} />);
+
+    expect(warnSpy).toHaveBeenCalled();
+    const img = screen.getByAltText(baseProps.image.alt);
+    expect(img).toHaveAttribute('src', '/images/media-card-placeholder.png');
+    warnSpy.mockRestore();
   });
 
   describe('Crop functionality', () => {
@@ -246,10 +313,8 @@ describe('EventItem', () => {
     it('should disconnect ResizeObserver on unmount', () => {
       const crop = { x: 10, y: 10, width: 100, height: 100 };
       const propsWithCrop = { ...baseProps, image: { ...baseProps.image, crop } };
-
       const { unmount } = render(<EventItem {...propsWithCrop} />);
       unmount();
-
       expect(disconnectMock).toHaveBeenCalled();
     });
 
@@ -261,29 +326,100 @@ describe('EventItem', () => {
         unobserve: jest.fn(),
         disconnect: jest.fn()
       }));
-
       Object.defineProperty(HTMLImageElement.prototype, 'naturalWidth', { configurable: true, get: () => 800 });
       Object.defineProperty(HTMLImageElement.prototype, 'naturalHeight', { configurable: true, get: () => 600 });
-
       const crop = { x: 10, y: 20, width: 200, height: 150 };
       const props = { ...baseProps, image: { ...baseProps.image, crop } };
-
       render(<EventItem {...props} />);
-
       const img = screen.getByRole('img', { name: baseProps.image.alt });
-
       act(() => {
         fireEvent.load(img);
       });
-
       expect(img.style.transform).toContain('translate');
       expect(img.style.transform).toContain('scale');
+      globalThis.ResizeObserver = jest
+        .fn()
+        .mockImplementation(() => ({ observe: observeMock, unobserve: unobserveMock, disconnect: disconnectMock }));
+    });
 
-      globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
-        observe: observeMock,
-        unobserve: unobserveMock,
-        disconnect: disconnectMock
-      }));
+    it('renders dates with English locale', () => {
+      mockLocale = 'en';
+      const props: EventItemProps = {
+        ...baseProps,
+        statusLabel: undefined,
+        dateVariant: 'text',
+        date: { startDate: '2024-03-05' }
+      };
+
+      render(<EventItem {...props} />);
+
+      expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent(/March/i);
+
+      mockLocale = 'uk';
+    });
+  });
+
+  describe('Image error fallback', () => {
+    it('should fallback to placeholder when native img fails to load (crop provided)', () => {
+      const crop = { x: 0, y: 0, width: 200, height: 150 };
+      const props = { ...baseProps, image: { ...baseProps.image, crop } };
+      render(<EventItem {...props} />);
+      const img = screen.getByRole('img', { name: baseProps.image.alt });
+      fireEvent.error(img);
+      const fallbackImg = screen.getByRole('img', { name: baseProps.image.alt });
+      expect(fallbackImg).toHaveAttribute('src', '/images/media-card-placeholder.png');
+    });
+
+    it('should fallback to placeholder when next/image fails to load (no crop)', () => {
+      const props = { ...baseProps, image: { ...baseProps.image, crop: null } };
+      render(<EventItem {...props} />);
+      const img = screen.getByTestId('next-image');
+      fireEvent.error(img);
+      expect(screen.getByTestId('next-image')).toHaveAttribute('src', '/images/media-card-placeholder.png');
+    });
+
+    it('should fallback to placeholder when image src is an empty string', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const props: EventItemProps = { ...baseProps, image: { ...baseProps.image, src: '' } };
+      render(<EventItem {...props} />);
+      const fallbackImg = screen.getByAltText(baseProps.image.alt);
+      expect(fallbackImg).toHaveAttribute('src', '/images/media-card-placeholder.png');
+      warnSpy.mockRestore();
+    });
+
+    it('renders text date range across different years', () => {
+      const props: EventItemProps = {
+        ...baseProps,
+        statusLabel: undefined,
+        dateVariant: 'text',
+        date: { startDate: '2023-12-30', endDate: '2024-01-02' }
+      };
+      render(<EventItem {...props} />);
+      expect(screen.queryByTestId('EventItem-year')).toBeNull();
+      expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent(/2023/);
+      expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent(/2024/);
+    });
+
+    it('should treat a full valid URL as valid image src', () => {
+      const props: EventItemProps = {
+        ...baseProps,
+        image: { ...baseProps.image, src: 'https://example.com/image.png' }
+      };
+      render(<EventItem {...props} />);
+      const img = screen.getByAltText(baseProps.image.alt);
+      expect(img).toHaveAttribute('src', 'https://example.com/image.png');
+    });
+
+    it('renders text date range within the same year', () => {
+      const props: EventItemProps = {
+        ...baseProps,
+        statusLabel: undefined,
+        dateVariant: 'text',
+        date: { startDate: '2024-03-05', endDate: '2024-03-10' }
+      };
+      render(<EventItem {...props} />);
+      expect(screen.getByTestId('EventItem-year')).toHaveTextContent('2024');
+      expect(screen.getByTestId('EventItem-dateRange')).toHaveTextContent(/БЕРЕЗНЯ/i);
     });
   });
 });

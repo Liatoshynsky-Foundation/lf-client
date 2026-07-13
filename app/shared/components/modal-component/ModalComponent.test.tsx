@@ -3,14 +3,23 @@ import userEvent from '@testing-library/user-event';
 
 import ModalComponent from './ModalComponent';
 
+type MockSlotProps = {
+  children?: React.ReactNode;
+  'data-testid'?: string;
+};
+
 jest.mock('~/components/backdrop-component/BackdropComponent', () => ({
   __esModule: true,
-  default: (props: any) => <div data-testid="mock-backdrop" {...props} />
+  default: ({ children, 'data-testid': testId }: MockSlotProps) => (
+    <div data-testid={testId || 'mock-backdrop'}>{children}</div>
+  )
 }));
 
 jest.mock('~/components/paper-component/PaperComponent', () => ({
   __esModule: true,
-  default: (props: any) => <div data-testid="mock-paper" {...props} />
+  default: ({ children, 'data-testid': testId }: MockSlotProps) => (
+    <div data-testid={testId || 'mock-paper'}>{children}</div>
+  )
 }));
 
 describe('ModalComponent', () => {

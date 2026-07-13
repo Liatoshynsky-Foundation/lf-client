@@ -6,17 +6,32 @@ import DesktopNav from './DesktopNav';
 import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { ROUTES } from '~/shared/components/constants/routes';
 
+type MockLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  href: string;
+};
+
 jest.mock('~/i18n/navigation', () => ({
   usePathname: jest.fn(() => ROUTES.HOME),
-  Link: ({ children, href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a href={href} {...props}>
+  Link: ({ children, href, onClick, ...props }: MockLinkProps) => (
+    <a
+      href={href}
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) onClick(e);
+      }}
+      {...props}
+    >
       {children}
     </a>
   )
 }));
 
+type MockSvgProps = SVGProps<SVGSVGElement> & {
+  Component?: React.ComponentType;
+};
+
 jest.mock('~/shared/components/colored-svg/ColoredSvg.tsx', () => ({
-  Svg: (props: SVGProps<SVGSVGElement>) => <svg data-testid="svg-icon" {...props} />
+  Svg: ({ Component: _Component, ...props }: MockSvgProps) => <svg data-testid="svg-icon" {...props} />
 }));
 
 jest.mock('~/public/icons/chevron-down.svg', () => ({

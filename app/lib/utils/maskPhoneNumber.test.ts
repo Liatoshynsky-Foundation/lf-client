@@ -75,4 +75,25 @@ describe('maskPhoneNumber', () => {
     });
     expect(res).toBe('+380 (6)');
   });
+
+  it('should cover branch for line 52 when operator length is truthy but code is empty', () => {
+    const res = maskPhoneNumber({
+      countryCode: '+380',
+      nationalNumber: '63',
+      operatorCodeLength: 2,
+      maxPhoneNumberLength: 2,
+      separateBy: ' '
+    });
+    expect(res).toBe('+380');
+  });
+
+  it('should force cover line 56 branch by fallback to default space separator when separateBy is undefined', () => {
+    const res = maskPhoneNumber({
+      countryCode: '+380',
+      nationalNumber: '631164284',
+      operatorCodeLength: 2,
+      maxPhoneNumberLength: 15
+    });
+    expect(res).toBe('+380 (63) 116 4284');
+  });
 });
