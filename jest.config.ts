@@ -48,7 +48,8 @@ const config: Config = {
     '^~/(.*)$': '<rootDir>/app/$1'
   },
   modulePaths: ['<rootDir>/app'],
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
+  modulePathIgnorePatterns: ['<rootDir>/.claude/'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/', '<rootDir>/.claude/'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest'
   },
