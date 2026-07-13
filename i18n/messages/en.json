@@ -207,7 +207,10 @@
     "buttons": {
       "viewSheetMusic": "View sheet music",
       "downloadMusic": "Download",
-      "listenToComposition": "Listen to the composition"
+      "listenToComposition": "Listen to the composition",
+      "watchOnYouTube": "Watch on YouTube",
+      "share": "Share",
+      "viewDetails": "View details"
     },
     "work": {
       "name": "All documents",

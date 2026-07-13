@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, type SxProps, Theme } from '@mui/material';
+import { Divider, Menu, type SxProps, Theme } from '@mui/material';
 import type { MouseEvent, ReactElement } from 'react';
 import { cloneElement, Fragment, useId, useMemo, useState } from 'react';
 
@@ -62,21 +62,29 @@ export default function OverflowMenu({
           sx: menuListSx
         }}
       >
-        {visibleItems.map((item) => (
-          <OverflowMenuItem
-            key={item.id}
-            label={item.label}
-            icon={item.icon}
-            iconPosition={item.iconPosition}
-            containerSx={item.containerSx}
-            labelSx={item.labelSx}
-            disabled={item.disabled}
-            onClick={() => {
-              handleClose();
-              item.onClick();
-            }}
-          />
-        ))}
+        {visibleItems.flatMap((item) => {
+          const menuItem = (
+            <OverflowMenuItem
+              key={item.id}
+              label={item.label}
+              icon={item.icon}
+              iconPosition={item.iconPosition}
+              containerSx={item.containerSx}
+              labelSx={item.labelSx}
+              disabled={item.disabled}
+              onClick={() => {
+                handleClose();
+                item.onClick();
+              }}
+            />
+          );
+
+          if (item.divider) {
+            return [<Divider key={`${item.id}-divider`} component="li" sx={overflowMenuSx.dividerSx} />, menuItem];
+          }
+
+          return [menuItem];
+        })}
       </Menu>
     </Fragment>
   );

@@ -207,7 +207,10 @@
     "buttons": {
       "viewSheetMusic": "Переглянути ноти",
       "downloadMusic": "Завантажити",
-      "listenToComposition": "Прослухати композицію"
+      "listenToComposition": "Прослухати композицію",
+      "watchOnYouTube": "Переглянути у YouTube",
+      "share": "Поділитись",
+      "viewDetails": "Переглянути деталі"
     },
     "work": {
       "name": "Усі документи",

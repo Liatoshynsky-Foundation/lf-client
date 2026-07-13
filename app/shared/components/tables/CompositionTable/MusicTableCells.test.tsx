@@ -10,6 +10,7 @@ import {
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
+  renderOpusActionsGroupLabel,
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
@@ -272,6 +273,11 @@ describe('MusicTableCells', () => {
     it('should render opus title label', () => {
       render(renderOpusTitleGroupLabel([mockMusic]));
       expect(screen.getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
+    });
+
+    it('should render nothing for opus actions label when the group is empty', () => {
+      const { container } = render(<>{renderOpusActionsGroupLabel([])}</>);
+      expect(container).toBeEmptyDOMElement();
     });
   });
 

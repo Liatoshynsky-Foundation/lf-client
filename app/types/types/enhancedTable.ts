@@ -19,7 +19,9 @@ export type Music = {
   name: string;
   year: number;
   opus?: string;
+  opusId?: string;
   opusTitle?: string;
+  opusYoutubeUrl?: string;
   genre?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;

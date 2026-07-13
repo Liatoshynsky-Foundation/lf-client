@@ -6,7 +6,8 @@ const opusSchema = new mongoose.Schema(
   {
     number: { type: String, required: true, unique: true },
     title: { type: translatedFieldSchema, required: true },
-    releaseYear: { type: Number }
+    releaseYear: { type: Number },
+    youtubeUrl: { type: String }
   },
   { timestamps: true }
 );

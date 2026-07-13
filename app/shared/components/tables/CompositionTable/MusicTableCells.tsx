@@ -14,6 +14,7 @@ import {
   menuLabelItemSx,
   playCellSx
 } from './MusicTableCells.styles';
+import { OpusGroupMenu } from './OpusGroupMenu';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import type { OverflowMenuItemConfig } from '~/types/types/menu.types';
@@ -207,3 +208,6 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => (
     </Typography>
   </Box>
 );
+
+export const renderOpusActionsGroupLabel = (items: Music[]): React.JSX.Element | null =>
+  items.length ? <OpusGroupMenu group={items} /> : null;

@@ -12,6 +12,7 @@ import {
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
+  renderOpusActionsGroupLabel,
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
@@ -131,7 +132,8 @@ export default function MusicTableSection() {
       {
         id: 'actions',
         header: '',
-        cell: (info) => RenderActionsCell(info, handleOpenModal)
+        cell: (info) => RenderActionsCell(info, handleOpenModal),
+        meta: { groupLabelContentFactory: renderOpusActionsGroupLabel }
       }
     ],
     []

@@ -13,6 +13,7 @@ export type OverflowMenuItemConfig = Readonly<{
   labelSx?: SxProps<Theme>;
   disabled?: boolean;
   hidden?: boolean;
+  divider?: boolean;
   onClick: () => void;
 }>;
 

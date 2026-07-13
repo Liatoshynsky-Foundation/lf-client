@@ -96,6 +96,24 @@ describe('OverflowMenu', () => {
     });
   });
 
+  it('should render a divider before an item flagged with divider', async () => {
+    render(
+      <OverflowMenu
+        items={[
+          { id: 'a', label: 'Item A', onClick: jest.fn() },
+          { id: 'b', label: 'Item B', onClick: jest.fn(), divider: true }
+        ]}
+        trigger={<Trigger />}
+      />
+    );
+
+    fireEvent.click(screen.getByTestId('trigger'));
+
+    expect(await screen.findByRole('menu')).toBeInTheDocument();
+    expect(screen.getByRole('separator')).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: /Item B/ })).toBeInTheDocument();
+  });
+
   it('should disable item has aria-disabled=true and does not call onClick', async () => {
     const onItemClick = jest.fn();
 

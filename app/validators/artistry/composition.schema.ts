@@ -37,7 +37,9 @@ export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSch
     createdAt: song.createdAt,
     updatedAt: song.updatedAt,
     opus: song.opusId ? song.opusId.number : undefined,
+    opusId: song.opusId ? song.opusId._id : undefined,
     opusTitle: song.opusId ? song.opusId.title : undefined,
+    opusYoutubeUrl: song.opusId ? song.opusId.youtubeUrl : undefined,
     genre: song.genres && song.genres.length > 0 ? song.genres.map((g: GenreDTO) => g.name) : []
   }));
 

@@ -5,6 +5,10 @@ export const overflowMenuSx = {
     boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.06)',
     bgcolor: 'white',
     padding: '4px 8px'
+  },
+  dividerSx: {
+    my: '4px',
+    borderColor: 'blue.200'
   }
 };
 

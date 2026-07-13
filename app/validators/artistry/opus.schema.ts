@@ -7,6 +7,7 @@ export const opusSchema = z.object({
   number: z.string(),
   title: translatedFieldSchema,
   releaseYear: z.number().optional(),
+  youtubeUrl: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date()
 });
