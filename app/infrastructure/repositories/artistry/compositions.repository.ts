@@ -271,16 +271,17 @@ const compositionsRepository = {
       return null;
     }
 
-    const opus = await Opus.findById(id).lean<OpusLean | null>();
+    const [opus, compositions] = await Promise.all([
+      Opus.findById(id).lean<OpusLean | null>(),
+      Compositions.find({ opusId: id })
+        .populate('genres')
+        .sort({ order: 1, createdAt: 1 })
+        .lean<OpusCompositionLean[]>()
+    ]);
 
     if (!opus) {
       return null;
     }
-
-    const compositions = await Compositions.find({ opusId: id })
-      .populate('genres')
-      .sort({ order: 1, createdAt: 1 })
-      .lean<OpusCompositionLean[]>();
 
     return { opus, compositions };
   },

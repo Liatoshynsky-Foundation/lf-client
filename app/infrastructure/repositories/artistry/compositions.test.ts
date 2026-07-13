@@ -242,6 +242,7 @@ describe('compositionsRepository', () => {
 
     it('should return null when the opus is not found', async () => {
       (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(null));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
 
       const result = await compositionsRepository.getOpusById(validMongoId);
 
