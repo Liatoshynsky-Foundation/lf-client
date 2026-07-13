@@ -4,16 +4,13 @@ import type { Locale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { createSeoMeta } from '~/utils/createSeoMeta';
+import { mapOpusDetailsToProps } from '~/utils/opusDetailsMapper';
 
 import { createRequestContainer } from '~/di/container';
 import type { OpusDetailsDTO } from '~/domain/dto/composition.dto';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import OpusDetails from '~/shared/components/blocks/opus-details/OpusDetails';
-import type {
-  OpusComposition,
-  OpusDetailsLabels,
-  OpusVideo
-} from '~/shared/components/blocks/opus-details/opusDetails.types';
+import type { OpusDetailsLabels } from '~/shared/components/blocks/opus-details/opusDetails.types';
 import { getDynamicRoute, ROUTES } from '~/shared/components/constants/routes';
 
 type OpusPageParams = {
@@ -75,19 +72,6 @@ export default async function OpusPage({ params }: Readonly<OpusPageProps>) {
     notFound();
   }
 
-  const compositions: OpusComposition[] = opusDetails.compositions.map((composition) => ({
-    id: composition._id,
-    index: composition.index,
-    title: composition.title,
-    sheetMusicUrl: composition.sheetMusicUrl
-  }));
-
-  const videos: OpusVideo[] = opusDetails.videos.map((video) => ({
-    id: video._id,
-    youTubeId: video.youTubeId,
-    title: video.title
-  }));
-
   const labels: OpusDetailsLabels = {
     back: t('back'),
     metaNumber: t('meta.number'),
@@ -104,19 +88,7 @@ export default async function OpusPage({ params }: Readonly<OpusPageProps>) {
 
   return (
     <MainLayout withLines>
-      <OpusDetails
-        title={opusDetails.title}
-        number={opusDetails.number}
-        creationDate={opusDetails.creationDate}
-        genre={opusDetails.genre}
-        movements={opusDetails.movements}
-        sheetMusicUrl={opusDetails.sheetMusicUrl}
-        description={opusDetails.description}
-        compositions={compositions}
-        videos={videos}
-        backHref={`/${lang}${ROUTES.ARTISTRY}`}
-        labels={labels}
-      />
+      <OpusDetails {...mapOpusDetailsToProps(opusDetails)} backHref={`/${lang}${ROUTES.ARTISTRY}`} labels={labels} />
     </MainLayout>
   );
 }
