@@ -102,6 +102,34 @@ describe('compositionsRepository', () => {
       const res = await compositionsRepository.getAllCompositionTitles({ genre: ['none-gen'] });
       expect(res).toEqual([]);
     });
+
+    it('should push a category filter when regular category keys resolve to ids', async () => {
+      (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['c1'] });
+
+      expect(Category.find).toHaveBeenCalledWith({ key: { $in: ['c1'] } });
+    });
+
+    it('should apply the with-opus special category filter', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus'] });
+
+      expect(Compositions.aggregate).toHaveBeenCalled();
+    });
+
+    it('should skip opus filtering when both special category keys are selected', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus', 'without-opus'] });
+
+      expect(Compositions.aggregate).toHaveBeenCalled();
+    });
   });
 
   describe('getAllCompositions', () => {
@@ -147,6 +175,45 @@ describe('compositionsRepository', () => {
       (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
       const res = await compositionsRepository.getAllCompositions();
       expect(res).toEqual([]);
+    });
+
+    it('should apply the with-opus special filter', async () => {
+      (Opus.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+
+      await compositionsRepository.getAllCompositions(undefined, { categories: ['with-opus'] });
+
+      expect(Opus.find).toHaveBeenCalledWith({ number: { $regex: /^op/i } });
+    });
+
+    it('should skip opus filtering when both special keys are selected', async () => {
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+
+      await compositionsRepository.getAllCompositions(undefined, { categories: ['with-opus', 'without-opus'] });
+
+      expect(Opus.find).not.toHaveBeenCalled();
+    });
+
+    it('should sort compositions by opus prefix, number and remainder', async () => {
+      const makeComp = (id: string, opusNumber: string): typeof mockComp => ({
+        ...mockComp,
+        _id: id,
+        opusId: { ...mockComp.opusId, _id: id, number: opusNumber }
+      });
+
+      const unsorted = [
+        makeComp('507f191e810c19729de860e1', 'sine op. 5'),
+        makeComp('507f191e810c19729de860e2', 'Op. 2'),
+        makeComp('507f191e810c19729de860e3', 'Op. 1 No. 1'),
+        makeComp('507f191e810c19729de860e4', 'Op. 1 No. 2')
+      ];
+
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(unsorted));
+
+      const result = await compositionsRepository.getAllCompositions();
+      const orderedNumbers = result.map((comp) => comp.opusId?.number);
+
+      expect(orderedNumbers).toEqual(['Op. 1 No. 1', 'Op. 1 No. 2', 'Op. 2', 'sine op. 5']);
     });
   });
 
