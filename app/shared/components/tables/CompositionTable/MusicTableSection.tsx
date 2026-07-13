@@ -104,7 +104,7 @@ export default function MusicTableSection() {
         id: 'opus',
         header: RenderOpusHeader,
         cell: () => null,
-        meta: { groupLabelContentFactory: renderOpusGroupLabel }
+        meta: { groupLabelContentFactory: (items: Music[]) => renderOpusGroupLabel(items) }
       },
       { id: 'play', header: '', cell: RenderPlayCell },
       {

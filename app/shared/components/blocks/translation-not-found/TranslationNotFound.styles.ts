@@ -45,5 +45,11 @@ export const styles = {
       xs: '#FCFCFC',
       sm: '#F2EEE8'
     }
+  },
+
+  gridLayout: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center'
   }
 };

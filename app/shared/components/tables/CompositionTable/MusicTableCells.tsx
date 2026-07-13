@@ -19,6 +19,7 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import type { OverflowMenuItemConfig } from '~/types/types/menu.types';
 
+import { formatTextWithHyphens } from '~/lib/utils/textFormater';
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
@@ -195,11 +196,14 @@ export const RenderExpanderCell = (ctx: CellContext<Music, unknown>) => {
   return (isTablet || isMobile) && !ctx.row.getCanExpand() ? <PlayCell row={ctx.row} /> : null;
 };
 
-export const renderOpusGroupLabel = (items: Music[]) => (
-  <Typography variant="customItalic16" color={mainHexPallete.blue[800]}>
-    {items[0]?.opus}
-  </Typography>
-);
+export const renderOpusGroupLabel = (items: Music[]) => {
+  const formatted = formatTextWithHyphens(items[0]?.opus, 10);
+  return (
+    <Typography variant="customItalic16" color={mainHexPallete.blue[800]} sx={{ whiteSpace: 'pre-line' }}>
+      {formatted}
+    </Typography>
+  );
+};
 
 export const renderOpusTitleGroupLabel = (items: Music[]) => (
   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
