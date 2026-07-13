@@ -3,7 +3,7 @@ import { mulish } from '../../design-system/all-components/theme/Theme';
 
 export const style = {
   paper: {
-    background: 'brown.100',
+    backgroundColor: 'brown.100',
     width: { xs: '100vw', sm: '490px' },
     height: '100%',
     borderLeft: '4px solid',
@@ -111,9 +111,7 @@ export const style = {
   },
   turnstileWidget: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: '24px'
+    justifyContent: 'center'
   },
   headerTexts: {
     display: 'flex',
