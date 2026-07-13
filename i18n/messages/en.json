@@ -155,6 +155,11 @@
   },
   "media": {
     "title": "NeWs, EveNtS aNd MeDia",
+    "tabs": {
+      "news": "News",
+      "events": "Events",
+      "press": "Media"
+    },
     "emptyState": {
       "news": {
         "title": "No news yet",
@@ -313,6 +318,11 @@
     "title": "PaGe UnDeR CoNsTrUcTiOn",
     "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
     "button": "Return to home"
+  },
+  "translationNotFound": {
+    "title": "CoMing SoOn",
+    "description": "Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English version will appear very soon.",
+    "button": "Return to Ukrainian"
   },
   "warSupport": {
     "title": "RuSSiA'S WaR AgAiNsT UkRaInIaNs",

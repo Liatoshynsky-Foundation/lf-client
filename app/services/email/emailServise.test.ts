@@ -66,8 +66,8 @@ describe('EmailService', () => {
       phoneNumber: '123456'
     };
 
-    it('should cover sendCollaborationEmail', async () => {
-      const res = await emailService.sendCollaborationEmail(mockData);
+    it('should cover sendContactEmail', async () => {
+      const res = await emailService.sendContactEmail(mockData);
       expect(res.success).toBe(true);
       expect(mockTransporter.sendMail).toHaveBeenCalledWith(
         expect.objectContaining({

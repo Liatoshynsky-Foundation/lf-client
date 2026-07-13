@@ -15,9 +15,9 @@ jest.mock('~/ds-components/icon-button/IconButton', () => ({
   )
 }));
 
-jest.mock('~/components/forms/contact-form/ContactForm', () => ({
+jest.mock('../forms/get-notes-form/GetNotesForm', () => ({
   __esModule: true,
-  default: ({ onSubmit }: any) => <button onClick={onSubmit}>ContactForm</button>
+  default: ({ onSuccess }: any) => <button onClick={onSuccess}>GetNotesForm</button>
 }));
 
 jest.mock('~/components/modal-component/ModalComponent', () => ({
@@ -83,13 +83,13 @@ describe('GetNotesModal', () => {
     fireEvent.click(screen.getByText('Paid Notes'));
     expect(screen.getByText('form.title')).toBeInTheDocument();
     expect(screen.getByText('form.subtitle')).toBeInTheDocument();
-    expect(screen.getByText('ContactForm')).toBeInTheDocument();
+    expect(screen.getByText('GetNotesForm')).toBeInTheDocument();
   });
 
-  it('should switch to CONFIRM state when ContactForm is submitted', () => {
+  it('should switch to CONFIRM state when GetNotesForm is submitted', () => {
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
     fireEvent.click(screen.getByText('Paid Notes'));
-    fireEvent.click(screen.getByText('ContactForm'));
+    fireEvent.click(screen.getByText('GetNotesForm'));
 
     const confirmModal = screen.getByTestId('notes-confirm-modal');
 
