@@ -4,12 +4,12 @@ import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 
-import ContactForm from '~/components/forms/contact-form/ContactForm';
 import ModalComponent from '~/components/modal-component/ModalComponent';
 import PaperComponent from '~/components/paper-component/PaperComponent';
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
+import GetNotesForm from '../forms/get-notes-form/GetNotesForm';
 import { styles } from './GetNotesModal.styles';
 import NotesConfirmModal from './notes-confirmation-modal/NotesConfirmModal';
 import NotesListModal from './notes-list-modal/NotesListModal';
@@ -66,7 +66,7 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
           </Typography>
         </Box>
       );
-      innards = <ContactForm onSubmit={() => setState(GetNotesState.CONFIRM)} />;
+      innards = <GetNotesForm onSuccess={() => setState(GetNotesState.CONFIRM)} />;
       break;
     case GetNotesState.CONFIRM:
       innards = (

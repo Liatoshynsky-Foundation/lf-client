@@ -2,6 +2,7 @@ import { act, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import OfferCollaborationForm from './OfferCollaborationForm';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 
 import ContactForm from '~/shared/components/forms/contact-form/ContactForm';
 
@@ -63,7 +64,7 @@ describe('OfferCollaborationForm', () => {
         await expect(onSubmit({ name: 'Test' })).resolves.toBeUndefined();
       });
 
-      expect(global.fetch).toHaveBeenCalledWith('/api/collaboration', expect.any(Object));
+      expect(global.fetch).toHaveBeenCalledWith(ApiRoutes.CONTACT, expect.any(Object));
     });
 
     it('should throw an error on 429 (Too many requests)', async () => {
