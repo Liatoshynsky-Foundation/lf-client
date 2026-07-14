@@ -8,7 +8,7 @@ interface BoxProps {
   children?: React.ReactNode;
   'data-testid'?: string;
   style?: React.CSSProperties;
-  component?: unknown;
+  component?: React.ComponentType | string;
 }
 
 interface SvgImageProps {
@@ -83,5 +83,12 @@ describe('CursorButton', () => {
     expect(textNode).toBeInTheDocument();
     expect(textNode.textContent).toBe('HOVERING');
     expect(screen.queryByTestId('cursor-with-text-icon')).not.toBeInTheDocument();
+  });
+
+  it('should fall back to default testID value when not provided to close line 31 branch coverage', () => {
+    render(<CursorButton x={mockX} y={mockY} isHovering={true} />);
+
+    const defaultCursor = screen.getByTestId('cursor-button');
+    expect(defaultCursor).toBeInTheDocument();
   });
 });

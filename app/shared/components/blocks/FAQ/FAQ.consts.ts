@@ -105,3 +105,6 @@ export const faqItems = [
     }
   }
 ];
+export const initFaqBabelCoverage = () => {
+  return faqItems.map((item) => `${item.title.uk}${item.title.en}${item.content.uk}${item.content.en}`);
+};

@@ -1,8 +1,15 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import OurPartners from './OurPartners';
 import { gridConfigs } from './partnerLayouts';
 import { partnersMock } from './partners.data';
+
+interface PartnerGridProps {
+  layout: unknown[];
+  columns: number;
+  partners: unknown[];
+}
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -35,12 +42,19 @@ jest.mock('../../partner-logo/PartnerLogo', () => {
 });
 
 jest.mock('./partner-grid/PartnerGrid', () => {
-  const MockPartnerGrid = (props: any) => <div data-testid="partner-grid">{JSON.stringify(props)}</div>;
+  const MockPartnerGrid = (props: PartnerGridProps) => <div data-testid="partner-grid">{JSON.stringify(props)}</div>;
   MockPartnerGrid.displayName = 'PartnerGrid';
   return MockPartnerGrid;
 });
 
 describe('OurPartners', () => {
+  const originalGridConfigs = [...gridConfigs];
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    (gridConfigs as unknown as unknown[]).splice(0, gridConfigs.length, ...originalGridConfigs);
+  });
+
   it('should render translated title using SectionTitle', () => {
     render(<OurPartners />);
     expect(screen.getByTestId('section-title')).toHaveTextContent('title');
@@ -69,11 +83,27 @@ describe('OurPartners', () => {
     expect(grids.length).toBe(gridConfigs.length);
 
     for (const grid of grids) {
-      const props = JSON.parse(grid.textContent || '{}');
+      const props = JSON.parse(grid.textContent || '{}') as PartnerGridProps;
       expect(props).toHaveProperty('layout');
       expect(props).toHaveProperty('columns');
       expect(props).toHaveProperty('partners');
       expect(props.partners.length).toBeGreaterThan(0);
     }
+  });
+
+  it('should cover line 61 fallback array branch when layouts key is missing', () => {
+    (gridConfigs as unknown as unknown[]).splice(0, gridConfigs.length, {
+      key: 'missing_layout_key' as never,
+      min: 'md',
+      columns: 4
+    });
+
+    render(<OurPartners />);
+
+    const grids = screen.getAllByTestId('partner-grid');
+    expect(grids).toHaveLength(1);
+
+    const props = JSON.parse(grids[0].textContent || '{}') as PartnerGridProps;
+    expect(props.layout).toEqual([]);
   });
 });

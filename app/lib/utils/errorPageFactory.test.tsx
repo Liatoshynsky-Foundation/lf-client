@@ -19,9 +19,9 @@ describe('ErrorPageFactory', () => {
     expect(getByTestId('translation-not-found')).toBeInTheDocument();
   });
 
-  it('should return PageNotFound component when missing ukrainian translation error occurs', () => {
+  it('should return TranslationNotFound component when missing ukrainian translation error occurs', () => {
     const { getByTestId } = render(ErrorPageFactory(LocalizationErrors.MISSING_UK_ERROR));
-    expect(getByTestId('page-not-found')).toBeInTheDocument();
+    expect(getByTestId('translation-not-found')).toBeInTheDocument();
   });
 
   it('should throw an unhandled error exception if an unmapped error code is provided', () => {

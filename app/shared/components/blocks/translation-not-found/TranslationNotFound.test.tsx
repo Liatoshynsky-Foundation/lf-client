@@ -25,8 +25,9 @@ describe('TranslationNotFound (Next.js)', () => {
     render(<TranslationNotFound />);
 
     expect(screen.getByRole('img')).toBeInTheDocument();
-    expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
-    expect(screen.getByText(/english version will appear very soon./i)).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('description')).toBeInTheDocument();
+
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
