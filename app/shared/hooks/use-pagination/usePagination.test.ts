@@ -73,4 +73,38 @@ describe('usePagination', () => {
     expect(result.current.paginatedData).toEqual(mockData.slice(0, 15));
     expect(result.current.hasMore).toBe(false);
   });
+
+  it('should change page directly when page is greater and visiblePages is 1', () => {
+    const { result } = renderHook(() => usePagination({ data: mockData, itemsPerPage: 10 }));
+
+    act(() => {
+      result.current.handlePageChange(2);
+    });
+
+    expect(result.current.currentPage).toBe(2);
+    expect(result.current.visiblePages).toBe(1);
+    expect(result.current.paginatedData).toEqual(mockData.slice(10, 20));
+  });
+
+  it('should go to previous or same page and reset visiblePages', () => {
+    const { result } = renderHook(() => usePagination({ data: mockData, itemsPerPage: 10 }));
+
+    act(() => {
+      result.current.handlePageChange(2);
+    });
+
+    act(() => {
+      result.current.handleLoadMore();
+    });
+
+    expect(result.current.currentPage).toBe(2);
+    expect(result.current.visiblePages).toBe(2);
+
+    act(() => {
+      result.current.handlePageChange(1);
+    });
+
+    expect(result.current.currentPage).toBe(1);
+    expect(result.current.visiblePages).toBe(1);
+  });
 });

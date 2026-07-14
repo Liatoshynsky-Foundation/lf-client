@@ -14,31 +14,29 @@ export default function EnhancedTableRow<T extends { id: string }>({
   sx,
   onClick
 }: Readonly<EnhancedTableRowProps<T>>) {
-  const handleRowClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (!onClick) return;
-
+  const onRowClick = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement | null;
     if (target?.closest('button, a')) return;
-
-    onClick(row.original);
+    onClick?.(row.original);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (!onClick) return;
+  const onKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      onClick(row.original);
+      onClick?.(row.original);
     }
   };
 
+  const handleRowClick = onClick ? onRowClick : undefined;
+  const handleKeyDown = onClick ? onKeyDown : undefined;
   const isInteractive = Boolean(onClick);
 
   return (
     <TableRow
       data-testid="EnhancedTableRow-mainNoOpus"
       sx={sx}
-      onClick={isInteractive ? handleRowClick : undefined}
-      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      onClick={handleRowClick}
+      onKeyDown={handleKeyDown}
       tabIndex={isInteractive ? 0 : undefined}
     >
       {row.getVisibleCells().map((cell) => (

@@ -131,6 +131,12 @@ describe('MusicTableCells', () => {
       const { container } = render(<>{genreCell}</>);
       expect(container).toBeEmptyDOMElement();
     });
+
+    it('should cover fallback when getValue returns undefined for genres', () => {
+      const genreCell = RenderGenreCell({ getValue: () => undefined } as CellContext<Music, unknown>);
+      const { container } = render(<>{genreCell}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
   });
 
   describe('PlayCell', () => {
@@ -167,6 +173,18 @@ describe('MusicTableCells', () => {
 
       fireEvent.click(screen.getByRole('button', { hidden: true }));
       expect(handlePlayClick).toHaveBeenCalled();
+    });
+
+    it('should render pause icon when track is current and playing', () => {
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: true,
+        isCurrentTrack: true,
+        isPlaying: true,
+        handlePlayClick: jest.fn()
+      });
+
+      render(RenderPlayCell(mockCellContext));
+      expect(screen.getByTestId('mock-svg')).toBeInTheDocument();
     });
   });
 
@@ -261,6 +279,32 @@ describe('MusicTableCells', () => {
       const playItem = screen.getByRole('menuitem', { name: 'listenToComposition' });
       expect(playItem).toHaveAttribute('aria-disabled', 'true');
     });
+
+    it('should not call onAction if it is not provided when clicking viewSheetMusic', () => {
+      mockUseBreakpoints.mockReturnValue({ isDesktop: true });
+
+      render(RenderActionsCell(mockCellContext, undefined as unknown as () => void));
+
+      const desktopBtn = screen.getByText('viewSheetMusic');
+      expect(desktopBtn).toBeInTheDocument();
+
+      expect(() => fireEvent.click(desktopBtn)).not.toThrow();
+    });
+
+    it('should render pause icon in overflow menu when track is current and playing', () => {
+      mockUseBreakpoints.mockReturnValue({ isDesktop: false, isLaptop: false });
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: true,
+        isCurrentTrack: true,
+        isPlaying: true,
+        handlePlayClick: jest.fn()
+      });
+
+      render(RenderActionsCell(mockCellContext, jest.fn()));
+      fireEvent.click(screen.getByTestId('Artistry-overflowMenuButton'));
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
   });
 
   describe('Group renderers', () => {
@@ -281,6 +325,29 @@ describe('MusicTableCells', () => {
 
       render(RenderExpanderCell(mockCellContext));
       expect(screen.getByTestId('mock-svg')).toBeInTheDocument();
+    });
+
+    it('should return null if it is desktop (not mobile and not tablet)', () => {
+      mockUseBreakpoints.mockReturnValue({ isMobile: false, isTablet: false });
+
+      const { container } = render(<>{RenderExpanderCell(mockCellContext)}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should return null if row can expand', () => {
+      mockUseBreakpoints.mockReturnValue({ isMobile: true, isTablet: false });
+
+      const mockExpandableRow = {
+        original: mockMusic,
+        getCanExpand: jest.fn(() => true)
+      } as unknown as Row<Music>;
+
+      const mockExpandableContext = {
+        row: mockExpandableRow
+      } as CellContext<Music, unknown>;
+
+      const { container } = render(<>{RenderExpanderCell(mockExpandableContext)}</>);
+      expect(container).toBeEmptyDOMElement();
     });
   });
 });

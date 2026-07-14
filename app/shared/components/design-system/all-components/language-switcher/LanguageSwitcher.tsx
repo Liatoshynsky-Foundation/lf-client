@@ -53,9 +53,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
   };
 
   const toggleLocale = () => {
+    if (!currentLocale) return;
     const newLocale = currentLocale === 'uk' ? 'en' : 'uk';
-    if (newLocale === currentLocale) return;
-    setLocaleCookie(newLocale);
     router.replace(pathname, { locale: newLocale, scroll: false });
   };
 

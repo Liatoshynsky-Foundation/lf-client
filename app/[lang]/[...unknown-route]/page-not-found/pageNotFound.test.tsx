@@ -19,6 +19,37 @@ describe('PageNotFound Component', () => {
     const ResolvedComponent = await (PageNotFound() as unknown as Promise<React.ReactElement>);
     const { asFragment } = render(ResolvedComponent);
 
-    expect(asFragment()).toMatchSnapshot();
+    expect(asFragment()).toMatchInlineSnapshot(`
+      <DocumentFragment>
+        <div
+          class="MuiBox-root css-ivqvp"
+        >
+          <h2
+            class="MuiTypography-root MuiTypography-h2 css-1uwders-MuiTypography-root"
+          >
+            pageNotFound.errorTitle
+          </h2>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-di72hm-MuiTypography-root"
+          >
+            pageNotFound.errorMessage
+          </p>
+          <a
+            href="/"
+          >
+            goHome
+          </a>
+          <div
+            class="MuiBox-root css-vvph5m"
+          >
+            <img
+              alt="Page not found (404)"
+              data-fill="true"
+              src="/images/pageNotFound.svg"
+            />
+          </div>
+        </div>
+      </DocumentFragment>
+    `);
   });
 });
