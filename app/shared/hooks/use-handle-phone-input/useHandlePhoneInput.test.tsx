@@ -202,13 +202,17 @@ describe('useHandlePhoneInput', () => {
     expect(maskSpy).toHaveBeenCalled();
   });
 
-  it('should trigger deleteIndex boundary guard checks inside adjustForBackspace workflow cleanly', async () => {
+  it.each([
+    { name: 'boundary guard checks inside adjustForBackspace workflow', pos: 0 },
+    { name: 'deleteIndex guard inside adjustForBackspace branch when index evaluates below zero', pos: 0 },
+    { name: 'backspace branch on first character causing negative deleteIndex', pos: 1 }
+  ])('should trigger deleteIndex negative-branch guard: $name', async ({ pos }) => {
     const api = await renderAndGetApi();
     const input = makeInput();
     await act(async () => {
       api.handlePhoneInput('+1', input);
     });
-    input.selectionStart = 0;
+    input.selectionStart = pos;
     await act(async () => {
       api.handlePhoneInput('+', input);
     });
@@ -223,19 +227,6 @@ describe('useHandlePhoneInput', () => {
       api.handlePhoneInput('+1', input);
     });
     expect(input.setSelectionRange).toHaveBeenCalled();
-  });
-
-  it('should cover deleteIndex guard inside adjustForBackspace branch when index evaluates below zero', async () => {
-    const api = await renderAndGetApi();
-    const input = makeInput();
-    await act(async () => {
-      api.handlePhoneInput('+1', input);
-    });
-    input.selectionStart = 0;
-    await act(async () => {
-      api.handlePhoneInput('+', input);
-    });
-    expect(api.getHasError()).toBe(true);
   });
 
   it('should cover error toggling conditional workflows inside primary hook thread handler', async () => {
@@ -259,19 +250,6 @@ describe('useHandlePhoneInput', () => {
       api.handlePhoneInput('1', input);
     });
     expect(input.setSelectionRange).toHaveBeenCalledWith(0, 0);
-  });
-
-  it('should cover backspace branch on first character causing negative deleteIndex to satisfy line 111', async () => {
-    const api = await renderAndGetApi();
-    const input = makeInput();
-    await act(async () => {
-      api.handlePhoneInput('+1', input);
-    });
-    input.selectionStart = 1;
-    await act(async () => {
-      api.handlePhoneInput('+', input);
-    });
-    expect(api.getHasError()).toBe(true);
   });
 
   it('should hit the false branch where deleteIndex is greater than or equal to zero on line 111', async () => {

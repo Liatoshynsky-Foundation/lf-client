@@ -51,7 +51,8 @@ const fillInput = (label: string, value: string) => {
 };
 
 const submitForm = () => {
-  fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+  const buttons = screen.getAllByRole('button', { name: /Надіслати запит/i });
+  fireEvent.click(buttons[0]);
 };
 
 const onSubmit = jest.fn();
@@ -59,15 +60,12 @@ const onSubmit = jest.fn();
 describe('ContactForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
     render(<ContactForm onSubmit={onSubmit} />);
   });
 
   it('should contain four text inputs including a multiline message field', () => {
     const textboxes = screen.getAllByRole('textbox');
-    if (textboxes.length !== 4) {
-      throw new Error(`Expected 4 textboxes (name, email, phone, message) but found ${textboxes.length}.`);
-    }
+    expect(textboxes).toHaveLength(4);
 
     expect(screen.getByLabelText('Імя')).toBeInTheDocument();
     expect(screen.getByLabelText('Електронна адреса (email) *')).toBeInTheDocument();
@@ -76,24 +74,17 @@ describe('ContactForm', () => {
   });
 
   it('should render a checkbox with privacy policy link', () => {
-    const checkbox = screen.queryByRole('checkbox');
-    if (!checkbox) {
-      throw new Error('Expected a checkbox to be present.');
-    }
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
 
-    const link = screen.queryByRole('link', {
+    const link = screen.getByRole('link', {
       name: /Політикою конфіденційності/i
     });
-    if (!link) {
-      throw new Error('Expected a privacy policy link to be present.');
-    }
+    expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', ROUTES.PRIVACY_POLICY);
   });
 
   it('should render a submit button', () => {
-    render(<ContactForm onSubmit={onSubmit} />);
-    const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
-    expect(submit).not.toBeNull();
+    const submit = screen.getByRole('button', { name: /Надіслати запит/i });
     expect(submit).toBeInTheDocument();
   });
 
@@ -101,7 +92,7 @@ describe('ContactForm', () => {
     fillInput('Імя', 'A');
     fillInput('Електронна адреса (email) *', 'test@');
     fillInput('Номер телефону', '531632');
-    fillInput('Ваше повідомлення *', 'Привіт');
+    fillInput('Ваше повідомлення *', 'A');
     submitForm();
 
     await waitFor(() => {
@@ -118,15 +109,15 @@ describe('ContactForm', () => {
     fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
     fireEvent.click(screen.getByRole('checkbox'));
 
-    fireEvent.click(screen.getByRole('button', { name: /Надіслати запит/i }));
+    submitForm();
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
   });
 
   it('should normalize when mask chars already present', async () => {
     const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
-    const form = submitBtn.closest('form') as HTMLFormElement;
-    if (!form) throw new Error('Form element not found');
+    const form = submitBtn.closest('form');
+    expect(form).toBeInTheDocument();
 
     fillInput('Імя', 'Kate');
     fillInput('Електронна адреса (email) *', 'k@mail.com');
@@ -134,7 +125,7 @@ describe('ContactForm', () => {
     fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
     fireEvent.click(screen.getByRole('checkbox'));
 
-    fireEvent.submit(form);
+    if (form) fireEvent.submit(form);
 
     await waitFor(() => {
       expect((screen.getByLabelText('Номер телефону') as HTMLInputElement).value).toBe('+380 (63) 116-4627');
@@ -147,8 +138,8 @@ describe('ContactForm', () => {
 
   it('should NOT call onSubmit when phone number is incomplete but not empty', async () => {
     const submitBtn = screen.getByRole('button', { name: /Надіслати запит/i });
-    const form = submitBtn.closest('form') as HTMLFormElement;
-    if (!form) throw new Error('Form element not found');
+    const form = submitBtn.closest('form');
+    expect(form).toBeInTheDocument();
 
     fillInput('Імя', 'Kate');
     fillInput('Електронна адреса (email) *', 'k@mail.com');
@@ -157,7 +148,7 @@ describe('ContactForm', () => {
 
     fillInput('Номер телефону', '+380 (63) 116-46');
 
-    fireEvent.submit(form);
+    if (form) fireEvent.submit(form);
 
     await waitFor(() => {
       expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
@@ -190,6 +181,7 @@ describe('ContactForm', () => {
 
     expect(nameInput.value).toBe('Vlad Ivanov');
   });
+
   it('should show max length message when name reaches 50 characters', () => {
     const nameInput = screen.getByLabelText('Імя') as HTMLInputElement;
     fireEvent.change(nameInput, { target: { value: 'A'.repeat(50) } });
@@ -202,13 +194,28 @@ describe('ContactForm', () => {
     fireEvent.change(messageInput, { target: { value: 'a'.repeat(1000) } });
 
     expect(messageInput.value).toHaveLength(1000);
+    expect(screen.getByText('Довжина повідомлення не може перевищувати 1000 символів')).toBeInTheDocument();
+  });
+});
+
+describe('ContactForm Responsive', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should apply medium button size on mobile or tablet', () => {
-    (useBreakpoints as jest.Mock).mockReturnValueOnce({ isMobile: true, isTablet: false });
-    render(<ContactForm onSubmit={onSubmit} />);
+  it('should apply medium button size on mobile', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true, isTablet: false });
+    render(<ContactForm onSubmit={jest.fn()} />);
 
-    const buttons = screen.getAllByRole('button', { name: /Надіслати запит/i });
-    expect(buttons[buttons.length - 1]).toBeInTheDocument();
+    const submit = screen.getByRole('button', { name: /Надіслати запит/i });
+    expect(submit).toBeInTheDocument();
+  });
+
+  it('should apply medium button size on tablet', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false, isTablet: true });
+    render(<ContactForm onSubmit={jest.fn()} />);
+
+    const submit = screen.getByRole('button', { name: /Надіслати запит/i });
+    expect(submit).toBeInTheDocument();
   });
 });

@@ -11,18 +11,15 @@ const renderWithTheme = (component: React.ReactElement) => {
 };
 
 class TestErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
-  constructor(props: { children: ReactNode }) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
+  override state = { hasError: false, error: null as Error | null };
 
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
   }
 
-  render() {
-    if (this.state.hasError) {
-      return <div data-testid="error-boundary-fallback">{this.state.error?.message}</div>;
+  override render() {
+    if (this.state.hasError && this.state.error) {
+      return <div data-testid="error-boundary-fallback">{this.state.error.message}</div>;
     }
     return this.props.children;
   }
@@ -54,7 +51,9 @@ let mockSearchValue = '';
 jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
   useTableFilters: () => ({
     params: {
-      search: mockSearchValue
+      get search() {
+        return mockSearchValue;
+      }
     },
     setParam,
     debouncedSetParam,
@@ -91,10 +90,10 @@ jest.mock('./FundCard/FundCard', () => ({
 globalThis.fetch = jest.fn();
 
 describe('Archive Page', () => {
-  let consoleErrorSpy: jest.Mock;
+  let consoleErrorSpy: jest.SpyInstance;
 
   beforeAll(() => {
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {}) as unknown as jest.Mock;
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterAll(() => {
@@ -252,8 +251,8 @@ describe('Archive Page', () => {
     });
   });
 
-  it('should render Archive component without crashing when search is triggered', () => {
+  it('should render Archive component without crashing when search is triggered', async () => {
     renderWithTheme(<Archive />);
-    expect(screen.getByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
   });
 });
