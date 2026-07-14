@@ -27,7 +27,7 @@ describe('contacts', () => {
 describe('sections', () => {
   it('should export correct array of navigation links', () => {
     expect(Array.isArray(sections)).toBe(true);
-    expect(sections.length).toBe(4);
+    expect(sections).toHaveLength(4);
 
     expect(sections[0]).toEqual({
       title: 'БОРИС ЛЯТОШИНСЬКИЙ',
@@ -65,7 +65,7 @@ describe('sections', () => {
 describe('SocialMedia', () => {
   it('should export correct social media links and icons', () => {
     expect(Array.isArray(SocialMedia)).toBe(true);
-    expect(SocialMedia.length).toBe(3);
+    expect(SocialMedia).toHaveLength(3);
 
     expect(SocialMedia[0].icon).toBe(SocialMediaTypes.Instagram);
     expect(typeof SocialMedia[0].href).toBe('string');

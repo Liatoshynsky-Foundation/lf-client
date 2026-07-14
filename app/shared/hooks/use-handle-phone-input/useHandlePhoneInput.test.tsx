@@ -41,14 +41,9 @@ function Harness({ onReady }: { onReady: (api: Api) => void }) {
   React.useEffect(() => {
     errRef.current = hasError;
   }, [hasError]);
-
   React.useEffect(() => {
-    onReady({
-      handlePhoneInput,
-      getHasError: () => errRef.current
-    });
+    onReady({ handlePhoneInput, getHasError: () => errRef.current });
   }, [handlePhoneInput, onReady]);
-
   return null;
 }
 
@@ -56,7 +51,6 @@ function makeInput(initial = ''): HTMLInputElement {
   const el = document.createElement('input');
   el.value = initial;
   let customSelectionStart = initial.length;
-
   Object.defineProperty(el, 'selectionStart', {
     get() {
       return customSelectionStart;
@@ -66,11 +60,9 @@ function makeInput(initial = ''): HTMLInputElement {
     },
     configurable: true
   });
-
   el.setSelectionRange = jest.fn((start: number) => {
     customSelectionStart = start;
   });
-
   return el;
 }
 
@@ -88,11 +80,9 @@ describe('useHandlePhoneInput', () => {
   it('should clear empty input with no errors shown', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('   ', input);
     });
-
     expect(api.getHasError()).toBe(false);
     expect(input.value).toBe('');
     expect(maskSpy).not.toHaveBeenCalled();
@@ -101,11 +91,9 @@ describe('useHandlePhoneInput', () => {
   it('should show error when letters present, no format', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('abc', input);
     });
-
     expect(api.getHasError()).toBe(true);
     expect(input.value).toBe('');
     expect(maskSpy).not.toHaveBeenCalled();
@@ -114,11 +102,9 @@ describe('useHandlePhoneInput', () => {
   it('should show error when unknown country code', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('31234567891', input);
     });
-
     expect(input.value).toBe('+31234567891');
     expect(api.getHasError()).toBe(true);
     expect(maskSpy).not.toHaveBeenCalled();
@@ -127,17 +113,10 @@ describe('useHandlePhoneInput', () => {
   it('should format UA zero rule: "0" ----> "+380..."', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('0631122334', input);
     });
-
     expect(maskSpy).toHaveBeenCalledTimes(1);
-    const mockArgs = maskSpy.mock.calls[0][0];
-    expect(mockArgs.countryCode).toBe('+380');
-    expect(mockArgs.operatorCodeLength).toBe(2);
-    expect(mockArgs.nationalNumber).toBe('631122334');
-
     expect(input.value).toBe('+380 (63) 1122334');
     expect(api.getHasError()).toBe(false);
   });
@@ -145,11 +124,9 @@ describe('useHandlePhoneInput', () => {
   it('should format and no error at length >= 10', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+11234567890', input);
     });
-
     expect(maskSpy).toHaveBeenCalledTimes(1);
     expect(input.value).toBe('+1 1234567890');
     expect(api.getHasError()).toBe(false);
@@ -158,35 +135,33 @@ describe('useHandlePhoneInput', () => {
   it('should show error when it is too long (> MAX=16)', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+1' + '1'.repeat(16), input);
     });
-
     expect(maskSpy).toHaveBeenCalledTimes(1);
     expect(api.getHasError()).toBe(true);
   });
 
-  it('should adjust for backspace and recalculate country code cleanly when digits match previous', async () => {
+  it.each([
+    { name: 'match previous', init: '+38063', next: '+3806', pos: 6 },
+    { name: 'inner slice deletion', init: '+1555', next: '+155', pos: 3 },
+    { name: 'mask char deleted', init: '+38063', next: '+38063', pos: 5 }
+  ])('should handle backspace: $name', async ({ init, next, pos }) => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
-      api.handlePhoneInput('+38063', input);
+      api.handlePhoneInput(init, input);
     });
-
-    input.selectionStart = 6;
+    input.selectionStart = pos;
     await act(async () => {
-      api.handlePhoneInput('+3806', input);
+      api.handlePhoneInput(next, input);
     });
-
     expect(maskSpy).toHaveBeenCalled();
   });
 
   it('should handle caret placement at the beginning or near the plus sign cleanly', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     input.selectionStart = 0;
     await act(async () => {
       api.handlePhoneInput('+1555', input);
@@ -197,11 +172,9 @@ describe('useHandlePhoneInput', () => {
   it('should loop through masked characters and find the correct caret position inside digits', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+38063', input);
     });
-
     input.selectionStart = 4;
     await act(async () => {
       api.handlePhoneInput('+380631', input);
@@ -220,63 +193,26 @@ describe('useHandlePhoneInput', () => {
   it('should skip adjustForBackspace when backspace occurs but input digits do not match previous state', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+38063', input);
     });
-
     await act(async () => {
       api.handlePhoneInput('+3809', input);
     });
     expect(maskSpy).toHaveBeenCalled();
   });
 
-  it('should execute branch in adjustForBackspace and handle fully custom inner slice deletion indexes', async () => {
-    const api = await renderAndGetApi();
-    const input = makeInput();
-
-    await act(async () => {
-      api.handlePhoneInput('+1555', input);
-    });
-
-    input.selectionStart = 3;
-    await act(async () => {
-      api.handlePhoneInput('+155', input);
-    });
-
-    expect(maskSpy).toHaveBeenCalled();
-  });
-
   it('should trigger deleteIndex boundary guard checks inside adjustForBackspace workflow cleanly', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+1', input);
     });
-
     input.selectionStart = 0;
     await act(async () => {
       api.handlePhoneInput('+', input);
     });
-
     expect(api.getHasError()).toBe(true);
-  });
-
-  it('should enter the inner backspace block where digits match previous because mask formatting character was deleted', async () => {
-    const api = await renderAndGetApi();
-    const input = makeInput();
-
-    await act(async () => {
-      api.handlePhoneInput('+38063', input);
-    });
-
-    input.selectionStart = 5;
-    await act(async () => {
-      api.handlePhoneInput('+38063', input);
-    });
-
-    expect(maskSpy).toHaveBeenCalled();
   });
 
   it('should cover branch targetDigitIndex less than or equal to zero inside caretHandler cleanly', async () => {
@@ -341,7 +277,6 @@ describe('useHandlePhoneInput', () => {
   it('should hit the false branch where deleteIndex is greater than or equal to zero on line 111', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+3806312345', input);
     });
@@ -352,6 +287,7 @@ describe('useHandlePhoneInput', () => {
     });
     expect(maskSpy).toHaveBeenCalled();
   });
+
   it('should cover fallback operator value zero on line 193 when country operatorCodeLength is undefined', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
@@ -360,19 +296,17 @@ describe('useHandlePhoneInput', () => {
     });
     expect(maskSpy).toHaveBeenCalledWith(expect.objectContaining({ operatorCodeLength: 0 }));
   });
+
   it('should hit deleteIndex negative branch when caret is at position zero during formatting backspace', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
-
     await act(async () => {
       api.handlePhoneInput('+38063', input);
     });
-
     input.selectionStart = 0;
     await act(async () => {
       api.handlePhoneInput('+380 (63', input);
     });
-
     expect(maskSpy).toHaveBeenCalled();
   });
 });

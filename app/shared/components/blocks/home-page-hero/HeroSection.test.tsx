@@ -119,7 +119,7 @@ describe('HeroSection', () => {
     expect(screen.getByTestId('hero-text-logo')).toBeInTheDocument();
 
     const quotes = screen.getAllByTestId('hero-quote-block');
-    expect(quotes.length).toBe(1);
+    expect(quotes).toHaveLength(1);
   });
 
   it('should render content with specific styles on mobile or tablet breakpoints', () => {
@@ -132,7 +132,7 @@ describe('HeroSection', () => {
     render(<HeroSection {...defaultProps} />);
 
     const quotes = screen.getAllByTestId('hero-quote-block');
-    expect(quotes.length).toBe(1);
+    expect(quotes).toHaveLength(1);
     expect(screen.getByTestId('hero-character-image')).toHaveStyle({ objectFit: 'cover' });
   });
 

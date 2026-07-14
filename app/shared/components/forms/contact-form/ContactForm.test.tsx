@@ -91,10 +91,10 @@ describe('ContactForm', () => {
   });
 
   it('should render a submit button', () => {
+    render(<ContactForm onSubmit={onSubmit} />);
     const submit = screen.queryByRole('button', { name: /Надіслати запит/i });
-    if (!submit) {
-      throw new Error('Expected a submit button to be present.');
-    }
+    expect(submit).not.toBeNull();
+    expect(submit).toBeInTheDocument();
   });
 
   it('should show errors when incorrect inputs', async () => {
@@ -201,7 +201,7 @@ describe('ContactForm', () => {
     const messageInput = screen.getByLabelText('Ваше повідомлення *') as HTMLTextAreaElement;
     fireEvent.change(messageInput, { target: { value: 'a'.repeat(1000) } });
 
-    expect(messageInput.value.length).toBe(1000);
+    expect(messageInput.value).toHaveLength(1000);
   });
 
   it('should apply medium button size on mobile or tablet', () => {

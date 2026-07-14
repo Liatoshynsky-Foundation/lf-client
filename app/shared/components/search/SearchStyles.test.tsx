@@ -5,10 +5,11 @@ import { CustomBorderTextField } from './SearchStyles';
 
 describe('CustomBorderTextField', () => {
   it('should render', () => {
-    render(
+    const { container } = render(
       <ThemeProvider theme={createTheme()}>
         <CustomBorderTextField />
       </ThemeProvider>
     );
+    expect(container).toBeDefined();
   });
 });

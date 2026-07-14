@@ -38,10 +38,10 @@ describe('Search', () => {
 
   const renderSearch = (opts = options, initialSearch = '') => {
     const setSearch = jest.fn();
-    render(<Search<TitleOption> search={initialSearch} setSearch={setSearch} options={opts} />);
+    const result = render(<Search<TitleOption> search={initialSearch} setSearch={setSearch} options={opts} />);
     const input = screen.getByRole('combobox');
     const searchIcon = screen.queryByAltText('search');
-    return { setSearch, input, searchIcon };
+    return { setSearch, input, searchIcon, ...result };
   };
 
   afterEach(() => {
@@ -51,13 +51,10 @@ describe('Search', () => {
   it('should render the input and fetches options', async () => {
     const { input } = renderSearch();
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-
     act(() => {
       input.focus();
     });
-
     fireEvent.change(input, { target: { value: 'T' } });
-
     await waitFor(() => {
       expect(screen.getByText('Test Song')).toBeInTheDocument();
     });
@@ -66,7 +63,6 @@ describe('Search', () => {
   it('should NOT call setSearch on input change', async () => {
     const { setSearch, input } = renderSearch();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
-
     await waitFor(() => {
       expect(setSearch).not.toHaveBeenCalled();
     });
@@ -76,7 +72,6 @@ describe('Search', () => {
     const { setSearch, input } = renderSearch();
     fireEvent.change(input, { target: { value: 'Bohemian' } });
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
-
     await waitFor(() => {
       expect(setSearch).toHaveBeenCalledWith('Bohemian');
     });
@@ -84,27 +79,21 @@ describe('Search', () => {
 
   it('should call setSearch when option is selected', async () => {
     const { setSearch, input } = renderSearch();
-
     act(() => {
       input.focus();
     });
-
     fireEvent.change(input, { target: { value: 'Test' } });
-
     await waitFor(() => {
       fireEvent.click(screen.getByText('Test Song'));
     });
-
     expect(setSearch).toHaveBeenCalledWith('Test Song');
   });
 
   it('should display no options text when no results', async () => {
     const { input } = renderSearch([], 'xyz');
-
     act(() => {
       input.focus();
     });
-
     fireEvent.change(input, { target: { value: 'Bohemian' } });
     await waitFor(() => {
       expect(screen.getByText('Not found')).toBeInTheDocument();
@@ -113,18 +102,14 @@ describe('Search', () => {
 
   it('should focus input when search icon is clicked', async () => {
     const { input, searchIcon } = renderSearch();
-
     act(() => {
       input.blur();
     });
-
     expect(document.activeElement).not.toBe(input);
     if (!searchIcon) throw new Error('search icon not found');
-
     act(() => {
       fireEvent.click(searchIcon);
     });
-
     expect(document.activeElement).toBe(input);
   });
 
@@ -137,11 +122,9 @@ describe('Search', () => {
 
   it('should clear the input and value state cleanly when clear icon is clicked', async () => {
     const { setSearch, input } = renderSearch(options, 'Test');
-
     act(() => {
       input.focus();
     });
-
     const clearIcon = screen.getByAltText('clear');
     fireEvent.click(clearIcon);
     expect(input).toHaveValue('');
@@ -150,83 +133,40 @@ describe('Search', () => {
 
   it('should invoke setSearch during onBlur event if inputValue differs from current search state', async () => {
     const { setSearch, input } = renderSearch(options, 'Initial');
-
     act(() => {
       input.focus();
     });
-
     fireEvent.change(input, { target: { value: 'Changed Text' } });
-
     act(() => {
       input.blur();
     });
-
     expect(setSearch).toHaveBeenCalledWith('Changed Text');
   });
 
   it('should NOT invoke setSearch during onBlur event if inputValue remains identical to search state', async () => {
     const { setSearch, input } = renderSearch(options, 'Same');
-
     act(() => {
       input.focus();
     });
-
     act(() => {
       input.blur();
     });
-
     expect(setSearch).not.toHaveBeenCalled();
   });
 
-  it('should process multi-word sorting algorithms inside filterOptions completely', async () => {
+  it.each([
+    { name: 'multi-word sorting', val: 'Song', expected: 'Song Exact Match' },
+    { name: 'prefix ranking', val: 'Prefix', expected: 'Prefix Match Song' },
+    { name: 'localized string', val: 'Specific', expected: 'Specific Track' },
+    { name: 'opus identifiers', val: 'Opus', expected: 'Opus Track' }
+  ])('should process $name correctly', async ({ val, expected }) => {
     const { input } = renderSearch();
-
     act(() => {
       input.focus();
     });
-
-    fireEvent.change(input, { target: { value: 'Song' } });
+    fireEvent.change(input, { target: { value: val } });
     await waitFor(() => {
-      expect(screen.getByText('Song Exact Match')).toBeInTheDocument();
-    });
-  });
-
-  it('should rank elements matching by prefix above internal index findings during sorting workflows', async () => {
-    const { input } = renderSearch();
-
-    act(() => {
-      input.focus();
-    });
-
-    fireEvent.change(input, { target: { value: 'Prefix' } });
-    await waitFor(() => {
-      expect(screen.getByText('Prefix Match Song')).toBeInTheDocument();
-    });
-  });
-
-  it('should default to localized record strings inside filter label generators if option title is object-shaped', async () => {
-    const { input } = renderSearch();
-
-    act(() => {
-      input.focus();
-    });
-
-    fireEvent.change(input, { target: { value: 'Specific' } });
-    await waitFor(() => {
-      expect(screen.getByText('Specific Track')).toBeInTheDocument();
-    });
-  });
-
-  it('should automatically prepend opus configuration identifiers to option label strings when present', async () => {
-    const { input } = renderSearch();
-
-    act(() => {
-      input.focus();
-    });
-
-    fireEvent.change(input, { target: { value: 'Opus' } });
-    await waitFor(() => {
-      expect(screen.getByText('Opus Track')).toBeInTheDocument();
+      expect(screen.getByText(expected)).toBeInTheDocument();
     });
   });
 
@@ -304,6 +244,7 @@ describe('Search', () => {
       expect(screen.getByText('A Duplicate Track')).toBeInTheDocument();
     });
   });
+
   it('should fallback to uk title when en is missing to cover renderOption line 146', async () => {
     const customOptions = [{ _id: 'a', title: { uk: 'Тільки Укр Трек' }, kind: 'composition' }];
     const { input } = renderSearch(customOptions as TitleOption[]);
@@ -346,25 +287,20 @@ describe('Search', () => {
       expect(screen.getByText('Target')).toBeInTheDocument();
     });
   });
+
   it('should call handleSelect with null value on blur after clearing input to cover lines 28 and 101', async () => {
     const { setSearch, input } = renderSearch();
-
     act(() => {
       input.focus();
     });
-
     fireEvent.change(input, { target: { value: 'Test' } });
-
     await waitFor(() => {
       fireEvent.click(screen.getByText('Test Song'));
     });
-
     fireEvent.change(input, { target: { value: '' } });
-
     act(() => {
       input.blur();
     });
-
     expect(setSearch).toHaveBeenCalledWith('');
   });
 

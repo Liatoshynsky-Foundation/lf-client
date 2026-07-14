@@ -232,7 +232,7 @@ describe('BiographyContent', () => {
   it('should render year line for blocks with numeric yearTitle', () => {
     render(<BiographyContent data={mockBlocks} />);
     const years = screen.getAllByTestId('BiographyContent-yearWithLine');
-    expect(years.length).toBe(1);
+    expect(years).toHaveLength(1);
     expect(years[0]).toHaveTextContent('1910');
   });
 

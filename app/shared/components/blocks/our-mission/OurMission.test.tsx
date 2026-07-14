@@ -73,8 +73,8 @@ describe('OurMission', () => {
     expect(screen.getByTestId('OurMission-list')).toBeInTheDocument();
 
     const items = screen.getAllByTestId('tiptap-paragraph');
-    expect(items.length).toBe(2);
-    expect(screen.getAllByText('Paragraph Content').length).toBe(2);
+    expect(items).toHaveLength(2);
+    expect(screen.getAllByText('Paragraph Content')).toHaveLength(2);
   });
 
   it('should evaluate conditional image wrappers to complete branch coverage matrix', () => {

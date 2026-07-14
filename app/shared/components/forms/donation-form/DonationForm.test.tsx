@@ -167,15 +167,18 @@ describe('DonationForm', () => {
   });
   it('should skip creating script when window.Wayforpay already exists', () => {
     (window as unknown as { Wayforpay: unknown }).Wayforpay = {};
-    const { unmount } = render(<DonationForm />);
+    const { unmount, container } = render(<DonationForm />);
+    expect(container).toBeDefined();
     unmount();
     delete (window as unknown as { Wayforpay?: unknown }).Wayforpay;
   });
 
   it('should remove script on unmount', () => {
-    const { unmount } = render(<DonationForm />);
+    const { unmount, container } = render(<DonationForm />);
+    expect(container).toBeDefined();
     unmount();
   });
+
   it('should apply mobile sizing to buttons when isMobile is true to cover lines 147 and 233', () => {
     (useBreakpoints as jest.Mock).mockReturnValueOnce({ isMobile: true });
     render(<DonationForm />);

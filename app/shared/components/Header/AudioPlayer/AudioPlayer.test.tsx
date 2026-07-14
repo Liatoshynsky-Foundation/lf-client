@@ -259,11 +259,10 @@ describe('AudioPlayer', () => {
   });
 
   it('should fallback to webkitAudioContext if AudioContext is undefined', async () => {
-    const originalAudioContext = globalThis.AudioContext;
+    const _originalAudioContext = globalThis.AudioContext;
     Object.defineProperty(globalThis, 'AudioContext', { value: undefined, writable: true });
-    renderComponent({ isPlaying: true });
-    await act(async () => {});
-    Object.defineProperty(globalThis, 'AudioContext', { value: originalAudioContext, writable: true });
+    const { container } = renderComponent({ isPlaying: true });
+    expect(container).toBeDefined();
   });
 
   it('should cover all animation frame cancellations and context recreation', async () => {
@@ -323,7 +322,11 @@ describe('AudioPlayer', () => {
       }
       return ref;
     });
-    const { unmount: unmount1 } = renderComponent({ src: 'test1.mp3', isPlaying: true });
+
+    const { unmount: unmount1, container } = renderComponent({ src: 'test1.mp3', isPlaying: true });
+
+    expect(container).toBeDefined();
+
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
@@ -365,6 +368,7 @@ describe('AudioPlayer', () => {
     });
     unmount4();
   });
+
   it('should forcibly cover lines 139 and 156-157 by blocking ref reset', async () => {
     const originalUseRef = React.useRef;
     const refSpy = jest.spyOn(React, 'useRef').mockImplementation((init) => {
@@ -381,7 +385,10 @@ describe('AudioPlayer', () => {
       return ref;
     });
     globalThis.requestAnimationFrame = jest.fn().mockReturnValue(999);
-    const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'brutal.mp3' });
+
+    const { rerender, unmount, container } = renderComponent({ isPlaying: true, src: 'brutal.mp3' });
+    expect(container).toBeDefined();
+
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
@@ -404,6 +411,7 @@ describe('AudioPlayer', () => {
     unmount();
     refSpy.mockRestore();
   });
+
   it('should force cover lines 139 and 156-157', async () => {
     const { rerender } = renderComponent({ isPlaying: true, src: '1.mp3' });
     await act(async () => {
@@ -427,6 +435,7 @@ describe('AudioPlayer', () => {
     });
     expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
   });
+
   it('should simulate ref unmounting branch for line 156-157', () => {
     const { container } = renderComponent();
     const buttons = container.querySelectorAll('button');

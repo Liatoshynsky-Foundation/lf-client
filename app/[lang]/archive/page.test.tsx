@@ -151,15 +151,6 @@ describe('Archive Page', () => {
     expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
   });
 
-  it('should filter funds based on search param to cover line 87 branch', async () => {
-    mockSearchValue = 'audio';
-    renderWithTheme(<Archive />);
-
-    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-2')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
-  });
-
   it('should handle response not ok error to cover lines 74-75 and 81-83', async () => {
     (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: false
@@ -222,24 +213,6 @@ describe('Archive Page', () => {
     expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
   });
 
-  it('should filter funds based on search param in title to cover line 87 branch', async () => {
-    mockSearchValue = 'audio';
-    renderWithTheme(<Archive />);
-
-    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-2')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
-  });
-
-  it('should filter funds based on search param in number to complete line 89 branch coverage', async () => {
-    mockSearchValue = 'fund 2';
-    renderWithTheme(<Archive />);
-
-    expect(await screen.findByTestId('FundCard-2')).toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-1')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('FundCard-3')).not.toBeInTheDocument();
-  });
-
   it('should trigger default branch inside getNumColumns when all breakpoints are false to complete coverage', async () => {
     mockBreakpoints.isMobile = false;
     mockBreakpoints.isTablet = false;
@@ -250,7 +223,37 @@ describe('Archive Page', () => {
     expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
   });
 
-  it('should call setParam when search is triggered', () => {
+  it.each([
+    {
+      description: 'search param',
+      search: 'audio',
+      expectedId: 'FundCard-1',
+      unexpectedIds: ['FundCard-2', 'FundCard-3']
+    },
+    {
+      description: 'search param in title',
+      search: 'audio',
+      expectedId: 'FundCard-1',
+      unexpectedIds: ['FundCard-2', 'FundCard-3']
+    },
+    {
+      description: 'search param in number',
+      search: 'fund 2',
+      expectedId: 'FundCard-2',
+      unexpectedIds: ['FundCard-1', 'FundCard-3']
+    }
+  ])('should filter funds based on $description', async ({ search, expectedId, unexpectedIds }) => {
+    mockSearchValue = search;
     renderWithTheme(<Archive />);
+
+    expect(await screen.findByTestId(expectedId)).toBeInTheDocument();
+    unexpectedIds.forEach((id) => {
+      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
+    });
+  });
+
+  it('should render Archive component without crashing when search is triggered', () => {
+    renderWithTheme(<Archive />);
+    expect(screen.getByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
   });
 });
