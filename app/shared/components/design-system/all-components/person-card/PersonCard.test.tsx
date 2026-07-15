@@ -110,11 +110,8 @@ describe('PersonCard', () => {
       expect(img).toHaveStyle('object-fit: cover');
 
       fireEvent.error(img);
-      expect(img).toHaveAttribute('src', '/images/light-logo.svg');
-      expect(img).toHaveStyle('object-fit: contain');
-
-      fireEvent.error(img);
-      expect(img).toHaveAttribute('src', '/images/light-logo.svg');
+      expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+      expect(screen.getByTestId('person-card-placeholder-logo')).toHaveAttribute('src', '/images/light-logo.svg');
     });
 
     it('should intercept the processing tree to prioritize a custom fallbackSrc if supplied', () => {
@@ -123,6 +120,13 @@ describe('PersonCard', () => {
 
       fireEvent.error(img);
       expect(img).toHaveAttribute('src', '/custom-fallback.jpg');
+    });
+
+    it('should render decorative logo over placeholder background when default fallback is provided as image', () => {
+      render(<PersonCard {...defaultProps} imgURL="/images/light-logo.svg" />);
+
+      expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+      expect(screen.getByTestId('person-card-placeholder-logo')).toHaveAttribute('src', '/images/light-logo.svg');
     });
   });
 });
