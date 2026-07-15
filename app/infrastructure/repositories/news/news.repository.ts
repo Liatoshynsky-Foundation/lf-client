@@ -1,7 +1,7 @@
 import { NewsStatus } from '~/domain/dto/news.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import NewsModel from '~/infrastructure/models/news/news.model';
-import { ArraySchema } from '~/validators/constants';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import { newsListItemSchema, newsSchema } from '~/validators/news.schema';
 
 const newsRepository = {
@@ -17,7 +17,7 @@ const newsRepository = {
       return [];
     }
 
-    return ArraySchema(newsListItemSchema).parse(news);
+    return parseArraySafely(news, newsListItemSchema);
   },
 
   async getNewsBySlug(slug: string) {
