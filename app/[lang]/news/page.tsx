@@ -38,12 +38,12 @@ const News = async ({ params }: Readonly<Language>) => {
   }
 
   const container = createRequestContainer();
-  const eventsService = container.resolve('eventsService');
+  const eventService = container.resolve('eventService');
   const newsService = container.resolve('newsService');
   const mediaMentionService = container.resolve('mediaMentionService');
 
   const newsData = await newsService.getAllPublishedNews(locale);
-  const eventsData = await eventsService.getAllPublishedEvents(locale);
+  const eventsData = await eventService.getAllPublishedEvents(locale);
   const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions(lang as 'uk' | 'en');
 
   return (

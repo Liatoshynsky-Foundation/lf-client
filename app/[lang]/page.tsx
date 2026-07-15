@@ -80,11 +80,11 @@ export default async function Home({ params }: Readonly<Language>) {
   }
 
   const container = createRequestContainer();
-  const eventsService = container.resolve('eventsService');
+  const eventService = container.resolve('eventService');
 
   const [pageResult, eventsData] = await Promise.all([
     resolvePageData('about-us', lang),
-    eventsService.getAllPublishedEvents(lang)
+    eventService.getAllPublishedEvents(lang)
   ]);
 
   if (isError(pageResult)) {

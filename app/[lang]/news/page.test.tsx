@@ -49,7 +49,7 @@ describe('News page', () => {
     getAllPublishedNews: jest.fn().mockResolvedValue([])
   };
 
-  const mockEventsService = {
+  const mockEventService = {
     getAllPublishedEvents: jest.fn().mockResolvedValue([])
   };
 
@@ -60,7 +60,7 @@ describe('News page', () => {
   const mockContainer = {
     resolve: jest.fn((service: string) => {
       if (service === 'newsService') return mockNewsService;
-      if (service === 'eventsService') return mockEventsService;
+      if (service === 'eventService') return mockEventService;
       if (service === 'mediaMentionService') return mockMediaMentionService;
       return null;
     })

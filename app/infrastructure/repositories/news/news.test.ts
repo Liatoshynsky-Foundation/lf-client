@@ -24,6 +24,14 @@ const mockMongooseChain = (resolvedValue: any) => ({
   lean: jest.fn().mockResolvedValue(resolvedValue)
 });
 
+const expectParsedResult = (result: Awaited<ReturnType<typeof newsRepository.getAllPublishedNews>>) => {
+  if (Array.isArray(result)) {
+    throw new Error('Expected a parsed { validItems, invalidCount } result, got an array');
+  }
+
+  return result;
+};
+
 const validNewsData = {
   _id: createFakeId(),
   publishedAt: '2026-03-16T12:00:00.000Z',
@@ -64,11 +72,12 @@ describe('newsRepository', () => {
     it('should return published news and parse them via Zod', async () => {
       (NewsModel.find as jest.Mock).mockReturnValue(mockMongooseChain([validNewsData]));
 
-      const result = await newsRepository.getAllPublishedNews();
+      const result = expectParsedResult(await newsRepository.getAllPublishedNews());
 
       expect(NewsModel.find).toHaveBeenCalledWith({ status: NewsStatus.Published });
-      expect(result).toHaveLength(1);
-      expect(result[0].slug).toBe('test-news-slug');
+      expect(result.invalidCount).toBe(0);
+      expect(result.validItems).toHaveLength(1);
+      expect(result.validItems[0].slug).toBe('test-news-slug');
     });
 
     it('should return empty array if news is falsy (covers lines 14-16)', async () => {
@@ -79,14 +88,27 @@ describe('newsRepository', () => {
       expect(result).toEqual([]);
     });
 
-    it('should return data without validation if news contains invalid fields', async () => {
+    it('should skip invalid items instead of throwing, and report invalidCount', async () => {
       const invalidData = [{ ...validNewsData, title: 123 }];
 
       (NewsModel.find as jest.Mock).mockReturnValue(mockMongooseChain(invalidData));
 
-      const result = await newsRepository.getAllPublishedNews();
+      const result = expectParsedResult(await newsRepository.getAllPublishedNews());
 
-      expect(result).toEqual(invalidData);
+      expect(result.validItems).toHaveLength(0);
+      expect(result.invalidCount).toBe(1);
+    });
+
+    it('should keep only valid items when the list is mixed', async () => {
+      const mixedData = [validNewsData, { ...validNewsData, _id: createFakeId(), title: 123 }];
+
+      (NewsModel.find as jest.Mock).mockReturnValue(mockMongooseChain(mixedData));
+
+      const result = expectParsedResult(await newsRepository.getAllPublishedNews());
+
+      expect(result.validItems).toHaveLength(1);
+      expect(result.invalidCount).toBe(1);
+      expect(result.validItems[0].slug).toBe('test-news-slug');
     });
   });
 
@@ -104,7 +126,10 @@ describe('newsRepository', () => {
 
       const result = await newsRepository.getNewsBySlug('test-news-slug');
 
-      expect(NewsModel.findOne).toHaveBeenCalledWith({ slug: 'test-news-slug' });
+      expect(NewsModel.findOne).toHaveBeenCalledWith({
+        slug: 'test-news-slug',
+        status: NewsStatus.Published
+      });
 
       if (!result) throw new Error('Result is null');
 
@@ -112,14 +137,12 @@ describe('newsRepository', () => {
       expect(result.slug).toBe(validNewsData.slug);
     });
 
-    it('should return single news without validation if it contains invalid fields', async () => {
+    it('should throw a validation error if news contains invalid fields', async () => {
       const invalidData = { ...validNewsData, title: 123 };
 
       (NewsModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(invalidData));
 
-      const result = await newsRepository.getNewsBySlug('test-news-slug');
-
-      expect(result).toEqual(invalidData);
+      await expect(newsRepository.getNewsBySlug('test-news-slug')).rejects.toThrow();
     });
   });
 });
