@@ -1,4 +1,4 @@
-import { EventStatus } from '~/domain/dto/event.dto';
+import { EventStatus } from '~/domain/dto/events.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import EventModel from '~/infrastructure/models/events/event.model';
 

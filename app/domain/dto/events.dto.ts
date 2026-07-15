@@ -1,3 +1,5 @@
+﻿import { LocalizedString } from '~/types/types/common.types';
+
 export enum EventStatus {
   Draft = 'draft',
   Published = 'published',
@@ -8,47 +10,30 @@ export enum EventStatus {
 
 export type EventImageDTO = {
   src: string;
-  alt: {
-    uk: string;
-    en: string;
-  };
-  caption: {
-    uk: string;
-    en: string;
-  };
+  alt: LocalizedString;
+  caption: LocalizedString;
   isTmp: boolean;
 };
 
 export type EventDTO = {
   _id: string;
-  slug: string;
-  status: EventStatus;
-
-  publishedAt: string | null;
-  eventDateTimeStart: string | null;
-  eventDateTimeEnd: string | null;
-
-  title: {
-    uk: string;
-    en: string;
-  };
-  description: {
-    uk: string;
-    en: string;
-  };
+  title: LocalizedString;
+  description: LocalizedString;
   content: {
     uk: object;
     en: object;
   };
-
+  slug: string;
   coverImage: EventImageDTO;
+  status: EventStatus;
   meta: {
     views: number;
   };
-
-  eventLink?: string;
-  ticketUrl?: { uk: string; en: string } | object;
-
+  publishedAt: string | null;
+  eventLink: string;
+  eventDateTimeStart: string | null;
+  eventDateTimeEnd: string | null;
+  ticketUrl: Record<'uk' | 'en', string | null> | null;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -56,14 +41,14 @@ export type EventDTO = {
 export type EventListItemDTO = Pick<
   EventDTO,
   | '_id'
-  | 'slug'
-  | 'status'
-  | 'publishedAt'
-  | 'eventDateTimeStart'
-  | 'eventDateTimeEnd'
   | 'title'
   | 'description'
+  | 'slug'
   | 'coverImage'
   | 'meta'
+  | 'eventDateTimeStart'
+  | 'eventDateTimeEnd'
+  | 'status'
+  | 'publishedAt'
   | 'ticketUrl'
 >;

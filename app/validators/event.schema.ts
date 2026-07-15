@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { mongoObjectIdSchema, translatedFieldSchema } from './constants';
 
-import { EventStatus } from '~/domain/dto/event.dto';
+import { EventStatus } from '~/domain/dto/events.dto';
 
 const eventImageSchema = z.object({
   src: z.string(),
