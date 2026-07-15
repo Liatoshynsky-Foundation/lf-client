@@ -49,7 +49,7 @@ jest.mock(
 jest.mock('~/di/container', () => ({
   createRequestContainer: jest.fn(() => ({
     resolve: jest.fn((serviceName) => {
-      if (serviceName === 'eventsService') {
+      if (serviceName === 'eventService') {
         return {
           getAllPublishedEvents: jest.fn().mockResolvedValue([])
         };
