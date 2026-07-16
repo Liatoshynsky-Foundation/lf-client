@@ -28,7 +28,7 @@ type ContentBlockProps = Readonly<{
 
 const createParagraph = (paragraphSx?: SxProps<Theme>) => {
   const ParagraphRenderer = (children: React.ReactNode) => (
-    <Typography sx={[[{ display: 'block' }, paragraphSx]].flat() as SxProps<Theme>}>{children}</Typography>
+    <Typography sx={[{ display: 'block' }, paragraphSx].flat() as SxProps<Theme>}>{children}</Typography>
   );
   ParagraphRenderer.displayName = 'ParagraphRenderer';
   return ParagraphRenderer;
