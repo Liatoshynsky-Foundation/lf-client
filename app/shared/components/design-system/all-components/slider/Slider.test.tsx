@@ -60,4 +60,18 @@ describe('DesignSystemSlider', () => {
       height: '20px'
     });
   });
+
+  it('renders correctly when value is a single number and sets marks to undefined', () => {
+    const { container } = render(<DesignSystemSlider min={0} max={100} value={50} />);
+
+    expect(screen.getByRole('slider')).toBeInTheDocument();
+    expect(container.querySelector('.MuiSlider-mark')).not.toBeInTheDocument();
+  });
+
+  it('uses default values for min and max when they are not provided', () => {
+    render(<DesignSystemSlider value={[10, 90]} />);
+
+    expect(screen.getByText('0')).toBeInTheDocument();
+    expect(screen.getByText('100')).toBeInTheDocument();
+  });
 });

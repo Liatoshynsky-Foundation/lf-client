@@ -1,6 +1,6 @@
 import { parseFilters } from './parseFilters';
 
-describe('parseFilters - years parsing', () => {
+describe('parseFilters - comprehensive parsing flow verification', () => {
   const currentYear = new Date().getFullYear();
 
   it('should return min/max from valid yearFrom and yearTo', () => {
@@ -49,5 +49,21 @@ describe('parseFilters - years parsing', () => {
     const params = new URLSearchParams('');
     const res = parseFilters(params);
     expect(res).toEqual({ categories: [], genres: [], author: [], years: { min: 1900, max: currentYear }, search: '' });
+  });
+
+  it('should extract array configuration lists correctly when multi parameter keys are supplied inside the query text stream', () => {
+    const params = new URLSearchParams();
+    params.append('genre', 'romance');
+    params.append('genre', 'jazz');
+    params.append('category', 'classic');
+    params.append('author', 'liatoshynsky');
+    params.append('search', 'symphony');
+
+    const res = parseFilters(params);
+
+    expect(res.genres).toEqual(['romance', 'jazz']);
+    expect(res.categories).toEqual(['classic']);
+    expect(res.author).toEqual(['liatoshynsky']);
+    expect(res.search).toBe('symphony');
   });
 });

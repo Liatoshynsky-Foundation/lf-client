@@ -58,4 +58,24 @@ describe('TextField', () => {
     const input = screen.getByDisplayValue('Value');
     expect(input).toHaveAttribute('id', 'custom-text-field');
   });
+
+  it('should render start icon by default in standard variant', () => {
+    render(<TextField onChange={handleChange} label="DefaultIcon" />);
+    expect(screen.getByAltText('start icon')).toHaveAttribute('src', 'icons/search-icon.svg');
+  });
+
+  it('should render custom start icon if provided in standard variant', () => {
+    render(<TextField onChange={handleChange} label="CustomIcon" startIcon="custom/start.svg" />);
+    expect(screen.getByAltText('start icon')).toHaveAttribute('src', 'custom/start.svg');
+  });
+
+  it('should not render default start icon in outlined variant', () => {
+    render(<TextField onChange={handleChange} label="NoIconOutlined" variant="outlined" />);
+    expect(screen.queryByAltText('start icon')).not.toBeInTheDocument();
+  });
+
+  it('should render custom end icon when provided', () => {
+    render(<TextField onChange={handleChange} label="EndIcon" endIcon="custom/end.svg" />);
+    expect(screen.getByAltText('end icon')).toHaveAttribute('src', 'custom/end.svg');
+  });
 });

@@ -17,7 +17,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} data-testid="next-image" />
+  default: ({ src, alt, onError }: { src: string; alt: string; onError?: () => void }) => (
+    <img src={src} alt={alt} data-testid="next-image" onError={onError} />
+  )
 }));
 
 jest.mock('next/link', () => ({
@@ -243,5 +245,49 @@ describe('BaseCard', () => {
 
       expect(img.style.transform).toContain('translate');
     });
+  });
+
+  it('should fallback to placeholder when image URL is invalid to cover lines 34-40', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(<BaseCard {...defaultProps} image="not a valid url" />);
+
+    const image = screen.getByTestId('next-image');
+    expect(image).toHaveAttribute('src', '/images/media-card-placeholder.png');
+
+    warnSpy.mockRestore();
+  });
+
+  it('should switch to fallback image on error for native img with crop to cover line 83', () => {
+    const crop = { x: 0, y: 0, width: 100, height: 100 };
+    render(<BaseCard {...defaultProps} crop={crop} />);
+
+    const img = screen.getByRole('img', { name: defaultProps.title });
+    fireEvent.error(img);
+
+    expect(img).toHaveAttribute('src', '/images/media-card-placeholder.png');
+  });
+
+  it('should switch to fallback image on error for Next Image without crop to cover line 92', () => {
+    render(<BaseCard {...defaultProps} crop={null} />);
+
+    const image = screen.getByTestId('next-image');
+    fireEvent.error(image);
+
+    expect(image).toHaveAttribute('src', '/images/media-card-placeholder.png');
+  });
+
+  it('should accept a valid absolute URL as image source to cover line 36', () => {
+    render(<BaseCard {...defaultProps} image="https://example.com/image.jpg" />);
+
+    const image = screen.getByTestId('next-image');
+    expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
+  });
+
+  it('should fallback to placeholder when image is empty string to cover line 32', () => {
+    render(<BaseCard {...defaultProps} image="" />);
+
+    const image = screen.getByTestId('next-image');
+    expect(image).toHaveAttribute('src', '/images/media-card-placeholder.png');
   });
 });

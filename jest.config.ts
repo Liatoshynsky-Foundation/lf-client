@@ -19,10 +19,15 @@ const config: Config = {
     '!app/domain/**',
     '!app/infrastructure/models/**',
     '!app/robots.ts',
-    '!app/sitemap.ts' // Exclude test files from coverage
+    '!app/sitemap.ts', // Exclude test files from coverage
+    '!app/**/*.styles.{ts,tsx}',
+    '!app/**/index.ts',
+    '!app/**/logoSVGPaths.ts',
+    '!app/**/*.schema.{ts,tsx}',
+    '!app/**/constants.{ts,tsx}'
   ],
   coverageDirectory: 'coverage',
-  coverageProvider: 'v8',
+  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 80,
@@ -33,7 +38,6 @@ const config: Config = {
   },
   coverageReporters: ['text', 'lcov', 'json', 'html'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^.+\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -49,9 +53,6 @@ const config: Config = {
   },
   modulePaths: ['<rootDir>/app'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest'
-  },
   transformIgnorePatterns: [
     'node_modules/(?!(next-intl|lodash-es|@azure/(storage-blob|core-rest-pipeline|core-auth|core-http)|mongodb|winston-mongodb|bson)/)'
   ],

@@ -98,5 +98,20 @@ describe('OfferCollaborationForm', () => {
         await expect(onSubmit({ name: 'Test' })).rejects.toThrow('Помилка відправки');
       });
     });
+
+    it('should handle network connection error and set fallback error message', async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+
+      render(<OfferCollaborationForm />);
+
+      const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
+      const onSubmit = contactFormCalls[contactFormCalls.length - 1][0].onSubmit;
+
+      await act(async () => {
+        await expect(onSubmit({ name: 'Test' })).rejects.toThrow('Network error');
+      });
+
+      expect(screen.getByText('Сталася помилка з’єднання. Перевірте інтернет.')).toBeInTheDocument();
+    });
   });
 });

@@ -6,17 +6,32 @@ import DesktopNav from './DesktopNav';
 import type { NavigationDTO } from '~/domain/dto/navigation.dto';
 import { ROUTES } from '~/shared/components/constants/routes';
 
+type MockLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  href: string;
+};
+
 jest.mock('~/i18n/navigation', () => ({
   usePathname: jest.fn(() => ROUTES.HOME),
-  Link: ({ children, href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a href={href} {...props}>
+  Link: ({ children, href, onClick, ...props }: MockLinkProps) => (
+    <a
+      href={href}
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) onClick(e);
+      }}
+      {...props}
+    >
       {children}
     </a>
   )
 }));
 
+type MockSvgProps = SVGProps<SVGSVGElement> & {
+  Component?: React.ComponentType;
+};
+
 jest.mock('~/shared/components/colored-svg/ColoredSvg.tsx', () => ({
-  Svg: (props: SVGProps<SVGSVGElement>) => <svg data-testid="svg-icon" {...props} />
+  Svg: ({ Component: _Component, ...props }: MockSvgProps) => <svg data-testid="svg-icon" {...props} />
 }));
 
 jest.mock('~/public/icons/chevron-down.svg', () => ({
@@ -124,5 +139,48 @@ describe('DesktopNav', () => {
     render(<DesktopNav navLabels={navLabels} specialNav={null} scrollDirection="up" />);
 
     expect(screen.queryByText('Спеціальна')).not.toBeInTheDocument();
+  });
+
+  it('should close dropdown when scrolling down while dropdown is open', () => {
+    const { rerender } = render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
+
+    fireEvent.click(screen.getByText('Фундація'));
+    expect(screen.getByText('Про Фундацію')).toBeInTheDocument();
+
+    rerender(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="down" />);
+
+    expect(screen.queryByText('Про Фундацію')).not.toBeInTheDocument();
+  });
+
+  it('should reset active button when pathname matches specialNav link', () => {
+    const { usePathname } = jest.requireMock('~/i18n/navigation');
+    (usePathname as jest.Mock).mockReturnValueOnce('/special');
+
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
+
+    expect(screen.getByText('Спеціальна')).toBeInTheDocument();
+  });
+
+  it('should trigger indicator animation when active button becomes defined', () => {
+    const rafSpy = jest.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+
+    const { usePathname } = jest.requireMock('~/i18n/navigation');
+    (usePathname as jest.Mock).mockReturnValueOnce(ROUTES.ARCHIVE);
+
+    render(<DesktopNav navLabels={navLabels} specialNav={specialNav} scrollDirection="up" />);
+
+    expect(rafSpy).toHaveBeenCalled();
+    rafSpy.mockRestore();
+  });
+
+  it('should render nothing for a nav item without dropdown or href to cover line 143', () => {
+    const emptyNavLabels: NavigationDTO[] = [...navLabels, { title: 'Empty', links: [] }];
+
+    render(<DesktopNav navLabels={emptyNavLabels} specialNav={specialNav} scrollDirection="up" />);
+
+    expect(screen.queryByText('Empty')).not.toBeInTheDocument();
   });
 });

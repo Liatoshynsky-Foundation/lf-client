@@ -1,11 +1,12 @@
 import { createMediaMentionService } from './mediaMentionService';
 
 import { MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
-import { MediaMentionRepository } from '~/infrastructure/repositories/media-mentions/mediaMention.repo';
+import type { MediaMentionRepository } from '~/infrastructure/repositories/media-mentions/mediaMention.repo';
 import logger from '~/middleware/logger/logger';
 
 jest.mock('~/middleware/logger/logger', () => ({
-  error: jest.fn()
+  error: jest.fn(),
+  warn: jest.fn()
 }));
 
 describe('mediaMentionService', () => {
@@ -55,6 +56,23 @@ describe('mediaMentionService', () => {
       expect(mediaMentionRepositoryMock.getAllPublishedMediaMentions).toHaveBeenCalledWith('uk');
       expect(result).toHaveLength(1);
       expect(result[0]._id).toBe(validId);
+    });
+
+    it('should log warning if some media mentions fail validation', async () => {
+      const invalidData = {
+        ...mockBaseData,
+        slug: undefined
+      };
+
+      mediaMentionRepositoryMock.getAllPublishedMediaMentions.mockResolvedValue([
+        invalidData as unknown as RepoListItem
+      ]);
+
+      const result = await mediaMentionService.getAllPublishedMediaMentions();
+
+      expect(result).toHaveLength(0);
+      expect(logger.warn).toHaveBeenCalledTimes(1);
+      expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Skipped 1 invalid media mentions records'));
     });
 
     it('should return an empty array if repository returns an empty array', async () => {

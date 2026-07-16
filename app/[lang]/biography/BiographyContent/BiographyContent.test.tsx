@@ -12,9 +12,9 @@ jest.mock('next-intl', () => ({
 }));
 
 jest.mock('~/shared/components/image-with-caption/ImageWithCaption', () => {
-  return function MockImageWithCaption(props: { alt?: string; dataTestId?: string }) {
+  return function MockImageWithCaption(props: { alt?: string; dataTestId?: string; sizes?: unknown }) {
     return (
-      <div data-testid={props.dataTestId ?? 'BiographyContent-image-mock'}>
+      <div data-testid={props.dataTestId ?? 'BiographyContent-image-mock'} data-sizes={JSON.stringify(props.sizes)}>
         mocked-image: {props.alt ?? 'mock-image'}
       </div>
     );
@@ -65,8 +65,8 @@ const makeAdvancedImage = (args: {
   src: string;
   altUk: string;
   altEn: string;
-  captionUk: string;
-  captionEn: string;
+  captionUk?: string;
+  captionEn?: string;
   size: ImagesSizes;
   rectangleTopLeftCorner?: boolean;
 }) => ({
@@ -75,14 +75,16 @@ const makeAdvancedImage = (args: {
   size: args.size,
   rectangleTopLeftCorner: args.rectangleTopLeftCorner ?? false,
   alt: t(args.altUk, args.altEn),
-  caption: t(args.captionUk, args.captionEn)
+  caption:
+    args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : (null as any)
 });
 
-const makeImage = (args: { src: string; altUk: string; altEn: string; captionUk: string; captionEn: string }) => ({
+const makeImage = (args: { src: string; altUk: string; altEn: string; captionUk?: string; captionEn?: string }) => ({
   src: args.src,
   generatedSrc: `/api/blob-url?folderName=photos&blobName=${args.src}`,
   alt: t(args.altUk, args.altEn),
-  caption: t(args.captionUk, args.captionEn)
+  caption:
+    args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : (null as any)
 });
 
 const mockBlocks: BiographyContentBlock[] = [
@@ -97,7 +99,8 @@ const mockBlocks: BiographyContentBlock[] = [
           altUk: 'alt uk',
           altEn: 'alt en',
           captionUk: 'caption uk',
-          captionEn: 'caption en'
+          captionEn: 'caption en',
+          rectangleTopLeftCorner: true
         }),
         listItems: [{ description: makeTipTapDoc('item 1 uk') }, { description: makeTipTapDoc('item 2 uk') }]
       },
@@ -116,7 +119,8 @@ const mockBlocks: BiographyContentBlock[] = [
           altUk: 'main alt uk',
           altEn: 'main alt en',
           captionUk: 'main caption uk',
-          captionEn: 'main caption en'
+          captionEn: 'main caption en',
+          rectangleTopLeftCorner: true
         }),
         additionalImage: makeAdvancedImage({
           src: '/img/left.png',
@@ -135,7 +139,8 @@ const mockBlocks: BiographyContentBlock[] = [
           altUk: 'single alt uk',
           altEn: 'single alt en',
           captionUk: 'single caption uk',
-          captionEn: 'single caption en'
+          captionEn: 'single caption en',
+          rectangleTopLeftCorner: true
         })
       },
       {
@@ -159,6 +164,62 @@ const mockBlocks: BiographyContentBlock[] = [
         listItems: [{ description: makeTipTapDoc('no-year item uk') }]
       }
     ]
+  },
+  {
+    yearTitle: 'Not A Number',
+    items: [
+      {
+        type: ContentType.ChronologyList,
+        additionalImage: makeAdvancedImage({
+          src: '/img/no-caption.png',
+          size: ImagesSizes.SmallVerticalWide,
+          altUk: 'no caption alt',
+          altEn: 'no caption alt'
+        }),
+        listItems: []
+      },
+      {
+        type: ContentType.OnlyImageBlock,
+        mainImage: makeAdvancedImage({
+          src: '/img/no-caption-main.png',
+          size: ImagesSizes.BigHorizontal,
+          altUk: 'no caption alt main',
+          altEn: 'no caption alt main'
+        }),
+        additionalImage: makeAdvancedImage({
+          src: '/img/no-caption-additional.png',
+          size: ImagesSizes.SmallVerticalThin,
+          altUk: 'no caption alt add',
+          altEn: 'no caption alt add'
+        })
+      },
+      {
+        type: ContentType.OnlyImageBlock,
+        mainImage: makeAdvancedImage({
+          src: '/img/no-caption-single.png',
+          size: ImagesSizes.BigHorizontal,
+          altUk: 'no caption alt single',
+          altEn: 'no caption alt single'
+        })
+      },
+      {
+        type: ContentType.FullWidthImage,
+        image: makeImage({
+          src: '/img/no-caption-full.png',
+          altUk: 'no caption alt full',
+          altEn: 'no caption alt full'
+        })
+      },
+      {
+        type: ContentType.FullWidthImage,
+        image: undefined as unknown as any
+      },
+
+      {
+        type: 'UNKNOWN_CONTENT_TYPE' as ContentType,
+        items: []
+      } as unknown as BiographyContentBlock['items'][number]
+    ]
   }
 ];
 
@@ -170,9 +231,9 @@ describe('BiographyContent', () => {
 
   it('should render year line for blocks with numeric yearTitle', () => {
     render(<BiographyContent data={mockBlocks} />);
-    const year = screen.getByTestId('BiographyContent-yearWithLine');
-    expect(year).toBeInTheDocument();
-    expect(year).toHaveTextContent('1910');
+    const years = screen.getAllByTestId('BiographyContent-yearWithLine');
+    expect(years).toHaveLength(1);
+    expect(years[0]).toHaveTextContent('1910');
   });
 
   it('should render chronology list items for each list entry', () => {
@@ -183,9 +244,9 @@ describe('BiographyContent', () => {
 
   it('should render additional image for chronology list when provided', () => {
     render(<BiographyContent data={mockBlocks} />);
-    const image = screen.getByTestId('BiographyContent-chronologyList-imageWithCaption');
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveTextContent(/alt uk/i);
+    const image = screen.getAllByTestId('BiographyContent-chronologyList-imageWithCaption');
+    expect(image[0]).toBeInTheDocument();
+    expect(image[0]).toHaveTextContent(/alt uk/i);
   });
 
   it('should render excerpt block with quote and source text', () => {
@@ -198,22 +259,30 @@ describe('BiographyContent', () => {
 
   it('should render both left and right images for OnlyImageBlock with additionalImage', () => {
     render(<BiographyContent data={mockBlocks} />);
-    const left = screen.getByTestId('BiographyContent-onlyImageBlock-left');
-    const right = screen.getByTestId('BiographyContent-onlyImageBlock-right');
-    expect(left).toBeInTheDocument();
-    expect(right).toBeInTheDocument();
+    const left = screen.getAllByTestId('BiographyContent-onlyImageBlock-left');
+    const right = screen.getAllByTestId('BiographyContent-onlyImageBlock-right');
+    expect(left[0]).toBeInTheDocument();
+    expect(right[0]).toBeInTheDocument();
   });
 
   it('should render single image block when OnlyImageBlock has no additionalImage', () => {
     render(<BiographyContent data={mockBlocks} />);
-    const single = screen.getByTestId('BiographyContent-onlyImageBlock-single');
-    expect(single).toBeInTheDocument();
+    const single = screen.getAllByTestId('BiographyContent-onlyImageBlock-single');
+    expect(single[0]).toBeInTheDocument();
   });
 
   it('should render full width image block', () => {
     render(<BiographyContent data={mockBlocks} />);
-    const fullWidth = screen.getByTestId('BiographyContent-fullWidthImage');
-    expect(fullWidth).toBeInTheDocument();
+    const fullWidth = screen.getAllByTestId('BiographyContent-fullWidthImage');
+    expect(fullWidth[0]).toBeInTheDocument();
     expect(screen.getByText(/full alt uk/i)).toBeInTheDocument();
+  });
+
+  it('should pass sizes prop correctly to ImageWithCaption elements', () => {
+    render(<BiographyContent data={mockBlocks} />);
+    const images = screen.getAllByTestId(/imageWithCaption|mainImage|additionalImage/i);
+    images.forEach((img) => {
+      expect(img).toHaveAttribute('data-sizes');
+    });
   });
 });

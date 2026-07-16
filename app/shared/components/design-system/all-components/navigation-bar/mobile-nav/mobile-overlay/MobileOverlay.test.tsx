@@ -1,10 +1,29 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import MobileMenuOverlay from './MobileOverlay';
 
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
+interface MockProps {
+  children?: React.ReactNode;
+}
+
+interface ContactProps {
+  isMobile: boolean;
+}
+
+interface AccordionItem {
+  label: string;
+}
+
+interface AccordionProps {
+  items: AccordionItem[];
+}
+
 jest.mock('@mui/material/Slide', () => {
-  const MockSlide = (props: any) => <div>{props.children}</div>;
+  const MockSlide = (props: MockProps) => <div>{props.children}</div>;
   MockSlide.displayName = 'Slide';
   return MockSlide;
 });
@@ -13,14 +32,14 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
   __esModule: true,
   default: jest.fn(() => ({ isMobile: false }))
 }));
-import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
 const mockUseBreakpoints = useBreakpoints as jest.Mock;
 
 jest.mock(
   '~/shared/components/design-system/all-components/navigation-bar/mobile-nav/mobile-overlay/nav-contacts/NavContactsSection',
   () => ({
     __esModule: true,
-    ContactsSection: (props: any) => (
+    ContactsSection: (props: ContactProps) => (
       <div data-testid="mock-contacts-section">{props.isMobile ? 'Mobile' : 'Desktop'}</div>
     )
   })
@@ -28,9 +47,9 @@ jest.mock(
 
 jest.mock('~/shared/components/design-system/all-components/navigation-accordion/NavAccordion', () => ({
   __esModule: true,
-  NavAccordion: ({ items }: any) => (
+  NavAccordion: ({ items }: AccordionProps) => (
     <div data-testid="mock-nav-accordion">
-      {items.map((i: any) => (
+      {items.map((i: AccordionItem) => (
         <div key={i.label}>{i.label}</div>
       ))}
     </div>
@@ -64,7 +83,7 @@ const socialLinks = [{ link: 'https://instagram.com', icon: 'inst.svg' }];
 describe('MobileMenuOverlay', () => {
   beforeEach(() => {
     document.body.style.overflow = '';
-    mockUseBreakpoints.mockReturnValue({ isMobile: false }); // default desktop
+    mockUseBreakpoints.mockReturnValue({ isMobile: false });
   });
 
   test('should render closed overlay when open=false', () => {
@@ -100,5 +119,18 @@ describe('MobileMenuOverlay', () => {
     expect(screen.getByTestId('MobileMenuOverlay-contacts')).toBeInTheDocument();
     expect(screen.queryByTestId('MobileMenuOverlay-leftColumn')).not.toBeInTheDocument();
     expect(screen.getByText('Mobile')).toBeInTheDocument();
+  });
+
+  test('should correctly map nav labels when a group has exactly one link', () => {
+    const singleLinkNav = [
+      {
+        title: 'Single Link Section',
+        links: [{ label: 'Only Page', href: '/only', visibility: true }]
+      }
+    ];
+
+    render(<MobileMenuOverlay open navLabels={singleLinkNav} contacts={contacts} socialLinks={socialLinks} />);
+    expect(screen.getByText('Single Link Section')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-nav-accordion')).toBeInTheDocument();
   });
 });

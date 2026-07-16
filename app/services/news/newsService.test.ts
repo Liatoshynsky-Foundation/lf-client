@@ -2,7 +2,13 @@ import { Locale } from 'next-intl';
 
 import { createNewsService } from './newsService';
 
-import { NewsRepository } from '~/infrastructure/repositories/news/news.repo';
+import type { NewsRepository } from '~/infrastructure/repositories/news/news.repo';
+import logger from '~/middleware/logger/logger';
+
+jest.mock('~/middleware/logger/logger', () => ({
+  error: jest.fn(),
+  warn: jest.fn()
+}));
 
 describe('newsService', () => {
   const newsRepositoryMock = {
@@ -54,13 +60,32 @@ describe('newsService', () => {
 
   describe('getAllPublishedNews', () => {
     it('should fetch and parse published news', async () => {
-      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([baseNewsMock] as any);
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([baseNewsMock] as unknown as Awaited<
+        ReturnType<NewsRepository['getAllPublishedNews']>
+      >);
 
       const result = await newsService.getAllPublishedNews(locale);
 
       expect(result).toHaveLength(1);
       expect(result[0].title).toBe('Заголовок');
       expect(newsRepositoryMock.getAllPublishedNews).toHaveBeenCalled();
+    });
+
+    it('should log warning if some news fail validation', async () => {
+      const invalidNews = {
+        ...baseNewsMock,
+        slug: undefined
+      };
+
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([invalidNews] as unknown as Awaited<
+        ReturnType<NewsRepository['getAllPublishedNews']>
+      >);
+
+      const result = await newsService.getAllPublishedNews(locale);
+
+      expect(result).toHaveLength(0);
+      expect(logger.warn).toHaveBeenCalledTimes(1);
+      expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Skipped 1 invalid news records'));
     });
 
     it('should return empty array if repository returns empty array', async () => {
@@ -72,7 +97,9 @@ describe('newsService', () => {
     });
 
     it('should return empty array if repository returns null', async () => {
-      newsRepositoryMock.getAllPublishedNews.mockResolvedValue(null as any);
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue(
+        null as unknown as Awaited<ReturnType<NewsRepository['getAllPublishedNews']>>
+      );
 
       const result = await newsService.getAllPublishedNews(locale);
 
@@ -80,7 +107,9 @@ describe('newsService', () => {
     });
 
     it('should localize to en locale', async () => {
-      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([baseNewsMock] as any);
+      newsRepositoryMock.getAllPublishedNews.mockResolvedValue([baseNewsMock] as unknown as Awaited<
+        ReturnType<NewsRepository['getAllPublishedNews']>
+      >);
 
       const result = await newsService.getAllPublishedNews('en');
 
@@ -99,7 +128,9 @@ describe('newsService', () => {
 
   describe('getNewsBySlug', () => {
     it('should return localized news if found', async () => {
-      newsRepositoryMock.getNewsBySlug.mockResolvedValue(baseNewsMock as any);
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(
+        baseNewsMock as unknown as Awaited<ReturnType<NewsRepository['getNewsBySlug']>>
+      );
 
       const result = await newsService.getNewsBySlug('news-1', locale);
 
@@ -118,7 +149,9 @@ describe('newsService', () => {
     });
 
     it('should return localized news for en locale', async () => {
-      newsRepositoryMock.getNewsBySlug.mockResolvedValue(baseNewsMock as any);
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(
+        baseNewsMock as unknown as Awaited<ReturnType<NewsRepository['getNewsBySlug']>>
+      );
 
       const result = await newsService.getNewsBySlug('news-1', 'en');
 
@@ -132,6 +165,25 @@ describe('newsService', () => {
       await newsService.getNewsBySlug('specific-slug', locale);
 
       expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('specific-slug');
+    });
+
+    it('should return null and log error if repository or parsing throws error (catch block coverage)', async () => {
+      const invalidNews = {
+        ...baseNewsMock,
+        slug: undefined
+      };
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(
+        invalidNews as unknown as Awaited<ReturnType<NewsRepository['getNewsBySlug']>>
+      );
+
+      const result = await newsService.getNewsBySlug('news-1', locale);
+
+      expect(result).toBeNull();
+      expect(logger.error).toHaveBeenCalledTimes(1);
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('[SERVICE:News:getNewsBySlug] Failed to fetch or parse news by slug'),
+        expect.any(Error)
+      );
     });
   });
 });
