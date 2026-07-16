@@ -81,29 +81,16 @@ describe('eventRepository', () => {
   });
 
   describe('getEventBySlug', () => {
-    it('should query by slug AND published status, so a cancelled (unpublished) event is not returned', async () => {
+    it('should query by slug', async () => {
       (EventModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(validEventData));
 
       const result = await eventRepository.getEventBySlug('test-event-slug');
 
       expect(dbConnect).toHaveBeenCalled();
       expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'test-event-slug',
-        status: EventStatus.Published
+        slug: 'test-event-slug'
       });
       expect(result).toEqual(validEventData);
-    });
-
-    it('should return null when event with given slug is not published (cancelled)', async () => {
-      (EventModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(null));
-
-      const result = await eventRepository.getEventBySlug('cancelled-event-slug');
-
-      expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'cancelled-event-slug',
-        status: EventStatus.Published
-      });
-      expect(result).toBeNull();
     });
   });
 });

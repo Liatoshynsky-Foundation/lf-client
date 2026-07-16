@@ -29,14 +29,23 @@ describe('mediaMentionService', () => {
 
   const mockBaseData: Partial<RepoListItem> = {
     _id: validId,
-    title: 'Media Title',
+    title: {
+      uk: 'Media Title',
+      en: 'Media Title'
+    },
     slug: 'media-slug',
-    publishedAt: new Date().toISOString(),
+    publishedAt: new Date(),
     url: 'https://forbes.com/news',
-    description: 'Short description for list',
+    description: {
+      uk: 'Short description for list',
+      en: 'Short description for list'
+    },
     coverImage: {
       src: 'https://img.com/cover.jpg',
-      alt: 'Cover'
+      alt: {
+        uk: 'Cover',
+        en: 'Cover'
+      }
     },
     meta: {
       views: 0

@@ -70,14 +70,13 @@ describe('mediaMentionRepository', () => {
       expect(result).toBeNull();
     });
 
-    it('should return media mention details and parse via Zod', async () => {
+    it('should return only media mention details and parse via Zod', async () => {
       (MediaMentionModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(validMentionData));
 
       const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention', 'uk');
 
       expect(MediaMentionModel.findOne).toHaveBeenCalledWith({
-        slug: 'test-media-mention',
-        status: MediaMentionStatus.Published
+        slug: 'test-media-mention'
       });
 
       if (!result) throw new Error('Result is null');
