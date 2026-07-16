@@ -82,13 +82,12 @@ describe('eventRepository', () => {
 
       expect(dbConnect).toHaveBeenCalledTimes(1);
       expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'target-slug',
-        status: EventStatus.Published
+        slug: 'target-slug'
       });
       expect(result).toEqual(mockEvent);
     });
 
-    it('should return null if no published event matches the slug', async () => {
+    it('should return null if no event matches the slug', async () => {
       const mockLean = jest.fn().mockResolvedValue(null);
 
       (EventModel.findOne as jest.Mock).mockReturnValue({

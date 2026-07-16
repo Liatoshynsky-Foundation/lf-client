@@ -44,7 +44,7 @@ export type newsPressCardItem = {
 };
 
 type LocalizedNewsItem = Localize<z.infer<typeof newsListItemSchema>>;
-type MediaMentionItem = z.infer<typeof mediaMentionListItemSchema>;
+type MediaMentionItem = Localize<z.infer<typeof mediaMentionListItemSchema>>;
 type EventItem = Localize<z.infer<typeof eventListItemSchema>>;
 
 interface MediaCenterProps {

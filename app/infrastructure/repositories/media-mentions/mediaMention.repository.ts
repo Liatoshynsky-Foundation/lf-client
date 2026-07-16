@@ -3,8 +3,6 @@ import { Types } from 'mongoose';
 import { MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import MediaMentionModel from '~/infrastructure/models/media-mentions/mediaMention.model';
-import { ArraySchema } from '~/validators/constants';
-import { mediaMentionListItemSchema, mediaMentionSchema } from '~/validators/mediaMention.schema';
 
 const mediaMentionRepository = {
   async getAllPublishedMediaMentions(_locale: string) {
@@ -20,13 +18,13 @@ const mediaMentionRepository = {
       _id: (mention._id as Types.ObjectId).toString()
     }));
 
-    return ArraySchema(mediaMentionListItemSchema).parse(transformedMediaMentions);
+    return transformedMediaMentions;
   },
 
   async getMediaMentionBySlug(slug: string, _locale: string) {
     await dbConnect();
 
-    const mediaMention = await MediaMentionModel.findOne({ slug, status: MediaMentionStatus.Published }).lean();
+    const mediaMention = await MediaMentionModel.findOne({ slug }).lean();
 
     if (!mediaMention) return null;
 
@@ -35,7 +33,7 @@ const mediaMentionRepository = {
       _id: (mediaMention._id as Types.ObjectId).toString()
     };
 
-    return mediaMentionSchema.parse(transformedMediaMention);
+    return transformedMediaMention;
   }
 };
 
