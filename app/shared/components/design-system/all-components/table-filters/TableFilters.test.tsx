@@ -4,25 +4,49 @@ import React from 'react';
 import { TableFilters } from './TableFilters';
 import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.enums';
 
+type MockBoxProps = {
+  children?: React.ReactNode;
+  sx?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
 jest.mock('@mui/material', () => ({
-  Box: ({ children, sx, ...props }: any) => (
-    <div data-testid="mui-box" style={sx} {...props}>
-      {children}
-    </div>
-  )
+  Box: ({ children, sx, ...props }: MockBoxProps) => {
+    const inlineStyle =
+      sx && typeof sx === 'object'
+        ? Object.fromEntries(Object.entries(sx).filter(([key]) => !key.startsWith('&')))
+        : undefined;
+
+    return (
+      <div data-testid="mui-box" style={inlineStyle} {...props}>
+        {children}
+      </div>
+    );
+  }
 }));
 
+type MockIconButtonProps = {
+  children?: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  [key: string]: unknown;
+};
+
 jest.mock('~/ds-components/icon-button/IconButton', () => ({
-  IconButton: ({ children, onClick, ...props }: any) => (
+  IconButton: ({ children, onClick, ...props }: MockIconButtonProps) => (
     <button data-testid="icon-btn" onClick={onClick} {...props}>
       {children}
     </button>
   )
 }));
 
+type MockTooltipProps = {
+  children?: React.ReactNode;
+  title?: string;
+};
+
 jest.mock('~/shared/components/design-system/all-components/tooltip/Tooltip', () => ({
   __esModule: true,
-  default: ({ children, title }: any) => (
+  default: ({ children, title }: MockTooltipProps) => (
     <div data-testid="tooltip" title={title}>
       {children}
     </div>

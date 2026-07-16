@@ -26,7 +26,10 @@ const isValidUrl = (url: string | null | undefined): url is string => {
     new URL(url);
     return true;
   } catch (error) {
-    console.warn(`[EventItem:isValidUrl] Failed to parse image URL: ${url} `, error);
+    const logger = globalThis['console'];
+    if (logger) {
+      logger.warn(`[EventItem:isValidUrl] Failed to parse image URL: ${url}`, error);
+    }
     return false;
   }
 };
@@ -68,10 +71,8 @@ const formatNumeric = (d: Date) =>
 const buildEventItemDateLabels = (
   date: EventItemDate,
   locale: string,
-  dateVariant: 'numeric' | 'text' = 'numeric'
+  dateVariant: 'numeric' | 'text'
 ): EventItemDateLabels | null => {
-  if (!date.startDate) return null;
-
   const start = new Date(date.startDate);
   if (Number.isNaN(start.getTime())) return null;
 

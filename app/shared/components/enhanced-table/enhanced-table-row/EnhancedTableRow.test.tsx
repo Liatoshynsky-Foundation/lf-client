@@ -1,4 +1,5 @@
 import { Table, TableBody } from '@mui/material';
+import type { Row } from '@tanstack/react-table';
 import { createEvent, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
@@ -9,6 +10,11 @@ jest.mock('@tanstack/react-table', () => ({
   ...jest.requireActual('@tanstack/react-table'),
   flexRender: jest.fn((cell) => cell)
 }));
+
+interface TestData {
+  id: string;
+  name: string;
+}
 
 describe('EnhancedTableRow', () => {
   const mockRow = {
@@ -21,7 +27,7 @@ describe('EnhancedTableRow', () => {
         getContext: () => ({})
       }
     ])
-  } as any;
+  } as unknown as Row<TestData>;
 
   const mockOnClick = jest.fn();
 
@@ -56,12 +62,13 @@ describe('EnhancedTableRow', () => {
     expect(mockOnClick).toHaveBeenCalledWith(mockRow.original);
   });
 
-  it('should handle early return in handleRowClick when onClick is missing', () => {
-    renderInTable(<EnhancedTableRow row={mockRow} />);
+  it('should handle render when onClick is missing', () => {
+    renderInTable(<EnhancedTableRow row={mockRow} onClick={undefined} />);
     const row = screen.getByTestId('EnhancedTableRow-mainNoOpus');
 
     fireEvent.click(row);
     expect(mockOnClick).not.toHaveBeenCalled();
+    expect(row).not.toHaveAttribute('tabIndex');
   });
 
   it('should not call onClick if click target is a button or link', () => {

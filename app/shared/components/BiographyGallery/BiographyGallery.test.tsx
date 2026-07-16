@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import BiographyGallery from './BiographyGallery';
@@ -6,13 +6,17 @@ import { biographyGalleryPhotos } from './BiographyGallery.data';
 import { styles } from './BiographyGallery.styles';
 import { buildFrameImages } from './buildBiographyFrameImages';
 
-const ImageWithCaptionMock = jest.fn((props: any) => (
-  <div data-testid="image-with-caption" data-caption={props.caption} />
+type MockImageProps = {
+  caption?: string;
+};
+
+const ImageWithCaptionMock = jest.fn(({ caption }: MockImageProps) => (
+  <div data-testid="image-with-caption" data-caption={caption} />
 ));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
   __esModule: true,
-  default: (props: any) => ImageWithCaptionMock(props)
+  default: (props: MockImageProps) => ImageWithCaptionMock(props)
 }));
 
 jest.mock('next-intl', () => ({
@@ -45,8 +49,14 @@ describe('BiographyGallery Folder 100% Coverage', () => {
 
     fireEvent.mouseEnter(firstWrapper);
     fireEvent.mouseLeave(firstWrapper);
-    fireEvent.focus(firstWrapper);
-    fireEvent.blur(firstWrapper);
+
+    act(() => {
+      fireEvent.focus(firstWrapper);
+    });
+
+    act(() => {
+      fireEvent.blur(firstWrapper);
+    });
 
     expect(ImageWithCaptionMock).toHaveBeenCalled();
   });
@@ -76,7 +86,9 @@ describe('BiographyGallery Folder 100% Coverage', () => {
     const focusables = document.querySelectorAll<HTMLDivElement>('[data-biography-photo="true"]');
     expect(focusables.length).toBe(3);
 
-    focusables[0].focus();
+    act(() => {
+      focusables[0].focus();
+    });
     fireEvent.keyDown(focusables[0], { key: 'ArrowRight' });
     expect(document.activeElement).toBe(focusables[1]);
 
@@ -95,7 +107,9 @@ describe('BiographyGallery Folder 100% Coverage', () => {
     render(<BiographyGallery images={images} frameRepeats={1} />);
 
     const focusables = document.querySelectorAll<HTMLDivElement>('[data-biography-photo="true"]');
-    focusables[0].focus();
+    act(() => {
+      focusables[0].focus();
+    });
     fireEvent.keyDown(focusables[0], { key: 'Enter' });
 
     expect(document.activeElement).toBe(focusables[0]);

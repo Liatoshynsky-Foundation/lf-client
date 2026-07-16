@@ -3,6 +3,7 @@ import { useLocale } from 'next-intl';
 import React from 'react';
 
 import WarInUkraine, { generateMetadata } from './page';
+import { createSeoMeta } from '~/utils/createSeoMeta';
 import * as envUtils from '~/utils/isProductionMode';
 
 jest.mock('next-intl', () => ({
@@ -48,10 +49,14 @@ jest.mock('~/components/blocks/volunteer-donation/VolunteerDonation', () => {
   return MockDonation;
 });
 jest.mock('~/ds-components/bullet-text-with-links/BulletTextWithLinks', () => {
-  const MockBullet = (props: any) => <div data-testid="bullet-section">{props.buttonText}</div>;
+  const MockBullet = ({ buttonText }: { buttonText: string }) => <div data-testid="bullet-section">{buttonText}</div>;
   MockBullet.displayName = 'BulletTextWithLinks';
   return MockBullet;
 });
+
+jest.mock('~/utils/createSeoMeta', () => ({
+  createSeoMeta: jest.fn((data) => data)
+}));
 
 describe('WarInUkraine Page', () => {
   const mockParams = Promise.resolve({ lang: 'uk' as const });
@@ -64,7 +69,20 @@ describe('WarInUkraine Page', () => {
 
   it('should generate metadata correctly', async () => {
     const metadata = await generateMetadata({ params: mockParams });
-    expect(metadata).toBeDefined();
+
+    expect(createSeoMeta).toHaveBeenCalledWith({
+      title: 'title',
+      description: 'description',
+      url: expect.any(String),
+      locale: 'uk'
+    });
+
+    expect(metadata).toEqual({
+      title: 'title',
+      description: 'description',
+      url: expect.any(String),
+      locale: 'uk'
+    });
   });
 
   it('should render all sections when not in production', () => {
@@ -74,7 +92,7 @@ describe('WarInUkraine Page', () => {
     expect(screen.getByText('War Carousel')).toBeInTheDocument();
     expect(screen.getByText('Volunteer Donation')).toBeInTheDocument();
 
-    expect(screen.getByText('Підтримати фонд')).toBeInTheDocument();
+    expect(screen.getByText('Підтримати')).toBeInTheDocument();
   });
 
   it('should render content in English locale', () => {

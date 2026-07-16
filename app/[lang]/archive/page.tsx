@@ -125,7 +125,7 @@ export default function Archive() {
                   paddingTop: getColumnPaddingTop(columnNum)
                 }}
               >
-                {(fundsByColumn[columnNum] ?? []).map((fund) => (
+                {fundsByColumn[columnNum].map((fund) => (
                   <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
                 ))}
               </Box>

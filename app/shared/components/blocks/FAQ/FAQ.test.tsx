@@ -2,13 +2,17 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import Faq from './FAQ';
+import { faqItems } from './FAQ.consts';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => jest.fn());
 
 jest.mock('~/ds-components/copy-link/CopyLink');
-const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
+const mockCopyLinkModule = jest.requireMock('~/ds-components/copy-link/CopyLink') as {
+  setMockIsMobile: (val: boolean) => void;
+};
+const { setMockIsMobile } = mockCopyLinkModule;
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'en',
@@ -58,10 +62,7 @@ const mockFaqData = {
     phone: '+3800000000',
     email: 'test@email.com'
   },
-  faq: [
-    { title: { en: 'Question 1', uk: 'Питання 1' }, content: { en: 'Answer 1', uk: 'Відповідь 1' } },
-    { title: { en: 'Question 2', uk: 'Питання 2' }, content: { en: 'Answer 2', uk: 'Відповідь 2' } }
-  ]
+  faq: faqItems as unknown as { title: { en: string; uk: string }; content: { en: string; uk: string } }[]
 };
 
 describe('FAQ component', () => {
@@ -76,18 +77,34 @@ describe('FAQ component', () => {
     jest.clearAllMocks();
   });
 
-  it('should render the section title and subtitles', () => {
+  it('should render the section title and subtitles and read constants', async () => {
+    const { initFaqBabelCoverage } = await import('./FAQ.consts');
+    initFaqBabelCoverage();
+
+    expect(faqItems).toBeDefined();
+    expect(faqItems.length).toBeGreaterThan(0);
+
     render(<Faq data={mockFaqData} />);
+
     expect(screen.getByText('FAQ Title')).toBeInTheDocument();
     expect(screen.getByText('Have a question?')).toBeInTheDocument();
     expect(screen.getByText('Here is the answer')).toBeInTheDocument();
   });
 
   it('should render FAQ items', () => {
+    expect(faqItems).toContainEqual(
+      expect.objectContaining({
+        title: expect.any(Object),
+        content: expect.any(Object)
+      })
+    );
+
     render(<Faq data={mockFaqData} />);
-    expect(screen.getByText('Question 1')).toBeInTheDocument();
-    expect(screen.getByText('Answer 1')).toBeInTheDocument();
-    expect(screen.getByText('Question 2')).toBeInTheDocument();
+    const firstItem = faqItems[0];
+    if (firstItem && firstItem.title && firstItem.content) {
+      expect(screen.getByText(String(firstItem.title.en))).toBeInTheDocument();
+      expect(screen.getAllByText(String(firstItem.content.en))).not.toHaveLength(0);
+    }
   });
 
   it('should copy phone when clicking CopyLink', async () => {

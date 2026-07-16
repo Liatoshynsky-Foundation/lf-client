@@ -24,4 +24,36 @@ describe('TextCard', () => {
     expect(allTextElements[0]).toHaveTextContent('Another description');
     expect(allTextElements[1]).toHaveTextContent('Another Title');
   });
+
+  it('should render correct language translation when localized objects are passed', () => {
+    const titleObj = { en: 'Title EN', uk: 'Заголовок УК' };
+    const descObj = { en: 'Desc EN', uk: 'Опис УК' };
+
+    render(<TextCard title={titleObj} description={descObj} locale="uk" />);
+
+    expect(screen.getByText('Заголовок УК')).toBeInTheDocument();
+    expect(screen.getByText('Опис УК')).toBeInTheDocument();
+    expect(screen.queryByText('Title EN')).not.toBeInTheDocument();
+    expect(screen.queryByText('Desc EN')).not.toBeInTheDocument();
+  });
+
+  it('should fallback to english default locale when no locale prop is specified', () => {
+    const titleObj = { en: 'Title Default EN', uk: 'Заголовок УК' };
+    const descObj = { en: 'Desc Default EN', uk: 'Опис УК' };
+
+    render(<TextCard title={titleObj} description={descObj} />);
+
+    expect(screen.getByText('Title Default EN')).toBeInTheDocument();
+    expect(screen.getByText('Desc Default EN')).toBeInTheDocument();
+  });
+
+  it('should correctly accept and apply custom sx properties array formatting', () => {
+    const title = 'Styled Title';
+    const description = 'Styled description';
+    const customSx = { marginTop: '20px', padding: '10px' };
+
+    const { container } = render(<TextCard title={title} description={description} sx={customSx} />);
+
+    expect(container.firstChild).toBeInTheDocument();
+  });
 });

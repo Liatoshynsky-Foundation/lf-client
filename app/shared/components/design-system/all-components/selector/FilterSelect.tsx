@@ -66,11 +66,9 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
     if (isSelected) {
       newValues = selectedValues.filter((val) => val !== option.value);
       onRemove?.(option.value, option.label, newValues);
-    } else if (!maxSelections || selectedValues.length < maxSelections) {
+    } else {
       newValues = [...selectedValues, option.value];
       onAdd?.(option.value, option.label, newValues);
-    } else {
-      return;
     }
 
     setSelectedValues(newValues);

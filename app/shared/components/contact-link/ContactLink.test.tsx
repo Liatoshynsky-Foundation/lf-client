@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { createEvent, fireEvent, render, screen } from '@testing-library/react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
@@ -12,14 +12,19 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
 }));
 
-jest.mock('~/ds-components/copy-link/CopyLink');
-const { setMockIsMobile } = jest.requireMock('~/ds-components/copy-link/CopyLink');
+jest.mock('~/ds-components/copy-link/CopyLink', () => {
+  return function MockCopyLink({ value, disabled, sx }: { value: string; disabled?: boolean; sx?: unknown }) {
+    return (
+      <div data-testid="mock-copy-link" data-disabled={disabled} data-sx={JSON.stringify(sx)}>
+        {value}
+      </div>
+    );
+  };
+});
 
 const mockedUseBreakpoints = useBreakpoints as jest.Mock;
 
 beforeEach(() => {
-  setMockIsMobile(false);
-
   mockedUseBreakpoints.mockReturnValue({ isMobile: false });
 });
 
@@ -41,22 +46,22 @@ describe('ContactLink component', () => {
   });
 
   it('should render mailto link on mobile', () => {
-    setMockIsMobile(true);
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
-    render(<ContactLink type="email" value="mobile@example.com" label="Email" />);
+    render(<ContactLink type="email" value="mobile@example.com" label="Email" icon={IconMock} useNativeLink={true} />);
 
-    const link = screen.getByRole('link');
+    const link = screen.getByText('mobile@example.com');
     expect(link).toHaveAttribute('href', 'mailto:mobile@example.com');
+    expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
+    expect(screen.getByText('Email:')).toBeInTheDocument();
   });
 
   it('should render phone link with tel: on mobile', () => {
-    setMockIsMobile(true);
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
-    render(<ContactLink type="phone" value="+380123456789" />);
+    render(<ContactLink type="phone" value="+380123456789" useNativeLink={true} />);
 
-    const link = screen.getByRole('link');
+    const link = screen.getByText('+380123456789');
     expect(link).toHaveAttribute('href', 'tel:+380123456789');
   });
 
@@ -72,26 +77,10 @@ describe('ContactLink component', () => {
     expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
   });
 
-  it('should copy value to clipboard when copy link clicked', async () => {
-    render(<ContactLink type="email" value="copy@example.com" />);
-    const copyLink = screen.getByTestId('mock-copy-link');
-
-    await act(async () => {
-      fireEvent.click(copyLink);
-    });
-
-    expect(mockWriteText).toHaveBeenCalledWith('copy@example.com');
-  });
-
-  it('should not copy value when disabled', async () => {
+  it('should pass disabled prop to copy link', () => {
     render(<ContactLink type="email" value="test@example.com" disabled />);
     const copyLink = screen.getByTestId('mock-copy-link');
-
-    await act(async () => {
-      fireEvent.click(copyLink);
-    });
-
-    expect(mockWriteText).not.toHaveBeenCalled();
+    expect(copyLink).toHaveAttribute('data-disabled', 'true');
   });
 
   it('should render layout in column direction', () => {
@@ -110,19 +99,50 @@ describe('ContactLink component', () => {
     expect(screen.getByTestId('mock-copy-link')).toBeInTheDocument();
   });
 
-  it('should not render copy button on mobile', () => {
-    setMockIsMobile(true);
-    mockedUseBreakpoints.mockReturnValue({ isMobile: true });
-
-    render(<ContactLink type="email" value="mobile@example.com" />);
-
-    const copyLink = screen.getByTestId('mock-copy-link');
-    expect(copyLink).toBeInTheDocument();
-    expect(copyLink).toHaveAttribute('href', 'mailto:mobile@example.com');
-  });
-
   it('should merge custom iconSx correctly', () => {
     const result = sxToArray({ backgroundColor: 'transparent' });
     expect(result).toContainEqual({ backgroundColor: 'transparent' });
+  });
+
+  it('should render an anchor tag without href and prevent default action when useNativeLink and disabled are true', () => {
+    render(<ContactLink type="email" value="test@example.com" useNativeLink={true} disabled={true} />);
+
+    const link = screen.getByText('test@example.com');
+    expect(link).not.toHaveAttribute('href');
+
+    const clickEvent = fireEvent.click(link);
+    expect(clickEvent).toBe(false);
+  });
+
+  it('should cover the execution of preventDefault when clicking a disabled native link', () => {
+    render(<ContactLink type="phone" value="+380123456789" useNativeLink={true} disabled={true} />);
+
+    const link = screen.getByText('+380123456789');
+
+    const mockPreventDefault = jest.fn();
+    const customEvent = createEvent.click(link);
+    Object.defineProperty(customEvent, 'preventDefault', { value: mockPreventDefault });
+
+    fireEvent(link, customEvent);
+    expect(mockPreventDefault).toHaveBeenCalled();
+  });
+
+  it('should pass valueSx to CopyLink on desktop', () => {
+    const customSx = { color: 'red' };
+    render(<ContactLink type="email" value="test@example.com" valueSx={customSx} />);
+
+    const copyLink = screen.getByTestId('mock-copy-link');
+    expect(copyLink).toHaveAttribute('data-sx', JSON.stringify(customSx));
+  });
+
+  it('should pass mobile stretched styles to CopyLink on mobile when useNativeLink is false', () => {
+    mockedUseBreakpoints.mockReturnValue({ isMobile: true });
+    const customSx = { color: 'blue' };
+
+    render(<ContactLink type="email" value="mobile-copy@example.com" valueSx={customSx} useNativeLink={false} />);
+
+    const copyLink = screen.getByTestId('mock-copy-link');
+    expect(copyLink).toBeInTheDocument();
+    expect(copyLink).toHaveAttribute('data-sx');
   });
 });

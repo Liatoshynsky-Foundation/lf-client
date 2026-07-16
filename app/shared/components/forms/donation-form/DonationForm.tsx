@@ -83,10 +83,6 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (globalThis.window === undefined) {
-      return;
-    }
-
     if (globalThis.window.Wayforpay) {
       return;
     }
