@@ -1,14 +1,6 @@
 import type { CompositionRepository } from '~/infrastructure/repositories/artistry/compositions.repo';
 import { createArtistryService } from '~/services/artistry/artistryService';
 
-const mockRawGenres = [
-  {
-    _id: '63f8b3b7a8b3d6c1b3e8e4a1',
-    key: 'romance',
-    name: { en: 'Romance', uk: 'Романс' }
-  }
-];
-
 const mockRawCategories = [
   {
     _id: '63f8b3b7a8b3d6c1b3e8e4d1',
@@ -35,7 +27,7 @@ const mockRawCompositions = [
       createdAt: new Date('2022-01-01'),
       updatedAt: new Date('2022-01-01')
     },
-    genres: mockRawGenres
+    genre: null
   }
 ];
 
@@ -57,11 +49,9 @@ describe('artistryService', () => {
   });
 
   describe('getAllGenres', () => {
-    it('should fetch genres, localize them and return the result', async () => {
-      const locale = 'uk';
-      (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue(mockRawGenres);
-      const result = await artistryService.getAllGenres(locale);
-      expect(result).toEqual([{ key: 'romance', name: 'Романс' }]);
+    it('should return empty array (genre filter removed from UI)', async () => {
+      const result = await artistryService.getAllGenres();
+      expect(result).toEqual([]);
     });
   });
 
@@ -92,7 +82,7 @@ describe('artistryService', () => {
   });
 
   describe('getAllCompositionTitles', () => {
-    it('should fetch titles and localize them with fallback empty object filters', async () => {
+    it('should fetch titles, localize them and add genre suggestions', async () => {
       const locale = 'en';
       const mockTitles = [
         {
@@ -101,11 +91,17 @@ describe('artistryService', () => {
         }
       ];
       (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue(mockTitles);
+      (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue(['Romance', 'Jazz']);
 
       const result = await artistryService.getAllCompositionTitles(locale);
 
-      expect(result).toEqual([{ _id: '507f191e810c19729de860ea', title: 'Title En' }]);
+      expect(result).toEqual([
+        { _id: '507f191e810c19729de860ea', title: 'Title En' },
+        { _id: 'genre-0', title: 'Romance', kind: 'genre' },
+        { _id: 'genre-1', title: 'Jazz', kind: 'genre' }
+      ]);
       expect(compositionServiceMock.getAllCompositionTitles).toHaveBeenCalledWith({});
+      expect(compositionServiceMock.getAllGenres).toHaveBeenCalled();
     });
 
     it('should return empty array if repo returns null to cover branch line 42', async () => {
@@ -116,6 +112,7 @@ describe('artistryService', () => {
 
     it('should return empty array if repo returns empty array to complete branch cover', async () => {
       (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue([]);
+      (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue([]);
       const result = await artistryService.getAllCompositionTitles('uk');
       expect(result).toEqual([]);
     });

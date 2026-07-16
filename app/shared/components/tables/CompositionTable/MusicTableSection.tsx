@@ -12,9 +12,11 @@ import {
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
+  renderOpusGenreGroupLabel,
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
+  renderOpusYearGroupLabel,
   RenderPlayCell,
   renderYearCell,
   RenderYearHeader
@@ -52,7 +54,6 @@ export default function MusicTableSection() {
 
   const { params, setParam, debouncedSetParam, resetFilters } = useTableFilters<CompositionsFilters>({
     search: '',
-    genre: [],
     category: [],
     yearFrom: null,
     yearTo: null
@@ -119,14 +120,16 @@ export default function MusicTableSection() {
         accessorKey: 'year',
         header: RenderYearHeader,
         cell: renderYearCell,
-        enableSorting: false
+        enableSorting: false,
+        meta: { groupLabelContentFactory: (items: Music[]) => renderOpusYearGroupLabel(items) }
       },
       {
         id: 'genre',
         accessorKey: 'genre',
         header: RenderGenreHeader,
         cell: RenderGenreCell,
-        enableSorting: false
+        enableSorting: false,
+        meta: { groupLabelContentFactory: (items: Music[]) => renderOpusGenreGroupLabel(items) }
       },
       {
         id: 'actions',
@@ -144,13 +147,6 @@ export default function MusicTableSection() {
   );
 
   const tableKey: TableKey = (bp.isMobile && 'mobile') || (bp.isTablet && 'tablet') || 'desktop';
-
-  const handleGenreChange = useCallback(
-    (values: string[]) => {
-      setParam('genre', values);
-    },
-    [setParam]
-  );
 
   const handleCategoryChange = useCallback(
     (values: string[]) => {
@@ -183,10 +179,9 @@ export default function MusicTableSection() {
   const currentYearTo = params.yearTo ?? defaultMaxYear;
 
   const isYearActive = currentYearFrom !== defaultMinYear || currentYearTo !== defaultMaxYear;
-  const genreCount = params.genre?.length ?? 0;
   const categoryCount = params.category?.length ?? 0;
 
-  const activeFiltersCount = genreCount + categoryCount + (isYearActive ? 1 : 0);
+  const activeFiltersCount = categoryCount + (isYearActive ? 1 : 0);
   const isAnyFilterActive = activeFiltersCount > 0;
 
   const filters = useMemo(
@@ -202,20 +197,6 @@ export default function MusicTableSection() {
             variant="filled"
             onAdd={(_, __, all) => handleCategoryChange(all)}
             onRemove={(_, __, all) => handleCategoryChange(all)}
-          />
-        )
-      },
-      {
-        id: 'genre',
-        isActive: genreCount > 0,
-        element: (
-          <FilterSelect
-            label={tFilters('genre')}
-            options={(staticFilters?.genres ?? []).map((g) => ({ value: g.key, label: g.name }))}
-            defaultValues={params.genre ?? []}
-            variant="filled"
-            onAdd={(_, __, all) => handleGenreChange(all)}
-            onRemove={(_, __, all) => handleGenreChange(all)}
           />
         )
       },
@@ -238,8 +219,6 @@ export default function MusicTableSection() {
     [
       params.category,
       categoryCount,
-      params.genre,
-      genreCount,
       staticFilters,
       isYearActive,
       currentYearFrom,
@@ -247,7 +226,6 @@ export default function MusicTableSection() {
       defaultMinYear,
       defaultMaxYear,
       handleCategoryChange,
-      handleGenreChange,
       handleYearChange,
       tFilters
     ]

@@ -1,4 +1,4 @@
-import { CategoryNameDTO, GenreNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
+import { CategoryNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
 
 export type WorkTableFilters = {
   search: string;
@@ -15,14 +15,12 @@ export type ScientificFiltersType = {
 
 export type CompositionsFiltersType = {
   titles?: TitlesDTO[];
-  genres?: GenreNameDTO[];
   categories?: CategoryNameDTO[];
   yearRange?: { minYear?: number; maxYear?: number };
 };
 
 export type CompositionsFilters = {
   search: string;
-  genre?: string[];
   category?: string[];
   yearFrom?: number | null;
   yearTo?: number | null;

@@ -79,7 +79,6 @@ const breakpointMock = {
 
 const staticFiltersData = {
   categories: [{ key: 'classic', name: 'classic' }],
-  genres: [{ key: 'rock', name: 'rock' }],
   titles: [{ title: 'Symphony' }],
   yearRange: { minYear: 1900, maxYear: 2026 }
 };
@@ -130,7 +129,6 @@ jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
     params: {
       search: '',
       category: [],
-      genre: [],
       yearFrom: null,
       yearTo: null
     },
@@ -407,16 +405,6 @@ describe('MusicTableSection (cleaned)', () => {
     expect(mockSetParam).toHaveBeenCalledWith('category', ['test-value']);
   });
 
-  it('should handle genre select change actions and correctly dispatch updates back to state hook managers', () => {
-    render(<MusicTableSection />);
-
-    fireEvent.click(screen.getByTestId('add-genre'));
-    expect(mockSetParam).toHaveBeenCalledWith('genre', ['test-value']);
-
-    fireEvent.click(screen.getByTestId('remove-genre'));
-    expect(mockSetParam).toHaveBeenCalledWith('genre', ['test-value']);
-  });
-
   it('should update state tracking parameters during pre commit slider value adjustments', () => {
     render(<MusicTableSection />);
 
@@ -447,7 +435,7 @@ describe('MusicTableSection (cleaned)', () => {
 
   it('should activate filter metrics tracking states when initial inputs provide multi language constraints', () => {
     (useTableFilters as jest.Mock).mockReturnValueOnce({
-      params: { search: '', category: ['classic'], genre: ['rock'], yearFrom: 1950, yearTo: 2010 },
+      params: { search: '', category: ['classic'], yearFrom: 1950, yearTo: 2010 },
       setParam: mockSetParam,
       debouncedSetParam: mockDebouncedSetParam,
       resetFilters: mockResetFilters
@@ -465,16 +453,16 @@ describe('MusicTableSection (cleaned)', () => {
 
   it('should evaluate conditional branch fallbacks when static input category and genre details resolve to null fields', () => {
     (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({
-      data: { ...staticFiltersData, categories: undefined, genres: undefined }
+      data: { ...staticFiltersData, categories: undefined }
     });
 
     render(<MusicTableSection />);
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
   });
 
-  it('should fallback genre and category counts and default values to empty when params collections are undefined', () => {
+  it('should fallback category counts and default values to empty when params collections are undefined', () => {
     (useTableFilters as jest.Mock).mockReturnValueOnce({
-      params: { search: '', category: undefined, genre: undefined, yearFrom: null, yearTo: null },
+      params: { search: '', category: undefined, yearFrom: null, yearTo: null },
       setParam: mockSetParam,
       debouncedSetParam: mockDebouncedSetParam,
       resetFilters: mockResetFilters
@@ -484,7 +472,6 @@ describe('MusicTableSection (cleaned)', () => {
 
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
     expect(screen.getByTestId('filter-select-category')).toBeInTheDocument();
-    expect(screen.getByTestId('filter-select-genre')).toBeInTheDocument();
   });
 
   it('should fall back COMPOSITION_FILTERS endpoint to null when the route constant is not defined', () => {
