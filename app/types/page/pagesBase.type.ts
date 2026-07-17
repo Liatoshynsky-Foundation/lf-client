@@ -4,6 +4,7 @@ import { PageSlug } from '~/services/pages-data/schema-factory';
 import { ExcludeDBFields } from '~/validators/constants';
 import { Localize } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
@@ -14,6 +15,7 @@ export type PrivacyPolicyPageBase = ExcludeDBFields<z.infer<typeof PrivacyPolicy
 export type ResearchPageBase = ExcludeDBFields<z.infer<typeof ResearchPageSchema>>;
 export type BiographyPageBase = ExcludeDBFields<z.infer<typeof BiographyPageSchema>>;
 export type CooperationPageBase = ExcludeDBFields<z.infer<typeof CooperationPageSchema>>;
+export type ArtistryPageBase = ExcludeDBFields<z.infer<typeof ArtistryPageSchema>>;
 
 export interface PageBaseMap {
   'about-us': AboutUsPageBase;
@@ -21,6 +23,7 @@ export interface PageBaseMap {
   research: ResearchPageBase;
   biography: BiographyPageBase;
   cooperation: CooperationPageBase;
+  artistry: ArtistryPageBase;
 }
 
 export type AboutUsPage = Localize<AboutUsPageBase>;
@@ -28,6 +31,7 @@ export type PrivacyPolicyPage = Localize<PrivacyPolicyPageBase>;
 export type ResearchPage = Localize<ResearchPageBase>;
 export type BiographyPage = Localize<BiographyPageBase>;
 export type CooperationPage = Localize<CooperationPageBase>;
+export type ArtistryPage = Localize<ArtistryPageBase>;
 
 export interface PageDataMap {
   'about-us': AboutUsPage;
@@ -35,6 +39,7 @@ export interface PageDataMap {
   research: ResearchPage;
   biography: BiographyPage;
   cooperation: CooperationPage;
+  artistry: ArtistryPage;
 }
 
 export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;
