@@ -29,10 +29,12 @@ export interface IIntroSection {
 }
 
 export interface IFoundationInfo {
+  title?: string | TipTapDoc;
   ourOrganisation: TipTapDoc;
   ourName: TipTapDoc;
   ourBelief: TipTapDoc;
   image: IImageBlock | null;
+  hidden?: boolean;
 }
 
 export interface IOurMission {
@@ -40,6 +42,7 @@ export interface IOurMission {
   list: TipTapDoc[];
   smallImage: IImageBlock | null;
   bigImage: IImageBlock | null;
+  hidden?: boolean;
 }
 
 export interface IOurGoals {
@@ -48,10 +51,12 @@ export interface IOurGoals {
     title: string | TipTapDoc;
     description: string | TipTapDoc;
   }[];
+  hidden?: boolean;
 }
 
 export interface ILiatoshynskyOffice {
   quote: ITipTapQuoteBlock | null;
+  hidden?: boolean;
 }
 
 export interface IWhatWeDo {
@@ -60,6 +65,7 @@ export interface IWhatWeDo {
     title: string | TipTapDoc;
     description: string | TipTapDoc;
   }[];
+  hidden?: boolean;
 }
 
 export interface IFoundationFounders {
@@ -70,4 +76,5 @@ export interface IFoundationFounders {
     name: string | TipTapDoc;
     description: string | TipTapDoc;
   }[];
+  hidden?: boolean;
 }

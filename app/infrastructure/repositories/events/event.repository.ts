@@ -20,7 +20,7 @@ const eventRepository = {
   async getEventBySlug(slug: string) {
     await dbConnect();
 
-    return EventModel.findOne({ slug }).lean();
+    return EventModel.findOne({ slug, status: EventStatus.Published }).lean();
   }
 };
 

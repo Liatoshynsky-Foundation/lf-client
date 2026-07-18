@@ -12,7 +12,7 @@ export default function PolicySection({
 }: Readonly<PolicySectionProps>) {
   return (
     <div data-testid={dataTestId}>
-      {title && <h2 data-testid="mock-title">{title}</h2>}
+      {title && <h2 data-testid="mock-title">{typeof title === 'string' ? title : JSON.stringify(title)}</h2>}
       {description && <div data-testid="mock-description">{JSON.stringify(description)}</div>}
       {list && (
         <ul data-testid="mock-list">
