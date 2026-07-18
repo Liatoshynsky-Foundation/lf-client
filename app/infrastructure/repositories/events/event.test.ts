@@ -88,8 +88,7 @@ describe('eventRepository', () => {
 
       expect(dbConnect).toHaveBeenCalled();
       expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'test-event-slug',
-        status: EventStatus.Published
+        slug: 'test-event-slug'
       });
       expect(result).toEqual(validEventData);
     });
