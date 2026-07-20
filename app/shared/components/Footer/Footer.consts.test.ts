@@ -8,8 +8,7 @@ describe('footerData', () => {
     expect(footerData.text).toBe('© 2025 Liotoshynsky Foundation. Всі права захищені.');
     expect(footerData.links).toEqual([
       { label: 'Політика конфіденційності', href: '/privacy' },
-      { label: 'Умови користування сайтом', href: ROUTES.TERMS },
-      { label: 'Інформація для медіа / партнерів', href: '/media' }
+      { label: 'Умови користування сайтом', href: ROUTES.TERMS }
     ]);
   });
 });
