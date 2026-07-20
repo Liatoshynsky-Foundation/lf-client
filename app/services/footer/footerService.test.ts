@@ -151,4 +151,16 @@ describe('footerService (composed)', () => {
     const result = await footerService.getFooterData('en' as Locale);
     expect(result.publicInfo.links).toEqual([]);
   });
+
+  it('should replace the {year} placeholder in the copyright text with the current year', async () => {
+    const currentYear = new Date().getFullYear();
+
+    foundationInfoServiceMock.getPublicInfo.mockResolvedValueOnce({
+      ...mockPublicInfoRaw,
+      copyright: { uk: '© {year} Фундація', en: '© {year} Foundation' }
+    });
+
+    const result = await footerService.getFooterData('en' as Locale);
+    expect(result.publicInfo.text).toBe(`© ${currentYear} Foundation`);
+  });
 });

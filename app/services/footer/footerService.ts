@@ -2,6 +2,7 @@ import type { Locale } from 'next-intl';
 
 import { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
 import { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
+import { injectCurrentYear } from '~/lib/utils/injectCurrentYear';
 import { ArraySchema, NoSupportButtonLink } from '~/validators/constants';
 import { brandingInfoSchema, contactInfoSchema, publicInfoSchema } from '~/validators/foundationInfo.schema';
 import { LocalizeSchema } from '~/validators/localization';
@@ -37,7 +38,7 @@ export const createFooterService = ({ navigationRepo, foundationInfoRepo }: Foot
       socialLinks: contactInfo.socialLinks ?? [],
       supportButtonLink: supportButtonData.supportButtonLink ?? '',
       publicInfo: {
-        text: publicInfo.copyright,
+        text: injectCurrentYear(publicInfo.copyright),
         links: publicInfo.links ?? []
       },
       navigation: navigationData
