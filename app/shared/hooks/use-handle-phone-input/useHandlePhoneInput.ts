@@ -149,8 +149,13 @@ export function useHandlePhoneInput() {
   const handlePhoneInput = (rawValue: string, inputElement: HTMLInputElement | null) => {
     const prevCaretPos = inputElement?.selectionStart ?? rawValue.length;
 
-    if (rawValue.trim() === '') {
+    if (rawValue === '') {
       resetState(setHasError, prevInputLengthRef, prevDigitsRef);
+      return;
+    }
+
+    if (rawValue.trim() === '') {
+      setHasError(true);
       return;
     }
 
