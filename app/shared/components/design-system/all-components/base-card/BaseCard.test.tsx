@@ -92,7 +92,7 @@ describe('BaseCard', () => {
       render(<BaseCard {...defaultProps} />);
       const image = screen.getByTestId('next-image');
       expect(image).toHaveAttribute('src', defaultProps.image);
-      expect(image).toHaveAttribute('alt', defaultProps.title);
+      expect(image).toHaveAttribute('alt', defaultProps.alt);
     });
 
     it('should render publication date with label', () => {
@@ -195,10 +195,10 @@ describe('BaseCard', () => {
       const crop = { x: 0, y: 0, width: 200, height: 150 };
       render(<BaseCard {...defaultProps} crop={crop} />);
 
-      const img = screen.getByRole('img', { name: defaultProps.title });
+      const img = screen.getByRole('img', { name: defaultProps.alt });
       expect(img.tagName).toBe('IMG');
       expect(img).toHaveAttribute('src', defaultProps.image);
-      expect(img).toHaveAttribute('alt', defaultProps.title);
+      expect(img).toHaveAttribute('alt', defaultProps.alt);
       expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
     });
 
@@ -238,7 +238,7 @@ describe('BaseCard', () => {
       const crop = { x: 10, y: 20, width: 200, height: 150 };
       render(<BaseCard {...defaultProps} crop={crop} />);
 
-      const img = screen.getByRole('img', { name: defaultProps.title });
+      const img = screen.getByRole('img', { name: defaultProps.alt });
 
       act(() => {
         fireEvent.load(img);
@@ -263,7 +263,7 @@ describe('BaseCard', () => {
     const crop = { x: 0, y: 0, width: 100, height: 100 };
     render(<BaseCard {...defaultProps} crop={crop} />);
 
-    const img = screen.getByRole('img', { name: defaultProps.title });
+    const img = screen.getByRole('img', { name: defaultProps.alt });
     fireEvent.error(img);
 
     expect(img).toHaveAttribute('src', '/images/media-card-placeholder.png');
