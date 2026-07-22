@@ -15,7 +15,7 @@ type TitleContentBlockProps = {
 export default function TitleContentBlock({ title, content, containerSx }: Readonly<TitleContentBlockProps>) {
   return (
     <Box data-testid="TitleContentBlock" sx={{ ...styles.mainContainer, ...containerSx }}>
-      <Typography data-testid="TitleContentBlock-title" sx={styles.title} variant="h5">
+      <Typography data-testid="TitleContentBlock-title" sx={styles.title} variant="h5" component="h3">
         {title}
       </Typography>
       <Box sx={styles.contentBlock}>

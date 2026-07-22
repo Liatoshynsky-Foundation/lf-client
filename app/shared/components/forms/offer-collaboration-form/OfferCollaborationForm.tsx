@@ -20,10 +20,15 @@ export default function OfferCollaborationForm({ formTitle, formSubtitle, sx }: 
 
   return (
     <PaperComponent sx={{ ...sx }} data-testid="OfferCollaborationForm">
-      <Typography sx={styles.formTitle} variant="h5" data-testid="OfferCollaborationForm-formTitle">
+      <Typography sx={styles.formTitle} variant="h5" component="h2" data-testid="OfferCollaborationForm-formTitle">
         {formTitle}
       </Typography>
-      <Typography sx={styles.formSubtitle} variant="subtitle1" data-testid="OfferCollaborationForm-formSubtitle">
+      <Typography
+        sx={styles.formSubtitle}
+        variant="subtitle1"
+        component="h3"
+        data-testid="OfferCollaborationForm-formSubtitle"
+      >
         {formSubtitle}
       </Typography>
       <ContactForm onSubmit={handleSubmit} disabled={isSubmitting} />
