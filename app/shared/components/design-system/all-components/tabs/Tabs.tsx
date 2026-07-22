@@ -1,5 +1,3 @@
-'use client';
-
 import Box from '@mui/material/Box';
 import MuiTab from '@mui/material/Tab';
 import MuiTabs from '@mui/material/Tabs';

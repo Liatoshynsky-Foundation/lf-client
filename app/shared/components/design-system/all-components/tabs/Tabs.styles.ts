@@ -70,6 +70,10 @@ export const styles: Record<string, SxProps<Theme>> = {
       '&:hover': {
         color: 'blue.800'
       },
+      '&:focus': {
+        outline: '2px solid black',
+        outlineOffset: '-7px'
+      },
       '&:active': {
         color: 'blue.900'
       },
