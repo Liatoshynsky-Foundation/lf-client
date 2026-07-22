@@ -62,6 +62,7 @@ globalThis.ResizeObserver = jest.fn().mockImplementation(() => ({
 describe('BaseCard', () => {
   const defaultProps: BaseCardProps = {
     image: '/test-image.jpg',
+    alt: 'Test Card Alt',
     title: 'Test Card Title',
     publicationDate: '01.01.25',
     description: 'Test card description text',
