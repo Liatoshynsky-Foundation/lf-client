@@ -77,14 +77,22 @@ describe('useHandlePhoneInput', () => {
     maskSpy.mockClear();
   });
 
-  it('should clear empty input with no errors shown', async () => {
+  it('should clear truly empty input with no errors', async () => {
+    const api = await renderAndGetApi();
+    const input = makeInput();
+    await act(async () => {
+      api.handlePhoneInput('', input);
+    });
+    expect(api.getHasError()).toBe(false);
+  });
+
+  it('should show error when input contains only spaces', async () => {
     const api = await renderAndGetApi();
     const input = makeInput();
     await act(async () => {
       api.handlePhoneInput('   ', input);
     });
-    expect(api.getHasError()).toBe(false);
-    expect(input.value).toBe('');
+    expect(api.getHasError()).toBe(true);
     expect(maskSpy).not.toHaveBeenCalled();
   });
 
