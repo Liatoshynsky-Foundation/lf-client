@@ -31,6 +31,7 @@ export const ContentSlider: React.FC<ContentSliderProps> = ({ cards, variant = '
     <BaseCard
       image={card.image}
       crop={card.crop}
+      alt={card.alt}
       title={card.title}
       publicationDate={card.publicationDate}
       description={card.description}

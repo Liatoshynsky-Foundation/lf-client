@@ -67,6 +67,7 @@ const NewsSection: React.FC<Props> = async ({
     return {
       image: imageSrc,
       crop: news.coverImage.crop ?? null,
+      alt: news.coverImage.alt,
       title: news.title,
       publicationDate: formattedDate,
       description: news.description,
