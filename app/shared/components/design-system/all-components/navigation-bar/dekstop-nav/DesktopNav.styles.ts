@@ -57,13 +57,13 @@ export const styles = {
     '&:hover': {
       backgroundColor: 'grey.350'
     },
-    '&:focus': {
-      backgroundColor: 'black',
-      color: 'white'
+    '&.Mui-focusVisible, &:focus-visible': {
+      outline: '3px solid #000000',
+      outlineOffset: '2px'
     }
   },
   warInUkraineButtonActive: {
-    backgroundColor: 'black',
+    backgroundColor: 'black !important',
     color: 'white',
     '&:hover': {
       backgroundColor: 'black'
