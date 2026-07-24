@@ -71,10 +71,10 @@ describe('ContactsInfo', () => {
   it('should render headings and translations', () => {
     render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} />);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Contacts' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Contacts' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 5, name: 'Contact form' })).toBeInTheDocument();
-
     expect(screen.getByText('We are on social media:')).toBeInTheDocument();
+
     expect(screen.getByText('Send a request and we will contact you within a few business days')).toBeInTheDocument();
 
     expect(screen.getByText('Phone number:')).toBeInTheDocument();

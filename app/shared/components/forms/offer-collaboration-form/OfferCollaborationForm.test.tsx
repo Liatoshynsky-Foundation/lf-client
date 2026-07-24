@@ -21,14 +21,12 @@ jest.mock('~/shared/components/paper-component/PaperComponent', () => ({
 }));
 
 global.fetch = jest.fn();
-
+const mockProps = {
+  formTitle: 'Test Title',
+  formSubtitle: 'Test Subtitle',
+  sx: { backgroundColor: 'red' }
+};
 describe('OfferCollaborationForm', () => {
-  const mockProps = {
-    formTitle: 'Test Title',
-    formSubtitle: 'Test Subtitle',
-    sx: { backgroundColor: 'red' }
-  };
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -45,7 +43,7 @@ describe('OfferCollaborationForm', () => {
   it('should render the provided formTitle and formSubtitle', () => {
     render(<OfferCollaborationForm formTitle={mockProps.formTitle} formSubtitle={mockProps.formSubtitle} />);
 
-    expect(screen.getByTestId('OfferCollaborationForm-formTitle')).toHaveTextContent(mockProps.formTitle);
+    expect(screen.getByRole('heading', { level: 2, name: mockProps.formTitle })).toHaveTextContent(mockProps.formTitle);
     expect(screen.getByTestId('OfferCollaborationForm-formSubtitle')).toHaveTextContent(mockProps.formSubtitle);
   });
 
