@@ -12,6 +12,7 @@ import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-s
 
 interface IContactInfoProps {
   title?: string;
+  titleTag?: 'h1' | 'h2';
   formTitle?: string;
   contacts: {
     phone: string;
@@ -20,7 +21,13 @@ interface IContactInfoProps {
   socialLinks: LinkIcon[];
 }
 
-export default function ContactsInfo({ title, formTitle, contacts, socialLinks }: Readonly<IContactInfoProps>) {
+export default function ContactsInfo({
+  title,
+  titleTag = 'h1',
+  formTitle,
+  contacts,
+  socialLinks
+}: Readonly<IContactInfoProps>) {
   const t = useTranslations('contactsInfoPage');
 
   return (
@@ -28,11 +35,11 @@ export default function ContactsInfo({ title, formTitle, contacts, socialLinks }
       <Box sx={styles.wrapper}>
         <Box sx={styles.contactsInfoWrapper}>
           {title ? (
-            <Typography variant="h1" component="h2" sx={styles.title} data-testid="ContactsInfo-title">
+            <Typography variant="h1" component={titleTag} sx={styles.title} data-testid="ContactsInfo-title">
               {title}
             </Typography>
           ) : (
-            <Typography sx={styles.titleMain} variant="h1" component="h2" data-testid="ContactsInfo-title">
+            <Typography sx={styles.titleMain} variant="h1" component={titleTag} data-testid="ContactsInfo-title">
               {t('contacts')}
             </Typography>
           )}

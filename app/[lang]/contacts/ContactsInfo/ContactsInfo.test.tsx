@@ -71,7 +71,7 @@ describe('ContactsInfo', () => {
   it('should render headings and translations', () => {
     render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} />);
 
-    expect(screen.getByRole('heading', { level: 2, name: 'Contacts' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Contacts' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 5, name: 'Contact form' })).toBeInTheDocument();
     expect(screen.getByText('We are on social media:')).toBeInTheDocument();
 
@@ -91,8 +91,14 @@ describe('ContactsInfo', () => {
       />
     );
 
-    expect(screen.getByText('Collaboration')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Collaboration' })).toBeInTheDocument();
     expect(screen.getByText('Offer collaboration')).toBeInTheDocument();
+  });
+
+  it('should render heading with custom titleTag', () => {
+    render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} titleTag="h2" />);
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Contacts' })).toBeInTheDocument();
   });
 
   it('should show phone and email values as links', () => {
