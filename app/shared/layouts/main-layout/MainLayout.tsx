@@ -16,7 +16,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ withLines = false, lineColor, c
     <Box sx={[styles.wrapper, ...(Array.isArray(sx) ? sx : [sx])]} {...props}>
       {withLines && <ColumnGuides lineColor={lineColor} />}
 
-      <Box sx={[styles.grid, ...sxToArray(gridSx)]}>{children}</Box>
+      <Box component="main" id="main" sx={[styles.grid, ...sxToArray(gridSx)]}>
+        {children}
+      </Box>
     </Box>
   );
 };
