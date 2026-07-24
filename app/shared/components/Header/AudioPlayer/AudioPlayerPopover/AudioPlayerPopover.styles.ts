@@ -77,7 +77,7 @@ export const styles = {
       height: 16
     },
     '&:hover': {
-      backgroundColor: 'white'
+      backgroundColor: 'grey.350'
     }
   },
   allTracksButton: {
@@ -90,7 +90,10 @@ export const styles = {
     height: 40,
     width: '111px',
     '&:hover': {
-      backgroundColor: 'white'
+      backgroundColor: 'grey.350'
+    },
+    '&.Mui-focusVisible, &:focus-visible': {
+      backgroundColor: '  white'
     }
   },
   errorMessage: {
