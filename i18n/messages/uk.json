@@ -189,6 +189,12 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Розгорнути групу рядків",
+      "collapse": "Згорнути групу рядків",
+      "expanded": "Розгорнуто",
+      "collapsed": "Згорнуто"
+    },
     "columns": {
       "opus": "Опус",
       "name": "Назва",

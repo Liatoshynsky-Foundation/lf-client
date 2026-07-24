@@ -189,6 +189,12 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Expand row group",
+      "collapse": "Collapse row group",
+      "expanded": "Expanded",
+      "collapsed": "Collapsed"
+    },
     "columns": {
       "opus": "Opus",
       "name": "Name",

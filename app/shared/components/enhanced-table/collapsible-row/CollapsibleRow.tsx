@@ -2,6 +2,7 @@
 
 import { Box, TableCell, TableRow } from '@mui/material';
 import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React, { useMemo } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
@@ -41,6 +42,7 @@ export const CollapsibleRow = <T extends RowData>({
   action,
   columns
 }: Readonly<CollapsibleRowProps<T>>) => {
+  const t = useTranslations('table');
   const table = useReactTable<T>({
     data,
     columns,
@@ -54,6 +56,7 @@ export const CollapsibleRow = <T extends RowData>({
       <TableRow
         sx={styles.row(collapsed)}
         data-testid="CollapsibleRow-mainOpus"
+        aria-expanded={collapsed}
         onClick={(e) => {
           e.preventDefault();
           action();
@@ -69,7 +72,7 @@ export const CollapsibleRow = <T extends RowData>({
               <TableCell key={cellKey} sx={styles.cell}>
                 <Box sx={styles.cellInnerCentered}>
                   <IconButton
-                    aria-label="toggle row"
+                    aria-label={collapsed ? t('collapsibleRow.expand') : t('collapsibleRow.collapse')}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -77,13 +80,14 @@ export const CollapsibleRow = <T extends RowData>({
                     }}
                     variant={IconButtonColorVariant.Secondary}
                     disableRipple
-                    sx={{ bgcolor: 'none' }}
+                    sx={styles.toggleButton}
                     data-testid="CollapsibleRow-mainOpus-toggle"
                   >
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
                       stroke={mainHexPallete.brown['700']}
-                      alt="toggle"
+                      alt={collapsed ? t('collapsibleRow.collapsed') : t('collapsibleRow.expanded')}
+                      data-testid="CollapsibleRow-mainOpus-toggle-svg"
                     />
                   </IconButton>
                 </Box>
