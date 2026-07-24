@@ -47,11 +47,9 @@ export const StyledButtonItem = styled(Box, {
     cursor: 'pointer',
     position: 'relative',
     zIndex: 1,
+
     marginRight: '4px',
-    padding: size === 'big' ? '5px 16px' : '2px 16px',
-    '&:has(svg)': {
-      paddingRight: '12px'
-    },
+    padding: 0,
     '& svg': {
       transform: 'translateY(2px)'
     },
@@ -65,6 +63,12 @@ export const StyledButtonItem = styled(Box, {
     '&:hover': {
       background: 'rgba(25, 13, 3, 0.12)'
     },
+    '& .MuiButtonBase-root.Mui-focusVisible, && a:focus-visible, && button:focus-visible': {
+      outline: '3px solid #000000 !important',
+      outlineOffset: '1px !important',
+      borderRadius: '100px !important',
+      backgroundColor: 'rgba(25, 13, 3, 0.12) !important'
+    },
     '& .MuiButtonBase-root, && a, && button': {
       backgroundColor: 'transparent',
       color: 'inherit',
@@ -75,11 +79,18 @@ export const StyledButtonItem = styled(Box, {
       lineHeight: 'inherit',
       cursor: 'inherit',
       border: 'none',
-      padding: 0,
       margin: 0,
       display: 'inline-flex',
+      width: '100%',
       height: '100%',
-      transition: 'none'
+      transition: 'none',
+      padding: size === 'big' ? '5px 16px' : '2px 16px',
+      '&:has(svg)': {
+        paddingRight: '12px'
+      },
+      '& svg': {
+        transform: 'translateY(2px)'
+      }
     }
   };
 });

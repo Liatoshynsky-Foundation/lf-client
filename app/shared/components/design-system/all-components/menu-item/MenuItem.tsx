@@ -1,21 +1,20 @@
 import { MenuItem, MenuItemProps } from '@mui/material';
+import { ElementType } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-interface CustomMenuItemProps extends MenuItemProps {
+export type CustomMenuItemProps<C extends ElementType = 'li'> = MenuItemProps<C, { component?: C }> & {
   children: React.ReactNode;
   selected?: boolean;
-}
+};
 
-type ReadonlyCustomMenuItemProps = Readonly<CustomMenuItemProps>;
-
-export default function CustomMenuItem({
+export default function CustomMenuItem<C extends ElementType = 'li'>({
   children,
   selected = false,
   disabled,
   onClick,
   ...props
-}: ReadonlyCustomMenuItemProps) {
+}: CustomMenuItemProps<C>) {
   return (
     <MenuItem selected={selected} disabled={disabled} onClick={onClick} {...props}>
       {children}

@@ -115,6 +115,8 @@ const DesktopNav = ({
         <IconButton
           disableRipple
           key={`${item.label}-${index}`}
+          aria-haspopup="true"
+          aria-expanded={isOpen ? 'true' : undefined}
           onClick={(e) => handleDropdownOpen(e, item.label, dropdownItems)}
           sx={styles.iconButtonSx}
           style={styles.iconButtonInline}
@@ -144,11 +146,15 @@ const DesktopNav = ({
   });
 
   const renderedDropdownItems = openDropdownState?.items.map((item, index) => (
-    <Link href={item.href} key={`${item.href}-${index}`}>
-      <CustomMenuItem sx={styles.menuItem} onClick={handleDropdownClose}>
-        {item.label}
-      </CustomMenuItem>
-    </Link>
+    <CustomMenuItem
+      key={`${item.href}-${index}`}
+      component={Link}
+      href={item.href}
+      sx={styles.menuItem}
+      onClick={handleDropdownClose}
+    >
+      {item.label}
+    </CustomMenuItem>
   ));
 
   return (
