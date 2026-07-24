@@ -27,7 +27,9 @@ export default function CardWithText({ icon, title, list }: Readonly<CardWithTex
                 <Box sx={styles.listIcon}>
                   <SvgImage src="/icons/bullet-small-secondary.svg" alt="List bullet icon" width={12} height={12} />
                 </Box>
-                <Typography variant="subtitle1">{item}</Typography>
+                <Typography variant="subtitle1" component="p">
+                  {item}
+                </Typography>
               </Box>
             );
           })}

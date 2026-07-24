@@ -51,9 +51,9 @@ jest.mock('~/shared/components/paper-component/PaperComponent', () => ({
 
 jest.mock('~/[lang]/contacts/ContactsInfo/ContactsInfo', () => ({
   __esModule: true,
-  default: ({ title, formTitle, contacts, socialLinks }: any) => (
+  default: ({ title, formTitle, titleTag, contacts, socialLinks }: any) => (
     <div data-testid="contacts-info">
-      <span>{title}</span>
+      {titleTag === 'h2' ? <h2>{title}</h2> : <h1>{title}</h1>}
       <span>{formTitle}</span>
       <div>{contacts.email}</div>
       <div>{socialLinks[0].platform}</div>
@@ -72,7 +72,7 @@ describe('OfferCollaboration', () => {
     expect(screen.getByTestId('paper')).toBeInTheDocument();
     expect(screen.getByTestId('contacts-info')).toBeInTheDocument();
 
-    expect(screen.getByText('Співпраця')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Співпраця' })).toBeInTheDocument();
     expect(screen.getByText('Запропонувати співпрацю')).toBeInTheDocument();
 
     expect(screen.getByText(/test@example\.com/)).toBeInTheDocument();

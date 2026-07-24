@@ -61,7 +61,7 @@ export const styles = {
     mt: '40px',
     mb: '72px',
 
-    h6: {
+    '&>p': {
       mb: '10px'
     }
   },
