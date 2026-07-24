@@ -17,7 +17,7 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 import chevronDown from '~/public/icons/chevron-down.svg';
 import chevronRight from '~/public/icons/chevron-right.svg';
 
-interface CollapsibleRowProps<T extends RowData> {
+export interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
   action: () => void;
@@ -86,8 +86,7 @@ export const CollapsibleRow = <T extends RowData>({
                     <Svg
                       Component={collapsed ? chevronDown : chevronRight}
                       stroke={mainHexPallete.brown['700']}
-                      alt={collapsed ? t('collapsibleRow.collapsed') : t('collapsibleRow.expanded')}
-                      data-testid="CollapsibleRow-mainOpus-toggle-svg"
+                      alt="toggle"
                     />
                   </IconButton>
                 </Box>
