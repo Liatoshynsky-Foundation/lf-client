@@ -40,6 +40,7 @@ export const CustomTabs = ({ tabs, activeTab, onTabChange, className, dataTestId
             key={tab.id}
             label={tab.label}
             value={tab.id}
+            sx={styles.tab}
             disableRipple
             data-testid={`${dataTestId}-tab-${tab.id}`}
           />
