@@ -43,7 +43,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ open, onClose, showPre
       modalSx={styles.container}
     >
       <>
-        <Typography variant="subtitle1">
+        <Typography variant="body1" sx={styles.mainText}>
           {t.rich('description', {
             link: renderLink
           })}
