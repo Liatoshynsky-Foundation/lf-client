@@ -1,17 +1,13 @@
 'use client';
-
-import { Box, Divider, Typography } from '@mui/material';
-import Image from 'next/image';
+import { Box, Divider } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Chip } from '~/ds-components/chip/Chip';
-import DropdownMenu from '~/ds-components/dropdown-menu/DropdownMenu';
 import FilterSelectItem from '~/ds-components/selector/FilterSelectItem/FilterSelectItem';
 
 import ClearFilterButton from '../clear-filter-button/ClearFilterButton';
-import { filterSelectStyles } from './FilterSelect.styles';
-import { PositionEnum } from '~/types/enums/common.enums';
+import { DropdownFilterPopper, DropdownFilterPopperHandle } from '../dropdown-filter-popper/DropdownFilterPopper';
 
 interface FilterOption {
   value: string;
@@ -40,118 +36,89 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   onRemove
 }) => {
   const t = useTranslations('filtering');
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>(() => defaultValues ?? []);
-  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const popperRef = useRef<DropdownFilterPopperHandle>(null);
 
   useEffect(() => {
     setSelectedValues(defaultValues ?? []);
   }, [defaultValues]);
 
-  const handleToggleMenu = () => {
-    if (disabled) return;
-    setAnchorEl((prev) => (prev ? null : triggerRef.current));
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-    requestAnimationFrame(() => triggerRef.current?.focus());
-  };
-
   const handleOptionClick = (option: FilterOption) => {
     const isSelected = selectedValues.includes(option.value);
-    let newValues: string[];
-
+    const newValues = isSelected
+      ? selectedValues.filter((val) => val !== option.value)
+      : [...selectedValues, option.value];
     if (isSelected) {
-      newValues = selectedValues.filter((val) => val !== option.value);
       onRemove?.(option.value, option.label, newValues);
     } else {
-      newValues = [...selectedValues, option.value];
       onAdd?.(option.value, option.label, newValues);
     }
-
     setSelectedValues(newValues);
   };
 
-  const handleChipDelete = () => {
+  const handleClear = () => {
     setSelectedValues([]);
     onRemove?.('', '', []);
+    popperRef.current?.focusTrigger();
   };
 
-  const selectedOptionsCount = selectedValues.length;
   const isMaxReached = maxSelections ? selectedValues.length >= maxSelections : false;
 
-  const menuList = (
-    <Box sx={{ padding: '0 8px' }}>
-      <Box sx={{ maxHeight: 220, overflowY: 'auto' }}>
-        {options.map((option) => {
-          const isSelected = selectedValues.includes(option.value);
-          const isDisabled = !isSelected && isMaxReached;
-
-          return (
-            <FilterSelectItem
-              key={option.value}
-              label={option.label}
-              onClick={() => !isDisabled && handleOptionClick(option)}
-              selected={isSelected}
-              disabled={isDisabled}
-              sx={filterSelectStyles.menuItem}
-            />
-          );
-        })}
-      </Box>
-      <Divider sx={{ my: 1 }} />
-      <ClearFilterButton onClick={handleChipDelete}>{t('clear')}</ClearFilterButton>
-    </Box>
-  );
-
   return (
-    <Box>
-      <Box
-        ref={triggerRef}
-        sx={filterSelectStyles.root(variant, disabled)}
-        onClick={handleToggleMenu}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-haspopup="dialog"
-        aria-expanded={Boolean(anchorEl)}
-      >
-        <Typography sx={filterSelectStyles.label(disabled)}>{label}</Typography>
-        <Box sx={filterSelectStyles.chipContainer}>
-          {selectedOptionsCount > 0 && (
-            <Chip
-              label={`${selectedOptionsCount} ${t('selected')}`}
-              variant={variant}
-              disabled={disabled}
-              onDelete={handleChipDelete}
-              size="small"
-              onClick={(e) => e.stopPropagation()}
-            />
-          )}
-          <Box sx={filterSelectStyles.dropdownIcon(disabled)}>
-            <Image src="/icons/chevron-down.svg" alt="dropdown" width={16} height={16} />
+    <DropdownFilterPopper
+      ref={popperRef}
+      label={label}
+      variant={variant}
+      disabled={disabled}
+      role="dialog"
+      chip={
+        selectedValues.length > 0 && (
+          <Chip
+            label={`${selectedValues.length} ${t('selected')}`}
+            disabled={disabled}
+            onDelete={handleClear}
+            size="small"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.stopPropagation();
+                handleClear();
+              }
+            }}
+          />
+        )
+      }
+    >
+      {() => (
+        <>
+          <Box
+            ref={listRef}
+            role="listbox"
+            aria-multiselectable="true"
+            aria-label={label}
+            tabIndex={-1}
+            sx={{ padding: '0 8px' }}
+          >
+            <Box sx={{ maxHeight: 220, overflowY: 'auto' }}>
+              {options.map((option) => {
+                const isSelected = selectedValues.includes(option.value);
+                return (
+                  <FilterSelectItem
+                    key={option.value}
+                    label={option.label}
+                    selected={isSelected}
+                    disabled={!isSelected && isMaxReached}
+                    onClick={() => handleOptionClick(option)}
+                  />
+                );
+              })}
+            </Box>
           </Box>
-        </Box>
-      </Box>
-
-      <DropdownMenu
-        disableScrollLock
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-        anchorOrigin={{
-          vertical: PositionEnum.Bottom,
-          horizontal: PositionEnum.Left
-        }}
-        transformOrigin={{
-          vertical: PositionEnum.Top,
-          horizontal: PositionEnum.Left
-        }}
-        maxHeight={300}
-        menuList={menuList}
-        sx={{ padding: '0px 8px' }}
-      />
-    </Box>
+          <Divider sx={{ my: 1 }} />
+          <ClearFilterButton onClick={handleClear}>{t('clear')}</ClearFilterButton>
+        </>
+      )}
+    </DropdownFilterPopper>
   );
 };

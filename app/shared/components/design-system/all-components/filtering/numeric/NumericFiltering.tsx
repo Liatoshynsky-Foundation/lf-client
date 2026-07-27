@@ -18,6 +18,7 @@ interface NumericFilteringProps {
   onChangeCommitted: (numbers: [number, number]) => void;
   minNumber?: number;
   maxNumber?: number;
+  autoFocusRef?: React.Ref<HTMLInputElement>;
 }
 
 const minDistance = 1;
@@ -27,7 +28,8 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   onChange,
   minNumber = 1900,
   maxNumber = new Date().getFullYear(),
-  onChangeCommitted
+  onChangeCommitted,
+  autoFocusRef
 }) => {
   const [inputNumbers, setInputNumbers] = useState<string[]>([String(value[0]), String(value[1])]);
   const [errors, setErrors] = useState<{ from?: string; to?: string }>({});
@@ -99,6 +101,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
         <Box sx={styles.textfieldContainer}>
           <TextField
             onChange={handleInputChange('from')}
+            ref={autoFocusRef}
             value={inputNumbers[0]}
             variant="outlined"
             label={t('numeric.from')}

@@ -28,7 +28,13 @@ export const filterSelectStyles = {
 
       backgroundColor,
       border: variant === 'outlined' ? '1px solid' : 'none',
-      borderColor
+      borderColor,
+
+      // use how in project!!!
+      '&:focus-visible': {
+        outline: 'none',
+        boxShadow: '0 0 0 2px rgba(0, 0, 0, 0.5)'
+      }
     };
   },
 

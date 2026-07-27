@@ -19,7 +19,7 @@ export const DesignSystemSlider: React.FC<CustomSliderProps> = ({
     : undefined;
 
   return (
-    <Box sx={sliderStyles.base}>
+    <Box sx={sliderStyles.base} aria-hidden="true" tabIndex={-1}>
       {Array.isArray(value) && (
         <Box sx={sliderStyles.valueContainer}>
           <Typography
