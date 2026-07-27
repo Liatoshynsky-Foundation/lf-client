@@ -2,6 +2,7 @@
 
 import { Box, TableCell, TableRow } from '@mui/material';
 import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React, { useMemo } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
@@ -16,7 +17,7 @@ import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhanced
 import chevronDown from '~/public/icons/chevron-down.svg';
 import chevronRight from '~/public/icons/chevron-right.svg';
 
-interface CollapsibleRowProps<T extends RowData> {
+export interface CollapsibleRowProps<T extends RowData> {
   data: T[];
   collapsed: boolean;
   action: () => void;
@@ -41,6 +42,7 @@ export const CollapsibleRow = <T extends RowData>({
   action,
   columns
 }: Readonly<CollapsibleRowProps<T>>) => {
+  const t = useTranslations('table');
   const table = useReactTable<T>({
     data,
     columns,
@@ -54,6 +56,7 @@ export const CollapsibleRow = <T extends RowData>({
       <TableRow
         sx={styles.row(collapsed)}
         data-testid="CollapsibleRow-mainOpus"
+        aria-expanded={collapsed}
         onClick={(e) => {
           e.preventDefault();
           action();
@@ -69,7 +72,7 @@ export const CollapsibleRow = <T extends RowData>({
               <TableCell key={cellKey} sx={styles.cell}>
                 <Box sx={styles.cellInnerCentered}>
                   <IconButton
-                    aria-label="toggle row"
+                    aria-label={collapsed ? t('collapsibleRow.expand') : t('collapsibleRow.collapse')}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -77,7 +80,7 @@ export const CollapsibleRow = <T extends RowData>({
                     }}
                     variant={IconButtonColorVariant.Secondary}
                     disableRipple
-                    sx={{ bgcolor: 'none' }}
+                    sx={styles.toggleButton}
                     data-testid="CollapsibleRow-mainOpus-toggle"
                   >
                     <Svg
