@@ -288,7 +288,8 @@
   },
   "search": {
     "notFound": "Не знайдено",
-    "loading": "Завантажується..."
+    "loading": "Завантажується...",
+    "placeholder": "Пошук"
   },
   "contactsInfoPage": {
     "contacts": "КонТактИ",
