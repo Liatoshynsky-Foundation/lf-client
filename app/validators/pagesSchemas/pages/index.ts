@@ -6,6 +6,7 @@ import { BiographyPageSchema } from './biography.schema';
 import { CooperationPageSchema } from './cooperation.schema';
 import { PrivacyPolicyPageSchema } from './privacy-policy.schema';
 import { ResearchPageSchema } from './research.schema';
+import { WarInUkrainePageSchema } from './war-in-ukraine.schema';
 
 export const PageSchema = z.discriminatedUnion('pageType', [
   AboutUsPageSchema,
@@ -13,7 +14,8 @@ export const PageSchema = z.discriminatedUnion('pageType', [
   PrivacyPolicyPageSchema,
   BiographyPageSchema,
   CooperationPageSchema,
-  ArtistryPageSchema
+  ArtistryPageSchema,
+  WarInUkrainePageSchema
 ]);
 
 export type Page = z.infer<typeof PageSchema>;
