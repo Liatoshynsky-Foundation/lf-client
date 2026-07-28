@@ -190,6 +190,10 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Expand row group",
+      "collapse": "Collapse row group"
+    },
     "columns": {
       "opus": "Opus",
       "name": "Name",

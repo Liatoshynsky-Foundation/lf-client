@@ -6,12 +6,14 @@ import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSe
 import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
+import { ArtistryPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import MainLayout from '~/layouts/main-layout/MainLayout';
+import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { ROUTES } from '~/shared/components/constants/routes';
+import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -27,25 +29,43 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
+type RendererProps = {
+  blocks: ArtistryPage['blocks'];
+};
+
+const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
+  'title-with-quote': 'TitleWithQuote',
+  'music-table': 'MusicTableSection'
+};
+
+const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
+  TitleWithQuote: ({ blocks }) => <TitleWithQuote data={blocks.TitleWithQuote} />,
+  MusicTableSection: () => <MusicTableSection />
+};
+
 export default async function Artistry({ params }: Readonly<Language>) {
   const { lang } = await params;
   setRequestLocale(lang);
-  const t = await getTranslations('liatoshynskyArtistry');
 
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
 
   return (
-    <MainLayout data-testid="Artistry">
-      <TitleWithQuote
-        quoteWidth={{ xs: '272px', sm: '316px', md: '341px', lg: '520px' }}
-        title={t('title-with-quote.title')}
-        quoteText={t('title-with-quote.quoteText')}
-        sourceText={t('title-with-quote.sourceText')}
-        color="black"
-      />
-      <MusicTableSection />
-    </MainLayout>
+    <PageBuilder<ArtistryPage>
+      lang={lang}
+      slug="artistry"
+      renderBlock={({ blockId, blocks, uniqueRenderKey }) => {
+        return (
+          <BlockRenderer
+            key={uniqueRenderKey}
+            blockId={blockId}
+            blocks={blocks}
+            rendererMap={BLOCKS_RENDERER}
+            namesMap={BLOCK_NAMES_MAP}
+          />
+        );
+      }}
+    />
   );
 }

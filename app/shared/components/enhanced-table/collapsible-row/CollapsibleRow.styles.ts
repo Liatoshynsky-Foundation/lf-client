@@ -43,6 +43,13 @@ export const collapsibleRowStyles = {
     }
   },
 
+  toggleButton: {
+    bgcolor: 'none',
+    '&:focus-visible': {
+      outline: '2px solid black'
+    }
+  },
+
   labelBox: {
     display: 'flex',
     alignItems: 'center',

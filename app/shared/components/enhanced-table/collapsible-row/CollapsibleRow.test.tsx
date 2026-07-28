@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import React from 'react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { CollapsibleRow } from './CollapsibleRow';
+import { CollapsibleRow, type CollapsibleRowProps } from './CollapsibleRow';
 
 jest.mock('~/public/icons/chevron-down.svg', () => ({
   __esModule: true,
@@ -11,14 +11,6 @@ jest.mock('~/public/icons/chevron-down.svg', () => ({
 jest.mock('~/public/icons/chevron-right.svg', () => ({
   __esModule: true,
   default: () => <svg data-testid="svg-image" />
-}));
-
-jest.mock('~/ds-components/icon-button/IconButton', () => ({
-  IconButton: ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
-    <button data-testid="icon-button" onClick={onClick}>
-      {children}
-    </button>
-  )
 }));
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
@@ -31,6 +23,16 @@ jest.mock('./CollapsibleDataRow', () => ({
       <td>{row.original.name}</td>
     </tr>
   )
+}));
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const messages: Record<string, string> = {
+      'collapsibleRow.expand': 'Expand row group',
+      'collapsibleRow.collapse': 'Collapse row group'
+    };
+    return messages[key] ?? key;
+  }
 }));
 
 const mockData: { id: string; name: string; group: string }[] = [
@@ -58,63 +60,90 @@ const columns: ColumnDef<(typeof mockData)[number], unknown>[] = [
   }
 ];
 
+type MockRowData = (typeof mockData)[0];
+
+const renderComponent = (props: Partial<CollapsibleRowProps<MockRowData>> = {}) => {
+  const defaultProps: CollapsibleRowProps<MockRowData> = {
+    data: mockData,
+    collapsed: false,
+    action: jest.fn(),
+    columns,
+    ...props
+  };
+
+  return render(
+    <table>
+      <tbody>
+        <CollapsibleRow {...defaultProps} />
+      </tbody>
+    </table>
+  );
+};
+
 describe('CollapsibleRow', () => {
   it('should render group header content and icon', () => {
-    render(
-      <table>
-        <tbody>
-          <CollapsibleRow data={mockData} collapsed={false} action={jest.fn()} columns={columns} />
-        </tbody>
-      </table>
-    );
+    renderComponent();
 
     expect(screen.getByTestId('group-label')).toBeInTheDocument();
     expect(screen.getByTestId('group-extra')).toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toBeInTheDocument();
   });
 
-  it('should call action on expander click', () => {
+  it('should call action on expander click', async () => {
+    const user = userEvent.setup();
     const onToggle = jest.fn();
 
-    render(
-      <table>
-        <tbody>
-          <CollapsibleRow data={mockData} collapsed={false} action={onToggle} columns={columns} />
-        </tbody>
-      </table>
-    );
+    renderComponent({ action: onToggle });
 
-    fireEvent.click(screen.getByTestId('icon-button'));
+    await user.click(screen.getByTestId('CollapsibleRow-mainOpus-toggle'));
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
-  it('should call action on row click', () => {
+  it('should call action on row click', async () => {
+    const user = userEvent.setup();
     const onToggle = jest.fn();
 
-    render(
-      <table>
-        <tbody>
-          <CollapsibleRow data={mockData} collapsed={false} action={onToggle} columns={columns} />
-        </tbody>
-      </table>
-    );
+    renderComponent({ action: onToggle });
 
-    fireEvent.click(screen.getByTestId('CollapsibleRow-mainOpus-name'));
+    await user.click(screen.getByTestId('CollapsibleRow-mainOpus-name'));
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
   it('should render internal rows via CollapsibleDataRow when collapsed=true', () => {
-    render(
-      <table>
-        <tbody>
-          <CollapsibleRow data={mockData} collapsed action={jest.fn()} columns={columns} />
-        </tbody>
-      </table>
-    );
+    renderComponent({ collapsed: true });
 
     const rows = screen.getAllByTestId('collapsible-data-row');
     expect(rows).toHaveLength(2);
     expect(within(rows[0]).getByText('Test 1')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Test 2')).toBeInTheDocument();
+  });
+
+  it.each([
+    { collapsed: true, value: 'Expand row group' },
+    { collapsed: false, value: 'Collapse row group' }
+  ])('should display correct ARIA labels for a row toggle when collapsed $collapsed', ({ collapsed, value }) => {
+    renderComponent({
+      collapsed,
+      columns: [{ id: 'expander', header: '', cell: () => null }]
+    });
+    const toggle = screen.getByTestId('CollapsibleRow-mainOpus-toggle');
+    expect(toggle).toHaveAttribute('aria-label', value);
+  });
+
+  it('should render the toggle button with correct focus styles when navigate using keyboard', async () => {
+    const user = userEvent.setup();
+
+    renderComponent({
+      collapsed: true,
+      columns: [{ id: 'expander', header: '', cell: () => null }]
+    });
+
+    const toggle = screen.getByTestId('CollapsibleRow-mainOpus-toggle');
+    await user.tab();
+
+    expect(toggle).toHaveFocus();
+    expect(toggle).toHaveStyle({
+      outline: '2px solid black'
+    });
   });
 });

@@ -7,9 +7,9 @@ import ResearchAndScientificWork from './ResearchAndScientificWork';
 jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
   const MockTitleWithQuote = ({ title, quoteText, sourceText, color }: TitleWithQuoteProps) => (
     <div data-testid="title-with-quote">
-      <div data-testid="title">{title}</div>
-      <div data-testid="quote-text">{quoteText}</div>
-      <div data-testid="source-title">{sourceText}</div>
+      <div data-testid="title">{typeof title === 'string' ? title : null}</div>
+      <div data-testid="quote-text">{typeof quoteText === 'string' ? quoteText : null}</div>
+      <div data-testid="source-title">{typeof sourceText === 'string' ? sourceText : null}</div>
       <div data-testid="color">{color}</div>
     </div>
   );

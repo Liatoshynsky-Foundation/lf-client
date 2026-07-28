@@ -190,6 +190,10 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Розгорнути групу рядків",
+      "collapse": "Згорнути групу рядків"
+    },
     "columns": {
       "opus": "Опус",
       "name": "Назва",
