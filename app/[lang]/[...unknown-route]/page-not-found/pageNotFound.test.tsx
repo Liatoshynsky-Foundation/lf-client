@@ -24,6 +24,7 @@ describe('PageNotFound Component', () => {
         <main
         class="MuiBox-root css-ivqvp"
         id="main"
+        tabindex="-1"
         >
           <h2
             class="MuiTypography-root MuiTypography-h2 css-1uwders-MuiTypography-root"

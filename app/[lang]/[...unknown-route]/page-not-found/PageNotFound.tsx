@@ -10,7 +10,7 @@ export async function PageNotFound() {
   const t = await getTranslations('common');
 
   return (
-    <Box component="main" id="main" sx={styles.mainContainer}>
+    <Box component="main" id="main" tabIndex={-1} sx={styles.mainContainer}>
       <Typography variant="h2" sx={styles.titleText}>
         {t('pageNotFound.errorTitle')}
       </Typography>

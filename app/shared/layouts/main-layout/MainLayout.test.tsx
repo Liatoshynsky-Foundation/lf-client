@@ -57,6 +57,7 @@ describe('MainLayout Component', () => {
     const mainElement = screen.getByRole('main');
 
     expect(mainElement).toHaveTextContent(childText);
+    expect(mainElement).toHaveAttribute('tabIndex', '-1');
   });
 
   it('should forward additional props to the inner Box element', () => {
