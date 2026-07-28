@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
@@ -27,19 +27,30 @@ interface TableFiltersProps {
 
 export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: Readonly<TableFiltersProps>) {
   const t = useTranslations('filtering');
+  const rowRef = useRef<HTMLDivElement>(null);
 
   const orderedFilters = (() => {
     const movable = filters.filter((f) => !f.isStatic);
-
     const sortedMovable = [...movable].sort((a, b) => Number(Boolean(b.isActive)) - Number(Boolean(a.isActive)));
 
     let i = 0;
     return filters.map((f) => (f.isStatic ? f : sortedMovable[i++]));
   })();
 
+  const handleClear = () => {
+    const focusableElements = rowRef.current?.querySelectorAll('button, input, [tabindex="0"]');
+
+    if (focusableElements && focusableElements.length > 0) {
+      const lastElement = focusableElements[focusableElements.length - 2] as HTMLElement;
+      lastElement?.focus();
+    }
+
+    onClearAllFilters?.();
+  };
+
   return (
     <Box sx={styles.container} data-testid="TableFilters">
-      <Box sx={styles.row} data-testid="TableFilters-row">
+      <Box sx={styles.row} data-testid="TableFilters-row" ref={rowRef}>
         {orderedFilters.map((filter) => (
           <Box key={filter.id} data-testid={`TableFilters-filter-${filter.id}`}>
             {filter.element}
@@ -54,7 +65,7 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
                 type={IconButtonVariant.outlined}
                 variant={IconButtonColorVariant.Secondary}
                 size="medium"
-                onClick={onClearAllFilters}
+                onClick={handleClear}
                 sx={{ border: 'none', padding: 0 }}
                 aria-label={t('clearAll')}
               >

@@ -15,7 +15,7 @@ export default function ClearFilterButton({ onClick, children }: ClearFilterButt
   return (
     <Button
       variant="text"
-      startIcon={<Svg Component={TrashIcon} alt="clear" stroke={theme.palette.error.main} />}
+      startIcon={<Svg Component={TrashIcon} alt="" stroke={theme.palette.error.main} aria-hidden="true" />}
       onClick={onClick}
       sx={styles.button}
     >
