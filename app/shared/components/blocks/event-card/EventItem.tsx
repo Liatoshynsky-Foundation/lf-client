@@ -212,7 +212,7 @@ const EventItem = ({
 
       <Box sx={styles.content}>
         <Typography component="h3" sx={styles.title}>
-          {title}
+          <Link href={href}>{title}</Link>
         </Typography>
 
         <Typography component="p" sx={styles.publishedAt} data-testid="EventItem-publishedAt">
