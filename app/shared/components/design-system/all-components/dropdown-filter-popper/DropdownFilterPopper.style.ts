@@ -1,6 +1,6 @@
 import { SxProps } from '@mui/material';
 
-export const filterSelectStyles = {
+export const styles = {
   root: (variant: 'filled' | 'outlined', disabled: boolean): SxProps => {
     let backgroundColor = 'blue.200';
     if (disabled) {
@@ -9,7 +9,7 @@ export const filterSelectStyles = {
       backgroundColor = 'transparent';
     }
 
-    let borderColor = undefined;
+    let borderColor: string | undefined;
     if (variant === 'outlined') {
       borderColor = disabled ? 'blue.200' : 'black';
     }
@@ -22,68 +22,44 @@ export const filterSelectStyles = {
       gap: '8px',
       borderRadius: '8px',
       padding: '6px 8px 6px 16px',
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      cursor: disabled ? 'default' : 'pointer',
       transition: 'background-color 0.2s',
       typography: 'customSemiBold16',
-
+      textTransform: 'none',
+      outline: 0,
       backgroundColor,
       border: variant === 'outlined' ? '1px solid' : 'none',
       borderColor,
-
-      // use how in project!!!
+      '&.Mui-disabled': {
+        cursor: 'default'
+      },
       '&:focus-visible': {
-        outline: 'none',
-        boxShadow: '0 0 0 2px rgba(0, 0, 0, 0.5)'
+        outline: '2px solid'
       }
     };
   },
-
   label: (disabled: boolean): SxProps => ({
     typography: 'customSemiBold16',
     color: disabled ? 'blue.700' : 'black'
   }),
-
   chipContainer: {
     display: 'flex',
     alignItems: 'center',
     gap: '4px'
   },
-
-  chipList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 1,
-    flex: 1
-  },
-
-  placeholderChip: {
-    pointerEvents: 'none',
-    opacity: 0.7,
-    flex: 1
-  },
-
-  dropdownIcon: (disabled: boolean): SxProps => ({
+  dropdownIcon: (disabled: boolean, open: boolean): SxProps => ({
     cursor: disabled ? 'default' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     display: 'flex',
-    justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'transform 0.2s ease-in-out',
+    transform: open ? 'rotate(180deg)' : 'rotate(0deg)'
   }),
 
-  menuItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    typography: 'customSemiBold16'
-  },
-
-  clearAllContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.04)'
-    }
-  }
+  popoverContent: (minWidth?: number): SxProps => ({
+    minWidth,
+    padding: '8px 0',
+    outline: 0
+  })
 };

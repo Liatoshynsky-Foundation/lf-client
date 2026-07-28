@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Chip as MuiChip, ChipProps as MuiChipProps } from '@mui/material';
+import { Chip as MuiChip, ChipProps as MuiChipProps } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
 
@@ -23,10 +23,9 @@ export const Chip: React.FC<CustomChipProps> = ({ variant = 'filled', disabled =
       {...props}
       disabled={disabled}
       onDelete={handleDeleteWrapper}
-      tabIndex={-1}
       deleteIcon={
         onDelete ? (
-          <Button
+          <button
             data-testid="delete-icon"
             aria-label="delete"
             style={{
@@ -37,7 +36,7 @@ export const Chip: React.FC<CustomChipProps> = ({ variant = 'filled', disabled =
             }}
           >
             <Image src="/icons/close-icon.svg" alt="close" width={16} height={16} priority />
-          </Button>
+          </button>
         ) : undefined
       }
       sx={baseChipStyles(variant)}

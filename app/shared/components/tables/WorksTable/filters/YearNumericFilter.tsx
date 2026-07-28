@@ -25,7 +25,7 @@ export const YearNumericFilter: React.FC<YearNumericFilterProps> = ({
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <DropdownFilterPopper label={label} role="dialog" autoFocusRef={firstFieldRef}>
+    <DropdownFilterPopper label={label} autoFocusRef={firstFieldRef}>
       {() => (
         <NumericFiltering
           value={value}
