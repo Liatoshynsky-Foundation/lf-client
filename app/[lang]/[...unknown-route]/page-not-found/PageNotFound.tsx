@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
+import { AccessibleMainWrapper } from '~/components/AccessibleMainWrapper/AccessibleMainWrapper';
 import Button from '~/ds-components/button/Button';
 
 import { styles } from './pageNotFound.styles';
@@ -10,7 +11,7 @@ export async function PageNotFound() {
   const t = await getTranslations('common');
 
   return (
-    <Box component="main" id="main" tabIndex={-1} sx={styles.mainContainer}>
+    <AccessibleMainWrapper sx={styles.mainContainer}>
       <Typography variant="h2" sx={styles.titleText}>
         {t('pageNotFound.errorTitle')}
       </Typography>
@@ -19,6 +20,6 @@ export async function PageNotFound() {
       <Box sx={styles.icon}>
         <Image src="/images/pageNotFound.svg" alt="Page not found (404)" fill />
       </Box>
-    </Box>
+    </AccessibleMainWrapper>
   );
 }
