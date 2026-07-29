@@ -133,9 +133,7 @@ export const DropdownFilterPopper = ({
         open={open}
         anchorEl={anchorEl}
         disableScrollLock
-        onClose={() => {
-          closeAndRestoreFocus();
-        }}
+        onClose={closeAndRestoreFocus}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       >

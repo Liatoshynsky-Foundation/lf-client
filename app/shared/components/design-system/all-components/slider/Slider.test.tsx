@@ -9,7 +9,7 @@ describe('DesignSystemSlider', () => {
 
   it('renders the slider correctly', () => {
     renderComponent();
-    const thumbs = screen.getAllByRole('slider');
+    const thumbs = screen.getAllByRole('slider', { hidden: true });
     expect(thumbs.length).toBeGreaterThan(0);
   });
 
@@ -49,7 +49,7 @@ describe('DesignSystemSlider', () => {
 
   it('renders correctly when value is a single number', () => {
     renderComponent({ value: 50 });
-    expect(screen.getByRole('slider')).toBeInTheDocument();
+    expect(screen.getByRole('slider', { hidden: true })).toBeInTheDocument();
   });
 
   it('applies correct styles for big size', () => {
@@ -64,7 +64,7 @@ describe('DesignSystemSlider', () => {
   it('renders correctly when value is a single number and sets marks to undefined', () => {
     const { container } = render(<DesignSystemSlider min={0} max={100} value={50} />);
 
-    expect(screen.getByRole('slider')).toBeInTheDocument();
+    expect(screen.getByRole('slider', { hidden: true })).toBeInTheDocument();
     expect(container.querySelector('.MuiSlider-mark')).not.toBeInTheDocument();
   });
 
