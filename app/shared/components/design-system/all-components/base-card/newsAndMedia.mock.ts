@@ -6,6 +6,7 @@ import { IMAGES } from '~/shared/constants/assets';
 export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
   {
     image: IMAGES.PLACEHOLDER,
+    alt: 'Концерт до 130-річчя Бориса Лятошинського',
     title: 'Концерт до 130-річчя Бориса Лятошинського',
     publicationDate: '15.01.25',
     description:
@@ -14,6 +15,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
   },
   {
     image: IMAGES.PLACEHOLDER,
+    alt: 'Презентація нового запису Третьої симфонії',
     title: 'Презентація нового запису Третьої симфонії',
     publicationDate: '10.01.25',
     description:
@@ -22,6 +24,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
   },
   {
     image: IMAGES.PLACEHOLDER,
+    alt: 'Відкриття виставки архівних матеріалів',
     title: 'Відкриття виставки архівних матеріалів',
     publicationDate: '05.01.25',
     description:
@@ -33,6 +36,7 @@ export const mockNewsCards: Omit<BaseCardProps, 'variant'>[] = [
 export const mockPressCards: Omit<BaseCardProps, 'variant'>[] = [
   {
     image: IMAGES.PLACEHOLDER,
+    alt: '«Золотий Обруч»: майже детективна історія',
     title: '«Золотий Обруч»: майже детективна історія',
     publicationDate: '05.05.25',
     description:
@@ -41,6 +45,7 @@ export const mockPressCards: Omit<BaseCardProps, 'variant'>[] = [
   },
   {
     image: IMAGES.PLACEHOLDER,
+    alt: 'Радіо Культура: Інтервю з головою Фундації',
     title: 'Радіо Культура: Інтервю з головою Фундації',
     publicationDate: '15.12.24',
     description: 'Тетяна Гомон розповідає про діяльність Фундації та плани на 2025 рік у програмі "Музичний світ".',
@@ -48,6 +53,7 @@ export const mockPressCards: Omit<BaseCardProps, 'variant'>[] = [
   },
   {
     image: IMAGES.PLACEHOLDER,
+    alt: 'Український тиждень: Спадщина майстра',
     title: 'Український тиждень: Спадщина майстра',
     publicationDate: '10.12.24',
     description: 'Огляд нових публікацій та досліджень творчості Бориса Лятошинського за останні роки.',

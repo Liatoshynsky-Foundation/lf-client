@@ -72,6 +72,7 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
               image={newsItem.coverImage.src}
               crop={newsItem.coverImage.crop ?? null}
               title={newsItem.title}
+              alt={newsItem.coverImage.alt ?? newsItem.title}
               publicationDate={
                 formatIsoDateToDdMmYy(
                   newsItem.publishedAt instanceof Date ? newsItem.publishedAt.toISOString() : newsItem.publishedAt
