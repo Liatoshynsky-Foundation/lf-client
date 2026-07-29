@@ -17,7 +17,14 @@ export const styles = {
       lineHeight: '145%',
       color: isActive ? 'black' : alpha(theme.palette.brown?.[800] || '#412B21', 0.6),
       background: 'none',
-      border: 'none'
+      border: 'none',
+      cursor: 'pointer',
+      borderRadius: '2px',
+      outline: 'none',
+      '&:focus-visible': {
+        outline: '2px solid #631B2B',
+        outlineOffset: '2px'
+      }
     })) as SxProps<Theme>;
   },
   mobileWrapper: {

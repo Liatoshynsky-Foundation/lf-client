@@ -1,21 +1,42 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 
 import { NavAccordion } from './NavAccordion';
 
+interface MockLinkProps {
+  href: string | { pathname?: string };
+  children: React.ReactNode;
+  [key: string]: unknown;
+}
+
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/section/page-a')
+}));
+
+jest.mock('~/i18n/navigation', () => ({
+  __esModule: true,
+  usePathname: jest.fn(() => '/section/page-a'),
+  useRouter: () => ({ replace: jest.fn(), push: jest.fn(), prefetch: jest.fn() }),
+  Link: ({ href, children, ...props }: MockLinkProps) => {
+    const h = typeof href === 'string' ? href : (href?.pathname ?? '');
+    return (
+      <a href={h} {...props}>
+        {children}
+      </a>
+    );
+  }
 }));
 
 jest.mock('~/../i18n/navigation', () => ({
   __esModule: true,
   usePathname: jest.fn(() => '/section/page-a'),
   useRouter: () => ({ replace: jest.fn(), push: jest.fn(), prefetch: jest.fn() }),
-  Link: ({ href, children, ...props }: any) => {
+  Link: ({ href, children, ...props }: MockLinkProps) => {
     const h = typeof href === 'string' ? href : (href?.pathname ?? '');
     return (
-      <a href={h} data-testid={`mock-link-${h}`} {...props}>
+      <a href={h} {...props}>
         {children}
       </a>
     );
@@ -79,6 +100,17 @@ describe('NavAccordion', () => {
     expect(screen.getByText('Collapse list')).toBeInTheDocument();
   });
 
+  test('should toggle open/close when Enter or Space key is pressed on title button', () => {
+    render(<NavAccordion items={items} />);
+    const toggleButton = screen.getByTestId('NavAccordion-item-Section1-toggle');
+
+    fireEvent.keyDown(toggleButton, { key: 'Enter' });
+    expect(screen.getByTestId('NavAccordion-item-Section1-toggle--open')).toBeInTheDocument();
+
+    fireEvent.keyDown(toggleButton, { key: ' ' });
+    expect(screen.queryByTestId('NavAccordion-item-Section1-toggle--open')).not.toBeInTheDocument();
+  });
+
   test('should render "active" title when pathname matches', () => {
     render(<NavAccordion items={items} />);
     const activeTitle = screen.getByTestId('NavAccordion-item-Section1--title--active');
@@ -87,14 +119,14 @@ describe('NavAccordion', () => {
 
   test('should render single link item correctly', () => {
     render(<NavAccordion items={items} />);
-    const link = screen.getByTestId('mock-link-/single');
+    const link = screen.getByTestId('NavAccordion-item-SinglePage');
     expect(link).toHaveAttribute('href', '/single');
     expect(screen.getByText('Single Page')).toBeInTheDocument();
   });
 
   test('submenu links should have correct hrefs', () => {
     render(<NavAccordion items={items} />);
-    const submenuLinks = screen.getAllByTestId('mock-link-/section/page-a')[0];
+    const submenuLinks = screen.getAllByTestId('NavAccordion-item-Section1-submenuItem')[0];
     expect(submenuLinks).toHaveAttribute('href', '/section/page-a');
   });
 

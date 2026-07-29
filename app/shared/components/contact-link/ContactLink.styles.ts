@@ -4,7 +4,7 @@ const commonLinkBaseStyles = {
   fontSize: '16px',
   fontWeight: 600,
   lineHeight: '110%',
-  transition: 'color 0.2s ease',
+  transition: 'color 0.2s ease, outline 0.2s ease',
   textDecoration: 'none'
 };
 
@@ -17,6 +17,14 @@ const commonTextStyle = {
 
 const commonLinkStates = {
   color: 'black',
+  borderRadius: '4px',
+
+  '&:focus-visible': {
+    outline: '2px solid #631B2B',
+    outlineOffset: '4px',
+    color: 'burgundy.800'
+  },
+
   '&:hover': {
     color: 'burgundy.800',
     cursor: 'pointer'

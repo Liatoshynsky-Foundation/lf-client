@@ -1,5 +1,7 @@
+'use client';
+
 import { Box, Slide } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { styles } from './MobileOverlay.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
@@ -22,11 +24,43 @@ interface MobileMenuOverlayProps {
 
 const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
   const { isMobile } = useBreakpoints();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (open) document.body.style.overflow = 'hidden';
+    if (!open) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('header button, header a[href], header [tabindex]:not([tabindex="-1"])')
+      ).filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [open]);
 
@@ -53,7 +87,12 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
 
   return (
     <Slide direction="down" in={open} mountOnEnter unmountOnExit appear={false} timeout={600}>
-      <Box data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`} sx={styles.overlay}>
+      <Box
+        ref={containerRef}
+        data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`}
+        sx={styles.overlay}
+        id="MobileMenuOverlay"
+      >
         <Box sx={styles.overlayContent}>
           <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 

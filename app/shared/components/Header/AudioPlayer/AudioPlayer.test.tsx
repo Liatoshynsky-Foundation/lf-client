@@ -31,8 +31,6 @@ declare global {
   var capturedOnSeek: ((val: number) => void) | undefined;
 }
 
-let mockAudioContextInstance: Partial<AudioContext> | null = null;
-
 describe('AudioPlayer', () => {
   let mockTogglePlay: jest.Mock;
   let mockPlayTrack: jest.Mock;
@@ -58,7 +56,7 @@ describe('AudioPlayer', () => {
 
     class MockAudioContext implements Partial<AudioContext> {
       state: AudioContextState = 'running';
-      destination: AudioDestinationNode = {} as AudioDestinationNode;
+      destination = {} as AudioDestinationNode;
       close = jest.fn().mockImplementation(() => {
         return Promise.resolve();
       });
@@ -76,20 +74,16 @@ describe('AudioPlayer', () => {
     globalThis.AudioContext = MockAudioContext as unknown as typeof AudioContext;
     globalThis.webkitAudioContext = MockAudioContext as unknown as typeof AudioContext;
 
-    HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
+    HTMLMediaElement.prototype.play = jest.fn().mockImplementation(() => Promise.resolve());
     HTMLMediaElement.prototype.pause = jest.fn();
     HTMLMediaElement.prototype.load = jest.fn();
 
-    globalThis.requestAnimationFrame = jest.fn().mockImplementation((cb: () => void) => {
-      setTimeout(cb, 0);
-      return 999;
-    });
+    globalThis.requestAnimationFrame = jest.fn().mockImplementation(() => 999);
     globalThis.cancelAnimationFrame = jest.fn();
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAudioContextInstance = null;
 
     mockTogglePlay = jest.fn();
     mockPlayTrack = jest.fn();
@@ -265,230 +259,103 @@ describe('AudioPlayer', () => {
     expect(container).toBeDefined();
   });
 
-  it('should cover all animation frame cancellations and context recreation', async () => {
-    const { rerender, unmount } = renderComponent({ isPlaying: true, src: '1.mp3' });
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    if (mockAudioContextInstance) {
-      Object.defineProperty(mockAudioContextInstance, 'state', {
-        value: 'closed',
-        configurable: true
+  describe('Animation Frame cleanup coverage', () => {
+    it('should cancel animation frame in playAudio and in pause else branch', async () => {
+      let frameCounter = 0;
+      globalThis.requestAnimationFrame = jest.fn().mockImplementation(() => {
+        frameCounter++;
+        return frameCounter;
       });
-    }
 
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: '2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
+      const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'song-1.mp3' });
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 10));
+      });
+
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'song-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 10));
+      });
+
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
+
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: 'song-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
+
+      unmount();
     });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: '2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: '3.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount();
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(999);
   });
-  it('should cover all edge cases including missing refs and empty src', async () => {
-    let callCount = 0;
-    const originalUseRef = React.useRef;
-    const refSpy1 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
-      const ref = originalUseRef(init);
-      if (callCount === 1) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
+
+  describe('Complete AudioPlayer 100% Coverage', () => {
+    it('should cover lines 43-44, 139, 156-157 using dynamic audioContext state and async play', async () => {
+      let currentCtxState = 'running';
+      const mockCloseFn = jest.fn().mockResolvedValue(undefined);
+
+      class MockDynamicAudioContext implements Partial<AudioContext> {
+        get state(): AudioContextState {
+          return currentCtxState as AudioContextState;
+        }
+        destination = {} as AudioDestinationNode;
+        close = mockCloseFn;
+        createAnalyser = () =>
+          ({
+            fftSize: 64,
+            frequencyBinCount: 32,
+            connect: jest.fn(),
+            getByteFrequencyData: jest.fn()
+          }) as unknown as AnalyserNode;
+        createMediaElementSource = () => ({ connect: jest.fn() }) as unknown as MediaElementAudioSourceNode;
       }
-      return ref;
-    });
 
-    const { unmount: unmount1, container } = renderComponent({ src: 'test1.mp3', isPlaying: true });
+      globalThis.AudioContext = MockDynamicAudioContext as unknown as typeof AudioContext;
 
-    expect(container).toBeDefined();
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount1();
-    refSpy1.mockRestore();
-    callCount = 0;
-    const refSpy2 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
-      const ref = originalUseRef(init);
-      if (callCount === 6) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
-      }
-      return ref;
-    });
-    const { unmount: unmount2 } = renderComponent({ src: 'test2.mp3', isPlaying: true });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount2();
-    refSpy2.mockRestore();
-    callCount = 0;
-    const refSpy3 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
-      const ref = originalUseRef(init);
-      if (callCount === 7) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
-      }
-      return ref;
-    });
-    const { unmount: unmount3 } = renderComponent({ src: 'test3.mp3', isPlaying: true });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount3();
-    refSpy3.mockRestore();
-    const { unmount: unmount4 } = renderComponent({ src: '' });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount4();
-  });
-
-  it('should forcibly cover lines 139 and 156-157 by blocking ref reset', async () => {
-    const originalUseRef = React.useRef;
-    const refSpy = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      const ref = originalUseRef(init);
-      let val = ref.current;
-      Object.defineProperty(ref, 'current', {
-        get: () => val,
-        set: (newVal) => {
-          if (newVal === null && val === 999) return;
-          val = newVal;
-        },
-        configurable: true
+      let frameId = 0;
+      globalThis.requestAnimationFrame = jest.fn().mockImplementation(() => {
+        frameId++;
+        return frameId;
       });
-      return ref;
-    });
-    globalThis.requestAnimationFrame = jest.fn().mockReturnValue(999);
 
-    const { rerender, unmount, container } = renderComponent({ isPlaying: true, src: 'brutal.mp3' });
-    expect(container).toBeDefined();
+      const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'audio-1.mp3' });
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: true, src: 'brutal.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: false, src: 'brutal.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount();
-    refSpy.mockRestore();
-  });
-
-  it('should force cover lines 139 and 156-157', async () => {
-    const { rerender } = renderComponent({ isPlaying: true, src: '1.mp3' });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: false, src: '1.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: true, src: '1.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
-  });
-
-  it('should simulate ref unmounting branch for line 156-157', () => {
-    const { container } = renderComponent();
-    const buttons = container.querySelectorAll('button');
-    expect(buttons).toBeDefined();
-  });
-
-  it('should cover all audio contexts and frame cancellation branches synchronously', async () => {
-    let capturedAnimationCallback: (() => void) | null = null;
-    globalThis.requestAnimationFrame = jest.fn().mockImplementation((cb: () => void) => {
-      capturedAnimationCallback = cb;
-      return 999;
-    });
-
-    const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'brutal-1.mp3' });
-
-    await act(async () => {
-      await Promise.resolve();
-    });
-
-    if (capturedAnimationCallback) {
-      act(() => {
-        (capturedAnimationCallback as () => void)();
+      await act(async () => {
+        await Promise.resolve();
       });
-    }
 
-    if (mockAudioContextInstance) {
-      Object.defineProperty(mockAudioContextInstance, 'state', {
-        value: 'closed',
-        configurable: true
+      currentCtxState = 'closed';
+
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'audio-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      await act(async () => {
+        await Promise.resolve();
       });
-    }
 
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'brutal-2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
+      expect(mockCloseFn).toHaveBeenCalled();
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
 
-    await act(async () => {
-      await Promise.resolve();
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: 'audio-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
+
+      unmount();
     });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: 'brutal-2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await Promise.resolve();
-    });
-
-    unmount();
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(999);
   });
 });

@@ -37,6 +37,7 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
         variant="text"
         color="primary"
         size="medium"
+        aria-expanded={isOpen}
       >
         <svg
           width="40"

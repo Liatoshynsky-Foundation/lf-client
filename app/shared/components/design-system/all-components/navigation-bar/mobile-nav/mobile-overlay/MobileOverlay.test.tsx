@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import MobileMenuOverlay from './MobileOverlay';
@@ -132,5 +132,62 @@ describe('MobileMenuOverlay', () => {
     render(<MobileMenuOverlay open navLabels={singleLinkNav} contacts={contacts} socialLinks={socialLinks} />);
     expect(screen.getByText('Single Link Section')).toBeInTheDocument();
     expect(screen.getByTestId('mock-nav-accordion')).toBeInTheDocument();
+  });
+
+  describe('Focus Trap keyboard navigation', () => {
+    it('should ignore non-Tab keys', () => {
+      render(<MobileMenuOverlay open navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />);
+      fireEvent.keyDown(window, { key: 'Escape' });
+    });
+
+    it('should trap Tab focus from last element to first element', () => {
+      document.body.innerHTML = `
+        <header>
+          <button id="btn1">First</button>
+          <button id="btn2">Last</button>
+        </header>
+      `;
+
+      render(<MobileMenuOverlay open navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />);
+
+      const btn1 = document.getElementById('btn1') as HTMLElement;
+      const btn2 = document.getElementById('btn2') as HTMLElement;
+
+      btn2.focus();
+      expect(document.activeElement).toBe(btn2);
+
+      fireEvent.keyDown(window, { key: 'Tab', shiftKey: false });
+      expect(document.activeElement).toBe(btn1);
+    });
+
+    it('should trap Shift+Tab focus from first element to last element', () => {
+      document.body.innerHTML = `
+        <header>
+          <button id="btn1">First</button>
+          <button id="btn2">Last</button>
+        </header>
+      `;
+
+      render(<MobileMenuOverlay open navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />);
+
+      const btn1 = document.getElementById('btn1') as HTMLElement;
+      const btn2 = document.getElementById('btn2') as HTMLElement;
+
+      btn1.focus();
+      expect(document.activeElement).toBe(btn1);
+
+      fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
+      expect(document.activeElement).toBe(btn2);
+    });
+
+    it('should return early when no focusable elements are present in header', () => {
+      document.body.innerHTML = '<header></header>';
+
+      render(<MobileMenuOverlay open navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />);
+
+      fireEvent.keyDown(window, { key: 'Tab', shiftKey: false });
+
+      expect(document.body).toBeInTheDocument();
+    });
   });
 });
