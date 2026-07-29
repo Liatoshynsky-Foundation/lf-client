@@ -77,6 +77,7 @@ jest.mock('~/shared/components/svg-image/SvgImage', () => ({
 const mockCards = [
   {
     image: '/news1.jpg',
+    alt: 'News Title 1',
     title: 'News Title 1',
     publicationDate: '15.01.25',
     description: 'Description 1',
@@ -85,6 +86,7 @@ const mockCards = [
   },
   {
     image: '/news2.jpg',
+    alt: 'News Title 2',
     title: 'News Title 2',
     publicationDate: '16.01.25',
     description: 'Description 2',
@@ -93,6 +95,7 @@ const mockCards = [
   },
   {
     image: '/news3.jpg',
+    alt: 'News Title 3',
     title: 'News Title 3',
     publicationDate: '17.01.25',
     description: 'Description 3',
