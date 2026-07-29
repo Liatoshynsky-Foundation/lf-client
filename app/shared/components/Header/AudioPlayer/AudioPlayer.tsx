@@ -135,9 +135,7 @@ export default function AudioPlayer() {
         if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
           setupAudioAnalyzer();
         }
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current);
-        }
+        cancelAnimationFrame(animationRef.current ?? 0);
         animateBars();
         setError(null);
       } catch (err) {
@@ -151,11 +149,8 @@ export default function AudioPlayer() {
       playAudio();
     } else {
       audio.pause();
-
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
+      cancelAnimationFrame(animationRef.current ?? 0);
+      animationRef.current = null;
     }
 
     return () => {
