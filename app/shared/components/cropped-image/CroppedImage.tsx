@@ -32,7 +32,12 @@ export default function CroppedImage({
   loading = 'lazy',
   sizes
 }: Readonly<CroppedImageProps>) {
-  const parsedCrop = crop ? ('rect' in crop ? crop.rect : crop) : null;
+  const parseCrop = (crop: CropRect | { rect: CropRect } | null | undefined): CropRect | null => {
+    if (!crop) return null;
+    if ('rect' in crop) return crop.rect;
+    return crop;
+  };
+  const parsedCrop = parseCrop(crop);
   const isValidCrop = !!(parsedCrop && parsedCrop.width > 0 && parsedCrop.height > 0);
 
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(isValidCrop ? parsedCrop : null);

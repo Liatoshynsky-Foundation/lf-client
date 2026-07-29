@@ -38,11 +38,16 @@ const VolunteerDonation: React.FC<VolunteerDonationProps> = ({ data }) => {
   if (!data) return null;
 
   const rawSrc = data.image?.generatedSrc || data.image?.src || data.imageSrc;
-  const finalSrc = rawSrc
-    ? rawSrc.startsWith('http') || rawSrc.startsWith('/')
-      ? rawSrc
-      : `${PUBLIC_STORAGE_BASE_URL}/photos${rawSrc}`
-    : '';
+
+  const getFinalSrc = (src?: string): string => {
+    if (!src) return '';
+    if (src.startsWith('http') || src.startsWith('/')) {
+      return src;
+    }
+    return `${PUBLIC_STORAGE_BASE_URL}/photos${src}`;
+  };
+
+  const finalSrc = getFinalSrc(rawSrc);
 
   const crop = data.image?.crop || null;
   const titleText = typeof data.title === 'string' ? data.title : 'Volunteer Donation';

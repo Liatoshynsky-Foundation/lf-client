@@ -19,7 +19,7 @@ export interface PrincipleOfHopeProps {
   };
 }
 
-export default function PrincipleOfHopeBlock({ data }: PrincipleOfHopeProps) {
+export default function PrincipleOfHopeBlock({ data }: Readonly<PrincipleOfHopeProps>) {
   if (!data) return null;
 
   const safeButtons = (data.buttons || []).map((btn) => ({

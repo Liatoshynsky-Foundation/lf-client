@@ -18,7 +18,7 @@ export interface YermolenkoLinksProps {
   };
 }
 
-export default function YermolenkoLinks({ data }: YermolenkoLinksProps) {
+export default function YermolenkoLinks({ data }: Readonly<YermolenkoLinksProps>) {
   if (!data) return null;
 
   const safeButtons = (data.buttons || []).map((btn) => ({
