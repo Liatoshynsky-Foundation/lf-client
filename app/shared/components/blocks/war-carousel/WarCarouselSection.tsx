@@ -19,7 +19,7 @@ export type WarCarouselSectionProps = BoxProps & {
       generatedSrc?: string;
       alt: Record<'uk' | 'en', string> | string;
       caption?: Record<'uk' | 'en', string> | string;
-      crop?: CropRect | null;
+      crop?: { rect: CropRect } | null;
     }>;
   };
 };
@@ -60,13 +60,17 @@ const WarCarouselSection: React.FC<WarCarouselSectionProps> = ({ sx, data, ...pr
       return defaultImages;
     }
 
-    return data.images.map((img, index) => ({
-      id: img.id || index,
-      src: img.src,
-      alt: getLocalizedText(img.alt),
-      description: getLocalizedText(img.caption),
-      crop: img.crop
-    }));
+    return data.images.map((img, index) => {
+      const parsedCrop = img.crop?.rect || null;
+
+      return {
+        id: img.id || index,
+        src: img.src,
+        alt: getLocalizedText(img.alt),
+        description: getLocalizedText(img.caption),
+        crop: parsedCrop
+      };
+    });
   }, [data?.images, locale]);
 
   return (

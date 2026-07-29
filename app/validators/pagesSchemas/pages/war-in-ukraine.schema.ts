@@ -17,10 +17,12 @@ const PaymentMethodSchema = z.object({
 
 const CropSchema = z
   .object({
-    x: z.number(),
-    y: z.number(),
-    width: z.number(),
-    height: z.number()
+    rect: z.object({
+      x: z.number(),
+      y: z.number(),
+      width: z.number(),
+      height: z.number()
+    })
   })
   .nullable()
   .optional();
