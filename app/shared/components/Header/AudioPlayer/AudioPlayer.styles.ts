@@ -7,11 +7,11 @@ export const styles = {
     padding: '6px 8px',
     borderRadius: '20px',
     transition: 'background-color 0.2s ease',
-    outline: 'none !important',
+    outline: 'none',
 
-    '&:hover, &:focus, &:focus-visible': {
+    '&:hover, &:focus-visible': {
       backgroundColor: 'rgba(25, 13, 3, 0.08)',
-      outline: 'none !important'
+      outline: 'none'
     }
   },
   icon: {

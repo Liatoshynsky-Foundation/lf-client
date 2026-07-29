@@ -315,6 +315,9 @@ describe('AudioPlayer', () => {
     });
 
     HTMLMediaElement.prototype.play = originalPlay;
+
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
+    HTMLMediaElement.prototype.play = originalPlay;
     jest.restoreAllMocks();
   });
 
@@ -350,6 +353,7 @@ describe('AudioPlayer', () => {
       await Promise.resolve();
     });
 
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
     jest.restoreAllMocks();
   });
 

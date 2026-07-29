@@ -17,12 +17,28 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MobileMenuOverlayProps {
   open: boolean;
+  onClose?: () => void;
   navLabels: NavigationDTO[];
   contacts: contactsData;
   socialLinks: LinkIcon[];
 }
 
-const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
+const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
+  const header = container.closest('header') || document.querySelector('header') || container;
+
+  const selector =
+    'button:not([disabled]), a[href]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  return Array.from(header.querySelectorAll<HTMLElement>(selector)).filter((el) => {
+    const isVisibleInLayout = Boolean(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    const isNotHiddenInStyle = el.style.display !== 'none' && el.style.visibility !== 'hidden';
+    const isVisible = isVisibleInLayout || isNotHiddenInStyle;
+
+    return isVisible && el.getAttribute('aria-hidden') !== 'true';
+  });
+};
+
+const MobileMenuOverlay = ({ open, onClose, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
   const { isMobile } = useBreakpoints();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -31,38 +47,45 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
 
     document.body.style.overflow = 'hidden';
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+    const timer = setTimeout(() => {
+      if (containerRef.current) {
+        const focusables = getFocusableElements(containerRef.current);
+        focusables[0]?.focus();
+      }
+    }, 50);
 
-      const focusableElements = Array.from(
-        document.querySelectorAll<HTMLElement>('header button, header a[href], header [tabindex]:not([tabindex="-1"])')
-      ).filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+        return;
+      }
+
+      if (event.key !== 'Tab' || !containerRef.current) return;
+
+      const focusableElements = getFocusableElements(containerRef.current);
 
       if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
+      const lastElement = focusableElements.at(-1);
 
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement?.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement?.focus();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      clearTimeout(timer);
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [open]);
+  }, [open, onClose]);
 
   const navItems = useMemo<NavItem[]>(() => {
     return navLabels.map((group) => {

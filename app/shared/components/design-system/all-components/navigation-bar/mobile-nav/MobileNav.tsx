@@ -1,5 +1,7 @@
+'use client';
+
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import MobileMenuOverlay from './mobile-overlay/MobileOverlay';
 import { styles } from './MobileNav.styles';
@@ -25,6 +27,7 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
   }, [pathname]);
 
   const toggle = () => setIsOpen((prev) => !prev);
+  const handleClose = useCallback(() => setIsOpen(false), []);
 
   return (
     <>
@@ -34,10 +37,11 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
         sx={styles.iconButton(isMobile)}
         className={isOpen ? 'menu opened' : 'menu'}
         aria-label="Main Menu"
+        aria-expanded={isOpen}
+        aria-controls="MobileMenuOverlay"
         variant="text"
         color="primary"
         size="medium"
-        aria-expanded={isOpen}
       >
         <svg
           width="40"
@@ -52,7 +56,13 @@ const MobileNav = ({ navLabels, contacts, socialLinks }: MobileNavProps) => {
           <rect className="line bottom" y="15" width="40" height="2" fill="#190D03" />
         </svg>
       </Button>
-      <MobileMenuOverlay open={isOpen} navLabels={navLabels} contacts={contacts} socialLinks={socialLinks} />
+      <MobileMenuOverlay
+        open={isOpen}
+        onClose={handleClose}
+        navLabels={navLabels}
+        contacts={contacts}
+        socialLinks={socialLinks}
+      />
     </>
   );
 };
