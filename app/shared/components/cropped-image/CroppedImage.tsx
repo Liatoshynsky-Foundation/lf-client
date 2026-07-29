@@ -62,7 +62,7 @@ export default function CroppedImage({
           alt={alt}
           onLoad={handleImageLoad}
           onError={onError}
-          style={{ ...croppedImgStyle, ...imageStyle }}
+          style={{ ...imageStyle, ...croppedImgStyle }}
           loading={loading}
         />
       ) : (

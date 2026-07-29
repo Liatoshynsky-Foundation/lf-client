@@ -76,21 +76,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
 
       <Box sx={styles.bodyImage} data-testid="FoundationInfo-bodyImage">
         {image && (
-          <CroppedImage
-            src={image.generatedSrc}
-            alt={extractTextFromTipTap(image.alt)}
-            crop={image.crop}
-            fill={false}
-            width={410}
-            height={490}
-            imageStyle={{
-              width: '100%',
-              height: 'auto',
-              objectFit: 'cover',
-              objectPosition: 'top',
-              position: 'relative'
-            }}
-          />
+          <CroppedImage src={image.generatedSrc} alt={extractTextFromTipTap(image.alt)} crop={image.crop} fill={true} />
         )}
       </Box>
     </Box>
