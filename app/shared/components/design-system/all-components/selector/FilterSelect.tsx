@@ -58,9 +58,17 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
     setSelectedValues(newValues);
   };
 
-  const handleClear = () => {
+  const clearSelection = () => {
     setSelectedValues([]);
     onRemove?.('', '', []);
+  };
+
+  const handleClear = () => {
+    clearSelection();
+  };
+
+  const handleChipClear = () => {
+    clearSelection();
     popperRef.current?.focusTrigger();
   };
 
@@ -73,7 +81,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
       variant={variant}
       disabled={disabled}
       chipCount={selectedValues.length}
-      onClearChip={handleClear}
+      onClearChip={handleChipClear}
       autoFocusRef={firstItemRef}
     >
       {() => (
