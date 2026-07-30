@@ -1,6 +1,8 @@
+import { SxProps, Theme } from '@mui/material';
+
 import { commonSx } from '~/shared/styles/commonSx';
 
-export const styles = {
+export const styles: Record<string, SxProps<Theme>> = {
   gridContainer: {
     display: 'grid',
     gridColumn: '1 / -1',
@@ -31,27 +33,35 @@ export const styles = {
     gap: '16px',
     mt: '32px'
   },
-  '.icon-wrapper': {
-    position: 'relative',
-    '.hover-icon': {
-      display: 'none',
-      position: 'absolute',
-      top: 0,
-      left: 0
-    }
-  },
-  '&:hover .icon-wrapper': {
-    '.default-icon': {
-      display: 'none'
-    },
-    '.hover-icon': {
-      display: 'block'
-    }
-  },
   contactsItem: {
     display: 'flex',
     gap: '8px',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: '2px',
+    '& a, & button': {
+      borderRadius: '2px',
+      '&:focus-visible': {
+        outline: '2px solid #631B2B',
+        outlineOffset: '2px'
+      }
+    },
+    '& .icon-wrapper': {
+      position: 'relative',
+      '& .hover-icon': {
+        display: 'none',
+        position: 'absolute',
+        top: 0,
+        left: 0
+      }
+    },
+    '&:hover .icon-wrapper': {
+      '& .default-icon': {
+        display: 'none'
+      },
+      '& .hover-icon': {
+        display: 'block'
+      }
+    }
   },
   faq: {
     gridColumn: { xs: '1 / -1', sm: '4 / -1', md: '6 / -1' },

@@ -14,8 +14,10 @@ const mockCopyLinkModule = jest.requireMock('~/ds-components/copy-link/CopyLink'
 };
 const { setMockIsMobile } = mockCopyLinkModule;
 
+let currentLocale = 'en';
+
 jest.mock('next-intl', () => ({
-  useLocale: () => 'en',
+  useLocale: () => currentLocale,
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
       title: 'FAQ Title',
@@ -57,16 +59,22 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   )
 }));
 
+type FaqItem = {
+  title: { en: string; uk: string };
+  content: { en: string; uk: string };
+};
+
 const mockFaqData = {
   contacts: {
     phone: '+3800000000',
     email: 'test@email.com'
   },
-  faq: faqItems as unknown as { title: { en: string; uk: string }; content: { en: string; uk: string } }[]
+  faq: faqItems as unknown as FaqItem[]
 };
 
 describe('FAQ component', () => {
   beforeEach(() => {
+    currentLocale = 'en';
     setMockIsMobile(false);
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false });
     jest.spyOn(window.navigator.clipboard, 'writeText').mockResolvedValue();
@@ -91,7 +99,7 @@ describe('FAQ component', () => {
     expect(screen.getByText('Here is the answer')).toBeInTheDocument();
   });
 
-  it('should render FAQ items', () => {
+  it('should render FAQ items with english locale', () => {
     expect(faqItems).toContainEqual(
       expect.objectContaining({
         title: expect.any(Object),
@@ -101,9 +109,20 @@ describe('FAQ component', () => {
 
     render(<Faq data={mockFaqData} />);
     const firstItem = faqItems[0];
-    if (firstItem && firstItem.title && firstItem.content) {
+    if (firstItem?.title && firstItem?.content) {
       expect(screen.getByText(String(firstItem.title.en))).toBeInTheDocument();
       expect(screen.getAllByText(String(firstItem.content.en))).not.toHaveLength(0);
+    }
+  });
+
+  it('should render FAQ items with ukrainian locale', () => {
+    currentLocale = 'uk';
+    render(<Faq data={mockFaqData} />);
+
+    const firstItem = faqItems[0];
+    if (firstItem?.title && firstItem?.content) {
+      expect(screen.getByText(String(firstItem.title.uk))).toBeInTheDocument();
+      expect(screen.getAllByText(String(firstItem.content.uk))).not.toHaveLength(0);
     }
   });
 
@@ -122,21 +141,29 @@ describe('FAQ component', () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.phone);
   });
 
+  it('should copy email when clicking email CopyLink on desktop', async () => {
+    render(<Faq data={mockFaqData} />);
+
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    const emailCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.email);
+
+    expect(emailCopyLink).toBeInTheDocument();
+
+    await act(async () => {
+      if (emailCopyLink) {
+        fireEvent.click(emailCopyLink);
+      }
+    });
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.email);
+  });
+
   it('should use tel: link when on mobile', () => {
     setMockIsMobile(true);
     (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true });
     render(<Faq data={mockFaqData} />);
     const phoneLink = screen.getByText(mockFaqData.contacts.phone);
     expect(phoneLink.closest('a')).toHaveAttribute('href', `tel:${mockFaqData.contacts.phone}`);
-  });
-
-  it('should render email as copyable element on desktop', () => {
-    render(<Faq data={mockFaqData} />);
-
-    const copyLinks = screen.getAllByTestId('mock-copy-link');
-    const emailCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.email);
-    expect(emailCopyLink).toBeInTheDocument();
-    expect(emailCopyLink).toHaveTextContent(mockFaqData.contacts.email);
   });
 
   it('should render email as link on mobile', () => {
