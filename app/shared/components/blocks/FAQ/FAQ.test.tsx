@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import Faq from './FAQ';
@@ -126,22 +126,20 @@ describe('FAQ component', () => {
     }
   });
 
-  it('should copy phone when clicking CopyLink', async () => {
+  it('should copy phone when clicking CopyLink', () => {
     render(<Faq data={mockFaqData} />);
 
     const copyLinks = screen.getAllByTestId('mock-copy-link');
     const phoneCopyLink = copyLinks.find((link) => link.textContent === mockFaqData.contacts.phone);
 
-    await act(async () => {
-      if (phoneCopyLink) {
-        fireEvent.click(phoneCopyLink);
-      }
-    });
+    if (phoneCopyLink) {
+      fireEvent.click(phoneCopyLink);
+    }
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.phone);
   });
 
-  it('should copy email when clicking email CopyLink on desktop', async () => {
+  it('should copy email when clicking email CopyLink on desktop', () => {
     render(<Faq data={mockFaqData} />);
 
     const copyLinks = screen.getAllByTestId('mock-copy-link');
@@ -149,11 +147,9 @@ describe('FAQ component', () => {
 
     expect(emailCopyLink).toBeInTheDocument();
 
-    await act(async () => {
-      if (emailCopyLink) {
-        fireEvent.click(emailCopyLink);
-      }
-    });
+    if (emailCopyLink) {
+      fireEvent.click(emailCopyLink);
+    }
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockFaqData.contacts.email);
   });
