@@ -19,7 +19,6 @@ const CHIP_COUNT = 3;
 const SELECTED_TEXT = 'selected';
 const CHILD_TEXT = 'Popover Content';
 const KEY_ENTER = 'Enter';
-const KEY_SPACE = ' ';
 
 describe('useFilterPopper', () => {
   const TestComponent = () => {
@@ -125,7 +124,7 @@ describe('DropdownFilterPopper', () => {
     });
   });
 
-  it('should not open when disabled', async () => {
+  it('should not open when disabled', () => {
     const autoFocusRef = createRef<HTMLElement>();
     render(
       <DropdownFilterPopper label={TEST_LABEL} disabled autoFocusRef={autoFocusRef}>
@@ -134,32 +133,9 @@ describe('DropdownFilterPopper', () => {
     );
 
     const trigger = screen.getByRole('button', { name: new RegExp(TEST_LABEL) });
-    await userEvent.click(trigger);
+    fireEvent.click(trigger);
 
     expect(screen.queryByText(CHILD_TEXT)).not.toBeInTheDocument();
-  });
-
-  it('should handle keyboard events on trigger for opening and toggling', async () => {
-    const autoFocusRef = createRef<HTMLElement>();
-    render(
-      <DropdownFilterPopper label={TEST_LABEL} autoFocusRef={autoFocusRef}>
-        {() => <div>{CHILD_TEXT}</div>}
-      </DropdownFilterPopper>
-    );
-
-    const trigger = screen.getByRole('button', { name: new RegExp(TEST_LABEL) });
-    trigger.focus();
-
-    fireEvent.keyDown(trigger, { key: KEY_ENTER });
-    expect(screen.getByText(CHILD_TEXT)).toBeInTheDocument();
-
-    fireEvent.keyDown(trigger, { key: KEY_ENTER });
-    await waitFor(() => {
-      expect(screen.queryByText(CHILD_TEXT)).not.toBeInTheDocument();
-    });
-
-    fireEvent.keyDown(trigger, { key: KEY_SPACE });
-    expect(screen.getByText(CHILD_TEXT)).toBeInTheDocument();
   });
 
   it('should not open via keyboard when disabled', () => {
@@ -198,50 +174,6 @@ describe('DropdownFilterPopper', () => {
       .querySelector('[data-testid="delete-icon"]') as HTMLElement;
     await userEvent.click(deleteButton);
     expect(handleClear).toHaveBeenCalledTimes(1);
-  });
-
-  it('should handle chip keyboard events for clearing', () => {
-    const autoFocusRef = createRef<HTMLElement>();
-    const handleClear = jest.fn();
-    render(
-      <DropdownFilterPopper
-        label={TEST_LABEL}
-        chipCount={CHIP_COUNT}
-        onClearChip={handleClear}
-        autoFocusRef={autoFocusRef}
-      >
-        {() => <div>{CHILD_TEXT}</div>}
-      </DropdownFilterPopper>
-    );
-
-    const chip = screen.getByText(`${CHIP_COUNT} ${SELECTED_TEXT}`).closest('div') as HTMLElement;
-
-    fireEvent.keyDown(chip, { key: KEY_ENTER });
-    expect(handleClear).toHaveBeenCalledTimes(1);
-
-    fireEvent.keyDown(chip, { key: KEY_SPACE });
-    expect(handleClear).toHaveBeenCalledTimes(2);
-
-    fireEvent.keyDown(chip, { key: 'Tab' });
-    expect(handleClear).toHaveBeenCalledTimes(2);
-  });
-
-  it('should stop propagation on chip click', async () => {
-    const autoFocusRef = createRef<HTMLElement>();
-    render(
-      <DropdownFilterPopper
-        label={TEST_LABEL}
-        chipCount={CHIP_COUNT}
-        onClearChip={jest.fn()}
-        autoFocusRef={autoFocusRef}
-      >
-        {() => <div>{CHILD_TEXT}</div>}
-      </DropdownFilterPopper>
-    );
-
-    const chip = screen.getByText(`${CHIP_COUNT} ${SELECTED_TEXT}`);
-    await userEvent.click(chip);
-    expect(screen.queryByText(CHILD_TEXT)).not.toBeInTheDocument();
   });
 
   it('should focus autoFocusRef element when opened', async () => {

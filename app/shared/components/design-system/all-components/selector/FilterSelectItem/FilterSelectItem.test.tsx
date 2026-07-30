@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createRef } from 'react';
+import { act, createRef } from 'react';
 
 import FilterSelectItem from './FilterSelectItem';
 
@@ -29,14 +29,18 @@ describe('FilterSelectItem', () => {
   it('should call onClick when the Box is clicked', async () => {
     const handleClick = jest.fn();
     render(<FilterSelectItem label={TEST_LABEL} onClick={handleClick} />);
-    await userEvent.click(screen.getByRole('option'));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option'));
+    });
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('should not call onClick when disabled and clicked', async () => {
     const handleClick = jest.fn();
     render(<FilterSelectItem label={TEST_LABEL} disabled onClick={handleClick} />);
-    await userEvent.click(screen.getByRole('option'));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option'));
+    });
     expect(handleClick).not.toHaveBeenCalled();
   });
 
@@ -45,13 +49,19 @@ describe('FilterSelectItem', () => {
     render(<FilterSelectItem label={TEST_LABEL} onClick={handleClick} />);
     const option = screen.getByRole('option');
 
-    fireEvent.keyDown(option, { key: KEY_ENTER });
+    act(() => {
+      fireEvent.keyDown(option, { key: KEY_ENTER });
+    });
     expect(handleClick).toHaveBeenCalledTimes(1);
 
-    fireEvent.keyDown(option, { key: KEY_SPACE });
+    act(() => {
+      fireEvent.keyDown(option, { key: KEY_SPACE });
+    });
     expect(handleClick).toHaveBeenCalledTimes(2);
 
-    fireEvent.keyDown(option, { key: KEY_TAB });
+    act(() => {
+      fireEvent.keyDown(option, { key: KEY_TAB });
+    });
     expect(handleClick).toHaveBeenCalledTimes(2);
   });
 
@@ -60,7 +70,9 @@ describe('FilterSelectItem', () => {
     render(<FilterSelectItem label={TEST_LABEL} disabled onClick={handleClick} />);
     const option = screen.getByRole('option');
 
-    fireEvent.keyDown(option, { key: KEY_ENTER });
+    act(() => {
+      fireEvent.keyDown(option, { key: KEY_ENTER });
+    });
     expect(handleClick).not.toHaveBeenCalled();
   });
 

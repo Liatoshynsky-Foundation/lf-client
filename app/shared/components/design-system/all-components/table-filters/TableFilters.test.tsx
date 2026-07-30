@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import { TableFilters } from './TableFilters';
@@ -136,5 +136,58 @@ describe('TableFilters', () => {
 
     expect(btn).toHaveAttribute('type', IconButtonVariant.outlined);
     expect(btn).toHaveAttribute('variant', IconButtonColorVariant.Secondary);
+  });
+
+  it('should render row container with correct data-testid and tabIndex', () => {
+    render(<TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />);
+    const row = screen.getByTestId('TableFilters-row');
+
+    expect(row).toBeInTheDocument();
+    expect(row).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('should focus the last focusable element on clear if present', async () => {
+    const filtersWithInput = [
+      {
+        id: 'filter1',
+        element: (
+          <div data-testid="custom-container">
+            <input data-testid="inner-input" />
+          </div>
+        ),
+        isActive: true
+      }
+    ];
+
+    const { rerender } = render(
+      <TableFilters filters={filtersWithInput} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />
+    );
+
+    const clearBtn = screen.getByTestId('TableFilters-clearButton');
+    fireEvent.click(clearBtn);
+
+    // Симулюємо зміни в компоненті після очищення (якщо стейт активних фільтрів оновлюється батьком)
+    rerender(
+      <TableFilters filters={filtersWithInput} isAnyFilterActive={false} onClearAllFilters={onClearAllFilters} />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('inner-input')).toHaveFocus();
+    });
+  });
+
+  it('should fallback focus to row container if no focusable elements are inside', async () => {
+    const { rerender } = render(
+      <TableFilters filters={baseFilters} isAnyFilterActive={true} onClearAllFilters={onClearAllFilters} />
+    );
+
+    const clearBtn = screen.getByTestId('TableFilters-clearButton');
+    fireEvent.click(clearBtn);
+
+    rerender(<TableFilters filters={baseFilters} isAnyFilterActive={false} onClearAllFilters={onClearAllFilters} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('TableFilters-row')).toHaveFocus();
+    });
   });
 });

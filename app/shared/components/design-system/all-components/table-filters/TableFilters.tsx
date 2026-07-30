@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
@@ -29,28 +29,28 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
   const t = useTranslations('filtering');
   const rowRef = useRef<HTMLDivElement>(null);
 
-  const orderedFilters = (() => {
+  const orderedFilters = useMemo(() => {
     const movable = filters.filter((f) => !f.isStatic);
     const sortedMovable = [...movable].sort((a, b) => Number(Boolean(b.isActive)) - Number(Boolean(a.isActive)));
-
     let i = 0;
     return filters.map((f) => (f.isStatic ? f : sortedMovable[i++]));
-  })();
+  }, [filters]);
 
   const handleClear = () => {
-    const focusableElements = rowRef.current?.querySelectorAll('button, input, [tabindex="0"]');
-
-    if (focusableElements && focusableElements.length > 0) {
-      const lastElement = focusableElements[focusableElements.length - 2] as HTMLElement;
-      lastElement?.focus();
-    }
-
     onClearAllFilters?.();
+    requestAnimationFrame(() => {
+      const focusableElements = Array.from(
+        rowRef.current?.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]') ?? []
+      );
+      const fallback = rowRef.current;
+      const target = focusableElements.length > 0 ? focusableElements[focusableElements.length - 1] : fallback;
+      target?.focus();
+    });
   };
 
   return (
     <Box sx={styles.container} data-testid="TableFilters">
-      <Box sx={styles.row} data-testid="TableFilters-row" ref={rowRef}>
+      <Box sx={styles.row} data-testid="TableFilters-row" ref={rowRef} tabIndex={-1}>
         {orderedFilters.map((filter) => (
           <Box key={filter.id} data-testid={`TableFilters-filter-${filter.id}`}>
             {filter.element}
@@ -66,7 +66,6 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
                 variant={IconButtonColorVariant.Secondary}
                 size="medium"
                 onClick={handleClear}
-                sx={{ border: 'none', padding: 0 }}
                 aria-label={t('clearAll')}
               >
                 <Delete />

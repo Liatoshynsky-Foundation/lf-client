@@ -1,4 +1,5 @@
 import { SxProps } from '@mui/material';
+import { CSSProperties } from 'react';
 
 export const styles = {
   root: (variant: 'filled' | 'outlined', disabled: boolean): SxProps => {
@@ -15,40 +16,56 @@ export const styles = {
     }
 
     return {
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       minHeight: '40px',
       gap: '8px',
-      borderRadius: '8px',
+      borderRadius: '28px',
       padding: '6px 8px 6px 16px',
-      cursor: disabled ? 'default' : 'pointer',
-      transition: 'background-color 0.2s',
       typography: 'customSemiBold16',
       textTransform: 'none',
-      outline: 0,
       backgroundColor,
       border: variant === 'outlined' ? '1px solid' : 'none',
       borderColor,
-      '&.Mui-disabled': {
-        cursor: 'default'
-      },
-      '&:focus-visible': {
-        outline: '2px solid'
+      '&:has(> button:focus-visible)': {
+        outline: '1px solid'
       }
     };
   },
+
+  overlayButton: {
+    position: 'absolute',
+    inset: 0,
+    cursor: 'inherit'
+  } satisfies CSSProperties,
+
+  nonInteractive: {
+    pointerEvents: 'none',
+    position: 'relative',
+    zIndex: 1
+  } satisfies CSSProperties,
+
   label: (disabled: boolean): SxProps => ({
     typography: 'customSemiBold16',
     color: disabled ? 'blue.700' : 'black'
   }),
+
   chipContainer: {
+    position: 'relative',
+    zIndex: 1,
     display: 'flex',
     alignItems: 'center',
     gap: '4px'
   },
+
+  chipAboveOverlay: {
+    position: 'relative',
+    zIndex: 2
+  },
+
   dropdownIcon: (disabled: boolean, open: boolean): SxProps => ({
-    cursor: disabled ? 'default' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     display: 'flex',
     alignItems: 'center',
