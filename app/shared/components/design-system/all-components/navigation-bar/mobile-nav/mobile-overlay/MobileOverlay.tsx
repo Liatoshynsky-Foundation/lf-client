@@ -23,6 +23,23 @@ interface MobileMenuOverlayProps {
   socialLinks: LinkIcon[];
 }
 
+const isElementVisible = (element: HTMLElement): boolean => {
+  if (typeof element.checkVisibility === 'function') {
+    return element.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true });
+  }
+
+  let node: HTMLElement | null = element;
+  while (node) {
+    const computed = window.getComputedStyle(node);
+    if (computed.display === 'none' || computed.visibility === 'hidden') {
+      return false;
+    }
+    node = node.parentElement;
+  }
+
+  return true;
+};
+
 const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
   const header = container.closest('header') || document.querySelector('header') || container;
 
@@ -30,11 +47,7 @@ const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
     'button:not([disabled]), a[href]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   return Array.from(header.querySelectorAll<HTMLElement>(selector)).filter((el) => {
-    const isVisibleInLayout = Boolean(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
-    const isNotHiddenInStyle = el.style.display !== 'none' && el.style.visibility !== 'hidden';
-    const isVisible = isVisibleInLayout || isNotHiddenInStyle;
-
-    return isVisible && el.getAttribute('aria-hidden') !== 'true';
+    return isElementVisible(el) && el.getAttribute('aria-hidden') !== 'true';
   });
 };
 

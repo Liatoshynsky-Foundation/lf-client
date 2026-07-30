@@ -3,7 +3,8 @@ const commonCopyLinkBaseStyles = {
   transition: 'color 0.2s ease, outline 0.2s ease',
   lineHeight: '110%',
   textDecoration: 'none',
-  whiteSpace: 'nowrap'
+  wordBreak: 'break-all',
+  overflowWrap: 'break-word'
 };
 
 interface ColorConfig {
