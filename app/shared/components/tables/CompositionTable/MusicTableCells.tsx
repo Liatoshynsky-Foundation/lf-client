@@ -72,9 +72,11 @@ export const renderNameCell = (info: CellContext<Music, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
-export const renderYearCell = (info: CellContext<Music, unknown>) => (
-  <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
-);
+export const renderYearCell = (info: CellContext<Music, unknown>) => {
+  const value = info.getValue<string | number | null | undefined>();
+  if (value == null) return null;
+  return <Typography variant="customMedium16">{value}</Typography>;
+};
 
 export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
   const genres = info.getValue<string[]>() || [];
@@ -211,3 +213,15 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => (
     </Typography>
   </Box>
 );
+
+export const renderOpusYearGroupLabel = (items: Music[]) => {
+  const year = items[0]?.opusYear;
+  if (!year) return null;
+  return <Typography variant="customMedium16">{year}</Typography>;
+};
+
+export const renderOpusGenreGroupLabel = (items: Music[]) => {
+  const genres = items[0]?.opusGenres;
+  if (!genres || genres.length === 0) return null;
+  return <Typography variant="customMedium16">{genres.join(', ')}</Typography>;
+};

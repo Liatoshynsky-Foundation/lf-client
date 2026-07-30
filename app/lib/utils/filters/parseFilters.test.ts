@@ -48,20 +48,17 @@ describe('parseFilters - comprehensive parsing flow verification', () => {
   it('should return empty filters object when neither year nor other filters are present', () => {
     const params = new URLSearchParams('');
     const res = parseFilters(params);
-    expect(res).toEqual({ categories: [], genres: [], author: [], years: { min: 1900, max: currentYear }, search: '' });
+    expect(res).toEqual({ categories: [], author: [], years: { min: 1900, max: currentYear }, search: '' });
   });
 
   it('should extract array configuration lists correctly when multi parameter keys are supplied inside the query text stream', () => {
     const params = new URLSearchParams();
-    params.append('genre', 'romance');
-    params.append('genre', 'jazz');
     params.append('category', 'classic');
     params.append('author', 'liatoshynsky');
     params.append('search', 'symphony');
 
     const res = parseFilters(params);
 
-    expect(res.genres).toEqual(['romance', 'jazz']);
     expect(res.categories).toEqual(['classic']);
     expect(res.author).toEqual(['liatoshynsky']);
     expect(res.search).toBe('symphony');

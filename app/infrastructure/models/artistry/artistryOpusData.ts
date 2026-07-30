@@ -6,7 +6,12 @@ const opusSchema = new mongoose.Schema(
   {
     number: { type: String, required: true, unique: true },
     title: { type: translatedFieldSchema, required: true },
-    releaseYear: { type: Number }
+    releaseYear: { type: mongoose.Schema.Types.Mixed },
+    creationYear: { type: mongoose.Schema.Types.Mixed, required: true, default: null },
+    endYear: { type: mongoose.Schema.Types.Mixed, default: null },
+    status: { type: String, default: null },
+    genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+    genre: { type: String, default: null }
   },
   { timestamps: true }
 );

@@ -47,8 +47,8 @@ export const compositionSort = (compositions: Composition[], reverse: boolean = 
       return (!a.opus ? 1 : -1) * direction;
     }
 
-    if (a.year !== b.year) {
-      return (a.year - b.year) * direction;
+    if ((a.year ?? 0) !== (b.year ?? 0)) {
+      return ((a.year ?? 0) - (b.year ?? 0)) * direction;
     }
 
     if (a.opus && b.opus) {

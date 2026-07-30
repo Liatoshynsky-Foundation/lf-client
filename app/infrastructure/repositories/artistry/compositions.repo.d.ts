@@ -1,15 +1,14 @@
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
-import type { CategoryDTO, CompositionDTO, CompositionTitlesDTO, GenreDTO } from '~/domain/dto/composition.dto';
+import type { CategoryDTO, CompositionDTO, CompositionTitlesDTO } from '~/domain/dto/composition.dto';
 
 export type YearRange = { minYear: number; maxYear: number };
 export type CompositionQueryFilters = {
-  genres?: string[];
   years?: { min?: number; max?: number };
 };
 
 export interface CompositionRepository {
-  getAllGenres(): Promise<GenreDTO[]>;
+  getAllGenres(): Promise<string[]>;
   getAllCategories(): Promise<CategoryDTO[]>;
   getAllCompositionTitles(filters: CompositionsTitleFilters): Promise<CompositionTitlesDTO[]>;
   getCompositionsYearRange(): Promise<YearRange>;

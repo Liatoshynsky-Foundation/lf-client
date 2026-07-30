@@ -10,9 +10,11 @@ import {
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
+  renderOpusGenreGroupLabel,
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
+  renderOpusYearGroupLabel,
   RenderPlayCell,
   renderYearCell,
   RenderYearHeader
@@ -118,6 +120,17 @@ describe('MusicTableCells', () => {
 
       expect(getByText('Poem about the Forest')).toBeInTheDocument();
       expect(getByText('1918')).toBeInTheDocument();
+    });
+
+    it('should render null for year cell when value is null or undefined', () => {
+      const yearCellNull = renderYearCell({ getValue: () => null } as CellContext<Music, unknown>);
+      const yearCellUndefined = renderYearCell({ getValue: () => undefined } as CellContext<Music, unknown>);
+
+      const { container: container1 } = render(<>{yearCellNull}</>);
+      expect(container1).toBeEmptyDOMElement();
+
+      const { container: container2 } = render(<>{yearCellUndefined}</>);
+      expect(container2).toBeEmptyDOMElement();
     });
 
     it('should render genre cell joined with commas', () => {
@@ -316,6 +329,32 @@ describe('MusicTableCells', () => {
     it('should render opus title label', () => {
       render(renderOpusTitleGroupLabel([mockMusic]));
       expect(screen.getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
+    });
+
+    it('should render opus year label when present', () => {
+      const musicWithYear: Music = { ...mockMusic, opusYear: '1918–1920' };
+      render(renderOpusYearGroupLabel([musicWithYear]));
+      expect(screen.getByText('1918–1920')).toBeInTheDocument();
+    });
+
+    it('should return null for opus year label when absent', () => {
+      const { container } = render(<>{renderOpusYearGroupLabel([mockMusic])}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should render opus genres joined by comma when present', () => {
+      const musicWithGenres: Music = { ...mockMusic, opusGenres: ['Chamber', 'Symphonic'] };
+      render(renderOpusGenreGroupLabel([musicWithGenres]));
+      expect(screen.getByText('Chamber, Symphonic')).toBeInTheDocument();
+    });
+
+    it('should return null for opus genres when absent or empty', () => {
+      const { container: container1 } = render(<>{renderOpusGenreGroupLabel([mockMusic])}</>);
+      expect(container1).toBeEmptyDOMElement();
+
+      const musicWithEmptyGenres: Music = { ...mockMusic, opusGenres: [] };
+      const { container: container2 } = render(<>{renderOpusGenreGroupLabel([musicWithEmptyGenres])}</>);
+      expect(container2).toBeEmptyDOMElement();
     });
   });
 
