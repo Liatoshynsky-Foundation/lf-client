@@ -48,9 +48,7 @@ describe('FilterSelect', () => {
   it('should open dropdown when clicked', async () => {
     render(<FilterSelect label="Dropdown" options={mockOptions} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Dropdown' }));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Dropdown' }));
 
     await waitFor(() => {
       mockOptions.forEach(({ label }) => {
@@ -62,13 +60,8 @@ describe('FilterSelect', () => {
   it('should add selected option as chip', async () => {
     render(<FilterSelect label="Select" options={mockOptions} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Select' }));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('First'));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Select' }));
+    fireEvent.click(screen.getByText('First'));
 
     await waitFor(() => {
       expect(screen.getByText('1 обрано')).toBeInTheDocument();
@@ -82,9 +75,7 @@ describe('FilterSelect', () => {
       expect(screen.getByText('1 обрано')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('delete-icon'));
-    });
+    fireEvent.click(screen.getByTestId('delete-icon'));
 
     await waitFor(() => {
       expect(screen.queryByText('1 обрано')).not.toBeInTheDocument();
@@ -95,13 +86,8 @@ describe('FilterSelect', () => {
     const onAdd = jest.fn();
     render(<FilterSelect label="Select" options={mockOptions} onAdd={onAdd} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Select' }));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Second'));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Select' }));
+    fireEvent.click(screen.getByText('Second'));
 
     await waitFor(() => {
       expect(onAdd).toHaveBeenCalledWith('second', 'Second', ['second']);
@@ -112,17 +98,9 @@ describe('FilterSelect', () => {
     const onRemove = jest.fn();
     render(<FilterSelect label="Remove" options={mockOptions} defaultValues={['first']} onRemove={onRemove} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('First'));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('trash-icon'));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
+    fireEvent.click(screen.getByText('First'));
+    fireEvent.click(screen.getByTestId('trash-icon'));
 
     await waitFor(() => {
       expect(onRemove).toHaveBeenCalledWith('first', 'First', []);
@@ -133,13 +111,8 @@ describe('FilterSelect', () => {
     const onRemove = jest.fn();
     render(<FilterSelect label="Select" options={mockOptions} defaultValues={['first']} onRemove={onRemove} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Select' }));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('clear'));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Select' }));
+    fireEvent.click(screen.getByText('clear'));
 
     await waitFor(() => {
       expect(screen.queryByText('1 обрано')).not.toBeInTheDocument();
@@ -165,9 +138,7 @@ describe('FilterSelect', () => {
     render(<FilterSelect label="Disabled" options={mockOptions} disabled />);
     const button = screen.getByRole('button', { name: 'Disabled' });
 
-    await waitFor(() => {
-      fireEvent.click(button);
-    });
+    fireEvent.click(button);
 
     await waitFor(() => {
       expect(screen.queryByText('First')).not.toBeInTheDocument();
@@ -182,15 +153,10 @@ describe('FilterSelect', () => {
 
     render(<FilterSelect label="Select" options={mockOptions} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Select' }));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Select' }));
 
     const backdrop = document.querySelector('.MuiBackdrop-root') as HTMLElement;
-
-    await waitFor(() => {
-      fireEvent.click(backdrop);
-    });
+    fireEvent.click(backdrop);
 
     await waitFor(() => {
       expect(rafSpy).toHaveBeenCalled();
@@ -205,25 +171,18 @@ describe('FilterSelect', () => {
       <FilterSelect label="Select" options={mockOptions} defaultValues={['first']} maxSelections={1} onAdd={onAdd} />
     );
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'Select' }));
-    });
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Second'));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Select' }));
+    fireEvent.click(screen.getByText('Second'));
 
     await waitFor(() => {
       expect(onAdd).not.toHaveBeenCalled();
     });
   });
 
-  it('should stop propagation when chip itself is clicked to cover ', async () => {
+  it('should stop propagation when chip itself is clicked to cover', async () => {
     render(<FilterSelect label="Select" options={mockOptions} defaultValues={['first']} />);
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('1 обрано'));
-    });
+    fireEvent.click(screen.getByText('1 обрано'));
 
     await waitFor(() => {
       expect(screen.getByText('1 обрано')).toBeInTheDocument();
@@ -234,17 +193,13 @@ describe('FilterSelect', () => {
     render(<FilterSelect label="Select" options={mockOptions} />);
     const triggerButton = screen.getByRole('button', { name: 'Select' });
 
-    await waitFor(() => {
-      fireEvent.click(triggerButton);
-    });
+    fireEvent.click(triggerButton);
 
     await waitFor(() => {
       expect(screen.getByText('First')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      fireEvent.click(triggerButton);
-    });
+    fireEvent.click(triggerButton);
 
     await waitFor(() => {
       expect(screen.queryByText('First')).not.toBeInTheDocument();

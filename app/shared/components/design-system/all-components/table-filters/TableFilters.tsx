@@ -43,7 +43,7 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
         rowRef.current?.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]') ?? []
       );
       const fallback = rowRef.current;
-      const target = focusableElements.length > 0 ? focusableElements[focusableElements.length - 1] : fallback;
+      const target = focusableElements.length > 0 ? focusableElements.at(-1) : fallback;
       target?.focus();
     });
   };

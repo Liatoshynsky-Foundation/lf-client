@@ -166,7 +166,6 @@ describe('TableFilters', () => {
     const clearBtn = screen.getByTestId('TableFilters-clearButton');
     fireEvent.click(clearBtn);
 
-    // Симулюємо зміни в компоненті після очищення (якщо стейт активних фільтрів оновлюється батьком)
     rerender(
       <TableFilters filters={filtersWithInput} isAnyFilterActive={false} onClearAllFilters={onClearAllFilters} />
     );
