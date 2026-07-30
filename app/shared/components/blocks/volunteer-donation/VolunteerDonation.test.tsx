@@ -2,34 +2,23 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import VolunteerDonation from './VolunteerDonation';
-import { volunteerDonationData } from './volunteerDonationData';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
-  useLocale: () => 'en'
+  useTranslations: () => (key: string) => key
 }));
 
 jest.mock('~/ds-components/copy-link/CopyLink', () => ({
   __esModule: true,
-  default: (props: any) => {
-    const val = props.text || props.value || props.copyText || '';
-    return (
-      <div data-testid="mock-copy-link" data-copy-value={val}>
-        {props.children}
-        <span>{val}</span>
-      </div>
-    );
-  }
-}));
-
-jest.mock('~/components/colored-svg/ColoredSvg', () => ({
-  __esModule: true,
-  default: () => <svg data-testid="colored-svg" />
+  default: (props: any) => (
+    <div data-testid="mock-copy-link" data-copy-value={props.value} data-hint={props.hint}>
+      {props.value}
+    </div>
+  )
 }));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
   __esModule: true,
-  default: ({ src, alt, caption }: { src: string; alt: string; caption: string }) => (
+  default: ({ src, alt, caption }: { src: string; alt: string; caption?: string }) => (
     <div data-testid="image-with-caption">
       <img src={src} alt={alt} />
       {caption && <span>{caption}</span>}
@@ -44,83 +33,86 @@ jest.mock('~/components/section-title/SectionTitle', () => ({
   )
 }));
 
-describe('VolunteerDonation Coverage Fix', () => {
-  const mockProps = {
-    title: { en: 'Support Our Cause', uk: 'Підтримайте нашу справу' },
+describe('VolunteerDonation', () => {
+  const baseData = {
+    title: 'Support Our Cause',
     paymentMethods: [
-      { label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' },
-      { label: { en: 'Bank Transfer', uk: 'Банківський переказ' }, value: 'bank@example.com' }
+      { label: 'PayPal', value: 'paypal@example.com' },
+      { label: 'Bank Transfer', value: 'bank@example.com' }
     ],
     imageSrc: '/images/volunteer.jpg',
     caption: 'Volunteer making a difference'
   };
 
-  it('should render correctly with REAL data from volunteerDonationData.ts', () => {
-    const normalizedVolunteerDonationData = {
-      ...volunteerDonationData,
-      title: { en: volunteerDonationData.title, uk: volunteerDonationData.title },
-      paymentMethods: volunteerDonationData.paymentMethods.map((method) => ({
-        ...method,
-        label: { en: method.label, uk: method.label }
-      }))
-    };
+  it('should render nothing when no data is provided', () => {
+    const { container } = render(<VolunteerDonation />);
+    expect(container).toBeEmptyDOMElement();
+  });
 
-    render(<VolunteerDonation {...normalizedVolunteerDonationData} />);
+  it('should render a string title', () => {
+    render(<VolunteerDonation data={baseData} />);
+    expect(screen.getByTestId('section-title')).toHaveTextContent('Support Our Cause');
+  });
 
-    expect(screen.getByTestId('section-title')).toHaveTextContent(volunteerDonationData.title);
-    expect(screen.getByText(/Ukraine.resisting@gmail.com/i)).toBeInTheDocument();
-
-    const image = screen.getByRole('img');
-    expect(image).toHaveAttribute('src', volunteerDonationData.imageSrc);
+  it('should render an object title', () => {
+    const data = { ...baseData, title: { en: 'Support Our Cause', uk: 'Підтримайте нашу справу' } };
+    render(<VolunteerDonation data={data} />);
+    expect(screen.getByTestId('section-title')).toHaveTextContent('Support Our Cause');
   });
 
   it('should render all payment methods', () => {
-    render(<VolunteerDonation {...mockProps} />);
+    render(<VolunteerDonation data={baseData} />);
     expect(screen.getByText('PayPal:')).toBeInTheDocument();
-    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Bank Transfer:')).toBeInTheDocument();
   });
 
-  it('should render copy buttons for each payment method', () => {
-    render(<VolunteerDonation {...mockProps} />);
-    const copyButtons = screen.getAllByTestId('mock-copy-link');
-    expect(copyButtons).toHaveLength(2);
-    expect(copyButtons[0]).toHaveAttribute('data-copy-value', 'paypal@example.com');
+  it('should render a copy link for each payment method', () => {
+    render(<VolunteerDonation data={baseData} />);
+    const copyLinks = screen.getAllByTestId('mock-copy-link');
+    expect(copyLinks).toHaveLength(2);
+    expect(copyLinks[0]).toHaveAttribute('data-copy-value', 'paypal@example.com');
   });
 
-  it('should handle empty payment methods array', () => {
-    const propsWithNoMethods = { ...mockProps, paymentMethods: [] };
-    render(<VolunteerDonation {...propsWithNoMethods} />);
+  it('should handle an empty payment methods array', () => {
+    render(<VolunteerDonation data={{ ...baseData, paymentMethods: [] }} />);
     expect(screen.queryByTestId('mock-copy-link')).not.toBeInTheDocument();
   });
 
-  it('should render single payment method', () => {
-    const propsWithOneMethod = {
-      ...mockProps,
-      paymentMethods: [{ label: { en: 'PayPal', uk: 'PayPal' }, value: 'paypal@example.com' }]
-    };
-    render(<VolunteerDonation {...propsWithOneMethod} />);
-
-    expect(screen.getByText('PayPal:')).toBeInTheDocument();
-    expect(screen.getByText('paypal@example.com')).toBeInTheDocument();
-    const copyButtons = screen.getAllByTestId('mock-copy-link');
-    expect(copyButtons).toHaveLength(1);
-  });
-
-  it('should use title as image alt text', () => {
-    const customTitle = { en: 'Custom Title', uk: 'Користувацький заголовок' };
-
-    render(<VolunteerDonation {...mockProps} title={customTitle} />);
-
+  it('should use imageSrc as-is when it starts with a slash', () => {
+    render(<VolunteerDonation data={baseData} />);
     const image = screen.getByRole('img');
-
-    expect(image).toHaveAttribute('alt', customTitle.en);
+    expect(image).toHaveAttribute('src', baseData.imageSrc);
+    expect(image).toHaveAttribute('alt', 'Support Our Cause');
   });
 
-  it('should render image without caption when caption is not provided', () => {
-    const propsWithoutCaption = { ...mockProps, caption: undefined };
+  it('should prefer image.generatedSrc, then image.src, over imageSrc', () => {
+    const data = {
+      ...baseData,
+      image: { src: '/images/original.jpg', generatedSrc: '/images/generated.jpg' }
+    };
+    render(<VolunteerDonation data={data} />);
+    expect(screen.getByRole('img')).toHaveAttribute('src', '/images/generated.jpg');
+  });
 
-    render(<VolunteerDonation {...propsWithoutCaption} />);
+  it('should prefix a relative image path with the storage base url', () => {
+    const data = { ...baseData, imageSrc: 'relative-photo.jpg' };
+    render(<VolunteerDonation data={data} />);
+    expect(screen.getByRole('img')).toHaveAttribute('src', '/photosrelative-photo.jpg');
+  });
 
+  it('should render no image block when no image source is available', () => {
+    const data = { ...baseData, imageSrc: undefined };
+    render(<VolunteerDonation data={data} />);
+    expect(screen.queryByTestId('image-with-caption')).not.toBeInTheDocument();
+  });
+
+  it('should render a string caption', () => {
+    render(<VolunteerDonation data={baseData} />);
+    expect(screen.getByText('Volunteer making a difference')).toBeInTheDocument();
+  });
+
+  it('should render no caption when caption is not a string', () => {
+    render(<VolunteerDonation data={{ ...baseData, caption: undefined }} />);
     expect(screen.queryByText('Volunteer making a difference')).not.toBeInTheDocument();
   });
 });

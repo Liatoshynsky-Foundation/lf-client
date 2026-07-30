@@ -19,11 +19,15 @@ jest.mock('~/validators/pagesSchemas/pages/cooperation.schema', () => ({
 }));
 
 jest.mock('~/validators/constants', () => {
+  const { z } = jest.requireActual('zod');
   const NoOp = (s: any) => s;
   return {
     NoTime: NoOp,
     NoIDSchema: NoOp,
-    NoPageType: NoOp
+    NoPageType: NoOp,
+    translatedFieldSchema: z.any(),
+    translatedTipTapSchema: z.any(),
+    mongoObjectIdSchema: z.any()
   };
 });
 
