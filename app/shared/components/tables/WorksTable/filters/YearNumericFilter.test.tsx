@@ -3,15 +3,36 @@ import React from 'react';
 
 import { YearNumericFilter } from './YearNumericFilter';
 
-jest.mock('~/ds-components/dropdown-menu/DropdownMenu', () => ({
-  __esModule: true,
-  default: ({ open, menuList, onClose }: any) =>
-    open ? (
-      <div data-testid="dropdown-menu">
-        <button onClick={onClose}>Close Menu</button>
-        <div data-testid="menu-content">{menuList}</div>
+jest.mock('~/shared/components/design-system/all-components/dropdown-filter-popper/DropdownFilterPopper', () => ({
+  DropdownFilterPopper: ({ label, children, autoFocusRef }: any) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const triggerRef = React.useRef<HTMLDivElement | null>(null);
+
+    const handleClose = () => {
+      setIsOpen(false);
+      if (triggerRef.current) {
+        triggerRef.current.focus();
+      }
+    };
+
+    return (
+      <div data-testid="dropdown-filter-popper">
+        <div ref={triggerRef} role="button" tabIndex={0} aria-expanded={isOpen} onClick={() => setIsOpen(!isOpen)}>
+          <p>{label}</p>
+          <img alt="dropdown" src="/icons/chevron-down.svg" />
+        </div>
+        {isOpen && (
+          <div data-testid="dropdown-menu" role="dialog" aria-label={label}>
+            <button onClick={handleClose}>Close Menu</button>
+            {children({
+              onClose: handleClose,
+              firstFieldRef: autoFocusRef
+            })}
+          </div>
+        )}
       </div>
-    ) : null
+    );
+  }
 }));
 
 jest.mock('~/ds-components/filtering/numeric/NumericFiltering', () => ({
