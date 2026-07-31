@@ -98,7 +98,7 @@ export const styles = {
     textDecoration: 'none !important',
     background: 'transparent !important',
 
-    '&:focus, &:focus-visible': {
+    '&:focus-visible': {
       outline: 'none !important',
       boxShadow: '0 0 0 2px #631B2B !important',
       color: 'burgundy.700 !important',

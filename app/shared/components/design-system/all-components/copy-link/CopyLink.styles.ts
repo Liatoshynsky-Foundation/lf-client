@@ -110,7 +110,7 @@ export const styles = {
     cursor: 'pointer',
     whiteSpace: 'nowrap',
 
-    '&:focus, &:focus-visible': {
+    '&:focus-visible': {
       outline: '2px solid #631B2B',
       outlineOffset: '2px'
     }
