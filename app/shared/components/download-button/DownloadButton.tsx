@@ -9,6 +9,7 @@ import Button from '~/ds-components/button/Button';
 
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { downloadWithAnchor } from '~/utils/downloadFile';
+import { getStorageFileEndpoint } from '~/utils/storageFileEndpoint';
 
 interface DownloadButtonProps {
   folderName: string;
@@ -17,12 +18,12 @@ interface DownloadButtonProps {
 
 const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
   const t = useTranslations('table.buttons');
-  const fileFromBlobStorageUrl = `${ApiRoutes.BLOB_URL}?folderName=${folderName}&blobName=${fileName}`;
+  const storageFileUrl = getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, folderName, fileName);
 
   return (
     <Box>
       <Button
-        onClick={() => downloadWithAnchor(fileFromBlobStorageUrl, fileName)}
+        onClick={() => downloadWithAnchor(storageFileUrl, fileName)}
         size={'medium'}
         variant={'outlined'}
         endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}

@@ -6,7 +6,8 @@ namespace NodeJS {
     MONGO_DB: string;
     MONGO_HOST: string;
     MONGO_PORT: string;
-    AZURE_SAS_URL: string;
+    STORAGE_BASE_URL?: string;
+    NEXT_PUBLIC_STORAGE_BASE_URL?: string;
     MERCHANT_ACCOUNT: string;
     MERCHANT_SECRET_KEY: string;
     DOMAIN_NAME: string;

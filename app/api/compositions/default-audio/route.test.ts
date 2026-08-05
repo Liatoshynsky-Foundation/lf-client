@@ -92,6 +92,26 @@ describe('Default composition audio route', () => {
     expect(response.headers.get('Accept-Ranges')).toBe('bytes');
   });
 
+  it('should default accept-ranges to bytes when R2 omits it', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response('audio-data', {
+        status: 200,
+        headers: {
+          'Content-Type': 'audio/mpeg'
+        }
+      })
+    );
+
+    const response = await GET({ headers: { get: () => null } } as unknown as Request);
+
+    expect(fetchMock).toHaveBeenCalledWith(DEFAULT_COMPOSITION_SOURCE_URL, {
+      method: 'GET',
+      headers: {},
+      next: { revalidate: 0 }
+    });
+    expect(response.headers.get('Accept-Ranges')).toBe('bytes');
+  });
+
   it('should return 502 when the R2 request fails', async () => {
     fetchMock.mockRejectedValueOnce(new Error('R2 unavailable'));
 

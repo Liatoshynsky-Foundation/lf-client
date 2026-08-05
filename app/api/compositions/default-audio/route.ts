@@ -1,4 +1,5 @@
 import { DEFAULT_COMPOSITION_SOURCE_URL } from '~/constants/audioPlayer';
+
 import logger from '~/middleware/logger/logger';
 
 const AUDIO_CACHE_CONTROL = 'public, max-age=604800, immutable';
