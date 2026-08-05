@@ -37,9 +37,13 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
     </Typography>
   );
 
-  const imageAltText = (
-    image ? (isTipTapDoc(image.alt) ? extractTextFromTipTap(image.alt) : (image.alt ?? '')) : ''
-  ) as string;
+  const getAltText = (img: typeof image): string => {
+    if (!img) return '';
+    if (isTipTapDoc(img.alt)) return extractTextFromTipTap(img.alt) as string;
+    return (img.alt ?? '') as string;
+  };
+
+  const imageAltText = getAltText(image);
 
   return (
     <Box sx={styles.container} data-testid="FoundationInfo">
