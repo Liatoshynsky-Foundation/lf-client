@@ -12,7 +12,8 @@ const copyHeader = (source: Headers, target: Headers, name: string) => {
   }
 };
 
-const getCacheControl = (status: number) => (status === 200 || status === 206 ? AUDIO_CACHE_CONTROL : ERROR_CACHE_CONTROL);
+const getCacheControl = (status: number) =>
+  status === 200 || status === 206 ? AUDIO_CACHE_CONTROL : ERROR_CACHE_CONTROL;
 
 export async function GET(request: Request) {
   try {
