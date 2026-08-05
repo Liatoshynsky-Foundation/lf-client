@@ -269,6 +269,16 @@ describe('compositionsRepository', () => {
       (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
       await compositionsRepository.getAllCompositions(undefined, { years: { min: 1900, max: 2000 } });
       expect(Compositions.find).toHaveBeenCalled();
+      expect(Opus.find).toHaveBeenCalledWith({
+        status: { $ne: 'draft' },
+        $or: [
+          { creationYear: { $gte: '1900', $lte: '2000' } },
+          { creationYear: { $gte: 1900, $lte: 2000 } },
+          { creationYear: null, releaseYear: { $gte: 1900, $lte: 2000 } },
+          { endYear: { $gte: '1900', $lte: '2000' } },
+          { endYear: { $gte: 1900, $lte: 2000 } }
+        ]
+      });
     });
     it('should sort by num when prefix is equal but num differs (same rest)', async () => {
       const makeComp = (id: string, number: string) => ({
