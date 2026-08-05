@@ -108,6 +108,7 @@ describe('Storage file route', () => {
     expect(response.status).toBe(206);
     expect(response.headers.get('Content-Type')).toBe('audio/mpeg');
     expect(response.headers.get('Content-Range')).toBe('bytes 0-41/42');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
   });
 
   it('should stream without range headers and default missing upstream headers', async () => {
@@ -133,6 +134,27 @@ describe('Storage file route', () => {
     expect(response.headers.get('Content-Length')).toBeNull();
     expect(response.headers.get('Content-Range')).toBeNull();
     expect(response.headers.get('Accept-Ranges')).toBe('bytes');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
+  });
+
+  it('should not cache R2 error responses as immutable', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response('too many requests', {
+        status: 429,
+        statusText: 'Too Many Requests',
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      })
+    );
+
+    const response = await GET({
+      url: 'http://localhost/api/storage-file?folderName=photos&fileName=poster.png',
+      headers: { get: () => null }
+    } as unknown as Request);
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get('Cache-Control')).toBe('no-store');
   });
 
   it('should return validation errors for invalid query params', async () => {

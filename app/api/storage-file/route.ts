@@ -6,6 +6,7 @@ import logger from '~/middleware/logger/logger';
 import { zStorageFileQuerySchema } from '~/validators/queryParams.schema';
 
 const STORAGE_CACHE_CONTROL = 'public, max-age=604800, immutable';
+const ERROR_CACHE_CONTROL = 'no-store';
 
 const copyHeader = (source: Headers, target: Headers, name: string) => {
   const value = source.get(name);
@@ -13,6 +14,9 @@ const copyHeader = (source: Headers, target: Headers, name: string) => {
     target.set(name, value);
   }
 };
+
+const getCacheControl = (status: number) =>
+  status === 200 || status === 206 ? STORAGE_CACHE_CONTROL : ERROR_CACHE_CONTROL;
 
 const getStorageBaseUrl = () => process.env.STORAGE_BASE_URL ?? process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
 
@@ -58,7 +62,7 @@ export async function GET(request: Request) {
     copyHeader(storageResponse.headers, headers, 'Content-Length');
     copyHeader(storageResponse.headers, headers, 'Content-Range');
     headers.set('Accept-Ranges', storageResponse.headers.get('Accept-Ranges') ?? 'bytes');
-    headers.set('Cache-Control', STORAGE_CACHE_CONTROL);
+    headers.set('Cache-Control', getCacheControl(storageResponse.status));
 
     return new Response(storageResponse.body, {
       status: storageResponse.status,

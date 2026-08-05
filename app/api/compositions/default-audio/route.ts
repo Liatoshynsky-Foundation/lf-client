@@ -3,6 +3,7 @@ import { DEFAULT_COMPOSITION_SOURCE_URL } from '~/constants/audioPlayer';
 import logger from '~/middleware/logger/logger';
 
 const AUDIO_CACHE_CONTROL = 'public, max-age=604800, immutable';
+const ERROR_CACHE_CONTROL = 'no-store';
 
 const copyHeader = (source: Headers, target: Headers, name: string) => {
   const value = source.get(name);
@@ -10,6 +11,8 @@ const copyHeader = (source: Headers, target: Headers, name: string) => {
     target.set(name, value);
   }
 };
+
+const getCacheControl = (status: number) => (status === 200 || status === 206 ? AUDIO_CACHE_CONTROL : ERROR_CACHE_CONTROL);
 
 export async function GET(request: Request) {
   try {
@@ -25,7 +28,7 @@ export async function GET(request: Request) {
     copyHeader(audioResponse.headers, headers, 'Content-Length');
     copyHeader(audioResponse.headers, headers, 'Content-Range');
     headers.set('Accept-Ranges', audioResponse.headers.get('Accept-Ranges') ?? 'bytes');
-    headers.set('Cache-Control', AUDIO_CACHE_CONTROL);
+    headers.set('Cache-Control', getCacheControl(audioResponse.status));
 
     return new Response(audioResponse.body, {
       status: audioResponse.status,

@@ -90,6 +90,7 @@ describe('Default composition audio route', () => {
     expect(response.headers.get('Content-Type')).toBe('audio/mpeg');
     expect(response.headers.get('Content-Range')).toBe('bytes 0-41/42');
     expect(response.headers.get('Accept-Ranges')).toBe('bytes');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
   });
 
   it('should default accept-ranges to bytes when R2 omits it', async () => {
@@ -110,6 +111,24 @@ describe('Default composition audio route', () => {
       next: { revalidate: 0 }
     });
     expect(response.headers.get('Accept-Ranges')).toBe('bytes');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
+  });
+
+  it('should not cache R2 error responses as immutable', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response('not-found', {
+        status: 404,
+        statusText: 'Not Found',
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      })
+    );
+
+    const response = await GET({ headers: { get: () => null } } as unknown as Request);
+
+    expect(response.status).toBe(404);
+    expect(response.headers.get('Cache-Control')).toBe('no-store');
   });
 
   it('should return 502 when the R2 request fails', async () => {
