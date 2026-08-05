@@ -17,7 +17,7 @@ export const mediaBigDoc: LocalizedTipTapDoc = {
   ]),
   en: makeDoc([
     normalText(
-      'In this section, we have gathered everything that the Lyatoshynsky Foundation is currently working on. Concerts, lectures, news, videos, and archival treasures — here you will find not only music, but also events that shape Ukrainian cultural reality.'
+      'In this section, we have gathered everything that the Liatoshynsky Foundation is currently working on. Concerts, lectures, news, videos, and archival treasures — here you will find not only music, but also events that shape Ukrainian cultural reality.'
     )
   ])
 };
@@ -128,7 +128,7 @@ export const mediaSmallDoc: LocalizedTipTapDoc = {
   ]),
   en: makeDoc([
     normalText(
-      'Follow the announcements, revisit past experiences, seek inspiration — Lyatoshynsky still has something to say today.'
+      'Follow the announcements, revisit past experiences, seek inspiration — Liatoshynsky still has something to say today.'
     )
   ])
 };
