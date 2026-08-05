@@ -20,6 +20,8 @@ const getCacheControl = (status: number) =>
 
 const getStorageBaseUrl = () => process.env.STORAGE_BASE_URL ?? process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
 
+const encodeObjectKey = (fileName: string) => fileName.split('/').map(encodeURIComponent).join('/');
+
 const buildStorageUrl = (folderName: string, fileName: string) => {
   const storageBaseUrl = getStorageBaseUrl();
   if (!storageBaseUrl) {
@@ -27,7 +29,7 @@ const buildStorageUrl = (folderName: string, fileName: string) => {
   }
 
   const storageUrl = new URL(storageBaseUrl);
-  storageUrl.pathname = [storageUrl.pathname.replace(/\/$/, ''), folderName, encodeURIComponent(fileName)]
+  storageUrl.pathname = [storageUrl.pathname.replace(/\/$/, ''), folderName, encodeObjectKey(fileName)]
     .filter(Boolean)
     .join('/');
 

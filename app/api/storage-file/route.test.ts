@@ -137,6 +137,25 @@ describe('Storage file route', () => {
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
   });
 
+  it('should preserve nested path delimiters while encoding path segments', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response('file-data', {
+        status: 200
+      })
+    );
+
+    await GET({
+      url: 'http://localhost/api/storage-file?folderName=compositions&fileName=subfolder/audio%20file.mp3',
+      headers: { get: () => null }
+    } as unknown as Request);
+
+    expect(fetchMock).toHaveBeenCalledWith('https://pub-test.r2.dev/compositions/subfolder/audio%20file.mp3', {
+      method: 'GET',
+      headers: {},
+      next: { revalidate: 0 }
+    });
+  });
+
   it('should not cache R2 error responses as immutable', async () => {
     fetchMock.mockResolvedValueOnce(
       new Response('too many requests', {
