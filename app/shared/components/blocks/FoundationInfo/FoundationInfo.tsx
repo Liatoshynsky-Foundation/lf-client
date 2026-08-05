@@ -7,7 +7,7 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { styles } from './FoundationInfo.styles';
 import { IFoundationInfo } from '~/types/page/about-us.types';
 
-import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
+import { extractTextFromTipTap, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
 import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
 
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
@@ -36,6 +36,10 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
       {children}
     </Typography>
   );
+
+  const imageAltText = (
+    image ? (isTipTapDoc(image.alt) ? extractTextFromTipTap(image.alt) : (image.alt ?? '')) : ''
+  ) as string;
 
   return (
     <Box sx={styles.container} data-testid="FoundationInfo">
@@ -78,7 +82,7 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
         {image && (
           <CroppedImage
             src={image.generatedSrc}
-            alt={extractTextFromTipTap(image.alt)}
+            alt={imageAltText}
             crop={image.crop}
             fill={false}
             width={410}
