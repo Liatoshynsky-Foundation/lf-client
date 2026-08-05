@@ -41,10 +41,10 @@ const mockImage = {
 } as unknown as IImageBlock;
 
 const mockData: IIntroSection = {
-  title: 'Welcome to the Lyatoshynsky Foundation',
+  title: 'Welcome to the Liatoshynsky Foundation',
   quote: {
     text: 'Preserving the legacy of a musical genius',
-    source: 'Boris Lyatoshynsky'
+    source: 'Boris Liatoshynsky'
   },
   image: mockImage
 };
@@ -70,7 +70,7 @@ describe('IntroSection', () => {
 
       const titleElement = screen.getByTestId('IntroSection-title');
       expect(titleElement).toBeInTheDocument();
-      expect(titleElement).toHaveTextContent('Welcome to the Lyatoshynsky Foundation');
+      expect(titleElement).toHaveTextContent('Welcome to the Liatoshynsky Foundation');
 
       expect(screen.queryByTestId('mock-tiptap-container')).not.toBeInTheDocument();
     });

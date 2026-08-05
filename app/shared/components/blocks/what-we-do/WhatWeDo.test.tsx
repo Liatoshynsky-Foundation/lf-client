@@ -99,7 +99,7 @@ const testData: IWhatWeDo = {
   items: [
     {
       title: 'titlesList.title1',
-      description: createDescription('We organize artistic events that bring Lyatoshynsky`s music back to the stage.')
+      description: createDescription('We organize artistic events that bring Liatoshynsky`s music back to the stage.')
     },
     {
       title: 'titlesList.title2',
@@ -133,7 +133,7 @@ describe('WhatWeDo component', () => {
 
       expect(screen.getByText('titlesList.title1')).toBeInTheDocument();
       expect(
-        screen.getByText('We organize artistic events that bring Lyatoshynsky`s music back to the stage.')
+        screen.getByText('We organize artistic events that bring Liatoshynsky`s music back to the stage.')
       ).toBeInTheDocument();
     });
 
