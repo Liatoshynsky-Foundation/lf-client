@@ -14,8 +14,8 @@ describe('IconButton', () => {
 
     const button = screen.getByRole('button');
     expect(button).not.toBeDisabled();
-    expect(button).toHaveStyle('color: #FCFCFC');
-    expect(button).toHaveStyle('backgroundColor: #190D03');
+    expect(button).toHaveStyle('color: white');
+    expect(button).toHaveStyle('backgroundColor: black');
   });
 
   it('should render children', () => {

@@ -1,9 +1,7 @@
-import { mainHexPallete } from '../../design-system/all-components/theme/colors';
-
 export const styles = {
   formWarning: {
     lineHeight: '130%',
-    color: mainHexPallete.brown[500],
+    color: 'brown.500',
     fontStyle: 'unset',
     mb: '16px'
   },
@@ -18,7 +16,7 @@ export const styles = {
   input: {
     width: '100%',
     '&::placeholder': {
-      color: mainHexPallete.blue[800]
+      color: 'blue.800'
     }
   },
 
@@ -28,7 +26,7 @@ export const styles = {
     gap: '16px',
     '& .MuiInputLabel-root[data-shrink="false"]': {
       transform: 'translate(14px, 12px) scale(1)',
-      color: mainHexPallete.blue[800]
+      color: 'blue.800'
     },
     '& .MuiFormHelperText-root': {
       ml: 0,

@@ -16,7 +16,13 @@ export default async function OfferCollaboration() {
     <Box sx={styles.mainContainer}>
       <PaperComponent sx={styles.paper} />
       <Box sx={styles.container}>
-        <ContactsInfo title={t('title')} formTitle={t('formTitle')} contacts={contacts} socialLinks={socialLinks} />
+        <ContactsInfo
+          title={t('title')}
+          titleTag="h2"
+          formTitle={t('formTitle')}
+          contacts={contacts}
+          socialLinks={socialLinks}
+        />
       </Box>
     </Box>
   );

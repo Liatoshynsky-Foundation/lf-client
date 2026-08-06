@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles: Record<string, SxProps<Theme>> = {
   root: {
     gridColumn: {
@@ -41,7 +39,7 @@ export const styles: Record<string, SxProps<Theme>> = {
       counterIncrement: 'docs-counter',
       content: 'counter(docs-counter) "."',
       minWidth: '28px',
-      color: mainHexPallete.black
+      color: 'black'
     }
   },
 
@@ -52,6 +50,6 @@ export const styles: Record<string, SxProps<Theme>> = {
   title: {
     fontSize: '16px',
     lineHeight: '150%',
-    color: mainHexPallete.black
+    color: 'black'
   }
 };

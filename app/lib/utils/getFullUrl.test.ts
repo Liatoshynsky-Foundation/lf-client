@@ -62,4 +62,29 @@ describe('getFullUrl', () => {
 
     expect(url).toBe('/api/user/456');
   });
+
+  it('should serialize nested object search parameters and handle null/undefined sub-values', () => {
+    const url = getFullUrl({
+      pathname: '/api/filter',
+      searchParameters: {
+        filter: {
+          name: 'John',
+          age: null,
+          role: undefined,
+          status: 'active'
+        }
+      }
+    });
+
+    expect(url).toBe('/api/filter?filter%5Bname%5D=John&filter%5Bstatus%5D=active');
+  });
+
+  it('should return resultUrl without question mark when searchParameters is an empty object', () => {
+    const url = getFullUrl({
+      pathname: '/api/empty-search',
+      searchParameters: {}
+    });
+
+    expect(url).toBe('/api/empty-search');
+  });
 });

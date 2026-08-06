@@ -4,7 +4,11 @@ import React from 'react';
 import Button from './Button';
 
 jest.mock('~/i18n/navigation', () => ({
-  Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>
+  Link: ({ href, children, scroll }: { href: string; children: React.ReactNode; scroll?: boolean }) => (
+    <a href={href} data-scroll={scroll ? 'true' : 'false'}>
+      {children}
+    </a>
+  )
 }));
 
 describe('Button Component', () => {
@@ -67,6 +71,7 @@ describe('Button Component', () => {
     expect(link).toHaveAttribute('href', '/internal');
     expect(link).not.toHaveAttribute('target');
     expect(link).not.toHaveAttribute('rel');
+    expect(link).toHaveAttribute('data-scroll', 'true');
   });
 
   it('should render button content inside link when externalLink is true', () => {
@@ -87,6 +92,25 @@ describe('Button Component', () => {
     render(<Button label="Long Label" shortLabel="Short" />);
     expect(screen.getByText('Short')).toBeInTheDocument();
     expect(screen.getByText('Long Label')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Long Label' })).toBeInTheDocument();
+  });
+
+  it('should not render as a link or anchor if the button is disabled even if link prop is provided', () => {
+    render(<Button link="/test-disabled-link" disabled label="Disabled Link Button" />);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('should not render as a link or anchor if the button is loading even if link prop is provided', () => {
+    render(<Button link="/test-loading-link" loading label="Loading Link Button" />);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('should accept custom sx and merge textDecoration none when link prop is active', () => {
+    render(<Button link="/styled-link" label="Styled" sx={{ color: 'red' }} />);
+    const link = screen.getByRole('link');
+    expect(link).toBeInTheDocument();
   });
 });

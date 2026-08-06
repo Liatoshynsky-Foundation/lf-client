@@ -198,7 +198,7 @@ export async function GET() {
 │ ├── api/ # Server-side API routes (Route Handlers)
 │ │ ├── compositions/ # CRUD for musical compositions (data, filters, titles)
 │ │ ├── scientific-works/ # Management of scientific publications and filtering
-│ │ ├── blob-url/ # Azure Storage integration for media URLs
+│ │ ├── storage-file/ # Cloudflare R2 media proxy
 │ │ ├── create-invoice/ # Payment and donation processing logic
 │ │ └── health/ # API health monitoring endpoint
 │ ├── di/ # Dependency Injection layer
@@ -213,7 +213,6 @@ export async function GET() {
 │ │ ├── scientific-works/ # Business logic for scientific data
 │ │ ├── email/ # Email sending services and templates
 │ │ ├── pages-data/ # Dynamic content aggregation for various pages
-│ │ └── upload/ # File handling and Azure Blob Storage services
 │ ├── shared/ # Reusable core codebase
 │ │ ├── components/ # Global UI Components
 │ │ │ ├── design-system/ # Atomic components

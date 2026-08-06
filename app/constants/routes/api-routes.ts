@@ -1,5 +1,5 @@
 export const ApiRoutes = {
-  BLOB_URL: '/api/blob-url',
+  STORAGE_FILE: '/api/storage-file',
   HEADER: '/api/header',
   COMPOSITION_FILTERS: '/api/compositions/filters',
   COMPOSITION_DATA: '/api/compositions/data',
@@ -9,5 +9,6 @@ export const ApiRoutes = {
   SCIENTIFIC_WORKS_TITLES: '/api/scientific-works/titles',
   VERIFY: '/api/verify',
   CREATE_INVOICE: '/api/create-invoice',
-  TURNSTILE: '/api/config'
-};
+  TURNSTILE: '/api/config',
+  CONTACT: '/api/contact'
+} as const;

@@ -1,3 +1,5 @@
+import { navButtonStyles } from '../content-slider/ContentSlider.styles';
+
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -25,7 +27,7 @@ export const styles = {
     gridRow: '1',
     fontSize: { xs: '48px', sm: '64px', md: '88px', lg: '104px', xl: '120px' },
     fontStyle: 'SemiBold',
-    color: '#190D03',
+    color: 'black',
     lineHeight: 1.1,
     fontWeight: 600,
     mb: { xs: '52px', sm: '52px', md: '52px', lg: '52px', xl: '52px' }
@@ -65,7 +67,7 @@ export const styles = {
     gridRow: { xs: '1', sm: '1', md: '1' },
     fontSize: { xs: '20px', sm: '20px', md: '28px', lg: '28px' },
     fontWeight: 700,
-    color: '#190D03',
+    color: 'black',
     lineHeight: 1.4,
     fontStyle: 'SemiBold',
     fontFamily: 'Oswald',
@@ -92,7 +94,7 @@ export const styles = {
     lineHeight: 1.5,
     fontWeight: 700,
     fontStyle: 'Bold',
-    color: '#190D03',
+    color: 'black',
     textTransform: 'uppercase',
     maxWidth: { sm: '100%', md: '100%', lg: '90%' },
     mb: '5px',
@@ -105,7 +107,7 @@ export const styles = {
 
   publishDate: {
     fontSize: { xs: '16px', sm: '16px', md: '16px', lg: '16px' },
-    color: '#08090b',
+    color: 'black',
     lineHeight: 1.5,
     fontWeight: 500,
     fontStyle: 'Medium',
@@ -117,7 +119,7 @@ export const styles = {
     fontSize: { xs: '16px', sm: '16px', md: '18px', lg: '18px' },
     lineHeight: 1.6,
     fontWeight: 400,
-    color: '#000000',
+    color: 'black',
     mb: { xs: '24px', sm: '0px', md: '20px', lg: '24px', xl: '24px' },
 
     display: '-webkit-box',
@@ -163,9 +165,36 @@ export const styles = {
     lineHeight: 1.5,
     fontWeight: 500,
     fontStyle: 'Medium',
-    border: '1px solid #190D03',
-    color: '#190D03',
+    border: '1px solid black',
+    color: 'black',
     pr: '20px',
     textTransform: 'none'
+  },
+  navButton: navButtonStyles,
+
+  regButton: {
+    textTransform: 'none',
+    pl: { xs: '0px', sm: '20px' },
+    p: { xs: 0, sm: '8px 24px' },
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: 1.1,
+    display: 'flex',
+    gap: '4px',
+    minWidth: { xs: '40px', sm: 'auto' },
+    width: { xs: '40px', sm: 'auto' },
+    height: { xs: '40px', sm: 'auto' },
+    borderRadius: { xs: '50%', sm: '30px' },
+    border: { xs: '1px solid black', sm: 'none' },
+    alignItems: 'center',
+    justifyContent: 'center',
+    textDecoration: 'none',
+    '& .MuiButton-endIcon': {
+      m: 0,
+      '& img': {
+        width: 20,
+        height: 20
+      }
+    }
   }
 };

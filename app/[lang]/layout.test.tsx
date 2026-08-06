@@ -1,3 +1,5 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
@@ -57,6 +59,11 @@ jest.mock('~/shared/context/AudioPlayerContext', () => {
   MockAudio.displayName = 'AudioPlayerProvider';
   return { AudioPlayerProvider: MockAudio };
 });
+
+jest.mock('~/shared/components/SkipToMainContentLink/SkipToMainContentLink', () => ({
+  __esModule: true,
+  SkipToMainContentLink: () => <a data-testid="skip-to-main-content-link" href="#main" />
+}));
 
 describe('RootLayout', () => {
   const mockParams = Promise.resolve({ lang: 'uk' as any });
@@ -132,5 +139,21 @@ describe('RootLayout', () => {
       params: mockParams
     });
     expect(Result.type).toBe('html');
+  });
+
+  it('should render the skip to main content link on the first tab', async () => {
+    const user = userEvent.setup();
+    const Result = await RootLayout({
+      children: <main>Content</main>,
+      params: mockParams
+    });
+
+    render(Result, { container: document });
+
+    await user.tab();
+    const link = screen.getByTestId('skip-to-main-content-link');
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveFocus();
   });
 });

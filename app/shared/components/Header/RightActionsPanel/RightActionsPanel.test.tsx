@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 
 import RightActionsPanel from './RightActionsPanel';
 
+jest.mock('~/hooks/use-breakpoints/useBreakpoints');
+
+import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
+
+const mockUseBreakpoints = useBreakpoints as jest.Mock;
+
 jest.mock('../AudioPlayer/AudioPlayer', () => {
   const AudioPlayer = () => <div data-testid="audio-player" />;
   AudioPlayer.displayName = 'AudioPlayer';
@@ -24,15 +30,27 @@ const mockedSupportButtonData = {
 };
 
 describe('RightActionsPanel', () => {
-  it('should render all components with correct data', () => {
+  it('should render desktop version', () => {
+    mockUseBreakpoints.mockReturnValue({
+      isMobile: false
+    });
+
     render(<RightActionsPanel supportButtonData={mockedSupportButtonData} scrollDirection="up" />);
 
-    const player = screen.getByTestId('audio-player');
-    const switcher = screen.getByTestId('language-switcher');
-    const supportBtn = screen.getByTestId('support-button');
+    expect(screen.getByTestId('audio-player')).toBeInTheDocument();
+    expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
+    expect(screen.getByTestId('support-button')).toHaveTextContent('Support Us');
+  });
 
-    expect(player).toBeInTheDocument();
-    expect(switcher).toBeInTheDocument();
-    expect(supportBtn.textContent).toContain('Support Us');
+  it('should render mobile version', () => {
+    mockUseBreakpoints.mockReturnValue({
+      isMobile: true
+    });
+
+    render(<RightActionsPanel supportButtonData={mockedSupportButtonData} scrollDirection="up" />);
+
+    expect(screen.getByTestId('audio-player')).toBeInTheDocument();
+    expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
+    expect(screen.getByTestId('support-button')).toHaveTextContent('Support Us');
   });
 });

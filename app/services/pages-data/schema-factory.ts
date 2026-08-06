@@ -6,12 +6,13 @@ import { PageDataMap } from '~/types/page/pagesBase.type';
 import { NoIDSchema, NoPageType, NoTime } from '~/validators/constants';
 import { LocalizeSchema } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 
-export const PAGE_SLUGS = ['about-us', 'privacy-policy', 'research', 'biography', 'cooperation'] as const;
+export const PAGE_SLUGS = ['about-us', 'privacy-policy', 'research', 'biography', 'cooperation', 'artistry'] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];
 
 export const isPageSlug = (slug: string): slug is PageSlug => PAGE_SLUGS.includes(slug as PageSlug);
@@ -21,7 +22,8 @@ const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageData
   'privacy-policy': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PrivacyPolicyPageSchema))), locale),
   research: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ResearchPageSchema))), locale),
   biography: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(BiographyPageSchema))), locale),
-  cooperation: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(CooperationPageSchema))), locale)
+  cooperation: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(CooperationPageSchema))), locale),
+  artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArtistryPageSchema))), locale)
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {

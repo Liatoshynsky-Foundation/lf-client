@@ -1,4 +1,3 @@
-import { mainHexPallete } from '../theme/colors';
 import { Color, HorizontalAlignment, VerticalAlignment } from './Modal';
 import { PositionEnum } from '~/types/enums/common.enums';
 
@@ -36,7 +35,7 @@ export const style = {
   ) => ({
     width: { xs: 'calc(100% - 48px)', sm: width },
     height: { xs: 'fit-content', sm: height ?? 'fit-content' },
-    backgroundColor: backgroundColor === 'white' ? backgroundColor : mainHexPallete.burgundy[900],
+    backgroundColor: backgroundColor === 'white' ? backgroundColor : 'burgundy.900',
     borderRadius: '32px',
     outline: 'none',
     boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
@@ -67,7 +66,7 @@ export const style = {
     marginLeft: width > 1000 ? '-110px' : '-32px',
     marginBottom: '20px',
     height: '2px',
-    backgroundColor: '#FFBC21',
+    backgroundColor: 'yellow.500',
     transform: 'rotate(-2deg)',
     transformOrigin: 'left center'
   }),

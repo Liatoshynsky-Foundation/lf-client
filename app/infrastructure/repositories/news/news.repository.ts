@@ -17,7 +17,7 @@ const newsRepository = {
   async getNewsBySlug(slug: string) {
     await dbConnect();
 
-    return NewsModel.findOne({ slug }).lean();
+    return await NewsModel.findOne({ slug }).lean();
   }
 };
 

@@ -16,18 +16,41 @@ export const styles = {
   photoWrapper: {
     position: 'relative',
     width: '207px',
-    height: '173px',
-    overflow: 'hidden',
+    height: '173px'
+  },
+  photoBackground: {
+    position: 'absolute',
+    inset: 0,
     transform: 'rotate(-25deg)',
     borderRadius: '50%',
-    backgroundColor: '#B8AEA2'
+    backgroundColor: 'brown.300'
+  },
+  photoImageWrapper: {
+    position: 'absolute',
+    top: '2px',
+    left: '15px',
+    width: '185px',
+    height: '166px',
+    overflow: 'hidden',
+    borderRadius: '60% 40% 60% 40% / 55% 45% 55% 45%'
+  },
+  placeholderLogo: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: '164px',
+    height: '61px',
+    transform: 'translate(-50%, -50%)',
+    objectFit: 'contain',
+    opacity: 0.48,
+    pointerEvents: 'none'
   },
   textWrapper: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: { xs: '5px', sm: '7px', md: '7px' },
-    color: '#190D03'
+    color: 'black'
   },
   name: {
     fontSize: { xs: '20px', md: '24px' },
@@ -44,11 +67,8 @@ export const styles = {
     fontFamily: 'inherit'
   },
   image: {
-    objectFit: 'cover',
-    borderRadius: '60% 40% 60% 40% / 55% 45% 55% 45%',
-    position: 'absolute',
-    top: '2px',
-    left: '15px',
-    transform: 'rotate(25deg)'
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
   } as CSSProperties
 };

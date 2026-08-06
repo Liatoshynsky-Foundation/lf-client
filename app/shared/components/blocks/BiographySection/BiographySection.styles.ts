@@ -1,4 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
 import { theme } from '~/ds-components/theme/Theme';
 
 export const styles = {
@@ -50,7 +49,7 @@ export const styles = {
     fontStyle: 'italic',
     fontWeight: 500,
     lineHeight: '140%',
-    color: mainHexPallete.blue[800]
+    color: 'blue.800'
   },
   title: {
     fontSize: {

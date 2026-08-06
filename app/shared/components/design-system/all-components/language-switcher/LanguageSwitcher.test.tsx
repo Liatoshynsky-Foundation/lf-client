@@ -71,8 +71,9 @@ describe('LanguageSwitcher', () => {
   });
 
   describe('toggle variant', () => {
-    it('should render toggle and switches language', () => {
-      (useLocale as jest.Mock).mockReturnValue('en');
+    it('should render toggle and switch language from en to uk', () => {
+      const mockedUseLocale = useLocale as jest.MockedFunction<typeof useLocale>;
+      mockedUseLocale.mockReturnValue('en');
 
       render(<LanguageSwitcher variant="toggle" />);
 
@@ -82,6 +83,32 @@ describe('LanguageSwitcher', () => {
 
       fireEvent.click(toggleButton);
       expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'uk', scroll: false });
+    });
+
+    it('should render toggle and switch language from uk to en', () => {
+      const mockedUseLocale = useLocale as jest.MockedFunction<typeof useLocale>;
+      mockedUseLocale.mockReturnValue('uk');
+
+      render(<LanguageSwitcher variant="toggle" />);
+
+      const toggleButton = screen.getByRole('button', { name: 'In English' });
+      expect(toggleButton).toBeInTheDocument();
+      expect(toggleButton.textContent).toContain('In English');
+
+      fireEvent.click(toggleButton);
+      expect(mockReplace).toHaveBeenCalledWith(mockPathname, { locale: 'en', scroll: false });
+    });
+
+    it('should cover early return in toggleLocale when currentLocale is missing', () => {
+      const mockedUseLocale = useLocale as jest.MockedFunction<typeof useLocale>;
+
+      mockedUseLocale.mockImplementation(() => '' as unknown as never);
+
+      render(<LanguageSwitcher variant="toggle" />);
+      const toggleButton = screen.getByRole('button');
+
+      fireEvent.click(toggleButton);
+      expect(mockReplace).not.toHaveBeenCalled();
     });
   });
 
@@ -117,6 +144,36 @@ describe('LanguageSwitcher', () => {
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByText('English'));
     await waitFor(() => {
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('scrollDirection tracking', () => {
+    it('should close the dropdown menu when scrollDirection changes to down', async () => {
+      (useLocale as jest.Mock).mockReturnValue('uk');
+      const { rerender } = render(<LanguageSwitcher variant="icon" />);
+
+      const iconBtn = screen.getByRole('button');
+      fireEvent.click(iconBtn);
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+
+      rerender(<LanguageSwitcher variant="icon" scrollDirection="down" />);
+
+      await waitFor(() => {
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should do nothing when scrollDirection is down but the menu is already closed', () => {
+      (useLocale as jest.Mock).mockReturnValue('uk');
+      const { rerender } = render(<LanguageSwitcher variant="icon" />);
+
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+      expect(() => {
+        rerender(<LanguageSwitcher variant="icon" scrollDirection="down" />);
+      }).not.toThrow();
+
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
   });

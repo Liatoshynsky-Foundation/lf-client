@@ -20,8 +20,6 @@ export const styles = {
     alignItems: 'center'
   },
   loadMoreButton: {
-    p: { xs: '12px 58px' },
-    fontSize: { xs: '16px' },
-    fontWeight: { xs: '500' }
+    p: { xs: '12px 58px' }
   }
 };

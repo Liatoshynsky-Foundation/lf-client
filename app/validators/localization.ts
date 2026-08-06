@@ -32,19 +32,13 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
   return false;
 }
 
-function validTranslatedField(value: Record<string, unknown>, locale: Locale, path?: string): boolean {
-  if (!(locale in value)) {
-    return false;
-  }
-
+function validTranslatedField(value: Record<string, unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
   if (typeof fieldValue === 'string') {
-    if (fieldValue === '' && path) {
-      const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption');
-      if (isOptionalField) {
-        return true;
-      }
+    const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption');
+    if (fieldValue === '' && isOptionalField) {
+      return true;
     }
     return fieldValue !== '';
   }
@@ -55,11 +49,9 @@ function validTranslatedField(value: Record<string, unknown>, locale: Locale, pa
 
   return false;
 }
-
-function translationErrorFactory(locale: Locale, path?: string): Error {
+function translationErrorFactory(locale: Locale, path: string): Error {
   const baseMessage = locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR;
-  const message = path ? `${baseMessage} at path: ${path}` : baseMessage;
-  return new Error(message);
+  return new Error(`${baseMessage} at path: ${path}`);
 }
 
 export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale) {
@@ -74,7 +66,7 @@ export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale
     if (Array.isArray(value)) {
       return value.map((item, idx) => localizeValue(item, `${path}[${idx}]`));
     }
-    if (typeof value === 'object' && value !== null && Object.getPrototypeOf(value) === Object.prototype) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, localizeValue(v, `${path}.${k}`)]));
     }
     return value;

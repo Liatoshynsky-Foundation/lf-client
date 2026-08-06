@@ -1,6 +1,6 @@
 export const tooltipStyles = {
-  backgroundColor: '#52545A',
-  color: '#ffffff',
+  backgroundColor: 'blue.800',
+  color: 'white',
   fontSize: '14px',
   fontStyle: 'italic',
   fontFamily: 'var(--font-mulish)',
@@ -9,5 +9,5 @@ export const tooltipStyles = {
 };
 
 export const arrowStyles = {
-  color: '#52545A'
+  color: 'blue.800'
 };

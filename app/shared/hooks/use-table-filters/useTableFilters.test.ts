@@ -10,6 +10,19 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams('search=initial&author=1&author=2')
 }));
 
+jest.mock('~/lib/utils/paramsToQuery', () => ({
+  tableParamsToQuery: jest.fn((params) => {
+    if (!params.search && !params.yearFrom && !params.yearTo) {
+      return '';
+    }
+    const parts: string[] = [];
+    if (params.search) parts.push(`search=${params.search}`);
+    if (params.yearFrom) parts.push(`yearFrom=${params.yearFrom}`);
+    if (params.yearTo) parts.push(`yearTo=${params.yearTo}`);
+    return parts.length > 0 ? `?${parts.join('&')}` : '';
+  })
+}));
+
 jest.useFakeTimers();
 
 describe('useTableFilters', () => {
@@ -21,7 +34,7 @@ describe('useTableFilters', () => {
   };
 
   beforeEach(() => {
-    replaceMock.mockReset();
+    jest.clearAllMocks();
   });
 
   test('initializes params from initialParams (URL is ignored)', () => {
@@ -38,7 +51,6 @@ describe('useTableFilters', () => {
     });
 
     expect(result.current.params.search).toBe('hello');
-
     expect(replaceMock).toHaveBeenLastCalledWith('/test?search=hello&yearFrom=1900&yearTo=2024', { scroll: false });
   });
 
@@ -54,7 +66,6 @@ describe('useTableFilters', () => {
     });
 
     expect(result.current.params.search).toBe('debounced');
-
     expect(replaceMock).toHaveBeenLastCalledWith('/test?search=debounced&yearFrom=1900&yearTo=2024', { scroll: false });
   });
 
@@ -70,7 +81,23 @@ describe('useTableFilters', () => {
     });
 
     expect(result.current.params).toEqual(initialParams);
+    expect(replaceMock).toHaveBeenLastCalledWith('/test?yearFrom=1900&yearTo=2024', { scroll: false });
+  });
 
-    expect(replaceMock).toHaveBeenLastCalledWith('/test?search=&yearFrom=1900&yearTo=2024', { scroll: false });
+  test('should replace pathname without query when query string is empty to cover lines 30-32 branch', () => {
+    const { result } = renderHook(() =>
+      useTableFilters({
+        search: '',
+        author: [],
+        yearFrom: null,
+        yearTo: null
+      })
+    );
+
+    act(() => {
+      result.current.setParam('search', '');
+    });
+
+    expect(replaceMock).toHaveBeenLastCalledWith('/test', { scroll: false });
   });
 });

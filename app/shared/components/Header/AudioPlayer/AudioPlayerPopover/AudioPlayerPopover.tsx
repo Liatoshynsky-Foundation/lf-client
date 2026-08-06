@@ -37,12 +37,25 @@ const AudioPlayerPopover = ({
 }: AudioPlayerPopoverProps) => {
   const progressRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const playButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const isOpen = Boolean(anchorEl);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
     onSeek(calculateProgress(e, progressRef));
   };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const timer = setTimeout(() => {
+      playButtonRef.current?.focus();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isDragging) return;
@@ -65,6 +78,36 @@ const AudioPlayerPopover = ({
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, onSeek]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const STEP = 0.05;
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        event.preventDefault();
+        onSeek(Math.max(0, progress - STEP));
+        break;
+
+      case 'ArrowRight':
+      case 'ArrowUp':
+        event.preventDefault();
+        onSeek(Math.min(1, progress + STEP));
+        break;
+
+      case 'Home':
+        event.preventDefault();
+        onSeek(0);
+        break;
+
+      case 'End':
+        event.preventDefault();
+        onSeek(1);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <Popover
@@ -92,10 +135,22 @@ const AudioPlayerPopover = ({
           </Box>
         ) : (
           <>
-            <Box ref={progressRef} onMouseDown={handleMouseDown} sx={styles.progressBar} role="progress">
+            <Box ref={progressRef} onMouseDown={handleMouseDown} sx={styles.progressBar}>
               <Box sx={styles.progressLine} style={{ width: `${progress * 100}%` }} />
-              <Box sx={styles.progressThumbSvg} style={{ left: `${progress * 100}%` }}>
-                <Image src="/icons/audio-play-circle-icon.svg" alt="progress thumb" width={16} height={16} />
+
+              <Box
+                tabIndex={0}
+                role="slider"
+                aria-label="Track progress"
+                aria-valuenow={Math.round(progress * 100)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+                onKeyDown={handleKeyDown}
+                sx={styles.progressThumbSvg}
+                style={{ left: `${progress * 100}%` }}
+              >
+                <Image src="/icons/audio-play-circle-icon.svg" alt="" width={16} height={16} />
               </Box>
             </Box>
 
@@ -104,10 +159,11 @@ const AudioPlayerPopover = ({
                 onClick={onTogglePlay}
                 aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
                 sx={styles.playPauseButton}
+                ref={playButtonRef}
               >
                 <Image
                   src={isPlaying ? '/icons/pause-icon.svg' : '/icons/play-icon.svg'}
-                  alt={isPlaying ? 'Pause' : 'Play'}
+                  alt=""
                   width={24}
                   height={24}
                 />

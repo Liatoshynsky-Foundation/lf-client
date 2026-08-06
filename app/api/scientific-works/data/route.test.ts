@@ -19,11 +19,6 @@ jest.mock('~/di/container', () => ({
     resolve: jest.fn()
   }))
 }));
-jest.mock('@azure/storage-blob', () => ({
-  BlobServiceClient: jest.fn().mockImplementation(() => ({
-    getContainerClient: jest.fn()
-  }))
-}));
 import { GET } from './route';
 
 import { createRequestContainer } from '~/di/container';

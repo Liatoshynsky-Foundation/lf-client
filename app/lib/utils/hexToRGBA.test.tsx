@@ -15,4 +15,8 @@ describe('hexToRGBA', () => {
   it('should handle edge case of lowercase hex', () => {
     expect(hexToRGBA('#d9e8ff', 0.4)).toBe('rgba(217, 232, 255, 0.4)');
   });
+
+  it('should convert to rgb when alpha is undefined to cover line 8 branch', () => {
+    expect(hexToRGBA('#D9E8FF')).toBe('rgb(217, 232, 255)');
+  });
 });

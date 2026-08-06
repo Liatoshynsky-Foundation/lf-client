@@ -1,10 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
 import DocumentTableSection from './DocumentTableSection';
 import { DocumentRecord } from '~/types/types/document.types';
 
-import { ROUTES } from '~/shared/components/constants/routes';
+interface EnhancedTableProps {
+  onRowClick?: (row: DocumentRecord) => void;
+  data: DocumentRecord[];
+}
+
+const mockPush = jest.fn();
+let mockPathname = '/archive/fund-1/';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
@@ -15,13 +22,13 @@ jest.mock('~/i18n/navigation', () => ({
 }));
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
+  useRouter: jest.fn(() => ({
+    push: mockPush,
     replace: jest.fn(),
     back: jest.fn(),
     prefetch: jest.fn()
-  }),
-  usePathname: () => `/uk${ROUTES.ARCHIVE}/fund-1`
+  })),
+  usePathname: jest.fn(() => mockPathname)
 }));
 
 const mockUseBreakpoints = jest.fn();
@@ -53,8 +60,27 @@ const setBreakpoint = (
 };
 
 jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
-  const EnhancedTable = () => {
-    return <div data-testid="enhanced-table"></div>;
+  const EnhancedTable = ({ onRowClick, data }: EnhancedTableProps) => {
+    return (
+      <div data-testid="enhanced-table">
+        <button
+          data-testid="click-row-1"
+          onClick={() => {
+            if (onRowClick) onRowClick(data[0]);
+          }}
+        >
+          Row 1
+        </button>
+        <button
+          data-testid="click-row-empty"
+          onClick={() => {
+            if (onRowClick) onRowClick({} as unknown as DocumentRecord);
+          }}
+        >
+          Row Empty
+        </button>
+      </div>
+    );
   };
 
   return { __esModule: true, EnhancedTable };
@@ -69,17 +95,29 @@ jest.mock('./MobileDocumentTable/MobileDocumentTable', () => {
 });
 
 const mockData: DocumentRecord[] = [
-  { id: '1', cipher: 'C1', name: 'Name1', dates: '2020', sheets: 1, contentDescription: 'Content1', pdfUrl: null },
-  { id: '2', cipher: 'C2', name: 'Name2', dates: '2021', sheets: 2, contentDescription: 'Content2', pdfUrl: null },
-  { id: '3', cipher: 'C3', name: 'Name3', dates: '2022', sheets: 3, contentDescription: 'Content3', pdfUrl: null },
-  { id: '4', cipher: 'C4', name: 'Name4', dates: '2023', sheets: 4, contentDescription: 'Content4', pdfUrl: null },
-  { id: '5', cipher: 'C5', name: 'Name5', dates: '2024', sheets: 5, contentDescription: 'Content5', pdfUrl: null },
-  { id: '6', cipher: 'C6', name: 'Name6', dates: '2025', sheets: 6, contentDescription: 'Content6', pdfUrl: null }
+  {
+    id: 'case-123',
+    cipher: 'C1',
+    name: 'Name1',
+    dates: '2020',
+    sheets: 1,
+    contentDescription: 'Content1',
+    pdfUrl: null
+  },
+  { id: '2', cipher: 'C2', name: 'Name2', dates: '2021', sheets: 2, contentDescription: 'Content2', pdfUrl: null }
 ];
 
 describe('DocumentTableSection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockPathname = '/archive/fund-1/';
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+      replace: jest.fn(),
+      back: jest.fn(),
+      prefetch: jest.fn()
+    });
+    (usePathname as jest.Mock).mockReturnValue(mockPathname);
   });
 
   test('should render EnhancedTable on desktop/laptop', () => {
@@ -96,5 +134,31 @@ describe('DocumentTableSection', () => {
 
     expect(screen.getByTestId('mobile-table')).toBeInTheDocument();
     expect(screen.queryByTestId('enhanced-table')).not.toBeInTheDocument();
+  });
+
+  test('should trigger routing actions with proper target encoded param details when clicking dynamic rows', () => {
+    setBreakpoint({ isDesktop: true });
+    render(<DocumentTableSection documents={mockData} />);
+
+    fireEvent.click(screen.getByTestId('click-row-1'));
+    expect(mockPush).toHaveBeenCalledWith('/archive/fund-1/case-123');
+  });
+
+  test('should clear trailing slashes correctly and build canonical path endpoints', () => {
+    mockPathname = '/archive/fund-1';
+    (usePathname as jest.Mock).mockReturnValue(mockPathname);
+    setBreakpoint({ isDesktop: true });
+    render(<DocumentTableSection documents={mockData} />);
+
+    fireEvent.click(screen.getByTestId('click-row-1'));
+    expect(mockPush).toHaveBeenCalledWith('/archive/fund-1/case-123');
+  });
+
+  test('should reject route redirection changes seamlessly if targeted row parameter records completely lack identity keys', () => {
+    setBreakpoint({ isDesktop: true });
+    render(<DocumentTableSection documents={mockData} />);
+
+    fireEvent.click(screen.getByTestId('click-row-empty'));
+    expect(mockPush).not.toHaveBeenCalled();
   });
 });

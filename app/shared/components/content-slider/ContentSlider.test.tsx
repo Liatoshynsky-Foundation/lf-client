@@ -1,25 +1,67 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-// Mock CSS imports
-jest.mock('swiper/css', () => ({}));
-jest.mock('swiper/css/navigation', () => ({}));
-
-import { getDynamicRoute } from '../constants/routes';
 import { ContentSlider } from './ContentSlider';
 
-// Mock Swiper components
-jest.mock('swiper/react', () => ({
-  Swiper: ({ children }: any) => <div data-testid="swiper">{children}</div>,
-  SwiperSlide: ({ children }: any) => <div data-testid="swiper-slide">{children}</div>
-}));
+interface MockBaseSliderProps<T> {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+  getItemKey: (item: T) => string;
+  prevLabel: string;
+  nextLabel: string;
+  onSwiper?: (swiper: unknown) => void;
+  onSlideFocus?: (index: number) => void;
+}
 
-jest.mock('swiper/modules', () => ({
-  Navigation: {}
+interface MockBaseCardProps {
+  title: string;
+  variant: string;
+  dataTestId?: string;
+}
+
+interface MockSwiperInstance {
+  slideTo: jest.Mock;
+}
+
+jest.mock('~/shared/components/base-slider', () => ({
+  __esModule: true,
+  BaseSlider: <T,>({
+    items,
+    renderItem,
+    getItemKey,
+    prevLabel,
+    nextLabel,
+    onSwiper,
+    onSlideFocus
+  }: MockBaseSliderProps<T>) => {
+    React.useEffect(() => {
+      const mockSwiperInstance: MockSwiperInstance = {
+        slideTo: jest.fn()
+      };
+      if (onSwiper) {
+        onSwiper(mockSwiperInstance);
+      }
+      if (onSlideFocus) {
+        onSlideFocus(1);
+      }
+    }, [onSwiper, onSlideFocus]);
+
+    return (
+      <div data-testid="swiper">
+        <button>{prevLabel}</button>
+        <button>{nextLabel}</button>
+        {items.map((item) => (
+          <div key={getItemKey(item)} data-testid="swiper-slide">
+            {renderItem(item)}
+          </div>
+        ))}
+      </div>
+    );
+  }
 }));
 
 jest.mock('~/ds-components/base-card/BaseCard', () => {
-  return function MockBaseCard({ title, variant, dataTestId }: any) {
+  return function MockBaseCard({ title, variant, dataTestId }: MockBaseCardProps) {
     return (
       <div data-testid={dataTestId || 'base-card'}>
         {title} - {variant}
@@ -35,26 +77,29 @@ jest.mock('~/shared/components/svg-image/SvgImage', () => ({
 const mockCards = [
   {
     image: '/news1.jpg',
+    alt: 'News Title 1',
     title: 'News Title 1',
     publicationDate: '15.01.25',
     description: 'Description 1',
-    href: getDynamicRoute.newsItem('news-1'),
+    href: '/news/news-1',
     dataTestId: 'news-card-1'
   },
   {
     image: '/news2.jpg',
+    alt: 'News Title 2',
     title: 'News Title 2',
     publicationDate: '16.01.25',
     description: 'Description 2',
-    href: getDynamicRoute.newsItem('news-2'),
+    href: '/news/news-2',
     dataTestId: 'news-card-2'
   },
   {
     image: '/news3.jpg',
+    alt: 'News Title 3',
     title: 'News Title 3',
     publicationDate: '17.01.25',
     description: 'Description 3',
-    href: getDynamicRoute.newsItem('news-3'),
+    href: '/news/news-3',
     dataTestId: 'news-card-3'
   }
 ];

@@ -18,6 +18,7 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import type { OverflowMenuItemConfig } from '~/types/types/menu.types';
 
+import { formatTextWithHyphens } from '~/lib/utils/textFormater';
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
@@ -71,9 +72,11 @@ export const renderNameCell = (info: CellContext<Music, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
 );
 
-export const renderYearCell = (info: CellContext<Music, unknown>) => (
-  <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
-);
+export const renderYearCell = (info: CellContext<Music, unknown>) => {
+  const value = info.getValue<string | number | null | undefined>();
+  if (value == null) return null;
+  return <Typography variant="customMedium16">{value}</Typography>;
+};
 
 export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
   const genres = info.getValue<string[]>() || [];
@@ -194,11 +197,14 @@ export const RenderExpanderCell = (ctx: CellContext<Music, unknown>) => {
   return (isTablet || isMobile) && !ctx.row.getCanExpand() ? <PlayCell row={ctx.row} /> : null;
 };
 
-export const renderOpusGroupLabel = (items: Music[]) => (
-  <Typography variant="customItalic16" color={mainHexPallete.blue[800]}>
-    {items[0]?.opus}
-  </Typography>
-);
+export const renderOpusGroupLabel = (items: Music[]) => {
+  const formatted = formatTextWithHyphens(items[0]?.opus, 10);
+  return (
+    <Typography variant="customItalic16" color={mainHexPallete.blue[800]} sx={{ whiteSpace: 'pre-line' }}>
+      {formatted}
+    </Typography>
+  );
+};
 
 export const renderOpusTitleGroupLabel = (items: Music[]) => (
   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
@@ -207,3 +213,15 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => (
     </Typography>
   </Box>
 );
+
+export const renderOpusYearGroupLabel = (items: Music[]) => {
+  const year = items[0]?.opusYear;
+  if (!year) return null;
+  return <Typography variant="customMedium16">{year}</Typography>;
+};
+
+export const renderOpusGenreGroupLabel = (items: Music[]) => {
+  const genres = items[0]?.opusGenres;
+  if (!genres || genres.length === 0) return null;
+  return <Typography variant="customMedium16">{genres.join(', ')}</Typography>;
+};

@@ -17,10 +17,12 @@ export type RowData = {
 export type Music = {
   id: string;
   name: string;
-  year: number;
+  year?: number | null;
   opus?: string;
   opusTitle?: string;
   genre?: string[];
+  opusYear?: number | string;
+  opusGenres?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
   sheetMusic?: Notes[];

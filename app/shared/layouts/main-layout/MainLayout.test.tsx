@@ -31,15 +31,53 @@ describe('MainLayout Component', () => {
   it('should forward additional props to the root Box element', () => {
     const testId = 'main-layout-container';
     const customClass = 'my-custom-class';
+    const customGridSx = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignContent: 'center'
+    };
 
     render(
-      <MainLayout data-testid={testId} className={customClass}>
+      <MainLayout data-testid={testId} className={customClass} gridSx={customGridSx}>
         {childElement}
       </MainLayout>
     );
 
     const layoutElement = screen.getByTestId(testId);
     expect(layoutElement).toHaveClass(customClass);
+
+    const innerBox = layoutElement.firstChild;
+    expect(innerBox).toHaveStyle(customGridSx);
+  });
+
+  it('should render the main tag that wraps the children', () => {
+    const testId = 'main-layout-container';
+    render(<MainLayout data-testid={testId}>{childElement}</MainLayout>);
+
+    const mainElement = screen.getByRole('main');
+
+    expect(mainElement).toHaveTextContent(childText);
+    expect(mainElement).toHaveAttribute('tabIndex', '-1');
+  });
+
+  it('should forward additional props to the inner Box element', () => {
+    const testId = 'main-layout-container';
+    const customGridSx = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignContent: 'center'
+    };
+
+    render(
+      <MainLayout data-testid={testId} gridSx={customGridSx}>
+        {childElement}
+      </MainLayout>
+    );
+
+    const layoutElement = screen.getByTestId(testId);
+    const innerBox = layoutElement.firstChild;
+
+    expect(innerBox).toHaveStyle(customGridSx);
   });
 
   it('should apply base styles and merge sx prop when it is an object', () => {

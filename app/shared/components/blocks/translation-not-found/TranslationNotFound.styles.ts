@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   imageContainer: {
     position: 'relative',
@@ -33,7 +31,7 @@ export const styles = {
     },
     backgroundColor: {
       xs: 'transparent',
-      sm: mainHexPallete.white
+      sm: 'white'
     }
   },
 
@@ -47,5 +45,11 @@ export const styles = {
       xs: '#FCFCFC',
       sm: '#F2EEE8'
     }
+  },
+
+  gridLayout: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center'
   }
 };

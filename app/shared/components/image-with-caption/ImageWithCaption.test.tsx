@@ -18,8 +18,8 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
+  default: ({ fill, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean }) => (
+    <img {...props} alt={props.alt || 'image'} data-testid="next-image" data-filled={fill ? 'true' : undefined} />
   )
 }));
 

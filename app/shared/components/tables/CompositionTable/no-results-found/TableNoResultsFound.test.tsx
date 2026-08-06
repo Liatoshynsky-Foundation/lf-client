@@ -8,7 +8,13 @@ jest.mock('next-intl', () => ({
 
 describe('TableNoResultsFound', () => {
   it('should render correctly', () => {
-    render(<TableNoResultsFound />);
+    render(
+      <table>
+        <tbody>
+          <TableNoResultsFound />
+        </tbody>
+      </table>
+    );
 
     const title = screen.getByText('title');
     const description = screen.getByText('description');

@@ -37,13 +37,11 @@ export function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<Acc
 
   if (!hasDropdown && isLinkItem(item)) {
     return (
-      <Link href={item.href} style={{ textDecoration: 'none' }}>
-        <Box data-testid={baseTestId} sx={styles.titleButton}>
-          <Typography data-testid={`${baseTestId}--title${isActive ? '--active' : ''}`} sx={styles.title(isActive)}>
-            {item.label}
-          </Typography>
-        </Box>
-      </Link>
+      <Box component={Link} href={item.href} data-testid={baseTestId} sx={styles.titleButton}>
+        <Typography data-testid={`${baseTestId}--title${isActive ? '--active' : ''}`} sx={styles.title(isActive)}>
+          {item.label}
+        </Typography>
+      </Box>
     );
   }
 
@@ -57,6 +55,14 @@ export function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<Acc
         data-testid={`${baseTestId}-toggle${isOpen ? '--open' : ''}`}
         sx={styles.titleButton}
         onClick={onToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onToggle();
+          }
+        }}
+        role="button"
+        tabIndex={0}
         aria-expanded={isOpen}
       >
         <Typography data-testid={`${baseTestId}--title${isActive ? '--active' : ''}`} sx={styles.title(isActive)}>
@@ -72,13 +78,22 @@ export function AccordionItem({ item, pathname, isOpen, onToggle }: Readonly<Acc
         />
       </Box>
 
-      <Box data-testid={`${baseTestId}-submenu${isOpen ? '--open' : ''}`} sx={styles.dropdownBox(isOpen)}>
+      <Box
+        data-testid={`${baseTestId}-submenu${isOpen ? '--open' : ''}`}
+        sx={styles.dropdownBox(isOpen)}
+        aria-hidden={!isOpen}
+      >
         {item.dropdown.map((child) => (
-          <Link key={child.label} href={child.href} style={{ textDecoration: 'none' }}>
-            <Typography data-testid={`${baseTestId}-submenuItem`} sx={styles.submenuItem}>
-              {child.label}
-            </Typography>
-          </Link>
+          <Typography
+            key={child.label}
+            component={Link}
+            href={child.href}
+            tabIndex={isOpen ? 0 : -1}
+            data-testid={`${baseTestId}-submenuItem`}
+            sx={styles.submenuItem}
+          >
+            {child.label}
+          </Typography>
         ))}
       </Box>
     </Box>

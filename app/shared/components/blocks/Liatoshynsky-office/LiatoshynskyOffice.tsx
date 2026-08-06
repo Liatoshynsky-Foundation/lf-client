@@ -1,6 +1,6 @@
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { Oswald } from 'next/font/google';
-import type { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
 import OfficeMedia from '~/components/blocks/Liatoshynsky-office/office-media/OfficeMedia';
@@ -15,17 +15,10 @@ import { ROUTES } from '~/shared/components/constants/routes';
 
 const oswald = Oswald({ weight: '700', subsets: ['latin'], display: 'swap' });
 
-const LiatoshynskyOffice = async ({
-  data,
-  t,
-  sx
-}: {
-  data: ILiatoshynskyOffice;
-  t: ReturnType<typeof useTranslations>;
-  sx?: SxProps<Theme>;
-}) => {
+const LiatoshynskyOffice = async ({ data, sx }: { data: ILiatoshynskyOffice; sx?: SxProps<Theme> }) => {
   const { quote } = data;
   const archiveUrl = await getNavigationLink(ROUTES.ARCHIVE, 'archive');
+  const t = await getTranslations('home.liatoshynskyOffice');
 
   return (
     <Box sx={{ ...(styles.mainContainer as object), ...(sx as object) }} data-testid="LiatoshynskyOffice">

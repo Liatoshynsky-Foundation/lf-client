@@ -83,10 +83,6 @@ function DonationForm() {
   });
 
   useEffect(() => {
-    if (globalThis.window === undefined) {
-      return;
-    }
-
     if (globalThis.window.Wayforpay) {
       return;
     }
@@ -226,11 +222,6 @@ function DonationForm() {
           </Box>
         </Box>
 
-        {showCaptcha && (
-          <Box sx={style.turnstileWidget}>
-            <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
-          </Box>
-        )}
         <Button
           color="primary"
           variant="contained"
@@ -241,6 +232,11 @@ function DonationForm() {
         >
           <Typography variant="customSemiBold18">{t('donationButton')}</Typography>
         </Button>
+        {showCaptcha && (
+          <Box sx={style.turnstileWidget}>
+            <TurnstileWidget language={lang} onSuccessAction={handleCaptchaSuccess} />
+          </Box>
+        )}
       </Box>
     </PaperComponent>
   );

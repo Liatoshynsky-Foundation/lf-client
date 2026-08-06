@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { CustomTabs } from './Tabs';
 
@@ -51,6 +52,20 @@ describe('CustomTabs', () => {
 
     const activeTab = screen.getByTestId('TestTabs-tab-news');
     expect(activeTab).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('tab applies correct focus styles when navigated via keyboard', async () => {
+    const user = userEvent.setup();
+    render(<CustomTabs {...defaultProps} />);
+
+    await user.tab();
+    const activeTab = screen.getByTestId('TestTabs-tab-news');
+
+    expect(activeTab).toHaveFocus();
+    expect(activeTab).toHaveStyle({
+      outline: '2px solid black',
+      outlineOffset: '-7px'
+    });
   });
 
   it('should update selected tab when activeTab prop changes', () => {

@@ -2,7 +2,9 @@
 
 import { useCallback, useMemo } from 'react';
 
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import type { Music } from '~/types/types/enhancedTable';
+import { getStorageFileEndpoint } from '~/utils/storageFileEndpoint';
 
 import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 
@@ -10,7 +12,7 @@ export function useCompositionPlayback(rowData: Music) {
   const { playTrack, togglePlay, isPlaying, src } = useAudioPlayer();
 
   const trackUrl = useMemo(
-    () => `/api/blob-url?blobName=${encodeURIComponent(rowData.name)}&folderName=compositions`,
+    () => getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, 'compositions', rowData.name),
     [rowData.name]
   );
 

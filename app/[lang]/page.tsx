@@ -80,12 +80,11 @@ export default async function Home({ params }: Readonly<Language>) {
   }
 
   const container = createRequestContainer();
-  const eventsService = container.resolve('eventsService');
+  const eventService = container.resolve('eventService');
 
-  const [pageResult, t, eventsData] = await Promise.all([
+  const [pageResult, eventsData] = await Promise.all([
     resolvePageData('about-us', lang),
-    getTranslations('home.liatoshynskyOffice'),
-    eventsService.getAllPublishedEvents(lang)
+    eventService.getAllPublishedEvents(lang)
   ]);
 
   if (isError(pageResult)) {
@@ -228,9 +227,7 @@ export default async function Home({ params }: Readonly<Language>) {
         />
       )}
 
-      {liatochynskyBlocks.LiatoshynskyOffice && (
-        <LiatoshynskyOffice data={liatochynskyBlocks.LiatoshynskyOffice} t={t} />
-      )}
+      {liatochynskyBlocks.LiatoshynskyOffice && <LiatoshynskyOffice data={liatochynskyBlocks.LiatoshynskyOffice} />}
 
       {blocks.CooperationSection && (
         <CooperationSection

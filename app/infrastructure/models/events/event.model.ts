@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-import { EventDTO, EventStatus } from '~/domain/dto/event.dto';
+import { EventDTO, EventStatus } from '~/domain/dto/events.dto';
 
 export interface IEventDocument extends Omit<EventDTO, '_id'>, Document {}
 

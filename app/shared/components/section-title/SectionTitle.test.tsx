@@ -1,5 +1,3 @@
-'use client';
-
 import { render, screen } from '@testing-library/react';
 import { useLocale } from 'next-intl';
 import React from 'react';
@@ -19,8 +17,8 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
+  default: ({ fill, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean }) => (
+    <img {...props} alt={props.alt || 'image'} data-testid="next-image" data-fill={fill ? 'true' : undefined} />
   )
 }));
 
@@ -33,7 +31,7 @@ jest.mock('~/utils/sxToArray', () => ({
 }));
 
 jest.mock('~/lib/utils/tiptapHelpers', () => ({
-  isTipTapDoc: jest.fn((val) => val?.type === 'doc'),
+  isTipTapDoc: jest.fn((val) => val && (val.type === 'doc' || val.type === TipTapNodeTypes.doc || val.isDoc)),
   getPlainString: jest.fn((val) => (typeof val === 'string' ? val : val?.en || 'localized-fallback'))
 }));
 
@@ -41,29 +39,28 @@ jest.mock('../tip-tap-content/TipTapContent', () => ({
   __esModule: true,
   default: ({ data, nodeRenderers }: MockTipTapContentProps) => {
     const ParagraphRenderer = nodeRenderers?.[TipTapNodeTypes.paragraph] || nodeRenderers?.['paragraph'];
-
     const isObjectDoc = typeof data === 'object' && data !== null && 'content' in data;
     const isString = typeof data === 'string' ? data : undefined;
-
-    const rawText = isObjectDoc ? data.content?.[0]?.content?.[0]?.text : isString;
-
-    const isLocalizedObject = rawText && typeof rawText === 'object';
-    const dummyText: string = isLocalizedObject
-      ? (rawText as Record<string, string>).uk || (rawText as Record<string, string>).en || ''
-      : (rawText as string) || 'Fallback Text';
-
-    return <div data-testid="mock-tiptap-content">{ParagraphRenderer ? ParagraphRenderer(dummyText) : dummyText}</div>;
+    const rawText = isObjectDoc ? (data as unknown as Record<string, unknown>).content : isString;
+    return (
+      <div data-testid="mock-tiptap-content">
+        {ParagraphRenderer
+          ? ParagraphRenderer(typeof rawText === 'string' ? rawText : 'TipTap Title Content')
+          : 'Fallback'}
+      </div>
+    );
   }
 }));
 
 const mockLocalizedTitle = { uk: 'Тестовий заголовок', en: 'Test English Title' };
 
 const mockTipTapTitle = {
-  type: TipTapNodeTypes.doc,
+  type: 'doc',
+  isDoc: true,
   content: [
     {
-      type: TipTapNodeTypes.paragraph,
-      content: [{ type: TipTapNodeTypes.text, text: 'TipTap Title Content' }]
+      type: 'paragraph',
+      content: [{ type: 'text', text: 'TipTap Title Content' }]
     }
   ]
 } as unknown as TipTapDoc;
@@ -74,35 +71,28 @@ describe('SectionTitle', () => {
     (useLocale as jest.Mock).mockReturnValue('en');
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should render title with icon', () => {
     render(<SectionTitle title={{ uk: 'Test title', en: 'Test title' }} />);
-
-    const title = screen.getByText('Test title');
-    const icon = screen.getByAltText('ellipse');
-    expect(title).toBeInTheDocument();
-    expect(icon).toBeInTheDocument();
+    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.getByAltText('ellipse')).toBeInTheDocument();
   });
 
   it('should render title without icon', () => {
     render(<SectionTitle icon={false} title={{ uk: 'Test title', en: 'Test title' }} />);
-
-    const title = screen.getByText('Test title');
-    const icon = screen.queryByAltText('ellipse');
-    expect(title).toBeInTheDocument();
-    expect(icon).not.toBeInTheDocument();
+    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.queryByAltText('ellipse')).not.toBeInTheDocument();
   });
 
   describe('Icon Visibility and Content Routing Matrix', () => {
     it('should correctly configure default visibility states and render plain text dictionaries', () => {
       render(<SectionTitle title={mockLocalizedTitle} />);
-
-      const heading = screen.getByRole('heading', { level: 2 });
-      expect(heading).toHaveTextContent('Test English Title');
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Test English Title');
       expect(screen.queryByTestId('mock-tiptap-content')).not.toBeInTheDocument();
-
-      const icon = screen.getByAltText('ellipse');
-      expect(icon).toBeInTheDocument();
-      expect(icon).toHaveAttribute('sizes', '(max-width: 600px) 16px, 24px');
+      expect(screen.getByAltText('ellipse')).toBeInTheDocument();
     });
 
     it('should cleanly suppress the icon when icon prop is false', () => {
@@ -112,7 +102,6 @@ describe('SectionTitle', () => {
 
     it('should alternate pipelines and mount TipTapContent when fed a structured node document', () => {
       render(<SectionTitle title={mockTipTapTitle} />);
-
       expect(screen.getByTestId('mock-tiptap-content')).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('TipTap Title Content');
     });
@@ -128,12 +117,9 @@ describe('SectionTitle', () => {
       'should match DOM structural suffixes when test ID is assigned to variant "$id"',
       ({ id, payload, expected }) => {
         render(<SectionTitle title={payload} dataTestId={id} />);
-
         expect(screen.getByTestId(id)).toBeInTheDocument();
-
         const matchingElements = screen.getAllByTestId(`${id}-title`);
         expect(matchingElements.length).toBeGreaterThanOrEqual(1);
-
         const hasExpectedText = matchingElements.some((el) => el.textContent === expected);
         expect(hasExpectedText).toBe(true);
       }

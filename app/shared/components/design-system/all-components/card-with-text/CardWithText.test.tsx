@@ -2,24 +2,26 @@ import { render, screen } from '@testing-library/react';
 
 import CardWithText from './CardWithText';
 
-describe('CardWithText', () => {
-  const smallList = ['Інтерв’ю та аналітика', 'Музична критика', 'Залучення медіа', 'Переклади матеріалів'];
-  const extendedList = [
-    'Звукове обладнання',
-    'Онлайн-трансляції',
-    'Логістика подій',
-    'Оцифрування архівів',
-    'Інтерв’ю та аналітика',
-    'Музична критика',
-    'Залучення медіа',
-    'Переклади матеріалів'
-  ];
+const smallList = ['Інтерв’ю та аналітика', 'Музична критика', 'Залучення медіа', 'Переклади матеріалів'];
+const extendedList = [
+  'Звукове обладнання',
+  'Онлайн-трансляції',
+  'Логістика подій',
+  'Оцифрування архівів',
+  'Інтерв’ю та аналітика',
+  'Музична критика',
+  'Залучення медіа',
+  'Переклади матеріалів'
+];
 
+describe('CardWithText', () => {
   it('should render the component with the necessary props', () => {
     render(<CardWithText title="Some title" list={smallList} />);
     expect(screen.getByText('Some title')).toBeInTheDocument();
     for (const item of smallList) {
-      expect(screen.getByText(item)).toBeInTheDocument();
+      const itemEl = screen.getByText(item);
+      expect(itemEl).toBeInTheDocument();
+      expect(itemEl.tagName).toBe('P');
     }
   });
 
@@ -31,13 +33,13 @@ describe('CardWithText', () => {
   it('should not render the main icon if icon prop is not passed', () => {
     render(<CardWithText title="Some title" list={smallList} />);
     const mainIcon = screen.queryAllByAltText('Bullet icon');
-    expect(mainIcon.length).toBe(0);
+    expect(mainIcon).toHaveLength(0);
   });
 
   it('should render all list items with correct number of list bullet icons', () => {
     render(<CardWithText title="Some title" list={smallList} />);
     const bullets = screen.getAllByAltText('List bullet icon');
-    expect(bullets.length).toBe(smallList.length);
+    expect(bullets).toHaveLength(smallList.length);
   });
 
   it('should render all list items for extended list', () => {
@@ -46,6 +48,6 @@ describe('CardWithText', () => {
       expect(screen.getByText(item)).toBeInTheDocument();
     }
     const bullets = screen.getAllByAltText('List bullet icon');
-    expect(bullets.length).toBe(extendedList.length);
+    expect(bullets).toHaveLength(extendedList.length);
   });
 });

@@ -11,7 +11,7 @@ export const styles = {
   },
   text: {
     fontSize: { xs: '14px', sm: '16px' },
-    color: '#412B21',
+    color: 'brown.800',
     fontWeight: 400,
     textAlign: { xs: 'left', md: 'left' },
     width: '100%'
@@ -26,7 +26,7 @@ export const styles = {
     margin: 0,
     flexWrap: { xs: 'wrap', lg: 'nowrap' },
     fontSize: '16px',
-    color: '#412B21',
+    color: 'brown.800',
     fontWeight: 400,
     width: { xs: '100%', md: 'auto' },
     marginLeft: '0',
@@ -43,7 +43,7 @@ export const styles = {
         height: '16px',
         margin: '0 16px',
         verticalAlign: 'middle',
-        backgroundColor: '#574139'
+        backgroundColor: 'brown.700'
       }
     }
   },
@@ -51,7 +51,7 @@ export const styles = {
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
-      color: '#000'
+      color: 'black'
     },
     fontSize: '16px',
     lineHeight: '150%'

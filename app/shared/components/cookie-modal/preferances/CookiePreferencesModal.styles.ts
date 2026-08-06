@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles = {
   container: {
     maxWidth: '632px',
@@ -33,7 +31,8 @@ export const styles = {
     mb: '24px'
   },
   analyticsContainer: {
-    border: `2px solid ${mainHexPallete.brown[100]}`,
+    border: '2px solid',
+    borderColor: 'brown.100',
     borderRadius: '8px',
     padding: '16px 24px',
     display: 'flex',
