@@ -3,16 +3,18 @@ export const contacts = {
   email: 'liatoshynsky@gmail.com'
 } as const;
 
+const defaultContent = {
+  en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
+  uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
+} as const;
+
 export const faqItems = [
   {
     title: {
       en: 'Is it possible to get a refund for my donation?',
       uk: 'Чи можливо отримати повернення коштів за мою пожертву?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent
   },
   {
     title: {
@@ -39,40 +41,28 @@ export const faqItems = [
       en: 'Is it safe to provide my bank card number?',
       uk: 'Чи безпечно вказувати номер моєї банківської карти?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent // Reused here
   },
   {
     title: {
       en: 'How do I set up a monthly donation to the Liatoshynsky Foundation?',
       uk: 'Як оформити платіж для щомісячної підтримки Фундації Лятошинського?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent
   },
   {
     title: {
       en: 'I have signed up for a monthly payment, but I want to cancel it. How do I do that?',
       uk: 'Я підписався на щомісячний платіж, але хочу відмовитися від нього, як це зробити?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent
   },
   {
     title: {
       en: 'How can I change the amount of help or the bank card details for monthly support?',
       uk: 'Як я можу змінити суму допомоги або реквізити банківської карти для щомісячної підтримки?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent
   },
   {
     title: {
@@ -99,10 +89,7 @@ export const faqItems = [
       en: 'How can I become a partner of the Liatoshynsky Foundation?',
       uk: 'Як стати партнером Фундації Лятошинського?'
     },
-    content: {
-      en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
-      uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'
-    }
+    content: defaultContent
   }
 ] as const;
 export const initFaqBabelCoverage = () => {
