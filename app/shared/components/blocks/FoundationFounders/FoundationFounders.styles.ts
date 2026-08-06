@@ -8,7 +8,7 @@ export const styles = {
     zIndex: -2,
     marginRight: '-50vw',
     width: '100vw',
-    backgroundColor: '#EDE8DF',
+    backgroundColor: 'brown.100',
     transform: 'skewY(-2deg)',
     transformOrigin: 'top left'
   },

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 

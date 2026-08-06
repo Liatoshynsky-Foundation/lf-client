@@ -1,17 +1,15 @@
-import { mainHexPallete } from '../theme/colors';
-
 export const textStates = {
   default: {
-    color: mainHexPallete.brown[900]
+    color: 'burgundy.900'
   },
   hover: {
-    '@media (min-width: 900px)': { color: mainHexPallete.burgundy[700] }
+    '@media (min-width: 900px)': { color: 'burgundy.700' }
   },
   pressed: {
-    color: mainHexPallete.burgundy[900]
+    color: 'burgundy.900'
   },
   active: {
-    color: mainHexPallete.burgundy[700]
+    color: 'burgundy.700'
   }
 };
 
@@ -23,7 +21,10 @@ export const styles = {
   },
   itemWrapper: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: '100%',
+    border: 'none !important',
+    boxShadow: 'none !important'
   },
 
   titleButton: {
@@ -31,22 +32,39 @@ export const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     cursor: 'pointer',
-    paddingY: { xs: '5px', md: '0' },
-    paddingX: 0,
+    paddingY: { xs: '6px', md: '4px' },
+    paddingX: '8px',
+    marginX: '-8px',
+    width: 'calc(100% + 16px)',
     color: textStates.default.color,
-    transition: 'color 0.2s ease',
+    transition: 'color 0.2s ease, box-shadow 0.2s ease',
+    borderRadius: '8px',
+    border: 'none !important',
+    outline: 'none !important',
+    textDecoration: 'none !important',
+    background: 'transparent !important',
+
+    '&:focus, &:focus-visible, &:focus-within': {
+      outline: 'none !important',
+      boxShadow: '0 0 0 2px #631B2B !important',
+      borderRadius: '8px',
+      color: 'burgundy.700 !important',
+      textDecoration: 'none !important'
+    },
 
     '&:hover': {
       ...textStates.hover,
+      textDecoration: 'none !important',
       '& svg *': {
-        stroke: mainHexPallete.burgundy[700]
+        stroke: 'burgundy.700'
       }
     },
 
     '&:active': {
       ...textStates.pressed,
+      textDecoration: 'none !important',
       '& svg *': {
-        stroke: mainHexPallete.burgundy[900]
+        stroke: 'burgundy.900'
       }
     }
   },
@@ -58,23 +76,48 @@ export const styles = {
     lineHeight: '160%',
     textTransform: 'uppercase',
     transition: 'color 0.2s ease',
-    color: isActive ? textStates.active : 'inherit'
+    color: isActive ? textStates.active : 'inherit',
+    textDecoration: 'none !important'
   }),
+
   submenuItem: {
     fontSize: { xs: '22px', md: '28px' },
     fontFamily: 'Oswald',
     fontWeight: 500,
     lineHeight: '120%',
     cursor: 'pointer',
-    color: textStates.default.color,
-    transition: 'color 0.2s ease',
+    color: `${textStates.default.color} !important`,
+    transition: 'color 0.2s ease, box-shadow 0.2s ease',
+    paddingY: '6px',
+    paddingX: '8px',
+    marginX: '-8px',
+    width: 'calc(100% + 16px)',
+    display: 'block',
+    border: 'none !important',
+    outline: 'none !important',
+    textDecoration: 'none !important',
+    background: 'transparent !important',
 
-    '&:hover': textStates.hover,
-    '&:active': textStates.pressed
+    '&:focus-visible': {
+      outline: 'none !important',
+      boxShadow: '0 0 0 2px #631B2B !important',
+      color: 'burgundy.700 !important',
+      textDecoration: 'none !important'
+    },
+
+    '&:hover': {
+      ...textStates.hover,
+      textDecoration: 'none !important'
+    },
+    '&:active': {
+      ...textStates.pressed,
+      textDecoration: 'none !important'
+    }
   },
+
   dropdownBox: (isOpen: boolean) => ({
-    overflow: 'hidden',
-    maxHeight: isOpen ? '13rem' : 0,
+    overflow: isOpen ? 'visible !important' : 'hidden !important',
+    maxHeight: isOpen ? '20rem' : 0,
 
     opacity: isOpen ? 1 : 0,
     transform: isOpen ? 'translateY(0)' : 'translateY(-6px)',
@@ -93,9 +136,11 @@ export const styles = {
         padding 400ms ease-in
       `,
 
-    py: isOpen ? '12px' : 0,
+    pt: isOpen ? '16px' : 0,
+    pb: isOpen ? '16px' : 0,
+    px: '8px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px'
+    gap: '12px'
   })
 };

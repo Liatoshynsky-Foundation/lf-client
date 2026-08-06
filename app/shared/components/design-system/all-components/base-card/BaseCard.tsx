@@ -21,6 +21,7 @@ export interface BaseCardProps {
   title: string;
   publicationDate: string;
   description: string;
+  alt: string;
   href: string;
   variant: Variant;
   dataTestId?: string;
@@ -48,6 +49,7 @@ const BUTTON_CONFIG = {
 
 export default function BaseCard({
   image,
+  alt,
   crop,
   title,
   publicationDate,
@@ -76,7 +78,7 @@ export default function BaseCard({
           <img
             ref={imgRef}
             src={imageSrc}
-            alt={title}
+            alt={alt}
             loading="lazy"
             onLoad={handleImageLoad}
             style={isFallbackImage ? styles.fallbackImage : croppedImgStyle}
@@ -85,7 +87,7 @@ export default function BaseCard({
         ) : (
           <Image
             src={imageSrc}
-            alt={title}
+            alt={alt}
             fill
             style={styles.image}
             sizes="(max-width: 768px) 100vw, 33vw"

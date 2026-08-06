@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -74,7 +72,7 @@ export const imageSizes = {
     },
     top: { xs: 12, sm: 20, md: 20, lg: 20, xl: 20 },
     left: { xs: 12, sm: 12, md: 20, lg: 20, xl: 20 },
-    color: mainHexPallete.yellow[300]
+    color: 'yellow.300'
   },
   imageSx: {
     width: { xs: '272px', sm: '400px', md: '496px', lg: '645px', xl: '744px', xxl: '806px', ultra: '1001px' }

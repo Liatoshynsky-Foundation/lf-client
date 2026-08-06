@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useMemo, useRef } from 'react';
 
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
@@ -27,19 +27,30 @@ interface TableFiltersProps {
 
 export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: Readonly<TableFiltersProps>) {
   const t = useTranslations('filtering');
+  const rowRef = useRef<HTMLDivElement>(null);
 
-  const orderedFilters = (() => {
+  const orderedFilters = useMemo(() => {
     const movable = filters.filter((f) => !f.isStatic);
-
     const sortedMovable = [...movable].sort((a, b) => Number(Boolean(b.isActive)) - Number(Boolean(a.isActive)));
-
     let i = 0;
     return filters.map((f) => (f.isStatic ? f : sortedMovable[i++]));
-  })();
+  }, [filters]);
+
+  const handleClear = () => {
+    onClearAllFilters?.();
+    requestAnimationFrame(() => {
+      const focusableElements = Array.from(
+        rowRef.current?.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]') ?? []
+      );
+      const fallback = rowRef.current;
+      const target = focusableElements.length > 0 ? focusableElements.at(-1) : fallback;
+      target?.focus();
+    });
+  };
 
   return (
     <Box sx={styles.container} data-testid="TableFilters">
-      <Box sx={styles.row} data-testid="TableFilters-row">
+      <Box sx={styles.row} data-testid="TableFilters-row" ref={rowRef} tabIndex={-1}>
         {orderedFilters.map((filter) => (
           <Box key={filter.id} data-testid={`TableFilters-filter-${filter.id}`}>
             {filter.element}
@@ -54,8 +65,7 @@ export function TableFilters({ filters, onClearAllFilters, isAnyFilterActive }: 
                 type={IconButtonVariant.outlined}
                 variant={IconButtonColorVariant.Secondary}
                 size="medium"
-                onClick={onClearAllFilters}
-                sx={{ border: 'none', padding: 0 }}
+                onClick={handleClear}
                 aria-label={t('clearAll')}
               >
                 <Delete />

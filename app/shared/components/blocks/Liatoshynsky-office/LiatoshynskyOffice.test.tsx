@@ -1,11 +1,20 @@
 import { render, screen } from '@testing-library/react';
-import { useTranslations } from 'next-intl';
 import React from 'react';
+
+import LiatoshynskyOffice from './LiatoshynskyOffice';
 
 import { ROUTES } from '~/shared/components/constants/routes';
 
+const mockData = {
+  quote: {
+    text: 'Текст моєї тестової цитати',
+    author: 'Тестовий Автор',
+    source: 'Тестове Джерело'
+  }
+};
+
 jest.mock('~/lib/utils/navigationHelper', () => ({
-  getNavigationLink: jest.fn().mockResolvedValue(ROUTES.ARCHIVE)
+  getNavigationLink: jest.fn().mockResolvedValue('/archive')
 }));
 
 jest.mock('~/components/Quote/Quote', () => {
@@ -26,35 +35,34 @@ jest.mock('next/font/google', () => ({
   Oswald: () => ({ className: 'mocked-oswald' })
 }));
 
-import LiatoshynskyOffice from './LiatoshynskyOffice';
-
-const mockTranslations: Record<string, string> = {
-  office: 'Кабінет',
-  name: 'Лятушинського',
-  goToOfficeButton: 'Увійти до архіву'
-};
-
-const mockTWithTranslations = (key: string) => {
-  return mockTranslations[key] || key;
-};
-const mockT = mockTWithTranslations as ReturnType<typeof useTranslations>;
-const mockData = {
-  quote: {
-    text: 'Текст моєї тестової цитати',
-    author: 'Тестовий Автор',
-    source: 'Тестове Джерело'
-  }
-};
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn()
+}));
 
 describe('LiatoshynskyOffice', () => {
+  const { getTranslations } = jest.requireMock('next-intl/server');
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    getTranslations.mockResolvedValue((key: 'office' | 'name' | 'goToOfficeButton') => {
+      const translations = {
+        office: 'АрХів',
+        name: 'ЛЯтоШинСькоГO',
+        goToOfficeButton: 'Увійти до архіву'
+      };
+      return translations[key] || key;
+    });
+  });
+
   const setupComponent = async () => {
-    const component = await LiatoshynskyOffice({ data: mockData, t: mockT });
+    const component = await LiatoshynskyOffice({ data: mockData });
     render(component);
   };
 
   it.each([
-    ['text content', 'Кабінет'],
-    ['text content', 'Лятушинського']
+    ['text content', 'АрХів'],
+    ['text content', 'ЛЯтоШинСькоГO']
   ])('should render the main %s from translations: %s', async (_, text) => {
     await setupComponent();
     expect(screen.getByText(text)).toBeInTheDocument();
@@ -63,7 +71,7 @@ describe('LiatoshynskyOffice', () => {
   it.each([
     ['quote', 'quote'],
     ['media', 'media']
-  ])('should render the %s component', async (description, testId) => {
+  ])('should render the %s component', async (_, testId) => {
     await setupComponent();
     expect(screen.getByTestId(testId)).toBeInTheDocument();
   });
@@ -76,7 +84,7 @@ describe('LiatoshynskyOffice', () => {
 
   it('should apply the correct font class to the text block', async () => {
     await setupComponent();
-    const textElement = screen.getByText('Кабінет');
-    expect(textElement.parentElement).toHaveClass('mocked-oswald');
+    const textBlock = screen.getByTestId('LiatoshynskyOffice-textBlock');
+    expect(textBlock).toHaveClass('mocked-oswald');
   });
 });

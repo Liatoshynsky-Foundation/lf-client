@@ -1,11 +1,12 @@
 import { Locale } from 'next-intl';
 
-import { errors } from '~/constants/errors';
+import { errors, loggerErrors } from '~/constants/errors';
 
 import type { EventRepository } from '~/infrastructure/repositories/events/event.repo';
 import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
-import { eventListItemSchema, eventSchema } from '~/validators/event.schema';
+import { eventSchema } from '~/validators/event.schema';
+import { eventListItemSchema } from '~/validators/events.schema';
 import { LocalizeSchema } from '~/validators/localization';
 
 interface EventServiceDeps {
@@ -29,7 +30,10 @@ export const createEventService = ({ eventRepository }: EventServiceDeps) => ({
 
       return validItems;
     } catch (error) {
-      logger.error(errors.EVENTS_FETCH_FAILED, error);
+      logger.error(
+        `[SERVICE:Events:getAllPublishedEvents] Failed to fetch or parse events. ${loggerErrors.ZOD_VALIDATION_ERROR}`,
+        error
+      );
       return [];
     }
   },

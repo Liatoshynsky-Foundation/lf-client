@@ -36,7 +36,7 @@ export const styles = {
     fontSize: '16px'
   },
   dateMobile: {
-    color: '#9E9E9E',
+    color: 'blue.500',
     fontSize: '14px',
     display: { xs: 'block', md: 'none' }
   },

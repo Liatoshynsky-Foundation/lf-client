@@ -4,12 +4,20 @@ import { render, screen } from '@testing-library/react';
 
 import ColoredLayout from './ColoredLayout';
 
+type MockMainLayoutProps = {
+  children?: React.ReactNode;
+  lineColor?: string;
+  [key: string]: unknown;
+};
+
 jest.mock('~/layouts/main-layout/MainLayout', () => {
-  return jest.fn(({ children, ...props }: any) => (
+  const MockLayout = ({ children, lineColor: _lineColor, ...props }: MockMainLayoutProps) => (
     <Box data-testid="main-layout" {...props}>
       {children}
     </Box>
-  ));
+  );
+  MockLayout.displayName = 'MockMainLayout';
+  return MockLayout;
 });
 
 describe('ColoredLayout Component', () => {

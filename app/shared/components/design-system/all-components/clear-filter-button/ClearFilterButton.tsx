@@ -1,7 +1,7 @@
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import Button from '~/ds-components/button/Button';
-import { rgbaClearFilterButton } from '~/ds-components/theme/colors';
 
+import { theme } from '../theme/Theme';
 import { styles } from './ClearFilterButton.styles';
 
 import TrashIcon from '~/public/icons/trash-2.svg';
@@ -15,7 +15,7 @@ export default function ClearFilterButton({ onClick, children }: ClearFilterButt
   return (
     <Button
       variant="text"
-      startIcon={<Svg Component={TrashIcon} alt="clear" stroke={rgbaClearFilterButton.defaultTextColor} />}
+      startIcon={<Svg Component={TrashIcon} alt="" stroke={theme.palette.error.main} aria-hidden="true" />}
       onClick={onClick}
       sx={styles.button}
     >

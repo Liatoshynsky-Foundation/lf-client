@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
     const filters = {
       search: rawFilters.search,
       category: rawFilters.categories,
-      genre: rawFilters.genres,
       yearFrom: rawFilters.years?.min,
       yearTo: rawFilters.years?.max
     };

@@ -1,32 +1,28 @@
 import type { SxProps, Theme } from '@mui/material';
-
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
-import { hexToRGBA } from '~/lib/utils/hexToRGBA';
-
-const borderWithOpacity = hexToRGBA(mainHexPallete.blue[200], 0.4);
+import { alpha } from '@mui/material/styles';
 
 export const collapsibleRowStyles = {
   row: (collapsed: boolean): SxProps<Theme> => ({
     py: collapsed ? 'auto' : 0,
     overflow: 'hidden',
     transition: 'height 400ms ease',
-    backgroundColor: collapsed ? mainHexPallete.blue[75] : 'transparent',
+    backgroundColor: collapsed ? 'blue.75' : 'transparent',
     cursor: 'pointer'
   }),
 
-  cell: {
+  cell: (theme: Theme) => ({
     py: 1.5,
     px: 0,
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none',
-    borderBottom: `2px solid ${borderWithOpacity}`,
+    borderBottom: '2px solid',
+    borderColor: alpha(theme.palette.blue?.[200] || '#D9DCE8', 0.4),
     '& .MuiTableCell-root': {
       borderBottom: 'none',
       padding: 0
     }
-  },
+  }),
 
   cellInner: {
     display: 'flex',
@@ -47,19 +43,29 @@ export const collapsibleRowStyles = {
     }
   },
 
+  toggleButton: {
+    bgcolor: 'none',
+    '&:focus-visible': {
+      outline: '2px solid black'
+    }
+  },
+
   labelBox: {
     display: 'flex',
     alignItems: 'center',
     gap: 1
   },
 
-  collapsedCell: (collapsed: boolean): SxProps<Theme> => ({
-    py: collapsed ? 1.5 : 0,
-    px: 0,
-    borderBottom: collapsed ? `2px solid ${borderWithOpacity}` : 'none',
-    borderLeft: 'none',
-    borderRight: 'none',
-    borderTop: 'none',
-    backgroundColor: collapsed ? mainHexPallete.blue[75] : 'transparent'
-  })
+  collapsedCell: (collapsed: boolean): SxProps<Theme> => {
+    return (theme) => ({
+      py: collapsed ? 1.5 : 0,
+      px: 0,
+      borderBottom: collapsed ? '2px solid' : 'none',
+      borderColor: collapsed ? alpha(theme.palette.blue?.[200] || '#D9DCE8', 0.4) : 'transparent',
+      borderLeft: 'none',
+      borderRight: 'none',
+      borderTop: 'none',
+      backgroundColor: collapsed ? 'blue.75' : 'transparent'
+    });
+  }
 };

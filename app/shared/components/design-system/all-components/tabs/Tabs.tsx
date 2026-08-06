@@ -1,5 +1,3 @@
-'use client';
-
 import Box from '@mui/material/Box';
 import MuiTab from '@mui/material/Tab';
 import MuiTabs from '@mui/material/Tabs';
@@ -42,6 +40,7 @@ export const CustomTabs = ({ tabs, activeTab, onTabChange, className, dataTestId
             key={tab.id}
             label={tab.label}
             value={tab.id}
+            sx={styles.tab}
             disableRipple
             data-testid={`${dataTestId}-tab-${tab.id}`}
           />

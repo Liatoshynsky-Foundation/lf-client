@@ -1,12 +1,5 @@
+import type { CompositionRepository } from '~/infrastructure/repositories/artistry/compositions.repo';
 import { createArtistryService } from '~/services/artistry/artistryService';
-
-const mockRawGenres = [
-  {
-    _id: '63f8b3b7a8b3d6c1b3e8e4a1',
-    key: 'romance',
-    name: { en: 'Romance', uk: 'Романс' }
-  }
-];
 
 const mockRawCategories = [
   {
@@ -34,40 +27,38 @@ const mockRawCompositions = [
       createdAt: new Date('2022-01-01'),
       updatedAt: new Date('2022-01-01')
     },
-    genres: [mockRawGenres[0]]
+    genre: null
   }
 ];
 
-const compositionServiceMock = {
-  getAllGenres: jest.fn(),
-  getAllCategories: jest.fn(),
-  getAllCompositions: jest.fn(),
-  getAllCompositionTitles: jest.fn(),
-  getCompositionsYearRange: jest.fn()
-};
-
-const artistryService = createArtistryService({
-  compositionsRepo: compositionServiceMock
-});
-
 describe('artistryService', () => {
+  const compositionServiceMock = {
+    getAllGenres: jest.fn(),
+    getAllCategories: jest.fn(),
+    getAllCompositions: jest.fn(),
+    getAllCompositionTitles: jest.fn(),
+    getCompositionsYearRange: jest.fn()
+  } as unknown as jest.Mocked<CompositionRepository>;
+
+  const artistryService = createArtistryService({
+    compositionsRepo: compositionServiceMock
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe('getAllGenres', () => {
-    it('should fetch genres, localize them and return the result', async () => {
-      const locale = 'uk';
-      compositionServiceMock.getAllGenres.mockResolvedValue(mockRawGenres);
-      const result = await artistryService.getAllGenres(locale);
-      expect(result).toEqual([{ key: 'romance', name: 'Романс' }]);
+    it('should return empty array (genre filter removed from UI)', async () => {
+      const result = await artistryService.getAllGenres();
+      expect(result).toEqual([]);
     });
   });
 
   describe('getAllCategories', () => {
     it('should fetch categories, localize them and return the result', async () => {
       const locale = 'uk';
-      compositionServiceMock.getAllCategories.mockResolvedValue(mockRawCategories);
+      (compositionServiceMock.getAllCategories as jest.Mock).mockResolvedValue(mockRawCategories);
       const result = await artistryService.getAllCategories(locale);
       expect(result).toEqual([{ key: 'classical', name: 'Класична' }]);
     });
@@ -76,48 +67,61 @@ describe('artistryService', () => {
   describe('getAllCompositions', () => {
     it('should fetch compositions, localize them and return the result', async () => {
       const locale = 'uk';
-      compositionServiceMock.getAllCompositions.mockResolvedValue(mockRawCompositions);
+      (compositionServiceMock.getAllCompositions as jest.Mock).mockResolvedValue(mockRawCompositions);
       const result = await artistryService.getAllCompositions(locale, '');
-      expect(result[0].name).toBe('Красива пісня');
-      expect(result[0].opusTitle).toBe('Перший опус');
+      const parsedResult = result as unknown as Record<string, unknown>[];
+      expect(parsedResult[0].name).toBe('Красива пісня');
+      expect(parsedResult[0].opusTitle).toBe('Перший опус');
     });
 
     it('should return empty array if null returned', async () => {
-      compositionServiceMock.getAllCompositions.mockResolvedValue(null);
+      (compositionServiceMock.getAllCompositions as jest.Mock).mockResolvedValue(null);
       const result = await artistryService.getAllCompositions('uk', '');
       expect(result).toEqual([]);
     });
   });
 
-  describe('getAllCompositionTitles (Targeting lines 43-46)', () => {
-    it('should fetch titles and localize them', async () => {
+  describe('getAllCompositionTitles', () => {
+    it('should fetch titles, localize them and add genre suggestions', async () => {
       const locale = 'en';
       const mockTitles = [
         {
-          // Заменяем '1' на валидный 24-символьный hex ID
           _id: '507f191e810c19729de860ea',
           title: { en: 'Title En', uk: 'Назва Укр' }
         }
       ];
-      compositionServiceMock.getAllCompositionTitles.mockResolvedValue(mockTitles);
+      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue(mockTitles);
+      (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue(['Romance', 'Jazz']);
 
-      const result = await artistryService.getAllCompositionTitles(locale, {});
+      const result = await artistryService.getAllCompositionTitles(locale);
 
-      expect(result).toEqual([{ _id: '507f191e810c19729de860ea', title: 'Title En' }]);
-      expect(compositionServiceMock.getAllCompositionTitles).toHaveBeenCalled();
+      expect(result).toEqual([
+        { _id: '507f191e810c19729de860ea', title: 'Title En' },
+        { _id: 'genre-0', title: 'Romance', kind: 'genre' },
+        { _id: 'genre-1', title: 'Jazz', kind: 'genre' }
+      ]);
+      expect(compositionServiceMock.getAllCompositionTitles).toHaveBeenCalledWith({});
+      expect(compositionServiceMock.getAllGenres).toHaveBeenCalled();
     });
 
-    it('should return empty array if repo returns null (line 44)', async () => {
-      compositionServiceMock.getAllCompositionTitles.mockResolvedValue(null);
-      const result = await artistryService.getAllCompositionTitles('uk', {});
+    it('should return empty array if repo returns null to cover branch line 42', async () => {
+      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue(null);
+      const result = await artistryService.getAllCompositionTitles('uk');
+      expect(result).toEqual([]);
+    });
+
+    it('should return empty array if repo returns empty array to complete branch cover', async () => {
+      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue([]);
+      (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue([]);
+      const result = await artistryService.getAllCompositionTitles('uk');
       expect(result).toEqual([]);
     });
   });
 
-  describe('getCompositionsYearRange (Targeting lines 49-51)', () => {
+  describe('getCompositionsYearRange', () => {
     it('should fetch and return year range', async () => {
       const mockRange = { minYear: 1950, maxYear: 2024 };
-      compositionServiceMock.getCompositionsYearRange.mockResolvedValue(mockRange);
+      (compositionServiceMock.getCompositionsYearRange as jest.Mock).mockResolvedValue(mockRange);
 
       const result = await artistryService.getCompositionsYearRange();
 

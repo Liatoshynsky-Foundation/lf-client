@@ -1,8 +1,6 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { hexButtonGroupColors } from '~/ds-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const StyledIndicator = styled(Box, {
@@ -13,7 +11,7 @@ export const StyledIndicator = styled(Box, {
   palette: 'primary' | 'secondary' | 'tertiary';
   animate?: boolean;
 }>(({ left, width, palette, animate = true }) => {
-  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
+  const isPrimary = palette === 'primary';
 
   return {
     ...commonSx.layout.activeTabIndicator,
@@ -21,8 +19,8 @@ export const StyledIndicator = styled(Box, {
     borderRadius: '9999px',
     transition: animate ? 'all 0.3s ease' : 'none',
     zIndex: 0,
-    backgroundColor: paletteValues.selectedButtonColor,
-    color: paletteValues.selectedButtonTextColor,
+    backgroundColor: isPrimary ? 'black' : 'white',
+    color: isPrimary ? 'white' : 'black',
     left,
     width
   };
@@ -35,23 +33,23 @@ export const StyledButtonItem = styled(Box, {
   palette: 'primary' | 'secondary' | 'tertiary';
   size: 'small' | 'big';
 }>(({ active, palette, size }) => {
-  const paletteValues = palette === 'primary' ? hexButtonGroupColors.primary : hexButtonGroupColors.secondary;
+  const isPrimary = palette === 'primary';
+  const activeTextColor = isPrimary ? 'white' : 'black';
+  const inactiveTextColor = 'black';
 
   return {
     display: 'inline-flex',
     alignItems: 'center',
     height: '100%',
     borderRadius: '9999px',
-    color: active ? paletteValues.selectedButtonTextColor : paletteValues.buttonTextColor,
+    color: active ? activeTextColor : inactiveTextColor,
     fontFamily: 'inherit',
     cursor: 'pointer',
     position: 'relative',
     zIndex: 1,
+
     marginRight: '4px',
-    padding: size === 'big' ? '5px 16px' : '2px 16px',
-    '&:has(svg)': {
-      paddingRight: '12px'
-    },
+    padding: 0,
     '& svg': {
       transform: 'translateY(2px)'
     },
@@ -65,6 +63,12 @@ export const StyledButtonItem = styled(Box, {
     '&:hover': {
       background: 'rgba(25, 13, 3, 0.12)'
     },
+    '& .MuiButtonBase-root.Mui-focusVisible, && a:focus-visible, && button:focus-visible': {
+      outline: '3px solid #000000 !important',
+      outlineOffset: '1px !important',
+      borderRadius: '100px !important',
+      backgroundColor: 'rgba(25, 13, 3, 0.12) !important'
+    },
     '& .MuiButtonBase-root, && a, && button': {
       backgroundColor: 'transparent',
       color: 'inherit',
@@ -75,11 +79,18 @@ export const StyledButtonItem = styled(Box, {
       lineHeight: 'inherit',
       cursor: 'inherit',
       border: 'none',
-      padding: 0,
       margin: 0,
       display: 'inline-flex',
+      width: '100%',
       height: '100%',
-      transition: 'none'
+      transition: 'none',
+      padding: size === 'big' ? '5px 16px' : '2px 16px',
+      '&:has(svg)': {
+        paddingRight: '12px'
+      },
+      '& svg': {
+        transform: 'translateY(2px)'
+      }
     }
   };
 });

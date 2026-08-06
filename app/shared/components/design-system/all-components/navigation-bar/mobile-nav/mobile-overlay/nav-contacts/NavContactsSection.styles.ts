@@ -1,5 +1,4 @@
 import { AppTypography } from '~/constants';
-import { mainHexPallete } from '~/shared/components/design-system/all-components/theme/colors';
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -12,7 +11,7 @@ export const styles = {
     ...AppTypography.mulish18Regular,
     fontSize: commonSx.layout.typography.bodyMedium,
     lineHeight: { xs: '150%', md: '160%' },
-    color: mainHexPallete.brown[700],
+    color: 'brown.700',
     display: { xs: 'none', sm: 'block' }
   },
   socialMediaBox: {

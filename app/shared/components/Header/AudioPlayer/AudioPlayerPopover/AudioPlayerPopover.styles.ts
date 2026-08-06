@@ -1,6 +1,6 @@
 export const styles = {
   popoverPaper: {
-    backgroundColor: '#2b2b2b',
+    backgroundColor: 'grey.900',
     color: 'white',
     borderRadius: '16px',
     padding: '16px',
@@ -37,7 +37,7 @@ export const styles = {
     position: 'relative',
     width: '100%',
     height: 2,
-    backgroundColor: '#666',
+    backgroundColor: 'grey.700',
     borderRadius: 2,
     cursor: 'pointer',
     marginTop: 1,
@@ -77,7 +77,7 @@ export const styles = {
       height: 16
     },
     '&:hover': {
-      backgroundColor: '#f5f5f5'
+      backgroundColor: 'grey.350'
     }
   },
   allTracksButton: {
@@ -90,7 +90,10 @@ export const styles = {
     height: 40,
     width: '111px',
     '&:hover': {
-      backgroundColor: '#f5f5f5'
+      backgroundColor: 'grey.350'
+    },
+    '&.Mui-focusVisible, &:focus-visible': {
+      backgroundColor: '  white'
     }
   },
   errorMessage: {

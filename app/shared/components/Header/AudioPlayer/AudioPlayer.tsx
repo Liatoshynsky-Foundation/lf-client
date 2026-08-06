@@ -36,8 +36,7 @@ export default function AudioPlayer() {
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   const setupAudioAnalyzer = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const audio = audioRef.current!;
 
     if (audioContextRef.current) {
       audioContextRef.current.close();
@@ -63,9 +62,8 @@ export default function AudioPlayer() {
   }, []);
 
   const animateBars = useCallback(() => {
-    const analyser = analyserRef.current;
-    const dataArray = dataArrayRef.current;
-    if (!analyser || !dataArray) return;
+    const analyser = analyserRef.current!;
+    const dataArray = dataArrayRef.current!;
 
     analyser.getByteFrequencyData(dataArray);
 
@@ -87,8 +85,7 @@ export default function AudioPlayer() {
   }, []);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const audio = audioRef.current!;
 
     const updateProgress = () => setCurrentTime(audio.currentTime);
     const loadDuration = () => {
@@ -135,9 +132,7 @@ export default function AudioPlayer() {
         if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
           setupAudioAnalyzer();
         }
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current);
-        }
+        cancelAnimationFrame(animationRef.current ?? 0);
         animateBars();
         setError(null);
       } catch (err) {
@@ -151,11 +146,8 @@ export default function AudioPlayer() {
       playAudio();
     } else {
       audio.pause();
-
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
+      cancelAnimationFrame(animationRef.current ?? 0);
+      animationRef.current = null;
     }
 
     return () => {
@@ -187,7 +179,14 @@ export default function AudioPlayer() {
   return (
     <>
       <Box sx={styles.wrapper}>
-        <IconButton sx={styles.eqButton} onClick={handlePopoverToggle} aria-label="Toggle audio player" ref={buttonRef}>
+        <IconButton
+          sx={styles.eqButton}
+          onClick={handlePopoverToggle}
+          aria-label="Toggle audio player"
+          aria-expanded={isPlayerOpen}
+          aria-haspopup="dialog"
+          ref={buttonRef}
+        >
           <Box display="flex" alignItems="center" gap={0.5} height={30}>
             {stickHeights.map(({ id, height }, i) => (
               <Box

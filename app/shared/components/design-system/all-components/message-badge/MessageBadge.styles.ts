@@ -5,19 +5,19 @@ export const badgeStyles = {
     right: 4
   },
   '& .MuiBadge-colorDefault': {
-    color: '#190D03'
+    color: 'black'
   },
   '& .MuiBadge-colorPrimary': {
-    color: '#FCFCFC',
-    backgroundColor: '#5F0E0F'
+    color: 'white',
+    backgroundColor: 'burgundy.800'
   },
   '& .MuiBadge-colorSecondary': {
-    color: '#190D03',
-    backgroundColor: '#FCFCFC'
+    color: 'black',
+    backgroundColor: 'white'
   },
   '& .MuiBadge-colorError': {
-    color: '#FCFCFC',
-    backgroundColor: '#E63C14'
+    color: 'white',
+    backgroundColor: 'red.600'
   },
   '& img': {
     position: 'absolute',

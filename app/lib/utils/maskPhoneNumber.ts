@@ -8,18 +8,19 @@ export type MaskPhoneNumberProps = {
 
 type SeparateBy = ' ' | '-';
 
-function clampNational(national: string, maxDigits: number, countryCode: number): string {
-  const allowed = Math.max(0, maxDigits - countryCode);
+function clampNational(national: string, maxDigits: number, countryCodeLength: number): string {
+  const allowed = Math.max(0, maxDigits - countryCodeLength);
   return national.slice(0, allowed);
 }
 
 function groupNationalRest(rest: string, separator: string): string {
   const length = rest.length;
-  if (length <= 1) return rest;
+  if (length <= 1) {
+    return rest;
+  }
 
   if (length < 9) {
     const firstGroupSize = Math.floor(length / 2);
-    if (firstGroupSize <= 0 || firstGroupSize >= length) return rest;
     return rest.slice(0, firstGroupSize) + separator + rest.slice(firstGroupSize);
   }
 
@@ -44,9 +45,11 @@ export function maskPhoneNumber({
   const rest = clampedNational.slice(operatorCodeLength);
 
   let out = `${countryCode}`;
-  if (out) out += ' ';
+  if (out) {
+    out += ' ';
+  }
 
-  if (operatorCodeLength > 0 && operatorCode) {
+  if (operatorCodeLength > 0 && !!operatorCode) {
     out += `(${operatorCode}) `;
   }
 

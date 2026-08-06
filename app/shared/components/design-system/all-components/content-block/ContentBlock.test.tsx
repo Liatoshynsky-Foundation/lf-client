@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import ContentBlock from './ContentBlock';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 const paragraphs = [
   { id: 1, text: 'Paragraph 1' },
@@ -21,6 +22,7 @@ const additionalDescription = [
 jest.mock('next-intl', () => ({
   useLocale: () => 'uk'
 }));
+
 const mockTipTapData = {
   type: 'doc',
   content: [
@@ -29,7 +31,7 @@ const mockTipTapData = {
       content: [{ type: 'text', text: 'TipTap Real Text' }]
     }
   ]
-};
+} as unknown as TipTapDoc;
 
 describe('ContentBlock', () => {
   it('should render title when provided', () => {
@@ -51,7 +53,7 @@ describe('ContentBlock', () => {
     });
 
     it('should render TipTap description (covers lines 44, 60-73)', () => {
-      render(<ContentBlock description={mockTipTapData as any} />);
+      render(<ContentBlock description={mockTipTapData} />);
       expect(screen.getByText('TipTap Real Text')).toBeInTheDocument();
     });
   });
@@ -70,7 +72,7 @@ describe('ContentBlock', () => {
     });
 
     it('should render TipTap list (covers lines 85-98)', () => {
-      const { container } = render(<ContentBlock list={mockTipTapData as any} />);
+      const { container } = render(<ContentBlock list={mockTipTapData} />);
 
       expect(screen.getByText('TipTap Real Text')).toBeInTheDocument();
 
@@ -93,7 +95,7 @@ describe('ContentBlock', () => {
     });
 
     it('should render TipTap additionalDescription', () => {
-      render(<ContentBlock additionalDescription={mockTipTapData as any} />);
+      render(<ContentBlock additionalDescription={mockTipTapData} />);
       expect(screen.getByText('TipTap Real Text')).toBeInTheDocument();
     });
   });
@@ -120,7 +122,24 @@ describe('ContentBlock', () => {
   });
 
   it('should cover style merge branch with textSx', () => {
-    render(<ContentBlock description={mockTipTapData as any} textSx={{ color: 'red' }} />);
+    render(<ContentBlock description={mockTipTapData} textSx={{ color: 'red' }} />);
     expect(screen.getByText('TipTap Real Text')).toBeInTheDocument();
+  });
+
+  it('should cover all style array branches (lines 31, 51, 79, 111) when styles are arrays', () => {
+    const mockArraySx = [{ color: 'red' }, { fontSize: '16px' }];
+
+    render(
+      <ContentBlock
+        description={mockTipTapData}
+        list={mockTipTapData}
+        additionalDescription={mockTipTapData}
+        textSx={mockArraySx}
+        additionalTextSx={mockArraySx}
+        containerSx={mockArraySx}
+      />
+    );
+
+    expect(screen.getAllByText('TipTap Real Text').length).toBeGreaterThan(0);
   });
 });

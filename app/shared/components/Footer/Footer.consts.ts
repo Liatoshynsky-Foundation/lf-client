@@ -6,8 +6,7 @@ export const footerData = {
   text: '© 2025 Liotoshynsky Foundation. Всі права захищені.',
   links: [
     { label: 'Політика конфіденційності', href: '/privacy' },
-    { label: 'Умови користування сайтом', href: ROUTES.TERMS },
-    { label: 'Інформація для медіа / партнерів', href: '/media' }
+    { label: 'Умови користування сайтом', href: ROUTES.TERMS }
   ]
 };
 

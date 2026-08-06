@@ -1,3 +1,5 @@
+import { theme } from '../../design-system/all-components/theme/Theme';
+
 export const styles = {
   container: {
     maxWidth: '520px',
@@ -9,6 +11,7 @@ export const styles = {
     flexDirection: 'column',
     flexGrow: 1
   },
+  mainText: theme.typography.subtitle1,
   title: {
     fontWeight: 700,
     fontSize: '20px',

@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 export const styles: Record<string, SxProps<Theme>> = {
   wrapper: {
     display: 'flex',
@@ -23,7 +21,8 @@ export const styles: Record<string, SxProps<Theme>> = {
     transition: 'border-bottom 0.3s ease-in-out',
     borderBottom: '1px solid transparent',
     '&:hover': {
-      borderBottom: `1px solid ${mainHexPallete.blue[800]}`
+      borderBottom: '1px solid',
+      borderColor: 'blue.800'
     }
   },
 
@@ -31,7 +30,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '16px',
     lineHeight: '150%',
     fontWeight: 500,
-    color: mainHexPallete.blue[800],
+    color: 'blue.800',
     '&:hover': {
       borderBottom: 'none'
     }

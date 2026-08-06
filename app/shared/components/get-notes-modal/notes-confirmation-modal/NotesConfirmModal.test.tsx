@@ -4,7 +4,10 @@ import React from 'react';
 import NotesConfirmModal from './NotesConfirmModal';
 
 jest.mock('~/ds-components/button/Button', () => {
-  const MockButton = (props: React.ComponentProps<'button'>) => (
+  const MockButton = ({
+    fullWidth: _fullWidth,
+    ...props
+  }: React.ComponentProps<'button'> & { fullWidth?: boolean }) => (
     <button data-testid="confirm-btn" {...props}>
       {props.children}
     </button>
@@ -12,6 +15,7 @@ jest.mock('~/ds-components/button/Button', () => {
   MockButton.displayName = 'MockButton';
   return MockButton;
 });
+
 jest.mock('~/ds-components/logo/Logo', () => {
   const MockLogo = (props: { color?: string; variant?: string }) => (
     <div data-testid="logo">

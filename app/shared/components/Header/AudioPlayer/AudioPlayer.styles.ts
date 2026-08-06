@@ -3,12 +3,21 @@ export const styles = {
     position: 'relative'
   },
   eqButton: {
-    color: '#5F0E0F'
+    color: 'red.900',
+    padding: '6px 8px',
+    borderRadius: '20px',
+    transition: 'background-color 0.2s ease',
+    outline: 'none',
+
+    '&:hover, &:focus-visible': {
+      backgroundColor: 'rgba(25, 13, 3, 0.08)',
+      outline: 'none'
+    }
   },
   icon: {
     width: 2,
     borderRadius: 1,
-    backgroundColor: '#5F0E0F'
+    backgroundColor: 'red.900'
   },
   iconStatic: {
     fontSize: 28

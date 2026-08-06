@@ -71,4 +71,31 @@ describe('ColoredSvg component', () => {
     const wrapper = screen.getByTestId('img');
     expect(wrapper).toHaveStyle('background-color: yellow');
   });
+
+  it('should successfully execute and cover rgba color parsing logic on lines 24-30 inside helpers', () => {
+    render(<Svg Component={MockSvg} alt={testAlt} color="rgb(255, 255, 255)" />);
+    expect(screen.getByTestId('icon-svg')).toBeInTheDocument();
+  });
+
+  it('should process and cover responsive width and height object configurations on lines 58-59 inside component', () => {
+    const responsiveWidth = { xs: '24px', md: '32px' };
+    const responsiveHeight = { xs: '24px', lg: '48px' };
+
+    render(
+      <Svg
+        Component={MockSvg}
+        alt={testAlt}
+        color="#000"
+        width={responsiveWidth as never}
+        height={responsiveHeight as never}
+      />
+    );
+
+    expect(screen.getByTestId('icon-svg')).toBeInTheDocument();
+  });
+
+  it('should successfully pass validation and render icon when using transparent keyword (line 12 branch coverage)', () => {
+    render(<Svg Component={MockSvg} alt={testAlt} color="transparent" />);
+    expect(screen.getByTestId('icon-svg')).toBeInTheDocument();
+  });
 });

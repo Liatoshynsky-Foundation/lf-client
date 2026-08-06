@@ -1,8 +1,6 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 const commonCopyLinkBaseStyles = {
   fontFamily: 'Mulish, Sans-serif',
-  transition: 'color 0.2s ease',
+  transition: 'color 0.2s ease, outline 0.2s ease',
   lineHeight: '110%',
   textDecoration: 'none',
   wordBreak: 'break-all',
@@ -16,32 +14,35 @@ interface ColorConfig {
   disabledColor: string;
 }
 
-const getColorConfig = (type: 'primary' | 'secondary', palette = mainHexPallete): ColorConfig => {
+const getColorConfig = (type: 'primary' | 'secondary'): ColorConfig => {
   if (type === 'primary') {
     return {
-      defaultColor: palette.black,
-      hoverColor: palette.burgundy[800],
-      activeColor: palette.black,
-      disabledColor: palette.blue[500]
+      defaultColor: 'black',
+      hoverColor: 'burgundy.800',
+      activeColor: 'black',
+      disabledColor: 'blue.500'
     };
   }
 
   return {
-    defaultColor: palette.blue[800],
-    hoverColor: palette.black,
-    activeColor: palette.blue[800],
-    disabledColor: palette.blue[500]
+    defaultColor: 'blue.800',
+    hoverColor: 'black',
+    activeColor: 'blue.800',
+    disabledColor: 'blue.500'
   };
 };
 
 const getCopyLinkStates = (config: ColorConfig) => ({
   color: config.defaultColor,
   cursor: 'pointer',
+  borderRadius: '4px',
+
   '& svg *': {
     stroke: config.defaultColor,
     transition: 'stroke 0.2s ease'
   },
-  '&:hover': {
+
+  '&:hover, &:focus, &:focus-visible': {
     color: config.hoverColor,
     textDecoration: 'underline',
     textDecorationColor: config.hoverColor,
@@ -49,6 +50,7 @@ const getCopyLinkStates = (config: ColorConfig) => ({
       stroke: config.hoverColor
     }
   },
+
   '&:active': {
     color: config.activeColor,
     '& svg *': {
@@ -76,39 +78,42 @@ export const getCopyLinkStyles = (type: 'primary' | 'secondary' = 'primary') => 
   };
 };
 
-export const getIconStroke = (
-  type: 'primary' | 'secondary' = 'primary',
-  disabled: boolean = false,
-  palette = mainHexPallete
-) => {
+export const getIconStroke = (type: 'primary' | 'secondary' = 'primary', disabled: boolean = false) => {
   if (disabled) {
-    return palette.blue[500];
+    return 'blue.500';
   }
   if (type === 'secondary') {
-    return palette.blue[800];
+    return 'blue.800';
   }
-  return palette.black;
+  return 'black';
 };
 
-export const getMobileDisabledStyles = (palette = mainHexPallete) => ({
-  color: palette.blue[500],
+export const getMobileDisabledStyles = () => ({
+  color: 'blue.500',
   pointerEvents: 'none',
   cursor: 'not-allowed'
 });
 
 export const styles = {
   wrapper: {
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     gap: '4px',
     border: 'none',
     background: 'none',
-    padding: 0,
-    margin: 0,
+    padding: '2px 4px',
     font: 'inherit',
-    outline: 'none',
     maxWidth: '100%',
-    textAlign: 'left'
+    width: 'fit-content',
+    textAlign: 'left',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+
+    '&:focus-visible': {
+      outline: '2px solid #631B2B',
+      outlineOffset: '2px'
+    }
   },
 
   iconWrapper: {

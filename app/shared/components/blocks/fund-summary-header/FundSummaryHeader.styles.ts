@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/components/design-system/all-components/theme/colors';
-
 import { AppTypography } from '~/constants';
 import { commonSx } from '~/shared/styles/commonSx';
 
@@ -85,6 +83,6 @@ export const styles = {
 
   itemTitle: {
     ...AppTypography.mulish16Regular,
-    color: mainHexPallete.brown[600]
+    color: 'brown.600'
   }
 };

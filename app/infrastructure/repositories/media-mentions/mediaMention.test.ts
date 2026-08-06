@@ -20,8 +20,7 @@ const createFakeId = () => '65f1d5f2' + Date.now().toString(16).slice(-8);
 const mockMongooseChain = <T>(resolvedValue: T) => ({
   select: jest.fn().mockReturnThis(),
   sort: jest.fn().mockReturnThis(),
-  lean: jest.fn().mockReturnThis(),
-  exec: jest.fn().mockResolvedValue(resolvedValue)
+  lean: jest.fn().mockResolvedValue(resolvedValue)
 });
 
 const validMentionData = {
@@ -51,7 +50,7 @@ describe('mediaMentionRepository', () => {
     it('should return published media mentions and parse them via Zod', async () => {
       (MediaMentionModel.find as jest.Mock).mockReturnValue(mockMongooseChain([validMentionData]));
 
-      const result = await mediaMentionRepository.getAllPublishedMediaMentions();
+      const result = await mediaMentionRepository.getAllPublishedMediaMentions('uk');
 
       expect(MediaMentionModel.find).toHaveBeenCalledWith({ status: MediaMentionStatus.Published });
       expect(result).toHaveLength(1);
@@ -66,19 +65,18 @@ describe('mediaMentionRepository', () => {
     it('should return null if mention not found', async () => {
       (MediaMentionModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(null));
 
-      const result = await mediaMentionRepository.getMediaMentionBySlug('non-existent');
+      const result = await mediaMentionRepository.getMediaMentionBySlug('non-existent', 'uk');
 
       expect(result).toBeNull();
     });
 
-    it('should return media mention details and parse via Zod', async () => {
+    it('should return only media mention details and parse via Zod', async () => {
       (MediaMentionModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(validMentionData));
 
-      const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention');
+      const result = await mediaMentionRepository.getMediaMentionBySlug('test-media-mention', 'uk');
 
       expect(MediaMentionModel.findOne).toHaveBeenCalledWith({
-        slug: 'test-media-mention',
-        status: MediaMentionStatus.Published
+        slug: 'test-media-mention'
       });
 
       if (!result) throw new Error('Result is null');

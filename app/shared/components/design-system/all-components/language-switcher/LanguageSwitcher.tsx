@@ -53,9 +53,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
   };
 
   const toggleLocale = () => {
+    if (!currentLocale) return;
     const newLocale = currentLocale === 'uk' ? 'en' : 'uk';
-    if (newLocale === currentLocale) return;
-    setLocaleCookie(newLocale);
     router.replace(pathname, { locale: newLocale, scroll: false });
   };
 
@@ -88,23 +87,27 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant, scrollDire
   if (variant === 'mobile') {
     return (
       <Box sx={styles.mobileWrapper}>
-        <button
-          style={styles.item(currentLocale === 'en')}
+        <Box
+          component="button"
+          sx={styles.item(currentLocale === 'en')}
           onClick={() => handleLanguageChange('en')}
           aria-current={currentLocale === 'en' ? 'true' : undefined}
         >
           EN
-        </button>
+        </Box>
 
-        <span style={styles.item(false)}>|</span>
+        <Box component="span" sx={styles.item(false)}>
+          |
+        </Box>
 
-        <button
-          style={styles.item(currentLocale === 'uk')}
+        <Box
+          component="button"
+          sx={styles.item(currentLocale === 'uk')}
           onClick={() => handleLanguageChange('uk')}
           aria-current={currentLocale === 'uk' ? 'true' : undefined}
         >
           UA
-        </button>
+        </Box>
       </Box>
     );
   }

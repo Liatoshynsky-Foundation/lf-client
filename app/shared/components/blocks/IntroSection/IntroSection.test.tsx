@@ -3,8 +3,8 @@ import React from 'react';
 
 import { IntroSection } from './IntroSection';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { IImageBlock, IIntroSection } from '~/types/page/about-us.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import type { IImageBlock, IIntroSection } from '~/types/page/about-us.types';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 type MockTipTapContentProps = {
   data?: TipTapDoc;
@@ -114,6 +114,22 @@ describe('IntroSection', () => {
 
       expect(screen.queryByTestId('IntroSection-imageCaption')).not.toBeInTheDocument();
       expect(screen.queryByTestId('IntroSection-quoteBlock')).not.toBeInTheDocument();
+    });
+
+    it('should fall back to empty object when image caption is missing (line 40 branch coverage)', () => {
+      const imageWithoutCaption = {
+        ...mockImage,
+        caption: undefined
+      } as unknown as IImageBlock;
+
+      const dataWithMissingCaption: IIntroSection = {
+        ...mockData,
+        image: imageWithoutCaption
+      };
+
+      render(<IntroSection data={dataWithMissingCaption} />);
+
+      expect(screen.getByTestId('IntroSection-imageCaption')).toBeInTheDocument();
     });
   });
 });

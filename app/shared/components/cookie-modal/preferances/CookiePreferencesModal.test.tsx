@@ -58,4 +58,20 @@ describe('CookiePreferences Modal', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Select All' }));
     expect(onCheckedMock).toHaveBeenCalledWith(true);
   });
+
+  it('should call onChecked when switch changes', () => {
+    render(<CookiePreferencesModal {...props} />);
+
+    fireEvent.click(screen.getByRole('switch'));
+
+    expect(onCheckedMock).toHaveBeenCalled();
+  });
+
+  it('should use default checked value', () => {
+    render(
+      <CookiePreferencesModal open onClose={onCloseMock} saveSettings={saveSettingsMock} onChecked={onCheckedMock} />
+    );
+
+    expect(screen.getByRole('switch')).toBeInTheDocument();
+  });
 });

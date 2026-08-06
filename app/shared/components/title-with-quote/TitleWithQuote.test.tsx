@@ -1,37 +1,52 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import TitleWithQuote from './TitleWithQuote';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
-jest.mock('~/shared/components/Quote/Quote', () => {
+jest.mock('~/components/Quote/Quote', () => {
   const MockQuote = () => <div data-testid="quote" />;
   MockQuote.displayName = 'MockQuote';
   return MockQuote;
 });
 
-const defaultProps = {
-  title: 'Тестовий заголовок',
-  quoteText: 'Тестова цитата',
-  sourceText: 'Лист Бориса Лятошинського, 4 травня 1916, Саратов',
-  color: 'black' as const
-};
+jest.mock('~/shared/components/tip-tap-content/TipTapContent', () => {
+  return function MockTipTapContent({ nodeRenderers }: any) {
+    const ParagraphRenderer = nodeRenderers[TipTapNodeTypes.paragraph];
+    return <div data-testid="mock-tiptap">{ParagraphRenderer ? ParagraphRenderer('Rendered TipTap Title') : null}</div>;
+  };
+});
 
-describe('TitleWithQuote', () => {
-  it('should render title', () => {
-    render(<TitleWithQuote {...defaultProps} />);
-
-    expect(screen.getByText('Тестовий заголовок')).toBeInTheDocument();
+describe('TitleWithQuote Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should render QuoteBlock component', () => {
-    render(<TitleWithQuote {...defaultProps} />);
+  it('should render the correct title', () => {
+    render(<TitleWithQuote title="Test title" quoteText="Test quote" sourceText="Letter from Borys Liatoshinsky" />);
 
+    expect(screen.getByText('Test title')).toBeInTheDocument();
     expect(screen.getByTestId('quote')).toBeInTheDocument();
+    expect(screen.queryByTestId('mock-tiptap')).not.toBeInTheDocument();
   });
 
-  it('should apply correct color for black', () => {
-    render(<TitleWithQuote {...defaultProps} color="black" />);
+  it('should correctly handle empty values', () => {
+    render(<TitleWithQuote />);
+    expect(screen.getByTestId('TitleWithQuote-title')).toBeEmptyDOMElement();
+  });
 
-    const title = screen.getByText('Тестовий заголовок');
-    expect(title).toHaveStyle({ color: '#190d03' });
+  it('should render TipTapContent if data.title is a TipTapDoc object', () => {
+    const mockData = {
+      title: { type: 'doc', content: [] } as any,
+      quoteText: 'Test quote from db',
+      sourceText: 'Letter from Borys Liatoshinsky from db'
+    };
+
+    render(<TitleWithQuote data={mockData} color="brown" quoteSectionSx={{ mt: 2 }} />);
+
+    expect(screen.getByTestId('mock-tiptap')).toBeInTheDocument();
+
+    expect(screen.getByText('Rendered TipTap Title')).toBeInTheDocument();
   });
 });

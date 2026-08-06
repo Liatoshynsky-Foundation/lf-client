@@ -2,7 +2,6 @@ import { asFunction, AwilixContainer } from 'awilix';
 
 import { createArtistryService } from '~/services/artistry/artistryService';
 import { createEventService } from '~/services/events/eventService';
-import { createEventsService } from '~/services/events/eventsService';
 import { createFooterService } from '~/services/footer/footerService';
 import { createFundsService } from '~/services/funds/fundsService';
 import { createHeaderService } from '~/services/header/headerService';
@@ -10,20 +9,17 @@ import { createMediaMentionService } from '~/services/media-mentions/mediaMentio
 import { createNewsService } from '~/services/news/newsService';
 import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
 import { createScientificWorksService } from '~/services/scientific-works/scientificWorks';
-import { createAzureStorageService } from '~/services/upload/upload';
 
 export type ComposedServicesModule = {
   headerService: ReturnType<typeof createHeaderService>;
   footerService: ReturnType<typeof createFooterService>;
   artistryService: ReturnType<typeof createArtistryService>;
   scientificService: ReturnType<typeof createScientificWorksService>;
-  uploadService: ReturnType<typeof createAzureStorageService>;
   pagesDataService: ReturnType<typeof createPagesDataService>;
   draftPagesDataService: ReturnType<typeof createDraftPagesDataService>;
   fundsService: ReturnType<typeof createFundsService>;
   newsService: ReturnType<typeof createNewsService>;
   mediaMentionService: ReturnType<typeof createMediaMentionService>;
-  eventsService: ReturnType<typeof createEventsService>;
   eventService: ReturnType<typeof createEventService>;
 };
 
@@ -37,8 +33,6 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
 
     scientificService: asFunction(createScientificWorksService).scoped(),
 
-    uploadService: asFunction(createAzureStorageService).singleton(),
-
     pagesDataService: asFunction(createPagesDataService).scoped(),
 
     draftPagesDataService: asFunction(createDraftPagesDataService).scoped(),
@@ -48,8 +42,6 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
     newsService: asFunction(createNewsService).scoped(),
 
     mediaMentionService: asFunction(createMediaMentionService).scoped(),
-
-    eventsService: asFunction(({ eventsRepo }) => createEventsService({ eventsRepository: eventsRepo })).scoped(),
 
     eventService: asFunction(createEventService).scoped()
   });

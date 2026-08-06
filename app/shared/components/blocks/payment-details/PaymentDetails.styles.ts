@@ -1,10 +1,8 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
   buttonGroup: {
-    backgroundColor: mainHexPallete.brown[50],
+    backgroundColor: 'brown.50',
     p: '4px',
     height: '36px',
     width: { xs: '100%', sm: 'fit-content' },
@@ -43,7 +41,7 @@ export const styles = {
 
     '& h6.MuiTypography-root': {
       lineHeight: '150%',
-      color: mainHexPallete.brown[500],
+      color: 'brown.500',
       width: { xs: '100%', sm: '115px' },
       flexShrink: 0
     },
@@ -66,7 +64,12 @@ export const styles = {
 
   iban: {
     gap: '8px',
-    alignItems: { xs: 'flex-start', sm: 'center' }
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    '&:focus, &:focus-visible': {
+      outline: '2px solid #631B2B',
+      outlineOffset: '2px',
+      borderRadius: '2px'
+    }
   },
 
   ibanIcon: {

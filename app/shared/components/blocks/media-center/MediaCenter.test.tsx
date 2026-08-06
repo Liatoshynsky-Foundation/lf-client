@@ -80,7 +80,7 @@ describe('MediaCenter Component Full Coverage', () => {
       />
     );
 
-    const pressTab = screen.getByText(/Ми у ЗМІ/i);
+    const pressTab = screen.getByText(/press/i);
     fireEvent.click(pressTab);
 
     rerender(
@@ -105,7 +105,7 @@ describe('MediaCenter Component Full Coverage', () => {
       />
     );
 
-    const eventsTab = screen.getByText(/Події/i);
+    const eventsTab = screen.getByText(/events/i);
     fireEvent.click(eventsTab);
 
     searchParamsValue = new URLSearchParams('tab=events');
@@ -141,7 +141,7 @@ describe('MediaCenter Component Full Coverage', () => {
       <MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} eventsData={[]} />
     );
 
-    const pressTab = screen.getByText(/Ми у ЗМІ/i);
+    const pressTab = screen.getByText(/press/i);
     fireEvent.click(pressTab);
 
     rerender(<MediaCenter newsData={mediaData.mockNewsList as any} mediaMentionsData={[]} eventsData={[]} />);

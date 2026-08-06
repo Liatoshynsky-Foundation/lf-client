@@ -19,6 +19,7 @@ import logger from '~/middleware/logger/logger';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
 import EmotionProvider from '~/shared/components/emotion-provider/EmotionProvider';
 import Header from '~/shared/components/Header/Header.server';
+import { SkipToMainContentLink } from '~/shared/components/SkipToMainContentLink/SkipToMainContentLink';
 import { AudioPlayerProvider } from '~/shared/context/AudioPlayerContext';
 import { IntroAnimationProvider } from '~/shared/context/IntroAnimationContext';
 import QueryProvider from '~/shared/providers/QueryProvider';
@@ -119,6 +120,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
               <QueryProvider>
                 <AudioPlayerProvider>
                   <IntroAnimationProvider>
+                    <SkipToMainContentLink />
                     <Box sx={styles.container}>
                       <Header />
                       <Box sx={styles.childrenBox}>{children}</Box>

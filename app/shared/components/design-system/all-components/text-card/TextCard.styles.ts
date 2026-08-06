@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material/styles';
+
 export const styles = {
   card: {
     position: 'relative',
@@ -11,7 +13,7 @@ export const styles = {
     left: '50%',
     width: '402px',
     height: '337px',
-    background: 'rgba(237, 232, 223, 1)',
+    backgroundColor: 'background.default',
     transform: 'translate(-50%, -50%) rotate(-2deg)'
   },
   content: {
@@ -24,19 +26,14 @@ export const styles = {
     flexDirection: 'column',
     background: 'transparent'
   },
-  description: {
-    fontFamily: 'Mulish, sans-serif',
-    fontSize: '16px',
-    fontWeight: 400,
-    lineHeight: '150%',
-    color: '#190D03',
+  description: (theme: Theme) => ({
+    ...theme.typography.customRegular16,
+    color: 'black',
     maxWidth: '216px'
-  },
-  title: {
-    fontFamily: 'Mulish, sans-serif',
-    fontSize: '20px',
-    fontWeight: 700,
+  }),
+  title: (theme: Theme) => ({
+    ...theme.typography.customBold20,
     lineHeight: '130%',
-    color: '#190D03'
-  }
+    color: 'black'
+  })
 };

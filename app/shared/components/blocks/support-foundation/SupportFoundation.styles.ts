@@ -1,5 +1,3 @@
-import { mainHexPallete } from '~/ds-components/theme/colors';
-
 import { commonSx } from '~/shared/styles/commonSx';
 
 export const styles = {
@@ -36,6 +34,6 @@ export const styles = {
     textAlign: 'left',
     textIndent: { xs: '26%', sm: '15%', md: '14%', lg: '60%', xl: '35%' },
     lineHeight: '160%',
-    color: mainHexPallete.brown[700]
+    color: 'brown.700'
   }
 };
