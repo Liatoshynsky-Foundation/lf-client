@@ -41,7 +41,7 @@ export const faqItems = [
       en: 'Is it safe to provide my bank card number?',
       uk: 'Чи безпечно вказувати номер моєї банківської карти?'
     },
-    content: defaultContent // Reused here
+    content: defaultContent
   },
   {
     title: {
