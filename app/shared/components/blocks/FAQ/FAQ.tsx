@@ -30,7 +30,7 @@ type FaqProps = {
     phone: string;
     email: string;
   };
-  faq: FaqItemProps[];
+  faq: readonly FaqItemProps[];
 };
 
 export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.Element => {
