@@ -53,9 +53,7 @@ const config: Config = {
   },
   modulePaths: ['<rootDir>/app'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
-  transformIgnorePatterns: [
-    'node_modules/(?!(next-intl|lodash-es|@azure/(storage-blob|core-rest-pipeline|core-auth|core-http)|mongodb|winston-mongodb|bson)/)'
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(next-intl|lodash-es|mongodb|winston-mongodb|bson)/)'],
   setupFilesAfterEnv: ['@testing-library/jest-dom', '<rootDir>/jest.setup.ts']
 };
 

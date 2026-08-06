@@ -354,9 +354,11 @@ const compositionsRepository = {
       const activeOpuses = await Opus.find({
         status: { $ne: 'draft' },
         $or: [
-          { creationYear: { $in: [yearFilterStr, yearFilterNum] } },
+          { creationYear: yearFilterStr },
+          { creationYear: yearFilterNum },
           { creationYear: null, releaseYear: yearFilterNum },
-          { endYear: { $in: [yearFilterStr, yearFilterNum] } }
+          { endYear: yearFilterStr },
+          { endYear: yearFilterNum }
         ]
       })
         .select('_id')

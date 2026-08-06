@@ -1,5 +1,5 @@
 export const ApiRoutes = {
-  BLOB_URL: '/api/blob-url',
+  STORAGE_FILE: '/api/storage-file',
   HEADER: '/api/header',
   COMPOSITION_FILTERS: '/api/compositions/filters',
   COMPOSITION_DATA: '/api/compositions/data',

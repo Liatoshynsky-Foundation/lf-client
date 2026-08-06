@@ -15,10 +15,6 @@ jest.mock('mongoose', () => ({
   models: {},
   connect: jest.fn()
 }));
-jest.mock('@azure/storage-blob', () => ({}));
-jest.mock('@azure/core-rest-pipeline', () => ({}));
-jest.mock('~/services/upload/upload', () => ({ createAzureStorageService: jest.fn() }));
-
 jest.mock(
   '~/components/blocks/home-page-hero/HeroSection',
   () =>

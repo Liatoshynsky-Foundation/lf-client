@@ -71,7 +71,7 @@ const makeAdvancedImage = (args: {
   rectangleTopLeftCorner?: boolean;
 }) => ({
   src: args.src,
-  generatedSrc: `/api/blob-url?folderName=photos&blobName=${args.src}`,
+  generatedSrc: args.src,
   size: args.size,
   rectangleTopLeftCorner: args.rectangleTopLeftCorner ?? false,
   alt: t(args.altUk, args.altEn),
@@ -81,7 +81,7 @@ const makeAdvancedImage = (args: {
 
 const makeImage = (args: { src: string; altUk: string; altEn: string; captionUk?: string; captionEn?: string }) => ({
   src: args.src,
-  generatedSrc: `/api/blob-url?folderName=photos&blobName=${args.src}`,
+  generatedSrc: args.src,
   alt: t(args.altUk, args.altEn),
   caption:
     args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : (null as any)
