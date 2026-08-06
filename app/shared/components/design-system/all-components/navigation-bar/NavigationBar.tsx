@@ -1,6 +1,7 @@
 'use client';
 
 import { CircularProgress } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -20,6 +21,7 @@ interface NavigationBarProps {
 }
 
 const NavigationBar = ({ navLabels, specialNav, scrollDirection, contacts, socialLinks }: NavigationBarProps) => {
+  const t = useTranslations('common');
   const { isDesktop } = useBreakpoints();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -28,7 +30,7 @@ const NavigationBar = ({ navLabels, specialNav, scrollDirection, contacts, socia
   }, []);
 
   if (!isMounted) {
-    return <CircularProgress />;
+    return <CircularProgress aria-label={t('loading')} />;
   }
 
   return (

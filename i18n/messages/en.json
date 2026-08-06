@@ -81,7 +81,9 @@
     "viewMore": "View More",
     "copied": "Copied",
     "completedEvent": "Completed event",
-    "publishedAtLabel": "Published:"
+    "publishedAtLabel": "Published:",
+    "skipToMainContent": "Skip to main content",
+    "loading": "Loading"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -155,6 +157,11 @@
   },
   "media": {
     "title": "NeWs, EveNtS aNd MeDia",
+    "tabs": {
+      "news": "News",
+      "events": "Events",
+      "press": "Media"
+    },
     "emptyState": {
       "news": {
         "title": "No news yet",
@@ -184,6 +191,10 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Expand row group",
+      "collapse": "Collapse row group"
+    },
     "columns": {
       "opus": "Opus",
       "name": "Name",
@@ -278,7 +289,8 @@
   },
   "search": {
     "notFound": "Not found",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "placeholder": "Search"
   },
   "contactsInfoPage": {
     "contacts": "Contacts",
@@ -313,6 +325,11 @@
     "title": "PaGe UnDeR CoNsTrUcTiOn",
     "subtitle": "We are still working on this page. Please check back later — a new section will appear here very soon.",
     "button": "Return to home"
+  },
+  "translationNotFound": {
+    "title": "CoMing SoOn",
+    "description": "Our archive cat Filimon has taken on a new role — translator. He’s working on this page, so the English version will appear very soon.",
+    "button": "Return to Ukrainian"
   },
   "warSupport": {
     "title": "RuSSiA'S WaR AgAiNsT UkRaInIaNs",
