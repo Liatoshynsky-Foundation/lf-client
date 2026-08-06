@@ -51,6 +51,11 @@ jest.mock('~/middleware/logger/logger', () => ({
 describe('Default composition audio route', () => {
   let GET: typeof import('./route').GET;
   const fetchMock = jest.fn();
+  const originalGlobals = {
+    Headers: global.Headers,
+    Response: global.Response,
+    fetch: global.fetch
+  };
 
   beforeAll(async () => {
     global.Headers = TestHeaders as unknown as typeof Headers;
@@ -61,6 +66,12 @@ describe('Default composition audio route', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    global.Headers = originalGlobals.Headers;
+    global.Response = originalGlobals.Response;
+    global.fetch = originalGlobals.fetch;
   });
 
   it('should stream the R2 default audio through the same-origin route', async () => {

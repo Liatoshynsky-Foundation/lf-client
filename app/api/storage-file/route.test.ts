@@ -62,6 +62,11 @@ describe('Storage file route', () => {
   const fetchMock = jest.fn();
   const originalStorageBaseUrl = process.env.STORAGE_BASE_URL;
   const originalPublicStorageBaseUrl = process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
+  const originalGlobals = {
+    Headers: global.Headers,
+    Response: global.Response,
+    fetch: global.fetch
+  };
 
   beforeAll(async () => {
     global.Headers = TestHeaders as unknown as typeof Headers;
@@ -79,6 +84,9 @@ describe('Storage file route', () => {
   afterAll(() => {
     process.env.STORAGE_BASE_URL = originalStorageBaseUrl;
     process.env.NEXT_PUBLIC_STORAGE_BASE_URL = originalPublicStorageBaseUrl;
+    global.Headers = originalGlobals.Headers;
+    global.Response = originalGlobals.Response;
+    global.fetch = originalGlobals.fetch;
   });
 
   it('should stream an R2 file through the same-origin route', async () => {
