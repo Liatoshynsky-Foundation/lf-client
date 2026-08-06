@@ -22,7 +22,7 @@ export const eventsMainText: LocalizedTipTapDoc = {
   ]),
   en: makeDoc([
     normalText(
-      'What is happening in the world of classical music? Where and when are the works of Ukrainian composers performed? Is it possible to hear Lyatoshynsky’s music at concerts? We track current events, recommend the most interesting ones, and guide you to the most important musical events in Ukraine and the world.'
+      'What is happening in the world of classical music? Where and when are the works of Ukrainian composers performed? Is it possible to hear Liatoshynsky’s music at concerts? We track current events, recommend the most interesting ones, and guide you to the most important musical events in Ukraine and the world.'
     )
   ])
 };
@@ -59,12 +59,12 @@ export const eventsNextLabel = {
 
 const COMMON_TITLE = {
   uk: 'У КИЄВІ СТАРТУЄ ФЕСТИВАЛЬ МУЗИКИ БОРИСА ЛЯТОШИНСЬКОГО. ЧОМУ ВАРТО ВІДВІДАТИ',
-  en: 'BORYS LYATOSHYNSKY MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
+  en: 'BORYS Liatoshynsky MUSIC FESTIVAL STARTS IN KYIV. WHY IT’S WORTH VISITING'
 };
 
 const COMMON_DESC = {
   uk: 'Прийдешнього 2025 року відзначатиметься 130-річчя від дня народження Бориса Лятошинського (1895–1968). Звісно, ця постать в українській культурі є настільки м...',
-  en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Lyatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
+  en: 'The upcoming year 2025 will mark the 130th anniversary of the birth of Borys Liatoshynsky (1895–1968). Of course, this figure in Ukrainian culture is so s...'
 };
 
 export const mockEventsData = {

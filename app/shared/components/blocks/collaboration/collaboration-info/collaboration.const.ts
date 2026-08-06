@@ -18,7 +18,7 @@ export const infoDoc: LocalizedTipTapDoc = {
   en: makeDoc([
     normalText(
       // eslint-disable-next-line quotes
-      `Any financial contribution made to the Foundation is executed transparently and in accordance with the charter of our public organization. All funds received are purposefully directed towards implementation of the Foundation's mission: the development of Ukrainian music, the preservation and popularization of Borys Lyatoshynsky's legacy and the support of new art initiatives. Thus, `
+      `Any financial contribution made to the Foundation is executed transparently and in accordance with the charter of our public organization. All funds received are purposefully directed towards implementation of the Foundation's mission: the development of Ukrainian music, the preservation and popularization of Borys Liatoshynsky's legacy and the support of new art initiatives. Thus, `
     ),
     boldText('every hryvnia you donate works towards our common cause'),
     normalText(' and brings us closer to our goal.')
