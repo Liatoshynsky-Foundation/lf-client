@@ -111,7 +111,7 @@ export default function Archive() {
         <ArchiveHeader onSearch={(value) => setParam('search', value)} />
 
         {isLoading ? (
-          <Box sx={styles.loaderBox} data-testid="ArchivePage-loader" aria-label={t('loading')}>
+          <Box sx={styles.loaderBox} data-testid="ArchivePage-loader">
             <CircularProgress aria-label={t('loading')} />
           </Box>
         ) : (
