@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { amount, lang, currency } = body;
 
-    if (typeof amount !== 'number' || amount < 1 || amount > 1000) {
-      return errorResponse(['Invalid donation amount. Must be between 1 and 1000.'], 400);
+    if (typeof amount !== 'number' || amount < 1) {
+      return errorResponse(['Invalid donation amount. Amount must be at least 1.'], 400);
     }
 
     const allowedCurrencies = ['UAH', 'USD', 'EUR'];
