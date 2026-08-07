@@ -132,12 +132,13 @@ describe('Create Invoice API Route (POST)', () => {
 
     const mockReq = {
       headers: { get: () => '127.0.0.1' },
-      json: async () => ({ amount: 2000 })
+      json: async () => ({ amount: 0 })
     };
 
     const res = await POST(mockReq as any);
 
-    expect(errorResponse).toHaveBeenCalledWith(['Invalid donation amount. Must be between 1 and 1000.'], 400);
+    expect(errorResponse).toHaveBeenCalledWith(['Invalid donation amount. Amount must be at least 1.'], 400);
+
     expect(res.status).toBe(400);
   });
 
