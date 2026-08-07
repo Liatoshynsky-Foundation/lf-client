@@ -38,10 +38,12 @@ const CarouselImageSchema = z.object({
 
 const WarInUkraineBlocks = z.object({
   WarInfo: z.object({
+    hidden: z.boolean().optional(),
     title: translatedFieldSchema.optional(),
     description: translatedTipTapSchema
   }),
   PrincipleOfHope: z.object({
+    hidden: z.boolean().optional(),
     buttonText: translatedFieldSchema,
     buttonLink: z.string().optional().or(z.literal('')),
     description: translatedTipTapSchema,
@@ -49,15 +51,18 @@ const WarInUkraineBlocks = z.object({
   }),
   WarCarousel: z
     .object({
+      hidden: z.boolean().optional(),
       images: z.array(CarouselImageSchema).optional()
     })
     .optional(),
   YermolenkoLinks: z.object({
+    hidden: z.boolean().optional(),
     buttonText: translatedFieldSchema,
     description: translatedTipTapSchema,
     buttons: z.array(ButtonItemSchema)
   }),
   VolunteerDonation: z.object({
+    hidden: z.boolean().optional(),
     title: translatedFieldSchema,
     imageSrc: z.string(),
     caption: translatedFieldSchema,
