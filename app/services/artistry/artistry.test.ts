@@ -11,23 +11,23 @@ const mockRawCategories = [
 
 const mockRawCompositions = [
   {
-    _id: '63f8b3b7a8b3d6c1b3e8e4b1',
-    title: { uk: 'Красива пісня', en: 'A Beautiful Song' },
-    year: 2022,
-    audioAvailable: true,
-    sheetAvailable: false,
-    sheetMusic: [],
-    createdAt: new Date('2022-01-01'),
-    updatedAt: new Date('2022-01-01'),
-    opusId: {
-      _id: '63f8b3b7a8b3d6c1b3e8e4c1',
-      number: 'op. 1',
-      title: { en: 'First Opus', uk: 'Перший опус' },
-      releaseYear: 2022,
-      createdAt: new Date('2022-01-01'),
-      updatedAt: new Date('2022-01-01')
-    },
-    genre: null
+    _id: '63f8b3b7a8b3d6c1b3e8e4c1',
+    number: 1,
+    numberKind: 'op',
+    name: { en: 'First Opus', uk: 'Перший опус' },
+    title: { en: 'First Opus', uk: 'Перший опус' },
+    creationYear: '2022',
+    status: 'published',
+    genre: { en: 'Genre', uk: 'Жанр' },
+    compositions: [
+      {
+        _id: '63f8b3b7a8b3d6c1b3e8e4b1',
+        name: { uk: 'Красива пісня', en: 'A Beautiful Song' },
+        audioAvailable: true,
+        sheetAvailable: false,
+        sheetMusic: []
+      }
+    ]
   }
 ];
 
@@ -36,7 +36,7 @@ describe('artistryService', () => {
     getAllGenres: jest.fn(),
     getAllCategories: jest.fn(),
     getAllCompositions: jest.fn(),
-    getAllCompositionTitles: jest.fn(),
+    getArtistrySearchSuggestions: jest.fn(),
     getCompositionsYearRange: jest.fn(),
     getOpusById: jest.fn()
   } as unknown as jest.Mocked<CompositionRepository>;
@@ -45,7 +45,7 @@ describe('artistryService', () => {
     compositionsRepo: compositionServiceMock
   });
 
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
@@ -61,7 +61,7 @@ describe('artistryService', () => {
       const locale = 'uk';
       (compositionServiceMock.getAllCategories as jest.Mock).mockResolvedValue(mockRawCategories);
       const result = await artistryService.getAllCategories(locale);
-      expect(result).toEqual([{ key: 'classical', name: 'Класична' }]);
+      expect(result).toEqual([{ key: mockRawCategories[0].key, name: mockRawCategories[0].name.uk }]);
     });
   });
 
@@ -70,9 +70,9 @@ describe('artistryService', () => {
       const locale = 'uk';
       (compositionServiceMock.getAllCompositions as jest.Mock).mockResolvedValue(mockRawCompositions);
       const result = await artistryService.getAllCompositions(locale, '');
-      const parsedResult = result as unknown as Record<string, unknown>[];
-      expect(parsedResult[0].name).toBe('Красива пісня');
-      expect(parsedResult[0].opusTitle).toBe('Перший опус');
+      const parsedResult = result as Array<{ name: string; compositions: Array<{ name: string }> }>;
+      expect(parsedResult[0].name).toBe(mockRawCompositions[0].name.uk);
+      expect(parsedResult[0].compositions[0].name).toBe(mockRawCompositions[0].compositions[0].name.uk);
     });
 
     it('should return empty array if null returned', async () => {
@@ -82,39 +82,40 @@ describe('artistryService', () => {
     });
   });
 
-  describe('getAllCompositionTitles', () => {
+  describe('getSearchAutocompleteOptions', () => {
     it('should fetch titles, localize them and add genre suggestions', async () => {
       const locale = 'en';
       const mockTitles = [
         {
           _id: '507f191e810c19729de860ea',
-          title: { en: 'Title En', uk: 'Назва Укр' }
+          title: { en: 'Title En', uk: 'Назва Укр' },
+          type: 'opus'
         }
       ];
-      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue(mockTitles);
+      (compositionServiceMock.getArtistrySearchSuggestions as jest.Mock).mockResolvedValue(mockTitles);
       (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue(['Romance', 'Jazz']);
 
-      const result = await artistryService.getAllCompositionTitles(locale);
+      const result = await artistryService.getSearchAutocompleteOptions(locale);
 
       expect(result).toEqual([
-        { _id: '507f191e810c19729de860ea', title: 'Title En' },
-        { _id: 'genre-0', title: 'Romance', kind: 'genre' },
-        { _id: 'genre-1', title: 'Jazz', kind: 'genre' }
+        { _id: mockTitles[0]._id, title: mockTitles[0].title.en, type: mockTitles[0].type },
+        { _id: 'genre-0', title: 'Romance', type: 'genre' },
+        { _id: 'genre-1', title: 'Jazz', type: 'genre' }
       ]);
-      expect(compositionServiceMock.getAllCompositionTitles).toHaveBeenCalledWith({});
+      expect(compositionServiceMock.getArtistrySearchSuggestions).toHaveBeenCalledWith({});
       expect(compositionServiceMock.getAllGenres).toHaveBeenCalled();
     });
 
     it('should return empty array if repo returns null to cover branch line 42', async () => {
-      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue(null);
-      const result = await artistryService.getAllCompositionTitles('uk');
+      (compositionServiceMock.getArtistrySearchSuggestions as jest.Mock).mockResolvedValue(null);
+      const result = await artistryService.getSearchAutocompleteOptions('uk');
       expect(result).toEqual([]);
     });
 
     it('should return empty array if repo returns empty array to complete branch cover', async () => {
-      (compositionServiceMock.getAllCompositionTitles as jest.Mock).mockResolvedValue([]);
+      (compositionServiceMock.getArtistrySearchSuggestions as jest.Mock).mockResolvedValue([]);
       (compositionServiceMock.getAllGenres as jest.Mock).mockResolvedValue([]);
-      const result = await artistryService.getAllCompositionTitles('uk');
+      const result = await artistryService.getSearchAutocompleteOptions('uk');
       expect(result).toEqual([]);
     });
   });

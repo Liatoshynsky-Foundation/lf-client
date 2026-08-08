@@ -3,7 +3,12 @@ import React from 'react';
 
 import { BiographyContent } from './BiographyContent';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import type { BiographyContentBlock } from '~/types/page/biography.types';
+import type {
+  BiographyContentBlock,
+  ChronologyList,
+  ExcerptBlockItem,
+  FullWidthImage
+} from '~/types/page/biography.types';
 import { ContentType, ImagesSizes } from '~/types/page/biography.types';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
 
@@ -75,16 +80,14 @@ const makeAdvancedImage = (args: {
   size: args.size,
   rectangleTopLeftCorner: args.rectangleTopLeftCorner ?? false,
   alt: t(args.altUk, args.altEn),
-  caption:
-    args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : (null as any)
+  caption: args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : null
 });
 
 const makeImage = (args: { src: string; altUk: string; altEn: string; captionUk?: string; captionEn?: string }) => ({
   src: args.src,
   generatedSrc: args.src,
   alt: t(args.altUk, args.altEn),
-  caption:
-    args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : (null as any)
+  caption: args.captionUk !== undefined && args.captionEn !== undefined ? t(args.captionUk, args.captionEn) : null
 });
 
 const mockBlocks: BiographyContentBlock[] = [
@@ -212,7 +215,7 @@ const mockBlocks: BiographyContentBlock[] = [
       },
       {
         type: ContentType.FullWidthImage,
-        image: undefined as unknown as any
+        image: undefined as unknown as FullWidthImage['image']
       },
 
       {
@@ -233,7 +236,7 @@ describe('BiographyContent', () => {
     render(<BiographyContent data={mockBlocks} />);
     const years = screen.getAllByTestId('BiographyContent-yearWithLine');
     expect(years).toHaveLength(1);
-    expect(years[0]).toHaveTextContent('1910');
+    expect(years[0]).toHaveTextContent(mockBlocks[0].yearTitle as string);
   });
 
   it('should render chronology list items for each list entry', () => {
@@ -246,15 +249,21 @@ describe('BiographyContent', () => {
     render(<BiographyContent data={mockBlocks} />);
     const image = screen.getAllByTestId('BiographyContent-chronologyList-imageWithCaption');
     expect(image[0]).toBeInTheDocument();
-    expect(image[0]).toHaveTextContent(/alt uk/i);
+    expect(image[0]).toHaveTextContent(
+      new RegExp((mockBlocks[0].items[0] as ChronologyList).additionalImage!.alt as string, 'i')
+    );
   });
 
   it('should render excerpt block with quote and source text', () => {
     render(<BiographyContent data={mockBlocks} />);
     const excerpt = screen.getByTestId('BiographyContent-excerptBlock');
     expect(excerpt).toBeInTheDocument();
-    expect(screen.getByTestId('BiographyContent-excerpt-quote')).toHaveTextContent(/quote text uk/i);
-    expect(screen.getByTestId('BiographyContent-excerpt-source')).toHaveTextContent(/source text uk/i);
+    expect(screen.getByTestId('BiographyContent-excerpt-quote')).toHaveTextContent(
+      new RegExp((mockBlocks[0].items[1] as ExcerptBlockItem).quote.text, 'i')
+    );
+    expect(screen.getByTestId('BiographyContent-excerpt-source')).toHaveTextContent(
+      new RegExp((mockBlocks[0].items[1] as ExcerptBlockItem).quote.source, 'i')
+    );
   });
 
   it('should render both left and right images for OnlyImageBlock with additionalImage', () => {
@@ -275,7 +284,9 @@ describe('BiographyContent', () => {
     render(<BiographyContent data={mockBlocks} />);
     const fullWidth = screen.getAllByTestId('BiographyContent-fullWidthImage');
     expect(fullWidth[0]).toBeInTheDocument();
-    expect(screen.getByText(/full alt uk/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp((mockBlocks[2].items[3] as FullWidthImage).image.alt as string, 'i'))
+    ).toBeInTheDocument();
   });
 
   it('should pass sizes prop correctly to ImageWithCaption elements', () => {

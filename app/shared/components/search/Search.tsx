@@ -29,8 +29,18 @@ const getOptionLabel = <T extends TitleOption>(option: T | string): string => {
 
   const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
 
-  if (option.kind === 'opus' && option.opusNumber) {
-    return `Op. ${option.opusNumber} — ${titleStr}`;
+  if (option.opusContext) {
+    const isSineOp = option.opusContext.numberKind?.toLowerCase() === 'sineop';
+    const opusPrefix = isSineOp ? `sineop. ${option.opusContext.number}` : `op. ${option.opusContext.number}`;
+    const extra = option.opusContext.additionalText ? ` ${option.opusContext.additionalText}` : '';
+    const formattedOpus = `${opusPrefix}${extra}`;
+
+    if (option.type === 'opus') {
+      return `${formattedOpus} — ${titleStr}`;
+    }
+    if (option.type === 'composition') {
+      return `${titleStr} (${formattedOpus})`;
+    }
   }
 
   return titleStr;
@@ -143,7 +153,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
             wordBreak: 'break-word'
           }}
         >
-          {typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || ''}
+          {getOptionLabel(option)}
         </Typography>
       </ListItem>
     );

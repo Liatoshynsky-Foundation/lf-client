@@ -11,6 +11,31 @@ const sheetMusicItemSchema = z.object({
   isFree: z.boolean()
 });
 
+export const compositionItemSchema = z.object({
+  _id: mongoObjectIdSchema,
+  name: translatedFieldSchema,
+  year: z.number().optional().nullable(),
+  genre: z.string().optional().nullable(),
+  audioAvailable: z.boolean(),
+  sheetAvailable: z.boolean(),
+  sheetMusic: z.array(sheetMusicItemSchema).nullable().optional(),
+  audios: z.array(sheetMusicItemSchema).nullable().optional()
+});
+
+export const opusGroupSchema = z.object({
+  _id: mongoObjectIdSchema,
+  number: z.number(),
+  numberKind: z.string(),
+  title: translatedFieldSchema,
+  name: translatedFieldSchema,
+  additionalText: z.string().optional().nullable(),
+  creationYear: z.string(),
+  endYear: z.string().optional().nullable(),
+  status: z.string(),
+  genre: translatedFieldSchema.optional().nullable(),
+  compositions: z.array(compositionItemSchema)
+});
+
 export const compositionSchema = z.object({
   _id: mongoObjectIdSchema,
   title: translatedFieldSchema,
@@ -63,7 +88,16 @@ export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSch
 
 export const compositionTitlesSchema = z.object({
   _id: mongoObjectIdSchema,
-  title: translatedFieldSchema
+  title: translatedFieldSchema,
+  type: z.enum(['opus', 'composition']).optional(),
+  opusContext: z
+    .object({
+      _id: z.string(),
+      number: z.number(),
+      numberKind: z.string(),
+      additionalText: z.string().optional().nullable()
+    })
+    .optional()
 });
 
 export const compositionsYearRangeSchema = z.object({

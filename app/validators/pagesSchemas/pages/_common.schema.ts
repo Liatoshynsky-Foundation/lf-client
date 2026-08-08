@@ -36,6 +36,18 @@ export const ImageSchema = BaseImageSchema.transform((image) => ({
   generatedSrc: image.src
 }));
 
+const BaseOptionalCaptionImageSchema = z.object({
+  src: z.string(),
+  alt: translatedTipTapSchema,
+  caption: translatedTipTapSchema.nullable().optional(),
+  crop: CropRectSchema
+});
+
+export const OptionalCaptionImageSchema = BaseOptionalCaptionImageSchema.transform((image) => ({
+  ...image,
+  generatedSrc: image.src
+}));
+
 export const QuoteSchema = z.object({
   text: translatedFieldSchema,
   source: translatedFieldSchema

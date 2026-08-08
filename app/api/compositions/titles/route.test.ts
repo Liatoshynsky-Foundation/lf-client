@@ -1,7 +1,8 @@
+import type { NextRequest, NextResponse } from 'next/server';
 import * as util from 'util';
 
 const mockArtistryService = {
-  getAllCompositionTitles: jest.fn()
+  getSearchAutocompleteOptions: jest.fn()
 };
 
 jest.mock('~/di/container', () => ({
@@ -10,38 +11,72 @@ jest.mock('~/di/container', () => ({
   }))
 }));
 
+const mockFilters = {
+  search: 'bach',
+  categories: 'piano',
+  years: { min: 1700, max: 1750 }
+};
+
 jest.mock('~/lib/utils/filters/parseFilters', () => ({
-  parseFilters: jest.fn(() => ({
-    search: 'bach',
-    categories: 'piano',
-    years: { min: 1700, max: 1750 }
-  }))
+  parseFilters: jest.fn(() => mockFilters)
 }));
 
+const mockLocale = 'de';
+
 jest.mock('~/lib/utils/translation/parseLocale', () => ({
-  parseLocale: jest.fn(() => 'de')
+  parseLocale: jest.fn(() => mockLocale)
 }));
 
 describe('Compositions Titles Route (GET)', () => {
-  let GET: any;
-  let nextServer: any;
+  let GET: (req: NextRequest) => Promise<NextResponse>;
+  let nextServer: typeof import('next/server');
+
+  const originalGlobals = {
+    Request: globalThis.Request,
+    Response: globalThis.Response,
+    TextEncoder: globalThis.TextEncoder,
+    TextDecoder: globalThis.TextDecoder
+  };
 
   beforeAll(async () => {
-    if (typeof global.Request === 'undefined') {
-      (global as any).Request = class {
-        constructor(public input: any) {}
-      } as any;
-      (global as any).Response = class {} as any;
-      (global as any).TextEncoder = util.TextEncoder;
-      (global as any).TextDecoder = util.TextDecoder;
+    if (typeof globalThis.Request === 'undefined') {
+      Object.assign(globalThis, {
+        Request: class MockRequest {
+          constructor(
+            public input: string | URL | Request,
+            public init?: RequestInit
+          ) {}
+        }
+      });
+    }
+
+    if (typeof globalThis.Response === 'undefined') {
+      Object.assign(globalThis, {
+        Response: class MockResponse {
+          constructor(
+            public body?: BodyInit | null,
+            public init?: ResponseInit
+          ) {}
+        }
+      });
+    }
+
+    if (typeof globalThis.TextEncoder === 'undefined') {
+      Object.assign(globalThis, {
+        TextEncoder: util.TextEncoder,
+        TextDecoder: util.TextDecoder
+      });
     }
 
     nextServer = await import('next/server');
-    nextServer.NextResponse.json = jest.fn((data, init) => ({
-      json: async () => data,
-      status: init?.status || 200,
-      _testData: data
-    }));
+    nextServer.NextResponse.json = jest.fn(
+      (data: unknown, init?: ResponseInit) =>
+        ({
+          json: async () => data,
+          status: init?.status || 200,
+          _testData: data
+        }) as unknown as NextResponse
+    ) as unknown as typeof nextServer.NextResponse.json;
 
     const routeModule = await import('./route');
     GET = routeModule.GET;
@@ -49,23 +84,30 @@ describe('Compositions Titles Route (GET)', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
+  afterAll(() => {
+    Object.assign(globalThis, originalGlobals);
+  });
+
   it('should map filters and return titles', async () => {
-    mockArtistryService.getAllCompositionTitles.mockResolvedValue(['Bach Title']);
+    const mockSuggestions = [{ _id: '123', title: 'Bach Title', type: 'opus' }];
+    mockArtistryService.getSearchAutocompleteOptions.mockResolvedValue(mockSuggestions);
 
-    const res: any = await GET({ nextUrl: { searchParams: new URLSearchParams() } } as any);
+    const req = { nextUrl: { searchParams: new URLSearchParams() } } as unknown as NextRequest;
+    const res = (await GET(req)) as NextResponse & { _testData: { titles: unknown } };
 
-    expect(mockArtistryService.getAllCompositionTitles).toHaveBeenCalledWith('de', {
-      search: 'bach',
-      category: 'piano',
-      yearFrom: 1700,
-      yearTo: 1750
+    expect(mockArtistryService.getSearchAutocompleteOptions).toHaveBeenCalledWith(mockLocale, {
+      search: mockFilters.search,
+      category: mockFilters.categories,
+      yearFrom: mockFilters.years.min,
+      yearTo: mockFilters.years.max
     });
-    expect(res._testData.titles).toEqual(['Bach Title']);
+    expect(res._testData.titles).toEqual(mockSuggestions);
   });
 
   it('should handle service failure', async () => {
-    mockArtistryService.getAllCompositionTitles.mockRejectedValue(new Error());
-    const res: any = await GET({ nextUrl: { searchParams: new URLSearchParams() } } as any);
+    mockArtistryService.getSearchAutocompleteOptions.mockRejectedValue(new Error());
+    const req = { nextUrl: { searchParams: new URLSearchParams() } } as unknown as NextRequest;
+    const res = await GET(req);
     expect(res.status).toBe(500);
   });
 });

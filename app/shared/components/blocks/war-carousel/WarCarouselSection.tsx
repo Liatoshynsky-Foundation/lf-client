@@ -28,34 +28,34 @@ const WarCarouselSection: React.FC<WarCarouselSectionProps> = ({ sx, data, ...pr
   const t = useTranslations('warCarousel');
   const locale = useLocale() as 'uk' | 'en';
 
-  const getLocalizedText = (field: Record<'uk' | 'en', string> | string | undefined) => {
-    if (!field) return '';
-    if (typeof field === 'string') return field;
-    return field[locale] || field['uk'] || '';
-  };
-
-  const defaultImages = [
-    {
-      id: 1,
-      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(1),
-      alt: 'Carousel Image 1',
-      description: t('photo1')
-    },
-    {
-      id: 2,
-      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(2),
-      alt: 'Carousel Image 2',
-      description: t('photo2')
-    },
-    {
-      id: 3,
-      src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(3),
-      alt: 'Carousel Image 3',
-      description: t('photo3')
-    }
-  ];
-
   const carouselImages = React.useMemo(() => {
+    const getLocalizedText = (field: Record<'uk' | 'en', string> | string | undefined) => {
+      if (!field) return '';
+      if (typeof field === 'string') return field;
+      return field[locale] || field['uk'] || '';
+    };
+
+    const defaultImages = [
+      {
+        id: 1,
+        src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(1),
+        alt: 'Carousel Image 1',
+        description: t('photo1')
+      },
+      {
+        id: 2,
+        src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(2),
+        alt: 'Carousel Image 2',
+        description: t('photo2')
+      },
+      {
+        id: 3,
+        src: IMAGES.WAR_IN_UKRAINE_CAROUSEL(3),
+        alt: 'Carousel Image 3',
+        description: t('photo3')
+      }
+    ];
+
     if (!data?.images || data.images.length === 0) {
       return defaultImages;
     }
@@ -71,7 +71,7 @@ const WarCarouselSection: React.FC<WarCarouselSectionProps> = ({ sx, data, ...pr
         crop: parsedCrop
       };
     });
-  }, [data?.images, locale]);
+  }, [data?.images, locale, t]);
 
   return (
     <Box sx={[styles.carouselSectionContainer, ...sxToArray(sx)]} {...props}>

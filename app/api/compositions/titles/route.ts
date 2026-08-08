@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const container = createRequestContainer();
     const artistryService = container.resolve('artistryService');
 
-    const titles = await artistryService.getAllCompositionTitles(locale, filters);
+    const titles = await artistryService.getSearchAutocompleteOptions(locale, filters);
 
     return NextResponse.json({ titles });
   } catch (error) {

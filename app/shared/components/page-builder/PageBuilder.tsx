@@ -64,7 +64,7 @@ export default async function PageBuilder<TPages extends PossiblePages>({
   const blocksOrder = page.blocksOrder;
 
   return (
-    <MainLayout withLines>
+    <MainLayout withLines={slug !== 'artistry'}>
       {blocksOrder &&
         blocksOrder.length > 0 &&
         blocksOrder.map((blockId, index) =>

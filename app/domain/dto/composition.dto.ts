@@ -1,15 +1,29 @@
-export type OpusDTO = {
+import { LocalizedString } from '~/types/types/common.types';
+
+export interface CompositionItemDTO {
   _id: string;
-  number: string;
-  title: string;
-  releaseYear?: number | string;
-  creationYear?: number | string | null;
-  endYear?: number | string | null;
-  status?: string | null;
+  name: LocalizedString;
+  year?: number | null;
   genre?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
+  audioAvailable: boolean;
+  sheetAvailable: boolean;
+  sheetMusic: SheetMusicDTO[] | null;
+  audios: SheetMusicDTO[] | null;
+}
+
+export interface OpusGroupDTO {
+  _id: string;
+  number: number;
+  numberKind: string;
+  title: LocalizedString;
+  name: LocalizedString;
+  additionalText?: string | null;
+  creationYear: string;
+  endYear?: string | null;
+  genre?: LocalizedString | null;
+  status: string;
+  compositions: CompositionItemDTO[];
+}
 
 type SheetMusicDTO = {
   url: string;
@@ -21,20 +35,6 @@ export type CategoryDTO = {
   _id: string;
   key: string;
   name: string;
-};
-
-export type CompositionDTO = {
-  _id: string;
-  title: string;
-  year?: number | null;
-  opusId: string | OpusDTO;
-  audioAvailable: boolean;
-  sheetAvailable: boolean;
-  sheetMusic: SheetMusicDTO[];
-  createdAt: Date;
-  updatedAt: Date;
-  opus: OpusDTO;
-  genre?: string | null;
 };
 
 export type CompositionTitlesDTO = {

@@ -95,7 +95,7 @@ export const testReturnBlockRenderer = async ({
   title
 }: TestReturnBlockRendererArgs) => {
   const Page = await PageComponent({ params: Promise.resolve({ lang: 'en' }) });
-  const mockBlocks = { IntroSection: { title: 'Test' } } as any;
+  const mockBlocks = { IntroSection: { title: 'Test' } } as unknown;
 
   const renderedBlockElement = Page.props.renderBlock({
     blockId: 'IntroSection',
@@ -104,12 +104,12 @@ export const testReturnBlockRenderer = async ({
     uniqueRenderKey: 'key-1'
   });
 
-  const expectedRendererMap: Record<string, any> = {};
+  const expectedRendererMap: Record<string, unknown> = {};
   rendererKeys.forEach((key) => {
     expectedRendererMap[key] = expect.any(Function);
   });
 
-  const expectedProps: any = {
+  const expectedProps: Record<string, unknown> = {
     blockId: 'IntroSection',
     blocks: mockBlocks,
     rendererMap: expect.objectContaining(expectedRendererMap)

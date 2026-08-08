@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const sheetMusicItemSchema = new mongoose.Schema(
+const MusicItemSchema = new mongoose.Schema(
   {
     url: { type: String, required: true },
     dateUploaded: { type: Date, default: Date.now },
@@ -9,16 +9,26 @@ const sheetMusicItemSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const localizedFieldSchema = new mongoose.Schema(
+  {
+    uk: { type: String, required: true },
+    en: { type: String, required: true }
+  },
+  {
+    _id: false
+  }
+);
+
 const songSchema = new mongoose.Schema(
   {
     opusId: { type: mongoose.Schema.Types.ObjectId, ref: 'Opus' },
-    title: { type: String, required: true },
+    name: { localizedFieldSchema },
     year: { type: Number },
-    genre: { type: String, default: null },
-    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
+    genre: { localizedFieldSchema },
     audioAvailable: { type: Boolean, default: true },
     sheetAvailable: { type: Boolean, default: true },
-    sheetMusic: [sheetMusicItemSchema]
+    sheetMusic: [MusicItemSchema],
+    audios: [MusicItemSchema]
   },
   { timestamps: true }
 );

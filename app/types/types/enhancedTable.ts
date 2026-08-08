@@ -33,6 +33,31 @@ export type CompositionWithNotes = {
   notes: Notes[];
 };
 
+export type CompositionItemFrontend = {
+  _id: string;
+  name: string;
+  year?: number | null;
+  genre?: string | null;
+  audioAvailable: boolean;
+  sheetAvailable: boolean;
+  sheetMusic: Notes[] | null;
+  audios: Notes[] | null;
+};
+
+export type OpusGroupFrontend = {
+  _id: string;
+  number: number;
+  numberKind: string;
+  title: string;
+  name: string;
+  additionalText?: string | null;
+  creationYear: string;
+  endYear?: string | null;
+  genre: string;
+  status: string;
+  compositions: CompositionItemFrontend[];
+};
+
 export type WorkTable = {
   id: string;
   name: string;
