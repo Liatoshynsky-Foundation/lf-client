@@ -203,7 +203,7 @@ export const EnhancedTable = <T extends RowData>({
       />
       {loading ? (
         <Box sx={styles.loaderBox}>
-          <CircularProgress />
+          <CircularProgress aria-label={t('loading')} />
         </Box>
       ) : (
         <>

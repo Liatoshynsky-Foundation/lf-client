@@ -2,6 +2,7 @@
 
 import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useTranslations } from 'next-intl';
 import { ElementType, forwardRef, ReactNode } from 'react';
 
 import { ButtonLabel } from './ButtonLabel';
@@ -31,6 +32,7 @@ export type ButtonProps = {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ label, shortLabel, link, externalLink, disabled, loading, startIcon, endIcon, children, sx, ...props }, ref) => {
+    const t = useTranslations('common');
     const isDisabled = disabled ?? loading;
 
     let component: ElementType = 'button';
@@ -67,7 +69,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...extraProps}
       >
         {loading ? (
-          <CircularProgress color="inherit" size={25} data-testid="loader" />
+          <CircularProgress color="inherit" size={25} aria-label={label ?? t('loading')} data-testid="loader" />
         ) : (
           <ButtonLabel label={label} shortLabel={shortLabel}>
             {children}

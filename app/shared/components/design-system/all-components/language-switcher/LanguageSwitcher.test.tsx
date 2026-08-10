@@ -10,7 +10,8 @@ jest.mock('~/../i18n/navigation', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-  useLocale: jest.fn()
+  useLocale: jest.fn(),
+  useTranslations: () => (key: string) => key
 }));
 
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
