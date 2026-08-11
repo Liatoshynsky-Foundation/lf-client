@@ -8,11 +8,20 @@ jest.mock('next-intl', () => ({
   useLocale: () => 'uk'
 }));
 
+interface MockCarouselProps {
+  images: Array<{
+    id?: string | number;
+    src: string;
+    alt: string;
+  }>;
+  infiniteLoop?: boolean;
+}
+
 jest.mock('~/shared/components/design-system/all-components/carousel/Carousel', () => ({
   __esModule: true,
-  default: ({ images, infiniteLoop }: any) => (
+  default: ({ images, infiniteLoop }: MockCarouselProps) => (
     <div data-testid="mock-carousel" data-images-count={images.length} data-infinite={infiniteLoop}>
-      {images.map((img: any) => (
+      {images.map((img) => (
         <img key={img.id} src={img.src} alt={img.alt} />
       ))}
     </div>

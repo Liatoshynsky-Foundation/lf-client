@@ -3,13 +3,23 @@ import React from 'react';
 
 import PrincipleOfHope from './PrincipleOfHope';
 
+interface MockButton {
+  link?: string;
+}
+
+interface MockBulletTextWithLinksProps {
+  buttonText: string;
+  buttonLink?: string;
+  buttons: MockButton[];
+}
+
 jest.mock('~/ds-components/bullet-text-with-links/BulletTextWithLinks', () => ({
   __esModule: true,
-  default: (props: any) => (
+  default: (props: MockBulletTextWithLinksProps) => (
     <div data-testid="bullet-text-with-links">
       <span data-testid="button-text">{props.buttonText}</span>
       <span data-testid="button-link">{props.buttonLink}</span>
-      {props.buttons.map((btn: any, i: number) => (
+      {props.buttons.map((btn: MockButton, i: number) => (
         <div key={i} data-testid="button">
           <span data-testid="nested-link">{btn.link}</span>
         </div>

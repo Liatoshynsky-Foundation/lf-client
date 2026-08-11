@@ -19,15 +19,22 @@ jest.mock('~/validators/pagesSchemas/pages/cooperation.schema', () => ({
 }));
 
 jest.mock('~/validators/constants', () => {
-  const { z } = jest.requireActual('zod');
-  const NoOp = (s: any) => s;
+  const { z } = jest.requireActual<typeof import('zod')>('zod');
+  const NoOp = <T>(s: T): T => s;
+
   return {
     NoTime: NoOp,
     NoIDSchema: NoOp,
     NoPageType: NoOp,
-    translatedFieldSchema: z.any(),
-    translatedTipTapSchema: z.any(),
-    mongoObjectIdSchema: z.any()
+    translatedFieldSchema: z.object({
+      uk: z.string(),
+      en: z.string()
+    }),
+    translatedTipTapSchema: z.object({
+      uk: z.object({ type: z.literal('doc'), content: z.array(z.record(z.string(), z.unknown())) }),
+      en: z.object({ type: z.literal('doc'), content: z.array(z.record(z.string(), z.unknown())) })
+    }),
+    mongoObjectIdSchema: z.custom<string>((val) => typeof val === 'string', 'Invalid ObjectId')
   };
 });
 

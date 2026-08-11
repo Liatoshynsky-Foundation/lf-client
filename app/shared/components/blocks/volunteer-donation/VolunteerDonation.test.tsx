@@ -7,9 +7,14 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
 
+interface MockCopyLinkProps {
+  value: string;
+  hint?: string;
+}
+
 jest.mock('~/ds-components/copy-link/CopyLink', () => ({
   __esModule: true,
-  default: (props: any) => (
+  default: (props: MockCopyLinkProps) => (
     <div data-testid="mock-copy-link" data-copy-value={props.value} data-hint={props.hint}>
       {props.value}
     </div>

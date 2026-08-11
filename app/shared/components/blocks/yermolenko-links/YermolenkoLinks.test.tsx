@@ -3,9 +3,20 @@ import React from 'react';
 
 import YermolenkoLinks from './YermolenkoLinks';
 
+interface MockBulletTextProps {
+  buttonText: string;
+  showMainButton?: boolean;
+  showShortButtonsText?: boolean;
+  buttons: Array<{
+    link?: string;
+    shortText: { en: string; uk?: string };
+    fullText: { en: string; uk?: string };
+  }>;
+}
+
 jest.mock('~/ds-components/bullet-text-with-links/BulletTextWithLinks', () => ({
   __esModule: true,
-  default: (props: any) => (
+  default: (props: MockBulletTextProps) => (
     <div data-testid="bullet-text-with-links">
       <span data-testid="button-text">{props.buttonText}</span>
       <span data-testid="show-main-button">{String(props.showMainButton)}</span>

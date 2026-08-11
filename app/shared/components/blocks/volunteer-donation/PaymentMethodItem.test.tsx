@@ -3,9 +3,15 @@ import React from 'react';
 
 import { PaymentMethodItem } from './PaymentMethodItem';
 
+interface MockCopyLinkProps {
+  hint: string;
+  forceShowCopyIcon?: boolean;
+  value: string;
+}
+
 jest.mock('~/ds-components/copy-link/CopyLink', () => ({
   __esModule: true,
-  default: (props: any) => (
+  default: (props: MockCopyLinkProps) => (
     <div data-testid="mock-copy-link" data-hint={props.hint} data-force-icon={String(props.forceShowCopyIcon)}>
       {props.value}
     </div>
