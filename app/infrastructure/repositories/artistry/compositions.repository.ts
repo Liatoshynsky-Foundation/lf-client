@@ -18,24 +18,28 @@ const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
 
 type TranslatedFieldLean = { uk: string; en: string };
 
-type OpusDescriptionLean = { uk?: string; en?: string } | null;
+type OptionalTranslatedFieldLean = { uk?: string; en?: string };
+
+type OpusPerformanceLean = {
+  _id: Types.ObjectId | string;
+  title?: OptionalTranslatedFieldLean;
+  videoUrl: string;
+};
 
 type OpusLean = {
   _id: Types.ObjectId | string;
-  number: string;
+  number: number | string;
+  numberKind?: string;
   title: TranslatedFieldLean;
   releaseYear?: number;
-  genre?: string | null;
-  description?: OpusDescriptionLean;
-  movements?: string[];
+  creationYear?: string;
+  endYear?: string;
+  genre?: OptionalTranslatedFieldLean | null;
+  description?: OptionalTranslatedFieldLean | null;
+  parts?: OptionalTranslatedFieldLean;
   sheetMusicUrl?: string | null;
-  videoLinks?: string[];
-};
-
-type GenreLean = {
-  _id: Types.ObjectId | string;
-  key: string;
-  name: TranslatedFieldLean;
+  performances?: OpusPerformanceLean[];
+  compositions?: (Types.ObjectId | string)[];
 };
 
 type SheetMusicLean = {
@@ -45,10 +49,9 @@ type SheetMusicLean = {
 
 type OpusCompositionLean = {
   _id: Types.ObjectId | string;
-  title: TranslatedFieldLean;
+  name: TranslatedFieldLean;
   year?: number;
-  order?: number;
-  genres?: GenreLean[];
+  genre?: string;
   sheetMusic?: SheetMusicLean[];
 };
 
@@ -271,17 +274,20 @@ const compositionsRepository = {
       return null;
     }
 
-    const [opus, compositions] = await Promise.all([
-      Opus.findById(id).lean<OpusLean | null>(),
-      Compositions.find({ opusId: id })
-        .populate('genres')
-        .sort({ order: 1, createdAt: 1 })
-        .lean<OpusCompositionLean[]>()
-    ]);
+    const opus = await Opus.findById(id).lean<OpusLean | null>();
 
     if (!opus) {
       return null;
     }
+
+    const compositionIds = opus.compositions ?? [];
+
+    const compositions = compositionIds.length
+      ? await Compositions.find({ _id: { $in: compositionIds } }).lean<OpusCompositionLean[]>()
+      : [];
+
+    const orderById = new Map(compositionIds.map((compositionId, index) => [String(compositionId), index]));
+    compositions.sort((a, b) => (orderById.get(String(a._id)) ?? 0) - (orderById.get(String(b._id)) ?? 0));
 
     return { opus, compositions };
   },

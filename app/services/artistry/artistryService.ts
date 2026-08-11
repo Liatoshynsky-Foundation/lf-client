@@ -21,6 +21,7 @@ type ArtistryServiceDeps = {
 
 type OpusLean = OpusWithCompositionsLean['opus'];
 type OpusCompositionLean = OpusWithCompositionsLean['compositions'][number];
+type OpusPerformanceLean = NonNullable<OpusLean['performances']>[number];
 
 function pickSheetMusicUrl(sheetMusic?: OpusCompositionLean['sheetMusic']): string | undefined {
   if (!sheetMusic?.length) {
@@ -32,12 +33,10 @@ function pickSheetMusicUrl(sheetMusic?: OpusCompositionLean['sheetMusic']): stri
   return preferred.url;
 }
 
-function deriveGenre(compositions: OpusCompositionLean[], locale: Locale): string | undefined {
+function deriveGenre(compositions: OpusCompositionLean[]): string | undefined {
   for (const composition of compositions) {
-    const genre = composition.genres?.[0];
-
-    if (genre?.name?.[locale]) {
-      return genre.name[locale];
+    if (composition.genre && composition.genre.trim().length > 0) {
+      return composition.genre;
     }
   }
 
@@ -45,11 +44,12 @@ function deriveGenre(compositions: OpusCompositionLean[], locale: Locale): strin
 }
 
 function pickGenre(opus: OpusLean, compositions: OpusCompositionLean[], locale: Locale): string | undefined {
-  if (opus.genre && opus.genre.trim().length > 0) {
-    return opus.genre;
+  const opusGenre = opus.genre?.[locale];
+  if (opusGenre && opusGenre.trim().length > 0) {
+    return opusGenre;
   }
 
-  return deriveGenre(compositions, locale);
+  return deriveGenre(compositions);
 }
 
 function pickDescription(description: OpusLean['description'], locale: Locale): string | null {
@@ -66,10 +66,25 @@ function nonEmpty(value?: string | null): string | undefined {
   return value && value.trim().length > 0 ? value : undefined;
 }
 
-function mapMovements(movements?: string[]): string[] | undefined {
-  const cleaned = movements?.map((movement) => movement.trim()).filter((movement) => movement.length > 0);
+function mapMovements(parts: OpusLean['parts'], locale: Locale): string[] | undefined {
+  const text = parts?.[locale];
 
-  return cleaned && cleaned.length > 0 ? cleaned : undefined;
+  if (!text) {
+    return undefined;
+  }
+
+  const cleaned = text
+    .split('\n')
+    .map((movement) => movement.trim())
+    .filter((movement) => movement.length > 0);
+
+  return cleaned.length > 0 ? cleaned : undefined;
+}
+
+function formatOpusNumber(opus: OpusLean): string {
+  const number = String(opus.number);
+
+  return opus.numberKind ? `${opus.numberKind}.${number}` : number;
 }
 
 const YOUTUBE_ID_REGEX = /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|v\/))([A-Za-z0-9_-]{11})/;
@@ -80,22 +95,33 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-function mapVideos(videoLinks?: string[]): OpusVideoDTO[] {
-  if (!videoLinks?.length) {
+function mapVideos(performances: OpusPerformanceLean[] | undefined, locale: Locale): OpusVideoDTO[] {
+  if (!performances?.length) {
     return [];
   }
 
-  return videoLinks
-    .map((url) => extractYouTubeId(url))
-    .filter((id): id is string => id !== null)
-    .map((id) => ({ _id: id, youTubeId: id }));
+  return performances
+    .map((performance): OpusVideoDTO | null => {
+      const youTubeId = extractYouTubeId(performance.videoUrl);
+
+      if (!youTubeId) {
+        return null;
+      }
+
+      return {
+        _id: String(performance._id ?? youTubeId),
+        youTubeId,
+        title: performance.title?.[locale]
+      };
+    })
+    .filter((video): video is OpusVideoDTO => video !== null);
 }
 
 function mapOpusCompositions(compositions: OpusCompositionLean[], locale: Locale): OpusCompositionDTO[] {
   return compositions.map((composition, index) => ({
     _id: String(composition._id),
     index: index + 1,
-    title: composition.title[locale],
+    title: composition.name[locale],
     sheetMusicUrl: pickSheetMusicUrl(composition.sheetMusic)
   }));
 }
@@ -144,15 +170,15 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
 
     return {
       _id: String(opus._id),
-      number: opus.number,
+      number: formatOpusNumber(opus),
       title: opus.title[locale],
-      creationDate: opus.releaseYear != null ? String(opus.releaseYear) : undefined,
+      creationDate: nonEmpty(opus.creationYear) ?? (opus.releaseYear != null ? String(opus.releaseYear) : undefined),
       genre: pickGenre(opus, compositions, locale),
-      movements: mapMovements(opus.movements),
+      movements: mapMovements(opus.parts, locale),
       sheetMusicUrl: nonEmpty(opus.sheetMusicUrl),
       compositions: mapOpusCompositions(compositions, locale),
       description: pickDescription(opus.description, locale),
-      videos: mapVideos(opus.videoLinks)
+      videos: mapVideos(opus.performances, locale)
     };
   }
 });

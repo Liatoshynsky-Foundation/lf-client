@@ -128,25 +128,20 @@ describe('artistryService', () => {
   });
 
   describe('getOpusDetailsById', () => {
-    const genre = {
-      _id: '63f8b3b7a8b3d6c1b3e8e4a1',
-      key: 'quintet',
-      name: { uk: 'Фортепіанний квінтет', en: 'Piano quintet' }
-    };
-
     const rawOpus = {
       opus: {
         _id: '63f8b3b7a8b3d6c1b3e8e4c1',
-        number: 'bo.16',
+        number: 16,
+        numberKind: 'bo',
         title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-        releaseYear: 1929
+        creationYear: '1929'
       },
       compositions: [
         {
           _id: '63f8b3b7a8b3d6c1b3e8e4b1',
-          title: { uk: 'Після бою', en: 'After the battle' },
+          name: { uk: 'Після бою', en: 'After the battle' },
           year: 1929,
-          genres: [genre],
+          genre: 'Фортепіанний квінтет',
           sheetMusic: [
             { url: 'https://example.com/paid.pdf', isFree: false },
             { url: 'https://example.com/free.pdf', isFree: true }
@@ -154,9 +149,8 @@ describe('artistryService', () => {
         },
         {
           _id: '63f8b3b7a8b3d6c1b3e8e4b2',
-          title: { uk: 'Смерть', en: 'Death' },
+          name: { uk: 'Смерть', en: 'Death' },
           year: 1929,
-          genres: [],
           sheetMusic: []
         }
       ]
@@ -204,10 +198,11 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'bo.16',
+          number: 16,
+          numberKind: 'bo',
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-          releaseYear: 1929,
-          genre: 'Фортепіанний квінтет (опус)',
+          creationYear: '1929',
+          genre: { uk: 'Фортепіанний квінтет (опус)', en: 'Piano quintet (opus)' },
           description: { uk: 'Опис українською.', en: 'Description in english.' }
         },
         compositions: rawOpus.compositions
@@ -223,14 +218,14 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'op.1',
+          number: 1,
+          numberKind: 'op',
           title: { uk: 'Опус', en: 'Opus' }
         },
         compositions: [
           {
             _id: '63f8b3b7a8b3d6c1b3e8e4b9',
-            title: { uk: 'Твір', en: 'Piece' },
-            genres: [],
+            name: { uk: 'Твір', en: 'Piece' },
             sheetMusic: [{ url: 'https://example.com/paid.pdf', isFree: false }]
           }
         ]
@@ -245,9 +240,10 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'bo.16',
+          number: 16,
+          numberKind: 'bo',
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-          releaseYear: 1929,
+          creationYear: '1929',
           description: { uk: '   ', en: '' }
         },
         compositions: []
@@ -262,15 +258,16 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'bo.16',
+          number: 16,
+          numberKind: 'bo',
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-          releaseYear: 1929,
-          movements: ['I. Allegro e poco agitato', '  ', 'II. Lento e tranquillo'],
+          creationYear: '1929',
+          parts: { uk: 'I. Allegro e poco agitato\n  \nII. Lento e tranquillo', en: '' },
           sheetMusicUrl: 'https://example.com/opus-score.pdf',
-          videoLinks: [
-            'https://www.youtube.com/watch?v=abcdefghijk',
-            'https://youtu.be/1234567890A',
-            'not-a-youtube-url'
+          performances: [
+            { videoUrl: 'https://www.youtube.com/watch?v=abcdefghijk' },
+            { videoUrl: 'https://youtu.be/1234567890A' },
+            { videoUrl: 'not-a-youtube-url' }
           ]
         },
         compositions: []
@@ -290,9 +287,10 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'bo.16',
+          number: 16,
+          numberKind: 'bo',
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-          movements: ['   '],
+          parts: { uk: '   ', en: '' },
           sheetMusicUrl: '  '
         },
         compositions: []
@@ -309,7 +307,8 @@ describe('artistryService', () => {
       compositionServiceMock.getOpusById.mockResolvedValue({
         opus: {
           _id: rawOpus.opus._id,
-          number: 'op.1',
+          number: 1,
+          numberKind: 'op',
           title: { uk: 'Опус', en: 'Opus' }
         },
         compositions: []

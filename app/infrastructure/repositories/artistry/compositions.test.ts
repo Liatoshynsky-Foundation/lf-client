@@ -220,16 +220,18 @@ describe('compositionsRepository', () => {
   describe('getOpusById', () => {
     const opusDoc = {
       _id: validMongoId,
-      number: 'bo.16',
+      number: 16,
+      numberKind: 'bo',
       title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
-      releaseYear: 1929
+      creationYear: '1929',
+      compositions: [validMongoId]
     };
 
     const compositionDoc = {
       _id: validMongoId,
-      title: { uk: 'Після бою', en: 'After the battle' },
+      name: { uk: 'Після бою', en: 'After the battle' },
       year: 1929,
-      genres: [],
+      genre: 'жанр твору',
       sheetMusic: []
     };
 
@@ -250,14 +252,36 @@ describe('compositionsRepository', () => {
       expect(Opus.findById).toHaveBeenCalledWith(validMongoId);
     });
 
-    it('should return the opus with its compositions', async () => {
+    it('should return an empty compositions list without querying Compositions when the opus has none', async () => {
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain({ ...opusDoc, compositions: [] }));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+
+      expect(result).toEqual({ opus: { ...opusDoc, compositions: [] }, compositions: [] });
+      expect(Compositions.find).not.toHaveBeenCalled();
+    });
+
+    it('should return the opus with its compositions, fetched by the ids stored on the opus', async () => {
       (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(opusDoc));
       (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([compositionDoc]));
 
       const result = await compositionsRepository.getOpusById(validMongoId);
 
       expect(result).toEqual({ opus: opusDoc, compositions: [compositionDoc] });
-      expect(Compositions.find).toHaveBeenCalledWith({ opusId: validMongoId });
+      expect(Compositions.find).toHaveBeenCalledWith({ _id: { $in: [validMongoId] } });
+    });
+
+    it('should order the returned compositions to match the order of opus.compositions', async () => {
+      const secondId = '507f191e810c19729de860eb';
+      const opusWithTwo = { ...opusDoc, compositions: [secondId, validMongoId] };
+      const secondCompositionDoc = { ...compositionDoc, _id: secondId, name: { uk: 'Смерть', en: 'Death' } };
+
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(opusWithTwo));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([compositionDoc, secondCompositionDoc]));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+
+      expect(result?.compositions.map((c) => String(c._id))).toEqual([secondId, validMongoId]);
     });
   });
 });
