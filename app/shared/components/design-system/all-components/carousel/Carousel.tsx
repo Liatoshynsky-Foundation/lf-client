@@ -1,21 +1,24 @@
 'use client';
 import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import ArrowCarousel from '~/ds-components/arrow-carousel/ArrowCarousel';
 
 import { styles } from './Carousel.styles';
 
-interface Image {
-  id: number;
+import { CropRect } from '~/lib/utils/cropUtils';
+import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
+
+interface CarouselImage {
+  crop?: { rect: CropRect } | CropRect | null;
+  id: string | number;
   src: string;
   alt: string;
   description?: string;
 }
 
 interface CarouselProps {
-  images: Image[];
+  images: CarouselImage[];
   initialIndex?: number;
   infiniteLoop?: boolean;
 }
@@ -116,7 +119,7 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
               onTouchEnd={handleTouchEnd}
               sx={styles.getImageWrapperStyles(index, activeIndex, isActive)}
             >
-              <Image src={image.src} alt={image.alt} style={{ objectFit: 'cover' }} loading="lazy" fill />
+              <CroppedImage src={image.src} alt={image.alt} crop={image.crop} fill={true} />
             </Box>
           );
         })}
@@ -128,7 +131,7 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
         </Box>
       </Box>
       <Box sx={styles.carouselFooterStyles}>
-        <Box key={images[activeIndex].description} sx={styles.captionStyles} data-testid="carousel-caption">
+        <Box key={images[activeIndex]?.description} sx={styles.captionStyles} data-testid="carousel-caption">
           <Typography sx={styles.captionStyles} variant="customItalic14">
             {images[activeIndex]?.description}
           </Typography>

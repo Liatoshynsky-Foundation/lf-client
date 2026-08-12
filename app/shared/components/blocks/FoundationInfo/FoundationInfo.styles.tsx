@@ -124,6 +124,9 @@ export const styles = {
       xs: '100%',
       sm: '100%',
       md: 'calc(100% + 40px)'
-    }
+    },
+    maxWidth: '410px',
+    aspectRatio: '410 / 490',
+    overflow: 'hidden'
   }
 };

@@ -1,30 +1,20 @@
 import type { Metadata } from 'next';
-import { useLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import VolunteerDonation from '~/components/blocks/volunteer-donation/VolunteerDonation';
 import WarCarouselSection from '~/components/blocks/war-carousel/WarCarouselSection';
 import WarInfoSection from '~/components/blocks/war-info/WarInfoSection';
-import UnderDevelopment from '~/components/under-development/UnderDevelopment';
-import BulletTextWithLinks from '~/ds-components/bullet-text-with-links/BulletTextWithLinks';
 
+import { WarInUkrainePage } from '~/types/page/pagesBase.type';
 import type { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
-import { isProductionMode } from '~/utils/isProductionMode';
 
-import {
-  carsForAFU,
-  carsForAFUData,
-  principleOfHopeButtonLink,
-  principleOfHopeButtonText,
-  principleOfHopeDoc,
-  principleOfHopeLinks,
-  yermolenkoDoc,
-  yermolenkoLinks
-} from '~/[lang]/war-in-ukraine/war.const';
-import MainLayout from '~/layouts/main-layout/MainLayout';
+import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
+import PrincipleOfHope from '~/shared/components/blocks/principle-of-hope/PrincipleOfHope';
+import YermolenkoLinks from '~/shared/components/blocks/yermolenko-links/YermolenkoLinks';
 import { ROUTES } from '~/shared/components/constants/routes';
+import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
   const { lang } = await params;
@@ -40,42 +30,42 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
-export default function WarInUkraine() {
-  const locale = useLocale();
+type RendererProps = {
+  blocks: WarInUkrainePage['blocks'];
+};
 
-  if (isProductionMode()) {
-    return <UnderDevelopment />;
-  }
+const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
+  'war-info': 'WarInfo',
+  'principle-of-hope': 'PrincipleOfHope',
+  'war-carousel': 'WarCarousel',
+  'yermolenko-links': 'YermolenkoLinks',
+  'volunteer-donation': 'VolunteerDonation'
+};
+
+const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
+  WarInfo: ({ blocks }) => <WarInfoSection data={blocks.WarInfo} />,
+  PrincipleOfHope: ({ blocks }) => <PrincipleOfHope data={blocks.PrincipleOfHope} />,
+  WarCarousel: ({ blocks }) => <WarCarouselSection data={blocks.WarCarousel} />,
+  YermolenkoLinks: ({ blocks }) => <YermolenkoLinks data={blocks.YermolenkoLinks} />,
+  VolunteerDonation: ({ blocks }) => <VolunteerDonation data={blocks.VolunteerDonation} />
+};
+
+export default async function WarInUkraine({ params }: Readonly<Language>) {
+  const { lang } = await params;
 
   return (
-    <MainLayout withLines>
-      <WarInfoSection />
-
-      <BulletTextWithLinks
-        buttonText={principleOfHopeButtonText[locale]}
-        buttonLink={principleOfHopeButtonLink}
-        description={principleOfHopeDoc[locale]}
-        buttons={principleOfHopeLinks}
-      />
-
-      <WarCarouselSection />
-
-      <BulletTextWithLinks
-        buttonText="Підтримати"
-        description={yermolenkoDoc[locale]}
-        buttons={yermolenkoLinks}
-        showMainButton={true}
-        sx={{ marginBottom: 12 }}
-        showShortButtonsText={false}
-      />
-
-      <VolunteerDonation
-        title={carsForAFUData.title}
-        paymentMethods={carsForAFU}
-        imageSrc={carsForAFUData.imageSrc}
-        caption={carsForAFUData.caption[locale]}
-        imageAlt="Портрет Володимира Єрмоленка з дружиною Тетяною Огарковою"
-      />
-    </MainLayout>
+    <PageBuilder<WarInUkrainePage>
+      lang={lang}
+      slug="war-in-ukraine"
+      renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
+        <BlockRenderer
+          key={uniqueRenderKey}
+          blockId={blockId}
+          blocks={blocks}
+          rendererMap={BLOCKS_RENDERER}
+          namesMap={BLOCK_NAMES_MAP}
+        />
+      )}
+    />
   );
 }
