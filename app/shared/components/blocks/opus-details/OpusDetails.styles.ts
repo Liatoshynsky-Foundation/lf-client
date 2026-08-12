@@ -10,32 +10,24 @@ export const styles: Record<string, SxProps<Theme>> = {
   contentGrid: {
     display: 'grid',
     gridColumn: '1 / -1',
-    gridTemplateColumns: 'subgrid'
+    gridTemplateColumns: 'subgrid',
+    rowGap: {
+      xs: '32px',
+      sm: '0'
+    }
   },
 
-  pdfButtonWrapper: {
+  rightColumn: {
     gridColumn: {
       xs: '1 / -1',
-      sm: '1 / 4',
-      md: '2 / 4',
-      lg: '2 / 5'
+      sm: '4 / -1',
+      md: '6 / -1'
     },
-    gridRow: '2',
-
-    position: {
-      xs: 'static',
-      sm: 'sticky'
+    gridRow: {
+      xs: 'auto',
+      sm: '1'
     },
-
-    top: {
-      sm: '48px'
-    },
-
-    mt: '24px',
-    alignSelf: 'flex-start',
-
-    zIndex: {
-      sm: 1
-    }
+    display: 'flex',
+    flexDirection: 'column'
   }
 };

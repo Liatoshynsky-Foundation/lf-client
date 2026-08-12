@@ -1,3 +1,4 @@
+import type { OpusWithCompositionsLean } from './compositions.repository';
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
 import type { CategoryDTO, CompositionDTO, CompositionTitlesDTO } from '~/domain/dto/composition.dto';
@@ -13,4 +14,5 @@ export interface CompositionRepository {
   getAllCompositionTitles(filters: CompositionsTitleFilters): Promise<CompositionTitlesDTO[]>;
   getCompositionsYearRange(): Promise<YearRange>;
   getAllCompositions(search?: string, filters?: CompositionQueryFilters): Promise<CompositionDTO[]>;
+  getOpusById(id: string): Promise<OpusWithCompositionsLean | null>;
 }

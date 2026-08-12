@@ -1,4 +1,4 @@
-import { FilterQuery, PipelineStage } from 'mongoose';
+import type { FilterQuery, PipelineStage, Types } from 'mongoose';
 
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
@@ -13,6 +13,52 @@ import { namedFilterHelper, searchHelper, yearHelper } from '~/lib/utils/searchA
 import { compositionSchema, compositionTitlesSchema } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
+
+const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
+
+type TranslatedFieldLean = { uk: string; en: string };
+
+type OptionalTranslatedFieldLean = { uk?: string; en?: string };
+
+type OpusPerformanceLean = {
+  _id: Types.ObjectId | string;
+  title?: OptionalTranslatedFieldLean;
+  videoUrl: string;
+};
+
+type OpusLean = {
+  _id: Types.ObjectId | string;
+  number: number | string;
+  numberKind?: string;
+  title: TranslatedFieldLean;
+  releaseYear?: number;
+  creationYear?: string;
+  endYear?: string;
+  genre?: OptionalTranslatedFieldLean | null;
+  description?: OptionalTranslatedFieldLean | null;
+  parts?: OptionalTranslatedFieldLean;
+  sheetMusicUrl?: string | null;
+  performances?: OpusPerformanceLean[];
+  compositions?: (Types.ObjectId | string)[];
+};
+
+type SheetMusicLean = {
+  url: string;
+  isFree: boolean;
+};
+
+type OpusCompositionLean = {
+  _id: Types.ObjectId | string;
+  name: TranslatedFieldLean;
+  year?: number;
+  genre?: string;
+  sheetMusic?: SheetMusicLean[];
+};
+
+export type OpusWithCompositionsLean = {
+  opus: OpusLean;
+  compositions: OpusCompositionLean[];
+};
 
 function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
   return words.map((word) => ({
@@ -278,6 +324,31 @@ const compositionsRepository = {
     const allTitles = Array.from(allTitlesMap.values()).filter((item) => parseOpus(item.opusNumber) !== null);
 
     return ArraySchema(compositionTitlesSchema).parse(allTitles);
+  },
+
+  async getOpusById(id: string): Promise<OpusWithCompositionsLean | null> {
+    await dbConnect();
+
+    if (!OBJECT_ID_REGEX.test(id)) {
+      return null;
+    }
+
+    const opus = await Opus.findById(id).lean<OpusLean | null>();
+
+    if (!opus) {
+      return null;
+    }
+
+    const compositionIds = opus.compositions ?? [];
+
+    const compositions = compositionIds.length
+      ? await Compositions.find({ _id: { $in: compositionIds } }).lean<OpusCompositionLean[]>()
+      : [];
+
+    const orderById = new Map(compositionIds.map((compositionId, index) => [String(compositionId), index]));
+    compositions.sort((a, b) => (orderById.get(String(a._id)) ?? 0) - (orderById.get(String(b._id)) ?? 0));
+
+    return { opus, compositions };
   },
 
   async getAllCompositions(

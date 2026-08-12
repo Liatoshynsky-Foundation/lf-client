@@ -366,6 +366,29 @@
       "viewPdf": "View PDF"
     }
   },
+  "opusDetails": {
+    "back": "Back to compositions",
+    "meta": {
+      "number": "Opus:",
+      "date": "Date of creation:",
+      "genre": "Genre:"
+    },
+    "buttons": {
+      "viewSheetMusic": "View sheet music"
+    },
+    "compositions": {
+      "title": "Compositions:"
+    },
+    "videos": {
+      "title": "Opus performance versions:",
+      "thumbnailAlt": "Opus performance video on YouTube"
+    },
+    "placeholder": {
+      "title": "Coming soon",
+      "subtitle": "This page is still being updated. Our cat archivist is already working on the description",
+      "imageAlt": "Cat archivist"
+    }
+  },
   "biography": {
     "heroSection": {
       "title": "Liatoshynsky’s Life Story"

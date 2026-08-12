@@ -13,7 +13,7 @@ const opusSchema = new mongoose.Schema(
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
     genre: { type: String, default: null }
   },
-  { timestamps: true }
+  { timestamps: true, collection: 'opus' }
 );
 
 export const Opus = mongoose.models.Opus ?? mongoose.model('Opus', opusSchema);
