@@ -13,8 +13,8 @@ const songSchema = new mongoose.Schema(
   {
     opusId: { type: mongoose.Schema.Types.ObjectId, ref: 'Opus' },
     title: { type: String, required: true },
-    year: { type: Number, required: true },
-    genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+    year: { type: Number },
+    genre: { type: String, default: null },
     categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     audioAvailable: { type: Boolean, default: true },
     sheetAvailable: { type: Boolean, default: true },

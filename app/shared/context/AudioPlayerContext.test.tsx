@@ -3,9 +3,8 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { AudioPlayerProvider, useAudioPlayer } from './AudioPlayerContext';
-import { DEFAULT_COMPOSITION_NAME } from '~/constants/audioPlayer';
+import { DEFAULT_COMPOSITION_NAME, DEFAULT_COMPOSITION_URL, FOLDER_NAME } from '~/constants/audioPlayer';
 import { errors } from '~/constants/errors';
-import { ApiRoutes } from '~/constants/routes/api-routes';
 
 const TestComponent = () => {
   const { src, trackName, isPlaying, isPlayerOpen, playTrack, togglePlay, openPlayer, closePlayer } = useAudioPlayer();
@@ -31,8 +30,9 @@ describe('AudioPlayerContext', () => {
       </AudioPlayerProvider>
     );
 
-    expect(screen.getByTestId('src').textContent).toContain(ApiRoutes.BLOB_URL);
+    expect(screen.getByTestId('src').textContent).toBe(DEFAULT_COMPOSITION_URL);
     expect(screen.getByTestId('trackName').textContent).toBe(DEFAULT_COMPOSITION_NAME);
+    expect(FOLDER_NAME).toBe('compositions');
     expect(screen.getByTestId('isPlaying').textContent).toBe('false');
     expect(screen.getByTestId('isPlayerOpen').textContent).toBe('false');
   });

@@ -18,7 +18,7 @@ export const collaborationIntroPageData = {
     subtitle: 'Together we can do more',
     contentAbove: makeDoc([
       normalText(
-        'We believe that Ukrainian classical music should be heard around the world — from Warsaw to New York, Tokyo, and Abu Dhabi. The Lyatoshynsky Foundation was created to preserve the legacy of Borys Lyatoshynsky and to support new names in classical music. This mission is possible only in partnership with people like you — those who share our values.'
+        'We believe that Ukrainian classical music should be heard around the world — from Warsaw to New York, Tokyo, and Abu Dhabi. The Liatoshynsky Foundation was created to preserve the legacy of Borys Liatoshynsky and to support new names in classical music. This mission is possible only in partnership with people like you — those who share our values.'
       )
     ]),
     content: makeDoc([

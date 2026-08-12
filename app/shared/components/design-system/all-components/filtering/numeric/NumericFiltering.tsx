@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Divider } from '@mui/material';
+import debounce from 'lodash.debounce';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -18,6 +19,7 @@ interface NumericFilteringProps {
   onChangeCommitted: (numbers: [number, number]) => void;
   minNumber?: number;
   maxNumber?: number;
+  autoFocusRef?: React.Ref<HTMLInputElement>;
 }
 
 const minDistance = 1;
@@ -27,7 +29,8 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
   onChange,
   minNumber = 1900,
   maxNumber = new Date().getFullYear(),
-  onChangeCommitted
+  onChangeCommitted,
+  autoFocusRef
 }) => {
   const [inputNumbers, setInputNumbers] = useState<string[]>([String(value[0]), String(value[1])]);
   const [errors, setErrors] = useState<{ from?: string; to?: string }>({});
@@ -37,25 +40,37 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
 
   const schema = useMemo(() => getFilteringSchema(minNumber, maxNumber, tError), [minNumber, maxNumber, tError]);
 
+  const debouncedSetParam = useMemo(
+    () =>
+      debounce((range: [number, number]) => {
+        onChange(range);
+      }, 400),
+    [onChange]
+  );
+
   useEffect(() => {
     setInputNumbers([String(value[0]), String(value[1])]);
     setErrors({});
   }, [value]);
 
-  const handleSliderChange = useCallback((event: Event, newValue: number | number[], activeThumb: number) => {
-    if (!Array.isArray(newValue)) return;
+  const handleSliderChange = useCallback(
+    (event: Event, newValue: number | number[], activeThumb: number) => {
+      if (!Array.isArray(newValue)) return;
 
-    let [newMin, newMax] = newValue;
+      let [newMin, newMax] = newValue;
 
-    if (activeThumb === 0) {
-      newMin = Math.min(newMin, newMax - minDistance);
-    } else {
-      newMax = Math.max(newMax, newMin + minDistance);
-    }
+      if (activeThumb === 0) {
+        newMin = Math.min(newMin, newMax - minDistance);
+      } else {
+        newMax = Math.max(newMax, newMin + minDistance);
+      }
 
-    setInputNumbers([String(newMin), String(newMax)]);
-    setErrors({});
-  }, []);
+      setInputNumbers([String(newMin), String(newMax)]);
+      setErrors({});
+      debouncedSetParam([newMin, newMax]);
+    },
+    [debouncedSetParam]
+  );
 
   const handleSliderChangeCommitted = useCallback(
     (event: Event | React.SyntheticEvent, newValue: number | number[]) => {
@@ -76,7 +91,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
 
     if (parsed.success) {
       setErrors({});
-      onChange([parsed.data.from, parsed.data.to]);
+      debouncedSetParam([parsed.data.from, parsed.data.to]);
     } else {
       const fieldErrors = parsed.error.formErrors.fieldErrors;
       setErrors({
@@ -99,6 +114,7 @@ const NumericFiltering: React.FC<NumericFilteringProps> = ({
         <Box sx={styles.textfieldContainer}>
           <TextField
             onChange={handleInputChange('from')}
+            ref={autoFocusRef}
             value={inputNumbers[0]}
             variant="outlined"
             label={t('numeric.from')}

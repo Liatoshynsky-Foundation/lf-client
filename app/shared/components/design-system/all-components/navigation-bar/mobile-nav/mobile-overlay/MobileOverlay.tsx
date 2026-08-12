@@ -1,5 +1,7 @@
+'use client';
+
 import { Box, Slide } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { styles } from './MobileOverlay.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
@@ -15,20 +17,88 @@ import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MobileMenuOverlayProps {
   open: boolean;
+  onClose?: () => void;
   navLabels: NavigationDTO[];
   contacts: contactsData;
   socialLinks: LinkIcon[];
 }
 
-const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
+const isElementVisible = (element: HTMLElement): boolean => {
+  if (typeof element.checkVisibility === 'function') {
+    return element.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true });
+  }
+
+  let node: HTMLElement | null = element;
+  while (node) {
+    const computed = window.getComputedStyle(node);
+    if (computed.display === 'none' || computed.visibility === 'hidden') {
+      return false;
+    }
+    node = node.parentElement;
+  }
+
+  return true;
+};
+
+const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
+  const header = container.closest('header') || document.querySelector('header') || container;
+
+  const selector =
+    'button:not([disabled]), a[href]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  return Array.from(header.querySelectorAll<HTMLElement>(selector)).filter((el) => {
+    return isElementVisible(el) && el.getAttribute('aria-hidden') !== 'true';
+  });
+};
+
+const MobileMenuOverlay = ({ open, onClose, navLabels, contacts, socialLinks }: MobileMenuOverlayProps) => {
   const { isMobile } = useBreakpoints();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (open) document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
+    if (!open) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (containerRef.current) {
+        const focusables = getFocusableElements(containerRef.current);
+        focusables[0]?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+        return;
+      }
+
+      if (event.key !== 'Tab' || !containerRef.current) return;
+
+      const focusableElements = getFocusableElements(containerRef.current);
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements.at(-1);
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement?.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement?.focus();
+      }
     };
-  }, [open]);
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open, onClose]);
 
   const navItems = useMemo<NavItem[]>(() => {
     return navLabels.map((group) => {
@@ -53,7 +123,12 @@ const MobileMenuOverlay = ({ open, navLabels, contacts, socialLinks }: MobileMen
 
   return (
     <Slide direction="down" in={open} mountOnEnter unmountOnExit appear={false} timeout={600}>
-      <Box data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`} sx={styles.overlay}>
+      <Box
+        ref={containerRef}
+        data-testid={`MobileMenuOverlay${open ? '--open' : '--closed'}`}
+        sx={styles.overlay}
+        id="MobileMenuOverlay"
+      >
         <Box sx={styles.overlayContent}>
           <ColumnGuides lineColor="rgba(239, 233, 224, 0.3)" />
 

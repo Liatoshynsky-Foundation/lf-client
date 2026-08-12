@@ -64,7 +64,12 @@ export const styles = {
 
   iban: {
     gap: '8px',
-    alignItems: { xs: 'flex-start', sm: 'center' }
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    '&:focus, &:focus-visible': {
+      outline: '2px solid #631B2B',
+      outlineOffset: '2px',
+      borderRadius: '2px'
+    }
   },
 
   ibanIcon: {

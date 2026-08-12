@@ -1,6 +1,6 @@
 const commonCopyLinkBaseStyles = {
   fontFamily: 'Mulish, Sans-serif',
-  transition: 'color 0.2s ease',
+  transition: 'color 0.2s ease, outline 0.2s ease',
   lineHeight: '110%',
   textDecoration: 'none',
   wordBreak: 'break-all',
@@ -35,11 +35,14 @@ const getColorConfig = (type: 'primary' | 'secondary'): ColorConfig => {
 const getCopyLinkStates = (config: ColorConfig) => ({
   color: config.defaultColor,
   cursor: 'pointer',
+  borderRadius: '4px',
+
   '& svg *': {
     stroke: config.defaultColor,
     transition: 'stroke 0.2s ease'
   },
-  '&:hover': {
+
+  '&:hover, &:focus, &:focus-visible': {
     color: config.hoverColor,
     textDecoration: 'underline',
     textDecorationColor: config.hoverColor,
@@ -47,6 +50,7 @@ const getCopyLinkStates = (config: ColorConfig) => ({
       stroke: config.hoverColor
     }
   },
+
   '&:active': {
     color: config.activeColor,
     '& svg *': {
@@ -92,17 +96,24 @@ export const getMobileDisabledStyles = () => ({
 
 export const styles = {
   wrapper: {
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     gap: '4px',
     border: 'none',
     background: 'none',
-    padding: 0,
-    margin: 0,
+    padding: '2px 4px',
     font: 'inherit',
-    outline: 'none',
     maxWidth: '100%',
-    textAlign: 'left'
+    width: 'fit-content',
+    textAlign: 'left',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+
+    '&:focus-visible': {
+      outline: '2px solid #631B2B',
+      outlineOffset: '2px'
+    }
   },
 
   iconWrapper: {

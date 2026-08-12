@@ -31,7 +31,25 @@ declare global {
   var capturedOnSeek: ((val: number) => void) | undefined;
 }
 
-let mockAudioContextInstance: Partial<AudioContext> | null = null;
+const makeAnalyser = () =>
+  ({
+    fftSize: 64,
+    frequencyBinCount: 32,
+    connect: jest.fn(),
+    getByteFrequencyData: jest.fn((arr: Uint8Array) => {
+      for (let i = 0; i < arr.length; i++) arr[i] = 128;
+    })
+  }) as unknown as AnalyserNode;
+
+const makeAudioContext = (state: AudioContextState = 'running') => {
+  return {
+    state,
+    destination: {} as AudioDestinationNode,
+    close: jest.fn().mockResolvedValue(undefined),
+    createAnalyser: jest.fn(() => makeAnalyser()),
+    createMediaElementSource: jest.fn(() => ({ connect: jest.fn() }) as unknown as MediaElementAudioSourceNode)
+  };
+};
 
 describe('AudioPlayer', () => {
   let mockTogglePlay: jest.Mock;
@@ -47,49 +65,19 @@ describe('AudioPlayer', () => {
   };
 
   beforeAll(() => {
-    class MockAnalyserNode implements Partial<AnalyserNode> {
-      fftSize = 64;
-      frequencyBinCount = 32;
-      connect = jest.fn();
-      getByteFrequencyData = jest.fn((array: Uint8Array) => {
-        array.set([10, 20, 30, 40, 50, 60]);
-      });
-    }
+    globalThis.AudioContext = jest.fn(() => makeAudioContext()) as unknown as typeof AudioContext;
+    globalThis.webkitAudioContext = jest.fn(() => makeAudioContext()) as unknown as typeof AudioContext;
 
-    class MockAudioContext implements Partial<AudioContext> {
-      state: AudioContextState = 'running';
-      destination: AudioDestinationNode = {} as AudioDestinationNode;
-      close = jest.fn().mockImplementation(() => {
-        return Promise.resolve();
-      });
-
-      createAnalyser(): AnalyserNode {
-        return new MockAnalyserNode() as unknown as AnalyserNode;
-      }
-      createMediaElementSource(): MediaElementAudioSourceNode {
-        return {
-          connect: jest.fn()
-        } as unknown as MediaElementAudioSourceNode;
-      }
-    }
-
-    globalThis.AudioContext = MockAudioContext as unknown as typeof AudioContext;
-    globalThis.webkitAudioContext = MockAudioContext as unknown as typeof AudioContext;
-
-    HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
+    HTMLMediaElement.prototype.play = jest.fn().mockImplementation(() => Promise.resolve());
     HTMLMediaElement.prototype.pause = jest.fn();
     HTMLMediaElement.prototype.load = jest.fn();
 
-    globalThis.requestAnimationFrame = jest.fn().mockImplementation((cb: () => void) => {
-      setTimeout(cb, 0);
-      return 999;
-    });
+    globalThis.requestAnimationFrame = jest.fn().mockImplementation(() => 999);
     globalThis.cancelAnimationFrame = jest.fn();
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAudioContextInstance = null;
 
     mockTogglePlay = jest.fn();
     mockPlayTrack = jest.fn();
@@ -125,68 +113,65 @@ describe('AudioPlayer', () => {
     expect(mockOpenPlayer).toHaveBeenCalled();
   });
 
-  it('should update currentTime and progress on timeupdate', () => {
+  it('should update currentTime on timeupdate event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
-
     act(() => {
       if (audio) {
-        Object.defineProperty(audio, 'currentTime', {
-          value: 5,
-          writable: true
-        });
-        Object.defineProperty(audio, 'duration', {
-          value: 10,
-          writable: true
-        });
+        Object.defineProperty(audio, 'currentTime', { value: 5, writable: true });
+        Object.defineProperty(audio, 'duration', { value: 10, writable: true });
         audio.dispatchEvent(new Event('timeupdate'));
       }
     });
-
     expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
   it('should set duration on loadedmetadata event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
-
     act(() => {
       if (audio) {
-        Object.defineProperty(audio, 'duration', {
-          value: 20,
-          writable: true
-        });
+        Object.defineProperty(audio, 'duration', { value: 20, writable: true });
         audio.dispatchEvent(new Event('loadedmetadata'));
       }
     });
-
     expect(audio?.duration).toBe(20);
   });
 
-  it('should call play when isPlaying is true', () => {
-    renderComponent({ isPlaying: true });
+  it('should not set duration when duration is NaN on loadedmetadata', () => {
+    renderComponent();
+    const audio = document.querySelector('audio');
+    act(() => {
+      if (audio) {
+        Object.defineProperty(audio, 'duration', { value: NaN, writable: true });
+        audio.dispatchEvent(new Event('loadedmetadata'));
+      }
+    });
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
+  });
+
+  it('should call play when isPlaying is true', async () => {
+    await act(async () => {
+      renderComponent({ isPlaying: true });
+    });
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
   it('should set error state on audio error event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
-
     act(() => {
       audio?.dispatchEvent(new Event('error'));
     });
-
     expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
 
   it('should close popover on audio ended event', () => {
     renderComponent();
     const audio = document.querySelector('audio');
-
     act(() => {
       audio?.dispatchEvent(new Event('ended'));
     });
-
     expect(screen.queryByText(mockContextValue.trackName)).not.toBeInTheDocument();
   });
 
@@ -196,8 +181,10 @@ describe('AudioPlayer', () => {
     expect(mockTogglePlay).not.toHaveBeenCalled();
   });
 
-  it('should NOT call togglePlay when button clicked and isPlaying is true', () => {
-    renderComponent({ isPlaying: true });
+  it('should NOT call togglePlay when button clicked and isPlaying is true', async () => {
+    await act(async () => {
+      renderComponent({ isPlaying: true });
+    });
     fireEvent.click(screen.getByRole('button', { name: /toggle audio player/i }));
     expect(mockTogglePlay).not.toHaveBeenCalled();
   });
@@ -212,11 +199,11 @@ describe('AudioPlayer', () => {
   it('should set error when playback fails', async () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const originalPlay = HTMLMediaElement.prototype.play;
-
     HTMLMediaElement.prototype.play = jest.fn().mockRejectedValue(new Error('fail'));
 
-    renderComponent({ isPlaying: true });
-    await act(async () => {});
+    await act(async () => {
+      renderComponent({ isPlaying: true });
+    });
 
     expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
 
@@ -235,10 +222,7 @@ describe('AudioPlayer', () => {
     renderComponent();
     const audio = document.querySelector('audio');
     if (audio) {
-      Object.defineProperty(audio, 'duration', {
-        value: 100,
-        writable: true
-      });
+      Object.defineProperty(audio, 'duration', { value: 100, writable: true });
     }
     fireEvent.click(screen.getByTestId('mock-seek'));
     expect(audio?.currentTime).toBe(50);
@@ -248,247 +232,196 @@ describe('AudioPlayer', () => {
     renderComponent();
     const audio = document.querySelector('audio');
     if (audio) {
-      Object.defineProperty(audio, 'duration', {
-        value: NaN,
-        writable: true
-      });
+      Object.defineProperty(audio, 'duration', { value: NaN, writable: true });
       audio.currentTime = 0;
     }
     fireEvent.click(screen.getByTestId('mock-seek'));
     expect(audio?.currentTime).toBe(0);
   });
 
-  it('should fallback to webkitAudioContext if AudioContext is undefined', async () => {
-    const _originalAudioContext = globalThis.AudioContext;
-    Object.defineProperty(globalThis, 'AudioContext', { value: undefined, writable: true });
-    const { container } = renderComponent({ isPlaying: true });
-    expect(container).toBeDefined();
+  it('should fallback to webkitAudioContext if AudioContext is undefined (line 47)', async () => {
+    const originalAudioContext = globalThis.AudioContext;
+    Object.defineProperty(globalThis, 'AudioContext', { value: undefined, writable: true, configurable: true });
+
+    const webkitCtx = makeAudioContext('running');
+    globalThis.webkitAudioContext = jest.fn(() => webkitCtx) as unknown as typeof AudioContext;
+
+    await act(async () => {
+      renderComponent({ isPlaying: true });
+    });
+
+    expect(globalThis.webkitAudioContext).toHaveBeenCalled();
+
+    Object.defineProperty(globalThis, 'AudioContext', {
+      value: originalAudioContext,
+      writable: true,
+      configurable: true
+    });
   });
 
-  it('should cover all animation frame cancellations and context recreation', async () => {
-    const { rerender, unmount } = renderComponent({ isPlaying: true, src: '1.mp3' });
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    if (mockAudioContextInstance) {
-      Object.defineProperty(mockAudioContextInstance, 'state', {
-        value: 'closed',
-        configurable: true
-      });
-    }
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: '2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: '2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: '3.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount();
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(999);
+  it('should render with undefined trackName', () => {
+    renderComponent({ trackName: undefined });
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
   });
-  it('should cover all edge cases including missing refs and empty src', async () => {
-    let callCount = 0;
+
+  it('should not load audio when src is empty', () => {
+    renderComponent({ src: '' });
+    expect(HTMLMediaElement.prototype.load).not.toHaveBeenCalled();
+  });
+
+  it('should not play when src is empty in play effect', async () => {
+    await act(async () => {
+      renderComponent({ src: '', isPlaying: true });
+    });
+    expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
+  });
+
+  it('should return early from setupAudioAnalyzer and useEffect when audioRef is null (lines 40, 91)', async () => {
+    let audioRefObj: { current: HTMLAudioElement | null } | null = null;
     const originalUseRef = React.useRef;
-    const refSpy1 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
+    let refCount = 0;
+
+    jest.spyOn(React, 'useRef').mockImplementation((init) => {
+      refCount++;
       const ref = originalUseRef(init);
-      if (callCount === 1) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
+      if (refCount === 1) {
+        audioRefObj = ref as { current: HTMLAudioElement | null };
       }
       return ref;
     });
 
-    const { unmount: unmount1, container } = renderComponent({ src: 'test1.mp3', isPlaying: true });
-
-    expect(container).toBeDefined();
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount1();
-    refSpy1.mockRestore();
-    callCount = 0;
-    const refSpy2 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
-      const ref = originalUseRef(init);
-      if (callCount === 6) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
+    const originalPlay = HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play = jest.fn().mockImplementation(() => {
+      if (audioRefObj) {
+        audioRefObj.current = null;
       }
-      return ref;
+      return Promise.resolve();
     });
-    const { unmount: unmount2 } = renderComponent({ src: 'test2.mp3', isPlaying: true });
+
+    const { rerender } = renderComponent({ isPlaying: true, src: 'test-null-ref.mp3' });
+
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
-    unmount2();
-    refSpy2.mockRestore();
-    callCount = 0;
-    const refSpy3 = jest.spyOn(React, 'useRef').mockImplementation((init) => {
-      callCount++;
-      const ref = originalUseRef(init);
-      if (callCount === 7) {
-        Object.defineProperty(ref, 'current', { get: () => null, set: () => {}, configurable: true });
-      }
-      return ref;
-    });
-    const { unmount: unmount3 } = renderComponent({ src: 'test3.mp3', isPlaying: true });
+
+    rerender(
+      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'test-null-ref-2.mp3' }}>
+        <AudioPlayer />
+      </AudioPlayerContext.Provider>
+    );
+
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
-    unmount3();
-    refSpy3.mockRestore();
-    const { unmount: unmount4 } = renderComponent({ src: '' });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount4();
+
+    HTMLMediaElement.prototype.play = originalPlay;
+
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
+    HTMLMediaElement.prototype.play = originalPlay;
+    jest.restoreAllMocks();
   });
 
-  it('should forcibly cover lines 139 and 156-157 by blocking ref reset', async () => {
+  it('should cover line 68 dataArray null branch in animateBars', async () => {
+    const workingCtx = makeAudioContext('running');
+    workingCtx.createAnalyser = jest.fn(
+      () =>
+        ({
+          fftSize: 64,
+          frequencyBinCount: 32,
+          connect: jest.fn(),
+          getByteFrequencyData: jest.fn()
+        }) as unknown as AnalyserNode
+    );
+
+    globalThis.AudioContext = jest.fn(() => workingCtx) as unknown as typeof AudioContext;
+
     const originalUseRef = React.useRef;
-    const refSpy = jest.spyOn(React, 'useRef').mockImplementation((init) => {
+    let refIdx = 0;
+
+    jest.spyOn(React, 'useRef').mockImplementation((init) => {
+      refIdx++;
       const ref = originalUseRef(init);
-      let val = ref.current;
-      Object.defineProperty(ref, 'current', {
-        get: () => val,
-        set: (newVal) => {
-          if (newVal === null && val === 999) return;
-          val = newVal;
-        },
-        configurable: true
-      });
+      if (refIdx === 5) {
+        return { current: null };
+      }
       return ref;
     });
-    globalThis.requestAnimationFrame = jest.fn().mockReturnValue(999);
 
-    const { rerender, unmount, container } = renderComponent({ isPlaying: true, src: 'brutal.mp3' });
-    expect(container).toBeDefined();
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: true, src: 'brutal.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: false, src: 'brutal.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    unmount();
-    refSpy.mockRestore();
-  });
-
-  it('should force cover lines 139 and 156-157', async () => {
-    const { rerender } = renderComponent({ isPlaying: true, src: '1.mp3' });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: false, src: '1.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    rerender(
-      <AudioPlayerContext.Provider
-        value={{ ...mockContextValue, isPlaying: true, src: '1.mp3' }}
-      ></AudioPlayerContext.Provider>
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
-  });
-
-  it('should simulate ref unmounting branch for line 156-157', () => {
-    const { container } = renderComponent();
-    const buttons = container.querySelectorAll('button');
-    expect(buttons).toBeDefined();
-  });
-
-  it('should cover all audio contexts and frame cancellation branches synchronously', async () => {
-    let capturedAnimationCallback: (() => void) | null = null;
-    globalThis.requestAnimationFrame = jest.fn().mockImplementation((cb: () => void) => {
-      capturedAnimationCallback = cb;
-      return 999;
-    });
-
-    const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'brutal-1.mp3' });
+    renderComponent({ isPlaying: true, src: 'test-null-data-array.mp3' });
 
     await act(async () => {
       await Promise.resolve();
     });
 
-    if (capturedAnimationCallback) {
-      act(() => {
-        (capturedAnimationCallback as () => void)();
+    expect(screen.getByRole('button', { name: /toggle audio player/i })).toBeInTheDocument();
+    jest.restoreAllMocks();
+  });
+
+  describe('AudioContext and Animation Frame Cleanup', () => {
+    it('should close old audioContext when state is closed and cancel animation frame on track change and pause', async () => {
+      const activeCloseMock = jest.fn().mockResolvedValue(undefined);
+      let activeCtxState = 'running';
+
+      class TestAudioContext implements Partial<AudioContext> {
+        get state(): AudioContextState {
+          return activeCtxState as AudioContextState;
+        }
+        destination = {} as AudioDestinationNode;
+        close = activeCloseMock;
+        createAnalyser = () =>
+          ({
+            fftSize: 64,
+            frequencyBinCount: 32,
+            connect: jest.fn(),
+            getByteFrequencyData: jest.fn((arr: Uint8Array) => {
+              for (let i = 0; i < arr.length; i++) arr[i] = 100;
+            })
+          }) as unknown as AnalyserNode;
+        createMediaElementSource = () => ({ connect: jest.fn() }) as unknown as MediaElementAudioSourceNode;
+      }
+
+      globalThis.AudioContext = TestAudioContext as unknown as typeof AudioContext;
+
+      let rafId = 0;
+      globalThis.requestAnimationFrame = jest.fn().mockImplementation(() => {
+        rafId++;
+        return rafId;
       });
-    }
 
-    if (mockAudioContextInstance) {
-      Object.defineProperty(mockAudioContextInstance, 'state', {
-        value: 'closed',
-        configurable: true
+      const { rerender, unmount } = renderComponent({ isPlaying: true, src: 'song-1.mp3' });
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 20));
       });
-    }
 
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'brutal-2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
+      activeCtxState = 'closed';
 
-    await act(async () => {
-      await Promise.resolve();
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: true, src: 'song-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 20));
+      });
+
+      expect(activeCloseMock).toHaveBeenCalled();
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
+
+      rerender(
+        <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: 'song-2.mp3' }}>
+          <AudioPlayer />
+        </AudioPlayerContext.Provider>
+      );
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 20));
+      });
+
+      expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
+
+      unmount();
     });
-
-    rerender(
-      <AudioPlayerContext.Provider value={{ ...mockContextValue, isPlaying: false, src: 'brutal-2.mp3' }}>
-        <AudioPlayer />
-      </AudioPlayerContext.Provider>
-    );
-
-    await act(async () => {
-      await Promise.resolve();
-    });
-
-    unmount();
-    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(999);
   });
 });

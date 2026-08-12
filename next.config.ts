@@ -1,16 +1,12 @@
 import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const AZURE_SAS_URL = process.env.AZURE_SAS_URL;
-const azureHostname = AZURE_SAS_URL ? new URL(AZURE_SAS_URL).hostname : null;
-
 const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL ?? process.env.NEXT_PUBLIC_STORAGE_BASE_URL;
 const storageHostname = STORAGE_BASE_URL ? new URL(STORAGE_BASE_URL).hostname : null;
 
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      ...(azureHostname ? [{ protocol: 'https' as const, hostname: azureHostname, port: '', pathname: '/**' }] : []),
       ...(storageHostname
         ? [{ protocol: 'https' as const, hostname: storageHostname, port: '', pathname: '/**' }]
         : []),

@@ -7,7 +7,7 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { styles } from './FoundationInfo.styles';
 import { IFoundationInfo } from '~/types/page/about-us.types';
 
-import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
+import { extractTextFromTipTap, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
 import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
 
 export default function FoundationInfo({ data }: { readonly data: IFoundationInfo }) {
@@ -36,6 +36,14 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
       {children}
     </Typography>
   );
+
+  const getAltText = (img: typeof image): string => {
+    if (!img) return '';
+    if (isTipTapDoc(img.alt)) return extractTextFromTipTap(img.alt) as string;
+    return (img.alt ?? '') as string;
+  };
+
+  const imageAltText = getAltText(image);
 
   return (
     <Box sx={styles.container} data-testid="FoundationInfo">
@@ -76,7 +84,21 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
 
       <Box sx={styles.bodyImage} data-testid="FoundationInfo-bodyImage">
         {image && (
-          <CroppedImage src={image.generatedSrc} alt={extractTextFromTipTap(image.alt)} crop={image.crop} fill={true} />
+          <CroppedImage
+            src={image.generatedSrc}
+            alt={imageAltText}
+            crop={image.crop}
+            fill={false}
+            width={410}
+            height={490}
+            imageStyle={{
+              width: '100%',
+              height: 'auto',
+              objectFit: 'cover',
+              objectPosition: 'top',
+              position: 'relative'
+            }}
+          />
         )}
       </Box>
     </Box>

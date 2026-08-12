@@ -1,7 +1,6 @@
 export function parseFilters(params: URLSearchParams) {
   const currentYear = new Date().getFullYear();
 
-  const genres = params.getAll('genre');
   const categories = params.getAll('category');
   const author = params.getAll('author');
 
@@ -12,13 +11,11 @@ export function parseFilters(params: URLSearchParams) {
 
   const filters = {
     categories: [] as string[],
-    genres: [] as string[],
     author: [] as string[],
     years: { min: 1900, max: currentYear },
     search
   };
 
-  if (genres.length) filters.genres = genres;
   if (categories.length) filters.categories = categories;
   if (author.length) filters.author = author;
 

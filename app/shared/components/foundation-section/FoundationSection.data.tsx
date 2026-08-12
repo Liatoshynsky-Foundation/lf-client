@@ -22,8 +22,8 @@ export const foundationParagraph1: LocalizedNode = {
   ),
   en: (
     <>
-      <b>Welcome to the Lyatoshynsky Foundation!</b> We research and promote Ukrainian classical and contemporary music
-      in Ukraine and worldwide. We pay special attention to the legacy of Borys Lyatoshynsky (1895-1968) — one of the{' '}
+      <b>Welcome to the Liatoshynsky Foundation!</b> We research and promote Ukrainian classical and contemporary music
+      in Ukraine and worldwide. We pay special attention to the legacy of Borys Liatoshynsky (1895-1968) — one of the{' '}
       <b>most influential Ukrainian composers of the 20th century</b>, founder of his own compositional school. His
       works combine modernist innovations and romantic expressiveness, attracting a wide audience.
     </>

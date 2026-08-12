@@ -14,15 +14,14 @@ export async function GET(req: NextRequest) {
     const container = createRequestContainer();
     const artistryService = container.resolve('artistryService');
 
-    const [yearRange, categories, genres] = await Promise.all([
+    const [yearRange, categories] = await Promise.all([
       artistryService.getCompositionsYearRange(),
-      artistryService.getAllCategories(locale),
-      artistryService.getAllGenres(locale)
+      artistryService.getAllCategories(locale)
     ]);
 
-    return NextResponse.json({ yearRange, genres, categories });
+    return NextResponse.json({ yearRange, categories });
   } catch (error) {
-    logger.error('[API:GET:filters] Failed to fetch filters data (years, categories, or genres)', error);
+    logger.error('[API:GET:filters] Failed to fetch filters data (years or categories)', error);
 
     return NextResponse.json({ message: errors.FILTERS_FETCH_FAILED }, { status: 500 });
   }

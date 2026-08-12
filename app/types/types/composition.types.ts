@@ -21,19 +21,10 @@ export type Opus = {
   updatedAt: string;
 };
 
-export type Genre = {
-  id: string;
-  key: string;
-  name: {
-    uk: string;
-    en: string;
-  };
-};
-
 export type Composition = {
   id: string;
   title: string;
-  year: number;
+  year?: number | null;
   audioAvailable: boolean;
   sheetAvailable: boolean;
   songBlobUrl: string;
@@ -47,12 +38,12 @@ export type Composition = {
   createdAt: string;
   updatedAt: string;
   opus?: Opus;
-  genres: Genre[];
+  genre?: string[];
 };
 
 export type TitleOption = {
   _id: string;
   title: string | { en?: string; uk?: string };
-  kind?: 'composition' | 'opus';
+  kind?: 'composition' | 'opus' | 'genre';
   opusNumber?: string | number;
 };

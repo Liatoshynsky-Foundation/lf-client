@@ -64,6 +64,7 @@ const onChangeCommitted = jest.fn();
 describe('NumericFiltering', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
     capturedSliderProps = null;
     render(
       <NumericFiltering
@@ -76,6 +77,10 @@ describe('NumericFiltering', () => {
     );
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('should render inputs and slider with correct default values', () => {
     expect(screen.getByLabelText(/from/i)).toHaveValue('1940');
     expect(screen.getByLabelText(/to/i)).toHaveValue('2000');
@@ -86,6 +91,7 @@ describe('NumericFiltering', () => {
     const fromInput = screen.getByLabelText(/from/i) as HTMLInputElement;
     act(() => {
       fireEvent.change(fromInput, { target: { value: '1950' } });
+      jest.advanceTimersByTime(400);
     });
     expect(fromInput.value).toBe('1950');
     expect(onChange).toHaveBeenCalledWith([1950, 2000]);
@@ -97,12 +103,14 @@ describe('NumericFiltering', () => {
 
     act(() => {
       fireEvent.change(fromInput, { target: { value: 'not-a-number' } });
+      jest.advanceTimersByTime(400);
     });
     expect(fromInput.value).toBe('not-a-number');
     expect(onChange).not.toHaveBeenLastCalledWith([expect.any(Number), expect.any(Number)]);
 
     act(() => {
       fireEvent.change(toInput, { target: { value: 'xyz' } });
+      jest.advanceTimersByTime(400);
     });
     expect(toInput.value).toBe('xyz');
   });
@@ -113,6 +121,7 @@ describe('NumericFiltering', () => {
 
     act(() => {
       fireEvent.change(fromInput, { target: { value: '1800' } });
+      jest.advanceTimersByTime(400);
     });
     act(() => {
       fireEvent.click(clearButton);
@@ -135,6 +144,7 @@ describe('NumericFiltering', () => {
       expect(capturedSliderProps).not.toBeNull();
       act(() => {
         capturedSliderProps!.onChange({} as Event, [1960, 2000], 0);
+        jest.advanceTimersByTime(400);
       });
       expect(screen.getByLabelText(/from/i)).toHaveValue('1960');
     });
@@ -143,6 +153,7 @@ describe('NumericFiltering', () => {
       expect(capturedSliderProps).not.toBeNull();
       act(() => {
         capturedSliderProps!.onChange({} as Event, [2010, 2000], 0);
+        jest.advanceTimersByTime(400);
       });
       expect(screen.getByLabelText(/from/i)).toHaveValue('1999');
     });
@@ -151,6 +162,7 @@ describe('NumericFiltering', () => {
       expect(capturedSliderProps).not.toBeNull();
       act(() => {
         capturedSliderProps!.onChange({} as Event, [1940, 2010], 1);
+        jest.advanceTimersByTime(400);
       });
       expect(screen.getByLabelText(/to/i)).toHaveValue('2010');
     });
@@ -159,6 +171,7 @@ describe('NumericFiltering', () => {
       expect(capturedSliderProps).not.toBeNull();
       act(() => {
         capturedSliderProps!.onChange({} as Event, [1940, 1920], 1);
+        jest.advanceTimersByTime(400);
       });
       expect(screen.getByLabelText(/to/i)).toHaveValue('1941');
     });

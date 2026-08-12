@@ -6,9 +6,19 @@ export interface ParsedOpus {
   rest: string;
 }
 
-export const parseFullOpus = (opusStr?: string): ParsedOpus | null => {
-  if (!opusStr) return null;
-  const trimmedStr = opusStr.trim();
+type OpusValue = number | string | null | undefined;
+
+const normalizeOpus = (opus: OpusValue): string | null => {
+  if (typeof opus === 'number') {
+    return Number.isFinite(opus) ? `op. ${opus}` : null;
+  }
+
+  return opus?.trim() || null;
+};
+
+export const parseFullOpus = (opusStr?: OpusValue): ParsedOpus | null => {
+  const trimmedStr = normalizeOpus(opusStr);
+  if (!trimmedStr) return null;
   const match = OPUS_REGEX.exec(trimmedStr);
   if (!match) return null;
   return {
@@ -18,7 +28,7 @@ export const parseFullOpus = (opusStr?: string): ParsedOpus | null => {
   };
 };
 
-export const parseOpus = (opusStr?: string): number | null => {
+export const parseOpus = (opusStr?: OpusValue): number | null => {
   const parsed = parseFullOpus(opusStr);
   return parsed ? parsed.num : null;
 };

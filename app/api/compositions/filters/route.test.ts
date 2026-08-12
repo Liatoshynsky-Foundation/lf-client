@@ -2,8 +2,7 @@ import * as util from 'util';
 
 const mockArtistryService = {
   getCompositionsYearRange: jest.fn(),
-  getAllCategories: jest.fn(),
-  getAllGenres: jest.fn()
+  getAllCategories: jest.fn()
 };
 
 jest.mock('~/di/container', () => ({
@@ -44,16 +43,14 @@ describe('Compositions Filters Route (GET)', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should return combined filters data', async () => {
-    mockArtistryService.getCompositionsYearRange.mockResolvedValue({ min: 1900, max: 2000 });
+    mockArtistryService.getCompositionsYearRange.mockResolvedValue({ minYear: 1900, maxYear: 2000 });
     mockArtistryService.getAllCategories.mockResolvedValue(['cat1']);
-    mockArtistryService.getAllGenres.mockResolvedValue(['genre1']);
 
     const mockReq = { nextUrl: { searchParams: new URLSearchParams() } };
     const res: any = await GET(mockReq as any);
 
     expect(res._testData).toEqual({
-      yearRange: { min: 1900, max: 2000 },
-      genres: ['genre1'],
+      yearRange: { minYear: 1900, maxYear: 2000 },
       categories: ['cat1']
     });
   });

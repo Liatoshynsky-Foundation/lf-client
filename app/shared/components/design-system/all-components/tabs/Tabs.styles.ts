@@ -66,7 +66,7 @@ export const styles: Record<string, SxProps<Theme>> = {
     whiteSpace: 'nowrap',
 
     color: 'blue.500',
-    '&:focus': {
+    '&.Mui-focusVisible': {
       outline: '2px solid black',
       outlineOffset: '-7px'
     },

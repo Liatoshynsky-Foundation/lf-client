@@ -82,7 +82,7 @@ const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButt
       <Box sx={heroSectionStyles.textLogoStyle}>
         <SvgImage
           src={imagesPaths.textLogo}
-          alt="Lyatoshynsky Foundation"
+          alt="Liatoshynsky Foundation"
           width={1400}
           height={165}
           data-testid="hero-text-logo"

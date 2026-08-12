@@ -225,7 +225,8 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
           slotProps={{
             htmlInput: {
               ...params.inputProps,
-              maxLength: 200
+              maxLength: 200,
+              'aria-label': t('placeholder')
             },
             input: {
               ...params.InputProps,

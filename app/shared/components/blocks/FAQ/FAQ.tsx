@@ -2,6 +2,7 @@
 
 import { Box, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
+import React from 'react';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
 import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
@@ -29,18 +30,14 @@ type FaqProps = {
     phone: string;
     email: string;
   };
-  faq: FaqItemProps[];
+  faq: readonly FaqItemProps[];
 };
 
-const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
+export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.Element => {
   const { contacts, faq } = data;
 
   const t = useTranslations('supportUs.faq');
-  const locale = useLocale();
-
-  const faqItems = faq.map((item) => {
-    return <FaqAccordion key={item.title[locale]} title={item.title[locale]} content={item.content[locale]} />;
-  });
+  const locale = useLocale() as 'en' | 'uk';
 
   return (
     <Box sx={styles.gridContainer} data-testid="Faq">
@@ -75,7 +72,11 @@ const Faq = ({ data }: { readonly data: Readonly<FaqProps> }) => {
           </Box>
         </Box>
       </Box>
-      <Box sx={styles.faq}>{faqItems}</Box>
+      <Box sx={styles.faq}>
+        {faq.map((item) => (
+          <FaqAccordion key={item.title[locale]} title={item.title[locale]} content={item.content[locale]} />
+        ))}
+      </Box>
     </Box>
   );
 };

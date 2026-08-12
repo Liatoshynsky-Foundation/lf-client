@@ -21,9 +21,9 @@ export const introDoc: LocalizedTipTapDoc = {
     normalText(' в доступі до архіву, правилах використання матеріалів і роботі сайту загалом.')
   ]),
   en: makeDoc([
-    boldText('Welcome to the Lyatoshynsky Foundation website!'),
+    boldText('Welcome to the Liatoshynsky Foundation website!'),
     normalText(
-      ' We are glad that you are interested in Ukrainian music and the legacy of Borys Lyatoshynsky. This section is designed so that performers, researchers, and listeners can '
+      ' We are glad that you are interested in Ukrainian music and the legacy of Borys Liatoshynsky. This section is designed so that performers, researchers, and listeners can '
     ),
     boldText('easily navigate'),
     normalText(' the archive, usage rules, and the overall operation of the site.')
@@ -73,7 +73,7 @@ export const rightsDoc: LocalizedTipTapDoc = {
   ]),
   en: makeDoc([
     normalText(
-      'The rights to use the works of Borys Lyatoshynsky are protected by law. Their public performance, recording, reproduction, or inclusion in other products (such as films or multimedia) '
+      'The rights to use the works of Borys Liatoshynsky are protected by law. Their public performance, recording, reproduction, or inclusion in other products (such as films or multimedia) '
     ),
     boldText('is only possible after appropriate licensing.')
   ])
@@ -85,7 +85,7 @@ export const rightsManagementDoc: LocalizedTipTapDoc = {
     boldText('Українській Агенції Авторських і Суміжних Прав (УААСП) головою фундації та правовласницею Тетяною Гомон.')
   ]),
   en: makeDoc([
-    normalText('The management of copyright for the creative works of Borys Lyatoshynsky has been transferred to '),
+    normalText('The management of copyright for the creative works of Borys Liatoshynsky has been transferred to '),
     boldText(
       'the Ukrainian Agency of Copyright and Related Rights (UAASP) by the Foundation’s head and rights holder Tetiana Homon.'
     )
@@ -163,7 +163,7 @@ export const licenseDoc: LocalizedTipTapDoc = {
     normalText('If you are an '),
     boldText('organizer of a concert'),
     normalText(
-      ' or plan to broadcast Lyatoshynsky’s works — please contact the UAASP to obtain the appropriate license via '
+      ' or plan to broadcast Liatoshynsky’s works — please contact the UAASP to obtain the appropriate license via '
     ),
     linkText('email', 'mailto:liatoshynsky@gmail.com'),
     normalText('.')

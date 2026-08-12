@@ -82,7 +82,8 @@
     "copied": "Copied",
     "completedEvent": "Completed event",
     "publishedAtLabel": "Published:",
-    "skipToMainContent": "Skip to main content"
+    "skipToMainContent": "Skip to main content",
+    "loading": "Loading"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -288,7 +289,8 @@
   },
   "search": {
     "notFound": "Not found",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "placeholder": "Search"
   },
   "contactsInfoPage": {
     "contacts": "Contacts",
@@ -362,6 +364,29 @@
     },
     "buttons": {
       "viewPdf": "View PDF"
+    }
+  },
+  "opusDetails": {
+    "back": "Back to compositions",
+    "meta": {
+      "number": "Opus:",
+      "date": "Date of creation:",
+      "genre": "Genre:"
+    },
+    "buttons": {
+      "viewSheetMusic": "View sheet music"
+    },
+    "compositions": {
+      "title": "Compositions:"
+    },
+    "videos": {
+      "title": "Opus performance versions:",
+      "thumbnailAlt": "Opus performance video on YouTube"
+    },
+    "placeholder": {
+      "title": "Coming soon",
+      "subtitle": "This page is still being updated. Our cat archivist is already working on the description",
+      "imageAlt": "Cat archivist"
     }
   },
   "biography": {

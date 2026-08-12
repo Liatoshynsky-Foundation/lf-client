@@ -79,16 +79,3 @@ jest.mock('mongoose', () => {
     disconnect: jest.fn().mockResolvedValue(true)
   };
 });
-
-jest.mock('@azure/storage-blob', () => ({
-  BlobServiceClient: {
-    fromConnectionString: jest.fn().mockReturnValue({
-      getContainerClient: jest.fn().mockReturnValue({
-        getBlockBlobClient: jest.fn().mockReturnValue({
-          upload: jest.fn().mockResolvedValue({}),
-          uploadData: jest.fn().mockResolvedValue({})
-        })
-      })
-    })
-  }
-}));
