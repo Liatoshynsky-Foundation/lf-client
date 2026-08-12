@@ -3,6 +3,12 @@ import { Locale } from 'next-intl';
 import { createEventService } from './eventService';
 
 import type { EventRepository } from '~/infrastructure/repositories/events/event.repo';
+import logger from '~/middleware/logger/logger';
+
+jest.mock('~/middleware/logger/logger', () => ({
+  warn: jest.fn(),
+  error: jest.fn()
+}));
 
 describe('eventService', () => {
   const eventRepositoryMock = {
@@ -13,55 +19,48 @@ describe('eventService', () => {
   const eventService = createEventService({ eventRepository: eventRepositoryMock });
   const locale: Locale = 'uk';
 
-  const mockContent = {
-    uk: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Контент' }] }] },
-    en: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Content' }] }] }
-  };
-
-  const baseEventMock = {
-    _id: '507f191e810c19729de860ea',
-    slug: 'event-1',
-    title: { uk: 'Назва події', en: 'Event Title' },
-    description: { uk: 'Опис події', en: 'Event Description' },
-    coverImage: {
-      src: 'https://img.com/1.jpg',
-      alt: { uk: 'Альт', en: 'Alt' },
-      caption: { uk: 'Підпис', en: 'Caption' },
-      isTmp: false
-    },
-    status: 'published',
-    meta: { views: 100 },
-    publishedAt: '2024-05-01T00:00:00.000Z',
-    eventLink: 'https://example.com',
-    eventDateTimeStart: '2024-05-10T16:00:00.000Z',
-    eventDateTimeEnd: '2024-05-10T18:00:00.000Z',
-    content: mockContent,
-    ticketUrl: { uk: 'https://tickets.ua', en: 'https://tickets.com' }
-  };
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe('getAllPublishedEvents', () => {
+    const baseListItemMock = {
+      _id: '507f191e810c19729de860ea',
+      slug: 'test-event',
+      status: 'published',
+      publishedAt: '2026-05-01T00:00:00.000Z',
+      eventDateTimeStart: '2026-05-10T16:00:00.000Z',
+      eventDateTimeEnd: '2026-05-10T18:00:00.000Z',
+      title: { uk: 'Тестова подія', en: 'Test Event' },
+      description: { uk: 'Опис події', en: 'Event description' },
+      coverImage: {
+        src: 'https://img.com/1.jpg',
+        alt: { uk: 'Альт', en: 'Alt' },
+        caption: { uk: 'Підпис', en: 'Caption' },
+        isTmp: false
+      },
+      meta: { views: 100 },
+      ticketUrl: { uk: 'https://tickets.ua', en: 'https://tickets.com' }
+    };
+
     it('fetches and localizes published events', async () => {
-      eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseEventMock] as any);
+      eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseListItemMock] as any);
 
       const result = await eventService.getAllPublishedEvents(locale);
 
       expect(eventRepositoryMock.getAllPublishedEvents).toHaveBeenCalled();
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('Назва події');
+      expect(result[0].title).toBe('Тестова подія');
       expect(result[0].description).toBe('Опис події');
     });
 
     it('localizes to en locale', async () => {
-      eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseEventMock] as any);
+      eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseListItemMock] as any);
 
       const result = await eventService.getAllPublishedEvents('en');
 
-      expect(result[0].title).toBe('Event Title');
-      expect(result[0].description).toBe('Event Description');
+      expect(result[0].title).toBe('Test Event');
+      expect(result[0].description).toBe('Event description');
     });
 
     it('returns empty array when repository returns empty array', async () => {
@@ -80,16 +79,59 @@ describe('eventService', () => {
       expect(result).toEqual([]);
     });
 
-    it('returns empty array when repository throws', async () => {
-      eventRepositoryMock.getAllPublishedEvents.mockRejectedValue(new Error('DB Error'));
+    it('skips invalid records and logs a warning, keeping only valid ones', async () => {
+      const invalidItem = { _id: 'not-a-valid-id' };
+      eventRepositoryMock.getAllPublishedEvents.mockResolvedValue([baseListItemMock, invalidItem] as any);
+
+      const result = await eventService.getAllPublishedEvents(locale);
+
+      expect(result).toHaveLength(1);
+      expect(logger.warn).toHaveBeenCalledWith(
+        expect.stringContaining('[SERVICE:Events:getAllPublishedEvents] Skipped 1 invalid event records')
+      );
+    });
+
+    it('returns empty array and logs an error when repository throws', async () => {
+      const dbError = new Error('Database connection failed');
+      eventRepositoryMock.getAllPublishedEvents.mockRejectedValue(dbError);
 
       const result = await eventService.getAllPublishedEvents(locale);
 
       expect(result).toEqual([]);
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('[SERVICE:Events:getAllPublishedEvents]'),
+        dbError
+      );
     });
   });
 
   describe('getEventBySlug', () => {
+    const mockContent = {
+      uk: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Контент' }] }] },
+      en: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Content' }] }] }
+    };
+
+    const baseEventMock = {
+      _id: '507f191e810c19729de860ea',
+      slug: 'event-1',
+      title: { uk: 'Назва події', en: 'Event Title' },
+      description: { uk: 'Опис події', en: 'Event Description' },
+      coverImage: {
+        src: 'https://img.com/1.jpg',
+        alt: { uk: 'Альт', en: 'Alt' },
+        caption: { uk: 'Підпис', en: 'Caption' },
+        isTmp: false
+      },
+      status: 'published',
+      meta: { views: 100 },
+      publishedAt: '2024-05-01T00:00:00.000Z',
+      eventLink: 'https://example.com',
+      eventDateTimeStart: '2024-05-10T16:00:00.000Z',
+      eventDateTimeEnd: '2024-05-10T18:00:00.000Z',
+      content: mockContent,
+      ticketUrl: { uk: 'https://tickets.ua', en: 'https://tickets.com' }
+    };
+
     it('returns null when event is not found', async () => {
       eventRepositoryMock.getEventBySlug.mockResolvedValue(null);
 
@@ -176,6 +218,16 @@ describe('eventService', () => {
       await eventService.getEventBySlug('specific-slug', locale);
 
       expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('specific-slug');
+    });
+
+    it('returns null and logs an error when repository throws', async () => {
+      const criticalError = new Error('Validation or Network failed');
+      eventRepositoryMock.getEventBySlug.mockRejectedValue(criticalError);
+
+      const result = await eventService.getEventBySlug('event-1', locale);
+
+      expect(result).toBeNull();
+      expect(logger.error).toHaveBeenCalled();
     });
   });
 });

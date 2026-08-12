@@ -21,6 +21,11 @@ export function BlockRenderer<T>({ blockId, blocks, title, rendererMap, namesMap
     return null;
   }
 
+  const blockData = (blocks as Record<string, { hidden?: boolean } | undefined>)[id as string];
+  if (blockData?.hidden) {
+    return null;
+  }
+
   const Component = rendererMap[id] as React.ElementType;
 
   return <Component key={id} blocks={blocks} title={title ?? ''} />;

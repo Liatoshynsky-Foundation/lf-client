@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
+import { translatedFieldSchema } from './constants';
+
 import { MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
 
 const mediaMentionCoverImageSchema = z.object({
   src: z.string(),
-  alt: z.string().optional(),
+  alt: translatedFieldSchema.optional(),
   width: z.number().optional(),
   height: z.number().optional(),
   crop: z
@@ -25,15 +27,25 @@ const mediaMentionMetaSchema = z.object({
 export const mediaMentionSchema = z.object({
   _id: z.string(),
   url: z.string().url(),
-  title: z.string(),
-  description: z.string(),
+  title: translatedFieldSchema,
+  description: translatedFieldSchema,
   slug: z.string(),
   coverImage: mediaMentionCoverImageSchema,
   status: z.nativeEnum(MediaMentionStatus),
-  publishedAt: z.string().datetime().nullable().optional(),
   meta: mediaMentionMetaSchema,
-  createdAt: z.string().datetime().optional(),
-  updatedAt: z.string().datetime().optional()
+  publishedAt: z.coerce
+    .date()
+    .nullable()
+    .optional()
+    .transform((date) => date?.toISOString() ?? null),
+  createdAt: z.coerce
+    .date()
+    .optional()
+    .transform((date) => date?.toISOString()),
+  updatedAt: z.coerce
+    .date()
+    .optional()
+    .transform((date) => date?.toISOString())
 });
 
 export const mediaMentionListItemSchema = mediaMentionSchema.pick({

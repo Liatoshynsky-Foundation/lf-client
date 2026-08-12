@@ -13,17 +13,20 @@ const IntroSectionBlockSchema = z.object({
 });
 
 const FoundationInfoBlockSchema = z.object({
+  title: translatedTipTapSchema.optional(),
   ourOrganisation: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   ourName: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   ourBelief: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  image: ImageSchema
+  image: ImageSchema,
+  hidden: z.boolean().optional()
 });
 
 const OurMissionBlockSchema = z.object({
   title: translatedTipTapSchema,
   smallImage: ImageSchema,
   bigImage: ImageSchema,
-  list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }))
+  list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })),
+  hidden: z.boolean().optional()
 });
 
 const OurGoalsBlockSchema = z.object({
@@ -33,11 +36,13 @@ const OurGoalsBlockSchema = z.object({
       title: translatedTipTapSchema,
       description: translatedTipTapSchema
     })
-  )
+  ),
+  hidden: z.boolean().optional()
 });
 
 const LiatoshynskyOfficeBlockSchema = z.object({
-  quote: TipTapQuoteSchema
+  quote: TipTapQuoteSchema,
+  hidden: z.boolean().optional()
 });
 
 const WhatWeDoBlockSchema = z.object({
@@ -47,7 +52,8 @@ const WhatWeDoBlockSchema = z.object({
       title: translatedTipTapSchema,
       description: translatedTipTapSchema
     })
-  )
+  ),
+  hidden: z.boolean().optional()
 });
 
 const FoundationFoundersBlockSchema = z.object({
@@ -59,7 +65,8 @@ const FoundationFoundersBlockSchema = z.object({
       name: translatedTipTapSchema,
       description: translatedTipTapSchema
     })
-  )
+  ),
+  hidden: z.boolean().optional()
 });
 
 const AboutUsBlock = z.object({

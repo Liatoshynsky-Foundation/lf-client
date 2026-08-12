@@ -14,7 +14,6 @@ jest.mock('~/lib/utils/filters/parseFilters', () => ({
   parseFilters: jest.fn(() => ({
     search: 'bach',
     categories: 'piano',
-    genres: 'baroque',
     years: { min: 1700, max: 1750 }
   }))
 }));
@@ -58,7 +57,6 @@ describe('Compositions Titles Route (GET)', () => {
     expect(mockArtistryService.getAllCompositionTitles).toHaveBeenCalledWith('de', {
       search: 'bach',
       category: 'piano',
-      genre: 'baroque',
       yearFrom: 1700,
       yearTo: 1750
     });

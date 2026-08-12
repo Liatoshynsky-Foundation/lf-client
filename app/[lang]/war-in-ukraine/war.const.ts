@@ -35,7 +35,7 @@ export const warSupportDoc: LocalizedTipTapDoc = {
   ]),
   en: makeDoc([
     normalText(
-      'In 2014, the Russian Federation started a brutal and aggressive war against Ukraine. The Lyatoshynsky Foundation and its team members are '
+      'In 2014, the Russian Federation started a brutal and aggressive war against Ukraine. The Liatoshynsky Foundation and its team members are '
     ),
     boldText('actively involved'),
     normalText(

@@ -46,19 +46,34 @@ const PersonCard: React.FC<PersonCardProps> = ({ imgURL, name, description, fall
     return renderBlock(styles.description);
   }, []);
 
+  const isDefaultPlaceholder = src === DEFAULT_FALLBACK || src.endsWith(DEFAULT_FALLBACK);
+
   return (
     <Box sx={styles.container}>
       <Box sx={styles.photoWrapper}>
-        <CroppedImage
-          src={src}
-          alt="Person"
-          crop={crop}
-          width={185}
-          height={166}
-          imageStyle={{ ...styles.image, objectFit: failed ? 'contain' : 'cover' }}
-          onError={handleError}
-          loading="lazy"
-        />
+        <Box sx={styles.photoBackground} />
+        {isDefaultPlaceholder ? (
+          <Box
+            component="img"
+            src={DEFAULT_FALLBACK}
+            alt=""
+            data-testid="person-card-placeholder-logo"
+            sx={styles.placeholderLogo}
+          />
+        ) : (
+          <Box sx={styles.photoImageWrapper}>
+            <CroppedImage
+              src={src}
+              alt="Person"
+              crop={crop}
+              width={185}
+              height={166}
+              imageStyle={{ ...styles.image, objectFit: failed ? 'contain' : 'cover' }}
+              onError={handleError}
+              loading="lazy"
+            />
+          </Box>
+        )}
       </Box>
 
       {name && (

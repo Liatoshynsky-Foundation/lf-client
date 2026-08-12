@@ -2,7 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import DownloadButton from './DownloadButton';
+import { ApiRoutes } from '~/constants/routes/api-routes';
 import { downloadWithAnchor } from '~/utils/downloadFile';
+import { getStorageFileEndpoint } from '~/utils/storageFileEndpoint';
 
 jest.mock('~/utils/downloadFile', () => ({
   downloadWithAnchor: jest.fn()
@@ -33,7 +35,7 @@ describe('DownloadButton', () => {
     const button = screen.getByRole('button', { name: /Download/i });
     fireEvent.click(button);
 
-    const expectedUrl = `/api/blob-url?folderName=${testFolderName}&blobName=${testFileName}`;
+    const expectedUrl = getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, testFolderName, testFileName);
 
     expect(downloadWithAnchor).toHaveBeenCalledWith(expectedUrl, testFileName);
   });

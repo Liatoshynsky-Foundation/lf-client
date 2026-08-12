@@ -47,35 +47,37 @@ export const styles: Record<string, SxProps<Theme>> = {
       backgroundColor: 'black',
       bottom: 0,
       zIndex: 2
+    }
+  },
+  tab: {
+    flex: {
+      xs: '0 0 auto',
+      sm: '1 1 0'
     },
 
-    '& .MuiTab-root': {
-      flex: {
-        xs: '0 0 auto',
-        sm: '1 1 0'
-      },
+    textTransform: 'none',
+    justifyContent: 'center',
 
-      textTransform: 'none',
-      justifyContent: 'center',
+    fontFamily: 'Mulish, sans-serif',
+    fontSize: commonSx.layout.typography.bodyMedium,
+    fontWeight: 600,
+    lineHeight: '150%',
+    letterSpacing: '0px',
+    whiteSpace: 'nowrap',
 
-      fontFamily: 'Mulish, sans-serif',
-      fontSize: commonSx.layout.typography.bodyMedium,
-      fontWeight: 600,
-      lineHeight: '150%',
-      letterSpacing: '0px',
-      whiteSpace: 'nowrap',
-
-      color: 'blue.500',
-
-      '&:hover': {
-        color: 'blue.800'
-      },
-      '&:active': {
-        color: 'blue.900'
-      },
-      '&.Mui-selected': {
-        color: 'black'
-      }
+    color: 'blue.500',
+    '&.Mui-focusVisible': {
+      outline: '2px solid black',
+      outlineOffset: '-7px'
+    },
+    '&:hover': {
+      color: 'blue.800'
+    },
+    '&:active': {
+      color: 'blue.900'
+    },
+    '&.Mui-selected': {
+      color: 'black'
     }
   },
 

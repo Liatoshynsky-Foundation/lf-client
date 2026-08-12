@@ -1,4 +1,4 @@
-import { EventDTO, EventListItemDTO } from '~/domain/dto/event.dto';
+import { EventDTO, EventListItemDTO } from '~/domain/dto/events.dto';
 
 export interface EventRepository {
   getAllPublishedEvents(): Promise<EventListItemDTO[]>;

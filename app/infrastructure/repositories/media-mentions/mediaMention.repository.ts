@@ -2,81 +2,35 @@ import { Types } from 'mongoose';
 
 import { MediaMentionStatus } from '~/domain/dto/mediaMention.dto';
 import dbConnect from '~/infrastructure/db/connect';
-import MediaMentionModel, { ILocalizedString } from '~/infrastructure/models/media-mentions/mediaMention.model';
-
-const getLocalizedText = (field: ILocalizedString | string | undefined, locale: 'uk' | 'en'): string => {
-  if (!field) return '';
-  if (typeof field === 'string') return field;
-  return field[locale] || field.uk || '';
-};
-
-const safeGetIsoDate = (dateData: unknown): string | null => {
-  if (!dateData) return null;
-  const parsedDate = new Date(dateData as string | number | Date);
-  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
-};
+import MediaMentionModel from '~/infrastructure/models/media-mentions/mediaMention.model';
 
 const mediaMentionRepository = {
-  async getAllPublishedMediaMentions(locale: 'uk' | 'en' = 'uk') {
+  async getAllPublishedMediaMentions(_locale: string) {
     await dbConnect();
 
     const mediaMentions = await MediaMentionModel.find({ status: MediaMentionStatus.Published })
       .select('_id url title description slug coverImage publishedAt meta')
       .sort({ publishedAt: -1 })
-      .lean()
-      .exec();
+      .lean();
 
-    const transformedMediaMentions = mediaMentions.map((mention) => {
-      let localizedCoverImage = undefined;
-
-      if (mention.coverImage) {
-        localizedCoverImage = {
-          ...mention.coverImage,
-          alt: getLocalizedText(mention.coverImage.alt, locale)
-        };
-      }
-
-      return {
-        ...mention,
-        _id: (mention._id as Types.ObjectId).toString(),
-        publishedAt: safeGetIsoDate(mention.publishedAt),
-        title: getLocalizedText(mention.title, locale),
-        description: getLocalizedText(mention.description, locale),
-        coverImage: localizedCoverImage
-      };
-    });
+    const transformedMediaMentions = mediaMentions.map((mention) => ({
+      ...mention,
+      _id: (mention._id as Types.ObjectId).toString()
+    }));
 
     return transformedMediaMentions;
   },
 
-  async getMediaMentionBySlug(slug: string, locale: 'uk' | 'en' = 'uk') {
+  async getMediaMentionBySlug(slug: string, _locale: string) {
     await dbConnect();
 
-    const mediaMention = await MediaMentionModel.findOne({
-      slug: String(slug),
-      status: MediaMentionStatus.Published
-    })
-      .lean()
-      .exec();
+    const mediaMention = await MediaMentionModel.findOne({ slug }).lean();
 
     if (!mediaMention) return null;
 
-    let localizedCoverImage = undefined;
-
-    if (mediaMention.coverImage) {
-      localizedCoverImage = {
-        ...mediaMention.coverImage,
-        alt: getLocalizedText(mediaMention.coverImage.alt, locale)
-      };
-    }
-
     const transformedMediaMention = {
       ...mediaMention,
-      _id: (mediaMention._id as Types.ObjectId).toString(),
-      publishedAt: safeGetIsoDate(mediaMention.publishedAt),
-      title: getLocalizedText(mediaMention.title, locale),
-      description: getLocalizedText(mediaMention.description, locale),
-      coverImage: localizedCoverImage
+      _id: (mediaMention._id as Types.ObjectId).toString()
     };
 
     return transformedMediaMention;

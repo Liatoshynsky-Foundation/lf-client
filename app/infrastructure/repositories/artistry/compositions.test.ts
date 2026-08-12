@@ -1,7 +1,8 @@
+import { PipelineStage } from 'mongoose';
+
 import newCompositionsRepository from './compositions.repository';
 
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
-import { Genre } from '~/infrastructure/models/artistry/artistryGenreData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
 
@@ -13,9 +14,6 @@ jest.mock('~/lib/utils/searchAndFiltersHelpers', () => ({
   yearHelper: jest.fn((val) => val)
 }));
 
-jest.mock('~/infrastructure/models/artistry/artistryGenreData', () => ({
-  Genre: { find: jest.fn() }
-}));
 jest.mock('~/infrastructure/models/artistry/artistryTableData', () => ({
   Compositions: { find: jest.fn(), aggregate: jest.fn() }
 }));
@@ -23,19 +21,18 @@ jest.mock('~/infrastructure/models/artistry/artistryCategoriesData', () => ({
   Category: { find: jest.fn() }
 }));
 jest.mock('~/infrastructure/models/artistry/artistryOpusData', () => ({
-  Opus: { find: jest.fn(), aggregate: jest.fn(), findById: jest.fn() }
+  Opus: { find: jest.fn(), aggregate: jest.fn(), distinct: jest.fn(), findById: jest.fn() }
 }));
 
 const compositionsRepository = newCompositionsRepository();
 
-const mockMongooseChain = (resolvedValue: any) => ({
+const mockMongooseChain = <T>(resolvedValue: T) => ({
   select: jest.fn().mockReturnThis(),
   populate: jest.fn().mockReturnThis(),
-  sort: jest.fn().mockReturnThis(),
   lean: jest.fn().mockResolvedValue(resolvedValue)
 });
 
-const mockAggregateChain = (resolvedValue: any) => ({
+const mockAggregateChain = <T>(resolvedValue: T) => ({
   exec: jest.fn().mockResolvedValue(resolvedValue)
 });
 
@@ -55,26 +52,31 @@ describe('compositionsRepository', () => {
     });
 
     it('should cover getAllGenres & getAllCategories', async () => {
-      (Genre.find as jest.Mock).mockReturnValue(mockMongooseChain([validNamedFilter()]));
+      (Opus.distinct as jest.Mock).mockResolvedValue(['romance', 'jazz', null, '']);
       (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([validNamedFilter()]));
 
-      await compositionsRepository.getAllGenres();
+      const genres = await compositionsRepository.getAllGenres();
       await compositionsRepository.getAllCategories();
 
-      expect(Genre.find).toHaveBeenCalled();
+      expect(Opus.distinct).toHaveBeenCalledWith('genre');
+      expect(genres).toEqual(['romance', 'jazz']);
       expect(Category.find).toHaveBeenCalled();
     });
 
     it('should return aggregated years or defaults', async () => {
-      (Compositions.aggregate as jest.Mock).mockResolvedValue([{ minYear: 1950, maxYear: 2000 }]);
+      (Opus.aggregate as jest.Mock).mockResolvedValue([{ minYear: 1950, maxYear: 2000 }]);
+      (Compositions.aggregate as jest.Mock).mockResolvedValue([{ minYear: 1912, maxYear: 1976 }]);
+
       const result = await compositionsRepository.getCompositionsYearRange();
-      expect(result).toEqual({ minYear: 1950, maxYear: 2000 });
+
+      expect(result).toEqual({ minYear: 1912, maxYear: 2000 });
+      expect(Opus.aggregate).toHaveBeenCalled();
+      expect(Compositions.aggregate).toHaveBeenCalled();
     });
   });
 
   describe('getAllCompositionTitles', () => {
     it('should handle search, years and successful filters', async () => {
-      (Genre.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
       (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
 
       (Compositions.aggregate as jest.Mock).mockReturnValue(
@@ -84,7 +86,6 @@ describe('compositionsRepository', () => {
 
       await compositionsRepository.getAllCompositionTitles({
         search: 'test',
-        genre: ['g1'],
         yearFrom: 1990
       });
 
@@ -96,40 +97,6 @@ describe('compositionsRepository', () => {
       const res = await compositionsRepository.getAllCompositionTitles({ category: ['none'] });
       expect(res).toEqual([]);
     });
-
-    it('should return [] if genre keys provided but none found in DB', async () => {
-      (Genre.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
-      const res = await compositionsRepository.getAllCompositionTitles({ genre: ['none-gen'] });
-      expect(res).toEqual([]);
-    });
-
-    it('should push a category filter when regular category keys resolve to ids', async () => {
-      (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
-      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-
-      await compositionsRepository.getAllCompositionTitles({ category: ['c1'] });
-
-      expect(Category.find).toHaveBeenCalledWith({ key: { $in: ['c1'] } });
-    });
-
-    it('should apply the with-opus special category filter', async () => {
-      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-
-      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus'] });
-
-      expect(Compositions.aggregate).toHaveBeenCalled();
-    });
-
-    it('should skip opus filtering when both special category keys are selected', async () => {
-      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
-
-      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus', 'without-opus'] });
-
-      expect(Compositions.aggregate).toHaveBeenCalled();
-    });
   });
 
   describe('getAllCompositions', () => {
@@ -137,7 +104,7 @@ describe('compositionsRepository', () => {
       _id: validMongoId,
       title: { uk: 'у', en: 'e' },
       year: 2020,
-      genres: [],
+      genre: null,
       categories: [],
       audioAvailable: false,
       sheetAvailable: false,
@@ -153,12 +120,11 @@ describe('compositionsRepository', () => {
       }
     };
 
-    it('should cover Search and Genre filter', async () => {
+    it('should cover Search filter', async () => {
       (Opus.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
-      (Genre.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
       (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
 
-      await compositionsRepository.getAllCompositions('Beethoven', { genres: ['g1'] });
+      await compositionsRepository.getAllCompositions('Beethoven');
 
       expect(Compositions.find).toHaveBeenCalled();
     });
@@ -177,43 +143,194 @@ describe('compositionsRepository', () => {
       expect(res).toEqual([]);
     });
 
-    it('should apply the with-opus special filter', async () => {
+    it('should cover with-opus special category branch', async () => {
       (Opus.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
-      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
 
       await compositionsRepository.getAllCompositions(undefined, { categories: ['with-opus'] });
 
       expect(Opus.find).toHaveBeenCalledWith({ number: { $regex: /^op/i } });
     });
 
-    it('should skip opus filtering when both special keys are selected', async () => {
-      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+    it('should cover without-opus special category branch', async () => {
+      (Opus.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
+
+      await compositionsRepository.getAllCompositions(undefined, { categories: ['without-opus'] });
+
+      expect(Opus.find).toHaveBeenCalledWith({ number: { $regex: /^sine op/i } });
+    });
+
+    it('should skip opus filter when both with-opus and without-opus selected', async () => {
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
 
       await compositionsRepository.getAllCompositions(undefined, { categories: ['with-opus', 'without-opus'] });
 
       expect(Opus.find).not.toHaveBeenCalled();
     });
 
-    it('should sort compositions by opus prefix, number and remainder', async () => {
-      const makeComp = (id: string, opusNumber: string): typeof mockComp => ({
+    it('should sort compositions by opus prefix, number and rest', async () => {
+      const makeComp = (id: string, number: string) => ({
         ...mockComp,
         _id: id,
-        opusId: { ...mockComp.opusId, _id: id, number: opusNumber }
+        opusId: { ...mockComp.opusId, _id: id, number }
       });
 
-      const unsorted = [
-        makeComp('507f191e810c19729de860e1', 'sine op. 5'),
-        makeComp('507f191e810c19729de860e2', 'Op. 2'),
-        makeComp('507f191e810c19729de860e3', 'Op. 1 No. 1'),
-        makeComp('507f191e810c19729de860e4', 'Op. 1 No. 2')
+      const compsUnsorted = [
+        makeComp('507f191e810c19729de860eb', 'Op. 2'),
+        makeComp('507f191e810c19729de860ec', 'Sine op. 1'),
+        makeComp('507f191e810c19729de860ee', 'Op. 1')
       ];
 
-      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(unsorted));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(compsUnsorted));
 
       const result = await compositionsRepository.getAllCompositions();
-      const orderedNumbers = result.map((comp) => comp.opusId?.number);
 
-      expect(orderedNumbers).toEqual(['Op. 1 No. 1', 'Op. 1 No. 2', 'Op. 2', 'sine op. 5']);
+      const opusNumbers = result.map((c) => {
+        const opus = typeof c.opusId === 'object' && c.opusId ? c.opusId.number : undefined;
+        return opus;
+      });
+      expect(opusNumbers).toEqual(['Op. 1', 'Op. 2', 'Sine op. 1']);
+    });
+
+    it('should push category match when regular category keys are found', async () => {
+      (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['some-category'] });
+
+      expect(Category.find).toHaveBeenCalledWith({ key: { $in: ['some-category'] } });
+      expect(Compositions.aggregate).toHaveBeenCalled();
+    });
+
+    it('should add opus-number regex match for with-opus special category', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus'] });
+
+      const pipelineArg = (Compositions.aggregate as jest.Mock).mock.calls[0][0] as PipelineStage[];
+      const matchStages = pipelineArg.filter((stage): stage is PipelineStage.Match => '$match' in stage);
+      const opusNumberMatch = matchStages.find((s) => s.$match?.['opusData.number']);
+      expect(opusNumberMatch?.$match).toMatchObject({ 'opusData.number': { $regex: /^op/i } });
+    });
+
+    it('should add opus-number regex match for without-opus special category', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['without-opus'] });
+
+      const pipelineArg = (Compositions.aggregate as jest.Mock).mock.calls[0][0] as PipelineStage[];
+      const matchStages = pipelineArg.filter((stage): stage is PipelineStage.Match => '$match' in stage);
+      const opusNumberMatch = matchStages.find((s) => s.$match?.['opusData.number']);
+      expect(opusNumberMatch?.$match).toMatchObject({ 'opusData.number': { $regex: /^sine op/i } });
+    });
+
+    it('should skip opus regex match when both with-opus and without-opus selected', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getAllCompositionTitles({ category: ['with-opus', 'without-opus'] });
+      const pipelineArg = (Compositions.aggregate as jest.Mock).mock.calls[0][0] as PipelineStage[];
+      const matchStages = pipelineArg.filter((stage): stage is PipelineStage.Match => '$match' in stage);
+      const opusNumberMatch = matchStages.find((s) => s.$match?.['opusData.number']);
+      expect(opusNumberMatch).toBeUndefined();
+    });
+    it('should filter out search words shorter than 2 chars but keep valid ones', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      await compositionsRepository.getAllCompositionTitles({ search: 'a test' });
+      expect(Compositions.aggregate).toHaveBeenCalled();
+    });
+    it('should apply yearTo condition for opus pipeline', async () => {
+      (Compositions.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+      await compositionsRepository.getAllCompositionTitles({ yearTo: 2000 });
+      const opusPipelineArg = (Opus.aggregate as jest.Mock).mock.calls[0][0] as PipelineStage[];
+      const matchStage = opusPipelineArg.find((stage): stage is PipelineStage.Match => '$match' in stage);
+      expect(matchStage?.$match).toMatchObject({
+        $and: [
+          {
+            $or: [
+              { creationYear: { $lte: '2000' } },
+              { creationYear: { $lte: 2000 } },
+              { endYear: { $lte: '2000' } },
+              { endYear: { $lte: 2000 } },
+              { releaseYear: { $lte: 2000 } }
+            ]
+          }
+        ]
+      });
+    });
+    it('should apply year range filter in getAllCompositions', async () => {
+      (Opus.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
+      await compositionsRepository.getAllCompositions(undefined, { years: { min: 1900, max: 2000 } });
+      expect(Compositions.find).toHaveBeenCalled();
+      expect(Opus.find).toHaveBeenCalledWith({
+        status: { $ne: 'draft' },
+        $or: [
+          { creationYear: { $gte: '1900', $lte: '2000' } },
+          { creationYear: { $gte: 1900, $lte: 2000 } },
+          { creationYear: null, releaseYear: { $gte: 1900, $lte: 2000 } },
+          { endYear: { $gte: '1900', $lte: '2000' } },
+          { endYear: { $gte: 1900, $lte: 2000 } }
+        ]
+      });
+    });
+    it('should sort by num when prefix is equal but num differs (same rest)', async () => {
+      const makeComp = (id: string, number: string) => ({
+        ...mockComp,
+        _id: id,
+        opusId: { ...mockComp.opusId, _id: id, number }
+      });
+      const compsUnsorted = [
+        makeComp('507f191e810c19729de860ef', 'Op. 3'),
+        makeComp('507f191e810c19729de860f0', 'Op. 1')
+      ];
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(compsUnsorted));
+      const result = await compositionsRepository.getAllCompositions();
+      const opusNumbers = result.map((c) => {
+        const opus = typeof c.opusId === 'object' && c.opusId ? c.opusId.number : undefined;
+        return opus;
+      });
+      expect(opusNumbers).toEqual(['Op. 1', 'Op. 3']);
+    });
+    it('should filter out compositions with unparsable opus number', async () => {
+      const invalidComp = {
+        ...mockComp,
+        _id: '507f191e810c19729de860f1',
+        opusId: { ...mockComp.opusId, _id: '507f191e810c19729de860f1', number: 'invalid-format' }
+      };
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp, invalidComp]));
+      const result = await compositionsRepository.getAllCompositions();
+      expect(result).toHaveLength(1);
+      const opusNumber = typeof result[0].opusId === 'object' && result[0].opusId ? result[0].opusId.number : undefined;
+      expect(opusNumber).toBe('Op. 1');
+    });
+    it('should not push year condition when years filter is not provided', async () => {
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain([mockComp]));
+      await compositionsRepository.getAllCompositions(undefined, {});
+      expect(Compositions.find).toHaveBeenCalled();
+    });
+    it('should return default year range when aggregation returns no rows', async () => {
+      (Opus.aggregate as jest.Mock).mockResolvedValue([]);
+      (Compositions.aggregate as jest.Mock).mockResolvedValue([]);
+
+      const result = await compositionsRepository.getCompositionsYearRange();
+
+      expect(result).toEqual({ minYear: 1900, maxYear: new Date().getFullYear() });
+    });
+
+    it('should use composition years when opus aggregation is empty', async () => {
+      (Opus.aggregate as jest.Mock).mockResolvedValue([]);
+      (Compositions.aggregate as jest.Mock).mockResolvedValue([{ minYear: 1912, maxYear: 1976 }]);
+
+      const result = await compositionsRepository.getCompositionsYearRange();
+
+      expect(result).toEqual({ minYear: 1912, maxYear: 1976 });
     });
   });
 

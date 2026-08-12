@@ -21,14 +21,12 @@ jest.mock('~/shared/components/paper-component/PaperComponent', () => ({
 }));
 
 global.fetch = jest.fn();
-
+const mockProps = {
+  formTitle: 'Test Title',
+  formSubtitle: 'Test Subtitle',
+  sx: { backgroundColor: 'red' }
+};
 describe('OfferCollaborationForm', () => {
-  const mockProps = {
-    formTitle: 'Test Title',
-    formSubtitle: 'Test Subtitle',
-    sx: { backgroundColor: 'red' }
-  };
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -45,7 +43,7 @@ describe('OfferCollaborationForm', () => {
   it('should render the provided formTitle and formSubtitle', () => {
     render(<OfferCollaborationForm formTitle={mockProps.formTitle} formSubtitle={mockProps.formSubtitle} />);
 
-    expect(screen.getByTestId('OfferCollaborationForm-formTitle')).toHaveTextContent(mockProps.formTitle);
+    expect(screen.getByRole('heading', { level: 2, name: mockProps.formTitle })).toHaveTextContent(mockProps.formTitle);
     expect(screen.getByTestId('OfferCollaborationForm-formSubtitle')).toHaveTextContent(mockProps.formSubtitle);
   });
 
@@ -97,6 +95,21 @@ describe('OfferCollaborationForm', () => {
       await act(async () => {
         await expect(onSubmit({ name: 'Test' })).rejects.toThrow('Помилка відправки');
       });
+    });
+
+    it('should handle network connection error and set fallback error message', async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+
+      render(<OfferCollaborationForm />);
+
+      const contactFormCalls = (ContactForm as jest.Mock).mock.calls;
+      const onSubmit = contactFormCalls[contactFormCalls.length - 1][0].onSubmit;
+
+      await act(async () => {
+        await expect(onSubmit({ name: 'Test' })).rejects.toThrow('Network error');
+      });
+
+      expect(screen.getByText('Сталася помилка з’єднання. Перевірте інтернет.')).toBeInTheDocument();
     });
   });
 });

@@ -7,6 +7,7 @@ describe('opusParser', () => {
       expect(parseFullOpus('Op. 15 v2')).toEqual({ prefix: 'op', num: 15, rest: 'v2' });
       expect(parseFullOpus('sine op. 5')).toEqual({ prefix: 'sine op', num: 5, rest: '' });
       expect(parseFullOpus('sine op. 1 bis')).toEqual({ prefix: 'sine op', num: 1, rest: 'bis' });
+      expect(parseFullOpus(42)).toEqual({ prefix: 'op', num: 42, rest: '' });
     });
 
     it('should return null for invalid formats or prefixes', () => {
@@ -25,6 +26,7 @@ describe('opusParser', () => {
       expect(parseOpus('Op. 15 v2')).toBe(15);
       expect(parseOpus('sine op. 5')).toBe(5);
       expect(parseOpus('sine op. 1 bis')).toBe(1);
+      expect(parseOpus(42)).toBe(42);
     });
 
     it('should return null for invalid opus strings', () => {

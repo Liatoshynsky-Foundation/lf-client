@@ -50,6 +50,16 @@ describe('MainLayout Component', () => {
     expect(innerBox).toHaveStyle(customGridSx);
   });
 
+  it('should render the main tag that wraps the children', () => {
+    const testId = 'main-layout-container';
+    render(<MainLayout data-testid={testId}>{childElement}</MainLayout>);
+
+    const mainElement = screen.getByRole('main');
+
+    expect(mainElement).toHaveTextContent(childText);
+    expect(mainElement).toHaveAttribute('tabIndex', '-1');
+  });
+
   it('should forward additional props to the inner Box element', () => {
     const testId = 'main-layout-container';
     const customGridSx = {

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { RateLimiterMongo } from 'rate-limiter-flexible';
 
 import { POST } from './route';
@@ -35,7 +36,7 @@ jest.mock('~/validators/contact.schema', () => ({
   }
 }));
 
-const mockRequest = (body: any, ip: string = '127.0.0.1') => {
+const mockRequest = (body: unknown, ip: string | null = '127.0.0.1') => {
   return {
     json: async () => body,
     headers: {
@@ -47,6 +48,7 @@ const mockRequest = (body: any, ip: string = '127.0.0.1') => {
 describe('Contact API Route (POST)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (mongoose.connection as unknown as { readyState: number }).readyState = 1;
   });
 
   it('should return 429 if rate limit is exceeded', async () => {
@@ -134,5 +136,42 @@ describe('Contact API Route (POST)', () => {
       expect.objectContaining({ success: true, message: 'Your collaboration request has been sent successfully.' }),
       200
     );
+  });
+
+  it('should bypass rate limiter when mongoose connection is not ready', async () => {
+    (mongoose.connection as unknown as { readyState: number }).readyState = 0;
+
+    (contactApiSchema.parse as jest.Mock).mockReturnValue({
+      name: 'Test',
+      email: 'test@example.com',
+      message: 'Hello',
+      formType: 'Test'
+    });
+    (emailService.sendContactEmail as jest.Mock).mockResolvedValue({ success: true });
+
+    const req = mockRequest({});
+    await POST(req);
+
+    expect(successResponse).toHaveBeenCalled();
+  });
+
+  it('should use fallback unknown IP when x-forwarded-for header is missing', async () => {
+    const mockConsume = jest.fn().mockResolvedValue(true);
+    (RateLimiterMongo as jest.Mock).mockImplementationOnce(() => ({
+      consume: mockConsume
+    }));
+
+    (contactApiSchema.parse as jest.Mock).mockReturnValue({
+      name: 'Test',
+      email: 'test@example.com',
+      message: 'Hello',
+      formType: 'Test'
+    });
+    (emailService.sendContactEmail as jest.Mock).mockResolvedValue({ success: true });
+
+    const req = mockRequest({}, null);
+    await POST(req);
+
+    expect(mockConsume).toHaveBeenCalledWith('unknown');
   });
 });

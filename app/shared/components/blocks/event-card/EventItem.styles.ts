@@ -172,7 +172,11 @@ export const styles: Record<string, SxProps<Theme>> = {
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 2,
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    '& a': {
+      textDecoration: 'none',
+      color: 'inherit'
+    }
   },
 
   publishedAt: {

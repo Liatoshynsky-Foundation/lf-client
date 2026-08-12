@@ -23,7 +23,7 @@ jest.mock('next-intl', () => ({
       }: {
         link: (chunks: React.ReactNode) => React.ReactNode;
       }
-    ) => ['Read our ', link('privacy policy'), '.'];
+    ) => <>Read our {link('privacy policy')}.</>;
 
     return t;
   }

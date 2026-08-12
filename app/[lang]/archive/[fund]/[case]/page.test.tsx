@@ -202,4 +202,34 @@ describe('ArchiveCasePage', () => {
     expect(archiveCaseDetailsCallCount).toBe(0);
     expect(archiveCaseDetailsProps).toBeUndefined();
   });
+
+  it('handles fallback cases when documents, sheets, pdfUrl, or adjacent cases are undefined or missing _id to cover line 86 branch', async () => {
+    const mockCaseWithMissingFields = {
+      name: 'Case with missing details',
+      cipher: 'Ф. 2, оп. 1, спр. 5',
+      dates: '1900–2000',
+      sheets: null,
+      pdfUrl: null,
+      documents: undefined,
+      prevCase: undefined,
+      nextCase: undefined
+    };
+
+    mockGetCaseById.mockResolvedValue(mockCaseWithMissingFields);
+
+    const jsx = await ArchiveCasePage({
+      params: Promise.resolve({ lang: 'uk', fund: '2', case: 'op1-spr5' })
+    });
+
+    render(jsx);
+
+    expect(archiveCaseDetailsProps).toBeDefined();
+    const props = archiveCaseDetailsProps!;
+
+    expect(props.documents).toEqual([]);
+    expect(props.sheetsCount).toBeUndefined();
+    expect(props.pdfUrl).toBe('#');
+    expect(props.prevCase).toBeUndefined();
+    expect(props.nextCase).toBeUndefined();
+  });
 });

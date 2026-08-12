@@ -3,6 +3,7 @@ import { loggerErrors } from '~/constants/errors';
 import type { MediaMentionRepository } from '~/infrastructure/repositories/media-mentions/mediaMention.repo';
 import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import logger from '~/middleware/logger/logger';
+import { LocalizeSchema } from '~/validators/localization';
 import { mediaMentionListItemSchema, mediaMentionSchema } from '~/validators/mediaMention.schema';
 
 interface MediaMentionServiceDeps {
@@ -14,11 +15,14 @@ export const createMediaMentionService = ({ mediaMentionRepository }: MediaMenti
     try {
       const mediaMentions = await mediaMentionRepository.getAllPublishedMediaMentions(locale);
 
-      if (mediaMentions.length === 0) {
+      if (!mediaMentions || mediaMentions.length === 0) {
         return [];
       }
 
-      const { validItems, invalidCount } = parseArraySafely(mediaMentions, mediaMentionListItemSchema);
+      const { validItems, invalidCount } = parseArraySafely(
+        mediaMentions,
+        LocalizeSchema(mediaMentionListItemSchema, locale)
+      );
 
       if (invalidCount > 0) {
         logger.warn(
@@ -41,7 +45,7 @@ export const createMediaMentionService = ({ mediaMentionRepository }: MediaMenti
       const mediaMention = await mediaMentionRepository.getMediaMentionBySlug(slug, locale);
       if (!mediaMention) return null;
 
-      return mediaMentionSchema.parse(mediaMention);
+      return LocalizeSchema(mediaMentionSchema, locale).parse(mediaMention);
     } catch (error) {
       logger.error(
         `[SERVICE:MediaMentions:getMediaMentionBySlug] Failed to fetch or parse media mention by slug: ${slug}. ${loggerErrors.ZOD_VALIDATION_ERROR}`,

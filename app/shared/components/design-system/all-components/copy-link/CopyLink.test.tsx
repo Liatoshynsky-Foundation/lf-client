@@ -16,17 +16,29 @@ jest.mock('next-intl', () => ({
   }
 }));
 
+type MockSvgProps = {
+  alt?: string;
+  Component?: React.ComponentType;
+  [key: string]: unknown;
+};
+
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
-  Svg: ({ alt, Component, ...props }: any) => (
+  Svg: ({ alt, Component, ...props }: MockSvgProps) => (
     <svg data-testid="CopyLink-icon" aria-label={alt} {...props}>
       {Component?.name || 'CopyIcon'}
     </svg>
   )
 }));
 
+type MockTooltipProps = {
+  children?: React.ReactNode;
+  title?: string;
+  isOpen?: boolean;
+};
+
 jest.mock('~/ds-components/tooltip/Tooltip', () => ({
   __esModule: true,
-  default: ({ children, title, isOpen }: any) => (
+  default: ({ children, title, isOpen }: MockTooltipProps) => (
     <div data-testid="CopyLink-tooltip" data-title={title} data-open={isOpen}>
       {children}
     </div>
@@ -186,7 +198,9 @@ describe('CopyLink', () => {
         expect(tooltip).toHaveAttribute('data-open', 'true');
       });
 
-      jest.advanceTimersByTime(1000);
+      React.act(() => {
+        jest.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         const tooltip = screen.getByTestId('CopyLink-tooltip');

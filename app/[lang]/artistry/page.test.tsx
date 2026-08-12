@@ -1,4 +1,6 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 
 import Artistry, { generateMetadata } from './page';
 import * as envUtils from '~/utils/isProductionMode';
@@ -13,13 +15,13 @@ jest.mock('~/utils/isProductionMode', () => ({
 }));
 
 jest.mock('~/components/title-with-quote/TitleWithQuote', () => {
-  const MockTitle = () => <div>Liatoshynksy artistry</div>;
+  const MockTitle = () => <div data-testid="title-with-quote">Liatoshynksy artistry</div>;
   MockTitle.displayName = 'TitleWithQuote';
   return MockTitle;
 });
 
 jest.mock('~/components/tables/CompositionTable/MusicTableSection', () => {
-  const MockMusicTable = () => <div>Composition table</div>;
+  const MockMusicTable = () => <div data-testid="music-table">Composition table</div>;
   MockMusicTable.displayName = 'MusicTableSection';
   return MockMusicTable;
 });
@@ -30,10 +32,28 @@ jest.mock('~/components/under-development/UnderDevelopment', () => {
   return MockUnderDev;
 });
 
-jest.mock('~/layouts/main-layout/MainLayout', () => {
-  const MockLayout = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-  MockLayout.displayName = 'MainLayout';
-  return MockLayout;
+jest.mock('~/shared/components/page-builder/PageBuilder', () => {
+  return function MockPageBuilder({ renderBlock }: any) {
+    const mockBlocksData = {
+      TitleWithQuote: { title: 'Mock Title' },
+      MusicTableSection: {}
+    };
+
+    return (
+      <div data-testid="mock-page-builder">
+        {renderBlock({
+          blockId: 'title-with-quote',
+          blocks: mockBlocksData,
+          uniqueRenderKey: 'key-1'
+        })}
+        {renderBlock({
+          blockId: 'music-table',
+          blocks: mockBlocksData,
+          uniqueRenderKey: 'key-2'
+        })}
+      </div>
+    );
+  };
 });
 
 describe('Artistry Page', () => {
@@ -45,24 +65,25 @@ describe('Artistry Page', () => {
   });
 
   it('should generate correct metadata', async () => {
-    const metadata = await generateMetadata({ params: mockParams });
-    expect(metadata).toBeDefined();
+    const metadata = await generateMetadata({ params: mockParams } as any);
+    expect(metadata.title).toBe('title');
+    expect(metadata.description).toBe('description');
   });
 
   it('should render UnderDevelopment in production mode', async () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
 
-    const ui = await Artistry({ params: mockParams });
+    const ui = await Artistry({ params: mockParams } as any);
     render(ui);
 
     expect(screen.getByTestId('under-dev')).toBeInTheDocument();
   });
 
-  it('should render page content correctly in dev mode', async () => {
-    const ui = await Artistry({ params: mockParams });
+  it('should render page content via PageBuilder and BlockRenderer in dev mode', async () => {
+    const ui = await Artistry({ params: mockParams } as any);
     render(ui);
-
-    expect(screen.getByText(/Liatoshynksy artistry/i)).toBeInTheDocument();
-    expect(screen.getByText(/Composition table/i)).toBeInTheDocument();
+    expect(screen.getByTestId('mock-page-builder')).toBeInTheDocument();
+    expect(screen.getByTestId('title-with-quote')).toBeInTheDocument();
+    expect(screen.getByTestId('music-table')).toBeInTheDocument();
   });
 });

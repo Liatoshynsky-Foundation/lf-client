@@ -1,8 +1,7 @@
-import { asFunction, asValue, AwilixContainer } from 'awilix';
+import { asFunction, AwilixContainer } from 'awilix';
 
 import newCompositionsRepo from '~/infrastructure/repositories/artistry/compositions.repository';
 import newEventRepository from '~/infrastructure/repositories/events/event.repository';
-import eventsRepository from '~/infrastructure/repositories/events/events.repository';
 import newFoundationInfoRepo from '~/infrastructure/repositories/foundation-info/foundationInfo.repository';
 import newFundsRepository from '~/infrastructure/repositories/funds/funds.repository';
 import newMediaMentionRepository from '~/infrastructure/repositories/media-mentions/mediaMention.repository';
@@ -11,7 +10,6 @@ import newNewsRepository from '~/infrastructure/repositories/news/news.repositor
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
 import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
-import newPaymentEventRepository from '~/infrastructure/repositories/way-for-pay/paymentEvent.repository';
 
 export type RepositoriesModule = {
   foundationInfoRepo: ReturnType<typeof newFoundationInfoRepo>;
@@ -22,10 +20,8 @@ export type RepositoriesModule = {
   fundsRepository: ReturnType<typeof newFundsRepository>;
   newsRepository: ReturnType<typeof newNewsRepository>;
   mediaMentionRepository: ReturnType<typeof newMediaMentionRepository>;
-  eventsRepo: typeof eventsRepository;
   eventRepository: ReturnType<typeof newEventRepository>;
   donationOrderRepository: ReturnType<typeof newDonationOrderRepository>;
-  paymentEventRepository: ReturnType<typeof newPaymentEventRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -38,9 +34,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     fundsRepository: asFunction(newFundsRepository).scoped(),
     newsRepository: asFunction(newNewsRepository).scoped(),
     mediaMentionRepository: asFunction(newMediaMentionRepository).scoped(),
-    eventsRepo: asValue(eventsRepository),
     eventRepository: asFunction(newEventRepository).scoped(),
-    donationOrderRepository: asFunction(newDonationOrderRepository).scoped(),
-    paymentEventRepository: asFunction(newPaymentEventRepository).scoped()
+    donationOrderRepository: asFunction(newDonationOrderRepository).scoped()
   });
 };

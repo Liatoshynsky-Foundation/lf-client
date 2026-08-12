@@ -99,7 +99,7 @@ const testData: IWhatWeDo = {
   items: [
     {
       title: 'titlesList.title1',
-      description: createDescription('We organize artistic events that bring Lyatoshynsky`s music back to the stage.')
+      description: createDescription('We organize artistic events that bring Liatoshynsky`s music back to the stage.')
     },
     {
       title: 'titlesList.title2',
@@ -133,8 +133,26 @@ describe('WhatWeDo component', () => {
 
       expect(screen.getByText('titlesList.title1')).toBeInTheDocument();
       expect(
-        screen.getByText('We organize artistic events that bring Lyatoshynsky`s music back to the stage.')
+        screen.getByText('We organize artistic events that bring Liatoshynsky`s music back to the stage.')
       ).toBeInTheDocument();
+    });
+
+    describe('Edge cases for item title key generation', () => {
+      it('should generate a fallback key string when item title is not a string', () => {
+        const nonStringTitleData: IWhatWeDo = {
+          title: 'Non-string Title Section',
+          items: [
+            {
+              title: { type: 'doc', content: [] } as unknown as string,
+              description: 'Description for fallback key'
+            }
+          ]
+        };
+
+        render(<WhatWeDo data={nonStringTitleData} />);
+
+        expect(screen.getByTestId('TitleWithDescription')).toBeInTheDocument();
+      });
     });
   });
 

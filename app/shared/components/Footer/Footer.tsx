@@ -88,7 +88,7 @@ export default async function Footer() {
       </Box>
 
       <Box sx={styles.svgContainer}>
-        <SvgImage src={svgImagePath} alt="Lyatoshynsky Foundation" width={1400} height={165} />
+        <SvgImage src={svgImagePath} alt="Liatoshynsky Foundation" width={1400} height={165} />
       </Box>
     </Box>
   );

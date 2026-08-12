@@ -81,7 +81,9 @@
     "viewMore": "View More",
     "copied": "Copied",
     "completedEvent": "Completed event",
-    "publishedAtLabel": "Published:"
+    "publishedAtLabel": "Published:",
+    "skipToMainContent": "Skip to main content",
+    "loading": "Loading"
   },
   "quote": {
     "mainText": "There will, of course, be a lot of interesting things, but you won't hear everything, because two concerts or operas will be held in different theaters and halls in one evening.",
@@ -189,6 +191,10 @@
     }
   },
   "table": {
+    "collapsibleRow": {
+      "expand": "Expand row group",
+      "collapse": "Collapse row group"
+    },
     "columns": {
       "opus": "Opus",
       "name": "Name",
@@ -283,7 +289,8 @@
   },
   "search": {
     "notFound": "Not found",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "placeholder": "Search"
   },
   "contactsInfoPage": {
     "contacts": "Contacts",

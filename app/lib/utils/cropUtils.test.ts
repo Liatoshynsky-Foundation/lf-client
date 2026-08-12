@@ -35,5 +35,12 @@ describe('cropUtils', () => {
 
       expect(style.transform).toBe('translate(-200px, -200px) scale(4)');
     });
+
+    it('should fallback scale calculation parameter to default step if crop layout dimensions are zero or lower', () => {
+      const edgeCrop: CropRect = { x: 0, y: 0, width: 0, height: 0 };
+      const style = buildCroppedStyle(edgeCrop, 500, 500, 100, 100);
+
+      expect(style.transform).toBe('translate(50px, 50px) scale(1)');
+    });
   });
 });

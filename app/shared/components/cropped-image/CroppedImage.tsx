@@ -40,7 +40,8 @@ export default function CroppedImage({
         position: 'relative',
         overflow: 'hidden',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        aspectRatio: width && height ? `${width} / ${height}` : 'auto'
       }}
     >
       {crop ? (

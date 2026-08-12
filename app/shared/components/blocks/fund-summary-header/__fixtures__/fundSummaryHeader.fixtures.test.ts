@@ -42,4 +42,27 @@ describe('FundSummaryHeader Fixtures', () => {
       expect(ukText).toBe('Опис українською');
     });
   });
+  describe('FundSummaryHeader Content and Helpers', () => {
+    it('should successfully execute getFundSummaryHeaderBacklinkUrl', async () => {
+      jest.mock('~/lib/utils/navigationHelper', () => ({
+        getNavigationLink: jest.fn().mockResolvedValue('/mocked-archive-path')
+      }));
+
+      const { getFundSummaryHeaderBacklinkUrl } = await import('../FundSummaryHeader.content');
+      const url = await getFundSummaryHeaderBacklinkUrl();
+      expect(url).toBeDefined();
+    });
+
+    it('should verify exported content structures', async () => {
+      const { fundSummaryBacklinkText, fundSummaryTitle, fundSummaryContent } = await import(
+        '../FundSummaryHeader.content'
+      );
+
+      expect(fundSummaryBacklinkText).toHaveProperty('uk');
+      expect(fundSummaryBacklinkText).toHaveProperty('en');
+      expect(fundSummaryTitle).toHaveProperty('uk');
+      expect(fundSummaryTitle).toHaveProperty('en');
+      expect(fundSummaryContent.items.length).toBeGreaterThan(0);
+    });
+  });
 });

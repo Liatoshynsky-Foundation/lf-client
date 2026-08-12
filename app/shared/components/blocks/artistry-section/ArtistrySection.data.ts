@@ -18,7 +18,7 @@ export const artistrySectionTextContent: LocalizedTipTapDoc = {
   en: makeDoc([
     normalText(
       // eslint-disable-next-line quotes
-      "Creating music and working for Boris Lyatoshynsky was his life's work. His compositions are distinguished by their grandeur, beauty, and emotional richness. Everyone will find something interesting in Lyatoshynsky's legacy."
+      "Creating music and working for Boris Liatoshynsky was his life's work. His compositions are distinguished by their grandeur, beauty, and emotional richness. Everyone will find something interesting in Liatoshynsky's legacy."
     ),
     normalText(
       // eslint-disable-next-line quotes

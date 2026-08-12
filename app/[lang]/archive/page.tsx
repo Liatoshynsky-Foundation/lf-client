@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, CircularProgress } from '@mui/material';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
@@ -37,6 +37,7 @@ const getColumnPaddingTop = (columnNum: number) => {
 };
 
 export default function Archive() {
+  const t = useTranslations('common');
   const { isMobile, isTablet, isLaptop, isDesktop } = useBreakpoints();
   const [error, setError] = useState<string | null>(null);
   const locale = useLocale();
@@ -110,8 +111,8 @@ export default function Archive() {
         <ArchiveHeader onSearch={(value) => setParam('search', value)} />
 
         {isLoading ? (
-          <Box sx={styles.loaderBox} data-testid="ArchivePage-loader" aria-label="Loading funds">
-            <CircularProgress />
+          <Box sx={styles.loaderBox} data-testid="ArchivePage-loader">
+            <CircularProgress aria-label={t('loading')} />
           </Box>
         ) : (
           <Box sx={styles.fundsGrid} data-testid="ArchivePage-fundsGrid">
@@ -125,7 +126,7 @@ export default function Archive() {
                   paddingTop: getColumnPaddingTop(columnNum)
                 }}
               >
-                {(fundsByColumn[columnNum] ?? []).map((fund) => (
+                {fundsByColumn[columnNum].map((fund) => (
                   <FundCard key={fund.id} id={fund.id} number={fund.number} title={fund.title} />
                 ))}
               </Box>

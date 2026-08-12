@@ -72,7 +72,7 @@ const testData: IFoundationFounders = {
       photo: {
         src: 'Tetyana-Homon',
         alt: 'Tetyana Gomon',
-        generatedSrc: '/api/blob-url?folderName=photos&blobName=Tetyana-Homon',
+        generatedSrc: 'Tetyana-Homon',
         caption: null
       },
       name: 'Tetyana Gomon',
@@ -82,7 +82,7 @@ const testData: IFoundationFounders = {
       photo: {
         src: 'Iryna-Tykova',
         alt: 'Iryna Tukova',
-        generatedSrc: '/api/blob-url?folderName=photos&blobName=Iryna-Tykova',
+        generatedSrc: 'Iryna-Tykova',
         caption: null
       },
       name: 'Iryna Tukova',
@@ -92,7 +92,7 @@ const testData: IFoundationFounders = {
       photo: {
         src: 'Maria-Hurska',
         alt: 'Maria Hurska',
-        generatedSrc: '/api/blob-url?folderName=photos&blobName=Maria-Hurska',
+        generatedSrc: 'Maria-Hurska',
         caption: null
       },
       name: 'Maria Hurska',

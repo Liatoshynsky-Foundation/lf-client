@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 
 import { ROUTES } from '../constants/routes';
 import YearTabs from './YearTabs';
@@ -23,13 +24,27 @@ jest.mock('~/components/year-tabs/constants', () => ({
   years: ['2025', '2024', '2023']
 }));
 
+type MockButtonGroupProps = {
+  buttons: React.ReactNode;
+  'data-testid'?: string;
+  sx?: Record<string, unknown>;
+  activeButton?: number;
+};
+
 jest.mock('~/ds-components/button-group/ButtonGroup', () => ({
   __esModule: true,
-  default: ({ buttons, 'data-testid': dataTestId, sx, activeButton }: any) => (
-    <div data-testid={dataTestId} style={sx} data-active-index={activeButton}>
-      {buttons}
-    </div>
-  )
+  default: ({ buttons, 'data-testid': dataTestId, sx, activeButton }: MockButtonGroupProps) => {
+    const inlineStyle =
+      sx && typeof sx === 'object'
+        ? Object.fromEntries(Object.entries(sx).filter(([key]) => !key.startsWith('&')))
+        : undefined;
+
+    return (
+      <div data-testid={dataTestId} style={inlineStyle} data-active-index={activeButton}>
+        {buttons}
+      </div>
+    );
+  }
 }));
 
 const mockScrollTo = jest.fn();
@@ -163,7 +178,7 @@ describe('YearTabs', () => {
       globalThis.scrollY = 150;
       mockUseScrollDirection.mockReturnValue('up');
     });
-
+    // 2
     rerender(<YearTabs years={MOCK_YEARS} />);
 
     act(() => {
@@ -235,7 +250,7 @@ describe('YearTabs', () => {
     } as unknown as IntersectionObserverEntry;
 
     act(() => {
-      yearObserver!.callback([mockEntry, mockEntryFar], null as any);
+      yearObserver!.callback([mockEntry, mockEntryFar], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '2');
@@ -260,7 +275,7 @@ describe('YearTabs', () => {
     } as unknown as IntersectionObserverEntry;
 
     act(() => {
-      yearObserver!.callback([mockEntry], null as any);
+      yearObserver!.callback([mockEntry], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '1');
@@ -270,7 +285,7 @@ describe('YearTabs', () => {
     });
 
     act(() => {
-      yearObserver!.callback([mockEntry], null as any);
+      yearObserver!.callback([mockEntry], {} as unknown as IntersectionObserver);
     });
 
     expect(buttonGroup).toHaveAttribute('data-active-index', '2');
@@ -288,7 +303,7 @@ describe('YearTabs', () => {
 
   it('should remove scroll event listener on unmount', () => {
     const mockRemoveEventListener = jest.fn();
-    globalThis.removeEventListener = mockRemoveEventListener as any;
+    globalThis.removeEventListener = mockRemoveEventListener as unknown as typeof globalThis.removeEventListener;
 
     const { unmount } = render(<YearTabs years={MOCK_YEARS} />);
     unmount();
@@ -320,10 +335,10 @@ describe('YearTabs', () => {
           {
             target: sentinel,
             boundingClientRect: { top: 0 },
-            rootBounds: { bottom: 800 } as any
+            rootBounds: { bottom: 800 } as unknown as DOMRect
           } as unknown as IntersectionObserverEntry
         ],
-        null as any
+        {} as unknown as IntersectionObserver
       );
     });
 
@@ -332,5 +347,115 @@ describe('YearTabs', () => {
     });
 
     expect(buttonGroup).toHaveStyle('transform: translate(-50%, calc(100% + 5vh))');
+  });
+  it('should ignore entries that are not intersecting', () => {
+    render(<YearTabs years={MOCK_YEARS} />);
+    const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
+
+    const yearObserver = ioInstances.find((inst) =>
+      inst.observed.some((el) => (el as HTMLElement).id.startsWith('year-'))
+    );
+    expect(yearObserver).toBeTruthy();
+
+    const mockNonIntersectingEntry = {
+      isIntersecting: false,
+      target: mockYearElements[1],
+      boundingClientRect: { top: 110 }
+    } as unknown as IntersectionObserverEntry;
+
+    act(() => {
+      yearObserver!.callback([mockNonIntersectingEntry], {} as unknown as IntersectionObserver);
+    });
+
+    expect(buttonGroup).toHaveAttribute('data-active-index', '0');
+  });
+
+  it('should not update year state if the new year is the same as the previous year', () => {
+    render(<YearTabs years={MOCK_YEARS} />);
+    const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
+
+    const yearObserver = ioInstances.find((inst) =>
+      inst.observed.some((el) => (el as HTMLElement).id.startsWith('year-'))
+    );
+    expect(yearObserver).toBeTruthy();
+
+    const mockEntrySame = {
+      isIntersecting: true,
+      target: mockYearElements[0],
+      boundingClientRect: { top: 100 }
+    } as unknown as IntersectionObserverEntry;
+
+    act(() => {
+      yearObserver!.callback([mockEntrySame], {} as unknown as IntersectionObserver);
+    });
+
+    expect(buttonGroup).toHaveAttribute('data-active-index', '0');
+  });
+
+  it('should scroll to correct element and set active year when hashchange fires with s suffix', () => {
+    mockScrollTo.mockClear();
+
+    delete (globalThis as unknown as { location: unknown }).location;
+    globalThis.location = { hash: '#2024s' } as unknown as Location;
+
+    render(<YearTabs years={MOCK_YEARS} />);
+
+    expect(mockScrollTo).toHaveBeenCalled();
+
+    act(() => {
+      globalThis.location.hash = '#2023s';
+      globalThis.dispatchEvent(new Event('hashchange'));
+    });
+
+    expect(mockScrollTo).toHaveBeenCalled();
+  });
+
+  it('should cover fallback branches in scrollToHash when elements are missing', () => {
+    delete (globalThis as unknown as { location: unknown }).location;
+    globalThis.location = { hash: '#nonexistent' } as unknown as Location;
+
+    mockGetElementById.mockReturnValue(null);
+
+    render(<YearTabs years={MOCK_YEARS} />);
+
+    expect(mockScrollTo).not.toHaveBeenCalled();
+  });
+
+  it('should cover fallback when validYears is empty', () => {
+    render(<YearTabs years={[]} />);
+
+    const buttonGroup = screen.getByTestId('YearTabs-yearsGroup');
+    expect(buttonGroup).toHaveAttribute('data-active-index', '-1');
+  });
+
+  it('should cover fallback when rootBounds is missing in sentinel observer', () => {
+    render(<YearTabs years={MOCK_YEARS} />);
+    const sentinelObserver = ioInstances.find((inst) =>
+      inst.observed.some((el) => (el as HTMLElement).id === 'timeline-hide-sentinel')
+    );
+    expect(sentinelObserver).toBeTruthy();
+
+    act(() => {
+      sentinelObserver!.callback(
+        [
+          {
+            target: sentinel,
+            boundingClientRect: { top: 0 },
+            rootBounds: null
+          } as unknown as IntersectionObserverEntry
+        ],
+        {} as unknown as IntersectionObserver
+      );
+    });
+
+    expect(screen.getByTestId('YearTabs')).toBeInTheDocument();
+  });
+
+  it('should cover early return in scrollToHash when id is missing', () => {
+    delete (globalThis as unknown as { location: unknown }).location;
+    globalThis.location = { hash: '#' } as unknown as Location;
+
+    render(<YearTabs years={MOCK_YEARS} />);
+    expect(mockScrollTo).not.toHaveBeenCalled();
   });
 });

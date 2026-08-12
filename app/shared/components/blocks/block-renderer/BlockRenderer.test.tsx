@@ -65,4 +65,16 @@ describe('BlockRenderer', () => {
     expect(screen.getByTestId('intro-section')).toHaveTextContent('IntroSection');
     expect(screen.getByTestId('intro-section-title')).toHaveTextContent(title);
   });
+
+  it('should NOT render a Component if its block data is marked as hidden', () => {
+    runSimulation({ blocks: { IntroSection: { hidden: true } } });
+
+    expect(screen.queryByTestId('intro-section')).not.toBeInTheDocument();
+  });
+
+  it('should render a Component if its block data is not marked as hidden', () => {
+    runSimulation({ blocks: { IntroSection: { hidden: false } } });
+
+    expect(screen.getByTestId('intro-section')).toBeInTheDocument();
+  });
 });

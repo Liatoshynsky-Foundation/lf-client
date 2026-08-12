@@ -10,9 +10,11 @@ import {
   RenderGenreHeader,
   renderNameCell,
   RenderNameHeader,
+  renderOpusGenreGroupLabel,
   renderOpusGroupLabel,
   RenderOpusHeader,
   renderOpusTitleGroupLabel,
+  renderOpusYearGroupLabel,
   RenderPlayCell,
   renderYearCell,
   RenderYearHeader
@@ -120,6 +122,17 @@ describe('MusicTableCells', () => {
       expect(getByText('1918')).toBeInTheDocument();
     });
 
+    it('should render null for year cell when value is null or undefined', () => {
+      const yearCellNull = renderYearCell({ getValue: () => null } as CellContext<Music, unknown>);
+      const yearCellUndefined = renderYearCell({ getValue: () => undefined } as CellContext<Music, unknown>);
+
+      const { container: container1 } = render(<>{yearCellNull}</>);
+      expect(container1).toBeEmptyDOMElement();
+
+      const { container: container2 } = render(<>{yearCellUndefined}</>);
+      expect(container2).toBeEmptyDOMElement();
+    });
+
     it('should render genre cell joined with commas', () => {
       const genreCell = RenderGenreCell({ getValue: () => ['Classical', 'Romantic'] } as CellContext<Music, unknown>);
       render(<>{genreCell}</>);
@@ -128,6 +141,12 @@ describe('MusicTableCells', () => {
 
     it('should render nothing if no genres', () => {
       const genreCell = RenderGenreCell({ getValue: () => [] } as CellContext<Music, unknown>);
+      const { container } = render(<>{genreCell}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should cover fallback when getValue returns undefined for genres', () => {
+      const genreCell = RenderGenreCell({ getValue: () => undefined } as CellContext<Music, unknown>);
       const { container } = render(<>{genreCell}</>);
       expect(container).toBeEmptyDOMElement();
     });
@@ -167,6 +186,18 @@ describe('MusicTableCells', () => {
 
       fireEvent.click(screen.getByRole('button', { hidden: true }));
       expect(handlePlayClick).toHaveBeenCalled();
+    });
+
+    it('should render pause icon when track is current and playing', () => {
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: true,
+        isCurrentTrack: true,
+        isPlaying: true,
+        handlePlayClick: jest.fn()
+      });
+
+      render(RenderPlayCell(mockCellContext));
+      expect(screen.getByTestId('mock-svg')).toBeInTheDocument();
     });
   });
 
@@ -261,6 +292,32 @@ describe('MusicTableCells', () => {
       const playItem = screen.getByRole('menuitem', { name: 'listenToComposition' });
       expect(playItem).toHaveAttribute('aria-disabled', 'true');
     });
+
+    it('should not call onAction if it is not provided when clicking viewSheetMusic', () => {
+      mockUseBreakpoints.mockReturnValue({ isDesktop: true });
+
+      render(RenderActionsCell(mockCellContext, undefined as unknown as () => void));
+
+      const desktopBtn = screen.getByText('viewSheetMusic');
+      expect(desktopBtn).toBeInTheDocument();
+
+      expect(() => fireEvent.click(desktopBtn)).not.toThrow();
+    });
+
+    it('should render pause icon in overflow menu when track is current and playing', () => {
+      mockUseBreakpoints.mockReturnValue({ isDesktop: false, isLaptop: false });
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: true,
+        isCurrentTrack: true,
+        isPlaying: true,
+        handlePlayClick: jest.fn()
+      });
+
+      render(RenderActionsCell(mockCellContext, jest.fn()));
+      fireEvent.click(screen.getByTestId('Artistry-overflowMenuButton'));
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
   });
 
   describe('Group renderers', () => {
@@ -273,6 +330,32 @@ describe('MusicTableCells', () => {
       render(renderOpusTitleGroupLabel([mockMusic]));
       expect(screen.getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
     });
+
+    it('should render opus year label when present', () => {
+      const musicWithYear: Music = { ...mockMusic, opusYear: '1918–1920' };
+      render(renderOpusYearGroupLabel([musicWithYear]));
+      expect(screen.getByText('1918–1920')).toBeInTheDocument();
+    });
+
+    it('should return null for opus year label when absent', () => {
+      const { container } = render(<>{renderOpusYearGroupLabel([mockMusic])}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should render opus genres joined by comma when present', () => {
+      const musicWithGenres: Music = { ...mockMusic, opusGenres: ['Chamber', 'Symphonic'] };
+      render(renderOpusGenreGroupLabel([musicWithGenres]));
+      expect(screen.getByText('Chamber, Symphonic')).toBeInTheDocument();
+    });
+
+    it('should return null for opus genres when absent or empty', () => {
+      const { container: container1 } = render(<>{renderOpusGenreGroupLabel([mockMusic])}</>);
+      expect(container1).toBeEmptyDOMElement();
+
+      const musicWithEmptyGenres: Music = { ...mockMusic, opusGenres: [] };
+      const { container: container2 } = render(<>{renderOpusGenreGroupLabel([musicWithEmptyGenres])}</>);
+      expect(container2).toBeEmptyDOMElement();
+    });
   });
 
   describe('RenderExpanderCell', () => {
@@ -281,6 +364,29 @@ describe('MusicTableCells', () => {
 
       render(RenderExpanderCell(mockCellContext));
       expect(screen.getByTestId('mock-svg')).toBeInTheDocument();
+    });
+
+    it('should return null if it is desktop (not mobile and not tablet)', () => {
+      mockUseBreakpoints.mockReturnValue({ isMobile: false, isTablet: false });
+
+      const { container } = render(<>{RenderExpanderCell(mockCellContext)}</>);
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should return null if row can expand', () => {
+      mockUseBreakpoints.mockReturnValue({ isMobile: true, isTablet: false });
+
+      const mockExpandableRow = {
+        original: mockMusic,
+        getCanExpand: jest.fn(() => true)
+      } as unknown as Row<Music>;
+
+      const mockExpandableContext = {
+        row: mockExpandableRow
+      } as CellContext<Music, unknown>;
+
+      const { container } = render(<>{RenderExpanderCell(mockExpandableContext)}</>);
+      expect(container).toBeEmptyDOMElement();
     });
   });
 });

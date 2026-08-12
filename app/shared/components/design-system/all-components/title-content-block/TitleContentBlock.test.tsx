@@ -2,16 +2,15 @@ import { render, screen } from '@testing-library/react';
 
 import TitleContentBlock from './TittleContentBlock';
 
-describe('TitleContentBlock component', () => {
-  const defaultProps = {
-    title: 'Test Title',
-    content: 'This is test content'
-  };
+const defaultProps = {
+  title: 'Test Title',
+  content: 'This is test content'
+};
 
+describe('TitleContentBlock component', () => {
   it('should render props correctly', () => {
     render(<TitleContentBlock {...defaultProps} />);
-    expect(screen.getByText('Test Title')).toBeInTheDocument();
-    expect(screen.getByText('Test Title').tagName).toBe('H5');
+    expect(screen.getByRole('heading', { level: 3, name: defaultProps.title })).toBeInTheDocument();
     expect(screen.getByText('This is test content')).toBeInTheDocument();
   });
 
