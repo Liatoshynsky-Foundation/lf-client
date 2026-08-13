@@ -29,6 +29,15 @@ const NotesListModal = ({ composition, notes, paidNotesHandler }: NotesListModal
           buttonText={note.isFree ? 'freeNotesButton' : 'paidNotesButton'}
         />
       ))}
+      {notes.length === 0 && (
+        <NotesListItem
+          key="empty-notes-contact"
+          note={{ isFree: false, url: '', dateUploaded: new Date().toISOString() }}
+          endIcon={<MessagesSquareIcon width={20} height={20} />}
+          handler={paidNotesHandler}
+          buttonText="paidNotesButton"
+        />
+      )}
     </Box>
   );
 };

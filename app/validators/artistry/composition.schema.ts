@@ -4,13 +4,13 @@ import { parseGenreString } from '~/lib/utils/parseGenreString';
 import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
 const sheetMusicItemSchema = z.object({
-  url: z.string(),
+  url: z.string().nullable(),
   dateUploaded: z.date(),
   isFree: z.boolean()
 });
 
 const audioItemSchema = z.object({
-  url: z.string(),
+  url: z.string().nullable(),
   name: z.string()
 });
 

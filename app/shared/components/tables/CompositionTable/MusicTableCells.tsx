@@ -18,10 +18,12 @@ import { IconButtonColorVariant, IconButtonVariant } from '~/types/enums/common.
 import type { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
 import type { OverflowMenuItemConfig } from '~/types/types/menu.types';
 
+import { Link } from '~/i18n/navigation';
 import { formatTextWithHyphens } from '~/lib/utils/textFormater';
 import PauseIcon from '~/public/icons/pause.svg';
 import PlayIcon from '~/public/icons/play.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
+import { getDynamicRoute } from '~/shared/components/constants/routes';
 import { Ellipsis } from '~/shared/components/design-system/all-components/Ellipsis/Ellipsis';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import OverflowMenu from '~/shared/components/design-system/all-components/overflow-menu/OverflowMenu';
@@ -115,8 +117,8 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(rowData);
 
   const handleNotesClick = () => {
-    if (onAction && rowData.sheetMusic) {
-      onAction({ composition: rowData.name, notes: rowData.sheetMusic });
+    if (onAction) {
+      onAction({ composition: rowData.name, notes: rowData.sheetMusic || [] });
     }
   };
 
@@ -141,7 +143,7 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
       id: 'notes',
       label: t('viewSheetMusic'),
       icon: <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={24} height={24} />,
-      disabled: !rowData.sheetMusic,
+      disabled: false,
       hidden: showNotesInline,
       labelSx: menuLabelItemSx,
       onClick: handleNotesClick
@@ -150,8 +152,7 @@ export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
 
   return (
     <Box sx={actionsCellContainerSx}>
-      {rowData.sheetAvailable &&
-        showNotesInline &&
+      {showNotesInline &&
         (isDesktop ? (
           <Button onClick={handleNotesClick} variant="outlined">
             {t('viewSheetMusic')}
@@ -206,13 +207,31 @@ export const renderOpusGroupLabel = (items: Music[]) => {
   );
 };
 
-export const renderOpusTitleGroupLabel = (items: Music[]) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-    <Typography variant="customBold16" fontWeight={600}>
-      {items[0]?.opusTitle}
-    </Typography>
-  </Box>
-);
+export const renderOpusTitleGroupLabel = (items: Music[]) => {
+  const opusId = items[0]?.opusId;
+
+  const content = (
+    <Box
+      sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', '&:hover': { textDecoration: 'underline' } }}
+    >
+      <Typography variant="customBold16" fontWeight={600}>
+        {items[0]?.opusTitle}
+      </Typography>
+    </Box>
+  );
+
+  if (!opusId) return content;
+
+  return (
+    <Link
+      href={getDynamicRoute.opus(opusId)}
+      onClick={(e) => e.stopPropagation()}
+      style={{ textDecoration: 'none', color: 'inherit' }}
+    >
+      {content}
+    </Link>
+  );
+};
 
 export const renderOpusYearGroupLabel = (items: Music[]) => {
   const year = items[0]?.opusYear;

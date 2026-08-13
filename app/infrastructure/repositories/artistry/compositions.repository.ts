@@ -38,6 +38,7 @@ type OpusLean = {
   sheetMusicUrl?: string | null;
   performances?: OpusPerformanceLean[];
   compositions?: (Types.ObjectId | string)[];
+  status?: string;
 };
 
 type SheetMusicLean = {
@@ -330,7 +331,7 @@ const compositionsRepository = {
 
     const opus = await Opus.findById(id).lean<OpusLean | null>();
 
-    if (!opus) {
+    if (!opus || opus.status === 'draft') {
       return null;
     }
 
