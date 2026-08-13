@@ -210,7 +210,7 @@ describe('artistryService', () => {
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
           creationYear: '1929',
           genre: { uk: 'Фортепіанний квінтет (опус)', en: 'Piano quintet (opus)' },
-          description: { uk: 'Опис українською.', en: 'Description in english.' }
+          introDescription: { uk: 'Опис українською.', en: 'Description in english.' }
         },
         compositions: rawOpus.compositions
       });
@@ -251,7 +251,7 @@ describe('artistryService', () => {
           numberKind: 'bo',
           title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
           creationYear: '1929',
-          description: { uk: '   ', en: '' }
+          introDescription: { uk: '   ', en: '' }
         },
         compositions: []
       });

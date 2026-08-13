@@ -33,6 +33,7 @@ type OpusLean = {
   creationYear?: string;
   endYear?: string;
   genre?: OptionalTranslatedFieldLean | null;
+  introDescription?: OptionalTranslatedFieldLean | null;
   description?: OptionalTranslatedFieldLean | null;
   parts?: OptionalTranslatedFieldLean;
   sheetMusicUrl?: string | null;

@@ -13,6 +13,8 @@ const opusSchema = new mongoose.Schema(
     endYear: { type: String, default: null },
     status: { type: String, default: 'draft' },
     genre: { type: translatedFieldSchema, required: true },
+    introDescription: { type: translatedFieldSchema, default: null },
+    description: { type: translatedFieldSchema, default: null },
     compositions: { type: Array<string> }
   },
   { timestamps: true, collection: 'opus' }

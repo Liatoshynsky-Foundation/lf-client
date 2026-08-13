@@ -49,8 +49,8 @@ const Meta = ({ number, creationDate, genre, movements, sheetMusicUrl, labels }:
 
       {movements && movements.length > 0 && (
         <Box sx={styles.movements} data-testid="OpusDetails-meta-movements">
-          {movements.map((movement) => (
-            <Typography key={movement} sx={styles.movementItem}>
+          {movements.map((movement, index) => (
+            <Typography key={`${movement}-${index}`} sx={styles.movementItem}>
               {movement}
             </Typography>
           ))}

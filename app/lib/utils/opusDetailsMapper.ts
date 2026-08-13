@@ -21,6 +21,15 @@ export function mapOpusDetailsToProps(opusDetails: OpusDetailsDTO): OpusDetailsC
     title: video.title
   }));
 
+  const parseDescription = (desc?: string | null) => {
+    if (!desc || desc.trim().length === 0) return null;
+    try {
+      return JSON.parse(desc);
+    } catch {
+      return desc;
+    }
+  };
+
   return {
     title: opusDetails.title,
     number: opusDetails.number,
@@ -28,7 +37,7 @@ export function mapOpusDetailsToProps(opusDetails: OpusDetailsDTO): OpusDetailsC
     genre: opusDetails.genre,
     movements: opusDetails.movements,
     sheetMusicUrl: opusDetails.sheetMusicUrl,
-    description: opusDetails.description,
+    description: parseDescription(opusDetails.description),
     compositions,
     videos
   };

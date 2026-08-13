@@ -3,12 +3,13 @@ import { Box, Typography } from '@mui/material';
 import BackLink from '~/components/blocks/archive-case-details/back-link/BackLink';
 
 import Compositions from './compositions/Compositions';
-import Description from './description/Description';
 import DescriptionPlaceholder from './description/DescriptionPlaceholder';
 import Meta from './meta/Meta';
 import { styles } from './OpusDetails.styles';
 import type { OpusDetailsProps } from './opusDetails.types';
 import VideoGallery from './videos/VideoGallery';
+
+import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 
 const OpusDetails = ({
   title,
@@ -47,8 +48,12 @@ const OpusDetails = ({
         />
 
         <Box sx={styles.rightColumn}>
-          {description && description.trim().length > 0 ? (
-            <Description description={description} />
+          {description ? (
+            <ContentBlock
+              dataTestId="OpusDetails-description"
+              description={description}
+              textSx={styles.descriptionText}
+            />
           ) : (
             <DescriptionPlaceholder
               title={labels.placeholderTitle}

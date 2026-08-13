@@ -209,26 +209,30 @@ export const renderOpusGroupLabel = (items: Music[]) => {
 
 export const renderOpusTitleGroupLabel = (items: Music[]) => {
   const opusId = items[0]?.opusId;
+  const opusTitle = items[0]?.opusTitle;
 
-  const content = (
-    <Box
-      sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', '&:hover': { textDecoration: 'underline' } }}
-    >
-      <Typography variant="customBold16" fontWeight={600}>
-        {items[0]?.opusTitle}
-      </Typography>
-    </Box>
-  );
-
-  if (!opusId) return content;
+  if (!opusId) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+        <Typography variant="customBold16" fontWeight={600}>
+          {opusTitle}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Link
       href={getDynamicRoute.opus(opusId)}
       onClick={(e) => e.stopPropagation()}
-      style={{ textDecoration: 'none', color: 'inherit' }}
+      style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textDecoration: 'none', color: 'inherit' }}
+      className="opus-group-link"
     >
-      {content}
+      <Box sx={{ '&:hover': { textDecoration: 'underline' } }}>
+        <Typography variant="customBold16" fontWeight={600}>
+          {opusTitle}
+        </Typography>
+      </Box>
     </Link>
   );
 };

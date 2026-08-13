@@ -1,3 +1,5 @@
+import type { RichContent } from '~/shared/components/design-system/all-components/content-block/ContentBlock';
+
 export type OpusComposition = {
   id: string;
   index: number;
@@ -32,7 +34,7 @@ export interface OpusDetailsProps {
   genre?: string;
   movements?: string[];
   sheetMusicUrl?: string;
-  description?: string | null;
+  description?: RichContent | null;
   compositions?: OpusComposition[];
   videos?: OpusVideo[];
   backHref: string;
