@@ -3,7 +3,11 @@ import { z } from 'zod';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
-import { ImageSchema, TipTapQuoteSchema } from '~/validators/pagesSchemas/pages/_common.schema';
+import {
+  ImageSchema,
+  OptionalCaptionImageSchema,
+  TipTapQuoteSchema
+} from '~/validators/pagesSchemas/pages/_common.schema';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 const IntroSectionBlockSchema = z.object({
@@ -61,7 +65,7 @@ const FoundationFoundersBlockSchema = z.object({
   listTitle: translatedTipTapSchema,
   members: z.array(
     z.object({
-      photo: ImageSchema,
+      photo: OptionalCaptionImageSchema,
       name: translatedTipTapSchema,
       description: translatedTipTapSchema
     })
