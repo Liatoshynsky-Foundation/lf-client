@@ -25,7 +25,9 @@ const mockRawCompositions = [
         name: { uk: 'Красива пісня', en: 'A Beautiful Song' },
         audioAvailable: true,
         sheetAvailable: false,
-        sheetMusic: []
+        sheetMusic: [],
+        createdAt: new Date('2023-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2023-01-01T00:00:00.000Z')
       }
     ]
   }

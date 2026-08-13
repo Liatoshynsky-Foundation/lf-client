@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { opusSchema } from './opus.schema';
-
 import { parseGenreString } from '~/lib/utils/parseGenreString';
 import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
@@ -9,6 +7,11 @@ const sheetMusicItemSchema = z.object({
   url: z.string(),
   dateUploaded: z.date(),
   isFree: z.boolean()
+});
+
+const audioItemSchema = z.object({
+  url: z.string(),
+  name: z.string()
 });
 
 export const compositionItemSchema = z.object({
@@ -19,7 +22,9 @@ export const compositionItemSchema = z.object({
   audioAvailable: z.boolean(),
   sheetAvailable: z.boolean(),
   sheetMusic: z.array(sheetMusicItemSchema).nullable().optional(),
-  audios: z.array(sheetMusicItemSchema).nullable().optional()
+  audios: z.array(audioItemSchema).nullable().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date()
 });
 
 export const opusGroupSchema = z.object({
@@ -34,20 +39,6 @@ export const opusGroupSchema = z.object({
   status: z.string(),
   genre: translatedFieldSchema.optional().nullable(),
   compositions: z.array(compositionItemSchema)
-});
-
-export const compositionSchema = z.object({
-  _id: mongoObjectIdSchema,
-  title: translatedFieldSchema,
-  year: z.number().optional().nullable(),
-  audioAvailable: z.boolean(),
-  sheetAvailable: z.boolean(),
-  sheetMusic: z.array(sheetMusicItemSchema),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  opusId: z.union([z.string(), opusSchema]).optional().nullable(),
-  genre: z.string().optional().nullable(),
-  categories: z.array(z.unknown()).default([])
 });
 
 export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSchema) =>

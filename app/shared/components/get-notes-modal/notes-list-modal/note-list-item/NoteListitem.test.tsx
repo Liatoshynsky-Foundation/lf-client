@@ -18,7 +18,10 @@ interface MockIconButtonProps {
 }
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useFormatter: () => ({
+    dateTime: (date: Date) => date.toISOString()
+  })
 }));
 
 jest.mock(
@@ -135,11 +138,11 @@ describe('NotesListItem', () => {
 
     const corruptNote = {
       url: fakeUrlMock,
-      isFree: true,
+      isFree: false,
       dateUploaded: '2023-01-01T00:00:00.000Z'
     } as unknown as Notes;
 
-    render(<NotesListItem note={corruptNote} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    render(<NotesListItem note={corruptNote} buttonText="paidNotesButton" endIcon={icon} handler={handler} />);
     expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'file-icon');
   });
 });

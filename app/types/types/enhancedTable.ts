@@ -14,6 +14,11 @@ export type RowData = {
   [key: string]: unknown;
 };
 
+type AudioTrack = {
+  name: string;
+  url: string;
+};
+
 export type Music = {
   id: string;
   name: string;
@@ -26,6 +31,7 @@ export type Music = {
   audioAvailable: boolean;
   sheetAvailable: boolean;
   sheetMusic?: Notes[];
+  audios?: AudioTrack[] | null;
 };
 
 export type CompositionWithNotes = {
@@ -41,7 +47,7 @@ export type CompositionItemFrontend = {
   audioAvailable: boolean;
   sheetAvailable: boolean;
   sheetMusic: Notes[] | null;
-  audios: Notes[] | null;
+  audios?: AudioTrack[] | null;
 };
 
 export type OpusGroupFrontend = {

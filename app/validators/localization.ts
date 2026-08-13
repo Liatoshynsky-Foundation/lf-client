@@ -97,6 +97,9 @@ export function LocalizeSchema<S extends z.ZodTypeAny>(
     if (Array.isArray(value)) {
       return value.map((item, idx) => localizeValue(item, `${path}[${idx}]`));
     }
+    if (value instanceof Date) {
+      return value;
+    }
     if (typeof value === 'object' && value !== null) {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, localizeValue(v, `${path}.${k}`)]));
     }

@@ -117,7 +117,9 @@ describe('compositionsRepository', () => {
           name: { uk: 'назва', en: 'name' },
           audioAvailable: false,
           sheetAvailable: false,
-          sheetMusic: []
+          sheetMusic: [],
+          createdAt: new Date('2023-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2023-01-01T00:00:00.000Z')
         }
       ]
     };
