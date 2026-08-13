@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { opusSchema } from './opus.schema';
-
 import { parseGenreString } from '~/lib/utils/parseGenreString';
 import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 
@@ -11,18 +9,36 @@ const sheetMusicItemSchema = z.object({
   isFree: z.boolean()
 });
 
-export const compositionSchema = z.object({
+const audioItemSchema = z.object({
+  url: z.string(),
+  name: z.string()
+});
+
+export const compositionItemSchema = z.object({
   _id: mongoObjectIdSchema,
-  title: translatedFieldSchema,
+  name: translatedFieldSchema,
   year: z.number().optional().nullable(),
+  genre: z.string().optional().nullable(),
   audioAvailable: z.boolean(),
   sheetAvailable: z.boolean(),
-  sheetMusic: z.array(sheetMusicItemSchema),
+  sheetMusic: z.array(sheetMusicItemSchema).nullable().optional(),
+  audios: z.array(audioItemSchema).nullable().optional(),
   createdAt: z.date(),
-  updatedAt: z.date(),
-  opusId: z.union([z.string(), opusSchema]).optional().nullable(),
-  genre: z.string().optional().nullable(),
-  categories: z.array(z.unknown()).default([])
+  updatedAt: z.date()
+});
+
+export const opusGroupSchema = z.object({
+  _id: mongoObjectIdSchema,
+  number: z.number(),
+  numberKind: z.string(),
+  title: translatedFieldSchema,
+  name: translatedFieldSchema,
+  additionalText: z.string().optional().nullable(),
+  creationYear: z.string(),
+  endYear: z.string().optional().nullable(),
+  status: z.string(),
+  genre: translatedFieldSchema.optional().nullable(),
+  compositions: z.array(compositionItemSchema)
 });
 
 export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSchema) =>
@@ -63,7 +79,16 @@ export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSch
 
 export const compositionTitlesSchema = z.object({
   _id: mongoObjectIdSchema,
-  title: translatedFieldSchema
+  title: translatedFieldSchema,
+  type: z.enum(['opus', 'composition']).optional(),
+  opusContext: z
+    .object({
+      _id: z.string(),
+      number: z.number(),
+      numberKind: z.string(),
+      additionalText: z.string().optional().nullable()
+    })
+    .optional()
 });
 
 export const compositionsYearRangeSchema = z.object({

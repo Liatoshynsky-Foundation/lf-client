@@ -15,8 +15,12 @@ export type Localize<T> =
         ? { [K in keyof T]: Localize<T[K]> }
         : T;
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 function isTranslatedField(value: unknown, locale: Locale): value is TranslatedField<unknown> {
-  return typeof value === 'object' && value !== null && locale in (value as Record<string, unknown>);
+  return isRecord(value) && locale in value;
 }
 
 function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): boolean {
@@ -32,11 +36,11 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
   return false;
 }
 
-function validTranslatedField(value: Record<string, unknown>, locale: Locale, path: string): boolean {
+function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
   if (typeof fieldValue === 'string') {
-    const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption');
+    const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption') || path.endsWith('.genre');
     if (fieldValue === '' && isOptionalField) {
       return true;
     }
@@ -54,19 +58,49 @@ function translationErrorFactory(locale: Locale, path: string): Error {
   return new Error(`${baseMessage} at path: ${path}`);
 }
 
-export function LocalizeSchema<S extends z.ZodTypeAny>(schema: S, locale: Locale) {
+function resolveTranslation(
+  value: TranslatedField<unknown>,
+  locale: Locale,
+  path: string,
+  options?: { fallbackFields?: string[] }
+): unknown {
+  if (validTranslatedField(value, locale, path)) {
+    return value[locale];
+  }
+
+  const fieldKey =
+    path
+      .split('.')
+      .pop()
+      ?.replace(/\[\d+\]$/, '') ?? '';
+  const canFallback = options?.fallbackFields?.includes(fieldKey);
+
+  if (canFallback) {
+    const fallbackLocale = locale === 'en' ? 'uk' : 'en';
+    if (validTranslatedField(value, fallbackLocale, path)) {
+      return value[fallbackLocale];
+    }
+  }
+
+  throw translationErrorFactory(locale, path);
+}
+
+export function LocalizeSchema<S extends z.ZodTypeAny>(
+  schema: S,
+  locale: Locale,
+  options?: { fallbackFields?: string[] }
+) {
   function localizeValue(value: unknown, path: string = 'root'): unknown {
     if (isTranslatedField(value, locale)) {
-      if (!validTranslatedField(value, locale, path)) {
-        throw translationErrorFactory(locale, path);
-      }
-
-      return value[locale];
+      return resolveTranslation(value, locale, path, options);
     }
     if (Array.isArray(value)) {
       return value.map((item, idx) => localizeValue(item, `${path}[${idx}]`));
     }
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    if (value instanceof Date) {
+      return value;
+    }
+    if (typeof value === 'object' && value !== null) {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, localizeValue(v, `${path}.${k}`)]));
     }
     return value;

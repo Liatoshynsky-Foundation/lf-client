@@ -61,6 +61,7 @@ interface EnhancedTableProps<T extends RowData> {
   tableContainerSx?: SxProps<Theme>;
   onRowClick?: (row: T) => void;
   isSearchActive?: boolean;
+  preGroupedData?: { label: string; items: T[] }[];
 }
 
 export const EnhancedTable = <T extends RowData>({
@@ -81,7 +82,8 @@ export const EnhancedTable = <T extends RowData>({
   rowSx,
   tableContainerSx,
   onRowClick,
-  isSearchActive = false
+  isSearchActive = false,
+  preGroupedData
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -147,8 +149,15 @@ export const EnhancedTable = <T extends RowData>({
     return { groupedItems: grouped, flatRows: ungrouped };
   }, [filteredAndSortedRows, groupByKey]);
 
-  const allRows: ItemOrGroup<T>[] = useMemo(
-    () => [
+  const allRows: ItemOrGroup<T>[] = useMemo(() => {
+    if (preGroupedData) {
+      return preGroupedData.map((g) => ({
+        type: 'group' as const,
+        label: g.label,
+        items: g.items
+      }));
+    }
+    return [
       ...Array.from(groupedItems.entries()).map(([label, items]) => ({
         type: 'group' as const,
         label,
@@ -158,9 +167,8 @@ export const EnhancedTable = <T extends RowData>({
         type: 'single' as const,
         row
       }))
-    ],
-    [groupedItems, flatRows]
-  );
+    ];
+  }, [groupedItems, flatRows, preGroupedData]);
 
   const {
     hasMore,
@@ -211,7 +219,7 @@ export const EnhancedTable = <T extends RowData>({
             <Table sx={{ tableLayout: 'fixed' }} data-testid="EnhancedTable-table">
               <EnhancedTableHeader table={headerTable} columnWidths={columnWidths} />
               <TableBody data-testid="EnhancedTable-tableBody">
-                {!loading && data.length === 0 && noResults}
+                {!loading && allRows.length === 0 && noResults}
                 {rowsToRender.map((entry) =>
                   entry.type === 'group' ? (
                     <CollapsibleRow

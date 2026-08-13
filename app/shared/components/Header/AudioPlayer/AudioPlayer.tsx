@@ -89,7 +89,7 @@ export default function AudioPlayer() {
 
     const updateProgress = () => setCurrentTime(audio.currentTime);
     const loadDuration = () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
+      if (!Number.isNaN(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
       }
     };
@@ -168,7 +168,7 @@ export default function AudioPlayer() {
 
   const onSeek = useCallback((newProgress: number) => {
     const audio = audioRef.current;
-    if (!audio || isNaN(audio.duration)) return;
+    if (!audio || Number.isNaN(audio.duration)) return;
     audio.currentTime = newProgress * audio.duration;
   }, []);
 

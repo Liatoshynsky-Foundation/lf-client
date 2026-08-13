@@ -14,9 +14,25 @@ export interface AssertionOptions {
   descriptionAsNote?: boolean;
 }
 
-export const assertPolicySectionProps = (mockData: any, options: AssertionOptions = {}) => {
+export interface MockSection {
+  subtitle?: LocalizedTipTapDoc;
+  description?: LocalizedTipTapDoc;
+  list?: LocalizedTipTapDoc[];
+  note?: LocalizedTipTapDoc;
+}
+
+export interface MockData {
+  title?: string | LocalizedTipTapDoc;
+  description?: LocalizedTipTapDoc;
+  list?: LocalizedTipTapDoc[];
+  note?: LocalizedTipTapDoc;
+  sections?: MockSection[];
+}
+
+export const assertPolicySectionProps = (mockData: MockData, options: AssertionOptions = {}) => {
   if (mockData.title) {
-    expect(screen.getByTestId('mock-title')).toHaveTextContent(mockData.title);
+    const expectedTitle = typeof mockData.title === 'string' ? mockData.title : JSON.stringify(mockData.title);
+    expect(screen.getByTestId('mock-title')).toHaveTextContent(expectedTitle);
   }
 
   if (mockData.description) {
@@ -25,7 +41,7 @@ export const assertPolicySectionProps = (mockData: any, options: AssertionOption
   }
 
   if (mockData.list) {
-    mockData.list.forEach((item: any, idx: number) => {
+    mockData.list.forEach((item, idx) => {
       expect(screen.getByTestId(`mock-list-item-${idx}`)).toHaveTextContent(JSON.stringify(item));
     });
   }
@@ -35,7 +51,7 @@ export const assertPolicySectionProps = (mockData: any, options: AssertionOption
   }
 
   if (mockData.sections) {
-    mockData.sections.forEach((section: any, idx: number) => {
+    mockData.sections.forEach((section, idx) => {
       const sectionId = getDocKey(section.subtitle) ?? getDocKey(section.description) ?? `section-${idx}`;
       const sectionContainer = screen.getByTestId(`mock-section-${sectionId}`);
 
@@ -52,7 +68,7 @@ export const assertPolicySectionProps = (mockData: any, options: AssertionOption
       }
 
       if (section.list) {
-        section.list.forEach((li: any, liIdx: number) => {
+        section.list.forEach((li, liIdx) => {
           expect(within(sectionContainer).getByTestId(`mock-section-list-item-${liIdx}`)).toHaveTextContent(
             JSON.stringify(li)
           );

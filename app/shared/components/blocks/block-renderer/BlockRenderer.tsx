@@ -17,6 +17,7 @@ export function BlockRenderer<T>({ blockId, blocks, title, rendererMap, namesMap
   const id = namesMap && blockId in namesMap ? namesMap[blockId] : blockId;
 
   if (!(id in rendererMap)) {
+    // eslint-disable-next-line no-console
     console.warn(`Block ID "${String(id)}" is missing from BLOCKS_RENDERER`);
     return null;
   }

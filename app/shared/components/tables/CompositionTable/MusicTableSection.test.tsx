@@ -28,6 +28,7 @@ interface EnhancedTableProps {
     meta?: { groupLabelContentFactory?: (items: unknown[]) => React.ReactNode };
     cell?: (info?: unknown, cb?: unknown) => React.ReactNode;
   }[];
+  preGroupedData?: { label: string; items: any[] }[];
 }
 
 interface TableFiltersProps {
@@ -65,8 +66,28 @@ interface SearchProps {
 type MutableApiRoutes = Record<string, string | undefined>;
 
 const musicTableMock = [
-  { id: '1', name: 'Composition 1', year: 2000, genre: ['Романс', 'Джаз'] },
-  { id: '2', name: 'Composition 2', year: 1970, genre: ['Рок', 'Мистецька пісня'] }
+  {
+    _id: 'group1',
+    number: 1,
+    numberKind: 'op',
+    title: 'Group 1',
+    name: 'Group 1',
+    creationYear: '2000',
+    genre: 'Романс',
+    status: 'published',
+    compositions: [{ _id: '1', name: 'Composition 1', year: 2000, genre: 'Романс, Джаз' }]
+  },
+  {
+    _id: 'group2',
+    number: 2,
+    numberKind: 'sineop',
+    title: 'Group 2',
+    name: 'Group 2',
+    creationYear: '1970',
+    genre: 'Рок',
+    status: 'published',
+    compositions: [{ _id: '2', name: 'Composition 2', year: 1970, genre: 'Рок, Мистецька пісня' }]
+  }
 ];
 
 const breakpointMock = {
@@ -171,7 +192,7 @@ jest.mock('~/shared/components/search/Search', () => ({
 jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
   return {
     __esModule: true,
-    EnhancedTable: ({ data, tableName, Filters, Search, columns }: EnhancedTableProps) => {
+    EnhancedTable: ({ data, tableName, Filters, Search, columns, preGroupedData }: EnhancedTableProps) => {
       const actionsColumn = columns.find((c) => c.id === 'actions');
       const opusColumn = columns.find((c) => c.id === 'opus');
       const nameColumn = columns.find((c) => c.id === 'name');
@@ -213,7 +234,7 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
           {nameColumn?.meta?.groupLabelContentFactory && (
             <div data-testid="name-group-factory">{nameColumn.meta.groupLabelContentFactory([] as unknown[])}</div>
           )}
-          {data.map((row) => {
+          {(preGroupedData ? preGroupedData.flatMap((g) => g.items) : data).map((row) => {
             const record = row as { id: string; name: string };
             return (
               <div data-testid="row" key={record.id}>

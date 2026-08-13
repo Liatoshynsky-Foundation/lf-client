@@ -68,8 +68,8 @@ const TitleWithQuote = ({
           sx={quoteBlockSx}
           quoteIconColor={'burgundy'}
           mainTextColor={'burgundy'}
-          quoteText={displayQuote as any}
-          sourceText={displaySource as any}
+          quoteText={displayQuote as unknown as TipTapDoc}
+          sourceText={displaySource as unknown as TipTapDoc}
           alignRight={false}
         />
       </Box>

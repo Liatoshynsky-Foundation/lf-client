@@ -11,9 +11,11 @@ import { useAudioPlayer } from '~/shared/context/AudioPlayerContext';
 export function useCompositionPlayback(rowData: Music) {
   const { playTrack, togglePlay, isPlaying, src } = useAudioPlayer();
 
+  const audioName = rowData.audios?.[0]?.name || '';
+
   const trackUrl = useMemo(
-    () => getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, 'compositions', rowData.name),
-    [rowData.name]
+    () => getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, 'compositions', audioName),
+    [audioName]
   );
 
   const isCurrentTrack = Boolean(src?.startsWith(trackUrl));

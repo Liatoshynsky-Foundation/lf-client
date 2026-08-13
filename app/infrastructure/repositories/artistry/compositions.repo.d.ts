@@ -1,7 +1,7 @@
 import type { OpusWithCompositionsLean } from './compositions.repository';
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
-import type { CategoryDTO, CompositionDTO, CompositionTitlesDTO } from '~/domain/dto/composition.dto';
+import type { CategoryDTO, CompositionTitlesDTO, OpusGroupDTO } from '~/domain/dto/composition.dto';
 
 export type YearRange = { minYear: number; maxYear: number };
 export type CompositionQueryFilters = {
@@ -11,8 +11,8 @@ export type CompositionQueryFilters = {
 export interface CompositionRepository {
   getAllGenres(): Promise<string[]>;
   getAllCategories(): Promise<CategoryDTO[]>;
-  getAllCompositionTitles(filters: CompositionsTitleFilters): Promise<CompositionTitlesDTO[]>;
+  getArtistrySearchSuggestions(filters: CompositionsTitleFilters): Promise<CompositionTitlesDTO[]>;
   getCompositionsYearRange(): Promise<YearRange>;
-  getAllCompositions(search?: string, filters?: CompositionQueryFilters): Promise<CompositionDTO[]>;
+  getAllCompositions(search?: string, filters?: CompositionQueryFilters): Promise<OpusGroupDTO[]>;
   getOpusById(id: string): Promise<OpusWithCompositionsLean | null>;
 }

@@ -6,10 +6,9 @@ import { OpusCompositionDTO, OpusDetailsDTO, OpusVideoDTO } from '~/domain/dto/c
 import { CompositionRepository } from '~/infrastructure/repositories/artistry/compositions.repo';
 import type { OpusWithCompositionsLean } from '~/infrastructure/repositories/artistry/compositions.repository';
 import {
-  compositionSchema,
   compositionsYearRangeSchema,
-  compositionTableReadySchema,
-  compositionTitlesSchema
+  compositionTitlesSchema,
+  opusGroupSchema
 } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema, NoIDSchema } from '~/validators/constants';
@@ -144,20 +143,22 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
     const allSongs = await compositionsRepo.getAllCompositions(search, filters);
     if (!allSongs) return [];
 
-    return ArraySchema(compositionTableReadySchema(LocalizeSchema(compositionSchema, locale))).parse(allSongs);
+    return ArraySchema(LocalizeSchema(opusGroupSchema, locale, { fallbackFields: ['name', 'title'] })).parse(allSongs);
   },
 
-  async getAllCompositionTitles(locale: Locale, filters: CompositionsTitleFilters = {}) {
-    const titles = await compositionsRepo.getAllCompositionTitles(filters);
+  async getSearchAutocompleteOptions(locale: Locale, filters: CompositionsTitleFilters = {}) {
+    const titles = await compositionsRepo.getArtistrySearchSuggestions(filters);
     if (!titles) return [];
 
-    const localizedTitles = ArraySchema(LocalizeSchema(compositionTitlesSchema, locale)).parse(titles);
+    const localizedTitles = ArraySchema(
+      LocalizeSchema(compositionTitlesSchema, locale, { fallbackFields: ['name', 'title'] })
+    ).parse(titles);
 
     const genres = await compositionsRepo.getAllGenres();
     const genreOptions = genres.map((genre, index) => ({
       _id: `genre-${index}`,
       title: genre,
-      kind: 'genre' as const
+      type: 'genre' as const
     }));
 
     return [...localizedTitles, ...genreOptions];
