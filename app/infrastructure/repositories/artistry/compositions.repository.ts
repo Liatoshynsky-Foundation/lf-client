@@ -390,7 +390,7 @@ const compositionsRepository = {
         }
       },
       {
-        $sort: { numberKind: 1 as const, number: 1 as const }
+        $sort: { numberKind: 1 as const, number: 1 as const, additionalText: 1 as const }
       }
     ];
 

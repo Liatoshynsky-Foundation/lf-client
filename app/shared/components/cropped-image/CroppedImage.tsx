@@ -44,6 +44,8 @@ export default function CroppedImage({
 
   const shouldFill = fill || (!width && !height);
 
+  if (!src) return null;
+
   return (
     <Box
       ref={containerRef}

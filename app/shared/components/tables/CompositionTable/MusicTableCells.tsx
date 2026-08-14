@@ -222,18 +222,18 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => {
   }
 
   return (
-    <Link
-      href={getDynamicRoute.opus(opusId)}
-      onClick={(e) => e.stopPropagation()}
-      style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textDecoration: 'none', color: 'inherit' }}
-      className="opus-group-link"
-    >
-      <Box sx={{ '&:hover': { textDecoration: 'underline' } }}>
-        <Typography variant="customBold16" fontWeight={600}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+      <Link
+        href={getDynamicRoute.opus(opusId)}
+        onClick={(e) => e.stopPropagation()}
+        style={{ textDecoration: 'none', color: 'inherit', display: 'inline-flex' }}
+        className="opus-group-link"
+      >
+        <Typography variant="customBold16" fontWeight={600} sx={{ '&:hover': { textDecoration: 'underline' } }}>
           {opusTitle}
         </Typography>
-      </Box>
-    </Link>
+      </Link>
+    </Box>
   );
 };
 
