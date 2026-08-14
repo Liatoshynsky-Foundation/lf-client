@@ -72,7 +72,7 @@ export default function MusicTableSection() {
   const preGroupedData = useMemo(() => {
     return rawData.map((group) => {
       const isSineOp = group.numberKind?.toLowerCase() === 'sineop';
-      const opusString = isSineOp ? `sineop. ${group.number}` : `op. ${group.number}`;
+      const opusString = isSineOp ? `sine op. ${group.number}` : `op. ${group.number}`;
       const finalOpusStr = group.additionalText ? `${opusString} ${group.additionalText}` : opusString;
 
       const finalOpusYear = group.endYear ? `${group.creationYear} - ${group.endYear}` : group.creationYear;

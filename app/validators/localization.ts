@@ -62,7 +62,7 @@ function resolveTranslation(
   value: TranslatedField<unknown>,
   locale: Locale,
   path: string,
-  options?: { fallbackFields?: string[] }
+  options?: { fallbackFields?: string[]; allowEmptyFields?: string[] }
 ): unknown {
   if (validTranslatedField(value, locale, path)) {
     return value[locale];
@@ -82,13 +82,17 @@ function resolveTranslation(
     }
   }
 
+  if (options?.allowEmptyFields?.includes(fieldKey)) {
+    return value[locale];
+  }
+
   throw translationErrorFactory(locale, path);
 }
 
 export function LocalizeSchema<S extends z.ZodTypeAny>(
   schema: S,
   locale: Locale,
-  options?: { fallbackFields?: string[] }
+  options?: { fallbackFields?: string[]; allowEmptyFields?: string[] }
 ) {
   function localizeValue(value: unknown, path: string = 'root'): unknown {
     if (isTranslatedField(value, locale)) {

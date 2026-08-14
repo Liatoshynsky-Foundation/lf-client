@@ -89,6 +89,8 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
     ? extractTextFromTipTap(alt, locale)
     : getPlainString(alt as string | LocalizedString, locale);
 
+  if (!src) return null;
+
   return (
     <Box sx={{ ...styles.container, ...containerSx } as BoxProps['sx']} data-testid={dataTestId}>
       <Box sx={{ ...styles.imageContainer(sizes), ...imageSx } as BoxProps['sx']}>

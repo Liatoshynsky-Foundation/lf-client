@@ -27,7 +27,8 @@ export type PageSlug = (typeof PAGE_SLUGS)[number];
 export const isPageSlug = (slug: string): slug is PageSlug => PAGE_SLUGS.includes(slug as PageSlug);
 
 const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageDataMap[K]> } = {
-  'about-us': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(AboutUsPageSchema))), locale),
+  'about-us': (locale) =>
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(AboutUsPageSchema))), locale, { allowEmptyFields: ['list'] }),
   'privacy-policy': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PrivacyPolicyPageSchema))), locale),
   research: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ResearchPageSchema))), locale),
   biography: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(BiographyPageSchema))), locale),

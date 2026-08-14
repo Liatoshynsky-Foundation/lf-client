@@ -2,7 +2,7 @@
 
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ModalComponent from '~/components/modal-component/ModalComponent';
 import PaperComponent from '~/components/paper-component/PaperComponent';
@@ -29,6 +29,12 @@ type GetNotesModalProps = {
 const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModalProps) => {
   const t = useTranslations('getNotes');
   const [state, setState] = useState(GetNotesState.LIST);
+
+  useEffect(() => {
+    if (opened) {
+      setState(GetNotesState.LIST);
+    }
+  }, [opened]);
 
   let title = null;
   let innards = null;

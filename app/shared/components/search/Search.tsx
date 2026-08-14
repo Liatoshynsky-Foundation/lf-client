@@ -31,7 +31,7 @@ const getOptionLabel = <T extends TitleOption>(option: T | string): string => {
 
   if (option.opusContext) {
     const isSineOp = option.opusContext.numberKind?.toLowerCase() === 'sineop';
-    const opusPrefix = isSineOp ? `sineop. ${option.opusContext.number}` : `op. ${option.opusContext.number}`;
+    const opusPrefix = isSineOp ? `sine op. ${option.opusContext.number}` : `op. ${option.opusContext.number}`;
     const extra = option.opusContext.additionalText ? ` ${option.opusContext.additionalText}` : '';
     const formattedOpus = `${opusPrefix}${extra}`;
 
