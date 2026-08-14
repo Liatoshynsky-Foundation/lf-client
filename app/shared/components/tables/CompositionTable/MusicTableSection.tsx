@@ -89,7 +89,8 @@ export default function MusicTableSection() {
         opusTitle: group.title || group.name,
         opusYear: finalOpusYear,
         opusGenres: group.genre ? [group.genre] : [],
-        audios: comp.audios ?? undefined
+        audios: comp.audios ?? undefined,
+        opusId: group._id
       }));
 
       return {

@@ -33,11 +33,13 @@ type OpusLean = {
   creationYear?: string;
   endYear?: string;
   genre?: OptionalTranslatedFieldLean | null;
+  introDescription?: OptionalTranslatedFieldLean | null;
   description?: OptionalTranslatedFieldLean | null;
   parts?: OptionalTranslatedFieldLean;
   sheetMusicUrl?: string | null;
   performances?: OpusPerformanceLean[];
   compositions?: (Types.ObjectId | string)[];
+  status?: string;
 };
 
 type SheetMusicLean = {
@@ -330,7 +332,7 @@ const compositionsRepository = {
 
     const opus = await Opus.findById(id).lean<OpusLean | null>();
 
-    if (!opus) {
+    if (!opus || opus.status === 'draft') {
       return null;
     }
 

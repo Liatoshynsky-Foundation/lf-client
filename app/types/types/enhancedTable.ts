@@ -32,6 +32,7 @@ export type Music = {
   sheetAvailable: boolean;
   sheetMusic?: Notes[];
   audios?: AudioTrack[] | null;
+  opusId?: string;
 };
 
 export type CompositionWithNotes = {

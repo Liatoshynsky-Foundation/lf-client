@@ -24,7 +24,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
   const format = useFormatter();
   const { isMobile, isTablet } = useBreakpoints();
 
-  const title = note.url.split('/').pop()?.split('.')[0];
+  const title = note.url ? note.url.split('/').pop()?.split('.')[0] : 'Без назви';
   const parsedDate = new Date(note.dateUploaded);
   const isValidDate = !Number.isNaN(parsedDate.getTime());
 
@@ -37,21 +37,38 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
     : '';
 
   const isCompact = isMobile || isTablet;
-  const buttonProps = note.isFree ? { link: note.url, externalLink: true } : { onClick: handler };
+  const isButtonDisabled = note.isFree && !note.url;
+  const buttonProps = note.isFree
+    ? { link: note.url || '', externalLink: true, disabled: isButtonDisabled }
+    : { onClick: handler };
 
   const desktopButton = <Button variant="outlined" label={t(buttonText)} endIcon={endIcon} {...buttonProps} />;
 
-  const mobileButton = note.isFree ? (
-    <a href={note.url} target="_blank" rel="noopener noreferrer">
-      <IconButton variant={IconButtonColorVariant.Primary} type={IconButtonVariant.outlined}>
-        {endIcon}
-      </IconButton>
-    </a>
-  ) : (
-    <IconButton onClick={handler} variant={IconButtonColorVariant.Primary} type={IconButtonVariant.outlined}>
-      {endIcon}
-    </IconButton>
-  );
+  const iconButtonProps = {
+    variant: IconButtonColorVariant.Primary,
+    type: IconButtonVariant.outlined,
+    disabled: isButtonDisabled
+  };
+
+  const renderMobileButton = () => {
+    if (!note.isFree) {
+      return (
+        <IconButton onClick={handler} {...iconButtonProps}>
+          {endIcon}
+        </IconButton>
+      );
+    }
+    if (isButtonDisabled) {
+      return <IconButton {...iconButtonProps}>{endIcon}</IconButton>;
+    }
+    return (
+      <a href={note.url || ''} target="_blank" rel="noopener noreferrer">
+        <IconButton {...iconButtonProps}>{endIcon}</IconButton>
+      </a>
+    );
+  };
+
+  const mobileButton = renderMobileButton();
 
   return (
     <Box sx={styles.container}>

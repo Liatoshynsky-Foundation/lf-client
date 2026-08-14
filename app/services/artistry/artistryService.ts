@@ -5,6 +5,7 @@ import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 import { OpusCompositionDTO, OpusDetailsDTO, OpusVideoDTO } from '~/domain/dto/composition.dto';
 import { CompositionRepository } from '~/infrastructure/repositories/artistry/compositions.repo';
 import type { OpusWithCompositionsLean } from '~/infrastructure/repositories/artistry/compositions.repository';
+import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
 import {
   compositionsYearRangeSchema,
   compositionTitlesSchema,
@@ -56,6 +57,19 @@ function pickDescription(description: OpusLean['description'], locale: Locale): 
 
   if (!text || text.trim().length === 0) {
     return null;
+  }
+
+  if (text.startsWith('{"type":"doc"')) {
+    try {
+      const doc = JSON.parse(text);
+      if (extractTextFromTipTap(doc, locale).trim().length === 0) {
+        return null;
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to parse TipTap description:', error);
+      return null;
+    }
   }
 
   return text;
@@ -187,7 +201,7 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
       movements: mapMovements(opus.parts, locale),
       sheetMusicUrl: nonEmpty(opus.sheetMusicUrl),
       compositions: mapOpusCompositions(compositions, locale),
-      description: pickDescription(opus.description, locale),
+      description: pickDescription(opus.introDescription, locale),
       videos: mapVideos(opus.performances, locale)
     };
   }

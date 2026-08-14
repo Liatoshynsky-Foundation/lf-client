@@ -1,5 +1,5 @@
 export type Notes = {
-  url: string;
+  url: string | null;
   isFree: boolean;
   dateUploaded: string;
 };

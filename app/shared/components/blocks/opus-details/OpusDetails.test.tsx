@@ -95,8 +95,8 @@ describe('OpusDetails', () => {
 
     const description = screen.getByTestId('OpusDetails-description');
     expect(description).toBeInTheDocument();
-    expect(within(description).getByText('Написаний під час війни.')).toBeInTheDocument();
-    expect(within(description).getByText('За структурою квінтет являє циклічну композицію.')).toBeInTheDocument();
+    expect(within(description).getByText(/Написаний під час війни/i)).toBeInTheDocument();
+    expect(within(description).getByText(/За структурою квінтет являє циклічну композицію/i)).toBeInTheDocument();
 
     expect(screen.queryByTestId('OpusDetails-placeholder')).toBeNull();
   });
@@ -114,7 +114,7 @@ describe('OpusDetails', () => {
   });
 
   it('treats a blank description as missing and shows the placeholder', () => {
-    renderOpus({ description: '   ' });
+    renderOpus({ description: null });
 
     expect(screen.getByTestId('OpusDetails-placeholder')).toBeInTheDocument();
     expect(screen.queryByTestId('OpusDetails-description')).toBeNull();

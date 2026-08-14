@@ -29,5 +29,11 @@ export const styles: Record<string, SxProps<Theme>> = {
     },
     display: 'flex',
     flexDirection: 'column'
+  },
+
+  descriptionText: {
+    '&:first-of-type': {
+      textIndent: commonSx.layout.textIndent.textIndentThirdColumn
+    }
   }
 };

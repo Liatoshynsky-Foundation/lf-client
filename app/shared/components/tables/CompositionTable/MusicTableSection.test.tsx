@@ -28,7 +28,7 @@ interface EnhancedTableProps {
     meta?: { groupLabelContentFactory?: (items: unknown[]) => React.ReactNode };
     cell?: (info?: unknown, cb?: unknown) => React.ReactNode;
   }[];
-  preGroupedData?: { label: string; items: any[] }[];
+  preGroupedData?: { label: string; items: unknown[] }[];
 }
 
 interface TableFiltersProps {
