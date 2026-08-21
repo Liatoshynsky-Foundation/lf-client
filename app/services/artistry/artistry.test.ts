@@ -82,6 +82,33 @@ describe('artistryService', () => {
       const result = await artistryService.getAllCompositions('uk', '');
       expect(result).toEqual([]);
     });
+
+    it('should map youTubeUrls when performances contain valid YouTube links', async () => {
+      const mockOpusWithPerformances = [
+        {
+          _id: '63f8b3b7a8b3d6c1b3e8e4c1',
+          number: 1,
+          numberKind: 'op',
+          creationYear: '2023',
+          name: { uk: 'Опус', en: 'Opus' },
+          title: { uk: 'Опус', en: 'Opus' },
+          status: 'published',
+          performances: [
+            {
+              _id: '63f8b3b7a8b3d6c1b3e8e4c2',
+              videoUrl: 'https://www.youtube.com/watch?v=abcdefghijk'
+            }
+          ],
+          compositions: []
+        }
+      ];
+      (compositionServiceMock.getAllCompositions as jest.Mock).mockResolvedValue(mockOpusWithPerformances);
+
+      const result = await artistryService.getAllCompositions('uk', '');
+
+      expect(result).toHaveLength(1);
+      expect((result[0] as unknown as { youTubeUrls: string[] }).youTubeUrls).toEqual(['abcdefghijk']);
+    });
   });
 
   describe('getSearchAutocompleteOptions', () => {
@@ -327,6 +354,59 @@ describe('artistryService', () => {
       expect(result?.creationDate).toBeUndefined();
       expect(result?.genre).toBeUndefined();
       expect(result?.compositions).toEqual([]);
+    });
+
+    it('should return null if TipTap description is valid JSON but extracts to an empty string', async () => {
+      (compositionServiceMock.getOpusById as jest.Mock).mockResolvedValue({
+        opus: {
+          _id: 'test-id',
+          number: 1,
+          title: { uk: 'Test' },
+          introDescription: { uk: '{"type":"doc","content":[]}' }
+        },
+        compositions: []
+      });
+
+      const result = await artistryService.getOpusDetailsById('uk', 'test-id');
+
+      expect(result?.description).toBeNull();
+    });
+
+    it('should catch JSON parse error for TipTap description, log error, and return null', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      (compositionServiceMock.getOpusById as jest.Mock).mockResolvedValue({
+        opus: {
+          _id: 'test-id',
+          number: 1,
+          title: { uk: 'Test' },
+          introDescription: { uk: '{"type":"doc", invalid JSON' }
+        },
+        compositions: []
+      });
+
+      const result = await artistryService.getOpusDetailsById('uk', 'test-id');
+
+      expect(result?.description).toBeNull();
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to parse TipTap description:', expect.any(Error));
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should fall back to releaseYear as creationDate when creationYear is missing or empty', async () => {
+      (compositionServiceMock.getOpusById as jest.Mock).mockResolvedValue({
+        opus: {
+          _id: 'test-id',
+          number: 2,
+          numberKind: 'op',
+          title: { uk: 'Опус 2', en: 'Opus 2' },
+          creationYear: '   ',
+          releaseYear: 2024
+        },
+        compositions: []
+      });
+
+      const result = await artistryService.getOpusDetailsById('uk', 'test-id');
+      expect(result?.creationDate).toBe('2024');
     });
   });
 });

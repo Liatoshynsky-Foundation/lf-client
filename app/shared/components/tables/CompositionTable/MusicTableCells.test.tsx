@@ -4,10 +4,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import {
+  GroupActionsCell,
   RenderActionsCell,
   RenderExpanderCell,
   RenderGenreCell,
   RenderGenreHeader,
+  renderGroupActionsCell,
   renderNameCell,
   RenderNameHeader,
   renderOpusGenreGroupLabel,
@@ -29,11 +31,26 @@ jest.mock('~/shared/hooks/use-composition-playback/useCompositionPlayback', () =
 }));
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
+export const mockRouterPush = jest.fn();
 jest.mock('~/i18n/navigation', () => ({
-  Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>
+  Link: ({ children, href, onClick, className, style }: any) => (
+    <a
+      href={href}
+      className={className}
+      style={style}
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) onClick(e);
+      }}
+    >
+      {children}
+    </a>
+  ),
+  useRouter: () => ({ push: mockRouterPush })
 }));
 
 jest.mock('~/shared/components/design-system/all-components/Ellipsis/Ellipsis', () => {
@@ -65,7 +82,8 @@ const mockMusic: Music = {
       isFree: true,
       dateUploaded: ''
     }
-  ]
+  ],
+  opusYoutubeUrl: []
 };
 
 const mockRow = {
@@ -356,6 +374,16 @@ describe('MusicTableCells', () => {
       const { container: container2 } = render(<>{renderOpusGenreGroupLabel([musicWithEmptyGenres])}</>);
       expect(container2).toBeEmptyDOMElement();
     });
+
+    it('should render opus title link and handle stopPropagation when opusId is present', () => {
+      const musicWithOpusId: Music = { ...mockMusic, opusId: 'test-opus-id' };
+      render(renderOpusTitleGroupLabel([musicWithOpusId]));
+
+      const link = screen.getByText('Symphony No. 3 in B minor').closest('a');
+      expect(link).toBeInTheDocument();
+
+      if (link) fireEvent.click(link);
+    });
   });
 
   describe('RenderExpanderCell', () => {
@@ -387,6 +415,126 @@ describe('MusicTableCells', () => {
 
       const { container } = render(<>{RenderExpanderCell(mockExpandableContext)}</>);
       expect(container).toBeEmptyDOMElement();
+    });
+  });
+
+  describe('GroupActionsCell', () => {
+    const mockWriteText = jest.fn();
+    const originalClipboard = navigator.clipboard;
+    const originalWindowOpen = window.open;
+
+    beforeAll(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: mockWriteText },
+        writable: true
+      });
+      window.open = jest.fn();
+    });
+
+    afterAll(() => {
+      Object.defineProperty(navigator, 'clipboard', { value: originalClipboard });
+      window.open = originalWindowOpen;
+    });
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should render group actions cell correctly via wrapper function', () => {
+      render(renderGroupActionsCell([mockMusic]));
+      expect(screen.getByTestId('Artistry-opusOverflowMenuButton')).toBeInTheDocument();
+    });
+
+    it('should handle all menu actions when opusId and youtube URL exist', async () => {
+      const musicWithData: Music = {
+        ...mockMusic,
+        opusId: 'opus-123',
+        opusYoutubeUrl: ['youtube-id-1'],
+        audios: [{ url: 'test-audio.mp3' } as NonNullable<Music['audios']>[number]]
+      };
+
+      const handlePlayClickMock = jest.fn();
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: true,
+        isCurrentTrack: false,
+        isPlaying: false,
+        handlePlayClick: handlePlayClickMock
+      });
+
+      render(renderGroupActionsCell([musicWithData]));
+
+      const openMenu = () => {
+        fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
+      };
+
+      fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton').parentElement!);
+
+      openMenu();
+      fireEvent.click(screen.getByRole('menuitem', { name: 'listenToComposition' }));
+      expect(handlePlayClickMock).toHaveBeenCalled();
+
+      openMenu();
+      fireEvent.click(screen.getByRole('menuitem', { name: 'watchOnYoutube' }));
+      expect(window.open).toHaveBeenCalledWith(
+        'https://www.youtube.com/watch?v=youtube-id-1',
+        '_blank',
+        'noopener,noreferrer'
+      );
+
+      openMenu();
+      fireEvent.click(screen.getByRole('menuitem', { name: 'copyLink' }));
+      expect(mockWriteText).toHaveBeenCalledWith(expect.stringContaining('/en/artistry/opus-123'));
+
+      openMenu();
+      fireEvent.click(screen.getByRole('menuitem', { name: 'viewDetails' }));
+      expect(mockRouterPush).toHaveBeenCalledWith('/artistry/opus-123');
+    });
+
+    it('should gracefully handle disabled states when data is missing', () => {
+      const musicNoData: Music = { ...mockMusic, opusId: undefined, opusYoutubeUrl: [] };
+      mockUseCompositionPlayback.mockReturnValue({
+        canPlay: false,
+        isCurrentTrack: false,
+        isPlaying: false,
+        handlePlayClick: jest.fn()
+      });
+
+      render(renderGroupActionsCell([musicNoData]));
+      fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
+
+      expect(screen.getByRole('menuitem', { name: 'watchOnYoutube' })).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.getByRole('menuitem', { name: 'listenToComposition' })).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    it('should ignore YouTube click if youtubeUrl is unexpectedly empty', () => {
+      const musicWithoutYoutube: Music = { ...mockMusic, opusYoutubeUrl: [] };
+      render(<GroupActionsCell items={[musicWithoutYoutube]} />);
+      fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
+
+      fireEvent.click(screen.getByRole('menuitem', { name: 'watchOnYoutube' }));
+
+      expect(window.open).not.toHaveBeenCalled();
+    });
+
+    it('should handle clipboard error silently', async () => {
+      const musicWithData: Music = { ...mockMusic, opusId: 'opus-123' };
+      mockWriteText.mockRejectedValueOnce(new Error('clipboard error'));
+
+      render(renderGroupActionsCell([musicWithData]));
+      fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
+
+      fireEvent.click(screen.getByRole('menuitem', { name: 'copyLink' }));
+
+      await waitFor(() => {
+        expect(mockWriteText).toHaveBeenCalled();
+      });
+    });
+
+    it('should fallback to the first item for playback if no audio is available', () => {
+      const musicNoAudio: Music = { ...mockMusic, audioAvailable: false, audios: [] };
+      render(renderGroupActionsCell([musicNoAudio]));
+
+      expect(mockUseCompositionPlayback).toHaveBeenCalledWith(musicNoAudio);
     });
   });
 });
