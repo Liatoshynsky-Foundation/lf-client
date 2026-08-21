@@ -23,6 +23,7 @@ export interface OpusGroupDTO {
   genre?: LocalizedString | null;
   status: string;
   compositions: CompositionItemDTO[];
+  performances?: { _id: string; videoUrl: string; title?: LocalizedString }[];
 }
 
 type SheetMusicDTO = {

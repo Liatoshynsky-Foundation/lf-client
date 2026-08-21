@@ -1,4 +1,5 @@
 import { SxProps, Theme } from '@mui/material';
+import { CSSProperties } from 'react';
 
 export const playCellSx: SxProps<Theme> = (theme) => ({
   display: 'flex',
@@ -54,4 +55,31 @@ export const menuLabelItemSx: SxProps<Theme> = {
   fontSize: '16px',
   lineHeight: '150%',
   letterSpacing: '0%'
+};
+
+export const opusGroupLabelTypographySx: SxProps<Theme> = {
+  whiteSpace: 'pre-line',
+  color: 'blue.800'
+};
+
+export const opusTitleGroupContainerSx: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 1,
+  width: '100%'
+};
+
+export const opusTitleTypographySx: SxProps<Theme> = {
+  fontWeight: 600
+};
+
+export const opusTitleHoverTypographySx: SxProps<Theme> = {
+  fontWeight: 600,
+  '&:hover': { textDecoration: 'underline' }
+};
+
+export const opusTitleLinkStyle: CSSProperties = {
+  textDecoration: 'none',
+  color: 'inherit',
+  display: 'inline-flex'
 };

@@ -27,6 +27,12 @@ export const compositionItemSchema = z.object({
   updatedAt: z.date()
 });
 
+const opusPerformanceSchema = z.object({
+  _id: z.union([mongoObjectIdSchema, z.string()]),
+  videoUrl: z.string(),
+  title: z.object({ uk: z.string().optional(), en: z.string().optional() }).optional()
+});
+
 export const opusGroupSchema = z.object({
   _id: mongoObjectIdSchema,
   number: z.number(),
@@ -38,7 +44,8 @@ export const opusGroupSchema = z.object({
   endYear: z.string().optional().nullable(),
   status: z.string(),
   genre: translatedFieldSchema.optional().nullable(),
-  compositions: z.array(compositionItemSchema)
+  compositions: z.array(compositionItemSchema),
+  performances: z.array(opusPerformanceSchema).optional()
 });
 
 export const compositionTableReadySchema = (localizedCompositionSchema: z.ZodSchema) =>

@@ -386,6 +386,7 @@ const compositionsRepository = {
           genre: { $first: '$genre' },
           createdAt: { $first: '$createdAt' },
           updatedAt: { $first: '$updatedAt' },
+          performances: { $first: '$performances' },
           compositions: { $push: '$compositions' }
         }
       },
