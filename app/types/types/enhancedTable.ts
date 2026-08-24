@@ -33,7 +33,7 @@ export type Music = {
   sheetMusic?: Notes[];
   audios?: AudioTrack[] | null;
   opusId?: string;
-  opusYoutubeUrl: string[];
+  opusyoutubeUrls: string[];
 };
 
 export type CompositionWithNotes = {
@@ -64,7 +64,7 @@ export type OpusGroupFrontend = {
   genre: string;
   status: string;
   compositions: CompositionItemFrontend[];
-  youTubeUrls: string[];
+  youtubeUrls: string[];
 };
 
 export type WorkTable = {

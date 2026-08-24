@@ -163,7 +163,7 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
 
     return localized.map((opus, index) => ({
       ...opus,
-      youTubeUrls: mapVideos(allSongs[index].performances, locale).map((v) => v.youTubeId)
+      youtubeUrls: mapVideos(allSongs[index].performances, locale).map((v) => v.youTubeId)
     }));
   },
 

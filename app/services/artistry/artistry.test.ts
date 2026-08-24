@@ -107,7 +107,7 @@ describe('artistryService', () => {
       const result = await artistryService.getAllCompositions('uk', '');
 
       expect(result).toHaveLength(1);
-      expect((result[0] as unknown as { youTubeUrls: string[] }).youTubeUrls).toEqual(['abcdefghijk']);
+      expect((result[0] as unknown as { youtubeUrls: string[] }).youtubeUrls).toEqual(['abcdefghijk']);
     });
   });
 

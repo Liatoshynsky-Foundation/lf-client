@@ -265,12 +265,12 @@ export const GroupActionsCell = ({ items }: GroupActionsProps) => {
   const opusId = items[0]?.opusId;
 
   const playableItem = items.find((item) => item.audioAvailable && (item.audios?.length ?? 0) > 0);
-  const getFirstYoutubeUrl = (youTubeUrls: string[] | undefined): string | null =>
-    youTubeUrls?.length ? `https://www.youtube.com/watch?v=${youTubeUrls[0]}` : null;
+  const getFirstYoutubeUrl = (youtubeUrls: string[] | undefined): string | null =>
+    youtubeUrls?.length ? `https://www.youtube.com/watch?v=${youtubeUrls[0]}` : null;
 
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(playableItem ?? items[0]);
 
-  const youtubeUrl = getFirstYoutubeUrl(items[0]?.opusYoutubeUrl);
+  const youtubeUrl = getFirstYoutubeUrl(items[0]?.opusyoutubeUrls);
 
   const handleYoutubeClick = () => {
     if (!youtubeUrl) return;

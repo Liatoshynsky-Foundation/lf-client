@@ -92,7 +92,7 @@ export default function MusicTableSection() {
         opusGenres: group.genre ? [group.genre] : [],
         audios: comp.audios ?? undefined,
         opusId: group._id,
-        opusYoutubeUrl: group.youTubeUrls ?? []
+        opusyoutubeUrls: group.youtubeUrls ?? []
       }));
 
       return {

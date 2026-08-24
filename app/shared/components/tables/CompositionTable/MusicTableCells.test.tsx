@@ -83,7 +83,7 @@ const mockMusic: Music = {
       dateUploaded: ''
     }
   ],
-  opusYoutubeUrl: []
+  opusyoutubeUrls: []
 };
 
 const mockRow = {
@@ -449,7 +449,7 @@ describe('MusicTableCells', () => {
       const musicWithData: Music = {
         ...mockMusic,
         opusId: 'opus-123',
-        opusYoutubeUrl: ['youtube-id-1'],
+        opusyoutubeUrls: ['youtube-id-1'],
         audios: [{ url: 'test-audio.mp3' } as NonNullable<Music['audios']>[number]]
       };
 
@@ -491,7 +491,7 @@ describe('MusicTableCells', () => {
     });
 
     it('should gracefully handle disabled states when data is missing', () => {
-      const musicNoData: Music = { ...mockMusic, opusId: undefined, opusYoutubeUrl: [] };
+      const musicNoData: Music = { ...mockMusic, opusId: undefined, opusyoutubeUrls: [] };
       mockUseCompositionPlayback.mockReturnValue({
         canPlay: false,
         isCurrentTrack: false,
@@ -507,7 +507,7 @@ describe('MusicTableCells', () => {
     });
 
     it('should ignore YouTube click if youtubeUrl is unexpectedly empty', () => {
-      const musicWithoutYoutube: Music = { ...mockMusic, opusYoutubeUrl: [] };
+      const musicWithoutYoutube: Music = { ...mockMusic, opusyoutubeUrls: [] };
       render(<GroupActionsCell items={[musicWithoutYoutube]} />);
       fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
 

@@ -24,7 +24,7 @@ describe('useCompositionPlayback', () => {
     sheetAvailable: true,
     sheetMusic: [{ url: '', isFree: true, dateUploaded: '' }],
     audios: [{ name: 'poem-about-forest.mp3', url: 'test-url' }],
-    opusYoutubeUrl: []
+    opusyoutubeUrls: []
   };
 
   const mockAudioName = mockMusicRow.audios?.[0]?.name || '';
