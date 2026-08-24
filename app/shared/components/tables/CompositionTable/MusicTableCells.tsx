@@ -3,7 +3,6 @@
 import { Box, Typography } from '@mui/material';
 import type { CellContext, Row } from '@tanstack/react-table';
 import { useLocale, useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 
 import Button from '~/ds-components/button/Button';
 
@@ -95,7 +94,7 @@ export const RenderGenreCell = (info: CellContext<Music, unknown>) => {
   return <Ellipsis text={genres.join(', ')} variant="customMedium16" />;
 };
 
-export const PlayCell: React.FC<RowProp> = ({ row }) => {
+export const PlayCell = ({ row }: RowProp) => {
   const rowData = row.original;
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(rowData);
 
@@ -116,7 +115,7 @@ export const PlayCell: React.FC<RowProp> = ({ row }) => {
   );
 };
 
-export const ActionsCell: React.FC<RowProp> = ({ row, onAction }) => {
+export const ActionsCell = ({ row, onAction }: RowProp) => {
   const rowData = row.original;
   const t = useTranslations('table.buttons');
   const { isDesktop, isLaptop } = useBreakpoints();
@@ -258,23 +257,20 @@ export const renderOpusGenreGroupLabel = (items: Music[]) => {
   return <Typography variant="customMedium16">{genres.join(', ')}</Typography>;
 };
 
-export const GroupActionsCell: React.FC<GroupActionsProps> = ({ items }) => {
+export const GroupActionsCell = ({ items }: GroupActionsProps) => {
   const t = useTranslations('table.buttons');
   const locale = useLocale();
   const router = useRouter();
 
   const opusId = items[0]?.opusId;
 
-  const playableItem = useMemo(
-    () => items.find((item) => item.audioAvailable && (item.audios?.length ?? 0) > 0),
-    [items]
-  );
+  const playableItem = items.find((item) => item.audioAvailable && (item.audios?.length ?? 0) > 0);
   const getFirstYoutubeUrl = (youTubeUrls: string[] | undefined): string | null =>
     youTubeUrls?.length ? `https://www.youtube.com/watch?v=${youTubeUrls[0]}` : null;
 
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(playableItem ?? items[0]);
 
-  const youtubeUrl = useMemo(() => getFirstYoutubeUrl(items[0]?.opusYoutubeUrl), [items]);
+  const youtubeUrl = getFirstYoutubeUrl(items[0]?.opusYoutubeUrl);
 
   const handleYoutubeClick = () => {
     if (!youtubeUrl) return;
