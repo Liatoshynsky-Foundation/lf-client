@@ -1,34 +1,64 @@
-import { FilterQuery, PipelineStage } from 'mongoose';
+import type { FilterQuery, PipelineStage, Types } from 'mongoose';
 
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
-import { CompositionDTO, Condition, OpusDTO, Query } from '~/domain/dto/composition.dto';
+import { CompositionItemDTO } from '~/domain/dto/composition.dto';
 import dbConnect from '~/infrastructure/db/connect';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
-import { parseFullOpus as parseOpus } from '~/lib/utils/opusParser';
 import { parseGenreString } from '~/lib/utils/parseGenreString';
 import { namedFilterHelper, searchHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
-import { compositionSchema, compositionTitlesSchema } from '~/validators/artistry/composition.schema';
+import { compositionTitlesSchema, opusGroupSchema } from '~/validators/artistry/composition.schema';
 import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
 import { ArraySchema } from '~/validators/constants';
+const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
 
-function buildWordSearchConditions<T>(words: string[], fields: string[]): FilterQuery<T>[] {
-  return words.map((word) => ({
-    $or: fields.map((field) => ({
-      [field]: { $regex: word, $options: 'i' }
-    }))
-  })) as FilterQuery<T>[];
-}
+type TranslatedFieldLean = { uk: string; en: string };
 
-function buildAllWordsPresent<T>(words: string[], fieldGroups: string[][]): FilterQuery<T> {
-  const andClauses = fieldGroups.map((group) => buildWordSearchConditions<T>(words, group));
+type OptionalTranslatedFieldLean = { uk?: string; en?: string };
 
-  return {
-    $or: andClauses.map((clauses) => ({ $and: clauses }))
-  };
-}
+type OpusPerformanceLean = {
+  _id: Types.ObjectId | string;
+  title?: OptionalTranslatedFieldLean;
+  videoUrl: string;
+};
+
+type OpusLean = {
+  _id: Types.ObjectId | string;
+  number: number | string;
+  numberKind?: string;
+  title: TranslatedFieldLean;
+  releaseYear?: number;
+  creationYear?: string;
+  endYear?: string;
+  genre?: OptionalTranslatedFieldLean | null;
+  introDescription?: OptionalTranslatedFieldLean | null;
+  description?: OptionalTranslatedFieldLean | null;
+  parts?: OptionalTranslatedFieldLean;
+  sheetMusicUrl?: string | null;
+  performances?: OpusPerformanceLean[];
+  compositions?: (Types.ObjectId | string)[];
+  status?: string;
+};
+
+type SheetMusicLean = {
+  url: string;
+  isFree: boolean;
+};
+
+type OpusCompositionLean = {
+  _id: Types.ObjectId | string;
+  name: TranslatedFieldLean;
+  year?: number;
+  genre?: string;
+  sheetMusic?: SheetMusicLean[];
+};
+
+export type OpusWithCompositionsLean = {
+  opus: OpusLean;
+  compositions: OpusCompositionLean[];
+};
 
 const COMPOSITION_YEAR_FLOOR = 1900;
 
@@ -43,6 +73,7 @@ function combineYearRanges(
   const mins = ranges
     .map((range) => (range?.minYear != null ? Number(range.minYear) : null))
     .filter((year): year is number => Number.isFinite(year));
+
   const maxs = ranges
     .map((range) => (range?.maxYear != null ? Number(range.maxYear) : null))
     .filter((year): year is number => Number.isFinite(year));
@@ -53,13 +84,116 @@ function combineYearRanges(
   };
 }
 
+function getBaseAggregatePipeline(): PipelineStage[] {
+  return [
+    {
+      $match: {
+        status: { $ne: 'draft' },
+        creationYear: { $nin: [null, ''] },
+        $or: [{ 'name.uk': { $nin: [null, ''] } }, { 'name.en': { $nin: [null, ''] } }]
+      }
+    },
+    {
+      $lookup: {
+        from: 'compositions',
+        localField: 'compositions',
+        foreignField: '_id',
+        as: 'compositions'
+      }
+    }
+  ];
+}
+
+function getOpusCondition(selectedSpecialKeys: string[]): FilterQuery<unknown> | null {
+  if (selectedSpecialKeys.length === 0) return null;
+  const isWithOpus = selectedSpecialKeys.includes('with-opus');
+  const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
+  if (isWithOpus && isWithoutOpus) return null;
+  return { numberKind: isWithOpus ? 'op' : 'sineop' };
+}
+
+function getYearCondition(years: { min?: number; max?: number } | undefined): FilterQuery<unknown> | null {
+  const readyYearObject = yearHelper(years);
+  if (!readyYearObject) return null;
+
+  const minStr = String(readyYearObject.min);
+  const maxStr = String(readyYearObject.max);
+
+  return {
+    $or: [
+      { creationYear: { $gte: minStr, $lte: maxStr } },
+      { endYear: { $gte: minStr, $lte: maxStr } },
+      { 'compositions.year': { $gte: readyYearObject.min, $lte: readyYearObject.max } }
+    ]
+  };
+}
+
+function getSearchCondition(search: string | undefined, includeGenreInSearch: boolean): FilterQuery<unknown> | null {
+  const searchPattern = searchHelper(search);
+  if (!searchPattern) return null;
+
+  const searchOr: FilterQuery<unknown>[] = [
+    { 'title.uk': { $regex: searchPattern, $options: 'i' } },
+    { 'title.en': { $regex: searchPattern, $options: 'i' } },
+    { 'name.uk': { $regex: searchPattern, $options: 'i' } },
+    { 'name.en': { $regex: searchPattern, $options: 'i' } },
+    { 'compositions.name.uk': { $regex: searchPattern, $options: 'i' } },
+    { 'compositions.name.en': { $regex: searchPattern, $options: 'i' } },
+    ...(includeGenreInSearch
+      ? [
+          { 'genre.uk': { $regex: searchPattern, $options: 'i' } },
+          { 'genre.en': { $regex: searchPattern, $options: 'i' } },
+          { 'compositions.genre': { $regex: searchPattern, $options: 'i' } },
+          { 'compositions.genre.uk': { $regex: searchPattern, $options: 'i' } },
+          { 'compositions.genre.en': { $regex: searchPattern, $options: 'i' } }
+        ]
+      : [])
+  ];
+
+  return { $or: searchOr };
+}
+
+async function buildCommonAndConditions(
+  search: string | undefined,
+  categoryKeys: string[] | undefined,
+  years: { min?: number; max?: number } | undefined,
+  includeGenreInSearch: boolean
+): Promise<{ conditions: FilterQuery<unknown>[]; noCategoryMatches: boolean }> {
+  const allCategoryKeys = categoryKeys || [];
+  const specialKeys = new Set<string>(['with-opus', 'without-opus']);
+  const regularCategoryKeys = allCategoryKeys.filter((key) => !specialKeys.has(key));
+  const selectedSpecialKeys = allCategoryKeys.filter((key) => specialKeys.has(key));
+
+  let categoryCondition: FilterQuery<unknown> | null = null;
+  if (regularCategoryKeys.length > 0) {
+    const categoryIds = await Category.find({ key: { $in: regularCategoryKeys } })
+      .select('_id')
+      .lean();
+    if (categoryIds.length === 0) {
+      return { conditions: [], noCategoryMatches: true };
+    }
+    categoryCondition = { 'compositions.categories': { $in: categoryIds.map((c) => c._id) } };
+  }
+
+  const conditions = [
+    getOpusCondition(selectedSpecialKeys),
+    categoryCondition,
+    getYearCondition(years),
+    getSearchCondition(search, includeGenreInSearch)
+  ].filter((c): c is FilterQuery<unknown> => c !== null);
+
+  return { conditions, noCategoryMatches: false };
+}
+
 const compositionsRepository = {
   async getAllGenres() {
     await dbConnect();
-    const rawGenres = await Opus.distinct('genre');
+    const ukGenres = await Opus.distinct('genre.uk');
+    const enGenres = await Opus.distinct('genre.en');
+    const rawGenres = [...ukGenres, ...enGenres];
     const parsedGenres = (rawGenres as (string | null)[]).flatMap(parseGenreString);
-
-    return Array.from(new Set(parsedGenres));
+    const uniqueGenres = Array.from(new Set(parsedGenres));
+    return uniqueGenres.sort((a, b) => a.localeCompare(b));
   },
 
   async getAllCategories() {
@@ -77,12 +211,7 @@ const compositionsRepository = {
         { $match: { status: { $ne: 'draft' } } },
         {
           $project: {
-            allYears: [
-              {
-                $ifNull: [toNumericYearField('$creationYear'), toNumericYearField('$releaseYear')]
-              },
-              toNumericYearField('$endYear')
-            ]
+            allYears: [toNumericYearField('$creationYear'), toNumericYearField('$endYear')]
           }
         },
         { $unwind: '$allYears' },
@@ -96,7 +225,7 @@ const compositionsRepository = {
         }
       ]),
       Compositions.aggregate([
-        { $match: { opusId: { $exists: true, $ne: null }, year: { $gte: COMPOSITION_YEAR_FLOOR, $lte: now } } },
+        { $match: { year: { $gte: COMPOSITION_YEAR_FLOOR, $lte: now } } },
         {
           $group: {
             _id: null,
@@ -113,171 +242,110 @@ const compositionsRepository = {
     return combineYearRanges([opusRow, compositionsRow], now);
   },
 
-  async getAllCompositionTitles(filters: CompositionsTitleFilters = {}) {
+  async getArtistrySearchSuggestions(filters: CompositionsTitleFilters = {}) {
     await dbConnect();
 
     const { search, category, yearFrom, yearTo } = filters;
+    const searchPattern = searchHelper(search);
+    const { conditions, noCategoryMatches } = await buildCommonAndConditions(
+      search,
+      namedFilterHelper(category),
+      { min: yearFrom ?? undefined, max: yearTo ?? undefined },
+      false
+    );
 
-    let searchWords: string[] = [];
+    if (noCategoryMatches) return [];
 
-    if (search?.trim()) {
-      searchWords = search
-        .trim()
-        .split(/\s+/)
-        .map((w) => w.trim())
-        .filter((w): w is string => w.length >= 2)
-        .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    }
-
-    const hasSearch = searchWords.length > 0;
-
-    const compositionPipeline: PipelineStage[] = [
+    const aggregatePipeline = [
+      ...getBaseAggregatePipeline(),
+      ...(conditions.length > 0 ? [{ $match: { $and: conditions } }] : []),
       {
-        $lookup: {
-          from: 'opus',
-          localField: 'opusId',
-          foreignField: '_id',
-          as: 'opusData'
-        }
-      },
-      {
-        $unwind: {
-          path: '$opusData',
-          preserveNullAndEmptyArrays: false
-        }
-      },
-      {
-        $match: {
-          'opusData.status': { $ne: 'draft' }
+        $project: {
+          _id: 1,
+          title: 1,
+          name: 1,
+          number: 1,
+          numberKind: 1,
+          additionalText: 1,
+          compositions: {
+            $filter: {
+              input: '$compositions',
+              as: 'comp',
+              cond: searchPattern
+                ? {
+                    $or: [
+                      { $regexMatch: { input: '$$comp.name.uk', regex: searchPattern, options: 'i' } },
+                      { $regexMatch: { input: '$$comp.name.en', regex: searchPattern, options: 'i' } }
+                    ]
+                  }
+                : { $literal: true }
+            }
+          },
+          opusMatchesSearch: searchPattern
+            ? {
+                $or: [
+                  { $regexMatch: { input: '$title.uk', regex: searchPattern, options: 'i' } },
+                  { $regexMatch: { input: '$title.en', regex: searchPattern, options: 'i' } },
+                  { $regexMatch: { input: '$name.uk', regex: searchPattern, options: 'i' } },
+                  { $regexMatch: { input: '$name.en', regex: searchPattern, options: 'i' } }
+                ]
+              }
+            : { $literal: true }
         }
       }
     ];
 
-    const compMatch: FilterQuery<CompositionDTO>[] = [];
+    const results = await Opus.aggregate(aggregatePipeline).exec();
 
-    if (hasSearch) {
-      const compFields = ['title.uk', 'title.en'];
-      const opusFields = ['opusData.title.uk', 'opusData.title.en'];
+    const flatResults: Record<string, unknown>[] = results.flatMap((opus) => [
+      ...(opus.opusMatchesSearch
+        ? [
+            {
+              _id: opus._id.toString(),
+              title: opus.title,
+              type: 'opus'
+            }
+          ]
+        : []),
+      ...(opus.compositions || []).map((comp: CompositionItemDTO) => ({
+        _id: comp._id.toString(),
+        title: comp.name,
+        type: 'composition',
+        opusContext: {
+          _id: opus._id.toString(),
+          number: opus.number,
+          numberKind: opus.numberKind,
+          additionalText: opus.additionalText
+        }
+      }))
+    ]);
 
-      compMatch.push(
-        buildAllWordsPresent<CompositionDTO>(searchWords, [compFields, opusFields, [...compFields, ...opusFields]])
-      );
+    return ArraySchema(compositionTitlesSchema).parse(flatResults);
+  },
+
+  async getOpusById(id: string): Promise<OpusWithCompositionsLean | null> {
+    await dbConnect();
+
+    if (!OBJECT_ID_REGEX.test(id)) {
+      return null;
     }
 
-    const allCategoryKeys: string[] = namedFilterHelper(category);
-    const specialKeys = new Set<string>(['with-opus', 'without-opus']);
+    const opus = await Opus.findById(id).lean<OpusLean | null>();
 
-    const regularCategoryKeys = allCategoryKeys.filter((key: string) => !specialKeys.has(key));
-    const selectedSpecialKeys = allCategoryKeys.filter((key: string) => specialKeys.has(key));
-
-    if (regularCategoryKeys.length > 0) {
-      const categoryDocs = await Category.find({ key: { $in: regularCategoryKeys } })
-        .select('_id')
-        .lean();
-      const categoryIds = categoryDocs.map((d) => d._id);
-
-      if (categoryIds.length) {
-        compMatch.push({ categories: { $in: categoryIds } });
-      } else {
-        return [];
-      }
+    if (!opus || opus.status === 'draft') {
+      return null;
     }
 
-    if (selectedSpecialKeys.length > 0) {
-      const isWithOpus = selectedSpecialKeys.includes('with-opus');
-      const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
+    const compositionIds = opus.compositions ?? [];
 
-      if (!(isWithOpus && isWithoutOpus)) {
-        const regexPattern = isWithOpus ? /^op/i : /^sine op/i;
-        compMatch.push({ 'opusData.number': { $regex: regexPattern } } as FilterQuery<CompositionDTO>);
-      }
-    }
+    const compositions = compositionIds.length
+      ? await Compositions.find({ _id: { $in: compositionIds } }).lean<OpusCompositionLean[]>()
+      : [];
 
-    const yearCond: { $gte?: number; $lte?: number } = {};
-    if (yearFrom != null) yearCond.$gte = yearFrom;
-    if (yearTo != null) yearCond.$lte = yearTo;
-    if (Object.keys(yearCond).length) {
-      compMatch.push({ year: yearCond });
-    }
+    const orderById = new Map(compositionIds.map((compositionId, index) => [String(compositionId), index]));
+    compositions.sort((a, b) => (orderById.get(String(a._id)) ?? 0) - (orderById.get(String(b._id)) ?? 0));
 
-    if (compMatch.length > 0) {
-      compositionPipeline.push({
-        $match: compMatch.length === 1 ? compMatch[0] : { $and: compMatch }
-      });
-    }
-
-    compositionPipeline.push({
-      $project: {
-        _id: 1,
-        title: 1,
-        kind: { $literal: 'composition' },
-        opusNumber: '$opusData.number'
-      }
-    });
-
-    const compositionTitles = await Compositions.aggregate(compositionPipeline).exec();
-
-    const opusPipeline: PipelineStage[] = [];
-
-    const opusMatch: FilterQuery<OpusDTO> = { status: { $ne: 'draft' } };
-
-    if (hasSearch) {
-      if (!opusMatch.$and) opusMatch.$and = [];
-      opusMatch.$and.push(...buildWordSearchConditions<OpusDTO>(searchWords, ['title.uk', 'title.en']));
-    }
-
-    const yearCondNum: { $gte?: number; $lte?: number } = {};
-    const yearCondStr: { $gte?: string; $lte?: string } = {};
-
-    if (yearFrom != null) {
-      yearCondNum.$gte = yearFrom;
-      yearCondStr.$gte = String(yearFrom);
-    }
-    if (yearTo != null) {
-      yearCondNum.$lte = yearTo;
-      yearCondStr.$lte = String(yearTo);
-    }
-
-    if (Object.keys(yearCondNum).length) {
-      if (!opusMatch.$and) opusMatch.$and = [];
-      opusMatch.$and.push({
-        $or: [
-          { creationYear: yearCondStr },
-          { creationYear: yearCondNum },
-          { endYear: yearCondStr },
-          { endYear: yearCondNum },
-          { releaseYear: yearCondNum }
-        ]
-      });
-    }
-
-    if (Object.keys(opusMatch).length > 0) {
-      opusPipeline.push({ $match: opusMatch });
-    }
-
-    opusPipeline.push({
-      $project: {
-        _id: 1,
-        title: 1,
-        kind: { $literal: 'opus' },
-        opusNumber: '$number'
-      }
-    });
-
-    const opusTitles = await Opus.aggregate(opusPipeline).exec();
-    type AggregatedItem = (typeof compositionTitles)[number];
-    const allTitlesMap = new Map<string, AggregatedItem>();
-
-    [...compositionTitles, ...opusTitles].forEach((item) => {
-      const key = item._id.toString();
-      if (!allTitlesMap.has(key)) {
-        allTitlesMap.set(key, item);
-      }
-    });
-
-    const allTitles = Array.from(allTitlesMap.values()).filter((item) => parseOpus(item.opusNumber) !== null);
-
-    return ArraySchema(compositionTitlesSchema).parse(allTitles);
+    return { opus, compositions };
   },
 
   async getAllCompositions(
@@ -286,131 +354,51 @@ const compositionsRepository = {
   ) {
     await dbConnect();
 
-    const conditions: Condition[] = [];
+    const { conditions, noCategoryMatches } = await buildCommonAndConditions(
+      search,
+      namedFilterHelper(filters?.categories),
+      filters?.years,
+      true
+    );
 
-    const readySearchExpression = searchHelper(search);
-    if (readySearchExpression) {
-      const pattern = readySearchExpression;
-      const matchingOpuses = await Opus.find({
-        status: { $ne: 'draft' },
-        $or: [
-          { 'title.uk': { $regex: pattern, $options: 'i' } },
-          { 'title.en': { $regex: pattern, $options: 'i' } },
-          { genre: { $regex: pattern, $options: 'i' } }
-        ]
-      })
-        .select('_id')
-        .lean();
+    if (noCategoryMatches) return [];
 
-      conditions.push({
-        $or: [
-          { 'title.uk': { $regex: pattern, $options: 'i' } },
-          { 'title.en': { $regex: pattern, $options: 'i' } },
-          { genre: { $regex: pattern, $options: 'i' } },
-          { opusId: { $in: matchingOpuses.map((o) => o._id) } }
-        ]
-      });
-    }
-
-    const allCategoryKeys: string[] = namedFilterHelper(filters?.categories) || [];
-    const specialKeys = new Set<string>(['with-opus', 'without-opus']);
-
-    const regularCategoryKeys = allCategoryKeys.filter((key: string) => !specialKeys.has(key));
-    const selectedSpecialKeys = allCategoryKeys.filter((key: string) => specialKeys.has(key));
-
-    if (regularCategoryKeys.length > 0) {
-      const categoryIds = await Category.find({ key: { $in: regularCategoryKeys } })
-        .select('_id')
-        .lean();
-
-      conditions.push({ categories: { $in: categoryIds } });
-    }
-
-    if (selectedSpecialKeys.length > 0) {
-      const isWithOpus = selectedSpecialKeys.includes('with-opus');
-      const isWithoutOpus = selectedSpecialKeys.includes('without-opus');
-
-      if (!(isWithOpus && isWithoutOpus)) {
-        const regexPattern = isWithOpus ? /^op/i : /^sine op/i;
-
-        const matchingOpuses = await Opus.find({ number: { $regex: regexPattern } })
-          .select('_id')
-          .lean();
-
-        const matchingOpusIds = matchingOpuses.map((o) => o._id);
-
-        conditions.push({ opusId: { $in: matchingOpusIds } });
+    const aggregatePipeline = [
+      ...getBaseAggregatePipeline(),
+      {
+        $unwind: {
+          path: '$compositions',
+          preserveNullAndEmptyArrays: false
+        }
+      },
+      ...(conditions.length > 0 ? [{ $match: { $and: conditions } }] : []),
+      {
+        $group: {
+          _id: '$_id',
+          number: { $first: '$number' },
+          title: { $first: '$title' },
+          numberKind: { $first: '$numberKind' },
+          name: { $first: '$name' },
+          additionalText: { $first: '$additionalText' },
+          creationYear: { $first: '$creationYear' },
+          endYear: { $first: '$endYear' },
+          status: { $first: '$status' },
+          genre: { $first: '$genre' },
+          createdAt: { $first: '$createdAt' },
+          updatedAt: { $first: '$updatedAt' },
+          compositions: { $push: '$compositions' }
+        }
+      },
+      {
+        $sort: { numberKind: 1 as const, number: 1 as const, additionalText: 1 as const }
       }
-    }
+    ];
 
-    const readyYearObject = yearHelper(filters?.years);
-    if (readyYearObject) {
-      const minNum = readyYearObject.min;
-      const maxNum = readyYearObject.max;
+    const opuses = await Opus.aggregate(aggregatePipeline).exec();
 
-      const yearFilterNum = { $gte: minNum, $lte: maxNum };
-      const yearFilterStr = { $gte: String(minNum), $lte: String(maxNum) };
+    if (!opuses || opuses.length === 0) return [];
 
-      const activeOpuses = await Opus.find({
-        status: { $ne: 'draft' },
-        $or: [
-          { creationYear: yearFilterStr },
-          { creationYear: yearFilterNum },
-          { creationYear: null, releaseYear: yearFilterNum },
-          { endYear: yearFilterStr },
-          { endYear: yearFilterNum }
-        ]
-      })
-        .select('_id')
-        .lean();
-
-      const opusIds = activeOpuses.map((o) => o._id);
-      conditions.push({
-        $or: [{ year: yearFilterNum }, { year: yearFilterStr }, { opusId: { $in: opusIds } }]
-      } as Condition);
-    }
-
-    conditions.push({ opusId: { $exists: true, $ne: null } });
-
-    let query: Query = {};
-    if (conditions.length === 1) query = conditions[0];
-    else if (conditions.length > 1) query = { $and: conditions };
-
-    const compositions = await Compositions.find(query)
-      .populate('categories')
-      .populate({ path: 'opusId', model: Opus })
-      .lean();
-
-    if (!compositions || compositions.length === 0) return [];
-
-    const parsedCompositions = ArraySchema(compositionSchema)
-      .parse(compositions)
-      .filter((comp) => {
-        const opusNumber = typeof comp.opusId === 'object' && comp.opusId ? comp.opusId.number : undefined;
-        return parseOpus(opusNumber) !== null;
-      })
-      .filter((comp) => {
-        if (typeof comp.opusId === 'object' && comp.opusId?.status === 'draft') return false;
-        return true;
-      });
-
-    return parsedCompositions.sort((a, b) => {
-      const numA = typeof a.opusId === 'object' && a.opusId ? a.opusId.number : undefined;
-      const numB = typeof b.opusId === 'object' && b.opusId ? b.opusId.number : undefined;
-
-      const parsedA = parseOpus(numA)!;
-      const parsedB = parseOpus(numB)!;
-
-      if (parsedA.prefix !== parsedB.prefix) {
-        return parsedA.prefix === 'op' ? -1 : 1;
-      }
-      if (parsedA.num !== parsedB.num) {
-        return parsedA.num - parsedB.num;
-      }
-      const cleanA = parsedA.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const cleanB = parsedB.rest.toLowerCase().replace(/[^a-z0-9]/g, '');
-      return cleanA.localeCompare(cleanB, undefined, { numeric: true, sensitivity: 'base' });
-    });
+    return ArraySchema(opusGroupSchema).parse(opuses);
   }
 };
 

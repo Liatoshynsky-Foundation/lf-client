@@ -18,7 +18,10 @@ interface MockIconButtonProps {
 }
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useFormatter: () => ({
+    dateTime: (date: Date) => date.toISOString()
+  })
 }));
 
 jest.mock(
@@ -49,13 +52,7 @@ jest.mock('~/components/svg-image/SvgImage', () => ({
   SvgImage: ({ alt }: { alt: string }) => <img data-testid="svg-image" alt={alt} />
 }));
 
-jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    isMobile: false,
-    isTablet: false
-  }))
-}));
+jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints');
 
 const note = {
   url: '/notes/test-note.pdf',
@@ -65,63 +62,85 @@ const note = {
 const icon = <svg data-testid="end-icon" />;
 const handler = jest.fn();
 
+const mockUseBreakpoints = useBreakpoints as jest.MockedFunction<typeof useBreakpoints>;
+
 describe('NotesListItem', () => {
+  const getMockBreakpoints = (
+    overrides?: Partial<ReturnType<typeof useBreakpoints>>
+  ): ReturnType<typeof useBreakpoints> => ({
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
+    isLaptop: false,
+    isLaptopAndAbove: false,
+    ...overrides
+  });
+
+  const renderComponent = (propsOverrides?: Partial<React.ComponentProps<typeof NotesListItem>>) => {
+    return render(
+      <NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} {...propsOverrides} />
+    );
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false, isTablet: false });
+    mockUseBreakpoints.mockReturnValue(getMockBreakpoints());
   });
 
   it('should render note title, date, and button on desktop viewports', () => {
-    render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    renderComponent();
     expect(screen.getByText('test-note')).toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'test-note');
   });
 
   it('should render correct button text for freeNotesButton', () => {
-    render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    renderComponent();
     expect(screen.getByRole('button')).toHaveTextContent('freeNotesButton');
   });
 
   it('should render correct button text for paidNotesButton', () => {
-    render(
-      <NotesListItem note={{ ...note, isFree: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
-    );
+    renderComponent({
+      note: { ...note, isFree: false },
+      buttonText: 'paidNotesButton'
+    });
     expect(screen.getByRole('button')).toHaveTextContent('paidNotesButton');
   });
 
   it('should call handler when button is clicked on desktop for paid notes', () => {
-    render(
-      <NotesListItem note={{ ...note, isFree: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
-    );
+    renderComponent({
+      note: { ...note, isFree: false },
+      buttonText: 'paidNotesButton'
+    });
     fireEvent.click(screen.getByRole('button'));
     expect(handler).toHaveBeenCalled();
   });
 
   it('should render endIcon if provided', () => {
-    render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    renderComponent();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
   });
 
   it('should render mobile layouts and hide the decorative frame icon on compact viewports', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: true, isTablet: false });
-    render(<NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isMobile: true }));
+    renderComponent();
 
     expect(screen.queryByTestId('svg-image')).not.toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute('href', '/notes/test-note.pdf');
   });
 
   it('should render an icon button configuration that triggers click parameters for paid mobile items', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false, isTablet: true });
-    render(
-      <NotesListItem note={{ ...note, isFree: false }} buttonText="paidNotesButton" endIcon={icon} handler={handler} />
-    );
+    mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isTablet: true }));
+    renderComponent({
+      note: { ...note, isFree: false },
+      buttonText: 'paidNotesButton'
+    });
 
     fireEvent.click(screen.getByTestId('icon-button'));
     expect(handler).toHaveBeenCalled();
   });
 
   it('should fallback to default literal labels if file extensions or text payloads parsing steps resolve to empty structures', () => {
-    (useBreakpoints as jest.Mock).mockReturnValue({ isMobile: false, isTablet: false });
+    mockUseBreakpoints.mockReturnValue(getMockBreakpoints());
 
     const fakeUrlMock = {
       split: () => ({
@@ -135,11 +154,14 @@ describe('NotesListItem', () => {
 
     const corruptNote = {
       url: fakeUrlMock,
-      isFree: true,
+      isFree: false,
       dateUploaded: '2023-01-01T00:00:00.000Z'
     } as unknown as Notes;
 
-    render(<NotesListItem note={corruptNote} buttonText="freeNotesButton" endIcon={icon} handler={handler} />);
+    renderComponent({
+      note: corruptNote,
+      buttonText: 'paidNotesButton'
+    });
     expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'file-icon');
   });
 });

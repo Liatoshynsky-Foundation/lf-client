@@ -23,12 +23,15 @@ const TestComponent = () => {
 };
 
 describe('AudioPlayerContext', () => {
-  it('should have default values', () => {
+  const renderTestComponent = () =>
     render(
       <AudioPlayerProvider>
         <TestComponent />
       </AudioPlayerProvider>
     );
+
+  it('should have default values', () => {
+    renderTestComponent();
 
     expect(screen.getByTestId('src').textContent).toBe(DEFAULT_COMPOSITION_URL);
     expect(screen.getByTestId('trackName').textContent).toBe(DEFAULT_COMPOSITION_NAME);
@@ -38,22 +41,14 @@ describe('AudioPlayerContext', () => {
   });
 
   it('should update state when playTrack is called', async () => {
-    render(
-      <AudioPlayerProvider>
-        <TestComponent />
-      </AudioPlayerProvider>
-    );
+    renderTestComponent();
     await userEvent.click(screen.getByText('Play'));
     expect(screen.getByTestId('src').textContent).toBe('newSrc');
     expect(screen.getByTestId('trackName').textContent).toBe('newTrack');
   });
 
   it('should toggle play state', async () => {
-    render(
-      <AudioPlayerProvider>
-        <TestComponent />
-      </AudioPlayerProvider>
-    );
+    renderTestComponent();
     await userEvent.click(screen.getByText('Play'));
     expect(screen.getByTestId('isPlaying').textContent).toBe('true');
 
@@ -62,11 +57,7 @@ describe('AudioPlayerContext', () => {
   });
 
   it('should open and close player state cleanly', async () => {
-    render(
-      <AudioPlayerProvider>
-        <TestComponent />
-      </AudioPlayerProvider>
-    );
+    renderTestComponent();
     await userEvent.click(screen.getByText('Open'));
     expect(screen.getByTestId('isPlayerOpen').textContent).toBe('true');
 

@@ -25,15 +25,15 @@ jest.mock('@mui/material/useMediaQuery', () => {
 
 describe('Search', () => {
   const options: TitleOption[] = [
-    { _id: '1', title: 'Test Song', kind: 'composition' },
-    { _id: '2', title: 'Another Song', kind: 'composition' },
-    { _id: '3', title: { en: 'Specific Track', uk: 'Специфічний Трек' }, kind: 'composition' },
-    { _id: '4', title: 'Song Exact Match', kind: 'composition' },
-    { _id: '5', title: 'Prefix Match Song', kind: 'composition' },
-    { _id: '6', title: 'Opus Track', kind: 'opus', opusNumber: '42' },
-    { _id: '7', title: 'B Exact Match', kind: 'composition' },
-    { _id: '8', title: 'Track Prefix Match', kind: 'composition' },
-    { _id: '9', title: 'Some Long Track Name', kind: 'composition' }
+    { _id: '1', title: 'Test Song', type: 'composition' },
+    { _id: '2', title: 'Another Song', type: 'composition' },
+    { _id: '3', title: { en: 'Specific Track', uk: 'Специфічний Трек' }, type: 'composition' },
+    { _id: '4', title: 'Song Exact Match', type: 'composition' },
+    { _id: '5', title: 'Prefix Match Song', type: 'composition' },
+    { _id: '6', title: 'Opus Track', type: 'opus' },
+    { _id: '7', title: 'B Exact Match', type: 'composition' },
+    { _id: '8', title: 'Track Prefix Match', type: 'composition' },
+    { _id: '9', title: 'Some Long Track Name', type: 'composition' }
   ];
 
   const renderSearch = (opts = options, initialSearch = '') => {
@@ -56,7 +56,7 @@ describe('Search', () => {
     });
     fireEvent.change(input, { target: { value: 'T' } });
     await waitFor(() => {
-      expect(screen.getByText('Test Song')).toBeInTheDocument();
+      expect(screen.getByText(options[0].title as string)).toBeInTheDocument();
     });
   });
 
@@ -84,9 +84,9 @@ describe('Search', () => {
     });
     fireEvent.change(input, { target: { value: 'Test' } });
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Test Song'));
+      fireEvent.click(screen.getByText(options[0].title as string));
     });
-    expect(setSearch).toHaveBeenCalledWith('Test Song');
+    expect(setSearch).toHaveBeenCalledWith(options[0].title as string);
   });
 
   it('should display no options text when no results', async () => {
@@ -187,8 +187,8 @@ describe('Search', () => {
 
   it('should satisfy the bLabel exact match condition inside sorting block to cover line 146 fully', async () => {
     const customOptions = [
-      { _id: 'a', title: 'Z Random Track Name', kind: 'composition' },
-      { _id: 'b', title: 'Target', kind: 'composition' }
+      { _id: 'a', title: 'Z Random Track Name', type: 'composition' },
+      { _id: 'b', title: 'Target', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
@@ -202,8 +202,8 @@ describe('Search', () => {
 
   it('should satisfy the bLabel startsWith condition inside prefix matching block to cover line 154 fully', async () => {
     const customOptions = [
-      { _id: 'a', title: 'Z Middle Contains Start Word', kind: 'composition' },
-      { _id: 'b', title: 'Start Mirror Track', kind: 'composition' }
+      { _id: 'a', title: 'Z Middle Contains Start Word', type: 'composition' },
+      { _id: 'b', title: 'Start Mirror Track', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
@@ -217,8 +217,8 @@ describe('Search', () => {
 
   it('should calculate mismatched substring placement indices within labels to cover line 167 fully', async () => {
     const customOptions = [
-      { _id: 'a', title: 'Z Word Long Long Long End', kind: 'composition' },
-      { _id: 'b', title: 'Short Phrase Word Inside', kind: 'composition' }
+      { _id: 'a', title: 'Z Word Long Long Long End', type: 'composition' },
+      { _id: 'b', title: 'Short Phrase Word Inside', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
@@ -232,8 +232,8 @@ describe('Search', () => {
 
   it('should test fallback alphabetical sorting for identical weights to cover remaining branch boundaries', async () => {
     const customOptions = [
-      { _id: 'a', title: 'B Duplicate Track', kind: 'composition' },
-      { _id: 'b', title: 'A Duplicate Track', kind: 'composition' }
+      { _id: 'a', title: 'B Duplicate Track', type: 'composition' },
+      { _id: 'b', title: 'A Duplicate Track', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
@@ -246,7 +246,7 @@ describe('Search', () => {
   });
 
   it('should fallback to uk title when en is missing to cover renderOption line 146', async () => {
-    const customOptions = [{ _id: 'a', title: { uk: 'Тільки Укр Трек' }, kind: 'composition' }];
+    const customOptions = [{ _id: 'a', title: { uk: 'Тільки Укр Трек' }, type: 'composition' }];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
       input.focus();
@@ -274,9 +274,9 @@ describe('Search', () => {
 
   it('should satisfy both exact match comparator branches during insertion sort to cover lines 167 and 168', async () => {
     const customOptions = [
-      { _id: 'a', title: 'Bxtarget', kind: 'composition' },
-      { _id: 'b', title: 'Target', kind: 'composition' },
-      { _id: 'c', title: 'Axtarget', kind: 'composition' }
+      { _id: 'a', title: 'Bxtarget', type: 'composition' },
+      { _id: 'b', title: 'Target', type: 'composition' },
+      { _id: 'c', title: 'Axtarget', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as TitleOption[]);
     act(() => {
@@ -306,8 +306,8 @@ describe('Search', () => {
 
   it('should fallback to empty string when title has neither en nor uk to cover line 146', async () => {
     const customOptions = [
-      { _id: 'a', title: {}, kind: 'composition' },
-      { _id: 'b', title: 'Filler Track', kind: 'composition' }
+      { _id: 'a', title: {}, type: 'composition' },
+      { _id: 'b', title: 'Filler Track', type: 'composition' }
     ];
     const { input } = renderSearch(customOptions as unknown as TitleOption[]);
     act(() => {

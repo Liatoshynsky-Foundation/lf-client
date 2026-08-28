@@ -180,14 +180,13 @@ describe('LocalizeSchema', () => {
     );
   });
 
-  it('should throw missing translation error for uk locale when uk field is empty', async () => {
+  it('should fallback to en locale when uk field is empty', async () => {
     const schema = z.object({ title: z.unknown() });
-    const transformer = LocalizeSchema(schema, 'uk' as Locale);
+    const transformer = LocalizeSchema(schema, 'uk' as Locale, { fallbackFields: ['title'] });
     const data = { title: { en: 'Hello', uk: '' } };
 
-    await expect(transformer.parseAsync(data)).rejects.toThrow(
-      `${LocalizationErrors.MISSING_UK_ERROR} at path: root.title`
-    );
+    const result = await transformer.parseAsync(data);
+    expect(result).toEqual({ title: 'Hello' });
   });
 
   it('should continue loop when tiptap node content is missing', async () => {

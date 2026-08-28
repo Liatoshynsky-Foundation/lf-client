@@ -10,6 +10,18 @@ export type AdditionalMenu = {
   isAvailable: boolean;
 };
 
+export type TitleOption = {
+  _id: string;
+  title: string | { en?: string; uk?: string };
+  type?: 'composition' | 'opus' | 'genre';
+  opusContext?: {
+    _id: string;
+    number: number;
+    numberKind: string;
+    additionalText?: string | null;
+  };
+};
+
 export type Opus = {
   id: string;
   number: string;
@@ -39,11 +51,4 @@ export type Composition = {
   updatedAt: string;
   opus?: Opus;
   genre?: string[];
-};
-
-export type TitleOption = {
-  _id: string;
-  title: string | { en?: string; uk?: string };
-  kind?: 'composition' | 'opus' | 'genre';
-  opusNumber?: string | number;
 };

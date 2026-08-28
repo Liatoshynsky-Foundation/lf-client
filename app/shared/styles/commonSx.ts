@@ -59,5 +59,48 @@ export const commonSx = {
       height: 'calc(100% - 8px)',
       top: 4
     }
+  },
+
+  detailsGrid: {
+    gridContainer: {
+      display: 'grid',
+      gridTemplateColumns: 'subgrid',
+      columnGap: {
+        xs: '16px',
+        sm: '24px',
+        md: '40px'
+      },
+      gridColumn: '1 / -1',
+      mt: {
+        xs: '32px',
+        sm: '88px'
+      },
+      mb: {
+        xs: '96px',
+        sm: '104px'
+      },
+      rowGap: {
+        xs: '16px',
+        sm: '24px'
+      }
+    },
+    sectionTitle: {
+      fontFamily: 'Oswald',
+      fontSize: {
+        xs: '24px',
+        md: '40px'
+      },
+      fontWeight: 700,
+      lineHeight: {
+        xs: '160%',
+        md: '120%'
+      },
+      textTransform: 'uppercase',
+      mb: {
+        xs: '0',
+        md: '32px'
+      },
+      gridColumn: '1 / -1'
+    }
   }
 } satisfies CommonSxStyles;

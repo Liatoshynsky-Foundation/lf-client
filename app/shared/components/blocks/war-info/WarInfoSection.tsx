@@ -1,32 +1,32 @@
+'use client';
+
 import { Box, type BoxProps, Typography } from '@mui/material';
-import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 
 import ContentBlock from '~/components/design-system/all-components/content-block/ContentBlock';
 
 import { style } from './WarInfoSection.style';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 import { sxToArray } from '~/utils/sxToArray';
 
-import { warSupportDoc } from '~/[lang]/war-in-ukraine/war.const';
+export type WarInfoSectionProps = BoxProps & {
+  data?: {
+    title?: string;
+    description?: TipTapDoc | string;
+  };
+};
 
-export type WarInfoSectionProps = BoxProps;
-
-const WarInfoSection: React.FC<WarInfoSectionProps> = ({ sx, ...props }) => {
-  const t = useTranslations('warSupport');
-  const locale = useLocale();
+const WarInfoSection: React.FC<WarInfoSectionProps> = ({ sx, data, ...props }) => {
+  if (!data) return null;
 
   return (
     <Box sx={[style.gridContainer, ...sxToArray(sx)]} {...props}>
       <Box sx={style.titleSection}>
         <Typography variant="h1" sx={style.titleText}>
-          {t('title')}
+          {data.title}
         </Typography>
       </Box>
-      <ContentBlock
-        description={warSupportDoc[locale]}
-        textSx={style.contentText}
-        containerSx={style.textBlockContainer}
-      />
+      <ContentBlock description={data.description} textSx={style.contentText} containerSx={style.textBlockContainer} />
     </Box>
   );
 };

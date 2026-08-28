@@ -24,7 +24,7 @@ import {
 import TableNoResultsFound from './no-results-found/TableNoResultsFound';
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { TitleOption } from '~/types/types/composition.types';
-import { CompositionWithNotes, Music } from '~/types/types/enhancedTable';
+import { CompositionWithNotes, Music, OpusGroupFrontend } from '~/types/types/enhancedTable';
 import { Notes } from '~/types/types/getNotes.types';
 import { CompositionsFilters, CompositionsFiltersType } from '~/types/types/tableFilters.types';
 
@@ -64,10 +64,41 @@ export default function MusicTableSection() {
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
 
-  const { data = [], isLoading: loadingData } = useTableData<Music, CompositionsFilters>(
+  const { data: rawData = [], isLoading: loadingData } = useTableData<OpusGroupFrontend, CompositionsFilters>(
     ApiRoutes.COMPOSITION_DATA,
     params
   );
+
+  const preGroupedData = useMemo(() => {
+    return rawData.map((group) => {
+      const isSineOp = group.numberKind?.toLowerCase() === 'sineop';
+      const opusString = isSineOp ? `sine op. ${group.number}` : `op. ${group.number}`;
+      const finalOpusStr = group.additionalText ? `${opusString} ${group.additionalText}` : opusString;
+
+      const finalOpusYear = group.endYear ? `${group.creationYear} - ${group.endYear}` : group.creationYear;
+
+      const items: Music[] = group.compositions.map((comp) => ({
+        id: comp._id,
+        name: comp.name,
+        year: comp.year,
+        genre: comp.genre ? [comp.genre] : [],
+        audioAvailable: comp.audioAvailable,
+        sheetAvailable: comp.sheetAvailable,
+        sheetMusic: comp.sheetMusic ?? undefined,
+        opus: finalOpusStr,
+        opusTitle: group.title || group.name,
+        opusYear: finalOpusYear,
+        opusGenres: group.genre ? [group.genre] : [],
+        audios: comp.audios ?? undefined,
+        opusId: group._id
+      }));
+
+      return {
+        label: group._id,
+        items
+      };
+    });
+  }, [rawData]);
 
   const selectTitles = useCallback((json: unknown) => (json as { titles: TitleOption[] }).titles, []);
 
@@ -235,11 +266,11 @@ export default function MusicTableSection() {
     <>
       <EnhancedTable
         key={tableKey}
-        data={data}
+        data={[]}
+        preGroupedData={preGroupedData}
         isSearchActive={!!params.search}
         loading={loadingData}
         columns={columns}
-        groupByKey="opus"
         columnFilters={columnFilters}
         onColumnFiltersChange={setColumnFilters}
         columnWidths={columnWidths}

@@ -11,19 +11,30 @@ import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.s
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
+import { WarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
 
-export const PAGE_SLUGS = ['about-us', 'privacy-policy', 'research', 'biography', 'cooperation', 'artistry'] as const;
+export const PAGE_SLUGS = [
+  'about-us',
+  'privacy-policy',
+  'research',
+  'biography',
+  'cooperation',
+  'artistry',
+  'war-in-ukraine'
+] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];
 
 export const isPageSlug = (slug: string): slug is PageSlug => PAGE_SLUGS.includes(slug as PageSlug);
 
 const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageDataMap[K]> } = {
-  'about-us': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(AboutUsPageSchema))), locale),
+  'about-us': (locale) =>
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(AboutUsPageSchema))), locale, { allowEmptyFields: ['list'] }),
   'privacy-policy': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PrivacyPolicyPageSchema))), locale),
   research: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ResearchPageSchema))), locale),
   biography: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(BiographyPageSchema))), locale),
   cooperation: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(CooperationPageSchema))), locale),
-  artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArtistryPageSchema))), locale)
+  artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArtistryPageSchema))), locale),
+  'war-in-ukraine': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(WarInUkrainePageSchema))), locale)
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {

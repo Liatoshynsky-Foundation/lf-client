@@ -5,12 +5,18 @@ import { PageStatus } from '~/types/enums/common.enums';
 import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
+const HiddenBlockSchema = z.object({
+  hidden: z.boolean().optional()
+});
+
+const hideableBlock = <T extends z.ZodRawShape>(shape: T) => HiddenBlockSchema.extend(shape);
+
 const IntroSectionBlockSchema = z.object({
   trustAndSecurity: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   agreement: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const DataWeCollectBlockSchema = z.object({
+const DataWeCollectBlockSchema = hideableBlock({
   title: translatedTipTapSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   sections: z.array(
@@ -25,65 +31,59 @@ const DataWeCollectBlockSchema = z.object({
       list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }))
     })
   ),
-  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  hidden: z.boolean().optional()
+  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const DataUsageBlockSchema = z.object({
+const DataUsageBlockSchema = hideableBlock({
+  title: translatedTipTapSchema,
+  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
+  list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }))
+});
+
+const CookiesBlockSchema = hideableBlock({
   title: translatedTipTapSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })),
-  hidden: z.boolean().optional()
+  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const CookiesBlockSchema = z.object({
-  title: translatedTipTapSchema,
-  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })),
-  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  hidden: z.boolean().optional()
-});
-
-const GoogleAuthBlockSchema = z.object({
+const GoogleAuthBlockSchema = hideableBlock({
   title: translatedFieldSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })),
   note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const SocialNetworksBlockSchema = z.object({
+const SocialNetworksBlockSchema = hideableBlock({
   title: translatedFieldSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const TargetedAdsBlockSchema = z.object({
+const TargetedAdsBlockSchema = hideableBlock({
   title: translatedFieldSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const NewsletterSubscriptionBlockSchema = z.object({
+const NewsletterSubscriptionBlockSchema = hideableBlock({
   title: translatedFieldSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const DataRetentionBlockSchema = z.object({
+const DataRetentionBlockSchema = hideableBlock({
   title: translatedTipTapSchema,
-  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  hidden: z.boolean().optional()
+  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const UserRightsBlockSchema = z.object({
+const UserRightsBlockSchema = hideableBlock({
   title: translatedTipTapSchema,
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
   list: z.array(z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })),
-  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  hidden: z.boolean().optional()
+  note: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const ContactUsBlockSchema = z.object({
+const ContactUsBlockSchema = hideableBlock({
   title: translatedTipTapSchema,
-  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema }),
-  hidden: z.boolean().optional()
+  description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
 const PrivacyPolicyBlock = z.object({

@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import UnderDevelopment from '../under-development/UnderDevelopment';
-import { AboutUsPage, ArtistryPage, PrivacyPolicyPage } from '~/types/page/pagesBase.type';
+import { AboutUsPage, ArtistryPage, PrivacyPolicyPage, WarInUkrainePage } from '~/types/page/pagesBase.type';
 import { isError, UnwrapResult } from '~/types/types/result';
 
 import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
@@ -11,7 +11,7 @@ import { isProductionMode } from '~/lib/utils/isProductionMode';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
-export type PossiblePages = AboutUsPage | PrivacyPolicyPage | ArtistryPage;
+export type PossiblePages = AboutUsPage | PrivacyPolicyPage | ArtistryPage | WarInUkrainePage;
 
 export interface PageBuilderProps<TPages extends PossiblePages> {
   lang: 'en' | 'uk';
@@ -27,10 +27,10 @@ export interface PageBuilderProps<TPages extends PossiblePages> {
     uniqueRenderKey: string;
   }) => React.JSX.Element | null;
 }
-type ValidSlug = 'about-us' | 'privacy-policy' | 'artistry';
+type ValidSlug = 'about-us' | 'privacy-policy' | 'artistry' | 'war-in-ukraine';
 
 const isValidSlug = (slug: string): slug is ValidSlug => {
-  if (!['about-us', 'privacy-policy', 'artistry'].includes(slug)) {
+  if (!['about-us', 'privacy-policy', 'artistry', 'war-in-ukraine'].includes(slug)) {
     return false;
   }
   return true;
@@ -64,7 +64,7 @@ export default async function PageBuilder<TPages extends PossiblePages>({
   const blocksOrder = page.blocksOrder;
 
   return (
-    <MainLayout withLines>
+    <MainLayout withLines={slug !== 'artistry'}>
       {blocksOrder &&
         blocksOrder.length > 0 &&
         blocksOrder.map((blockId, index) =>

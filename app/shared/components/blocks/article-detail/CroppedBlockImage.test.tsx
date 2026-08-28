@@ -68,8 +68,8 @@ describe('CroppedBlockImage', () => {
       render(<CroppedBlockImage {...defaultProps} />);
 
       const img = screen.getByRole('img');
-      expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg');
-      expect(img).toHaveAttribute('alt', 'A photo');
+      expect(img).toHaveAttribute('src', defaultProps.src);
+      expect(img).toHaveAttribute('alt', defaultProps.alt);
     });
 
     it('renders img with loading="lazy"', () => {
@@ -119,6 +119,7 @@ describe('CroppedBlockImage', () => {
       render(<CroppedBlockImage {...defaultProps} cropData="not-json" />);
 
       expect(mockedUseImageCrop).toHaveBeenCalledWith(null);
+      // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith(loggerErrors.CROP_DATA_PARSE_FAILED, expect.any(Error));
     });
 

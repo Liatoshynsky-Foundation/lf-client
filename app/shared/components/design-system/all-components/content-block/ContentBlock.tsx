@@ -8,12 +8,12 @@ import SectionTitle from '~/shared/components/section-title/SectionTitle';
 import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
 import { Typography as textStyles } from '~/shared/components/title-with-description/TitleWithDescription.styles';
 
-type Paragraph = Readonly<{
+export type Paragraph = Readonly<{
   id: number;
   text: string;
 }>;
 
-type RichContent = string | Paragraph[] | TipTapDoc;
+export type RichContent = string | Paragraph[] | TipTapDoc;
 
 type ContentBlockProps = Readonly<{
   title?: string;

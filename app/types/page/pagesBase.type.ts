@@ -9,6 +9,7 @@ import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.s
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
+import { WarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
 
 export type AboutUsPageBase = ExcludeDBFields<z.infer<typeof AboutUsPageSchema>>;
 export type PrivacyPolicyPageBase = ExcludeDBFields<z.infer<typeof PrivacyPolicyPageSchema>>;
@@ -16,6 +17,7 @@ export type ResearchPageBase = ExcludeDBFields<z.infer<typeof ResearchPageSchema
 export type BiographyPageBase = ExcludeDBFields<z.infer<typeof BiographyPageSchema>>;
 export type CooperationPageBase = ExcludeDBFields<z.infer<typeof CooperationPageSchema>>;
 export type ArtistryPageBase = ExcludeDBFields<z.infer<typeof ArtistryPageSchema>>;
+export type WarInUkrainePageBase = ExcludeDBFields<z.infer<typeof WarInUkrainePageSchema>>;
 
 export interface PageBaseMap {
   'about-us': AboutUsPageBase;
@@ -24,6 +26,7 @@ export interface PageBaseMap {
   biography: BiographyPageBase;
   cooperation: CooperationPageBase;
   artistry: ArtistryPageBase;
+  'war-in-ukraine': WarInUkrainePageBase;
 }
 
 export type AboutUsPage = Localize<AboutUsPageBase>;
@@ -32,6 +35,7 @@ export type ResearchPage = Localize<ResearchPageBase>;
 export type BiographyPage = Localize<BiographyPageBase>;
 export type CooperationPage = Localize<CooperationPageBase>;
 export type ArtistryPage = Localize<ArtistryPageBase>;
+export type WarInUkrainePage = Localize<WarInUkrainePageBase>;
 
 export interface PageDataMap {
   'about-us': AboutUsPage;
@@ -40,6 +44,7 @@ export interface PageDataMap {
   biography: BiographyPage;
   cooperation: CooperationPage;
   artistry: ArtistryPage;
+  'war-in-ukraine': WarInUkrainePage;
 }
 
 export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;
