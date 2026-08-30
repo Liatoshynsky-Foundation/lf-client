@@ -39,7 +39,7 @@ export const ImageSchema = BaseImageSchema.transform((image) => ({
 const BaseOptionalCaptionImageSchema = z.object({
   src: z.string(),
   alt: translatedTipTapSchema,
-  caption: translatedTipTapSchema.nullable().optional(),
+  caption: translatedTipTapSchema.nullable().catch(null),
   crop: CropRectSchema
 });
 
