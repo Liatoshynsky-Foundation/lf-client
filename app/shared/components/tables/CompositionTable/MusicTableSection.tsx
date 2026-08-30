@@ -10,6 +10,7 @@ import {
   RenderExpanderCell,
   RenderGenreCell,
   RenderGenreHeader,
+  renderGroupActionsCell,
   renderNameCell,
   RenderNameHeader,
   renderOpusGenreGroupLabel,
@@ -90,7 +91,8 @@ export default function MusicTableSection() {
         opusYear: finalOpusYear,
         opusGenres: group.genre ? [group.genre] : [],
         audios: comp.audios ?? undefined,
-        opusId: group._id
+        opusId: group._id,
+        opusyoutubeUrls: group.youtubeUrls ?? []
       }));
 
       return {
@@ -165,7 +167,8 @@ export default function MusicTableSection() {
       {
         id: 'actions',
         header: '',
-        cell: (info) => RenderActionsCell(info, handleOpenModal)
+        cell: (info) => RenderActionsCell(info, handleOpenModal),
+        meta: { groupLabelContentFactory: (items: Music[]) => renderGroupActionsCell(items) }
       }
     ],
     []

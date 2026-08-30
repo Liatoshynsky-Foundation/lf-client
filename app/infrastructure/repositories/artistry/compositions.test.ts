@@ -5,6 +5,7 @@ import newCompositionsRepository from './compositions.repository';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import { namedFilterHelper, yearHelper } from '~/lib/utils/searchAndFiltersHelpers';
 
 jest.mock('~/infrastructure/db/connect', () => ({ __esModule: true, default: jest.fn() }));
 
@@ -78,6 +79,23 @@ describe('compositionsRepository', () => {
   });
 
   describe('getArtistrySearchSuggestions', () => {
+    it('should use default parameter when filters are omitted and skip $match when conditions are empty', async () => {
+      (yearHelper as jest.Mock).mockReturnValueOnce(null);
+
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getArtistrySearchSuggestions();
+
+      const pipeline = (Opus.aggregate as jest.Mock).mock.calls[0][0] as PipelineStage[];
+
+      const matchStage = pipeline.find((stage) => {
+        const match = (stage as PipelineStage.Match).$match;
+        return match && '$and' in match;
+      });
+
+      expect(matchStage).toBeUndefined();
+    });
+
     it('should handle search, years and successful filters', async () => {
       (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
 
@@ -97,6 +115,56 @@ describe('compositionsRepository', () => {
     it('should return [] if category keys provided but none found in DB', async () => {
       (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
       const res = await compositionsRepository.getArtistrySearchSuggestions({ category: ['none'] });
+      expect(res).toEqual([]);
+    });
+
+    it('should parse both opus and compositions from aggregate result when opusMatchesSearch is true', async () => {
+      (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([{ _id: validMongoId }]));
+      (Opus.aggregate as jest.Mock).mockReturnValue(
+        mockAggregateChain([
+          {
+            _id: validMongoId,
+            title: { uk: 'Опус', en: 'Opus' },
+            number: 1,
+            numberKind: 'op',
+            opusMatchesSearch: true,
+            compositions: [{ _id: '507f191e810c19729de860eb', name: { uk: 'Комп', en: 'Comp' } }]
+          }
+        ])
+      );
+
+      const res = await compositionsRepository.getArtistrySearchSuggestions({ search: 'Opus' });
+
+      expect(res).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ type: 'opus', _id: validMongoId }),
+          expect.objectContaining({ type: 'composition', _id: '507f191e810c19729de860eb' })
+        ])
+      );
+    });
+
+    it('should handle missing compositions array and opusMatchesSearch false in getArtistrySearchSuggestions', async () => {
+      (Opus.aggregate as jest.Mock).mockReturnValue(
+        mockAggregateChain([
+          {
+            _id: validMongoId,
+            title: { uk: 'Опус', en: 'Opus' },
+            opusMatchesSearch: false
+          }
+        ])
+      );
+
+      const res = await compositionsRepository.getArtistrySearchSuggestions({ search: 'Opus' });
+
+      expect(res).toEqual([]);
+    });
+
+    it('should handle undefined categoryKeys from namedFilterHelper in buildCommonAndConditions', async () => {
+      (namedFilterHelper as jest.Mock).mockReturnValueOnce(undefined);
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      const res = await compositionsRepository.getAllCompositions();
+
       expect(res).toEqual([]);
     });
   });
@@ -237,6 +305,26 @@ describe('compositionsRepository', () => {
 
       expect(result).toEqual({ minYear: 1912, maxYear: 1976 });
     });
+
+    it('should handle yearTo without yearFrom', async () => {
+      (Opus.aggregate as jest.Mock).mockReturnValue(mockAggregateChain([]));
+
+      await compositionsRepository.getArtistrySearchSuggestions({ yearTo: 2020 });
+
+      expect(Opus.aggregate).toHaveBeenCalled();
+    });
+
+    it('should return empty array directly when noCategoryMatches is true', async () => {
+      (Category.find as jest.Mock).mockReturnValue(mockMongooseChain([]));
+      (Opus.aggregate as jest.Mock).mockClear();
+
+      const result = await compositionsRepository.getAllCompositions(undefined, {
+        categories: ['non-existent-category']
+      });
+
+      expect(result).toEqual([]);
+      expect(Opus.aggregate).not.toHaveBeenCalled();
+    });
   });
 
   describe('getOpusById', () => {
@@ -304,6 +392,60 @@ describe('compositionsRepository', () => {
       const result = await compositionsRepository.getOpusById(validMongoId);
 
       expect(result?.compositions.map((c) => String(c._id))).toEqual([secondId, validMongoId]);
+    });
+
+    it('should fall back to empty array if opus.compositions is undefined', async () => {
+      const opusWithoutComps = {
+        _id: validMongoId,
+        number: 16,
+        numberKind: 'bo',
+        title: { uk: 'Український квінтет', en: 'Ukrainian Quintet' },
+        creationYear: '1929'
+      };
+
+      (Opus.findById as jest.Mock).mockReset().mockReturnValue(mockMongooseChain(opusWithoutComps));
+      (Compositions.find as jest.Mock).mockReset().mockReturnValue(mockMongooseChain([]));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+
+      expect(result).toEqual({ opus: opusWithoutComps, compositions: [] });
+    });
+
+    it('should fall back to index 0 when sorting compositions if a composition id is not in opus.compositions', async () => {
+      const unknownId = '507f191e810c19729de860ef';
+      const dbCompositions = [{ ...compositionDoc, _id: unknownId }, compositionDoc];
+
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(opusDoc));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(dbCompositions));
+
+      const result = await compositionsRepository.getOpusById(validMongoId);
+      expect(result?.compositions.length).toBe(2);
+    });
+
+    it('should hit fallback ?? 0 for both a and b when sorting compositions if ids are missing from opus', async () => {
+      const opusId = '507f191e810c19729de860e1';
+      const expectedCompId = '507f191e810c19729de860e0';
+
+      const opusMock = {
+        _id: opusId,
+        number: 1,
+        title: { uk: 'Т', en: 'T' },
+        compositions: [expectedCompId]
+      };
+
+      const unexpectedId1 = '507f191e810c19729de860e2';
+      const unexpectedId2 = '507f191e810c19729de860e3';
+      const dbCompositions = [
+        { _id: unexpectedId1, name: { uk: '1', en: '1' } },
+        { _id: unexpectedId2, name: { uk: '2', en: '2' } }
+      ];
+
+      (Opus.findById as jest.Mock).mockReturnValue(mockMongooseChain(opusMock));
+      (Compositions.find as jest.Mock).mockReturnValue(mockMongooseChain(dbCompositions));
+
+      const result = await compositionsRepository.getOpusById(opusId);
+
+      expect(result?.compositions.length).toBe(2);
     });
   });
 });

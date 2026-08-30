@@ -7,6 +7,7 @@ import { ApiRoutes } from '~/constants/routes/api-routes';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
+import { useTableData } from '~/shared/hooks/use-table-data/useTableData';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 
 interface LinkProps {
@@ -73,6 +74,8 @@ const musicTableMock = [
     title: 'Group 1',
     name: 'Group 1',
     creationYear: '2000',
+    endYear: '2005',
+    additionalText: 'posth.',
     genre: 'Романс',
     status: 'published',
     compositions: [{ _id: '1', name: 'Composition 1', year: 2000, genre: 'Романс, Джаз' }]
@@ -81,12 +84,16 @@ const musicTableMock = [
     _id: 'group2',
     number: 2,
     numberKind: 'sineop',
-    title: 'Group 2',
     name: 'Group 2',
     creationYear: '1970',
-    genre: 'Рок',
     status: 'published',
-    compositions: [{ _id: '2', name: 'Composition 2', year: 1970, genre: 'Рок, Мистецька пісня' }]
+    compositions: [
+      {
+        _id: '2',
+        name: 'Composition 2',
+        year: 1970
+      }
+    ]
   }
 ];
 
@@ -160,10 +167,10 @@ jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
 }));
 
 jest.mock('~/shared/hooks/use-table-data/useTableData', () => ({
-  useTableData: () => ({
+  useTableData: jest.fn(() => ({
     data: musicTableMock,
     isLoading: false
-  })
+  }))
 }));
 
 let storedSelectFn: ((json: unknown) => unknown) | null = null;
@@ -195,7 +202,6 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
     EnhancedTable: ({ data, tableName, Filters, Search, columns, preGroupedData }: EnhancedTableProps) => {
       const actionsColumn = columns.find((c) => c.id === 'actions');
       const opusColumn = columns.find((c) => c.id === 'opus');
-      const nameColumn = columns.find((c) => c.id === 'name');
 
       return (
         <div data-testid="enhanced-table">
@@ -228,11 +234,12 @@ jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => {
               opus
             </button>
           )}
-          {opusColumn?.meta?.groupLabelContentFactory && (
-            <div data-testid="opus-group-factory">{opusColumn.meta.groupLabelContentFactory([] as unknown[])}</div>
-          )}
-          {nameColumn?.meta?.groupLabelContentFactory && (
-            <div data-testid="name-group-factory">{nameColumn.meta.groupLabelContentFactory([] as unknown[])}</div>
+          {columns.map((c) =>
+            c.meta?.groupLabelContentFactory ? (
+              <div key={c.id} data-testid={`${c.id}-group-factory`}>
+                {c.meta.groupLabelContentFactory([] as unknown[])}
+              </div>
+            ) : null
           )}
           {(preGroupedData ? preGroupedData.flatMap((g) => g.items) : data).map((row) => {
             const record = row as { id: string; name: string };
@@ -315,8 +322,11 @@ jest.mock('./MusicTableCells', () => ({
   renderOpusTitleGroupLabel: () => <div data-testid="inner-opus-title-group" />,
   RenderYearHeader: () => <div />,
   renderYearCell: () => <div />,
+  renderOpusYearGroupLabel: () => <div data-testid="inner-year-group" />,
   RenderGenreHeader: () => <div />,
   RenderGenreCell: () => <div />,
+  renderOpusGenreGroupLabel: () => <div data-testid="inner-genre-group" />,
+  renderGroupActionsCell: () => <div data-testid="inner-actions-group" />,
   RenderActionsCell: (info: unknown, handleOpenModal: (payload: { composition: string; notes: unknown[] }) => void) => {
     mockActionCellReceivedCb = handleOpenModal;
     return <div />;
@@ -470,6 +480,9 @@ describe('MusicTableSection (cleaned)', () => {
     render(<MusicTableSection />);
     expect(screen.getByTestId('opus-group-factory')).toBeInTheDocument();
     expect(screen.getByTestId('name-group-factory')).toBeInTheDocument();
+    expect(screen.getByTestId('year-group-factory')).toBeInTheDocument();
+    expect(screen.getByTestId('genre-group-factory')).toBeInTheDocument();
+    expect(screen.getByTestId('actions-group-factory')).toBeInTheDocument();
   });
 
   it('should evaluate conditional branch fallbacks when static input category and genre details resolve to null fields', () => {
@@ -541,6 +554,17 @@ describe('MusicTableSection (cleaned)', () => {
     render(<MusicTableSection />);
 
     fireEvent.click(screen.getByTestId('trigger-opus-cell'));
+
+    expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
+  });
+
+  it('should fallback rawData to an empty array when useTableData returns undefined data', () => {
+    (useTableData as jest.Mock).mockReturnValueOnce({
+      data: undefined,
+      isLoading: false
+    });
+
+    render(<MusicTableSection />);
 
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
   });

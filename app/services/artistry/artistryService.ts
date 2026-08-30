@@ -157,7 +157,14 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
     const allSongs = await compositionsRepo.getAllCompositions(search, filters);
     if (!allSongs) return [];
 
-    return ArraySchema(LocalizeSchema(opusGroupSchema, locale, { fallbackFields: ['name', 'title'] })).parse(allSongs);
+    const localized = ArraySchema(LocalizeSchema(opusGroupSchema, locale, { fallbackFields: ['name', 'title'] })).parse(
+      allSongs
+    );
+
+    return localized.map((opus, index) => ({
+      ...opus,
+      youtubeUrls: mapVideos(allSongs[index].performances, locale).map((v) => v.youTubeId)
+    }));
   },
 
   async getSearchAutocompleteOptions(locale: Locale, filters: CompositionsTitleFilters = {}) {
