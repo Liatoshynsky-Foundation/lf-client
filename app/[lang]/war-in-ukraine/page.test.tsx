@@ -3,13 +3,13 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import type { VolunteerDonationProps } from '~/components/blocks/volunteer-donation/VolunteerDonation';
-import type { WarCarouselSectionProps } from '~/components/blocks/war-carousel/WarCarouselSection';
 import type { WarInfoSectionProps } from '~/components/blocks/war-info/WarInfoSection';
 
 import WarInUkraine, { generateMetadata } from './page';
 import type { WarInUkrainePage } from '~/types/page/pagesBase.type';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
+import type { ImageCarouselSectionProps } from '~/shared/components/blocks/image-carousel-section/ImageCarouselSection';
 import type { PrincipleOfHopeProps } from '~/shared/components/blocks/principle-of-hope/PrincipleOfHope';
 import type { YermolenkoLinksProps } from '~/shared/components/blocks/yermolenko-links/YermolenkoLinks';
 
@@ -27,9 +27,11 @@ jest.mock('~/components/blocks/war-info/WarInfoSection', () => ({
   default: (props: WarInfoSectionProps) => <div data-testid="war-info">{JSON.stringify(props.data)}</div>
 }));
 
-jest.mock('~/components/blocks/war-carousel/WarCarouselSection', () => ({
+jest.mock('~/shared/components/blocks/image-carousel-section/ImageCarouselSection', () => ({
   __esModule: true,
-  default: (props: WarCarouselSectionProps) => <div data-testid="war-carousel">{JSON.stringify(props.data)}</div>
+  default: (props: ImageCarouselSectionProps) => (
+    <div data-testid="image-carousel-section">{JSON.stringify(props.data)}</div>
+  )
 }));
 
 jest.mock('~/components/blocks/volunteer-donation/VolunteerDonation', () => ({
@@ -134,7 +136,7 @@ describe('WarInUkraine page', () => {
 
       expect(screen.getByTestId('war-info')).toHaveTextContent('War info data');
       expect(screen.getByTestId('principle-of-hope')).toHaveTextContent('Hope');
-      expect(screen.getByTestId('war-carousel')).toBeInTheDocument();
+      expect(screen.getByTestId('image-carousel-section')).toBeInTheDocument();
       expect(screen.getByTestId('yermolenko-links')).toHaveTextContent('Links');
       expect(screen.getByTestId('volunteer-donation')).toHaveTextContent('Donate');
     });

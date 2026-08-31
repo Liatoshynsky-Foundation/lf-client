@@ -15,7 +15,7 @@ import { getDynamicRoute, ROUTES } from '~/shared/components/constants/routes';
 
 type OpusPageParams = {
   lang: Locale;
-  opus: string;
+  slug: string;
 };
 
 type OpusPageProps = {
@@ -23,49 +23,46 @@ type OpusPageProps = {
 };
 
 type ArtistryServiceSlice = {
-  getOpusDetailsById: (locale: Locale, id: string) => Promise<OpusDetailsDTO | null>;
+  getOpusDetailsBySlug: (locale: Locale, slug: string) => Promise<OpusDetailsDTO | null>;
 };
 
-async function getOpusDetails(locale: Locale, opusId: string): Promise<OpusDetailsDTO | null> {
+async function getOpusDetails(locale: Locale, slug: string): Promise<OpusDetailsDTO | null> {
   const container = createRequestContainer();
   const artistryService = container.resolve('artistryService') as ArtistryServiceSlice;
 
-  return artistryService.getOpusDetailsById(locale, opusId);
+  return artistryService.getOpusDetailsBySlug(locale, slug);
 }
 
 export async function generateMetadata({ params }: Readonly<OpusPageProps>): Promise<Metadata> {
-  const { lang, opus } = await params;
+  const { lang, slug } = await params;
 
-  const opusDetails = await getOpusDetails(lang, opus);
+  const opusDetails = await getOpusDetails(lang, slug);
 
   if (!opusDetails) {
     return createSeoMeta({
       title: 'Опус не знайдено',
       description: 'Запитуваний опус не знайдено.',
-      url: getDynamicRoute.opus(opus),
+      url: getDynamicRoute.opus(slug),
       locale: lang
     });
   }
 
-  const title = `${opusDetails.number} — ${opusDetails.title}`;
-  const description = opusDetails.description ?? `${opusDetails.title} (${opusDetails.number}).`;
-
   return createSeoMeta({
-    title,
-    description,
-    url: getDynamicRoute.opus(opus),
+    title: opusDetails.title,
+    description: opusDetails.description ?? '',
+    url: getDynamicRoute.opus(slug),
     locale: lang
   });
 }
 
 export default async function OpusPage({ params }: Readonly<OpusPageProps>) {
-  const { lang, opus } = await params;
+  const { lang, slug } = await params;
 
   setRequestLocale(lang);
 
   const [t, opusDetails] = await Promise.all([
     getTranslations({ locale: lang, namespace: 'opusDetails' }),
-    getOpusDetails(lang, opus)
+    getOpusDetails(lang, slug)
   ]);
 
   if (!opusDetails) {

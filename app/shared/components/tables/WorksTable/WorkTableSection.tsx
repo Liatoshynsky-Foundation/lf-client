@@ -16,9 +16,9 @@ import {
   RenderYearHeader
 } from './WorkTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
-import { TitleOption } from '~/types/types/composition.types';
 import { ScientificFiltersType, WorkTableFilters } from '~/types/types/tableFilters.types';
 
+import { SearchAutocompleteDTO } from '~/domain/dto/composition.dto';
 import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
@@ -53,14 +53,15 @@ export const WorkTableSection = () => {
   );
 
   const selectTitles = useCallback((json: unknown) => {
-    const rawTitles = (json as { titles: { _id: string; title: string }[] }).titles;
+    const rawTitles = (json as { titles: SearchAutocompleteDTO[] }).titles;
     return rawTitles.map((t) => ({
-      ...t,
-      kind: 'composition' as const
-    })) as TitleOption[];
+      _id: t._id,
+      name: t.name,
+      type: t.type ?? 'composition'
+    })) as SearchAutocompleteDTO[];
   }, []);
 
-  const { options: titleOptions } = useFilterAutocomplete<WorkTableFilters, TitleOption>({
+  const { options: titleOptions } = useFilterAutocomplete<WorkTableFilters, SearchAutocompleteDTO>({
     endpoint: ApiRoutes.SCIENTIFIC_WORKS_TITLES,
     params,
     select: selectTitles

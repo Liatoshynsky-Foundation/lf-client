@@ -1,10 +1,12 @@
-import type { RichContent } from '~/shared/components/design-system/all-components/content-block/ContentBlock';
+import { TipTapDoc } from '~/types/types/tiptap.types';
+
+import { MusicItem, OpusGalleryItem } from '~/domain/entities/artistry.entity';
 
 export type OpusComposition = {
   id: string;
   index: number;
-  title: string;
-  sheetMusicUrl?: string;
+  name: string;
+  sheetMusic?: MusicItem[];
 };
 
 export type OpusVideo = {
@@ -28,15 +30,16 @@ export type OpusDetailsLabels = {
 };
 
 export interface OpusDetailsProps {
-  title: string;
+  name: string;
   number: string;
-  creationDate?: string;
+  year?: string;
   genre?: string;
   movements?: string[];
-  sheetMusicUrl?: string;
-  description?: RichContent | null;
+  sheetMusic?: MusicItem | null;
+  introDescription: TipTapDoc | null;
   compositions?: OpusComposition[];
   videos?: OpusVideo[];
+  gallery?: OpusGalleryItem[];
   backHref: string;
   labels: OpusDetailsLabels;
 }

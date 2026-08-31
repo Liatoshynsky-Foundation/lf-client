@@ -1,4 +1,7 @@
+import type { TipTapDoc } from '~/types/types/tiptap.types';
+
 import type { OpusDetailsDTO } from '~/domain/dto/composition.dto';
+import { parseTipTapString } from '~/lib/utils/tiptapHelpers';
 import type {
   OpusComposition,
   OpusDetailsProps,
@@ -8,37 +11,31 @@ import type {
 export type OpusDetailsContent = Omit<OpusDetailsProps, 'backHref' | 'labels'>;
 
 export function mapOpusDetailsToProps(opusDetails: OpusDetailsDTO): OpusDetailsContent {
-  const compositions: OpusComposition[] = opusDetails.compositions.map((composition) => ({
+  const compositions: OpusComposition[] = (opusDetails.compositions || []).map((composition, index) => ({
     id: composition._id,
-    index: composition.index,
-    title: composition.title,
-    sheetMusicUrl: composition.sheetMusicUrl
+    index: index + 1,
+    name: composition.name,
+    sheetMusic: composition.sheetMusic || undefined
   }));
 
-  const videos: OpusVideo[] = opusDetails.videos.map((video) => ({
+  const videos: OpusVideo[] = (opusDetails.videos || []).map((video) => ({
     id: video._id,
     youTubeId: video.youTubeId,
-    title: video.title
+    title: video.title || ''
   }));
 
-  const parseDescription = (desc?: string | null) => {
-    if (!desc || desc.trim().length === 0) return null;
-    try {
-      return JSON.parse(desc);
-    } catch {
-      return desc;
-    }
-  };
-
   return {
-    title: opusDetails.title,
+    name: opusDetails.name,
     number: opusDetails.number,
-    creationDate: opusDetails.creationDate,
-    genre: opusDetails.genre,
-    movements: opusDetails.movements,
-    sheetMusicUrl: opusDetails.sheetMusicUrl,
-    description: parseDescription(opusDetails.description),
+    year: opusDetails.year,
+    genre: opusDetails.genre || undefined,
+    introDescription: opusDetails.introDescription
+      ? (parseTipTapString(opusDetails.introDescription) as TipTapDoc)
+      : null,
+    movements: opusDetails.movements || undefined,
+    sheetMusic: opusDetails.sheetMusic || null,
     compositions,
-    videos
+    videos,
+    gallery: opusDetails.gallery
   };
 }

@@ -4,14 +4,14 @@ import { Box, type BoxProps } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 
-import { styles } from './WarCarouselSection.styles';
+import { styles } from './ImageCarouselSection.styles';
 import { sxToArray } from '~/utils/sxToArray';
 
 import { CropRect } from '~/lib/utils/cropUtils';
 import Carousel from '~/shared/components/design-system/all-components/carousel/Carousel';
 import { IMAGES } from '~/shared/constants/assets';
 
-export type WarCarouselSectionProps = BoxProps & {
+export type ImageCarouselSectionProps = BoxProps & {
   data?: {
     images?: Array<{
       id?: string | number;
@@ -24,7 +24,7 @@ export type WarCarouselSectionProps = BoxProps & {
   };
 };
 
-const WarCarouselSection: React.FC<WarCarouselSectionProps> = ({ sx, data, ...props }) => {
+const ImageCarouselSection: React.FC<ImageCarouselSectionProps> = ({ sx, data, ...props }) => {
   const t = useTranslations('warCarousel');
   const locale = useLocale() as 'uk' | 'en';
 
@@ -80,4 +80,4 @@ const WarCarouselSection: React.FC<WarCarouselSectionProps> = ({ sx, data, ...pr
   );
 };
 
-export default WarCarouselSection;
+export default ImageCarouselSection;

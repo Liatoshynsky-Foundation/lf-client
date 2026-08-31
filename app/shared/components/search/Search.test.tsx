@@ -24,16 +24,22 @@ jest.mock('@mui/material/useMediaQuery', () => {
 });
 
 describe('Search', () => {
+  const createOpt = (id: string, name: string, type: TitleOption['type'] = 'composition'): TitleOption => ({
+    _id: id,
+    name,
+    type
+  });
+
   const options: TitleOption[] = [
-    { _id: '1', title: 'Test Song', type: 'composition' },
-    { _id: '2', title: 'Another Song', type: 'composition' },
-    { _id: '3', title: { en: 'Specific Track', uk: 'Специфічний Трек' }, type: 'composition' },
-    { _id: '4', title: 'Song Exact Match', type: 'composition' },
-    { _id: '5', title: 'Prefix Match Song', type: 'composition' },
-    { _id: '6', title: 'Opus Track', type: 'opus' },
-    { _id: '7', title: 'B Exact Match', type: 'composition' },
-    { _id: '8', title: 'Track Prefix Match', type: 'composition' },
-    { _id: '9', title: 'Some Long Track Name', type: 'composition' }
+    createOpt('1', 'Test Song'),
+    createOpt('2', 'Another Song'),
+    createOpt('3', 'Specific Track', 'genre'),
+    createOpt('4', 'Song Exact Match'),
+    createOpt('5', 'Prefix Match Song'),
+    createOpt('6', 'Opus Track', 'opus'),
+    createOpt('7', 'B Exact Match'),
+    createOpt('8', 'Track Prefix Match'),
+    createOpt('9', 'Some Long Track Name')
   ];
 
   const renderSearch = (opts = options, initialSearch = '') => {
@@ -48,16 +54,24 @@ describe('Search', () => {
     jest.clearAllMocks();
   });
 
-  it('should render the input and fetches options', async () => {
-    const { input } = renderSearch();
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  const changeInput = (input: HTMLElement, value: string) => {
     act(() => {
       input.focus();
     });
-    fireEvent.change(input, { target: { value: 'T' } });
+    fireEvent.change(input, { target: { value } });
+  };
+
+  const expectSearchResult = async (input: HTMLElement, searchVal: string, expectedText: string) => {
+    changeInput(input, searchVal);
     await waitFor(() => {
-      expect(screen.getByText(options[0].title as string)).toBeInTheDocument();
+      expect(screen.getByText(expectedText)).toBeInTheDocument();
     });
+  };
+
+  it('should render the input and fetches options', async () => {
+    const { input } = renderSearch();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    await expectSearchResult(input, 'T', options[0].name);
   });
 
   it('should NOT call setSearch on input change', async () => {
@@ -79,25 +93,15 @@ describe('Search', () => {
 
   it('should call setSearch when option is selected', async () => {
     const { setSearch, input } = renderSearch();
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Test' } });
-    await waitFor(() => {
-      fireEvent.click(screen.getByText(options[0].title as string));
-    });
-    expect(setSearch).toHaveBeenCalledWith(options[0].title as string);
+    changeInput(input, 'Test');
+    const optionElement = await screen.findByText(options[0].name);
+    fireEvent.click(optionElement);
+    expect(setSearch).toHaveBeenCalledWith(options[0].name);
   });
 
   it('should display no options text when no results', async () => {
     const { input } = renderSearch([], 'xyz');
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Bohemian' } });
-    await waitFor(() => {
-      expect(screen.getByText('Not found')).toBeInTheDocument();
-    });
+    await expectSearchResult(input, 'Bohemian', 'Not found');
   });
 
   it('should focus input when search icon is clicked', async () => {
@@ -133,10 +137,7 @@ describe('Search', () => {
 
   it('should invoke setSearch during onBlur event if inputValue differs from current search state', async () => {
     const { setSearch, input } = renderSearch(options, 'Initial');
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Changed Text' } });
+    changeInput(input, 'Changed Text');
     act(() => {
       input.blur();
     });
@@ -161,13 +162,7 @@ describe('Search', () => {
     { name: 'opus identifiers', val: 'Opus', expected: 'Opus Track' }
   ])('should process $name correctly', async ({ val, expected }) => {
     const { input } = renderSearch();
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: val } });
-    await waitFor(() => {
-      expect(screen.getByText(expected)).toBeInTheDocument();
-    });
+    await expectSearchResult(input, val, expected);
   });
 
   it('should alternate responsive icon style parameters when render context detects mobile breakpoints', () => {
@@ -185,141 +180,61 @@ describe('Search', () => {
     expect(input).toBeInTheDocument();
   });
 
-  it('should satisfy the bLabel exact match condition inside sorting block to cover line 146 fully', async () => {
-    const customOptions = [
-      { _id: 'a', title: 'Z Random Track Name', type: 'composition' },
-      { _id: 'b', title: 'Target', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Target' } });
-    await waitFor(() => {
-      expect(screen.getByText('Target')).toBeInTheDocument();
-    });
-  });
+  const testSorting = async (customOptions: TitleOption[], searchValue: string, expectedName: string) => {
+    const { input } = renderSearch(customOptions);
+    await expectSearchResult(input, searchValue, expectedName);
+  };
 
-  it('should satisfy the bLabel startsWith condition inside prefix matching block to cover line 154 fully', async () => {
-    const customOptions = [
-      { _id: 'a', title: 'Z Middle Contains Start Word', type: 'composition' },
-      { _id: 'b', title: 'Start Mirror Track', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Start' } });
-    await waitFor(() => {
-      expect(screen.getByText('Start Mirror Track')).toBeInTheDocument();
-    });
-  });
-
-  it('should calculate mismatched substring placement indices within labels to cover line 167 fully', async () => {
-    const customOptions = [
-      { _id: 'a', title: 'Z Word Long Long Long End', type: 'composition' },
-      { _id: 'b', title: 'Short Phrase Word Inside', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Word' } });
-    await waitFor(() => {
-      expect(screen.getByText('Short Phrase Word Inside')).toBeInTheDocument();
-    });
-  });
-
-  it('should test fallback alphabetical sorting for identical weights to cover remaining branch boundaries', async () => {
-    const customOptions = [
-      { _id: 'a', title: 'B Duplicate Track', type: 'composition' },
-      { _id: 'b', title: 'A Duplicate Track', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Duplicate' } });
-    await waitFor(() => {
-      expect(screen.getByText('A Duplicate Track')).toBeInTheDocument();
-    });
-  });
-
-  it('should fallback to uk title when en is missing to cover renderOption line 146', async () => {
-    const customOptions = [{ _id: 'a', title: { uk: 'Тільки Укр Трек' }, type: 'composition' }];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Укр' } });
-    await waitFor(() => {
-      expect(screen.getByText('Тільки Укр Трек')).toBeInTheDocument();
-    });
-  });
-
-  it('should return all options when trimmedInput is empty to cover filterOptions early return branch', async () => {
+  it('should return all options when trimmedInput is empty', async () => {
     const { input } = renderSearch();
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'T' } });
-    await waitFor(() => {
-      expect(screen.getByText('Test Song')).toBeInTheDocument();
-    });
-    fireEvent.change(input, { target: { value: '' } });
-    await waitFor(() => {
-      expect(screen.getByText('Another Song')).toBeInTheDocument();
-    });
+    await expectSearchResult(input, 'T', 'Test Song');
+    await expectSearchResult(input, '', 'Another Song');
   });
 
-  it('should satisfy both exact match comparator branches during insertion sort to cover lines 167 and 168', async () => {
-    const customOptions = [
-      { _id: 'a', title: 'Bxtarget', type: 'composition' },
-      { _id: 'b', title: 'Target', type: 'composition' },
-      { _id: 'c', title: 'Axtarget', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'target' } });
-    await waitFor(() => {
-      expect(screen.getByText('Target')).toBeInTheDocument();
-    });
+  it.each([
+    {
+      description: 'should satisfy the bLabel exact match condition inside sorting block',
+      customOptions: [createOpt('a', 'Z Random Track Name'), createOpt('b', 'Target')],
+      searchValue: 'Target',
+      expectedName: 'Target'
+    },
+    {
+      description: 'should satisfy the bLabel startsWith condition inside prefix matching block',
+      customOptions: [createOpt('a', 'Z Middle Contains Start Word'), createOpt('b', 'Start Mirror Track')],
+      searchValue: 'Start',
+      expectedName: 'Start Mirror Track'
+    },
+    {
+      description: 'should calculate mismatched substring placement indices within labels',
+      customOptions: [createOpt('a', 'Z Word Long Long Long End'), createOpt('b', 'Short Phrase Word Inside')],
+      searchValue: 'Word',
+      expectedName: 'Short Phrase Word Inside'
+    },
+    {
+      description: 'should test fallback alphabetical sorting for identical weights',
+      customOptions: [createOpt('a', 'B Duplicate Track'), createOpt('b', 'A Duplicate Track')],
+      searchValue: 'Duplicate',
+      expectedName: 'A Duplicate Track'
+    },
+    {
+      description: 'should satisfy both exact match comparator branches during insertion sort',
+      customOptions: [createOpt('a', 'Bxtarget'), createOpt('b', 'Target'), createOpt('c', 'Axtarget')],
+      searchValue: 'target',
+      expectedName: 'Target'
+    }
+  ])('$description', async ({ customOptions, searchValue, expectedName }) => {
+    await testSorting(customOptions, searchValue, expectedName);
   });
 
-  it('should call handleSelect with null value on blur after clearing input to cover lines 28 and 101', async () => {
+  it('should call handleSelect with null value on blur after clearing input', async () => {
     const { setSearch, input } = renderSearch();
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Test' } });
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Test Song'));
-    });
+    changeInput(input, 'Test');
+    const optionElement = await screen.findByText('Test Song');
+    fireEvent.click(optionElement);
     fireEvent.change(input, { target: { value: '' } });
     act(() => {
       input.blur();
     });
     expect(setSearch).toHaveBeenCalledWith('');
-  });
-
-  it('should fallback to empty string when title has neither en nor uk to cover line 146', async () => {
-    const customOptions = [
-      { _id: 'a', title: {}, type: 'composition' },
-      { _id: 'b', title: 'Filler Track', type: 'composition' }
-    ];
-    const { input } = renderSearch(customOptions as unknown as TitleOption[]);
-    act(() => {
-      input.focus();
-    });
-    fireEvent.change(input, { target: { value: 'Fill' } });
-    await waitFor(() => {
-      expect(screen.getByText('Filler Track')).toBeInTheDocument();
-    });
-    fireEvent.change(input, { target: { value: '' } });
-    await waitFor(() => {
-      expect(screen.getByText('Filler Track')).toBeInTheDocument();
-    });
   });
 });

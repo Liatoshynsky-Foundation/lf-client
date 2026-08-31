@@ -1,36 +1,34 @@
 import mongoose from 'mongoose';
 
-const MusicItemSchema = new mongoose.Schema(
+import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
+import { CompositionDocument } from '~/validators/artistry/composition.schema';
+
+export const musicItemSchema = new mongoose.Schema(
   {
     url: { type: String, required: true },
-    dateUploaded: { type: Date, default: Date.now },
-    isFree: { type: Boolean, default: false }
+    publishDate: { type: String, default: '' },
+    fileName: { type: String, default: null },
+    name: { type: String, required: true }
   },
   { _id: false }
 );
 
-const localizedFieldSchema = new mongoose.Schema(
-  {
-    uk: { type: String, required: true },
-    en: { type: String, required: true }
-  },
-  {
-    _id: false
-  }
-);
+const AudioItemSchema = new mongoose.Schema({
+  url: { type: String, required: true },
+  name: { type: String, required: true }
+});
 
-const songSchema = new mongoose.Schema(
+const compositionSchema = new mongoose.Schema<CompositionDocument>(
   {
-    opusId: { type: mongoose.Schema.Types.ObjectId, ref: 'Opus' },
-    name: { localizedFieldSchema },
+    name: translatedFieldSchema,
     year: { type: Number },
-    genre: { localizedFieldSchema },
+    genre: translatedFieldSchema,
     audioAvailable: { type: Boolean, default: true },
     sheetAvailable: { type: Boolean, default: true },
-    sheetMusic: [MusicItemSchema],
-    audios: [MusicItemSchema]
+    sheetMusic: [musicItemSchema],
+    audios: [AudioItemSchema]
   },
   { timestamps: true }
 );
 
-export const Compositions = mongoose.models.Compositions ?? mongoose.model('Compositions', songSchema);
+export const Compositions = mongoose.models.Compositions ?? mongoose.model('Compositions', compositionSchema);

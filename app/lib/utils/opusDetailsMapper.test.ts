@@ -4,19 +4,23 @@ import type { OpusDetailsDTO } from '~/domain/dto/composition.dto';
 
 const opusDetailsDto: OpusDetailsDTO = {
   _id: '63f8b3b7a8b3d6c1b3e8e4c1',
+  name: 'First Opus Name',
+  title: 'First Opus Title',
+  slug: 'first-opus',
   number: 'op. 1',
-  title: 'First Opus',
-  creationDate: '1929',
+  year: '1929',
   genre: 'Classical',
   movements: ['I. Allegro', 'II. Lento'],
-  sheetMusicUrl: 'https://example.com/opus-score.pdf',
+  sheetMusic: { url: 'https://example.com/opus-score.pdf', name: 'opus-score' },
+  introDescription: '{"type":"doc","content":[]}',
   description: 'A description',
+  gallery: [],
   compositions: [
     {
       _id: '63f8b3b7a8b3d6c1b3e8e4b1',
-      index: 1,
-      title: 'After the battle',
-      sheetMusicUrl: 'https://example.com/composition-score.pdf'
+      name: 'After the battle',
+      sheetAvailable: true,
+      sheetMusic: [{ url: 'https://example.com/composition-score.pdf', name: 'composition-score' }]
     }
   ],
   videos: [
@@ -33,19 +37,20 @@ describe('mapOpusDetailsToProps', () => {
     const result = mapOpusDetailsToProps(opusDetailsDto);
 
     expect(result).toEqual({
-      title: 'First Opus',
+      name: 'First Opus Name',
       number: 'op. 1',
-      creationDate: '1929',
+      year: '1929',
       genre: 'Classical',
       movements: ['I. Allegro', 'II. Lento'],
-      sheetMusicUrl: 'https://example.com/opus-score.pdf',
-      description: 'A description',
+      sheetMusic: { url: 'https://example.com/opus-score.pdf', name: 'opus-score' },
+      introDescription: { type: 'doc', content: [] },
+      gallery: [],
       compositions: [
         {
           id: '63f8b3b7a8b3d6c1b3e8e4b1',
           index: 1,
-          title: 'After the battle',
-          sheetMusicUrl: 'https://example.com/composition-score.pdf'
+          name: 'After the battle',
+          sheetMusic: [{ url: 'https://example.com/composition-score.pdf', name: 'composition-score' }]
         }
       ],
       videos: [
@@ -63,5 +68,31 @@ describe('mapOpusDetailsToProps', () => {
 
     expect(result.compositions).toEqual([]);
     expect(result.videos).toEqual([]);
+  });
+
+  it('should handle undefined optional fields and fallback properly', () => {
+    const result = mapOpusDetailsToProps({
+      _id: '123',
+      name: 'Name',
+      title: 'Title',
+      slug: 'slug',
+      number: '1',
+      year: '2023',
+      genre: undefined,
+      movements: undefined,
+      sheetMusic: undefined,
+      introDescription: undefined,
+      description: 'Desc',
+      gallery: [],
+      compositions: undefined,
+      videos: [{ _id: 'vid1', youTubeId: 'abc1234', title: undefined }]
+    });
+
+    expect(result.compositions).toEqual([]);
+    expect(result.videos).toEqual([{ id: 'vid1', youTubeId: 'abc1234', title: '' }]);
+    expect(result.genre).toBeUndefined();
+    expect(result.introDescription).toBeNull();
+    expect(result.movements).toBeUndefined();
+    expect(result.sheetMusic).toBeNull();
   });
 });

@@ -407,9 +407,9 @@ describe('MusicTableSection (cleaned)', () => {
     expect(storedSelectFn).toBeInstanceOf(Function);
 
     if (storedSelectFn) {
-      const mockRawPayload = { titles: [{ _id: 't1', title: 'Symphony testing' }] };
+      const mockRawPayload = { names: [{ _id: 't1', name: 'Symphony testing' }] };
       const resultingMapping = storedSelectFn(mockRawPayload);
-      expect(resultingMapping).toEqual([{ _id: 't1', title: 'Symphony testing' }]);
+      expect(resultingMapping).toEqual([{ _id: 't1', name: 'Symphony testing' }]);
     }
   });
 
