@@ -18,8 +18,8 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
 }));
 
 jest.mock('./CollapsibleDataRow', () => ({
-  CollapsibleDataRow: ({ row }: { row: { original: { name: string } } }) => (
-    <tr data-testid="collapsible-data-row">
+  CollapsibleDataRow: ({ row, isExpanded }: { row: { original: { name: string } }; isExpanded: boolean }) => (
+    <tr data-testid="collapsible-data-row" data-expanded={String(isExpanded)}>
       <td>{row.original.name}</td>
     </tr>
   )
@@ -65,7 +65,7 @@ type MockRowData = (typeof mockData)[0];
 const renderComponent = (props: Partial<CollapsibleRowProps<MockRowData>> = {}) => {
   const defaultProps: CollapsibleRowProps<MockRowData> = {
     data: mockData,
-    collapsed: false,
+    isExpanded: false,
     action: jest.fn(),
     columns,
     ...props
@@ -109,32 +109,34 @@ describe('CollapsibleRow', () => {
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
-  it('should render internal rows via CollapsibleDataRow when collapsed=true', () => {
-    renderComponent({ collapsed: true });
+  it('should pass expanded state to CollapsibleDataRow when isExpanded=true', () => {
+    renderComponent({ isExpanded: true });
 
     const rows = screen.getAllByTestId('collapsible-data-row');
     expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveAttribute('data-expanded', 'true');
     expect(within(rows[0]).getByText('Test 1')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Test 2')).toBeInTheDocument();
   });
 
   it.each([
-    { collapsed: true, value: 'Expand row group' },
-    { collapsed: false, value: 'Collapse row group' }
-  ])('should display correct ARIA labels for a row toggle when collapsed $collapsed', ({ collapsed, value }) => {
+    { isExpanded: true, value: 'Collapse row group' },
+    { isExpanded: false, value: 'Expand row group' }
+  ])('should display correct ARIA label when isExpanded is $isExpanded', ({ isExpanded, value }) => {
     renderComponent({
-      collapsed,
+      isExpanded,
       columns: [{ id: 'expander', header: '', cell: () => null }]
     });
     const toggle = screen.getByTestId('CollapsibleRow-mainOpus-toggle');
     expect(toggle).toHaveAttribute('aria-label', value);
+    expect(screen.getByTestId('CollapsibleRow-mainOpus')).toHaveAttribute('aria-expanded', String(isExpanded));
   });
 
   it('should render the toggle button with correct focus styles when navigate using keyboard', async () => {
     const user = userEvent.setup();
 
     renderComponent({
-      collapsed: true,
+      isExpanded: true,
       columns: [{ id: 'expander', header: '', cell: () => null }]
     });
 

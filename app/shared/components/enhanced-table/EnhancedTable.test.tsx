@@ -137,15 +137,35 @@ describe('EnhancedTable', () => {
     expect(screen.getAllByRole('row').length).toBeGreaterThan(0);
   });
 
-  it('should toggle group collapse state when clicking a collapsible group row to cover lines 93-95 and 221', () => {
+  it('should toggle group expansion state when clicking a collapsible group row', () => {
     render(
       <EnhancedTable data={mockData} columns={columns} tableName="Test Table" groupByKey="group" itemsPerPage={4} />
     );
 
     const groupRow = screen.getAllByTestId('CollapsibleRow-mainOpus')[0];
+    expect(groupRow).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
+
     fireEvent.click(groupRow);
 
-    expect(groupRow).toBeInTheDocument();
+    expect(groupRow).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+  });
+
+  it('should expand grouped rows by default while search is active', () => {
+    render(
+      <EnhancedTable
+        data={mockData}
+        columns={columns}
+        tableName="Test Table"
+        groupByKey="group"
+        itemsPerPage={4}
+        isSearchActive
+      />
+    );
+
+    expect(screen.getAllByTestId('CollapsibleRow-mainOpus')[0]).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
   });
 
   it('should use zero sibling count on mobile or tablet to cover line 221', async () => {

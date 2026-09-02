@@ -86,13 +86,13 @@ export const EnhancedTable = <T extends RowData>({
   preGroupedData
 }: Readonly<EnhancedTableProps<T>>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const t = useTranslations('common');
 
   const breakpoint = useBreakpoints();
 
-  const toggleGroupCollapse = (groupLabel: string) => {
-    setCollapsedGroups((prev) => {
+  const toggleGroupExpansion = (groupLabel: string) => {
+    setExpandedGroups((prev) => {
       const currentState = prev[groupLabel] ?? isSearchActive;
       return {
         ...prev,
@@ -225,8 +225,8 @@ export const EnhancedTable = <T extends RowData>({
                     <CollapsibleRow
                       key={`group-${entry.label}`}
                       data={entry.items}
-                      collapsed={collapsedGroups[entry.label] ?? isSearchActive}
-                      action={() => toggleGroupCollapse(entry.label)}
+                      isExpanded={expandedGroups[entry.label] ?? isSearchActive}
+                      action={() => toggleGroupExpansion(entry.label)}
                       columns={getGroupColumns(columns, entry.items)}
                     />
                   ) : (

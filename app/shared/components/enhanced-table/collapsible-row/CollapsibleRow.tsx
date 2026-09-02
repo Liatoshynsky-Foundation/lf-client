@@ -19,7 +19,7 @@ import chevronRight from '~/public/icons/chevron-right.svg';
 
 export interface CollapsibleRowProps<T extends RowData> {
   data: T[];
-  collapsed: boolean;
+  isExpanded: boolean;
   action: () => void;
   columns: ColumnDef<T, unknown>[];
 }
@@ -38,7 +38,7 @@ const getNextFactoryIndex = (currentIdx: number, factoryIndexes: number[], colum
 
 export const CollapsibleRow = <T extends RowData>({
   data,
-  collapsed,
+  isExpanded,
   action,
   columns
 }: Readonly<CollapsibleRowProps<T>>) => {
@@ -54,9 +54,9 @@ export const CollapsibleRow = <T extends RowData>({
   return (
     <>
       <TableRow
-        sx={styles.row(collapsed)}
+        sx={styles.row(isExpanded)}
         data-testid="CollapsibleRow-mainOpus"
-        aria-expanded={collapsed}
+        aria-expanded={isExpanded}
         onClick={(e) => {
           e.preventDefault();
           action();
@@ -72,7 +72,7 @@ export const CollapsibleRow = <T extends RowData>({
               <TableCell key={cellKey} sx={styles.cell}>
                 <Box sx={styles.cellInnerCentered}>
                   <IconButton
-                    aria-label={collapsed ? t('collapsibleRow.expand') : t('collapsibleRow.collapse')}
+                    aria-label={isExpanded ? t('collapsibleRow.collapse') : t('collapsibleRow.expand')}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -84,7 +84,7 @@ export const CollapsibleRow = <T extends RowData>({
                     data-testid="CollapsibleRow-mainOpus-toggle"
                   >
                     <Svg
-                      Component={collapsed ? chevronDown : chevronRight}
+                      Component={isExpanded ? chevronDown : chevronRight}
                       stroke={mainHexPallete.brown['700']}
                       alt="toggle"
                     />
@@ -124,7 +124,7 @@ export const CollapsibleRow = <T extends RowData>({
       </TableRow>
 
       {table.getRowModel().rows.map((row) => (
-        <CollapsibleDataRow key={row.id} row={row} collapsed={collapsed} />
+        <CollapsibleDataRow key={row.id} row={row} isExpanded={isExpanded} />
       ))}
     </>
   );
