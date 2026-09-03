@@ -8,7 +8,7 @@ export function useGroupedCompositions(rawData: readonly OpusListDTO[]) {
   return useMemo(() => {
     return rawData.map((group) => {
       const items: Music[] = (group.compositions || []).map((comp) => ({
-        id: group._id,
+        id: comp._id,
         opus: group.number,
         opusName: group.name,
         opusTitle: group.title,

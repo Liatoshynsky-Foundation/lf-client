@@ -31,16 +31,16 @@ describe('Search', () => {
   });
 
   const options: TitleOption[] = [
-    createOpt('1', 'Test Song'),
-    createOpt('2', 'Another Song'),
-    createOpt('3', 'Specific Track', 'genre'),
-    createOpt('4', 'Song Exact Match'),
-    createOpt('5', 'Prefix Match Song'),
-    createOpt('6', 'Opus Track', 'opus'),
-    createOpt('7', 'B Exact Match'),
-    createOpt('8', 'Track Prefix Match'),
-    createOpt('9', 'Some Long Track Name')
-  ];
+    ['Test Song'],
+    ['Another Song'],
+    ['Specific Track', 'genre'],
+    ['Song Exact Match'],
+    ['Prefix Match Song'],
+    ['Opus Track', 'opus'],
+    ['B Exact Match'],
+    ['Track Prefix Match'],
+    ['Some Long Track Name']
+  ].map(([name, type], i) => createOpt(String(i + 1), name as string, type as TitleOption['type']));
 
   const renderSearch = (opts = options, initialSearch = '') => {
     const setSearch = jest.fn();

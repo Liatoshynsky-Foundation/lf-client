@@ -119,9 +119,7 @@ export class OpusYearHandler implements PipelineFilterHandler {
       $or: [
         { creationYear: { $gte: minStr, $lte: maxStr } },
         { endYear: { $gte: minStr, $lte: maxStr } },
-        { 'compositions.year': { $gte: readyYearObject.min, $lte: readyYearObject.max } },
-        { 'compositions.year': null },
-        { 'compositions.year': { $exists: false } }
+        { 'compositions.year': { $gte: readyYearObject.min, $lte: readyYearObject.max } }
       ]
     };
   }

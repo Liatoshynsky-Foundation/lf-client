@@ -54,7 +54,7 @@ describe('useGroupedCompositions', () => {
 
     expect(result.current[0].items[0]).toEqual(
       expect.objectContaining({
-        id: 'opus-123',
+        id: 'comp-1',
         opus: '1',
         opusName: 'Symphony No. 1',
         opusTitle: 'Mock Title',
