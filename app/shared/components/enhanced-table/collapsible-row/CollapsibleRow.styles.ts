@@ -2,11 +2,11 @@ import type { SxProps, Theme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 
 export const collapsibleRowStyles = {
-  row: (collapsed: boolean): SxProps<Theme> => ({
-    py: collapsed ? 'auto' : 0,
+  row: (isExpanded: boolean): SxProps<Theme> => ({
+    py: isExpanded ? 'auto' : 0,
     overflow: 'hidden',
     transition: 'height 400ms ease',
-    backgroundColor: collapsed ? 'blue.75' : 'transparent',
+    backgroundColor: isExpanded ? 'blue.75' : 'transparent',
     cursor: 'pointer'
   }),
 
@@ -56,16 +56,16 @@ export const collapsibleRowStyles = {
     gap: 1
   },
 
-  collapsedCell: (collapsed: boolean): SxProps<Theme> => {
+  expandedCell: (isExpanded: boolean): SxProps<Theme> => {
     return (theme) => ({
-      py: collapsed ? 1.5 : 0,
+      py: isExpanded ? 1.5 : 0,
       px: 0,
-      borderBottom: collapsed ? '2px solid' : 'none',
-      borderColor: collapsed ? alpha(theme.palette.blue?.[200] || '#D9DCE8', 0.4) : 'transparent',
+      borderBottom: isExpanded ? '2px solid' : 'none',
+      borderColor: isExpanded ? alpha(theme.palette.blue?.[200] || '#D9DCE8', 0.4) : 'transparent',
       borderLeft: 'none',
       borderRight: 'none',
       borderTop: 'none',
-      backgroundColor: collapsed ? 'blue.75' : 'transparent'
+      backgroundColor: isExpanded ? 'blue.75' : 'transparent'
     });
   }
 };

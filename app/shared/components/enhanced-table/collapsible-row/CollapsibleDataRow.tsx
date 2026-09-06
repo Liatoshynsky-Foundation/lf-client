@@ -8,19 +8,19 @@ import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
 import { RowData } from '~/types/types/enhancedTable';
 interface CollapsibleDataRowProps<T extends RowData> {
   row: Row<T>;
-  collapsed: boolean;
+  isExpanded: boolean;
 }
 
-function CollapsibleDataRowComponent<T extends RowData>({ row, collapsed }: Readonly<CollapsibleDataRowProps<T>>) {
+function CollapsibleDataRowComponent<T extends RowData>({ row, isExpanded }: Readonly<CollapsibleDataRowProps<T>>) {
   return (
-    <TableRow data-testid={collapsed ? 'CollapsibleDataRow-expanded' : 'CollapsibleDataRow-expanded-empty'}>
+    <TableRow data-testid={isExpanded ? 'CollapsibleDataRow-expanded' : 'CollapsibleDataRow-expanded-empty'}>
       {row.getVisibleCells().map((cell) => (
         <TableCell
           key={cell.id}
-          sx={styles.collapsedCell(collapsed)}
+          sx={styles.expandedCell(isExpanded)}
           data-testid={`CollapsibleDataRow-expanded-${cell.id.split('_').at(1)}`}
         >
-          <Collapse in={collapsed} timeout={300} unmountOnExit>
+          <Collapse in={isExpanded} timeout={300} unmountOnExit>
             <Box>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Box>
           </Collapse>
         </TableCell>
