@@ -14,8 +14,8 @@ import { collapsibleRowStyles as styles } from './CollapsibleRow.styles';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
 import type { CollapsibleGroupColumnMeta, RowData } from '~/types/types/enhancedTable';
 
-import chevronDown from '~/public/icons/chevron-down.svg';
 import chevronRight from '~/public/icons/chevron-right.svg';
+import chevronUp from '~/public/icons/chevron-up.svg';
 
 export interface CollapsibleRowProps<T extends RowData> {
   data: T[];
@@ -84,7 +84,7 @@ export const CollapsibleRow = <T extends RowData>({
                     data-testid="CollapsibleRow-mainOpus-toggle"
                   >
                     <Svg
-                      Component={isExpanded ? chevronDown : chevronRight}
+                      Component={isExpanded ? chevronUp : chevronRight}
                       stroke={mainHexPallete.brown['700']}
                       alt="toggle"
                     />
