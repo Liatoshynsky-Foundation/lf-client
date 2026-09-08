@@ -20,7 +20,7 @@ import { Search } from '~/shared/components/search/Search';
 import { YearNumericFilter } from '~/shared/components/tables/WorksTable/filters/YearNumericFilter';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
-import { useGroupedCompositions } from '~/shared/hooks/use-grouped-composiions/useGroupedCompositions';
+import { useGroupedCompositions } from '~/shared/hooks/use-grouped-compositions/useGroupedCompositions';
 import { useTableData } from '~/shared/hooks/use-table-data/useTableData';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 import { useFilterAutocomplete } from '~/shared/hooks/useFilterAutocomplete/useFilterAutocomplete';

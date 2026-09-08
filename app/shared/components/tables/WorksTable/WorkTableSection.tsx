@@ -53,10 +53,10 @@ export const WorkTableSection = () => {
   );
 
   const selectTitles = useCallback((json: unknown) => {
-    const rawTitles = (json as { titles: SearchAutocompleteDTO[] }).titles;
+    const rawTitles = (json as { titles?: Array<SearchAutocompleteDTO & { title?: string }> })?.titles ?? [];
     return rawTitles.map((t) => ({
       _id: t._id,
-      name: t.name,
+      name: t.name || t.title || '',
       type: t.type ?? 'composition'
     })) as SearchAutocompleteDTO[];
   }, []);
