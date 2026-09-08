@@ -25,8 +25,8 @@ export function useCompositionPlayback(rowData: Music) {
     if (!canPlay) return;
 
     if (isCurrentTrack) togglePlay();
-    else playTrack(trackUrl, rowData.name);
-  }, [canPlay, isCurrentTrack, togglePlay, playTrack, trackUrl, rowData.name]);
+    else playTrack(trackUrl, rowData.opusName);
+  }, [canPlay, isCurrentTrack, togglePlay, playTrack, trackUrl, rowData.opusName]);
 
   return {
     canPlay,

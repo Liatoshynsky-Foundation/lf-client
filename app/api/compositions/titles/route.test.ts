@@ -89,11 +89,11 @@ describe('Compositions Titles Route (GET)', () => {
   });
 
   it('should map filters and return titles', async () => {
-    const mockSuggestions = [{ _id: '123', title: 'Bach Title', type: 'opus' }];
+    const mockSuggestions = [{ _id: '123', name: 'Bach Title', type: 'opus' }];
     mockArtistryService.getSearchAutocompleteOptions.mockResolvedValue(mockSuggestions);
 
     const req = { nextUrl: { searchParams: new URLSearchParams() } } as unknown as NextRequest;
-    const res = (await GET(req)) as NextResponse & { _testData: { titles: unknown } };
+    const res = (await GET(req)) as NextResponse & { _testData: { names: unknown } };
 
     expect(mockArtistryService.getSearchAutocompleteOptions).toHaveBeenCalledWith(mockLocale, {
       search: mockFilters.search,
@@ -101,7 +101,7 @@ describe('Compositions Titles Route (GET)', () => {
       yearFrom: mockFilters.years.min,
       yearTo: mockFilters.years.max
     });
-    expect(res._testData.titles).toEqual(mockSuggestions);
+    expect(res._testData.names).toEqual(mockSuggestions);
   });
 
   it('should handle service failure', async () => {

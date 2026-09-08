@@ -5,6 +5,7 @@ import OpusPage, { generateMetadata } from './page';
 
 import { createRequestContainer } from '~/di/container';
 import type { OpusDetailsDTO } from '~/domain/dto/composition.dto';
+import type { OpusDetailsProps } from '~/shared/components/blocks/opus-details/opusDetails.types';
 
 jest.mock('~/di/container', () => ({
   createRequestContainer: jest.fn()
@@ -28,26 +29,27 @@ jest.mock('~/layouts/main-layout/MainLayout', () => {
 });
 
 jest.mock('~/shared/components/blocks/opus-details/OpusDetails', () => {
-  type MockProps = { title: string; compositions: unknown[]; videos: unknown[]; backHref: string };
-  const MockOpusDetails = ({ title, compositions, videos, backHref }: MockProps) => (
+  const MockOpusDetails = ({ name, compositions, videos, backHref }: OpusDetailsProps) => (
     <div data-testid="opus-details" data-backhref={backHref}>
-      {`${title}|${compositions.length}|${videos.length}`}
+      {`${name}|${compositions?.length ?? 0}|${videos?.length ?? 0}`}
     </div>
   );
   MockOpusDetails.displayName = 'OpusDetails';
   return { __esModule: true, default: MockOpusDetails };
 });
 
-const getOpusDetailsById = jest.fn();
+const getOpusDetailsBySlug = jest.fn();
 
 const mockDto: OpusDetailsDTO = {
   _id: 'opus-id',
-  number: 'bo.16',
+  slug: 'ukrainskyi-kvintet',
+  name: 'Український квінтет',
   title: 'Український квінтет',
-  creationDate: '1929',
+  number: 'sine op. 16',
+  year: '1929',
   genre: 'Фортепіанний квінтет',
   description: null,
-  compositions: [{ _id: 'c1', index: 1, title: 'Після бою', sheetMusicUrl: 'https://example.com/c1.pdf' }],
+  compositions: [{ _id: 'c1', name: 'Після бою', sheetAvailable: false }],
   videos: [{ _id: 'v1', youTubeId: 'abc123', title: 'Виконання 1' }]
 };
 
@@ -55,32 +57,35 @@ describe('OpusPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (createRequestContainer as jest.Mock).mockReturnValue({
-      resolve: () => ({ getOpusDetailsById })
+      resolve: () => ({ getOpusDetailsBySlug })
     });
   });
 
-  const params = Promise.resolve({ lang: 'uk' as const, opus: 'opus-id' });
+  type OpusPageProps = Parameters<typeof OpusPage>[0];
+  const props: OpusPageProps = {
+    params: Promise.resolve({ lang: 'uk', slug: 'ukrainskyi-kvintet' })
+  };
 
   it('generates metadata from the opus details', async () => {
-    getOpusDetailsById.mockResolvedValue(mockDto);
+    getOpusDetailsBySlug.mockResolvedValue(mockDto);
 
-    const metadata = await generateMetadata({ params });
+    const metadata = await generateMetadata(props);
 
-    expect(metadata.title).toBe('bo.16 — Український квінтет');
+    expect(metadata.title).toBe('Український квінтет');
   });
 
   it('generates a not-found metadata when the opus is missing', async () => {
-    getOpusDetailsById.mockResolvedValue(null);
+    getOpusDetailsBySlug.mockResolvedValue(null);
 
-    const metadata = await generateMetadata({ params });
+    const metadata = await generateMetadata(props);
 
     expect(metadata.title).toBe('Опус не знайдено');
   });
 
   it('renders the opus details with mapped compositions and videos', async () => {
-    getOpusDetailsById.mockResolvedValue(mockDto);
+    getOpusDetailsBySlug.mockResolvedValue(mockDto);
 
-    const ui = await OpusPage({ params });
+    const ui = await OpusPage(props);
     render(ui);
 
     const block = screen.getByTestId('opus-details');
@@ -89,8 +94,8 @@ describe('OpusPage', () => {
   });
 
   it('calls notFound when the opus does not exist', async () => {
-    getOpusDetailsById.mockResolvedValue(null);
+    getOpusDetailsBySlug.mockResolvedValue(null);
 
-    await expect(OpusPage({ params })).rejects.toThrow('NEXT_NOT_FOUND');
+    await expect(OpusPage(props)).rejects.toThrow('NEXT_NOT_FOUND');
   });
 });

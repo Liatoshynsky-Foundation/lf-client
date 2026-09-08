@@ -19,31 +19,13 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import { SvgImage } from '../svg-image/SvgImage';
 import { VirtualizedListbox } from './LazyListItem';
-import { CustomBorderTextField, iconStyles, SearchStyles } from './SearchStyles';
-import { TitleOption } from '~/types/types/composition.types';
+import { CustomBorderTextField, styles } from './Search.styles';
 
+import { SearchAutocompleteDTO } from '~/domain/dto/composition.dto';
 import { normalizeSearch } from '~/lib/utils/normalizeSearch';
 
-const getOptionLabel = <T extends TitleOption>(option: T | string): string => {
-  if (typeof option === 'string') return option;
-
-  const titleStr = typeof option.title === 'string' ? option.title : option.title?.en || option.title?.uk || '';
-
-  if (option.opusContext) {
-    const isSineOp = option.opusContext.numberKind?.toLowerCase() === 'sineop';
-    const opusPrefix = isSineOp ? `sine op. ${option.opusContext.number}` : `op. ${option.opusContext.number}`;
-    const extra = option.opusContext.additionalText ? ` ${option.opusContext.additionalText}` : '';
-    const formattedOpus = `${opusPrefix}${extra}`;
-
-    if (option.type === 'opus') {
-      return `${formattedOpus} — ${titleStr}`;
-    }
-    if (option.type === 'composition') {
-      return `${titleStr} (${formattedOpus})`;
-    }
-  }
-
-  return titleStr;
+const getOptionLabel = <T extends SearchAutocompleteDTO>(option: T | string): string => {
+  return typeof option === 'string' ? option : option.name;
 };
 
 interface SearchProps<T> {
@@ -65,13 +47,13 @@ function getIconStyle(isMobile: boolean, focused: boolean) {
   }
 
   return {
-    ...SearchStyles.icon,
+    ...styles.searchStyles.icon,
     width,
     borderRadius
   };
 }
 
-export const Search = <T extends TitleOption>({ search, setSearch, options }: SearchProps<T>) => {
+export const Search = <T extends SearchAutocompleteDTO>({ search, setSearch, options }: SearchProps<T>) => {
   const theme = useTheme();
   const t = useTranslations('search');
 
@@ -135,24 +117,8 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
   const renderOption = useCallback((props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
     const { key, ...rest } = props;
     return (
-      <ListItem
-        key={key}
-        {...rest}
-        disableGutters
-        sx={{ height: 64, padding: 0, display: 'flex', alignItems: 'center', whiteSpace: 'normal' }}
-      >
-        <Typography
-          variant="customMedium16"
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            lineHeight: '1.2',
-            wordBreak: 'break-word'
-          }}
-        >
+      <ListItem key={key} {...rest} disableGutters sx={styles.optionListItem}>
+        <Typography variant="customMedium16" sx={styles.optionListItemText}>
           {getOptionLabel(option)}
         </Typography>
       </ListItem>
@@ -172,6 +138,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
       })
       .sort((a, b) => {
         const aLabel = getOptionLabel(a).toLowerCase();
+        // console.log('alabel: ', aLabel);
         const bLabel = getOptionLabel(b).toLowerCase();
 
         if (aLabel === trimmedInput) return -1;
@@ -212,7 +179,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
       loadingText={<Typography>{t('loading')}</Typography>}
       slotProps={{
         listbox: {
-          style: SearchStyles.listbox,
+          style: styles.searchStyles.listbox,
           component: VirtualizedListbox
         }
       }}
@@ -243,7 +210,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
               style: getIconStyle(isMobile, focused),
               startAdornment: (
                 <InputAdornment position="start">
-                  <Box sx={iconStyles} onClick={handleTriggerSearch}>
+                  <Box sx={styles.iconStyles} onClick={handleTriggerSearch}>
                     <SvgImage src="/icons/search-static.svg" width={24} height={24} alt="search" />
                   </Box>
                 </InputAdornment>
@@ -251,7 +218,7 @@ export const Search = <T extends TitleOption>({ search, setSearch, options }: Se
               endAdornment: (
                 <InputAdornment position="end">
                   {(inputValue.trim().length > 0 || value !== null) && (
-                    <Box sx={iconStyles} onClick={handleClearSearch}>
+                    <Box sx={styles.iconStyles} onClick={handleClearSearch}>
                       <SvgImage src="/icons/close-icon.svg" width={24} height={24} alt="clear" />
                     </Box>
                   )}

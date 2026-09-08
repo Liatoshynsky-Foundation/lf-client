@@ -1,4 +1,4 @@
-import { Notes } from './getNotes.types';
+import { AudioItem, MusicItem } from '~/domain/entities/artistry.entity';
 
 export type ColumnWidths = Record<string, string | number>;
 
@@ -14,57 +14,28 @@ export type RowData = {
   [key: string]: unknown;
 };
 
-type AudioTrack = {
-  name: string;
-  url: string;
-};
-
 export type Music = {
   id: string;
-  name: string;
-  year?: number | null;
   opus?: string;
+  opusName: string;
   opusTitle?: string;
-  genre?: string[];
   opusYear?: number | string;
   opusGenres?: string[];
+  slug: string;
+  compositionName: string;
+  compositionYear?: number | null;
+  compositionGenre?: string[];
   audioAvailable: boolean;
   sheetAvailable: boolean;
-  sheetMusic?: Notes[];
-  audios?: AudioTrack[] | null;
+  sheetMusic?: MusicItem[] | null;
+  audios?: AudioItem[] | null;
   opusId?: string;
-  opusyoutubeUrls: string[];
+  youtubeUrl?: string | null;
 };
 
 export type CompositionWithNotes = {
   composition: string;
-  notes: Notes[];
-};
-
-export type CompositionItemFrontend = {
-  _id: string;
-  name: string;
-  year?: number | null;
-  genre?: string | null;
-  audioAvailable: boolean;
-  sheetAvailable: boolean;
-  sheetMusic: Notes[] | null;
-  audios?: AudioTrack[] | null;
-};
-
-export type OpusGroupFrontend = {
-  _id: string;
-  number: number;
-  numberKind: string;
-  title: string;
-  name: string;
-  additionalText?: string | null;
-  creationYear: string;
-  endYear?: string | null;
-  genre: string;
-  status: string;
-  compositions: CompositionItemFrontend[];
-  youtubeUrls: string[];
+  notes: MusicItem[];
 };
 
 export type WorkTable = {

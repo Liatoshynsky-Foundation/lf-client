@@ -3,8 +3,7 @@ import { Locale } from 'next-intl';
 import { WorkTableFilters } from '~/types/types/tableFilters.types';
 
 import { ScientificWorksRepository } from '~/infrastructure/repositories/scientific-works/scientificWorks.repo';
-import { namedFilterSchema } from '~/validators/artistry/namedFilter.schema';
-import { ArraySchema, NoIDSchema } from '~/validators/constants';
+import { ArraySchema, namedFilterSchema, NoIDSchema } from '~/validators/constants';
 import { LocalizeSchema } from '~/validators/localization';
 import { scientificWorkTitleSchema } from '~/validators/scientific-works/scientificWorks.schema';
 

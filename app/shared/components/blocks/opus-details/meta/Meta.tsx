@@ -3,6 +3,8 @@ import { Box, Typography } from '@mui/material';
 import SheetMusicButton from '../sheet-music-button/SheetMusicButton';
 import { styles } from './Meta.styles';
 
+import { MusicItem } from '~/domain/entities/artistry.entity';
+
 export type MetaLabels = {
   number: string;
   date: string;
@@ -12,14 +14,14 @@ export type MetaLabels = {
 
 export type MetaProps = {
   number: string;
-  creationDate?: string;
+  year?: string;
   genre?: string;
   movements?: string[];
-  sheetMusicUrl?: string;
+  sheetMusic?: MusicItem | null;
   labels: MetaLabels;
 };
 
-const Meta = ({ number, creationDate, genre, movements, sheetMusicUrl, labels }: Readonly<MetaProps>) => {
+const Meta = ({ number, year, genre, movements, sheetMusic, labels }: Readonly<MetaProps>) => {
   return (
     <Box sx={styles.root} data-testid="OpusDetails-meta">
       <Box sx={styles.metaBlock}>
@@ -29,11 +31,11 @@ const Meta = ({ number, creationDate, genre, movements, sheetMusicUrl, labels }:
         </Typography>
       </Box>
 
-      {creationDate && (
+      {year && (
         <Box sx={styles.metaBlock}>
           <Typography sx={styles.metaLabel}>{labels.date}</Typography>
           <Typography sx={styles.metaValueAccent} data-testid="OpusDetails-meta-date">
-            {creationDate}
+            {year}
           </Typography>
         </Box>
       )}
@@ -57,9 +59,9 @@ const Meta = ({ number, creationDate, genre, movements, sheetMusicUrl, labels }:
         </Box>
       )}
 
-      {sheetMusicUrl && (
+      {sheetMusic?.url && (
         <SheetMusicButton
-          href={sheetMusicUrl}
+          href={sheetMusic.url}
           label={labels.viewSheetMusic}
           variant="contained"
           dataTestId="OpusDetails-meta-sheetMusic"

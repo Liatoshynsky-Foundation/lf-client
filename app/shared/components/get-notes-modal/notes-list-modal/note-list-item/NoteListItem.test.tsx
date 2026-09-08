@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import NotesListItem from './NoteListItem';
-import { Notes } from '~/types/types/getNotes.types';
 
+import type { MusicItem } from '~/domain/entities/artistry.entity';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
 interface MockButtonProps {
@@ -54,11 +54,11 @@ jest.mock('~/components/svg-image/SvgImage', () => ({
 
 jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints');
 
-const note = {
+const note: MusicItem = {
+  name: 'test-note',
   url: '/notes/test-note.pdf',
-  isFree: true,
-  dateUploaded: '2023-01-01T00:00:00.000Z'
-} as unknown as Notes;
+  publishDate: '2023-01-01T00:00:00.000Z'
+};
 const icon = <svg data-testid="end-icon" />;
 const handler = jest.fn();
 
@@ -100,7 +100,7 @@ describe('NotesListItem', () => {
 
   it('should render correct button text for paidNotesButton', () => {
     renderComponent({
-      note: { ...note, isFree: false },
+      note: { ...note },
       buttonText: 'paidNotesButton'
     });
     expect(screen.getByRole('button')).toHaveTextContent('paidNotesButton');
@@ -108,7 +108,7 @@ describe('NotesListItem', () => {
 
   it('should call handler when button is clicked on desktop for paid notes', () => {
     renderComponent({
-      note: { ...note, isFree: false },
+      note: { ...note, url: undefined },
       buttonText: 'paidNotesButton'
     });
     fireEvent.click(screen.getByRole('button'));
@@ -131,7 +131,7 @@ describe('NotesListItem', () => {
   it('should render an icon button configuration that triggers click parameters for paid mobile items', () => {
     mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isTablet: true }));
     renderComponent({
-      note: { ...note, isFree: false },
+      note: { ...note, url: undefined },
       buttonText: 'paidNotesButton'
     });
 
@@ -139,29 +139,24 @@ describe('NotesListItem', () => {
     expect(handler).toHaveBeenCalled();
   });
 
-  it('should fallback to default literal labels if file extensions or text payloads parsing steps resolve to empty structures', () => {
-    mockUseBreakpoints.mockReturnValue(getMockBreakpoints());
+  it('should use fileName as title if name is not provided', () => {
+    renderComponent({ note: { ...note, name: undefined, fileName: 'file.pdf' } });
+    expect(screen.getByText('file.pdf')).toBeInTheDocument();
+  });
 
-    const fakeUrlMock = {
-      split: () => ({
-        pop: () => ({
-          split: () => ({
-            0: undefined
-          })
-        })
-      })
-    };
+  it('should not render title block if both name and fileName are missing', () => {
+    renderComponent({ note: { ...note, name: undefined, fileName: undefined } });
+    expect(screen.queryByTestId('svg-image')).not.toBeInTheDocument();
+  });
 
-    const corruptNote = {
-      url: fakeUrlMock,
-      isFree: false,
-      dateUploaded: '2023-01-01T00:00:00.000Z'
-    } as unknown as Notes;
+  it('should handle invalid or missing publishDate without crashing', () => {
+    renderComponent({ note: { ...note, publishDate: undefined } });
+    expect(screen.getByText('test-note')).toBeInTheDocument();
+  });
 
-    renderComponent({
-      note: corruptNote,
-      buttonText: 'paidNotesButton'
-    });
-    expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'file-icon');
+  it('should render mobile disabled state if isButtonDisabled is theoretically true', () => {
+    mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isMobile: true }));
+    renderComponent({ note: { ...note, url: '' }, buttonText: 'paidNotesButton' });
+    expect(screen.getByTestId('icon-button')).toBeInTheDocument();
   });
 });

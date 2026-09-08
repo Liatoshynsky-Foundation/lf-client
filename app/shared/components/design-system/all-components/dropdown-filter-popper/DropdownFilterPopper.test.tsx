@@ -10,8 +10,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  // eslint-disable-next-line jsx-a11y/alt-text
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />
+  default: ({ priority: _p, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { priority?: boolean }) => (
+    <img alt="" {...props} />
+  )
 }));
 
 const TEST_LABEL = 'Filter Label';

@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { render } from '@testing-library/react';
 
-import { CustomBorderTextField } from './SearchStyles';
+import { CustomBorderTextField } from './Search.styles';
 
 describe('CustomBorderTextField', () => {
   it('should render', () => {

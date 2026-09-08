@@ -9,18 +9,20 @@ import { styles } from './OpusDetails.styles';
 import type { OpusDetailsProps } from './opusDetails.types';
 import VideoGallery from './videos/VideoGallery';
 
+import ImageCarouselSection from '~/shared/components/blocks/image-carousel-section/ImageCarouselSection';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 
 const OpusDetails = ({
-  title,
+  name,
   number,
-  creationDate,
+  year,
   genre,
   movements,
-  sheetMusicUrl,
-  description,
+  sheetMusic,
+  introDescription,
   compositions,
   videos,
+  gallery,
   backHref,
   labels
 }: Readonly<OpusDetailsProps>) => {
@@ -29,16 +31,16 @@ const OpusDetails = ({
       <BackLink href={backHref} label={labels.back} dataTestId="OpusDetails-back" />
 
       <Typography variant="h2" sx={styles.sectionTitle} data-testid="OpusDetails-title">
-        {title}
+        {name}
       </Typography>
 
       <Box sx={styles.contentGrid}>
         <Meta
           number={number}
-          creationDate={creationDate}
+          year={year}
           genre={genre}
           movements={movements}
-          sheetMusicUrl={sheetMusicUrl}
+          sheetMusic={sheetMusic}
           labels={{
             number: labels.metaNumber,
             date: labels.metaDate,
@@ -48,10 +50,10 @@ const OpusDetails = ({
         />
 
         <Box sx={styles.rightColumn}>
-          {description ? (
+          {introDescription ? (
             <ContentBlock
               dataTestId="OpusDetails-description"
-              description={description}
+              description={introDescription}
               textSx={styles.descriptionText}
             />
           ) : (
@@ -63,6 +65,12 @@ const OpusDetails = ({
           )}
         </Box>
       </Box>
+
+      {gallery && gallery.length > 0 && (
+        <Box sx={{ gridColumn: '1 / -1', mt: 6 }}>
+          <ImageCarouselSection data={{ images: gallery }} />
+        </Box>
+      )}
 
       {compositions && compositions.length > 0 && (
         <Compositions

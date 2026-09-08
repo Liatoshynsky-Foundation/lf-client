@@ -16,15 +16,17 @@ const mockUseAudioPlayer = useAudioPlayer as jest.MockedFunction<typeof useAudio
 describe('useCompositionPlayback', () => {
   const mockMusicRow: Music = {
     id: '1',
-    name: 'Poem about the Forest',
-    year: 1918,
+    opusName: 'Poem about the Forest',
+    opusYear: 1918,
+    compositionName: 'Movement I',
+    slug: 'poem',
     opus: 'op.50',
     opusTitle: 'Symphony No. 3 in B minor',
     audioAvailable: true,
     sheetAvailable: true,
-    sheetMusic: [{ url: '', isFree: true, dateUploaded: '' }],
+    sheetMusic: [{ url: '', publishDate: '' }],
     audios: [{ name: 'poem-about-forest.mp3', url: 'test-url' }],
-    opusyoutubeUrls: []
+    youtubeUrl: null
   };
 
   const mockAudioName = mockMusicRow.audios?.[0]?.name || '';
@@ -95,7 +97,7 @@ describe('useCompositionPlayback', () => {
       result.current.handlePlayClick();
     });
 
-    expect(audioMock.playTrack).toHaveBeenCalledWith(mockTrackUrl, mockMusicRow.name);
+    expect(audioMock.playTrack).toHaveBeenCalledWith(mockTrackUrl, mockMusicRow.opusName);
     expect(audioMock.togglePlay).not.toHaveBeenCalled();
   });
 
@@ -153,6 +155,6 @@ describe('useCompositionPlayback', () => {
     });
 
     const fallbackTrackUrl = getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, 'compositions', '');
-    expect(audioMock.playTrack).toHaveBeenCalledWith(fallbackTrackUrl, mockMusicRow.name);
+    expect(audioMock.playTrack).toHaveBeenCalledWith(fallbackTrackUrl, mockMusicRow.opusName);
   });
 });

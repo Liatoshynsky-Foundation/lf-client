@@ -15,13 +15,13 @@ import NotesConfirmModal from './notes-confirmation-modal/NotesConfirmModal';
 import NotesListModal from './notes-list-modal/NotesListModal';
 import { IconButtonVariant } from '~/types/enums/common.enums';
 import { GetNotesState } from '~/types/enums/getNotes.enums';
-import { Notes } from '~/types/types/getNotes.types';
 
+import { MusicItem } from '~/domain/entities/artistry.entity';
 import { commonSx } from '~/shared/styles/commonSx';
 
-type GetNotesModalProps = {
+export type GetNotesModalProps = {
   composition: string;
-  notes: Notes[];
+  notes: MusicItem[];
   opened: boolean;
   handleClose: () => void;
 };

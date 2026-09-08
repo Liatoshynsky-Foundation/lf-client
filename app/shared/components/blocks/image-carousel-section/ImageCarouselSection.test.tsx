@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import WarCarouselSection from './WarCarouselSection';
+import ImageCarouselSection from './ImageCarouselSection';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -28,15 +28,15 @@ jest.mock('~/shared/components/design-system/all-components/carousel/Carousel', 
   )
 }));
 
-describe('WarCarouselSection', () => {
+describe('ImageCarouselSection', () => {
   it('should render the section container', () => {
-    const { container } = render(<WarCarouselSection />);
+    const { container } = render(<ImageCarouselSection />);
 
     expect(container.firstChild).toBeInTheDocument();
   });
 
   it('should render default images with correct props when no data is provided', () => {
-    render(<WarCarouselSection />);
+    render(<ImageCarouselSection />);
 
     const carousel = screen.getByTestId('mock-carousel');
 
@@ -45,7 +45,7 @@ describe('WarCarouselSection', () => {
   });
 
   it('should render default images with correct alt text', () => {
-    render(<WarCarouselSection />);
+    render(<ImageCarouselSection />);
 
     expect(screen.getByAltText('Carousel Image 1')).toBeInTheDocument();
     expect(screen.getByAltText('Carousel Image 2')).toBeInTheDocument();
@@ -53,14 +53,14 @@ describe('WarCarouselSection', () => {
   });
 
   it('should have correct default image sources', () => {
-    render(<WarCarouselSection />);
+    render(<ImageCarouselSection />);
 
     const img1 = screen.getByAltText('Carousel Image 1');
     expect(img1).toHaveAttribute('src', '/photos/war-in-ukraine-carousel-1.png');
   });
 
   it('should fall back to default images when data.images is an empty array', () => {
-    render(<WarCarouselSection data={{ images: [] }} />);
+    render(<ImageCarouselSection data={{ images: [] }} />);
 
     expect(screen.getByTestId('mock-carousel')).toHaveAttribute('data-images-count', '3');
   });
@@ -78,7 +78,7 @@ describe('WarCarouselSection', () => {
       ]
     };
 
-    render(<WarCarouselSection data={data} />);
+    render(<ImageCarouselSection data={data} />);
 
     const carousel = screen.getByTestId('mock-carousel');
     expect(carousel).toHaveAttribute('data-images-count', '1');
@@ -95,7 +95,7 @@ describe('WarCarouselSection', () => {
       ]
     };
 
-    render(<WarCarouselSection data={data} />);
+    render(<ImageCarouselSection data={data} />);
 
     expect(screen.getByAltText('Plain alt text')).toBeInTheDocument();
   });

@@ -2,7 +2,12 @@ import { z } from 'zod';
 
 import { PageStatus } from '~/types/enums/common.enums';
 
-import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import {
+  carouselImageSchema as CarouselImageSchema,
+  mongoObjectIdSchema,
+  translatedFieldSchema,
+  translatedTipTapSchema
+} from '~/validators/constants';
 
 const ButtonItemSchema = z.object({
   shortText: translatedFieldSchema,
@@ -13,27 +18,6 @@ const ButtonItemSchema = z.object({
 const PaymentMethodSchema = z.object({
   label: translatedFieldSchema,
   value: z.string()
-});
-
-const CropSchema = z
-  .object({
-    rect: z.object({
-      x: z.number(),
-      y: z.number(),
-      width: z.number(),
-      height: z.number()
-    })
-  })
-  .nullable()
-  .optional();
-
-const CarouselImageSchema = z.object({
-  id: z.string().optional(),
-  src: z.string(),
-  generatedSrc: z.string().optional(),
-  alt: translatedFieldSchema,
-  caption: translatedFieldSchema.optional(),
-  crop: CropSchema
 });
 
 const WarInUkraineBlocks = z.object({

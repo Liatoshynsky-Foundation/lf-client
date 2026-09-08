@@ -23,9 +23,8 @@ export async function GET(req: NextRequest) {
     const container = createRequestContainer();
     const artistryService = container.resolve('artistryService');
 
-    const titles = await artistryService.getSearchAutocompleteOptions(locale, filters);
-
-    return NextResponse.json({ titles });
+    const names = await artistryService.getSearchAutocompleteOptions(locale, filters);
+    return NextResponse.json({ names });
   } catch (error) {
     logger.error('[API:GET:compositions:titles] Failed to fetch composition titles', error);
 
