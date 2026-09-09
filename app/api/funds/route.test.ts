@@ -1,3 +1,6 @@
+import type { NextRequest } from 'next/server';
+import * as util from 'util';
+
 jest.mock('~/middleware/logger/logger', () => ({
   __esModule: true,
   default: {
@@ -24,8 +27,6 @@ jest.mock('mongodb', () => ({
   })),
   ObjectId: jest.fn().mockImplementation((id) => id)
 }));
-import type { NextRequest } from 'next/server';
-import * as util from 'util';
 
 type FundsRouteHandler = typeof import('./route').GET;
 type FundsRouteRequest = Parameters<FundsRouteHandler>[0];
@@ -120,7 +121,7 @@ describe('Funds API Route (GET)', () => {
     expect(res._testData.data).toEqual(mockCase);
   });
 
-  it('should return 404 when caseId is provided but case not found (Lines 34-35)', async () => {
+  it('should return 404 when caseId is provided but case not found', async () => {
     mockFundsService.getCaseById.mockResolvedValue(null);
 
     const res = await getResponse('caseId=not-exists');
@@ -129,7 +130,8 @@ describe('Funds API Route (GET)', () => {
     expect(res.status).toBe(404);
     expect(res._testData.success).toBe(false);
   });
-  it('should return 404 when fundId is valid but fund not found (Lines 59-61)', async () => {
+
+  it('should return 404 when fundId is valid but fund not found', async () => {
     mockFundsService.getFundById.mockResolvedValue(null);
 
     const res = await getResponse('id=999');
@@ -138,6 +140,7 @@ describe('Funds API Route (GET)', () => {
     expect(res.status).toBe(404);
     expect(res._testData.success).toBe(false);
   });
+
   it('should return fund details by fundId without flattening localized fields', async () => {
     const mockFund = {
       id: 5,
@@ -151,6 +154,7 @@ describe('Funds API Route (GET)', () => {
     expect(mockFundsService.getFundById).toHaveBeenCalledWith(5);
     expect(res._testData.data).toEqual(mockFund);
   });
+
   it('should ignore lang while preserving the fund details DTO shape', async () => {
     const mockFund = {
       id: 10,
@@ -163,6 +167,7 @@ describe('Funds API Route (GET)', () => {
 
     expect(res._testData.data).toEqual(mockFund);
   });
+
   it('should return fund details when lang is missing', async () => {
     const mockFund = {
       id: 1,
@@ -175,12 +180,14 @@ describe('Funds API Route (GET)', () => {
 
     expect(res._testData.data).toEqual(mockFund);
   });
-  it('should fallback to funds list if no ID matches (Last lines)', async () => {
+
+  it('should fallback to funds list if no ID matches query params', async () => {
     mockFundsService.getFunds.mockResolvedValue([]);
 
     const res = await getResponse('something=else');
     expect(res._testData.success).toBe(true);
   });
+
   it('should return 400 for invalid fundId format', async () => {
     const res = await getResponse('id=abc');
 
