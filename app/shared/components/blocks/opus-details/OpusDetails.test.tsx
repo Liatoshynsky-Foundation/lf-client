@@ -3,6 +3,7 @@ import React from 'react';
 
 import OpusDetails from './OpusDetails';
 import type { OpusComposition, OpusDetailsLabels, OpusDetailsProps, OpusVideo } from './opusDetails.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('next/image');
 
@@ -25,8 +26,13 @@ const labels: OpusDetailsLabels = {
 };
 
 const compositions: OpusComposition[] = [
-  { id: 'c1', index: 1, title: '«Після бою», сл. І. Буніна', sheetMusicUrl: 'https://example.com/c1.pdf' },
-  { id: 'c2', index: 2, title: '«Смерть», сл. І. Буніна' }
+  {
+    id: 'c1',
+    index: 1,
+    name: '«Після бою», сл. І. Буніна',
+    sheetMusic: [{ name: 'c1.pdf', url: 'https://example.com/c1.pdf' }]
+  },
+  { id: 'c2', index: 2, name: '«Смерть», сл. І. Буніна' }
 ];
 
 const videos: OpusVideo[] = [
@@ -34,14 +40,28 @@ const videos: OpusVideo[] = [
   { id: 'v2', youTubeId: 'def456' }
 ];
 
+const mockTipTapDoc = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [{ type: 'text', text: 'Написаний під час війни.' }]
+    },
+    {
+      type: 'paragraph',
+      content: [{ type: 'text', text: 'За структурою квінтет являє циклічну композицію.' }]
+    }
+  ]
+} as TipTapDoc;
+
 const baseProps: OpusDetailsProps = {
-  title: 'Український квінтет для фортепіано',
+  name: 'Український квінтет для фортепіано',
   number: 'bo.16',
-  creationDate: '1929',
+  year: '1929',
   genre: 'Фортепіанний квінтет',
   movements: ['I. Allegro e poco agitato', 'II. Lento e tranquillo'],
-  sheetMusicUrl: 'https://example.com/opus.pdf',
-  description: 'Написаний під час війни.\n\nЗа структурою квінтет являє циклічну композицію.',
+  sheetMusic: { name: 'opus.pdf', url: 'https://example.com/opus.pdf' },
+  introDescription: mockTipTapDoc,
   compositions,
   videos,
   backHref: '/uk/artistry',
@@ -81,7 +101,7 @@ describe('OpusDetails', () => {
   });
 
   it('hides optional sidebar fields when they are not provided', () => {
-    renderOpus({ creationDate: undefined, genre: undefined, movements: [], sheetMusicUrl: undefined });
+    renderOpus({ year: undefined, genre: undefined, movements: [], sheetMusic: undefined });
 
     expect(screen.getByTestId('OpusDetails-meta-number')).toBeInTheDocument();
     expect(screen.queryByTestId('OpusDetails-meta-date')).toBeNull();
@@ -102,7 +122,7 @@ describe('OpusDetails', () => {
   });
 
   it('renders the cat placeholder and hides the description when description is missing', () => {
-    renderOpus({ description: null });
+    renderOpus({ introDescription: null });
 
     const placeholder = screen.getByTestId('OpusDetails-placeholder');
     expect(placeholder).toBeInTheDocument();
@@ -114,7 +134,7 @@ describe('OpusDetails', () => {
   });
 
   it('treats a blank description as missing and shows the placeholder', () => {
-    renderOpus({ description: null });
+    renderOpus({ introDescription: null });
 
     expect(screen.getByTestId('OpusDetails-placeholder')).toBeInTheDocument();
     expect(screen.queryByTestId('OpusDetails-description')).toBeNull();
@@ -124,13 +144,13 @@ describe('OpusDetails', () => {
     renderOpus();
 
     const list = screen.getByTestId('OpusDetails-compositionsList');
-    expect(within(list).getByText('№1«Після бою», сл. І. Буніна')).toBeInTheDocument();
-    expect(within(list).getByText('№2«Смерть», сл. І. Буніна')).toBeInTheDocument();
+    expect(within(list).getByText('«Після бою», сл. І. Буніна')).toBeInTheDocument();
+    expect(within(list).getByText('«Смерть», сл. І. Буніна')).toBeInTheDocument();
 
-    expect(screen.getByTestId('OpusDetails-composition-sheetMusic-c1')).toHaveAttribute(
-      'href',
-      'https://example.com/c1.pdf'
-    );
+    const sheetMusicButton = screen.getByTestId('OpusDetails-composition-sheetMusic-c1');
+    expect(sheetMusicButton).toBeInTheDocument();
+    expect(sheetMusicButton).toHaveTextContent('Переглянути ноти');
+
     expect(screen.queryByTestId('OpusDetails-composition-sheetMusic-c2')).toBeNull();
   });
 
@@ -160,7 +180,7 @@ describe('OpusDetails', () => {
   });
 
   it('renders the placeholder while still rendering compositions and videos sequentially', () => {
-    renderOpus({ description: null });
+    renderOpus({ introDescription: null });
 
     expect(screen.getByTestId('OpusDetails-placeholder')).toBeInTheDocument();
     expect(screen.getByTestId('OpusDetails-compositions')).toBeInTheDocument();
@@ -168,7 +188,7 @@ describe('OpusDetails', () => {
   });
 
   it('renders a minimal opus with description, compositions and videos omitted', () => {
-    renderOpus({ description: undefined, compositions: undefined, videos: undefined });
+    renderOpus({ introDescription: null, compositions: undefined, videos: undefined });
 
     expect(screen.getByTestId('OpusDetails-meta-number')).toBeInTheDocument();
     expect(screen.getByTestId('OpusDetails-placeholder')).toBeInTheDocument();

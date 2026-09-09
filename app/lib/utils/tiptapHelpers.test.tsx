@@ -1,6 +1,7 @@
 import {
   boldText,
   boldUnderlineText,
+  createTipTapDocFromText,
   extractTextFromTipTap,
   getPlainString,
   isTipTapDoc,
@@ -57,6 +58,27 @@ describe('tiptap.utils', () => {
         ]
       };
       expect(doc).toEqual(expected);
+    });
+  });
+
+  describe('createTipTapDocFromText', () => {
+    it('should create a TipTap doc with a paragraph for non-empty text', () => {
+      expect(createTipTapDocFromText('hello')).toEqual({
+        type: TipTapNodeTypes.doc,
+        content: [
+          {
+            type: TipTapNodeTypes.paragraph,
+            content: [{ type: TipTapNodeTypes.text, text: 'hello' }]
+          }
+        ]
+      });
+    });
+
+    it('should create an empty TipTap doc for empty text', () => {
+      expect(createTipTapDocFromText('')).toEqual({
+        type: TipTapNodeTypes.doc,
+        content: []
+      });
     });
   });
 

@@ -54,7 +54,7 @@ export function useFilterAutocomplete<P extends TableParams, O>({
 
         const nextOptions = selectRef.current ? selectRef.current(json) : (json as O[]);
 
-        if (!isCancelled) setOptions(nextOptions);
+        if (!isCancelled) setOptions(nextOptions || []);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(`[useFilterAutocomplete] Fetching failed for endpoint: ${endpoint}`, error);

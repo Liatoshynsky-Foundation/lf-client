@@ -2,7 +2,14 @@ import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 import { LocalizedString } from '~/types/types/common.types';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { RichContent } from '~/shared/components/design-system/all-components/content-block/ContentBlock';
+
 type ParagraphNode = Extract<TipTapDoc['content'][number], { type: TipTapNodeTypes.paragraph }>;
+
+export interface LocalizedTipTap {
+  uk: TipTapDoc;
+  en: TipTapDoc;
+}
 
 export type TipTapTextNode = NonNullable<ParagraphNode['content']>[number];
 
@@ -50,6 +57,31 @@ export const makeDoc = (content: TipTapTextNode[]): TipTapDoc => ({
   ]
 });
 
+export const parseTipTapString = (data: RichContent) => {
+  let parsedData = data;
+  if (typeof data === 'string' && data.startsWith('{"type":"doc"')) {
+    try {
+      parsedData = JSON.parse(data);
+    } catch {
+      return data;
+    }
+  }
+
+  return parsedData;
+};
+
+export const createTipTapDocFromText = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: text
+    ? [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [{ type: TipTapNodeTypes.text, text }]
+        }
+      ]
+    : []
+});
+
 export const normalText = (text: string): TipTapTextNode =>
   ({
     type: TipTapNodeTypes.text,
@@ -86,3 +118,12 @@ export const linkText = (text: string, href: string): TipTapTextNode => ({
     }
   ]
 });
+
+export const parseDescription = (desc?: string | null): TipTapDoc | string | null => {
+  if (!desc || desc.trim().length === 0) return null;
+  try {
+    return JSON.parse(desc) as TipTapDoc;
+  } catch {
+    return desc;
+  }
+};

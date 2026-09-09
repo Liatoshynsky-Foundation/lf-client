@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 
-import { translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
+import { carouselImageSchema, translatedFieldSchema } from '~/infrastructure/models/commonSchemas';
+import { OpusDocument } from '~/validators/artistry/composition.schema';
 
-const opusSchema = new mongoose.Schema(
+const opusSchema = new mongoose.Schema<OpusDocument>(
   {
     number: { type: Number, required: true },
     title: { type: translatedFieldSchema, required: true },
@@ -11,11 +12,12 @@ const opusSchema = new mongoose.Schema(
     additionalText: { type: String, default: null },
     creationYear: { type: String, required: true },
     endYear: { type: String, default: null },
-    status: { type: String, default: 'draft' },
     genre: { type: translatedFieldSchema, required: true },
+    slug: { type: String, required: true },
     introDescription: { type: translatedFieldSchema, default: null },
     description: { type: translatedFieldSchema, default: null },
-    compositions: { type: Array<string> }
+    compositions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compositions' }],
+    gallery: [carouselImageSchema]
   },
   { timestamps: true, collection: 'opus' }
 );

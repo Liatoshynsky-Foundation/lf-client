@@ -42,41 +42,21 @@ import { useCompositionPlayback } from '~/shared/hooks/use-composition-playback/
 type RowProp = Readonly<{ row: Row<Music>; onAction?: (data: CompositionWithNotes) => void }>;
 type GroupActionsProps = Readonly<{ items: Music[] }>;
 
-export const RenderOpusHeader = () => {
-  const t = useTranslations('table.columns');
-  return (
-    <Typography variant="customBold16" sx={headerTypographySx}>
-      {t('opus')}
-    </Typography>
-  );
+const createHeader = (translationKey: Parameters<ReturnType<typeof useTranslations<'table.columns'>>>[0]) => {
+  return function HeaderComponent() {
+    const t = useTranslations('table.columns');
+    return (
+      <Typography variant="customBold16" sx={headerTypographySx}>
+        {t(translationKey)}
+      </Typography>
+    );
+  };
 };
 
-export const RenderNameHeader = () => {
-  const t = useTranslations('table.columns');
-  return (
-    <Typography variant="customBold16" sx={headerTypographySx}>
-      {t('name')}
-    </Typography>
-  );
-};
-
-export const RenderYearHeader = () => {
-  const t = useTranslations('table.columns');
-  return (
-    <Typography variant="customBold16" sx={headerTypographySx}>
-      {t('year')}
-    </Typography>
-  );
-};
-
-export const RenderGenreHeader = () => {
-  const t = useTranslations('table.columns');
-  return (
-    <Typography variant="customBold16" sx={headerTypographySx}>
-      {t('genre')}
-    </Typography>
-  );
-};
+export const RenderOpusHeader = createHeader('opus');
+export const RenderNameHeader = createHeader('name');
+export const RenderYearHeader = createHeader('year');
+export const RenderGenreHeader = createHeader('genre');
 
 export const renderNameCell = (info: CellContext<Music, unknown>) => (
   <Typography variant="customMedium16">{info.getValue<string>()}</Typography>
@@ -120,13 +100,15 @@ export const ActionsCell = ({ row, onAction }: RowProp) => {
   const t = useTranslations('table.buttons');
   const { isDesktop, isLaptop } = useBreakpoints();
 
-  const showNotesInline = isDesktop || isLaptop;
+  const hasValidNotes = rowData.sheetMusic?.some((note) => note.name || note.fileName);
+  const showNotesButton = !!hasValidNotes;
+  const showNotesInline = (isDesktop || isLaptop) && showNotesButton;
 
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(rowData);
 
   const handleNotesClick = () => {
     if (onAction) {
-      onAction({ composition: rowData.name, notes: rowData.sheetMusic || [] });
+      onAction({ composition: rowData.compositionName, notes: rowData.sheetMusic || [] });
     }
   };
 
@@ -152,7 +134,7 @@ export const ActionsCell = ({ row, onAction }: RowProp) => {
       label: t('viewSheetMusic'),
       icon: <SvgImage src="/icons/music-4.svg" alt={t('viewSheetMusic')} width={24} height={24} />,
       disabled: false,
-      hidden: showNotesInline,
+      hidden: showNotesInline || !showNotesButton,
       labelSx: menuLabelItemSx,
       onClick: handleNotesClick
     }
@@ -216,14 +198,14 @@ export const renderOpusGroupLabel = (items: Music[]) => {
 };
 
 export const renderOpusTitleGroupLabel = (items: Music[]) => {
-  const opusId = items[0]?.opusId;
-  const opusTitle = items[0]?.opusTitle;
+  const opusSlug = items[0]?.slug;
+  const opusName = items[0]?.opusName;
 
-  if (!opusId) {
+  if (!opusSlug) {
     return (
       <Box sx={opusTitleGroupContainerSx}>
         <Typography variant="customBold16" sx={opusTitleTypographySx}>
-          {opusTitle}
+          {opusName}
         </Typography>
       </Box>
     );
@@ -232,13 +214,13 @@ export const renderOpusTitleGroupLabel = (items: Music[]) => {
   return (
     <Box sx={opusTitleGroupContainerSx}>
       <Link
-        href={getDynamicRoute.opus(opusId)}
+        href={getDynamicRoute.opus(opusSlug)}
         onClick={(e) => e.stopPropagation()}
         style={opusTitleLinkStyle}
         className="opus-group-link"
       >
         <Typography variant="customBold16" sx={opusTitleHoverTypographySx}>
-          {opusTitle}
+          {opusName}
         </Typography>
       </Link>
     </Box>
@@ -265,12 +247,9 @@ export const GroupActionsCell = ({ items }: GroupActionsProps) => {
   const opusId = items[0]?.opusId;
 
   const playableItem = items.find((item) => item.audioAvailable && (item.audios?.length ?? 0) > 0);
-  const getFirstYoutubeUrl = (youtubeUrls: string[] | undefined): string | null =>
-    youtubeUrls?.length ? `https://www.youtube.com/watch?v=${youtubeUrls[0]}` : null;
-
   const { canPlay, isCurrentTrack, isPlaying, handlePlayClick } = useCompositionPlayback(playableItem ?? items[0]);
 
-  const youtubeUrl = getFirstYoutubeUrl(items[0]?.opusyoutubeUrls);
+  const youtubeUrl = items[0]?.youtubeUrl ? `https://www.youtube.com/watch?v=${items[0].youtubeUrl}` : null;
 
   const handleYoutubeClick = () => {
     if (!youtubeUrl) return;

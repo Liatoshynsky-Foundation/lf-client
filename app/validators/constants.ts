@@ -74,3 +74,48 @@ export const mongoObjectIdSchema = z.preprocess(
   },
   z.string().regex(/^[0-9a-fA-F]{24}$/)
 );
+
+export const namedFilterSchema = z.object({
+  _id: mongoObjectIdSchema,
+  key: z.string(),
+  name: translatedFieldSchema
+});
+
+export type RawCategoryDTO = z.infer<typeof namedFilterSchema>;
+
+export const cropRectSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number()
+});
+
+export const cropSchema = z
+  .object({
+    rect: cropRectSchema
+  })
+  .nullable()
+  .optional();
+
+export const baseImageSchema = z.object({
+  src: z.string(),
+  generatedSrc: z.string().optional()
+});
+
+export const carouselImageSchema = baseImageSchema.extend({
+  id: z.string().optional(),
+  alt: translatedFieldSchema,
+  caption: translatedFieldSchema.optional(),
+  crop: cropSchema
+});
+
+export const galleryItemSchema = baseImageSchema.extend({
+  _id: mongoObjectIdSchema.optional(),
+  description: translatedFieldSchema,
+  altText: translatedFieldSchema,
+  crop: cropRectSchema.nullable().optional()
+});
+
+export type CarouselImageDTO = z.infer<typeof carouselImageSchema>;
+export type GalleryItemDTO = z.infer<typeof galleryItemSchema>;
+export type CropDTO = z.infer<typeof cropSchema>;

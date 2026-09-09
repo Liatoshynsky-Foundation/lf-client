@@ -32,24 +32,44 @@ export const CustomBorderTextField = styled(TextField)(({ theme }) => {
   };
 });
 
-export const SearchStyles = {
-  icon: {
-    padding: 8,
-    height: 40,
-    overflow: 'hidden'
-  },
-  list: {
-    width: '280px'
-  },
-  listbox: {
+export const styles = {
+  optionListItem: {
+    height: 64,
     padding: 0,
-    margin: 0,
-    overflow: 'hidden',
-    maxHeight: 'none'
-  }
-};
+    display: 'flex',
+    alignItems: 'center',
+    whiteSpace: 'normal'
+  },
 
-export const iconStyles = {
-  height: '24px',
-  cursor: 'pointer'
+  optionListItemText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    lineHeight: '1.2',
+    wordBreak: 'break-word'
+  },
+
+  iconStyles: {
+    height: '24px',
+    cursor: 'pointer'
+  },
+
+  searchStyles: {
+    icon: {
+      padding: 8,
+      height: 40,
+      overflow: 'hidden'
+    },
+    list: {
+      width: '280px'
+    },
+    listbox: {
+      padding: 0,
+      margin: 0,
+      overflow: 'hidden',
+      maxHeight: 'none'
+    }
+  }
 };

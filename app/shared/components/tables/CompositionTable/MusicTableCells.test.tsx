@@ -70,20 +70,22 @@ const mockUseCompositionPlayback = useCompositionPlayback as jest.Mock;
 
 const mockMusic: Music = {
   id: '1',
-  name: 'Poem about the Forest',
-  year: 1918,
+  opusName: 'Poem about the Forest',
+  opusYear: 1918,
+  compositionName: 'Movement I',
+  slug: 'poem',
   opus: 'op.50',
   opusTitle: 'Symphony No. 3 in B minor',
   audioAvailable: true,
   sheetAvailable: true,
   sheetMusic: [
     {
+      name: 'sheet.pdf',
       url: '',
-      isFree: true,
-      dateUploaded: ''
+      publishDate: ''
     }
   ],
-  opusyoutubeUrls: []
+  youtubeUrl: null
 };
 
 const mockRow = {
@@ -232,7 +234,7 @@ describe('MusicTableCells', () => {
       fireEvent.click(desktopBtn);
       expect(onAction).toHaveBeenCalledTimes(1);
       expect(onAction).toHaveBeenCalledWith({
-        composition: mockMusic.name,
+        composition: mockMusic.compositionName,
         notes: mockMusic.sheetMusic
       });
     });
@@ -285,7 +287,7 @@ describe('MusicTableCells', () => {
 
       expect(onAction).toHaveBeenCalledTimes(1);
       expect(onAction).toHaveBeenCalledWith({
-        composition: mockMusic.name,
+        composition: mockMusic.compositionName,
         notes: mockMusic.sheetMusic
       });
 
@@ -346,7 +348,7 @@ describe('MusicTableCells', () => {
 
     it('should render opus title label', () => {
       render(renderOpusTitleGroupLabel([mockMusic]));
-      expect(screen.getByText('Symphony No. 3 in B minor')).toBeInTheDocument();
+      expect(screen.getByText('Poem about the Forest')).toBeInTheDocument();
     });
 
     it('should render opus year label when present', () => {
@@ -356,7 +358,8 @@ describe('MusicTableCells', () => {
     });
 
     it('should return null for opus year label when absent', () => {
-      const { container } = render(<>{renderOpusYearGroupLabel([mockMusic])}</>);
+      const mockWithoutYear = { ...mockMusic, opusYear: undefined };
+      const { container } = render(<>{renderOpusYearGroupLabel([mockWithoutYear])}</>);
       expect(container).toBeEmptyDOMElement();
     });
 
@@ -379,7 +382,7 @@ describe('MusicTableCells', () => {
       const musicWithOpusId: Music = { ...mockMusic, opusId: 'test-opus-id' };
       render(renderOpusTitleGroupLabel([musicWithOpusId]));
 
-      const link = screen.getByText('Symphony No. 3 in B minor').closest('a');
+      const link = screen.getByText('Poem about the Forest').closest('a');
       expect(link).toBeInTheDocument();
 
       if (link) fireEvent.click(link);
@@ -449,7 +452,7 @@ describe('MusicTableCells', () => {
       const musicWithData: Music = {
         ...mockMusic,
         opusId: 'opus-123',
-        opusyoutubeUrls: ['youtube-id-1'],
+        youtubeUrl: 'youtube-id-1',
         audios: [{ url: 'test-audio.mp3' } as NonNullable<Music['audios']>[number]]
       };
 
@@ -491,7 +494,7 @@ describe('MusicTableCells', () => {
     });
 
     it('should gracefully handle disabled states when data is missing', () => {
-      const musicNoData: Music = { ...mockMusic, opusId: undefined, opusyoutubeUrls: [] };
+      const musicNoData: Music = { ...mockMusic, opusId: undefined, youtubeUrl: null };
       mockUseCompositionPlayback.mockReturnValue({
         canPlay: false,
         isCurrentTrack: false,
@@ -507,7 +510,7 @@ describe('MusicTableCells', () => {
     });
 
     it('should ignore YouTube click if youtubeUrl is unexpectedly empty', () => {
-      const musicWithoutYoutube: Music = { ...mockMusic, opusyoutubeUrls: [] };
+      const musicWithoutYoutube: Music = { ...mockMusic, youtubeUrl: null };
       render(<GroupActionsCell items={[musicWithoutYoutube]} />);
       fireEvent.click(screen.getByTestId('Artistry-opusOverflowMenuButton'));
 

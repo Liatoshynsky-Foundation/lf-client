@@ -274,10 +274,10 @@ describe('WorkTableSection', () => {
 
     if (storedSelectFn) {
       const mockRawPayload = {
-        titles: [{ _id: 'id1', title: 'mapped title testing' }]
+        titles: [{ _id: 'id1', name: 'mapped title testing' }]
       };
       const resultingMapping = storedSelectFn(mockRawPayload);
-      expect(resultingMapping).toEqual([{ _id: 'id1', title: 'mapped title testing', kind: 'composition' }]);
+      expect(resultingMapping).toEqual([{ _id: 'id1', name: 'mapped title testing', type: 'composition' }]);
     }
   });
 

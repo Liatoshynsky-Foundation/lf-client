@@ -10,5 +10,6 @@ export const ApiRoutes = {
   VERIFY: '/api/verify',
   CREATE_INVOICE: '/api/create-invoice',
   TURNSTILE: '/api/config',
-  CONTACT: '/api/contact'
+  CONTACT: '/api/contact',
+  FUNDS: '/api/funds'
 } as const;

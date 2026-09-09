@@ -1,6 +1,6 @@
 import { asFunction, AwilixContainer } from 'awilix';
 
-import { createArtistryService } from '~/services/artistry/artistryService';
+import { createArtistryService } from '~/services/artistry/artistry.service';
 import { createEventService } from '~/services/events/eventService';
 import { createFooterService } from '~/services/footer/footerService';
 import { createFundsService } from '~/services/funds/fundsService';

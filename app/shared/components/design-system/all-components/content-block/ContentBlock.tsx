@@ -3,6 +3,7 @@ import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { styles } from './ContentBlock.styles';
 import type { TipTapDoc } from '~/types/types/tiptap.types';
 
+import { parseTipTapString } from '~/lib/utils/tiptapHelpers';
 import ListItem from '~/shared/components/list-item/ListItem';
 import SectionTitle from '~/shared/components/section-title/SectionTitle';
 import TipTapContent from '~/shared/components/tip-tap-content/TipTapContent';
@@ -49,12 +50,14 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
     ...(Array.isArray(textSx) ? textSx : [textSx])
   ];
 
-  if (typeof data === 'string') {
-    return <Typography sx={combinedSx}>{data}</Typography>;
+  const parsedData = parseTipTapString(data);
+
+  if (typeof parsedData === 'string') {
+    return <Typography sx={combinedSx}>{parsedData}</Typography>;
   }
 
-  if (Array.isArray(data)) {
-    return data.map(({ id, text }) => (
+  if (Array.isArray(parsedData)) {
+    return parsedData.map(({ id, text }) => (
       <Typography key={id} sx={combinedSx}>
         {text}
       </Typography>
@@ -63,7 +66,7 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
 
   return (
     <TipTapContent
-      data={data}
+      data={parsedData}
       nodeRenderers={{
         paragraph: createParagraph(combinedSx)
       }}
@@ -73,20 +76,21 @@ function renderTextBlock(data?: RichContent, textSx?: SxProps<Theme>) {
 
 function renderList(data?: RichContent, textSx?: SxProps<Theme>) {
   if (!data) return null;
+  const parsedData = parseTipTapString(data);
 
   const flatTextSx = Array.isArray(textSx) ? textSx : [textSx];
 
-  if (typeof data === 'string') {
-    return <ListItem sx={[styles.textContent, ...flatTextSx, { maxWidth: '900px' }]} text={data} />;
+  if (typeof parsedData === 'string') {
+    return <ListItem sx={[styles.textContent, ...flatTextSx, { maxWidth: '900px' }]} text={parsedData} />;
   }
 
-  if (Array.isArray(data)) {
-    return data.map(({ id, text }) => <ListItem key={id} sx={[styles.textContent, ...flatTextSx]} text={text} />);
+  if (Array.isArray(parsedData)) {
+    return parsedData.map(({ id, text }) => <ListItem key={id} sx={[styles.textContent, ...flatTextSx]} text={text} />);
   }
 
   return (
     <TipTapContent
-      data={data}
+      data={parsedData}
       nodeRenderers={{
         paragraph: createListParagraph([styles.textContent, ...flatTextSx, { maxWidth: '900px' }])
       }}
