@@ -70,6 +70,18 @@ export const parseTipTapString = (data: RichContent) => {
   return parsedData;
 };
 
+export const createTipTapDocFromText = (text: string): TipTapDoc => ({
+  type: TipTapNodeTypes.doc,
+  content: text
+    ? [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [{ type: TipTapNodeTypes.text, text }]
+        }
+      ]
+    : []
+});
+
 export const normalText = (text: string): TipTapTextNode =>
   ({
     type: TipTapNodeTypes.text,

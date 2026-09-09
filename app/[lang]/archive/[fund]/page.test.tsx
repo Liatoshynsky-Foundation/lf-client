@@ -1,13 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 
 import FundDetailsPage from './page';
-import * as envUtils from '~/utils/isProductionMode';
+
+type FundDetailsClientProps = {
+  fundId: number;
+  locale: string;
+  fundSummaryBacklinkUrl: string;
+  fundSummaryBacklinkText: string;
+};
+
+let fundDetailsClientProps: FundDetailsClientProps | undefined;
 
 jest.mock('~/shared/components/blocks/fund-summary-header/FundSummaryHeader.content', () => ({
   fundSummaryBacklinkText: { uk: 'Назад', en: 'Back' },
-  fundSummaryContent: { items: [] },
-  fundSummaryTitle: { uk: 'Заголовок', en: 'Title' },
   getFundSummaryHeaderBacklinkUrl: jest.fn().mockResolvedValue('/mock-url')
 }));
 
@@ -20,24 +27,17 @@ jest.mock('next/navigation', () => ({
   }),
   usePathname: () => '/mock-path'
 }));
-jest.mock('~/utils/isProductionMode', () => ({ isProductionMode: jest.fn() }));
-jest.mock('~/components/tables/DocumentsTable/DocumentTableSection', () => ({
-  __esModule: true,
-  default: () => <div data-testid="document-table">Document Table Section</div>
-}));
-jest.mock('next-intl', () => ({
-  useLocale: () => 'uk',
-  useTranslations: () => (key: string) => key
+
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn()
 }));
 
-jest.mock('~/layouts/main-layout/MainLayout', () => ({
+jest.mock('./FundDetailsClient', () => ({
   __esModule: true,
-  default: ({ children }: any) => <div data-testid="main-layout">{children}</div>
-}));
-
-jest.mock('~/components/under-development/UnderDevelopment', () => ({
-  __esModule: true,
-  default: () => <div data-testid="under-dev">Under Development</div>
+  default: (props: FundDetailsClientProps) => {
+    fundDetailsClientProps = props;
+    return <div data-testid="fund-details-client">Fund Details Client</div>;
+  }
 }));
 
 describe('FundDetailsPage', () => {
@@ -45,6 +45,7 @@ describe('FundDetailsPage', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    fundDetailsClientProps = undefined;
   });
 
   it('should trigger notFound() if fund ID is NaN (lines 31-33)', async () => {
@@ -53,22 +54,24 @@ describe('FundDetailsPage', () => {
     expect(notFound).toHaveBeenCalled();
   });
 
-  it('should render UnderDevelopment in production mode (lines 35-37)', async () => {
-    (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
+  it('should trigger notFound() if fund ID is not a positive integer', async () => {
+    await FundDetailsPage({ params: Promise.resolve({ lang: 'uk', fund: '0' }) });
+    await FundDetailsPage({ params: Promise.resolve({ lang: 'uk', fund: '1.5' }) });
 
-    const ui = await FundDetailsPage({ params: Promise.resolve(mockParams) });
-    render(ui);
-
-    expect(screen.getByTestId('under-dev')).toBeInTheDocument();
+    expect(notFound).toHaveBeenCalledTimes(2);
   });
 
-  it('should render full page content in dev mode (lines 39-56)', async () => {
-    (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
-
+  it('should render the client fund details page with parsed route params', async () => {
     const ui = await FundDetailsPage({ params: Promise.resolve(mockParams) });
     render(ui);
 
-    expect(screen.getByTestId('main-layout')).toBeInTheDocument();
-    expect(screen.getByText('Заголовок')).toBeInTheDocument();
+    expect(setRequestLocale).toHaveBeenCalledWith('uk');
+    expect(screen.getByTestId('fund-details-client')).toBeInTheDocument();
+    expect(fundDetailsClientProps).toEqual({
+      fundId: 123,
+      locale: 'uk',
+      fundSummaryBacklinkUrl: '/mock-url',
+      fundSummaryBacklinkText: 'Назад'
+    });
   });
 });

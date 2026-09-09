@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import type { Locale } from 'next-intl';
+import type { ReactNode } from 'react';
 
 import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
 
@@ -50,6 +51,8 @@ export interface TipTapDoc {
   type: TipTapNodeTypes.doc;
   content: TipTapElement[];
 }
+
+export type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
 
 export type TipTapNode = TipTapDoc | HeadingNode | ParagraphNode | TextNode | MultiLangNode;
 
