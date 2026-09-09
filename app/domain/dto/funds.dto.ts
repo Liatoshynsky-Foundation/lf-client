@@ -1,50 +1,58 @@
-export type FundDTO = {
+import type { LocalizedString } from '~/types/types/common.types';
+import type { LocalizedTipTapDoc } from '~/types/types/tiptap.types';
+
+export enum FundStatus {
+  Draft = 'draft',
+  Published = 'published',
+  Hidden = 'hidden',
+  Archived = 'archived',
+  Editing = 'editing'
+}
+
+export type FundBaseDTO = {
   id: number;
-  number: { en: string; uk: string };
-  title: { en: string; uk: string };
+  number: LocalizedString;
+  title: LocalizedString;
+  status: FundStatus;
 };
 
-export type FundDetailsDTO = {
-  id: number;
-  number: { en: string; uk: string };
-  title: { en: string; uk: string };
+export type FundDetailsDTO = FundBaseDTO & {
   numberOfDescriptions: number;
   numberOfCases: number;
-  organizationForm: string;
+  organizationForm?: LocalizedString;
   documentCreationDate: string;
-  chronologicalBoundaries: string;
-  documentLanguages: string;
-  characterAndContent: string;
-  accessConditions: string;
-  compilerInfo: string;
-  cases?: CaseDTO[];
+  chronologicalBoundaries?: string;
+  documentLanguages?: string;
+  characterAndContent?: LocalizedTipTapDoc;
+  accessConditions?: string;
+  compilerInfo?: string;
+  cases: CaseDTO[];
 };
 
-export type CaseDTO = {
+export type CaseBaseDTO<Name = string, Dates = string, ContentDescription = string> = {
   _id: string;
   cipher: string;
-  name: string;
-  dates: string;
+  name: Name;
+  dates: Dates;
   sheets: number | null;
-  contentDescription: string;
+  contentDescription: ContentDescription;
   pdfUrl: string | null;
+};
+
+export type CaseDTO = CaseBaseDTO<LocalizedString, LocalizedString, LocalizedString> & {
   order: number;
+  status: FundStatus;
 };
 
-export type CaseDetailsDTO = {
-  _id: string;
-  cipher: string;
-  name: string;
-  dates: string;
-  sheets: number | null;
-  contentDescription: string;
-  pdfUrl: string | null;
+export type AdjacentCaseDTO = Pick<CaseBaseDTO, '_id' | 'name' | 'cipher'>;
+
+export type CaseDetailsDTO = CaseBaseDTO & {
   fundId: string;
-  fundNumber: { en: string; uk: string };
-  fundTitle: { en: string; uk: string };
+  fundNumber: LocalizedString;
+  fundTitle: LocalizedString;
   documents?: DocumentDTO[];
-  prevCase?: { _id: string; name: string; cipher: string } | null;
-  nextCase?: { _id: string; name: string; cipher: string } | null;
+  prevCase?: AdjacentCaseDTO | null;
+  nextCase?: AdjacentCaseDTO | null;
 };
 
 export type DocumentDTO = {

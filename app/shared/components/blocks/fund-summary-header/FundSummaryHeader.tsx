@@ -10,11 +10,9 @@ import CustomLink from '~/ds-components/link/CustomLink';
 
 import { styles, TITLE_GRID_COLUMN, TITLE_SX } from './FundSummaryHeader.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import type { LocalizedString } from '~/types/types/common.types';
+import type { LocalizedTipTapDoc } from '~/types/types/tiptap.types';
 import { sxToArray } from '~/utils/sxToArray';
-
-type LocalizedString = Record<Locale, string>;
-type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
 
 export type FundSummaryHeaderDataItem = {
   title: LocalizedString;

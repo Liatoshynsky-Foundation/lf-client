@@ -1,3 +1,4 @@
+import type { NextRequest } from 'next/server';
 import * as util from 'util';
 
 jest.mock('~/middleware/logger/logger', () => ({
@@ -27,6 +28,21 @@ jest.mock('mongodb', () => ({
   ObjectId: jest.fn().mockImplementation((id) => id)
 }));
 
+type FundsRouteHandler = typeof import('./route').GET;
+type FundsRouteRequest = Parameters<FundsRouteHandler>[0];
+type JsonResponsePayload<TData = unknown> = {
+  success: boolean;
+  data?: TData;
+  error?: {
+    code: string;
+    message: string;
+  };
+};
+type TestJsonResponse<TData = unknown> = Awaited<ReturnType<FundsRouteHandler>> & {
+  _testData: JsonResponsePayload<TData>;
+  status: number;
+};
+
 const mockFundsService = {
   getFunds: jest.fn(),
   getFundById: jest.fn(),
@@ -40,25 +56,44 @@ jest.mock('~/di/container', () => ({
 }));
 
 describe('Funds API Route (GET)', () => {
-  let GET: any;
-  let nextServer: any;
+  let GET: FundsRouteHandler;
+
+  const createRequest = (searchParams = ''): FundsRouteRequest =>
+    ({
+      nextUrl: {
+        searchParams: new URLSearchParams(searchParams)
+      }
+    }) as NextRequest;
+
+  const getResponse = async <TData = unknown>(searchParams = ''): Promise<TestJsonResponse<TData>> =>
+    (await GET(createRequest(searchParams))) as TestJsonResponse<TData>;
 
   beforeAll(async () => {
-    if (typeof global.Request === 'undefined') {
-      (global as any).Request = class {
-        constructor() {}
-      } as any;
-      (global as any).Response = class {} as any;
-      (global as any).TextEncoder = util.TextEncoder;
-      (global as any).TextDecoder = util.TextDecoder;
+    if (typeof globalThis.Request === 'undefined') {
+      Object.defineProperty(globalThis, 'Request', {
+        value: jest.fn()
+      });
+      Object.defineProperty(globalThis, 'Response', {
+        value: jest.fn()
+      });
+      Object.defineProperty(globalThis, 'TextEncoder', {
+        value: util.TextEncoder
+      });
+      Object.defineProperty(globalThis, 'TextDecoder', {
+        value: util.TextDecoder
+      });
     }
 
-    nextServer = await import('next/server');
-    nextServer.NextResponse.json = jest.fn((data, init) => ({
-      json: async () => data,
-      status: init?.status || 200,
-      _testData: data
-    }));
+    const { NextResponse } = await import('next/server');
+    jest.spyOn(NextResponse, 'json').mockImplementation((data?: unknown, init?: ResponseInit) => {
+      const response = {
+        json: async () => data,
+        status: init?.status || 200,
+        _testData: data
+      };
+
+      return response as unknown as ReturnType<typeof NextResponse.json>;
+    });
 
     const routeModule = await import('./route');
     GET = routeModule.GET;
@@ -66,59 +101,21 @@ describe('Funds API Route (GET)', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('should return dynamically numbered funds list in English when lang=en', async () => {
-    const rawFunds = [{ id: 1, title: { uk: 'Заголовок', en: 'Title' } }];
+  it('should return published funds list when no params provided', async () => {
+    const rawFunds = [{ id: 1, number: { uk: '№1', en: 'No.1' }, title: { uk: 'Заголовок', en: 'Title' } }];
     mockFundsService.getFunds.mockResolvedValue(rawFunds);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('lang=en') }
-    };
-
-    const res = await GET(mockReq as any);
+    const res = await getResponse<typeof rawFunds>('lang=en');
 
     expect(res._testData.success).toBe(true);
-    expect(res._testData.data[0].number).toBe('Fund 1');
-    expect(res._testData.data[0].title).toBe('Title');
-  });
-
-  it('should return dynamically numbered funds list in Ukrainian by default', async () => {
-    const rawFunds = [{ id: 2, title: { uk: 'Особисті документи', en: 'Personal documents' } }];
-    mockFundsService.getFunds.mockResolvedValue(rawFunds);
-
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams() }
-    };
-
-    const res = await GET(mockReq as any);
-
-    expect(res._testData.success).toBe(true);
-    expect(res._testData.data[0].number).toBe('Фонд 2');
-    expect(res._testData.data[0].title).toBe('Особисті документи');
-  });
-
-  it('should fallback to empty string when title is missing in funds list (branch coverage)', async () => {
-    const rawFunds = [{ id: 3 }];
-    mockFundsService.getFunds.mockResolvedValue(rawFunds);
-
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('lang=uk') }
-    };
-
-    const res = await GET(mockReq as any);
-
-    expect(res._testData.data[0].number).toBe('Фонд 3');
-    expect(res._testData.data[0].title).toBe('');
+    expect(res._testData.data).toEqual(rawFunds);
   });
 
   it('should return case details by caseId', async () => {
     const mockCase = { _id: 'case123', name: 'Test Case' };
     mockFundsService.getCaseById.mockResolvedValue(mockCase);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('caseId=case123') }
-    };
-
-    const res = await GET(mockReq as any);
+    const res = await getResponse<typeof mockCase>('caseId=case123');
 
     expect(mockFundsService.getCaseById).toHaveBeenCalledWith('case123');
     expect(res._testData.data).toEqual(mockCase);
@@ -127,11 +124,7 @@ describe('Funds API Route (GET)', () => {
   it('should return 404 when caseId is provided but case not found', async () => {
     mockFundsService.getCaseById.mockResolvedValue(null);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('caseId=not-exists') }
-    };
-
-    const res = await GET(mockReq as any);
+    const res = await getResponse('caseId=not-exists');
 
     expect(mockFundsService.getCaseById).toHaveBeenCalledWith('not-exists');
     expect(res.status).toBe(404);
@@ -140,72 +133,81 @@ describe('Funds API Route (GET)', () => {
 
   it('should return 404 when fundId is valid but fund not found', async () => {
     mockFundsService.getFundById.mockResolvedValue(null);
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=999') }
-    };
 
-    const res = await GET(mockReq as any);
+    const res = await getResponse('id=999');
 
     expect(mockFundsService.getFundById).toHaveBeenCalledWith(999);
     expect(res.status).toBe(404);
     expect(res._testData.success).toBe(false);
   });
 
-  it('should return translated fund details by fundId', async () => {
+  it('should return fund details by fundId without flattening localized fields', async () => {
     const mockFund = {
-      id: 10,
-      title: { uk: 'Фонд 10 Назва', en: 'Fund 10 Title' }
+      id: 5,
+      number: { uk: 'Фонд 5', en: 'Fund 5' },
+      title: { uk: 'Назва', en: 'Title' }
     };
     mockFundsService.getFundById.mockResolvedValue(mockFund);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=10&lang=uk') }
-    };
+    const res = await getResponse<typeof mockFund>('id=5');
 
-    const res = await GET(mockReq as any);
-
-    expect(res._testData.data.number).toBe('Фонд 10');
-    expect(res._testData.data.title).toBe('Фонд 10 Назва');
+    expect(mockFundsService.getFundById).toHaveBeenCalledWith(5);
+    expect(res._testData.data).toEqual(mockFund);
   });
 
-  it('should fallback to empty string when fund title is missing in details (branch coverage)', async () => {
-    const mockFund = { id: 7 };
+  it('should ignore lang while preserving the fund details DTO shape', async () => {
+    const mockFund = {
+      id: 10,
+      number: { uk: 'Ф10', en: 'F10' },
+      title: { uk: 'Заголовок', en: 'Title' }
+    };
     mockFundsService.getFundById.mockResolvedValue(mockFund);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=7&lang=en') }
+    const res = await getResponse<typeof mockFund>('id=10&lang=uk');
+
+    expect(res._testData.data).toEqual(mockFund);
+  });
+
+  it('should return fund details when lang is missing', async () => {
+    const mockFund = {
+      id: 1,
+      number: { uk: 'Українська', en: 'English' },
+      title: { uk: 'Заголовок', en: 'Title' }
     };
+    mockFundsService.getFundById.mockResolvedValue(mockFund);
 
-    const res = await GET(mockReq as any);
+    const res = await getResponse<typeof mockFund>('id=1');
 
-    expect(res._testData.data.number).toBe('Fund 7');
-    expect(res._testData.data.title).toBe('');
+    expect(res._testData.data).toEqual(mockFund);
   });
 
   it('should fallback to funds list if no ID matches query params', async () => {
     mockFundsService.getFunds.mockResolvedValue([]);
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('something=else') }
-    };
 
-    const res = await GET(mockReq as any);
+    const res = await getResponse('something=else');
     expect(res._testData.success).toBe(true);
   });
-  it('should return 400 for invalid fundId format', async () => {
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=abc') }
-    };
 
-    const res = await GET(mockReq as any);
+  it('should return 400 for invalid fundId format', async () => {
+    const res = await getResponse('id=abc');
+
     expect(res.status).toBe(400);
     expect(res._testData.error).toMatchObject({ code: 'VALIDATION_ERROR' });
   });
 
+  it('should return 400 for non-positive or fractional fundId values', async () => {
+    const zeroIdRes = await getResponse('id=0');
+    const fractionalIdRes = await getResponse('id=1.5');
+
+    expect(zeroIdRes.status).toBe(400);
+    expect(fractionalIdRes.status).toBe(400);
+    expect(mockFundsService.getFundById).not.toHaveBeenCalled();
+  });
+
   it('should return 500 on service failure', async () => {
     mockFundsService.getFunds.mockRejectedValue(new Error('DB Error'));
-    const mockReq = { nextUrl: { searchParams: new URLSearchParams() } };
 
-    const res = await GET(mockReq as any);
+    const res = await getResponse();
 
     expect(res.status).toBe(500);
     expect(res._testData.error).toMatchObject({ code: 'FUNDS_FETCH_FAILED' });

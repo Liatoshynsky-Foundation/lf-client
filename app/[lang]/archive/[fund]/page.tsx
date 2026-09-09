@@ -1,21 +1,14 @@
 import { notFound } from 'next/navigation';
 import type { Locale } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
-import FundSummaryHeader from '~/components/blocks/fund-summary-header/FundSummaryHeader';
 import {
   fundSummaryBacklinkText,
-  fundSummaryContent,
-  fundSummaryTitle,
   getFundSummaryHeaderBacklinkUrl
 } from '~/components/blocks/fund-summary-header/FundSummaryHeader.content';
-import DocumentTableSection from '~/components/tables/DocumentsTable/DocumentTableSection';
-import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
-import { isProductionMode } from '~/utils/isProductionMode';
-
-import MainLayout from '~/layouts/main-layout/MainLayout';
-import { mockDocuments } from '~/shared/components/tables/DocumentsTable/documents.mock';
+import FundDetailsClient from './FundDetailsClient';
 
 interface FundDetailsPageProps {
   params: Promise<{
@@ -30,27 +23,20 @@ export default async function FundDetailsPage({ params }: Readonly<FundDetailsPa
 
   const fundId = Number(fund);
 
-  if (Number.isNaN(fundId)) {
+  if (!Number.isInteger(fundId) || fundId < 1) {
     return notFound();
   }
 
-  if (isProductionMode()) {
-    return <UnderDevelopment />;
-  }
+  setRequestLocale(locale);
 
   const fundSummaryBacklinkUrl = await getFundSummaryHeaderBacklinkUrl();
 
   return (
-    <MainLayout>
-      <FundSummaryHeader
-        backLinkUrl={fundSummaryBacklinkUrl}
-        backLinkText={fundSummaryBacklinkText[locale]}
-        title={fundSummaryTitle[locale]}
-        data={fundSummaryContent}
-        sx={{ pt: { xs: '80px', lg: '88px' } }}
-      />
-
-      <DocumentTableSection documents={mockDocuments} />
-    </MainLayout>
+    <FundDetailsClient
+      fundId={fundId}
+      locale={locale}
+      fundSummaryBacklinkUrl={fundSummaryBacklinkUrl}
+      fundSummaryBacklinkText={fundSummaryBacklinkText[locale]}
+    />
   );
 }

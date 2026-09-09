@@ -27,7 +27,7 @@
       "get": {
         "tags": ["Funds"],
         "summary": "Get funds, fund details, or case details",
-        "description": "Returns different data based on query parameters:\n\n### Usage examples:\n\n| Scenario | URL | Returns |\n|----------|-----|--------|\n| List all funds | `GET /api/funds` | Array of FundDTO |\n| Fund details | `GET /api/funds?id=2` | FundDetailsDTO with cases |\n| Case details | `GET /api/funds?caseId=69236afae427aafae7051acd` | CaseDetailsDTO with documents |\n\n### Notes:\n- Use only one parameter at a time\n- `id` is numeric (fund ID)\n- `caseId` is MongoDB ObjectId string\n- If both parameters provided, `caseId` takes priority",
+        "description": "Returns different data based on query parameters:\n\n### Usage examples:\n\n| Scenario | URL | Returns |\n|----------|-----|--------|\n| List all funds | `GET /api/funds` | Array of FundBaseDTO |\n| Fund details | `GET /api/funds?id=2` | FundDetailsDTO with cases |\n| Case details | `GET /api/funds?caseId=69236afae427aafae7051acd` | CaseDetailsDTO with documents |\n\n### Notes:\n- Use only one parameter at a time\n- `id` is numeric (fund ID)\n- `caseId` is MongoDB ObjectId string\n- If both parameters provided, `caseId` takes priority",
         "operationId": "getFunds",
         "parameters": [
           {
@@ -66,7 +66,7 @@
                           "type": "array",
                           "description": "List of all funds (no parameters)",
                           "items": {
-                            "$ref": "#/components/schemas/FundDTO"
+                            "$ref": "#/components/schemas/FundBaseDTO"
                           }
                         },
                         {
@@ -85,8 +85,18 @@
                     "value": {
                       "success": true,
                       "data": [
-                        { "id": 1, "number": "Фонд 1", "title": "АУДІОЗАПИСИ" },
-                        { "id": 2, "number": "Фонд 2", "title": "ОСОБИСТІ ДОКУМЕНТИ" }
+                        {
+                          "id": 1,
+                          "number": { "uk": "Фонд 1", "en": "Fund 1" },
+                          "title": { "uk": "АУДІОЗАПИСИ", "en": "AUDIO RECORDINGS" },
+                          "status": "published"
+                        },
+                        {
+                          "id": 2,
+                          "number": { "uk": "Фонд 2", "en": "Fund 2" },
+                          "title": { "uk": "ОСОБИСТІ ДОКУМЕНТИ", "en": "PERSONAL DOCUMENTS" },
+                          "status": "published"
+                        }
                       ]
                     }
                   },
@@ -96,27 +106,48 @@
                       "success": true,
                       "data": {
                         "id": 2,
-                        "number": "Фонд 2",
-                        "title": "ОСОБИСТІ ДОКУМЕНТИ",
+                        "number": { "uk": "Фонд 2", "en": "Fund 2" },
+                        "title": { "uk": "ОСОБИСТІ ДОКУМЕНТИ", "en": "PERSONAL DOCUMENTS" },
                         "numberOfDescriptions": 1,
                         "numberOfCases": 15,
-                        "organizationForm": "Хронологічний",
+                        "organizationForm": { "uk": "Хронологічний", "en": "Chronological" },
                         "documentCreationDate": "1920-1968",
                         "chronologicalBoundaries": "1920-1968 рр.",
                         "documentLanguages": "Українська, російська",
-                        "characterAndContent": "Особисті документи композитора",
+                        "characterAndContent": {
+                          "uk": {
+                            "type": "doc",
+                            "content": [
+                              {
+                                "type": "paragraph",
+                                "content": [{ "type": "text", "text": "Особисті документи композитора" }]
+                              }
+                            ]
+                          },
+                          "en": {
+                            "type": "doc",
+                            "content": [
+                              {
+                                "type": "paragraph",
+                                "content": [{ "type": "text", "text": "Composer personal documents" }]
+                              }
+                            ]
+                          }
+                        },
                         "accessConditions": "Вільний доступ",
                         "compilerInfo": "Упорядник: Фундація Лятошинського",
+                        "status": "published",
                         "cases": [
                           {
                             "_id": "69236afae427aafae7051acd",
                             "cipher": "Ф2-001",
-                            "name": "Свідоцтво про народження",
-                            "dates": "1920",
+                            "name": { "uk": "Свідоцтво про народження", "en": "Birth certificate" },
+                            "dates": { "uk": "1920", "en": "1920" },
                             "sheets": 2,
-                            "contentDescription": "Оригінал документа",
+                            "contentDescription": { "uk": "Оригінал документа", "en": "Original document" },
                             "pdfUrl": "https://storage.blob/doc.pdf",
-                            "order": 1
+                            "order": 1,
+                            "status": "published"
                           }
                         ]
                       }
@@ -135,8 +166,8 @@
                         "contentDescription": "Оригінал документа",
                         "pdfUrl": "https://storage.blob/doc.pdf",
                         "fundId": "507f1f77bcf86cd799439011",
-                        "fundNumber": "Фонд 2",
-                        "fundTitle": "ОСОБИСТІ ДОКУМЕНТИ",
+                        "fundNumber": { "uk": "Фонд 2", "en": "Fund 2" },
+                        "fundTitle": { "uk": "ОСОБИСТІ ДОКУМЕНТИ", "en": "PERSONAL DOCUMENTS" },
                         "documents": [
                           {
                             "_id": "507f1f77bcf86cd799439012",
@@ -212,33 +243,64 @@
           "error": { "type": "string" }
         }
       },
-      "FundDTO": {
+      "LocalizedString": {
+        "type": "object",
+        "description": "Localized string value",
+        "required": ["uk", "en"],
+        "properties": {
+          "uk": { "type": "string" },
+          "en": { "type": "string" }
+        }
+      },
+      "TipTapDoc": {
+        "type": "object",
+        "description": "TipTap JSON document",
+        "required": ["type", "content"],
+        "properties": {
+          "type": { "type": "string", "enum": ["doc"] },
+          "content": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "FundStatus": {
+        "type": "string",
+        "enum": ["draft", "published", "hidden", "archived", "editing"]
+      },
+      "FundBaseDTO": {
         "type": "object",
         "description": "Basic fund information for list view",
-        "required": ["id", "number", "title"],
+        "required": ["id", "number", "title", "status"],
         "properties": {
           "id": { "type": "integer", "description": "Unique fund identifier" },
-          "number": { "type": "string", "description": "Fund number" },
-          "title": { "type": "string", "description": "Fund title" }
+          "number": { "$ref": "#/components/schemas/LocalizedString" },
+          "title": { "$ref": "#/components/schemas/LocalizedString" },
+          "status": { "$ref": "#/components/schemas/FundStatus" }
         }
       },
       "FundDetailsDTO": {
         "type": "object",
         "description": "Full fund details with cases",
-        "required": ["id", "number", "title"],
+        "required": ["id", "number", "title", "status", "cases"],
         "properties": {
           "id": { "type": "integer", "description": "Unique fund identifier" },
-          "number": { "type": "string", "description": "Fund number" },
-          "title": { "type": "string", "description": "Fund title" },
+          "number": { "$ref": "#/components/schemas/LocalizedString" },
+          "title": { "$ref": "#/components/schemas/LocalizedString" },
           "numberOfDescriptions": { "type": "integer", "description": "Number of descriptions" },
           "numberOfCases": { "type": "integer", "description": "Total cases count" },
-          "organizationForm": { "type": "string", "description": "Organization form" },
+          "organizationForm": { "$ref": "#/components/schemas/LocalizedString" },
           "documentCreationDate": { "type": "string", "description": "Document creation date range" },
           "chronologicalBoundaries": { "type": "string", "description": "Chronological boundaries" },
           "documentLanguages": { "type": "string", "description": "Languages of documents" },
-          "characterAndContent": { "type": "string", "description": "Character and content description" },
+          "characterAndContent": {
+            "type": "object",
+            "description": "Localized TipTap character and content description",
+            "properties": {
+              "uk": { "$ref": "#/components/schemas/TipTapDoc" },
+              "en": { "$ref": "#/components/schemas/TipTapDoc" }
+            }
+          },
           "accessConditions": { "type": "string", "description": "Access conditions" },
           "compilerInfo": { "type": "string", "description": "Compiler information" },
+          "status": { "$ref": "#/components/schemas/FundStatus" },
           "cases": {
             "type": "array",
             "description": "List of cases in this fund",
@@ -249,16 +311,17 @@
       "CaseDTO": {
         "type": "object",
         "description": "Case (справа) within a fund",
-        "required": ["_id", "cipher", "name", "order"],
+        "required": ["_id", "cipher", "name", "order", "status"],
         "properties": {
           "_id": { "type": "string", "description": "MongoDB ObjectId" },
           "cipher": { "type": "string", "description": "Case cipher/code" },
-          "name": { "type": "string", "description": "Case name" },
-          "dates": { "type": "string", "description": "Date range" },
+          "name": { "$ref": "#/components/schemas/LocalizedString" },
+          "dates": { "$ref": "#/components/schemas/LocalizedString" },
           "sheets": { "type": "integer", "nullable": true, "description": "Number of sheets" },
-          "contentDescription": { "type": "string", "description": "Content description" },
+          "contentDescription": { "$ref": "#/components/schemas/LocalizedString" },
           "pdfUrl": { "type": "string", "nullable": true, "description": "PDF document URL" },
-          "order": { "type": "integer", "description": "Sort order" }
+          "order": { "type": "integer", "description": "Sort order" },
+          "status": { "$ref": "#/components/schemas/FundStatus" }
         }
       },
       "CaseDetailsDTO": {
@@ -274,8 +337,8 @@
           "contentDescription": { "type": "string", "description": "Content description" },
           "pdfUrl": { "type": "string", "nullable": true, "description": "PDF document URL" },
           "fundId": { "type": "string", "description": "Parent fund MongoDB ObjectId" },
-          "fundNumber": { "type": "string", "description": "Parent fund number" },
-          "fundTitle": { "type": "string", "description": "Parent fund title" },
+          "fundNumber": { "$ref": "#/components/schemas/LocalizedString" },
+          "fundTitle": { "$ref": "#/components/schemas/LocalizedString" },
           "documents": {
             "type": "array",
             "description": "List of documents in this case",
