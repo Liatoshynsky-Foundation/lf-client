@@ -10,7 +10,7 @@ import ArchiveHeader from './ArchiveHeader/ArchiveHeader';
 import FundCard from './FundCard/FundCard';
 import { styles } from './page.styles';
 
-import { FundDTO } from '~/domain/dto/funds.dto';
+import type { FundBaseDTO } from '~/domain/dto/funds.dto';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 
@@ -42,7 +42,7 @@ export default function Archive() {
   const [error, setError] = useState<string | null>(null);
   const locale = useLocale();
 
-  const [funds, setFunds] = useState<FundDTO[]>([]);
+  const [funds, setFunds] = useState<FundBaseDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { params, setParam } = useTableFilters({ search: '' });
 
@@ -93,7 +93,7 @@ export default function Archive() {
 
   const numColumns = getNumColumns();
 
-  const fundsByColumn: Record<number, FundDTO[]> = {};
+  const fundsByColumn: Record<number, FundBaseDTO[]> = {};
   for (let i = 1; i <= numColumns; i++) {
     fundsByColumn[i] = [];
   }

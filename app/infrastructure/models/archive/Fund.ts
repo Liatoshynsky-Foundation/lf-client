@@ -1,22 +1,32 @@
 import { model, models, Schema, Types } from 'mongoose';
 
+import type { LocalizedString } from '~/types/types/common.types';
+import type { LocalizedTipTapDoc } from '~/types/types/tiptap.types';
+
+import { FundStatus } from '~/domain/dto/funds.dto';
+
 export interface IFund {
   _id: Types.ObjectId;
   id: number;
-  number: { en: string; uk: string };
-  title: { en: string; uk: string };
+  title: LocalizedString;
   numberOfDescriptions: number;
   numberOfCases: number;
-  organizationForm: string;
+  organizationForm?: LocalizedString;
   documentCreationDate: string;
-  chronologicalBoundaries: string;
-  documentLanguages: string;
-  characterAndContent: string;
-  accessConditions: string;
-  compilerInfo: string;
+  chronologicalBoundaries?: string;
+  documentLanguages?: string;
+  characterAndContent?: LocalizedTipTapDoc | string;
+  accessConditions?: string;
+  compilerInfo?: string;
+  status: FundStatus;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const localizedStringSchema = {
+  uk: { type: String, default: '' },
+  en: { type: String, default: '' }
+};
 
 const fundSchema = new Schema<IFund>(
   {
@@ -25,13 +35,9 @@ const fundSchema = new Schema<IFund>(
       required: true,
       unique: true
     },
-    number: {
-      type: String,
-      required: true
-    },
     title: {
-      type: String,
-      required: true
+      uk: { type: String, required: true },
+      en: { type: String, required: true }
     },
     numberOfDescriptions: {
       type: Number,
@@ -42,8 +48,7 @@ const fundSchema = new Schema<IFund>(
       default: 0
     },
     organizationForm: {
-      type: String,
-      default: ''
+      ...localizedStringSchema
     },
     documentCreationDate: {
       type: String,
@@ -58,8 +63,8 @@ const fundSchema = new Schema<IFund>(
       default: ''
     },
     characterAndContent: {
-      type: String,
-      default: ''
+      uk: { type: Object, required: false, default: undefined },
+      en: { type: Object, required: false, default: undefined }
     },
     accessConditions: {
       type: String,
@@ -68,6 +73,13 @@ const fundSchema = new Schema<IFund>(
     compilerInfo: {
       type: String,
       default: ''
+    },
+    status: {
+      type: String,
+      enum: Object.values(FundStatus),
+      default: FundStatus.Hidden,
+      required: true,
+      index: true
     }
   },
   {

@@ -5,28 +5,25 @@ import { errors } from '~/constants/errors';
 import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
 
+const parsePositiveInteger = (value: string): number | null => {
+  if (!/^[1-9]\d*$/.test(value)) {
+    return null;
+  }
+
+  return Number(value);
+};
+
 export async function GET(req: NextRequest) {
   try {
     const params = req.nextUrl.searchParams;
     const fundId = params.get('id');
     const caseId = params.get('caseId');
-    const lang: 'uk' | 'en' = (params.get('lang') as 'uk' | 'en') || 'uk';
 
     const fundsService = createRequestContainer().resolve('fundsService');
-    type FundData = {
-      number: string | Record<string, string>;
-      title: string | Record<string, string>;
-      [key: string]: unknown;
-    };
 
     if (!fundId && !caseId) {
       const funds = await fundsService.getFunds();
-      const translatedFunds = funds.map((fund: FundData) => ({
-        ...fund,
-        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
-        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
-      }));
-      return NextResponse.json({ success: true, data: translatedFunds });
+      return NextResponse.json({ success: true, data: funds });
     }
 
     if (caseId) {
@@ -40,9 +37,9 @@ export async function GET(req: NextRequest) {
     }
 
     if (fundId) {
-      const id = Number.parseInt(fundId, 10);
+      const id = parsePositiveInteger(fundId);
 
-      if (Number.isNaN(id)) {
+      if (id === null) {
         return NextResponse.json({ success: false, error: errors.VALIDATION_ERROR }, { status: 400 });
       }
 
@@ -52,13 +49,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ success: false, error: errors.NOT_FOUND }, { status: 404 });
       }
 
-      const translatedFund = {
-        ...fund,
-        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
-        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
-      };
-
-      return NextResponse.json({ success: true, data: translatedFund });
+      return NextResponse.json({ success: true, data: fund });
     }
   } catch (error) {
     logger.error('[API:GET:funds] Critical error while fetching funds/cases data', error);
