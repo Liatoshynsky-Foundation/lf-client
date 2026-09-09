@@ -1,3 +1,5 @@
+import * as util from 'util';
+
 jest.mock('~/middleware/logger/logger', () => ({
   __esModule: true,
   default: {
@@ -24,7 +26,7 @@ jest.mock('mongodb', () => ({
   })),
   ObjectId: jest.fn().mockImplementation((id) => id)
 }));
-import * as util from 'util';
+
 const mockFundsService = {
   getFunds: jest.fn(),
   getFundById: jest.fn(),
@@ -64,8 +66,8 @@ describe('Funds API Route (GET)', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('should return translated funds list when no params provided', async () => {
-    const rawFunds = [{ id: 1, number: { uk: '№1', en: 'No.1' }, title: { uk: 'Заголовок', en: 'Title' } }];
+  it('should return dynamically numbered funds list in English when lang=en', async () => {
+    const rawFunds = [{ id: 1, title: { uk: 'Заголовок', en: 'Title' } }];
     mockFundsService.getFunds.mockResolvedValue(rawFunds);
 
     const mockReq = {
@@ -75,8 +77,37 @@ describe('Funds API Route (GET)', () => {
     const res = await GET(mockReq as any);
 
     expect(res._testData.success).toBe(true);
-    expect(res._testData.data[0].number).toBe('No.1');
+    expect(res._testData.data[0].number).toBe('Fund 1');
     expect(res._testData.data[0].title).toBe('Title');
+  });
+
+  it('should return dynamically numbered funds list in Ukrainian by default', async () => {
+    const rawFunds = [{ id: 2, title: { uk: 'Особисті документи', en: 'Personal documents' } }];
+    mockFundsService.getFunds.mockResolvedValue(rawFunds);
+
+    const mockReq = {
+      nextUrl: { searchParams: new URLSearchParams() }
+    };
+
+    const res = await GET(mockReq as any);
+
+    expect(res._testData.success).toBe(true);
+    expect(res._testData.data[0].number).toBe('Фонд 2');
+    expect(res._testData.data[0].title).toBe('Особисті документи');
+  });
+
+  it('should fallback to empty string when title is missing in funds list (branch coverage)', async () => {
+    const rawFunds = [{ id: 3 }];
+    mockFundsService.getFunds.mockResolvedValue(rawFunds);
+
+    const mockReq = {
+      nextUrl: { searchParams: new URLSearchParams('lang=uk') }
+    };
+
+    const res = await GET(mockReq as any);
+
+    expect(res._testData.data[0].number).toBe('Фонд 3');
+    expect(res._testData.data[0].title).toBe('');
   });
 
   it('should return case details by caseId', async () => {
@@ -93,7 +124,7 @@ describe('Funds API Route (GET)', () => {
     expect(res._testData.data).toEqual(mockCase);
   });
 
-  it('should return 404 when caseId is provided but case not found (Lines 34-35)', async () => {
+  it('should return 404 when caseId is provided but case not found', async () => {
     mockFundsService.getCaseById.mockResolvedValue(null);
 
     const mockReq = {
@@ -106,7 +137,8 @@ describe('Funds API Route (GET)', () => {
     expect(res.status).toBe(404);
     expect(res._testData.success).toBe(false);
   });
-  it('should return 404 when fundId is valid but fund not found (Lines 59-61)', async () => {
+
+  it('should return 404 when fundId is valid but fund not found', async () => {
     mockFundsService.getFundById.mockResolvedValue(null);
     const mockReq = {
       nextUrl: { searchParams: new URLSearchParams('id=999') }
@@ -118,56 +150,11 @@ describe('Funds API Route (GET)', () => {
     expect(res.status).toBe(404);
     expect(res._testData.success).toBe(false);
   });
-  it('should handle fund fields when they are NOT objects (Line 63-65)', async () => {
-    const mockFund = {
-      id: 5,
-      number: 'SimpleNumber',
-      title: 'SimpleTitle'
-    };
-    mockFundsService.getFundById.mockResolvedValue(mockFund);
 
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=5') }
-    };
-
-    const res = await GET(mockReq as any);
-
-    expect(res._testData.data.number).toBe('SimpleNumber');
-    expect(res._testData.data.title).toBe('SimpleTitle');
-  });
-  it('BRANCH COVERAGE: should handle mixed types for number and title (Lines 34, 64-65)', async () => {
-    const mixedFunds = [
-      {
-        id: 1,
-        number: { uk: 'Объект', en: 'Object' },
-        title: 'Простая строка'
-      },
-      {
-        id: 2,
-        number: 'Простая строка',
-        title: { uk: 'Объект', en: 'Object' }
-      }
-    ];
-
-    mockFundsService.getFunds.mockResolvedValue(mixedFunds);
-
-    const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('lang=en') }
-    };
-
-    const res = await GET(mockReq as any);
-
-    expect(res._testData.data[0].number).toBe('Object');
-    expect(res._testData.data[0].title).toBe('Простая строка');
-
-    expect(res._testData.data[1].number).toBe('Простая строка');
-    expect(res._testData.data[1].title).toBe('Object');
-  });
   it('should return translated fund details by fundId', async () => {
     const mockFund = {
       id: 10,
-      number: { uk: 'Ф10', en: 'F10' },
-      title: 'Static Title'
+      title: { uk: 'Фонд 10 Назва', en: 'Fund 10 Title' }
     };
     mockFundsService.getFundById.mockResolvedValue(mockFund);
 
@@ -177,26 +164,25 @@ describe('Funds API Route (GET)', () => {
 
     const res = await GET(mockReq as any);
 
-    expect(res._testData.data.number).toBe('Ф10');
-    expect(res._testData.data.title).toBe('Static Title');
+    expect(res._testData.data.number).toBe('Фонд 10');
+    expect(res._testData.data.title).toBe('Фонд 10 Назва');
   });
-  it('should handle fund translation when lang is missing (default "uk")', async () => {
-    const mockFund = {
-      id: 1,
-      number: { uk: 'Українська', en: 'English' },
-      title: { uk: 'Заголовок', en: 'Title' }
-    };
+
+  it('should fallback to empty string when fund title is missing in details (branch coverage)', async () => {
+    const mockFund = { id: 7 };
     mockFundsService.getFundById.mockResolvedValue(mockFund);
 
     const mockReq = {
-      nextUrl: { searchParams: new URLSearchParams('id=1') }
+      nextUrl: { searchParams: new URLSearchParams('id=7&lang=en') }
     };
 
     const res = await GET(mockReq as any);
 
-    expect(res._testData.data.number).toBe('Українська');
+    expect(res._testData.data.number).toBe('Fund 7');
+    expect(res._testData.data.title).toBe('');
   });
-  it('should fallback to funds list if no ID matches (Last lines)', async () => {
+
+  it('should fallback to funds list if no ID matches query params', async () => {
     mockFundsService.getFunds.mockResolvedValue([]);
     const mockReq = {
       nextUrl: { searchParams: new URLSearchParams('something=else') }

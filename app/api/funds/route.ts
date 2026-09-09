@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
+import { LocalizedString } from '~/types/types/common.types';
 
 import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
@@ -14,8 +15,8 @@ export async function GET(req: NextRequest) {
 
     const fundsService = createRequestContainer().resolve('fundsService');
     type FundData = {
-      number: string | Record<string, string>;
-      title: string | Record<string, string>;
+      id: number;
+      title: LocalizedString;
       [key: string]: unknown;
     };
 
@@ -23,8 +24,8 @@ export async function GET(req: NextRequest) {
       const funds = await fundsService.getFunds();
       const translatedFunds = funds.map((fund: FundData) => ({
         ...fund,
-        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
-        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
+        number: lang === 'en' ? `Fund ${fund.id}` : `Фонд ${fund.id}`,
+        title: fund.title?.[lang] || ''
       }));
       return NextResponse.json({ success: true, data: translatedFunds });
     }
@@ -54,8 +55,8 @@ export async function GET(req: NextRequest) {
 
       const translatedFund = {
         ...fund,
-        number: typeof fund.number === 'object' ? fund.number[lang] : fund.number,
-        title: typeof fund.title === 'object' ? fund.title[lang] : fund.title
+        number: lang === 'en' ? `Fund ${fund.id}` : `Фонд ${fund.id}`,
+        title: fund.title?.[lang] || ''
       };
 
       return NextResponse.json({ success: true, data: translatedFund });
