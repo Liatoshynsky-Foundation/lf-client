@@ -8,6 +8,7 @@ import { styles } from './Carousel.styles';
 
 import { CropRect } from '~/lib/utils/cropUtils';
 import CroppedImage from '~/shared/components/cropped-image/CroppedImage';
+import { isValidUrl } from '~/shared/utils/isValidUrl';
 
 interface CarouselImage {
   crop?: { rect: CropRect } | CropRect | null;
@@ -24,30 +25,54 @@ interface CarouselProps {
 }
 
 const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselProps) => {
+  const [failedImageIds, setFailedImageIds] = useState<Set<string | number>>(new Set());
+
+  const validImages = React.useMemo(() => {
+    return (images || []).filter((img) => isValidUrl(img.src) && !failedImageIds.has(img.id));
+  }, [images, failedImageIds]);
+
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
   const [touchStartX, setTouchStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
 
+  const handleImageError = useCallback((id: string | number) => {
+    setFailedImageIds((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (validImages.length > 0 && activeIndex >= validImages.length) {
+      setActiveIndex(validImages.length - 1);
+    }
+  }, [validImages.length, activeIndex]);
+
+  const total = validImages.length;
+
   const goToNext = useCallback(() => {
+    if (total === 0) return;
     setActiveIndex((prev) => {
       if (infiniteLoop) {
-        return (prev + 1) % images.length;
+        return (prev + 1) % total;
       }
-      return prev < images.length - 1 ? prev + 1 : prev;
+      return prev < total - 1 ? prev + 1 : prev;
     });
-  }, [images.length, infiniteLoop]);
+  }, [total, infiniteLoop]);
 
   const goToPrev = useCallback(() => {
+    if (total === 0) return;
     setActiveIndex((prev) => {
       if (infiniteLoop) {
-        return (prev - 1 + images.length) % images.length;
+        return (prev - 1 + total) % total;
       }
       return prev > 0 ? prev - 1 : prev;
     });
-  }, [images.length, infiniteLoop]);
+  }, [total, infiniteLoop]);
 
   const isFirstSlide = !infiniteLoop && activeIndex === 0;
-  const isLastSlide = !infiniteLoop && activeIndex === images.length - 1;
+  const isLastSlide = !infiniteLoop && activeIndex === validImages.length - 1;
 
   const goToSlide = useCallback((index: number) => {
     setActiveIndex(index);
@@ -81,7 +106,7 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
         goToPrev();
       }
     } else if (dragOffset < -50) {
-      if (infiniteLoop || activeIndex < images.length - 1) {
+      if (infiniteLoop || activeIndex < validImages.length - 1) {
         goToNext();
       }
     }
@@ -103,10 +128,14 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
     return () => document.removeEventListener('keydown', handleKey);
   }, [handleKey]);
 
+  if (validImages.length === 0) {
+    return null;
+  }
+
   return (
     <Box data-testid="carousel">
       <Box sx={styles.carouselTrackStyles}>
-        {images.map((image, index) => {
+        {validImages.map((image, index) => {
           const isActive = index === activeIndex;
           return (
             <Box
@@ -119,7 +148,13 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
               onTouchEnd={handleTouchEnd}
               sx={styles.getImageWrapperStyles(index, activeIndex, isActive)}
             >
-              <CroppedImage src={image.src} alt={image.alt} crop={image.crop} fill={true} />
+              <CroppedImage
+                src={image.src}
+                alt={image.alt}
+                crop={image.crop}
+                fill={true}
+                onError={() => handleImageError(image.id)}
+              />
             </Box>
           );
         })}
@@ -131,13 +166,13 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
         </Box>
       </Box>
       <Box sx={styles.carouselFooterStyles}>
-        <Box key={images[activeIndex]?.description} sx={styles.captionStyles} data-testid="carousel-caption">
+        <Box key={validImages[activeIndex]?.description} sx={styles.captionStyles} data-testid="carousel-caption">
           <Typography sx={styles.captionStyles} variant="customItalic14">
-            {images[activeIndex]?.description}
+            {validImages[activeIndex]?.description}
           </Typography>
         </Box>
         <Box sx={styles.dotsContainerStyles}>
-          {images.map((image, index) => {
+          {validImages.map((image, index) => {
             const isActive = index === activeIndex;
             return (
               <Box

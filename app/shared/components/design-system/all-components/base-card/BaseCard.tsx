@@ -12,6 +12,7 @@ import { styles } from './BaseCard.styles';
 import { type CropRect } from '~/lib/utils/cropUtils';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
+import { isValidUrl } from '~/shared/utils/isValidUrl';
 
 export type Variant = 'news' | 'press';
 
@@ -28,19 +29,6 @@ export interface BaseCardProps {
 }
 
 const FALLBACK_IMAGE = '/images/media-card-placeholder.png';
-
-const isValidUrl = (url: string | null | undefined): url is string => {
-  if (!url) return false;
-  if (url.startsWith('/')) return true;
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn(`[BaseCard:isValidUrl] Failed to parse image URL: ${url} `, error);
-    return false;
-  }
-};
 
 const BUTTON_CONFIG = {
   news: { showIcon: false },
