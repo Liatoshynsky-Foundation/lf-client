@@ -7,6 +7,7 @@ import { parseGenreString } from '~/lib/utils/parseGenreString';
 import { extractTextFromTipTap, LocalizedTipTap, parseTipTapString } from '~/lib/utils/tiptapHelpers';
 import { extractYouTubeId } from '~/lib/utils/youtubeHelpers';
 import { RichContent } from '~/shared/components/design-system/all-components/content-block/ContentBlock';
+import { isValidUrl } from '~/shared/utils/isValidUrl';
 import {
   OpusDocument,
   RawCompositionDTO,
@@ -125,7 +126,10 @@ export function mapOpusGallery(
   locale: Locale
 ): OpusGalleryItem[] | undefined {
   if (!gallery || gallery.length === 0) return undefined;
-  return gallery.map((item) => ({
+  const validGallery = gallery.filter((item) => isValidUrl(item?.src));
+  if (validGallery.length === 0) return undefined;
+
+  return validGallery.map((item) => ({
     id: String(item._id || item.src),
     src: item.src,
     alt: item.altText[locale],

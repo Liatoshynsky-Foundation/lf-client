@@ -4,7 +4,12 @@ import * as React from 'react';
 
 import Carousel from './Carousel';
 
-jest.mock('next/image');
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ src, alt, onError, ...props }: React.ComponentProps<'img'>) => (
+    <img src={src} alt={alt} onError={onError} {...props} />
+  )
+}));
 
 jest.mock('~/ds-components/arrow-carousel/ArrowCarousel', () => ({
   __esModule: true,
@@ -147,5 +152,28 @@ describe('Carousel', () => {
     const carousel = screen.getByTestId('carousel');
     fireEvent.keyDown(carousel, { key: 'ArrowLeft' });
     expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+  });
+
+  it('should remove image slide when image load fails (onError triggered)', () => {
+    render(<Carousel images={mockImages} />);
+
+    const firstImage = screen.getByAltText('Image 1');
+    fireEvent.error(firstImage);
+
+    expect(screen.queryByAltText('Image 1')).not.toBeInTheDocument();
+    expect(screen.getByAltText('Image 2')).toBeInTheDocument();
+  });
+
+  it('should adjust activeIndex when the active last slide fails', () => {
+    render(<Carousel images={mockImages} initialIndex={2} />);
+
+    const lastImage = screen.getByAltText('Image 3');
+    expect(screen.getByTestId('carousel-image-2')).toHaveAttribute('data-active', 'true');
+
+    fireEvent.error(lastImage);
+
+    expect(screen.queryByAltText('Image 3')).not.toBeInTheDocument();
+    const newActiveSlide = screen.getByTestId('carousel-image-1');
+    expect(newActiveSlide).toHaveAttribute('data-active', 'true');
   });
 });

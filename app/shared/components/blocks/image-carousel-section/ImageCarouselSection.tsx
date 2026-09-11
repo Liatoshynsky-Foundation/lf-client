@@ -10,6 +10,7 @@ import { sxToArray } from '~/utils/sxToArray';
 import { CropRect } from '~/lib/utils/cropUtils';
 import Carousel from '~/shared/components/design-system/all-components/carousel/Carousel';
 import { IMAGES } from '~/shared/constants/assets';
+import { isValidUrl } from '~/shared/utils/isValidUrl';
 
 export type ImageCarouselSectionProps = BoxProps & {
   data?: {
@@ -60,18 +61,24 @@ const ImageCarouselSection: React.FC<ImageCarouselSectionProps> = ({ sx, data, .
       return defaultImages;
     }
 
-    return data.images.map((img, index) => {
-      const parsedCrop = img.crop?.rect || null;
+    return data.images
+      .filter((img) => isValidUrl(img.src))
+      .map((img, index) => {
+        const parsedCrop = img.crop?.rect || null;
 
-      return {
-        id: img.id || index,
-        src: img.src,
-        alt: getLocalizedText(img.alt),
-        description: getLocalizedText(img.caption),
-        crop: parsedCrop
-      };
-    });
+        return {
+          id: img.id || index,
+          src: img.src,
+          alt: getLocalizedText(img.alt),
+          description: getLocalizedText(img.caption),
+          crop: parsedCrop
+        };
+      });
   }, [data?.images, locale, t]);
+
+  if (carouselImages.length === 0) {
+    return null;
+  }
 
   return (
     <Box sx={[styles.carouselSectionContainer, ...sxToArray(sx)]} {...props}>

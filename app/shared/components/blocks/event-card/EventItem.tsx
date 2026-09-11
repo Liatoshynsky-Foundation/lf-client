@@ -16,23 +16,9 @@ import { formatIsoDateToDdMmYy } from '~/lib/utils/parseIsoDate';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import CustomLink from '~/shared/components/design-system/all-components/link/CustomLink';
 import { useImageCrop } from '~/shared/hooks/use-image-crop/useImageCrop';
+import { isValidUrl } from '~/shared/utils/isValidUrl';
 
 const FALLBACK_IMAGE = '/images/media-card-placeholder.png';
-
-const isValidUrl = (url: string | null | undefined): url is string => {
-  if (!url) return false;
-  if (url.startsWith('/')) return true;
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    const logger = globalThis['console'];
-    if (logger) {
-      logger.warn(`[EventItem:isValidUrl] Failed to parse image URL: ${url}`, error);
-    }
-    return false;
-  }
-};
 
 export type EventItemDate = {
   startDate: string;
