@@ -43,6 +43,12 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
     });
   }, []);
 
+  useEffect(() => {
+    if (validImages.length > 0 && activeIndex >= validImages.length) {
+      setActiveIndex(validImages.length - 1);
+    }
+  }, [validImages.length, activeIndex]);
+
   const total = validImages.length;
 
   const goToNext = useCallback(() => {

@@ -163,4 +163,17 @@ describe('Carousel', () => {
     expect(screen.queryByAltText('Image 1')).not.toBeInTheDocument();
     expect(screen.getByAltText('Image 2')).toBeInTheDocument();
   });
+
+  it('should adjust activeIndex when the active last slide fails', () => {
+    render(<Carousel images={mockImages} initialIndex={2} />);
+
+    const lastImage = screen.getByAltText('Image 3');
+    expect(screen.getByTestId('carousel-image-2')).toHaveAttribute('data-active', 'true');
+
+    fireEvent.error(lastImage);
+
+    expect(screen.queryByAltText('Image 3')).not.toBeInTheDocument();
+    const newActiveSlide = screen.getByTestId('carousel-image-1');
+    expect(newActiveSlide).toHaveAttribute('data-active', 'true');
+  });
 });
