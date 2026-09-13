@@ -44,7 +44,7 @@ jest.mock('~/shared/components/design-system/all-components/content-block/Conten
 });
 
 jest.mock('~/shared/components/year-with-line/YearWithLine', () => {
-  return function MockYearWithLine(props: { year: number }) {
+  return function MockYearWithLine(props: { year: number | string }) {
     return <div data-testid="BiographyContent-yearWithLine">{props.year}</div>;
   };
 });
@@ -232,11 +232,12 @@ describe('BiographyContent', () => {
     expect(screen.getByTestId('BiographyContent')).toBeInTheDocument();
   });
 
-  it('should render year line for blocks with numeric yearTitle', () => {
+  it('should render year line for blocks with non-null yearTitle', () => {
     render(<BiographyContent data={mockBlocks} />);
     const years = screen.getAllByTestId('BiographyContent-yearWithLine');
-    expect(years).toHaveLength(1);
+    expect(years).toHaveLength(2);
     expect(years[0]).toHaveTextContent(mockBlocks[0].yearTitle as string);
+    expect(years[1]).toHaveTextContent(mockBlocks[2].yearTitle as string);
   });
 
   it('should render chronology list items for each list entry', () => {
