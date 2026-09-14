@@ -1,6 +1,6 @@
 import '../globals.css';
 import { Box } from '@mui/material';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Mulish, Oswald } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -45,6 +45,12 @@ const oswald = Oswald({
   weight: ['400', '600', '700'],
   variable: '--font-oswald'
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover'
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: Locale }> }): Promise<Metadata> {
   const { lang } = await params;

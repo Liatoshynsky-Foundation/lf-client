@@ -3,7 +3,9 @@ import { theme } from '../../design-system/all-components/theme/Theme';
 export const styles = {
   container: {
     maxWidth: '520px',
-    height: '100%'
+    height: '100%',
+    marginBottom: 'env(safe-area-inset-bottom, 0px)',
+    maxHeight: '100dvh'
   },
   childrenBox: {
     display: 'flex',
@@ -33,6 +35,7 @@ export const styles = {
     justifyContent: 'space-between',
     flexDirection: { xs: 'column', sm: 'row' },
     gap: '8px',
-    padding: '16px 8px'
+    padding: '16px 8px',
+    paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))'
   }
 };
