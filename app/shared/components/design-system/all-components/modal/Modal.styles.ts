@@ -5,11 +5,17 @@ const titleColor = (backgroundColor: Color) => (backgroundColor === 'white' ? 'b
 
 const windowMargin = { xs: '24px', sm: '32px', md: '48px' };
 
+const bottomMargin = {
+  xs: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+  sm: 'calc(32px + env(safe-area-inset-bottom, 0px))',
+  md: '48px'
+};
+
 const verticalPositionStyles = (verticalAlignment: VerticalAlignment) => {
   if (verticalAlignment === PositionEnum.Top) {
     return { top: 0, bottom: 'revert-layer', mt: windowMargin, mb: windowMargin };
   } else if (verticalAlignment === PositionEnum.Bottom) {
-    return { bottom: 0, top: 'revert-layer', mt: windowMargin, mb: windowMargin };
+    return { bottom: 0, top: 'revert-layer', mt: windowMargin, mb: bottomMargin };
   } else {
     return { top: '35%', my: '0' };
   }
@@ -35,6 +41,8 @@ export const style = {
   ) => ({
     width: { xs: 'calc(100% - 48px)', sm: width },
     height: { xs: 'fit-content', sm: height ?? 'fit-content' },
+    maxHeight: 'calc(100dvh - 48px - env(safe-area-inset-bottom, 0px))',
+    overflowY: 'auto',
     backgroundColor: backgroundColor === 'white' ? backgroundColor : 'burgundy.900',
     borderRadius: '32px',
     outline: 'none',
