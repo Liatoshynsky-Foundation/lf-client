@@ -266,7 +266,8 @@ describe('BaseCard', () => {
     const img = screen.getByRole('img', { name: defaultProps.alt });
     fireEvent.error(img);
 
-    expect(img).toHaveAttribute('src', '/images/media-card-placeholder.png');
+    const fallbackImg = screen.getByTestId('next-image');
+    expect(fallbackImg).toHaveAttribute('src', '/images/media-card-placeholder.png');
   });
 
   it('should switch to fallback image on error for Next Image without crop to cover line 92', () => {

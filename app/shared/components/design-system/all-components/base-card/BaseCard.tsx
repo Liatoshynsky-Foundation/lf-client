@@ -63,17 +63,17 @@ export default function BaseCard({
     setHasError(!valid);
   }, [image]);
 
-  const handleImageError = () => {
-    setHasError(true);
-    setImageSrc(FALLBACK_IMAGE);
-  };
-
   useEffect(() => {
     const img = imgRef.current;
     if (img && img.complete && img.naturalWidth === 0) {
       handleImageError();
     }
   }, [imgRef, imageSrc]);
+
+  const handleImageError = () => {
+    setHasError(true);
+    setImageSrc(FALLBACK_IMAGE);
+  };
 
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
