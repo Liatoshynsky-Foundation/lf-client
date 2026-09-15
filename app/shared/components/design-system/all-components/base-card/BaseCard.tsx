@@ -51,35 +51,53 @@ export default function BaseCard({
   const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
 
   const { containerRef, imgRef, handleImageLoad, croppedImgStyle } = useImageCrop(crop);
+
   const initialSrc = isValidUrl(image) ? image : FALLBACK_IMAGE;
   const [imageSrc, setImageSrc] = useState<string>(initialSrc);
-  const isFallbackImage = imageSrc === FALLBACK_IMAGE;
+  const [hasError, setHasError] = useState<boolean>(!isValidUrl(image));
+  const isFallbackImage = hasError || imageSrc === FALLBACK_IMAGE;
 
   useEffect(() => {
-    setImageSrc(isValidUrl(image) ? image : FALLBACK_IMAGE);
+    const valid = isValidUrl(image);
+    setImageSrc(valid ? image : FALLBACK_IMAGE);
+    setHasError(!valid);
   }, [image]);
+
+  const handleImageError = () => {
+    setHasError(true);
+    setImageSrc(FALLBACK_IMAGE);
+  };
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth === 0) {
+      handleImageError();
+    }
+  }, [imgRef, imageSrc]);
 
   const cardContent = (
     <Box component="article" sx={styles.card} data-testid={dataTestId} aria-label={title}>
       <Box ref={containerRef} sx={styles.imageContainer} data-testid={`${dataTestId}-imageContainer`}>
-        {crop ? (
+        {!isFallbackImage && crop ? (
           <img
             ref={imgRef}
             src={imageSrc}
             alt={alt}
-            loading="lazy"
             onLoad={handleImageLoad}
-            style={isFallbackImage ? styles.fallbackImage : croppedImgStyle}
-            onError={() => setImageSrc(FALLBACK_IMAGE)}
+            style={{
+              ...croppedImgStyle,
+              color: 'transparent'
+            }}
+            onError={handleImageError}
           />
         ) : (
           <Image
-            src={imageSrc}
+            src={isFallbackImage ? FALLBACK_IMAGE : imageSrc}
             alt={alt}
             fill
             style={styles.image}
             sizes="(max-width: 768px) 100vw, 33vw"
-            onError={() => setImageSrc(FALLBACK_IMAGE)}
+            onError={handleImageError}
           />
         )}
       </Box>
