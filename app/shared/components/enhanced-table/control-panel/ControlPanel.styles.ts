@@ -12,9 +12,13 @@ export const ControlPanelStyles = {
   headerRight: {
     display: 'flex',
     alignItems: 'center',
+    flexShrink: 0,
     gap: {
       xs: 1,
       sm: 2
+    },
+    '& > *': {
+      flexShrink: 0
     }
   },
   filtersBadge: {
