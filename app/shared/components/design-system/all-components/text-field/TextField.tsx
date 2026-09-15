@@ -4,7 +4,12 @@ import * as React from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-const CustomTextField = styled(MuiTextField)({});
+const CustomTextField = styled(MuiTextField)({
+  flexShrink: 0,
+  '& .MuiInputBase-root': {
+    boxSizing: 'border-box'
+  }
+});
 
 type CustomBaseProps = {
   variant?: 'standard' | 'outlined';
