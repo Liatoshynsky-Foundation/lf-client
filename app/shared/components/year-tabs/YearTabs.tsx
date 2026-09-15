@@ -136,7 +136,8 @@ export default function YearTabs({ years }: Readonly<Data>) {
       if (!hash) return;
 
       const raw = hash.slice(1);
-      const id = raw.endsWith('s') ? raw.slice(0, -1) : raw;
+      const decodedRaw = decodeURIComponent(raw);
+      const id = decodedRaw.endsWith('s') ? decodedRaw.slice(0, -1) : decodedRaw;
       if (!id) return;
 
       const element = document.getElementById(`year-${id}`);

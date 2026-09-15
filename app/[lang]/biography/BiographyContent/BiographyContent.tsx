@@ -132,11 +132,11 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
   }
 
   function renderBlock(block: BiographyContentBlock, blockIndex: number) {
-    const yearNumber = block.yearTitle && !Number.isNaN(Number(block.yearTitle)) ? Number(block.yearTitle) : null;
+    const yearTitle = block.yearTitle ?? null;
 
     return (
       <Fragment key={block.yearTitle ?? `block-${blockIndex}`}>
-        {yearNumber && <YearWithLine year={yearNumber} />}
+        {yearTitle && <YearWithLine year={yearTitle} />}
 
         {block.items.map((item, itemIndex) => {
           const key = `${item.type}-${blockIndex}-${itemIndex}`;
