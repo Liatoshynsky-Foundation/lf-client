@@ -71,7 +71,16 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
           .max(50, tErrors('nameMaxLength'))
           .regex(nameRegex, tErrors('nameInvalid'))
       ),
-    email: z.string().trim().min(1, tErrors('emailRequired')).email(tErrors('emailInvalid')),
+
+    email: z
+      .string()
+      .trim()
+      .min(1, tErrors('emailRequired'))
+      .email(tErrors('emailInvalid'))
+      .refine((value) => !value.includes('-.') && !value.endsWith('-'), {
+        message: tErrors('emailInvalid')
+      }),
+
     phoneNumber: phoneSchema.optional(),
     message: z
       .string()
