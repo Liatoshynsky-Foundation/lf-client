@@ -410,6 +410,25 @@ describe('YearTabs', () => {
     expect(mockScrollTo).toHaveBeenCalled();
   });
 
+  it('should handle encoded Cyrillic hash correctly', () => {
+    mockScrollTo.mockClear();
+    const mockElement = document.createElement('div');
+    mockGetElementById.mockImplementation((id: string) => (id === 'year-1900' ? mockElement : null));
+
+    delete (globalThis as unknown as { location: unknown }).location;
+    globalThis.location = { hash: '#%D1%82%D1%96' } as unknown as Location;
+
+    render(<YearTabs years={['1900']} />);
+
+    act(() => {
+      globalThis.location.hash = '#1900';
+      globalThis.dispatchEvent(new Event('hashchange'));
+    });
+
+    expect(mockGetElementById).toHaveBeenCalledWith('year-1900');
+    expect(mockScrollTo).toHaveBeenCalled();
+  });
+
   it('should cover fallback branches in scrollToHash when elements are missing', () => {
     delete (globalThis as unknown as { location: unknown }).location;
     globalThis.location = { hash: '#nonexistent' } as unknown as Location;

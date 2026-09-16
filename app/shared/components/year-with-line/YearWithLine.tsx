@@ -7,7 +7,7 @@ import { theme } from '~/ds-components/theme/Theme';
 import useBreakpoints from '~/hooks/use-breakpoints/useBreakpoints';
 
 import { styles } from './YearWithLine.styles';
-const YearWithLine = ({ year }: { year: number }) => {
+const YearWithLine = ({ year }: { year: number | string }) => {
   const Styles = styles(theme);
 
   const numberStr = year.toString();

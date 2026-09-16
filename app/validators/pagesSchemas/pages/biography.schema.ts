@@ -2,14 +2,27 @@ import { z } from 'zod';
 
 import { PageStatus } from '~/types/enums/common.enums';
 import { ContentType, ImagesSizes } from '~/types/page/biography.types';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { mongoObjectIdSchema, translatedFieldSchema } from '~/validators/constants';
 import { ImageSchema, QuoteSchema } from '~/validators/pagesSchemas/pages/_common.schema';
-import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
+
+const AnyNodeSchema: z.ZodTypeAny = z.lazy(() =>
+  z
+    .object({
+      type: z.string()
+    })
+    .passthrough()
+);
+
+const CustomTipTapDocSchema: z.ZodType<TipTapDoc> = z.object({
+  type: z.literal('doc'),
+  content: z.array(AnyNodeSchema)
+}) as z.ZodType<TipTapDoc>;
 
 const LocalizedTipTapDocSchema = z.object({
-  uk: TipTapDocSchema,
-  en: TipTapDocSchema
+  uk: CustomTipTapDocSchema,
+  en: CustomTipTapDocSchema
 });
 
 const AdvancedImageSchema = z.intersection(
