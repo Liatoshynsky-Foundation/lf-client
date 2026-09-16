@@ -64,8 +64,7 @@ export default function BaseCard({
   }, [image]);
 
   useEffect(() => {
-    const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth === 0) {
+    if (imgRef.current?.complete && imgRef.current.naturalWidth === 0) {
       handleImageError();
     }
   }, [imgRef, imageSrc]);
