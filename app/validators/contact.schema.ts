@@ -8,7 +8,13 @@ export const contactApiSchema = z.object({
     .string()
     .transform((val) => val.trim().replace(/\s+/g, ' '))
     .pipe(z.string().min(2).max(50).regex(nameRegex)),
-  email: z.string().email(),
+  email: z
+    .string()
+    .trim()
+    .email()
+    .refine((value) => !value.includes('-.') && !value.endsWith('-'), {
+      message: 'Invalid email format'
+    }),
   phoneNumber: z
     .string()
     .trim()
