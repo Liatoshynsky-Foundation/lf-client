@@ -61,11 +61,12 @@ const NewsSection: React.FC<Props> = async ({
 
   const newsCards = newsList.map((news) => {
     const formattedDate = news.publishedAt ? (formatIsoDateToDdMmYy(news.publishedAt) ?? '') : '';
+    const hasImage = Boolean(news.coverImage?.src);
 
     return {
-      image: news.coverImage.src,
-      crop: news.coverImage.crop ?? null,
-      alt: news.coverImage.alt,
+      image: news.coverImage?.src ?? '',
+      crop: hasImage ? (news.coverImage?.crop ?? null) : null,
+      alt: news.coverImage?.alt || news.title || '',
       title: news.title,
       publicationDate: formattedDate,
       description: news.description,
