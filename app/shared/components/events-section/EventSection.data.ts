@@ -10,19 +10,19 @@ type LocalizedTipTapDoc = {
 };
 
 export const eventsTitle = {
-  uk: 'ПоДіЇ Та ЗаХоДи',
-  en: 'EvEnTs AnD AcTiViTiEs'
+  uk: 'Події та заходи',
+  en: 'Events'
 };
 
 export const eventsMainText: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Що відбувається у світі класичної музики? Де й коли виконуються твори українських композиторів? Чи можна почути музику Лятошинського на концертах? Які події від наших друзів і партнерів варто відвідати? Ми відстежуємо актуальні події, рекомендуємо найцікавіше й спрямовуємо до найважливіших музичних (і не тільки!) заходів в Україні та світі.'
+      'Де і коли звучить музика Бориса Лятошинського? Що відбувається навколо його творчості та спадщини? Тут ми збираємо інформацію про концерти, фестивалі, виставки, лекції та інші події, пов’язані з Лятошинським, а також розповідаємо про заходи Фундації, наших друзів і партнерів.'
     )
   ]),
   en: makeDoc([
     normalText(
-      'What is happening in the world of classical music? Where and when are the works of Ukrainian composers performed? Is it possible to hear Liatoshynsky’s music at concerts? We track current events, recommend the most interesting ones, and guide you to the most important musical events in Ukraine and the world.'
+      'Where and when is Borys Liatoshynsky’s music being performed? What is happening around his music and legacy? Here we bring together information about concerts, festivals, exhibitions, lectures, and other events related to Liatoshynsky, as well as events organised by the Foundation, our friends, and partners.'
     )
   ])
 };

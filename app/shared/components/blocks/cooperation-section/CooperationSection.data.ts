@@ -12,20 +12,20 @@ type LocalizedTipTapDoc = {
 export const cooperationSectionTextContent: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Ми віримо, що великі ідеї народжуються у співпраці. Саме завдяки підтримці партнерів і друзів нам вдається реалізовувати проєкти, що популяризують українську музику у світі. Якщо вам близькі наші цінності — будемо раді знайомству.'
+      'Проєкти Фундації реалізуються у співпраці з музикантами, дослідниками, культурними інституціями, видавництвами та іншими партнерами в Україні й за кордоном. Ми відкриті до нових професійних партнерств і спільних проєктів, пов’язаних із дослідженням, виконанням і виданням музики Бориса Лятошинського.'
     )
   ]),
   en: makeDoc([
     normalText(
-      'We believe that great ideas are born in collaboration. It is thanks to the support of partners and friends that we are able to implement projects that popularize Ukrainian music in the world. If our values are close to you — we will be happy to meet you.'
+      'The Foundation’s projects are developed in collaboration with musicians, researchers, cultural institutions, publishers, and other partners in Ukraine and abroad. We are open to new professional partnerships and collaborative projects related to the research, performance, and publication of Borys Liatoshynsky’s music.'
     )
   ])
 };
 
 export const cooperationSectionData = {
   title: {
-    uk: 'НаШі ПаРтнЕрИ',
-    en: 'OuR PaRtNeRs'
+    uk: 'Наші партнери',
+    en: 'Our Partners'
   },
   textContent: cooperationSectionTextContent,
   buttonText: {
