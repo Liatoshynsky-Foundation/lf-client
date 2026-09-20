@@ -48,9 +48,7 @@ export default function OurPartnersSlider({
 
   const getPartnerKey = (partner: Partner): string => partner.id;
 
-  const autoplayConfig = autoScroll
-    ? { delay: autoScrollInterval, disableOnInteraction: false, pauseOnMouseEnter: true }
-    : false;
+  const autoplayConfig = autoScroll ? { delay: autoScrollInterval, disableOnInteraction: false } : false;
 
   return (
     <Box sx={styles.wrapper}>

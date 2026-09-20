@@ -65,7 +65,7 @@ const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, b
         link={buttonLink}
       />
 
-      <OurPartnersSlider partners={partners ?? []} autoScroll={false} autoScrollInterval={3000} />
+      <OurPartnersSlider partners={partners ?? []} autoScroll={true} autoScrollInterval={3000} />
     </Box>
   );
 };

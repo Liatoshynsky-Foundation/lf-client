@@ -1,5 +1,3 @@
-import { ROUTES } from '../../constants/routes';
-
 export interface Partner {
   id: string;
   link: string;
@@ -24,7 +22,7 @@ const partnerData: Partner[] = [
     id: 'liatoshynsky',
     name: 'Liatoshynsky Space',
     img: 'liatoshynsky-space.png',
-    link: ROUTES.HOME
+    link: 'https://philarmonia.com.ua/project/ls/'
   },
   {
     id: 'masterKlass',
@@ -36,7 +34,7 @@ const partnerData: Partner[] = [
     id: 'kolomyia',
     name: 'Коломийська філармонія',
     img: 'kolomyia-philharmonic.png',
-    link: 'https://kocult.com/home/philharmonic'
+    link: 'https://www.facebook.com/kolomyia.filarmonia'
   },
   {
     id: 'axon',
@@ -61,7 +59,63 @@ const partnerData: Partner[] = [
     name: 'OpenTech',
     img: 'opentech.png',
     link: 'https://opentech.softserveinc.com/uk'
+  },
+  {
+    id: 'ukrainianInstitute',
+    name: 'Український інститут',
+    img: 'ukrainian-institute.png',
+    link: 'https://ui.org.ua/sectors/antologiya-ukrayinskoyi-kamernoyi-muzyky-borys-lyatoshynskyj-strunni-kvartety/'
+  },
+  {
+    id: 'diplomaticAcademy',
+    name: 'Дипломатична академія',
+    img: 'dip-academy.png',
+    link: 'https://da.mfa.gov.ua/'
+  },
+  {
+    id: 'sshdir',
+    name: 'Наукове товариство історії дипломатії',
+    img: 'sshdir.svg',
+    link: 'https://sshdir.org.ua/pro-tovarystvo/'
+  },
+  {
+    id: 'lvivOpera',
+    name: 'Львівська опера',
+    img: 'lviv-opera.png',
+    link: 'https://opera.lviv.ua/shows/zolotyy-obruch/'
+  },
+  {
+    id: 'ucmFoundation',
+    name: 'Фундація української класичної музики',
+    img: 'ucm-foundation.png',
+    link: 'https://www.facebook.com/ucmfoundation/'
+  },
+  {
+    id: 'laboratoria',
+    name: 'Видавництво «Лабораторія»',
+    img: 'laboratoria.png',
+    link: 'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
   }
+
+  // --- Партнери БЕЗ ЛОГО ---
+  // {
+  //   id: 'cowoGuru',
+  //   name: 'Cowoguru',
+  //   img: 'cowo-guru.png', !!!!
+  //   link: 'https://www.cowo.guru/'
+  // },
+  // {
+  //   id: 'kmbsAlumni',
+  //   name: 'Alumni kmbs',
+  //   img: 'kmbs-alumni.png',  !!!!
+  //   link: 'https://alumni.kmbs.ua/'
+  // },
+  // {
+  //   id: 'kyivCamerata',
+  //   name: 'Київська камерата',
+  //   img: 'kyiv-camerata.png',  !!!
+  //   link: 'https://kyivcamerata.org/ua/ua/'
+  // }
 ];
 
 export const partnersMock: Partner[] = partnerData.map((p) => ({
