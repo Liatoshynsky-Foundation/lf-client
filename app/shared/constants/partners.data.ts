@@ -5,119 +5,47 @@ export interface Partner {
   name: string;
 }
 
-const partnerData: Partner[] = [
-  {
-    id: 'musicHouse',
-    name: 'Національний будинок музики',
-    img: 'national-music-house.png',
-    link: 'https://nhm.com.ua/'
-  },
-  {
-    id: 'philharmonic',
-    name: 'Національна філармонія України',
-    img: 'national-philharmonic.png',
-    link: 'https://philarmonia.com.ua/'
-  },
-  {
-    id: 'liatoshynsky',
-    name: 'Liatoshynsky Space',
-    img: 'liatoshynsky-space.png',
-    link: 'https://philarmonia.com.ua/project/ls/'
-  },
-  {
-    id: 'masterKlass',
-    name: 'Master Klass',
-    img: 'masterklass.png',
-    link: 'https://dommk.org/'
-  },
-  {
-    id: 'kolomyia',
-    name: 'Коломийська філармонія',
-    img: 'kolomyia-philharmonic.png',
-    link: 'https://www.facebook.com/kolomyia.filarmonia'
-  },
-  {
-    id: 'axon',
-    name: 'Axon Partners',
-    img: 'axon-partners.png',
-    link: 'https://axon.partners/'
-  },
-  {
-    id: 'espreso',
-    name: 'Еспресо',
-    img: 'espreso.png',
-    link: 'https://espreso.tv/'
-  },
-  {
-    id: 'softserve',
-    name: 'SoftServe Academy',
-    img: 'softserve.png',
-    link: 'https://softserve.academy/'
-  },
-  {
-    id: 'opentech',
-    name: 'OpenTech',
-    img: 'opentech.png',
-    link: 'https://opentech.softserveinc.com/uk'
-  },
-  {
-    id: 'ukrainianInstitute',
-    name: 'Український інститут',
-    img: 'ukrainian-institute.png',
-    link: 'https://ui.org.ua/sectors/antologiya-ukrayinskoyi-kamernoyi-muzyky-borys-lyatoshynskyj-strunni-kvartety/'
-  },
-  {
-    id: 'diplomaticAcademy',
-    name: 'Дипломатична академія',
-    img: 'dip-academy.png',
-    link: 'https://da.mfa.gov.ua/'
-  },
-  {
-    id: 'sshdir',
-    name: 'Наукове товариство історії дипломатії',
-    img: 'sshdir.svg',
-    link: 'https://sshdir.org.ua/pro-tovarystvo/'
-  },
-  {
-    id: 'lvivOpera',
-    name: 'Львівська опера',
-    img: 'lviv-opera.png',
-    link: 'https://opera.lviv.ua/shows/zolotyy-obruch/'
-  },
-  {
-    id: 'ucmFoundation',
-    name: 'Фундація української класичної музики',
-    img: 'ucm-foundation.png',
-    link: 'https://www.facebook.com/ucmfoundation/'
-  },
-  {
-    id: 'laboratoria',
-    name: 'Видавництво «Лабораторія»',
-    img: 'laboratoria.png',
-    link: 'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
-  },
+type PartnerRaw = [id: string, name: string, img: string, link: string];
 
-  {
-    id: 'cowoGuru',
-    name: 'Cowoguru',
-    img: 'cowo-guru.png',
-    link: 'https://www.cowo.guru/'
-  },
-  {
-    id: 'kmbsAlumni',
-    name: 'Alumni kmbs',
-    img: 'kmbs-alumni.svg',
-    link: 'https://alumni.kmbs.ua/'
-  },
-  {
-    id: 'kyivCamerata',
-    name: 'Київська камерата',
-    img: 'kyiv-camerata.png',
-    link: 'https://kyivcamerata.org/ua/ua/'
-  }
+const rawPartners: PartnerRaw[] = [
+  ['musicHouse', 'Національний будинок музики', 'national-music-house.png', 'https://nhm.com.ua/'],
+  ['philharmonic', 'Національна філармонія України', 'national-philharmonic.png', 'https://philarmonia.com.ua/'],
+  ['liatoshynsky', 'Liatoshynsky Space', 'liatoshynsky-space.png', 'https://philarmonia.com.ua/project/ls/'],
+  ['masterKlass', 'Master Klass', 'masterklass.png', 'https://dommk.org/'],
+  ['kolomyia', 'Коломийська філармонія', 'kolomyia-philharmonic.png', 'https://www.facebook.com/kolomyia.filarmonia'],
+  ['axon', 'Axon Partners', 'axon-partners.png', 'https://axon.partners/'],
+  ['espreso', 'Еспресо', 'espreso.png', 'https://espreso.tv/'],
+  ['softserve', 'SoftServe Academy', 'softserve.png', 'https://softserve.academy/'],
+  ['opentech', 'OpenTech', 'opentech.png', 'https://opentech.softserveinc.com/uk'],
+  [
+    'ukrainianInstitute',
+    'Український інститут',
+    'ukrainian-institute.png',
+    'https://ui.org.ua/sectors/antologiya-ukrayinskoyi-kamernoyi-muzyky-borys-lyatoshynskyj-strunni-kvartety/'
+  ],
+  ['diplomaticAcademy', 'Дипломатична академія', 'dip-academy.png', 'https://da.mfa.gov.ua/'],
+  ['sshdir', 'Наукове товариство історії дипломатії', 'sshdir.svg', 'https://sshdir.org.ua/pro-tovarystvo/'],
+  ['lvivOpera', 'Львівська опера', 'lviv-opera.png', 'https://opera.lviv.ua/shows/zolotyy-obruch/'],
+  [
+    'ucmFoundation',
+    'Фундація української класичної музики',
+    'ucm-foundation.png',
+    'https://www.facebook.com/ucmfoundation/'
+  ],
+  [
+    'laboratoria',
+    'Видавництво «Лабораторія»',
+    'laboratoria.png',
+    'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
+  ],
+  ['cowoGuru', 'Cowoguru', 'cowo-guru.png', 'https://www.cowo.guru/'],
+  ['kmbsAlumni', 'Alumni kmbs', 'kmbs-alumni.svg', 'https://alumni.kmbs.ua/'],
+  ['kyivCamerata', 'Київська камерата', 'kyiv-camerata.png', 'https://kyivcamerata.org/ua/ua/']
 ];
 
-export const partnersMock: Partner[] = partnerData.map((p) => ({
-  ...p,
-  img: `/images/partners/${p.img}`
+export const partnersMock: Partner[] = rawPartners.map(([id, name, img, link]) => ({
+  id,
+  name,
+  img: `/images/partners/${img}`,
+  link
 }));
