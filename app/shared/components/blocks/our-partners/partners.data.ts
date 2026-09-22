@@ -95,27 +95,26 @@ const partnerData: Partner[] = [
     name: 'Видавництво «Лабораторія»',
     img: 'laboratoria.png',
     link: 'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
-  }
+  },
 
-  // --- Партнери БЕЗ ЛОГО ---
-  // {
-  //   id: 'cowoGuru',
-  //   name: 'Cowoguru',
-  //   img: 'cowo-guru.png', !!!!
-  //   link: 'https://www.cowo.guru/'
-  // },
-  // {
-  //   id: 'kmbsAlumni',
-  //   name: 'Alumni kmbs',
-  //   img: 'kmbs-alumni.png',  !!!!
-  //   link: 'https://alumni.kmbs.ua/'
-  // },
-  // {
-  //   id: 'kyivCamerata',
-  //   name: 'Київська камерата',
-  //   img: 'kyiv-camerata.png',  !!!
-  //   link: 'https://kyivcamerata.org/ua/ua/'
-  // }
+  {
+    id: 'cowoGuru',
+    name: 'Cowoguru',
+    img: 'cowo-guru.png',
+    link: 'https://www.cowo.guru/'
+  },
+  {
+    id: 'kmbsAlumni',
+    name: 'Alumni kmbs',
+    img: 'kmbs-alumni.svg',
+    link: 'https://alumni.kmbs.ua/'
+  },
+  {
+    id: 'kyivCamerata',
+    name: 'Київська камерата',
+    img: 'kyiv-camerata.png',
+    link: 'https://kyivcamerata.org/ua/ua/'
+  }
 ];
 
 export const partnersMock: Partner[] = partnerData.map((p) => ({
