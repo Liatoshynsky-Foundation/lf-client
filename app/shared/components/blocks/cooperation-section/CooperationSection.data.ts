@@ -1,8 +1,8 @@
-import { partnersMock } from '../our-partners/partners.data';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 import { ROUTES } from '~/shared/components/constants/routes';
+import { partnersMock } from '~/shared/constants/partners.data';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
