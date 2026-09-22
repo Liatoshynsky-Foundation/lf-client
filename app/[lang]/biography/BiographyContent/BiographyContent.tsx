@@ -132,7 +132,7 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
   }
 
   function renderBlock(block: BiographyContentBlock, blockIndex: number) {
-    const yearTitle = block.yearTitle ?? null;
+    const yearTitle = block.yearTitle?.trim();
 
     return (
       <Fragment key={block.yearTitle ?? `block-${blockIndex}`}>
