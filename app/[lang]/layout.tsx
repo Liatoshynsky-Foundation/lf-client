@@ -59,24 +59,35 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: Loc
   try {
     const t = await getTranslations('meta');
     const brand = t('brand');
+    const description = t('pages.home.description');
 
     return {
       title: {
         default: brand,
         template: `%s | ${brand}`
       },
+      description,
+      icons: {
+        icon: '/favicon.ico',
+        shortcut: '/favicon.ico',
+        apple: '/apple-touch-icon.png'
+      },
       openGraph: {
         siteName: brand,
         title: {
           default: brand,
           template: `%s | ${brand}`
-        }
+        },
+        description,
+        url: 'https://liatoshynsky.com',
+        type: 'website'
       },
       twitter: {
         title: {
           default: brand,
           template: `%s | ${brand}`
-        }
+        },
+        description
       }
     };
   } catch (error) {

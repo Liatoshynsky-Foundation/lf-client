@@ -22,9 +22,16 @@ export function createSeoMeta({
   const currentLocale = locales.find((loc) => loc.startsWith(locale));
   const alternateLocale = locales.find((loc) => loc !== currentLocale);
 
+  const brand = 'liatoshynsky.com';
+  const formattedTitle = title === 'Головна' || title === 'Home' || title === brand ? brand : `${title} | ${brand}`;
+
   return {
-    title,
+    title: formattedTitle,
     description,
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon.ico'
+    },
     openGraph: {
       title,
       description,
