@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
-import { partnersMock } from '../our-partners/partners.data';
 import OurPartnersSlider from './OurPartnersSlider';
+
+import { partnersMock } from '~/shared/constants/partners.data';
 
 jest.mock('swiper/css', () => ({}));
 
