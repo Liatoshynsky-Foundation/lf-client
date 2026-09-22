@@ -22,11 +22,8 @@ export function createSeoMeta({
   const currentLocale = locales.find((loc) => loc.startsWith(locale));
   const alternateLocale = locales.find((loc) => loc !== currentLocale);
 
-  const brand = 'liatoshynsky.com';
-  const formattedTitle = title === 'Головна' || title === 'Home' || title === brand ? brand : `${title} | ${brand}`;
-
   return {
-    title: formattedTitle,
+    title,
     description,
     icons: {
       icon: '/favicon.ico',
@@ -36,7 +33,7 @@ export function createSeoMeta({
       title,
       description,
       url: fullUrl,
-      siteName: 'Liatoshynsky Foundation',
+      siteName: 'liatoshynsky.com',
       locale: currentLocale,
       alternateLocale,
       type: 'website',
