@@ -1,4 +1,4 @@
-import { Partner } from './partners.data';
+import type { Partner } from '~/shared/constants/partners.data';
 
 type LayoutItem = string | null;
 

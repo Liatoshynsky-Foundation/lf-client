@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
-import type { Partner } from '../partners.data';
 import styles from './PartnerGrid.styles';
 
 import PartnerLogo from '~/shared/components/partner-logo/PartnerLogo';
+import type { Partner } from '~/shared/constants/partners.data';
 
 interface PartnerGridProps {
   layout: (string | null)[];
