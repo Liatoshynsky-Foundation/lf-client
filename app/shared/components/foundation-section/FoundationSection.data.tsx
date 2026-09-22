@@ -14,25 +14,23 @@ type LocalizedString = Localized<string>;
 export const foundationParagraph1: LocalizedNode = {
   uk: (
     <>
-      <b>Ласкаво просимо до Фундації Лятошинського!</b> Ми досліджуємо й популяризуємо українську класичну та сучасну
-      музику в Україні й світі. Особливу увагу приділяємо спадщині Бориса Лятошинського (1895-1968) — одного з{' '}
-      <b>найвпливовіших українських композиторів ХХ століття</b>, фундатора власної композиторської школи. Його твори
-      поєднують у собі модерністські новації та романтичну виразність, що приваблює широке коло слухачів.
+      <b>Ласкаво просимо на сайт Фундації Лятошинського!</b> Ми досліджуємо, зберігаємо та представляємо спадщину Бориса
+      Лятошинського (1895–1968) — одного з найвизначніших українських композиторів ХХ століття, творчість і педагогічна
+      діяльність якого вплинули на розвиток української класичної музики та зберігають своє значення до сьогодні.
     </>
   ),
   en: (
     <>
-      <b>Welcome to the Liatoshynsky Foundation!</b> We research and promote Ukrainian classical and contemporary music
-      in Ukraine and worldwide. We pay special attention to the legacy of Borys Liatoshynsky (1895-1968) — one of the{' '}
-      <b>most influential Ukrainian composers of the 20th century</b>, founder of his own compositional school. His
-      works combine modernist innovations and romantic expressiveness, attracting a wide audience.
+      <b>Welcome to the Liatoshynsky Foundation website!</b> We research, preserve, and present the legacy of Borys
+      Liatoshynsky (1895–1968), one of the most significant Ukrainian composers of the twentieth century, whose music
+      and teaching shaped the development of Ukrainian art music and remain influential today.
     </>
   )
 };
 
 export const foundationParagraph2: LocalizedNode = {
-  uk: 'Ми зберігаємо, переосмислюємо й інтегруємо його музику у світовий контекст. Фундація працює, аби зробити українську музику доступною та впізнаваною у світі, адже вона варта міжнародного визнання.',
-  en: 'We preserve, reinterpret, and integrate his music into the global context. The Foundation works to make Ukrainian music accessible and recognizable worldwide, as it deserves international recognition.'
+  uk: 'Ми сприяємо виконанню та виданню творів Лятошинського, працюємо з архівом композитора, створюємо дослідницькі й освітні проєкти. Спадщина Лятошинського відкриває ширшу історію української музики та дає змогу побачити її як невіддільну частину європейської культури.',
+  en: 'We support the performance and publication of Liatoshynsky’s works, engage with the composer’s archive, and develop research and educational projects. Liatoshynsky’s legacy opens onto the broader history of Ukrainian music and allows us to see it as an integral part of European culture.'
 };
 
 export const foundationButtonText: LocalizedString = {

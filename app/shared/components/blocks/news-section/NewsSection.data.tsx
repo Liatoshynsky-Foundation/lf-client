@@ -11,12 +11,12 @@ type LocalizedTipTapDoc = {
 export const newsSectionTextContent: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Ми наполегливо працюємо, відкриваємо нове й ділимося натхненням. Концерти, фестивалі, дискусії, екскурсії, дослідження — наше життя насичене подіями, зустрічами та відкриттями. Найцікавішим із цього ми радо ділимося з нашими читачами.'
+      'Концерти й фестивалі, нові видання та записи, дослідження, виставки, зустрічі й інші проєкти — тут ми розповідаємо про те, над чим працює Фундація і що відбувається навколо спадщини Бориса Лятошинського.'
     )
   ]),
   en: makeDoc([
     normalText(
-      'We work hard, discover new things, and share inspiration. From concerts and festivals to discussions, tours, and research—our lives are packed with events, encounters, and discoveries. We are delighted to share the most exciting highlights with our readers.'
+      'Concerts and festivals, new publications and recordings, research, exhibitions, meetings, and other projects—here we share what the Foundation is working on and what is happening around the legacy of Borys Liatoshynsky.'
     )
   ])
 };
@@ -33,8 +33,8 @@ export const newsSliderNextLabel = {
 
 export const newsSectionData = {
   title: {
-    uk: 'НоВиНи ФунДаЦІЇ',
-    en: 'FounDatION NeWs '
+    uk: 'Новини Фундації',
+    en: 'Foundation News'
   },
   textContent: newsSectionTextContent,
   buttonText: {
