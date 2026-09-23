@@ -3,7 +3,7 @@ import React from 'react';
 
 jest.mock('~/constants/phoneCountryCodes', () => ({
   PHONE_COUNTRY_CODES: {
-    '+380': { minPhoneLength: 12, operatorCodeLength: 2 },
+    '+380': { minPhoneLength: 12, maxPhoneLength: 12, operatorCodeLength: 2 },
     '+1': { minPhoneLength: 10, operatorCodeLength: undefined }
   }
 }));
