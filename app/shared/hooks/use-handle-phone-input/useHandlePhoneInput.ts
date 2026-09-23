@@ -199,7 +199,7 @@ export function useHandlePhoneInput() {
     const meta = PHONE_COUNTRY_CODES[countryCode] as CountryMeta;
     const nationalNumber = cleanedWithPlus.slice(countryCode.length);
 
-    const maxAllowedPhoneLength = meta.maxPhoneLength ?? PHONE_NUMBER_MAX_LENGTH;
+    const maxAllowedPhoneLength = (meta.maxPhoneLength ?? PHONE_NUMBER_MAX_LENGTH) + 1;
     const masked = applyMaskToInput(
       inputElement,
       countryCode,
