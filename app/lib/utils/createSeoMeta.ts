@@ -25,11 +25,15 @@ export function createSeoMeta({
   return {
     title,
     description,
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon.ico'
+    },
     openGraph: {
       title,
       description,
       url: fullUrl,
-      siteName: 'Liatoshynsky Foundation',
+      siteName: 'liatoshynsky.com',
       locale: currentLocale,
       alternateLocale,
       type: 'website',
