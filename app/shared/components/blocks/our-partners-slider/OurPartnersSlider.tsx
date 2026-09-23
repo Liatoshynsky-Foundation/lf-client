@@ -4,10 +4,10 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 import PartnerLogo from '../../partner-logo/PartnerLogo';
-import { Partner } from '../our-partners/partners.data';
 import { styles } from './OurPartnersSlider.styles';
 
 import { BaseSlider } from '~/shared/components/base-slider';
+import type { Partner } from '~/shared/constants/partners.data';
 
 interface OurPartnersSliderProps {
   readonly partners: Partner[];
@@ -48,9 +48,7 @@ export default function OurPartnersSlider({
 
   const getPartnerKey = (partner: Partner): string => partner.id;
 
-  const autoplayConfig = autoScroll
-    ? { delay: autoScrollInterval, disableOnInteraction: false, pauseOnMouseEnter: true }
-    : false;
+  const autoplayConfig = autoScroll ? { delay: autoScrollInterval, disableOnInteraction: false } : false;
 
   return (
     <Box sx={styles.wrapper}>

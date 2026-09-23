@@ -8,8 +8,8 @@ import SectionTitle from '../../section-title/SectionTitle';
 import { styles } from './OurPartners.styles';
 import PartnerGrid from './partner-grid/PartnerGrid';
 import { generateLayouts, gridConfigs, patterns } from './partnerLayouts';
-import { partnersMock } from './partners.data';
 
+import { partnersMock } from '~/shared/constants/partners.data';
 import { commonSx } from '~/shared/styles/commonSx';
 
 export default function OurPartners() {

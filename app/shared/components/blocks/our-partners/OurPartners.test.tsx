@@ -3,7 +3,8 @@ import React from 'react';
 
 import OurPartners from './OurPartners';
 import { gridConfigs } from './partnerLayouts';
-import { partnersMock } from './partners.data';
+
+import { partnersMock } from '~/shared/constants/partners.data';
 
 interface PartnerGridProps {
   layout: unknown[];

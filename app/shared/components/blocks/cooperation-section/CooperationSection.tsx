@@ -3,11 +3,12 @@ import { useLocale } from 'next-intl';
 import React from 'react';
 
 import SectionTitle from '../../section-title/SectionTitle';
-import { Partner } from '../our-partners/partners.data';
 import OurPartnersSlider from '../our-partners-slider';
 import ButtonContentBlock from '../terms-of-use/terms-content/button-content-block/ButtonContentBlock';
 import { styles } from './CooperationSection.styles';
 import { TipTapDoc } from '~/types/types/tiptap.types';
+
+import type { Partner } from '~/shared/constants/partners.data';
 
 interface Props {
   title: {
@@ -65,7 +66,7 @@ const CooperationSection: React.FC<Props> = ({ title, textContent, buttonText, b
         link={buttonLink}
       />
 
-      <OurPartnersSlider partners={partners ?? []} autoScroll={false} autoScrollInterval={3000} />
+      <OurPartnersSlider partners={partners ?? []} autoScroll={true} autoScrollInterval={3000} />
     </Box>
   );
 };
