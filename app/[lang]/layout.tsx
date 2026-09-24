@@ -72,6 +72,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: Loc
         shortcut: '/favicon.ico',
         apple: '/apple-touch-icon.png'
       },
+      manifest: '/site.webmanifest',
       openGraph: {
         siteName: brand,
         title: {
