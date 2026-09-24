@@ -4,6 +4,7 @@ export const PHONE_COUNTRY_CODES: Record<
     country: string;
     minPhoneLength: number;
     operatorCodeLength: number;
+    maxPhoneLength?: number;
   }
 > = {
   '+1': { country: 'United States / Canada', minPhoneLength: 11, operatorCodeLength: 3 },
@@ -23,7 +24,7 @@ export const PHONE_COUNTRY_CODES: Record<
   '+371': { country: 'Latvia', minPhoneLength: 11, operatorCodeLength: 3 },
   '+372': { country: 'Estonia', minPhoneLength: 11, operatorCodeLength: 4 },
 
-  '+380': { country: 'Ukraine', minPhoneLength: 12, operatorCodeLength: 2 },
+  '+380': { country: 'Ukraine', minPhoneLength: 12, maxPhoneLength: 12, operatorCodeLength: 2 },
   '+420': { country: 'Czech Republic', minPhoneLength: 12, operatorCodeLength: 3 },
   '+421': { country: 'Slovakia', minPhoneLength: 12, operatorCodeLength: 3 },
 

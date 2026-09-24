@@ -9,6 +9,7 @@ const PHONE_NUMBER_MAX_LENGTH = 16;
 
 type CountryMeta = {
   minPhoneLength: number;
+  maxPhoneLength?: number;
   operatorCodeLength?: number;
 };
 
@@ -121,13 +122,14 @@ function applyMaskToInput(
   inputElement: HTMLInputElement | null,
   countryCode: string,
   nationalNumber: string,
-  operatorCodeLength: number
+  operatorCodeLength: number,
+  maxAllowedPhoneLength: number
 ) {
   const masked = maskPhoneNumber({
     countryCode,
     nationalNumber,
     operatorCodeLength,
-    maxPhoneNumberLength: PHONE_NUMBER_MAX_LENGTH,
+    maxPhoneNumberLength: maxAllowedPhoneLength,
     separateBy: '-'
   });
   if (inputElement) inputElement.value = masked;
@@ -136,7 +138,8 @@ function applyMaskToInput(
 
 function computeNextError(meta: CountryMeta, totalDigitsWithoutPlus: number) {
   const tooShort = meta.minPhoneLength !== null && totalDigitsWithoutPlus < meta.minPhoneLength;
-  const tooLong = totalDigitsWithoutPlus > PHONE_NUMBER_MAX_LENGTH;
+  const maxAllowedLength = meta.maxPhoneLength ?? PHONE_NUMBER_MAX_LENGTH;
+  const tooLong = totalDigitsWithoutPlus > maxAllowedLength;
   return tooShort || tooLong;
 }
 
@@ -195,7 +198,15 @@ export function useHandlePhoneInput() {
 
     const meta = PHONE_COUNTRY_CODES[countryCode] as CountryMeta;
     const nationalNumber = cleanedWithPlus.slice(countryCode.length);
-    const masked = applyMaskToInput(inputElement, countryCode, nationalNumber, meta.operatorCodeLength ?? 0);
+
+    const maxAllowedPhoneLength = (meta.maxPhoneLength ?? PHONE_NUMBER_MAX_LENGTH) + 1;
+    const masked = applyMaskToInput(
+      inputElement,
+      countryCode,
+      nationalNumber,
+      meta.operatorCodeLength ?? 0,
+      maxAllowedPhoneLength
+    );
 
     caretHandler(inputElement, masked, rawValue, prevCaretPos, addedDigitsOffset);
 
