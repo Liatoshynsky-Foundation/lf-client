@@ -12,7 +12,7 @@ export function createSeoMeta({
   title,
   description,
   url,
-  imageUrl = '/images/liatoshynsky-thumbnail.jpg',
+  imageUrl = '/opengraph-image.png',
   locale = 'uk'
 }: CreateSeoMetaProps): Metadata {
   const baseUrl = process.env.CLIENT_BASE_URL;
