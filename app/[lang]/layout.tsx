@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: Loc
     const description = t('pages.home.description');
 
     return {
+      metadataBase: new URL(process.env.CLIENT_BASE_URL || 'https://liatoshynsky.com'),
       title: {
         default: brand,
         template: `%s | ${brand}`
@@ -81,14 +82,24 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: Loc
         },
         description,
         url: 'https://liatoshynsky.com',
-        type: 'website'
+        type: 'website',
+        images: [
+          {
+            url: '/opengraph-image.png',
+            width: 1200,
+            height: 630,
+            alt: brand
+          }
+        ]
       },
       twitter: {
+        card: 'summary_large_image',
         title: {
           default: brand,
           template: `%s | ${brand}`
         },
-        description
+        description,
+        images: ['/opengraph-image.png']
       }
     };
   } catch (error) {

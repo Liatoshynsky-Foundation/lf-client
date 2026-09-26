@@ -59,7 +59,7 @@ describe('createSeoMeta', () => {
       expect(meta.openGraph.images[0]).toEqual({
         alt: 'Prod Title',
         height: 630,
-        url: `${prodBaseUrl}/images/liatoshynsky-thumbnail.jpg`,
+        url: `${prodBaseUrl}/opengraph-image.png`,
         width: 1200
       });
     }
@@ -78,7 +78,7 @@ describe('createSeoMeta', () => {
       expect(meta.openGraph.images[0]).toEqual({
         alt: 'Fallback Title',
         height: 630,
-        url: `${localBaseUrl}/images/liatoshynsky-thumbnail.jpg`,
+        url: `${localBaseUrl}/opengraph-image.png`,
         width: 1200
       });
     }
