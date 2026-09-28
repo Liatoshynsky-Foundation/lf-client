@@ -16,7 +16,7 @@ import { styles } from '~/shared/components/Quote/Quote.styles';
 import { IMAGES } from '~/shared/constants/assets';
 import { commonSx } from '~/shared/styles/commonSx';
 
-const TermsOfUse = () => {
+const TermsOfUse = ({ email }: { readonly email?: string }) => {
   const t = useTranslations('termsOfUse');
   const locale = useLocale();
 
@@ -74,7 +74,7 @@ const TermsOfUse = () => {
             marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
           }}
         />
-        <TermsContent />
+        <TermsContent email={email} />
       </Box>
     </>
   );

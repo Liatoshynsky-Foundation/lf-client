@@ -31,6 +31,19 @@ jest.mock('~/components/under-development/UnderDevelopment', () => {
   return MockUnderDev;
 });
 
+jest.mock('~/di/container', () => ({
+  createRootContainer: () => ({
+    resolve: () => ({
+      getFooterData: jest.fn().mockResolvedValue({
+        contacts: {
+          email: 'lffoundation@gmail.com',
+          phone: '+3800000000'
+        }
+      })
+    })
+  })
+}));
+
 describe('Terms page', () => {
   const mockParams = Promise.resolve({ lang: 'uk' as const });
 
@@ -45,17 +58,18 @@ describe('Terms page', () => {
     expect(metadata.title).toBe('title');
   });
 
-  it('should render terms of use content when not in production', () => {
-    render(<Terms />);
+  it('should render terms of use content when not in production', async () => {
+    const jsx = await Terms({ params: mockParams });
+    render(jsx);
 
     expect(screen.getByTestId('terms-of-use')).toBeInTheDocument();
     expect(screen.queryByTestId('under-dev')).not.toBeInTheDocument();
   });
 
-  it('should render UnderDevelopment in production mode', () => {
+  it('should render UnderDevelopment in production mode', async () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
-
-    render(<Terms />);
+    const jsx = await Terms({ params: mockParams });
+    render(jsx);
 
     expect(screen.getByTestId('under-dev')).toBeInTheDocument();
     expect(screen.queryByTestId('terms-of-use')).not.toBeInTheDocument();

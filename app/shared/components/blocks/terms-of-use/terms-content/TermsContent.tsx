@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import {
   archiveDoc,
   behaviorListKeys,
-  licenseDoc,
+  getLicenseDoc,
   meaningDoc,
   privacyDoc,
   registerDoc,
@@ -24,7 +24,8 @@ import { IMAGES } from '~/shared/constants/assets';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { commonSx } from '~/shared/styles/commonSx';
 
-const TermsContent = () => {
+const TermsContent = ({ email }: { readonly email?: string }) => {
+  const licenseDoc = getLicenseDoc(email);
   const t = useTranslations('termsOfUse');
   const locale = useLocale();
   const { isMobile } = useBreakpoints();

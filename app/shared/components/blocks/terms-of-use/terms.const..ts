@@ -149,14 +149,14 @@ export const rulesDoc: LocalizedTipTapDoc = {
   ])
 };
 
-export const licenseDoc: LocalizedTipTapDoc = {
+export const getLicenseDoc = (email = 'liatoshynsky@gmail.com'): LocalizedTipTapDoc => ({
   uk: makeDoc([
     normalText('Якщо ви є '),
     boldText('організатором концерту'),
     normalText(
       ' або плануєте трансляцію творів Лятошинського — зверніться до УААСП для оформлення відповідної ліцензії за '
     ),
-    linkText('електронною адресою', 'mailto:liatoshynsky@gmail.com'),
+    linkText('електронною адресою', `mailto:${email}`),
     normalText('.')
   ]),
   en: makeDoc([
@@ -165,7 +165,7 @@ export const licenseDoc: LocalizedTipTapDoc = {
     normalText(
       ' or plan to broadcast Liatoshynsky’s works — please contact the UAASP to obtain the appropriate license via '
     ),
-    linkText('email', 'mailto:liatoshynsky@gmail.com'),
+    linkText('email', `mailto:${email}`),
     normalText('.')
   ])
-};
+});

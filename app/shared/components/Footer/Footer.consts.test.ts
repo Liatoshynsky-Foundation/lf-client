@@ -1,7 +1,7 @@
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
 import { ROUTES } from '~/shared/components/constants/routes';
-import { contacts, footerData, sections, SocialMedia } from '~/shared/components/Footer/Footer.consts';
+import { footerData, sections, SocialMedia } from '~/shared/components/Footer/Footer.consts';
 
 describe('footerData', () => {
   it('should export correct structure and values', () => {
@@ -10,16 +10,6 @@ describe('footerData', () => {
       { label: 'Політика конфіденційності', href: '/privacy' },
       { label: 'Умови користування сайтом', href: ROUTES.TERMS }
     ]);
-  });
-});
-
-describe('contacts', () => {
-  it('should export correct title, phone and email', () => {
-    expect(contacts).toEqual({
-      title: 'ГРОМАДСЬКА ОРГАНІЗАЦІЯ \n«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»',
-      phone: '067 963 8366',
-      email: 'liatoshynsky@gmail.com'
-    });
   });
 });
 
