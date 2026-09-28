@@ -62,10 +62,11 @@ describe('Compositions Titles Route (GET)', () => {
     }
 
     if (typeof globalThis.TextEncoder === 'undefined') {
-      Object.assign(globalThis, {
-        TextEncoder: util.TextEncoder,
-        TextDecoder: util.TextDecoder
-      });
+      Object.assign(globalThis, { TextEncoder: util.TextEncoder });
+    }
+
+    if (typeof globalThis.TextDecoder === 'undefined') {
+      Object.assign(globalThis, { TextDecoder: util.TextDecoder });
     }
 
     nextServer = await import('next/server');
