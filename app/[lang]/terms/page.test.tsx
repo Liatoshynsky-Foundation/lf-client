@@ -4,6 +4,16 @@ import React from 'react';
 import Terms, { generateMetadata } from './page';
 import * as envUtils from '~/utils/isProductionMode';
 
+const mockFooterService = {
+  getFooterData: jest.fn().mockResolvedValue({
+    contacts: { email: 'lffoundation@gmail.com' }
+  })
+};
+
+jest.mock('~/di/container', () => ({
+  createRootContainer: () => ({ resolve: () => mockFooterService })
+}));
+
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: jest.fn()
 }));
@@ -30,19 +40,6 @@ jest.mock('~/components/under-development/UnderDevelopment', () => {
   MockUnderDev.displayName = 'UnderDevelopment';
   return MockUnderDev;
 });
-
-jest.mock('~/di/container', () => ({
-  createRootContainer: () => ({
-    resolve: () => ({
-      getFooterData: jest.fn().mockResolvedValue({
-        contacts: {
-          email: 'lffoundation@gmail.com',
-          phone: '+3800000000'
-        }
-      })
-    })
-  })
-}));
 
 describe('Terms page', () => {
   const mockParams = Promise.resolve({ lang: 'uk' as const });
