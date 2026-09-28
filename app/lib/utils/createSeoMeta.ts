@@ -6,6 +6,7 @@ interface CreateSeoMetaProps {
   url: string;
   imageUrl?: string;
   locale?: string;
+  keywords?: string;
 }
 
 export function createSeoMeta({
@@ -13,7 +14,8 @@ export function createSeoMeta({
   description,
   url,
   imageUrl = '/opengraph-image.png',
-  locale = 'uk'
+  locale = 'uk',
+  keywords
 }: CreateSeoMetaProps): Metadata {
   const baseUrl = process.env.CLIENT_BASE_URL;
   const fullUrl = `${baseUrl}/${locale}${url}`;
@@ -25,6 +27,7 @@ export function createSeoMeta({
   return {
     title,
     description,
+    ...(keywords ? { keywords } : {}),
     icons: {
       icon: '/favicon.ico',
       shortcut: '/favicon.ico'

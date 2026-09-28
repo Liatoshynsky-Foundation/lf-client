@@ -48,6 +48,7 @@ export const newsSchema = z.object({
     .transform((date) => date?.toISOString() ?? null),
   title: translatedFieldSchema,
   description: translatedFieldSchema,
+  keywords: translatedFieldSchema.optional().nullable(),
   content: z.object({
     uk: z.record(z.any()),
     en: z.record(z.any())
