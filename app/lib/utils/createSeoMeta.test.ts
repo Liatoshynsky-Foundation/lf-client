@@ -65,6 +65,31 @@ describe('createSeoMeta', () => {
     }
   });
 
+  it('should include keywords in metadata when provided', () => {
+    process.env = { ...originalEnv, NODE_ENV: 'development', CLIENT_BASE_URL: localBaseUrl };
+
+    const meta = createSeoMeta({
+      title: 'Keywords Title',
+      description: 'Keywords Description',
+      url: '/news/test',
+      keywords: 'music, composer, art'
+    });
+
+    expect(meta.keywords).toBe('music, composer, art');
+  });
+
+  it('should not include keywords in metadata when omitted', () => {
+    process.env = { ...originalEnv, NODE_ENV: 'development', CLIENT_BASE_URL: localBaseUrl };
+
+    const meta = createSeoMeta({
+      title: 'No Keywords Title',
+      description: 'No Keywords Description',
+      url: '/news/test'
+    });
+
+    expect(meta.keywords).toBeUndefined();
+  });
+
   it('should fallback to defaults when optional fields are missing', () => {
     process.env = { ...originalEnv, NODE_ENV: 'development', CLIENT_BASE_URL: localBaseUrl };
 
