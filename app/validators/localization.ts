@@ -39,6 +39,10 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
 function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
+  if (!fieldValue && path.endsWith('.ticketUrl')) {
+    return true;
+  }
+
   if (typeof fieldValue === 'string') {
     const isOptionalField =
       path.endsWith('.alt') ||

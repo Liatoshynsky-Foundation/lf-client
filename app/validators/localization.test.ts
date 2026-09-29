@@ -7,6 +7,13 @@ import { LocalizationErrors } from '~/constants/errors';
 describe('LocalizeSchema', () => {
   const unknownSchema = z.unknown();
 
+  const ticketUrlSchema = z.object({
+    ticketUrl: z.object({
+      uk: z.string().nullable(),
+      en: z.string().nullable()
+    })
+  });
+
   it('should return primitive values untouched', async () => {
     const transformer = LocalizeSchema(unknownSchema, 'en' as Locale);
     const data = { title: 'test', views: 42 };
@@ -232,5 +239,23 @@ describe('LocalizeSchema', () => {
 
     const result = await transformer.parseAsync(customObj);
     expect(result).toEqual(customObj);
+  });
+
+  it('should allow null ticketUrl', async () => {
+    const transformer = LocalizeSchema(ticketUrlSchema, 'en' as Locale);
+    const data = { ticketUrl: { uk: null, en: null } };
+
+    const result = await transformer.parseAsync(data);
+
+    expect(result).toEqual({ ticketUrl: null });
+  });
+
+  it('should localize ticketUrl', async () => {
+    const transformer = LocalizeSchema(ticketUrlSchema, 'en' as Locale);
+    const data = { ticketUrl: { uk: 'https://uk.example.com', en: 'https://en.example.com' } };
+
+    const result = await transformer.parseAsync(data);
+
+    expect(result).toEqual({ ticketUrl: 'https://en.example.com' });
   });
 });
