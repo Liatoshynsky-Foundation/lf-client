@@ -40,7 +40,11 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
   const fieldValue = value[locale];
 
   if (typeof fieldValue === 'string') {
-    const isOptionalField = path.endsWith('.alt') || path.endsWith('.caption') || path.endsWith('.genre');
+    const isOptionalField =
+      path.endsWith('.alt') ||
+      path.endsWith('.caption') ||
+      path.endsWith('.genre') ||
+      (locale === 'en' && path.endsWith('.description'));
     if (fieldValue === '' && isOptionalField) {
       return true;
     }

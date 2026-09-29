@@ -71,6 +71,5 @@ export const eventListItemSchema = eventSchema.pick({
   title: true,
   description: true,
   coverImage: true,
-  meta: true,
-  ticketUrl: true
+  meta: true
 });
