@@ -9,6 +9,7 @@ import type { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { createRootContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ROUTES } from '~/shared/components/constants/routes';
 
@@ -26,14 +27,20 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
   });
 }
 
-export default function Terms() {
+export default async function Terms({ params }: Language) {
+  const { lang } = await params;
+  const container = createRootContainer();
+  const footerService = container.resolve('footerService');
+
+  const footerData = await footerService.getFooterData(lang);
+
   if (isProductionMode()) {
     return <UnderDevelopment />;
   }
 
   return (
     <MainLayout withLines>
-      <TermsOfUse />
+      <TermsOfUse email={footerData.contacts.email} />
     </MainLayout>
   );
 }

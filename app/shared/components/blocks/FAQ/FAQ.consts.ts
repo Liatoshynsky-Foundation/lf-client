@@ -1,8 +1,3 @@
-export const contacts = {
-  phone: '0679638366',
-  email: 'liatoshynsky@gmail.com'
-} as const;
-
 const defaultContent = {
   en: 'The Liatoshynsky Foundation is a non-profit organization that exists solely through voluntary donations and the help of patrons. All received funds are directed towards the implementation of the statutory areas of activity of the organization. The description of the projects we are working on and for which we are collecting funds appears on our website. By making a donation to a specific project of the Foundation, you consent to their redistribution and use in other projects. The amount of the donation is non-refundable.',
   uk: 'Фундація Лятошинського є неприбутковою організацією, існує лише за рахунок добровільних пожертвувань та допомоги меценатів. Усі отримані кошти спрямовуються на реалізацію статутних напрямків діяльності організації. Опис проектів, якими ми займаємося і на які збираємо кошти, з’являється на нашому сайті. Здійснюючи пожертву коштів на конкретний проєкт Фундації ви надаєте згоду на їх перерозподіл і використання в інших проєктах. Сума пожертви не підлягає поверненню.'

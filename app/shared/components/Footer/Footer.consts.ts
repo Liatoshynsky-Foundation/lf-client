@@ -10,12 +10,6 @@ export const footerData = {
   ]
 };
 
-export const contacts = {
-  title: 'ГРОМАДСЬКА ОРГАНІЗАЦІЯ \n«ФУНДАЦІЯ ЛЯТОШИНСЬКОГО»',
-  phone: '067 963 8366',
-  email: 'liatoshynsky@gmail.com'
-};
-
 export const sections = [
   {
     title: 'БОРИС ЛЯТОШИНСЬКИЙ',

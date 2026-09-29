@@ -82,4 +82,23 @@ describe('TermsContent', () => {
     expect(screen.getByText('buttons.library.short')).toBeInTheDocument();
     expect(screen.getByText('buttons.archive.short')).toBeInTheDocument();
   });
+
+  it('should render license link with provided dynamic email in mailto href', () => {
+    const testEmail = 'custom-partner@foundation.org';
+    render(<TermsContent email={testEmail} />);
+
+    const lists = screen.getAllByTestId('list');
+    const licenseBlock = lists.find((el) => el.textContent?.includes(`mailto:${testEmail}`));
+
+    expect(licenseBlock).toBeDefined();
+  });
+
+  it('should fallback to default email in license link when email prop is omitted', () => {
+    render(<TermsContent />);
+
+    const lists = screen.getAllByTestId('list');
+    const licenseBlock = lists.find((el) => el.textContent?.includes('mailto:liatoshynsky@gmail.com'));
+
+    expect(licenseBlock).toBeDefined();
+  });
 });
