@@ -11,12 +11,22 @@ jest.mock('next/server', () => {
         return this.internalUrl;
       }
     }
-    class MockResponse {}
     Object.defineProperty(globalThis, 'Request', { value: MockRequest, writable: true });
+  }
+
+  if (typeof globalThis.Response === 'undefined') {
+    class MockResponse {}
     Object.defineProperty(globalThis, 'Response', { value: MockResponse, writable: true });
+  }
+
+  if (typeof globalThis.TextEncoder === 'undefined') {
     Object.defineProperty(globalThis, 'TextEncoder', { value: util.TextEncoder, writable: true });
+  }
+
+  if (typeof globalThis.TextDecoder === 'undefined') {
     Object.defineProperty(globalThis, 'TextDecoder', { value: util.TextDecoder, writable: true });
   }
+
   return {
     NextResponse: {
       json: jest.fn()

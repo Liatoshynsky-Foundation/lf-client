@@ -70,18 +70,19 @@ describe('Funds API Route (GET)', () => {
 
   beforeAll(async () => {
     if (typeof globalThis.Request === 'undefined') {
-      Object.defineProperty(globalThis, 'Request', {
-        value: jest.fn()
-      });
-      Object.defineProperty(globalThis, 'Response', {
-        value: jest.fn()
-      });
-      Object.defineProperty(globalThis, 'TextEncoder', {
-        value: util.TextEncoder
-      });
-      Object.defineProperty(globalThis, 'TextDecoder', {
-        value: util.TextDecoder
-      });
+      Object.defineProperty(globalThis, 'Request', { value: jest.fn() });
+    }
+
+    if (typeof globalThis.Response === 'undefined') {
+      Object.defineProperty(globalThis, 'Response', { value: jest.fn() });
+    }
+
+    if (typeof globalThis.TextEncoder === 'undefined') {
+      Object.defineProperty(globalThis, 'TextEncoder', { value: util.TextEncoder });
+    }
+
+    if (typeof globalThis.TextDecoder === 'undefined') {
+      Object.defineProperty(globalThis, 'TextDecoder', { value: util.TextDecoder });
     }
 
     const { NextResponse } = await import('next/server');
