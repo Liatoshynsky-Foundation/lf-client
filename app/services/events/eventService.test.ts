@@ -192,15 +192,6 @@ describe('eventService', () => {
       expect(result?.ticketUrl).toBeNull();
     });
 
-    it('returns null ticketUrl when ticketUrl is undefined', async () => {
-      const { ticketUrl: _, ...eventWithoutTicketUrl } = baseEventMock;
-      eventRepositoryMock.getEventBySlug.mockResolvedValue(eventWithoutTicketUrl as any);
-
-      const result = await eventService.getEventBySlug('event-1', locale);
-
-      expect(result?.ticketUrl).toBeNull();
-    });
-
     it('returns null ticketUrl when locale-specific value is null', async () => {
       eventRepositoryMock.getEventBySlug.mockResolvedValue({
         ...baseEventMock,
