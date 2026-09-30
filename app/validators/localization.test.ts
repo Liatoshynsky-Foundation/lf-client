@@ -7,6 +7,13 @@ import { LocalizationErrors } from '~/constants/errors';
 describe('LocalizeSchema', () => {
   const unknownSchema = z.unknown();
 
+  const ticketUrlSchema = z.object({
+    ticketUrl: z.object({
+      uk: z.string().nullable(),
+      en: z.string().nullable()
+    })
+  });
+
   it('should return primitive values untouched', async () => {
     const transformer = LocalizeSchema(unknownSchema, 'en' as Locale);
     const data = { title: 'test', views: 42 };
@@ -203,13 +210,23 @@ describe('LocalizeSchema', () => {
     expect(result).toEqual({ body: data.body.en });
   });
 
-  it('should throw error if non optional field path evaluates to empty string inside root array mapping', async () => {
+  it('should allow empty English description inside root array mapping', async () => {
     const schema = z.array(z.unknown());
     const transformer = LocalizeSchema(schema, 'en' as Locale);
-    const invalidData = [{ description: { en: '' } }];
+    const data = [{ description: { uk: 'Опис', en: '' } }];
 
-    await expect(transformer.parseAsync(invalidData)).rejects.toThrow(
-      `${LocalizationErrors.MISSING_EN_ERROR} at path: root[0].description`
+    const result = await transformer.parseAsync(data);
+
+    expect(result).toEqual([{ description: '' }]);
+  });
+
+  it('should throw error if Ukrainian description is empty inside root array mapping', async () => {
+    const schema = z.array(z.unknown());
+    const transformer = LocalizeSchema(schema, 'uk' as Locale);
+    const data = [{ description: { uk: '', en: 'Description' } }];
+
+    await expect(transformer.parseAsync(data)).rejects.toThrow(
+      `${LocalizationErrors.MISSING_UK_ERROR} at path: root[0].description`
     );
   });
 
@@ -222,5 +239,23 @@ describe('LocalizeSchema', () => {
 
     const result = await transformer.parseAsync(customObj);
     expect(result).toEqual(customObj);
+  });
+
+  it('should allow null ticketUrl', async () => {
+    const transformer = LocalizeSchema(ticketUrlSchema, 'en' as Locale);
+    const data = { ticketUrl: { uk: null, en: null } };
+
+    const result = await transformer.parseAsync(data);
+
+    expect(result).toEqual({ ticketUrl: null });
+  });
+
+  it('should localize ticketUrl', async () => {
+    const transformer = LocalizeSchema(ticketUrlSchema, 'en' as Locale);
+    const data = { ticketUrl: { uk: 'https://uk.example.com', en: 'https://en.example.com' } };
+
+    const result = await transformer.parseAsync(data);
+
+    expect(result).toEqual({ ticketUrl: 'https://en.example.com' });
   });
 });

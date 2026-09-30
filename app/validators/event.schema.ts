@@ -65,5 +65,6 @@ export const eventListItemSchema = eventSchema.pick({
   coverImage: true,
   meta: true,
   eventDateTimeStart: true,
-  eventDateTimeEnd: true
+  eventDateTimeEnd: true,
+  ticketUrl: true
 });
