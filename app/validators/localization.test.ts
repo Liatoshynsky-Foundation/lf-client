@@ -4,6 +4,8 @@ import z from 'zod';
 import { LocalizeSchema } from './localization';
 import { LocalizationErrors } from '~/constants/errors';
 
+import { ArchivePageSchema } from '~/validators/pagesSchemas/pages/archive.schema';
+
 describe('LocalizeSchema', () => {
   const unknownSchema = z.unknown();
 
@@ -12,6 +14,29 @@ describe('LocalizeSchema', () => {
       uk: z.string().nullable(),
       en: z.string().nullable()
     })
+  });
+
+  it('should localize the ArchivePage CMS description and allow it to be empty', async () => {
+    const transformer = LocalizeSchema(ArchivePageSchema, 'en' as Locale, { allowEmptyFields: ['description'] });
+    const data = {
+      _id: '6ab53b4580bb219111c9e999',
+      pageType: 'ArchivePage',
+      slug: 'archive',
+      title: { uk: 'Архів', en: 'Archive' },
+      status: 'published',
+      blocks: {
+        PageCaption: {
+          description: {
+            uk: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Вступ' }] }] },
+            en: { type: 'doc', content: [] }
+          }
+        }
+      }
+    };
+
+    const result = await transformer.parseAsync(data);
+
+    expect(result.blocks.PageCaption.description).toEqual({ type: 'doc', content: [] });
   });
 
   it('should return primitive values untouched', async () => {

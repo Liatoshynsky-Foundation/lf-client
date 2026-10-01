@@ -6,6 +6,7 @@ import { PageDataMap } from '~/types/page/pagesBase.type';
 import { NoIDSchema, NoPageType, NoTime } from '~/validators/constants';
 import { LocalizeSchema } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { ArchivePageSchema } from '~/validators/pagesSchemas/pages/archive.schema';
 import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
@@ -20,7 +21,8 @@ export const PAGE_SLUGS = [
   'biography',
   'cooperation',
   'artistry',
-  'war-in-ukraine'
+  'war-in-ukraine',
+  'archive'
 ] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];
 
@@ -34,7 +36,9 @@ const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageData
   biography: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(BiographyPageSchema))), locale),
   cooperation: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(CooperationPageSchema))), locale),
   artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArtistryPageSchema))), locale),
-  'war-in-ukraine': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(WarInUkrainePageSchema))), locale)
+  'war-in-ukraine': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(WarInUkrainePageSchema))), locale),
+  archive: (locale) =>
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale, { allowEmptyFields: ['description'] })
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {

@@ -4,7 +4,8 @@ import userEvent from '@testing-library/user-event';
 import ArchiveHeader from './ArchiveHeader';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en'
 }));
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
@@ -15,6 +16,12 @@ describe('ArchiveHeader', () => {
   const mockOnSearch = jest.fn();
 
   beforeEach(() => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: false
+    });
+  });
+
+  afterEach(() => {
     mockOnSearch.mockClear();
   });
 
@@ -27,13 +34,96 @@ describe('ArchiveHeader', () => {
   it('should renders title', () => {
     render(<ArchiveHeader onSearch={mockOnSearch} />);
 
-    expect(screen.getByTestId('ArchiveHeader-title')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'title' })).toBeInTheDocument();
   });
 
-  it('should renders description', () => {
+  it('should render the CMS description', async () => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        value: { blocks: { PageCaption: { description: 'CMS description' } } }
+      })
+    });
+
     render(<ArchiveHeader onSearch={mockOnSearch} />);
 
-    expect(screen.getByTestId('ArchiveHeader-description')).toBeInTheDocument();
+    expect(await screen.findByText('CMS description')).toBeInTheDocument();
+  });
+
+  it('should omit the description when the CMS value is empty', async () => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ ok: true, value: { blocks: { PageCaption: { description: '' } } } })
+    });
+
+    render(<ArchiveHeader onSearch={mockOnSearch} />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
+    expect(screen.queryByTestId('ArchiveHeader-description')).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['returns a non-ok response', { ok: false }],
+    ['returns an unsuccessful result', { ok: true, json: async () => ({ ok: false }) }]
+  ])('should omit the description when the CMS request %s', async (_caseName, response) => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue(response);
+
+    render(<ArchiveHeader onSearch={mockOnSearch} />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
+    expect(screen.queryByTestId('ArchiveHeader-description')).not.toBeInTheDocument();
+  });
+
+  it('should omit the description when the CMS request fails', async () => {
+    (globalThis.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+
+    render(<ArchiveHeader onSearch={mockOnSearch} />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
+    expect(screen.queryByTestId('ArchiveHeader-description')).not.toBeInTheDocument();
+  });
+
+  it('should omit a TipTap description with no text', async () => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        value: { blocks: { PageCaption: { description: { type: 'doc', content: [{ type: 'paragraph' }] } } } }
+      })
+    });
+
+    render(<ArchiveHeader onSearch={mockOnSearch} />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
+    expect(screen.queryByTestId('ArchiveHeader-description')).not.toBeInTheDocument();
+  });
+
+  it('should render a TipTap description with multiple paragraphs', async () => {
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        value: {
+          blocks: {
+            PageCaption: {
+              description: {
+                type: 'doc',
+                content: [
+                  { type: 'paragraph', content: [{ type: 'text', text: 'First paragraph' }] },
+                  { type: 'paragraph', content: [{ type: 'text', text: 'Second paragraph' }] }
+                ]
+              }
+            }
+          }
+        }
+      })
+    });
+
+    render(<ArchiveHeader onSearch={mockOnSearch} />);
+
+    expect(await screen.findByText('First paragraph')).toBeInTheDocument();
+    expect(screen.getByText('Second paragraph')).toBeInTheDocument();
   });
 
   it('should renders search input', () => {
@@ -62,22 +152,22 @@ describe('ArchiveHeader', () => {
     const user = userEvent.setup();
     render(<ArchiveHeader onSearch={mockOnSearch} />);
 
-    const searchInput = screen.getByRole('textbox') as HTMLInputElement;
+    const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'fund');
 
-    expect(searchInput.value).toBe('fund');
+    expect(searchInput).toHaveValue('fund');
   });
 
   it('should clears search input', async () => {
     const user = userEvent.setup();
     render(<ArchiveHeader onSearch={mockOnSearch} />);
 
-    const searchInput = screen.getByRole('textbox') as HTMLInputElement;
+    const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'test');
-    expect(searchInput.value).toBe('test');
+    expect(searchInput).toHaveValue('test');
 
     await user.clear(searchInput);
-    expect(searchInput.value).toBe('');
+    expect(searchInput).toHaveValue('');
   });
 
   it('should calls onSearch with empty string when input is cleared', async () => {

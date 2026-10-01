@@ -4,6 +4,7 @@ import { PageSlug } from '~/services/pages-data/schema-factory';
 import { ExcludeDBFields } from '~/validators/constants';
 import { Localize } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { ArchivePageSchema } from '~/validators/pagesSchemas/pages/archive.schema';
 import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
@@ -18,6 +19,7 @@ export type BiographyPageBase = ExcludeDBFields<z.infer<typeof BiographyPageSche
 export type CooperationPageBase = ExcludeDBFields<z.infer<typeof CooperationPageSchema>>;
 export type ArtistryPageBase = ExcludeDBFields<z.infer<typeof ArtistryPageSchema>>;
 export type WarInUkrainePageBase = ExcludeDBFields<z.infer<typeof WarInUkrainePageSchema>>;
+export type ArchivePageBase = ExcludeDBFields<z.infer<typeof ArchivePageSchema>>;
 
 export interface PageBaseMap {
   'about-us': AboutUsPageBase;
@@ -27,6 +29,7 @@ export interface PageBaseMap {
   cooperation: CooperationPageBase;
   artistry: ArtistryPageBase;
   'war-in-ukraine': WarInUkrainePageBase;
+  archive: ArchivePageBase;
 }
 
 export type AboutUsPage = Localize<AboutUsPageBase>;
@@ -36,6 +39,7 @@ export type BiographyPage = Localize<BiographyPageBase>;
 export type CooperationPage = Localize<CooperationPageBase>;
 export type ArtistryPage = Localize<ArtistryPageBase>;
 export type WarInUkrainePage = Localize<WarInUkrainePageBase>;
+export type ArchivePage = Localize<ArchivePageBase>;
 
 export interface PageDataMap {
   'about-us': AboutUsPage;
@@ -45,6 +49,7 @@ export interface PageDataMap {
   cooperation: CooperationPage;
   artistry: ArtistryPage;
   'war-in-ukraine': WarInUkrainePage;
+  archive: ArchivePage;
 }
 
 export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;
