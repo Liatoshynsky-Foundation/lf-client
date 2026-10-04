@@ -6,30 +6,48 @@ describe('downloadWithAnchor', () => {
   const fileUrl = 'https://example.com/file.pdf';
   const fileName = 'file.pdf';
 
-  it('creates and clicks an anchor link with download attribute', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('downloads the file using a blob URL', async () => {
+    const blob = new Blob(['file content'], { type: 'application/pdf' });
+    const blobUrl = 'blob:http://localhost/file';
+
     const mockLink = {
       href: '',
-      setAttribute: jest.fn(),
+      download: '',
       click: jest.fn()
     };
 
-    const appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation((child: Node) => child);
-    const removeChildSpy = jest.spyOn(document.body, 'removeChild').mockImplementation((child: Node) => child);
-    const createElementSpy = jest
-      .spyOn(document, 'createElement')
-      .mockReturnValue(mockLink as unknown as HTMLAnchorElement);
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      blob: jest.fn().mockResolvedValue(blob)
+    } as unknown as Response);
+    URL.createObjectURL = jest.fn().mockReturnValue(blobUrl);
+    URL.revokeObjectURL = jest.fn();
+    jest.spyOn(document.body, 'appendChild').mockImplementation((child: Node) => child);
+    jest.spyOn(document.body, 'removeChild').mockImplementation((child: Node) => child);
+    jest.spyOn(document, 'createElement').mockReturnValue(mockLink as unknown as HTMLAnchorElement);
 
-    downloadWithAnchor(fileUrl, fileName);
+    await downloadWithAnchor(fileUrl, fileName);
 
-    expect(createElementSpy).toHaveBeenCalledWith('a');
-    expect(mockLink.href).toBe(fileUrl);
-    expect(mockLink.setAttribute).toHaveBeenCalledWith('download', fileName);
+    expect(fetch).toHaveBeenCalledWith(fileUrl);
+    expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+    expect(mockLink.download).toBe(fileName);
     expect(mockLink.click).toHaveBeenCalled();
-    expect(appendChildSpy).toHaveBeenCalledWith(mockLink);
-    expect(removeChildSpy).toHaveBeenCalledWith(mockLink);
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith(blobUrl);
+  });
 
-    createElementSpy.mockRestore();
-    appendChildSpy.mockRestore();
-    removeChildSpy.mockRestore();
+  it('throws an error when the download request fails', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false
+    } as Response);
+
+    await expect(downloadWithAnchor(fileUrl, fileName)).rejects.toThrow('Failed to download file');
   });
 });

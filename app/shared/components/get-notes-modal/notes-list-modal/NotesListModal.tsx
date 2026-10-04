@@ -12,9 +12,10 @@ type NotesListModalProps = {
   composition: string;
   notes: MusicItem[];
   paidNotesHandler: () => void;
+  onViewPdf: (note: MusicItem) => void;
 };
 
-const NotesListModal = ({ composition, notes, paidNotesHandler }: NotesListModalProps) => {
+const NotesListModal = ({ composition, notes, paidNotesHandler, onViewPdf }: NotesListModalProps) => {
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.typography}>{composition}</Typography>
@@ -29,6 +30,7 @@ const NotesListModal = ({ composition, notes, paidNotesHandler }: NotesListModal
             }
             handler={!note.url ? paidNotesHandler : undefined}
             buttonText={note.url ? 'freeNotesButton' : 'paidNotesButton'}
+            onViewPdf={() => onViewPdf(note)}
           />
         ))}
       {notes.length === 0 && (

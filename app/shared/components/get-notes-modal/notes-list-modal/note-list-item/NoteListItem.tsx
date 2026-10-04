@@ -17,9 +17,10 @@ type NotesListItemProps = {
   buttonText: 'freeNotesButton' | 'paidNotesButton';
   endIcon: React.ReactNode;
   handler?: () => void;
+  onViewPdf?: () => void;
 };
 
-const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProps) => {
+const NotesListItem = ({ note, buttonText, handler, endIcon, onViewPdf }: NotesListItemProps) => {
   const t = useTranslations('getNotes.notesList');
   const format = useFormatter();
   const { isMobile, isTablet } = useBreakpoints();
@@ -38,9 +39,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
   const isCompact = isMobile || isTablet;
   const isFree = !!note.url;
   const isButtonDisabled = isFree && !note.url;
-  const buttonProps = isFree
-    ? { link: note.url || '', externalLink: true, disabled: isButtonDisabled }
-    : { onClick: handler };
+  const buttonProps = isFree ? { onClick: onViewPdf, disabled: isButtonDisabled } : { onClick: handler };
 
   const desktopButton = <Button variant="outlined" label={t(buttonText)} endIcon={endIcon} {...buttonProps} />;
 
@@ -62,9 +61,9 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
       return <IconButton {...iconButtonProps}>{endIcon}</IconButton>;
     }
     return (
-      <a href={note.url || ''} target="_blank" rel="noopener noreferrer">
-        <IconButton {...iconButtonProps}>{endIcon}</IconButton>
-      </a>
+      <IconButton onClick={onViewPdf} {...iconButtonProps}>
+        {endIcon}
+      </IconButton>
     );
   };
 

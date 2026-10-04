@@ -43,17 +43,20 @@ jest.mock('./notes-confirmation-modal/NotesConfirmModal', () => ({
 
 jest.mock('./notes-list-modal/NotesListModal', () => ({
   __esModule: true,
-  default: ({ notes, paidNotesHandler }: any) => (
+  default: ({ notes, paidNotesHandler, onViewPdf }: any) => (
     <div data-testid="notes-list-modal">
-      <a href={notes[0].url} target="_blank" rel="noopener noreferrer">
-        Free Notes
-      </a>
+      <button onClick={() => onViewPdf(notes[0])}>Free Notes</button>
       <button onClick={paidNotesHandler}>Paid Notes</button>
       {notes.map((n: any) => (
         <div key={n.url}>{n.url}</div>
       ))}
     </div>
   )
+}));
+
+jest.mock('../pdf-viewer/PdfViewer', () => ({
+  __esModule: true,
+  default: ({ note }: { note: { url: string } }) => <div>PDF Viewer: {note.url}</div>
 }));
 
 const composition = 'Composition 1';
@@ -65,7 +68,7 @@ const notes = [
 const handleCloseModal = jest.fn();
 
 describe('GetNotesModal', () => {
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -105,11 +108,20 @@ describe('GetNotesModal', () => {
     expect(handleCloseModal).toHaveBeenCalled();
   });
 
-  it('should render Free Notes as a link with correct attributes', () => {
+  it('should render PDF viewer when free note is clicked', () => {
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-    const link = screen.getByText('Free Notes');
-    expect(link).toHaveAttribute('href', notes[0].url);
-    expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    fireEvent.click(screen.getByRole('button', { name: 'Free Notes' }));
+    expect(screen.getByText(`PDF Viewer: ${notes[0].url}`)).toBeInTheDocument();
+  });
+
+  it('should return to notes list when clos icon is clicked in PDF viewer', () => {
+    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Free Notes' }));
+    fireEvent.click(screen.getByTestId('icon-button'));
+
+    expect(screen.getByTestId('notes-list-modal')).toBeInTheDocument();
+    expect(screen.queryByText(`PDF Viewer: ${notes[0].url}`)).not.toBeInTheDocument();
+    expect(handleCloseModal).not.toHaveBeenCalled();
   });
 });

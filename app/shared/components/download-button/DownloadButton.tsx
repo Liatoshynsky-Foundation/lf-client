@@ -2,34 +2,44 @@
 
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
 import Button from '~/ds-components/button/Button';
 
-import { ApiRoutes } from '~/constants/routes/api-routes';
 import { downloadWithAnchor } from '~/utils/downloadFile';
-import { getStorageFileEndpoint } from '~/utils/storageFileEndpoint';
 
 interface DownloadButtonProps {
-  folderName: string;
+  url: string;
   fileName: string;
 }
 
-const DownloadButton = ({ folderName, fileName }: DownloadButtonProps) => {
+const DownloadButton = ({ url, fileName }: DownloadButtonProps) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const t = useTranslations('table.buttons');
-  const storageFileUrl = getStorageFileEndpoint(ApiRoutes.STORAGE_FILE, folderName, fileName);
+
+  const handleDownload = async () => {
+    if (isDownloading) return;
+
+    setIsDownloading(true);
+
+    try {
+      await downloadWithAnchor(url, fileName);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <Box>
       <Button
-        onClick={() => downloadWithAnchor(storageFileUrl, fileName)}
+        onClick={handleDownload}
         size={'medium'}
         variant={'outlined'}
         endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}
-      >
-        {t('downloadMusic')}
-      </Button>
+        label={t('downloadMusic')}
+      />
     </Box>
   );
 };

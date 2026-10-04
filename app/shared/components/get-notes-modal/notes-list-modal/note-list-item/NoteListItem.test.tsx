@@ -61,6 +61,7 @@ const note: MusicItem = {
 };
 const icon = <svg data-testid="end-icon" />;
 const handler = jest.fn();
+const onViewPdf = jest.fn();
 
 const mockUseBreakpoints = useBreakpoints as jest.MockedFunction<typeof useBreakpoints>;
 
@@ -78,7 +79,14 @@ describe('NotesListItem', () => {
 
   const renderComponent = (propsOverrides?: Partial<React.ComponentProps<typeof NotesListItem>>) => {
     return render(
-      <NotesListItem note={note} buttonText="freeNotesButton" endIcon={icon} handler={handler} {...propsOverrides} />
+      <NotesListItem
+        note={note}
+        buttonText="freeNotesButton"
+        endIcon={icon}
+        handler={handler}
+        onViewPdf={onViewPdf}
+        {...propsOverrides}
+      />
     );
   };
 
@@ -115,17 +123,25 @@ describe('NotesListItem', () => {
     expect(handler).toHaveBeenCalled();
   });
 
+  it('should call onViewPdf when free note is clicked on desktop', () => {
+    renderComponent();
+    fireEvent.click(screen.getByRole('button'));
+    expect(onViewPdf).toHaveBeenCalled();
+  });
+
   it('should render endIcon if provided', () => {
     renderComponent();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
   });
 
-  it('should render mobile layouts and hide the decorative frame icon on compact viewports', () => {
+  it('should render mobile layouts and call onViewPdf when free not is clicked', () => {
     mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isMobile: true }));
     renderComponent();
 
     expect(screen.queryByTestId('svg-image')).not.toBeInTheDocument();
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/notes/test-note.pdf');
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(onViewPdf).toHaveBeenCalled();
   });
 
   it('should render an icon button configuration that triggers click parameters for paid mobile items', () => {

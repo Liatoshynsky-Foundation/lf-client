@@ -5,13 +5,15 @@ import NotesListModal from './NotesListModal';
 
 import { MusicItem } from '~/domain/entities/artistry.entity';
 
+const pdfHandler = jest.fn();
+
 jest.mock('./note-list-item/NoteListItem', () => {
   const MockListItem = (props: any) => (
     <div data-testid="note-list-item" data-note={JSON.stringify(props.note)}>
       {props.note.url ? (
-        <a data-testid="note-btn-free" href={props.note.url} target="_blank" rel="noopener noreferrer">
+        <button data-testid="note-btn-free" onClick={props.onViewPdf}>
           {props.buttonText}
-        </a>
+        </button>
       ) : (
         <button data-testid="note-btn-paid" onClick={props.handler}>
           {props.buttonText}
@@ -37,7 +39,14 @@ describe('NotesListModal', () => {
   });
 
   const renderComponent = (customNotes: MusicItem[] = notes) =>
-    render(<NotesListModal composition="Test composition" notes={customNotes} paidNotesHandler={paidHandler} />);
+    render(
+      <NotesListModal
+        composition="Test composition"
+        notes={customNotes}
+        paidNotesHandler={paidHandler}
+        onViewPdf={pdfHandler}
+      />
+    );
 
   it('should render a NoteListItem for each note', () => {
     renderComponent();
@@ -47,10 +56,10 @@ describe('NotesListModal', () => {
     expect(items[1]).toHaveAttribute('data-note', JSON.stringify(notes[1]));
   });
 
-  it('should render link with correct url', () => {
+  it('should call onViewPdf with the selected note', () => {
     renderComponent();
-    const link = screen.getByTestId('note-btn-free');
-    expect(link).toHaveAttribute('href', notes[0].url!);
+    fireEvent.click(screen.getByRole('button', { name: 'freeNotesButton' }));
+    expect(pdfHandler).toHaveBeenCalledWith(notes[0]);
   });
 
   it('should call paidNotesHandler when paid note button is clicked', () => {
