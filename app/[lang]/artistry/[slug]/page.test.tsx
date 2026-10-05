@@ -30,8 +30,9 @@ jest.mock('~/layouts/main-layout/MainLayout', () => {
 
 jest.mock('~/shared/components/blocks/opus-details/OpusDetails', () => {
   const MockOpusDetails = ({ name, compositions, videos, backHref, labels }: OpusDetailsProps) => (
-    <div data-testid="opus-details" data-backhref={backHref} data-videostitle={labels?.videosTitle}>
-      {`${name}|${compositions?.length ?? 0}|${videos?.length ?? 0}`}
+    <div data-testid="opus-details" data-backhref={backHref}>
+      <h2>{labels?.videosTitle}</h2>
+      <div>{`${name}|${compositions?.length ?? 0}|${videos?.length ?? 0}`}</div>
     </div>
   );
   MockOpusDetails.displayName = 'OpusDetails';
@@ -108,8 +109,7 @@ describe('OpusPage', () => {
     const ui = await OpusPage(props);
     render(ui);
 
-    const block = screen.getByTestId('opus-details');
-    expect(block).toHaveAttribute('data-videostitle', 'ТЕСТ заголовок з CMS');
+    expect(screen.getByRole('heading', { level: 2, name: 'ТЕСТ заголовок з CMS' })).toBeInTheDocument();
   });
 
   it('falls back to default i18n title when performancesTitle is empty or whitespace', async () => {
@@ -121,7 +121,6 @@ describe('OpusPage', () => {
     const ui = await OpusPage(props);
     render(ui);
 
-    const block = screen.getByTestId('opus-details');
-    expect(block).toHaveAttribute('data-videostitle', 'videos.title');
+    expect(screen.getByRole('heading', { level: 2, name: 'videos.title' })).toBeInTheDocument();
   });
 });
