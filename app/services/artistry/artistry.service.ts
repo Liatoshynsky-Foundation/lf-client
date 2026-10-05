@@ -157,6 +157,7 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
       name: opusDetails.name[locale],
       title: opusDetails.title[locale],
       year: mapYear(opusDetails),
+      datesNote: opusDetails.datesNote?.trim() || null,
       genre: pickGenre(opusDetails, opusDetails.compositions, locale),
       slug: opusDetails.slug,
       movements: mapMovements(opusDetails.parts ?? null, locale),

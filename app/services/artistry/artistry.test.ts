@@ -237,7 +237,8 @@ describe('ArtistryService', () => {
           }
         ],
         performances: [{ videoUrl: 'https://youtube.com/watch?v=123' }],
-        gallery: [{ _id: 'g1', src: 'img.jpg', altText: { uk: 'Фото', en: 'Photo' } }]
+        gallery: [{ _id: 'g1', src: 'img.jpg', altText: { uk: 'Фото', en: 'Photo' } }],
+        datesNote: '  авторське уточнення  '
       } as RawOpusDetailsDTO);
       compositionsRepoMock.getOpusBySlug.mockResolvedValue(rawOpus);
 
@@ -250,6 +251,7 @@ describe('ArtistryService', () => {
         name: 'Квінтет',
         title: 'Український квінтет',
         year: '1929',
+        datesNote: 'авторське уточнення',
         genre: undefined,
         introDescription: null,
         description: 'SEO Опис',
@@ -281,6 +283,7 @@ describe('ArtistryService', () => {
       expect(result).toMatchObject({
         introDescription: null,
         description: null,
+        datesNote: null,
         videos: [],
         sheetMusic: null
       });
