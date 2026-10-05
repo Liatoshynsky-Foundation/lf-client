@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import NotesListItem from './NoteListItem';
@@ -114,18 +115,20 @@ describe('NotesListItem', () => {
     expect(screen.getByRole('button')).toHaveTextContent('paidNotesButton');
   });
 
-  it('should call handler when button is clicked on desktop for paid notes', () => {
+  it('should call handler when button is clicked on desktop for paid notes', async () => {
+    const user = userEvent.setup();
     renderComponent({
       note: { ...note, url: undefined },
       buttonText: 'paidNotesButton'
     });
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     expect(handler).toHaveBeenCalled();
   });
 
-  it('should call onViewPdf when free note is clicked on desktop', () => {
+  it('should call onViewPdf when free note is clicked on desktop', async () => {
+    const user = userEvent.setup();
     renderComponent();
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     expect(onViewPdf).toHaveBeenCalled();
   });
 
@@ -134,24 +137,26 @@ describe('NotesListItem', () => {
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
   });
 
-  it('should render mobile layouts and call onViewPdf when free not is clicked', () => {
+  it('should render mobile layouts and call onViewPdf when free not is clicked', async () => {
+    const user = userEvent.setup();
     mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isMobile: true }));
     renderComponent();
 
     expect(screen.queryByTestId('svg-image')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     expect(onViewPdf).toHaveBeenCalled();
   });
 
-  it('should render an icon button configuration that triggers click parameters for paid mobile items', () => {
+  it('should render an icon button configuration that triggers click parameters for paid mobile items', async () => {
+    const user = userEvent.setup();
     mockUseBreakpoints.mockReturnValue(getMockBreakpoints({ isTablet: true }));
     renderComponent({
       note: { ...note, url: undefined },
       buttonText: 'paidNotesButton'
     });
 
-    fireEvent.click(screen.getByTestId('icon-button'));
+    await user.click(screen.getByTestId('icon-button'));
     expect(handler).toHaveBeenCalled();
   });
 

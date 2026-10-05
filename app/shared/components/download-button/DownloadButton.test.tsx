@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import DownloadButton from './DownloadButton';
@@ -24,14 +25,15 @@ describe('DownloadButton', () => {
     jest.clearAllMocks();
   });
 
-  it('should call downloadWithAnchor with the correct parameters when clicked', () => {
+  it('should call downloadWithAnchor with the correct parameters when clicked', async () => {
+    const user = userEvent.setup();
     const testUrl = 'https://example.com/sheet-music.pdf';
     const testFileName = 'summer-vacation.jpeg';
 
     render(<DownloadButton url={testUrl} fileName={testFileName} />);
 
     const button = screen.getByRole('button', { name: /Download/i });
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(downloadWithAnchor).toHaveBeenCalledWith(testUrl, testFileName);
   });
@@ -42,6 +44,7 @@ describe('DownloadButton', () => {
   });
 
   it('does not start another download while downloading', async () => {
+    const user = userEvent.setup();
     let resolveDownload: () => void;
 
     (downloadWithAnchor as jest.Mock).mockImplementation(
@@ -54,8 +57,8 @@ describe('DownloadButton', () => {
     render(<DownloadButton url="https://example.com/sheet-music.pdf" fileName="test.pdf" />);
 
     const button = screen.getByRole('button', { name: /Download/i });
-    fireEvent.click(button);
-    fireEvent.click(button);
+    await user.click(button);
+    await user.click(button);
 
     expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
 

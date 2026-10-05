@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import GetNotesModal from './GetNotesModal';
@@ -81,18 +82,20 @@ describe('GetNotesModal', () => {
     expect(screen.getByText('/note-2.pdf')).toBeInTheDocument();
   });
 
-  it('should switch to FORM state when Paid Notes button is clicked', () => {
+  it('should switch to FORM state when Paid Notes button is clicked', async () => {
+    const user = userEvent.setup();
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-    fireEvent.click(screen.getByText('Paid Notes'));
+    await user.click(screen.getByText('Paid Notes'));
     expect(screen.getByText('form.title')).toBeInTheDocument();
     expect(screen.getByText('form.subtitle')).toBeInTheDocument();
     expect(screen.getByText('GetNotesForm')).toBeInTheDocument();
   });
 
-  it('should switch to CONFIRM state when GetNotesForm is submitted', () => {
+  it('should switch to CONFIRM state when GetNotesForm is submitted', async () => {
+    const user = userEvent.setup();
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-    fireEvent.click(screen.getByText('Paid Notes'));
-    fireEvent.click(screen.getByText('GetNotesForm'));
+    await user.click(screen.getByText('Paid Notes'));
+    await user.click(screen.getByText('GetNotesForm'));
 
     const confirmModal = screen.getByTestId('notes-confirm-modal');
 
@@ -102,23 +105,26 @@ describe('GetNotesModal', () => {
     expect(confirmModal).toHaveTextContent('confirmation.btnText');
   });
 
-  it('should close modal when close icon is clicked', () => {
+  it('should close modal when close icon is clicked', async () => {
+    const user = userEvent.setup();
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-    fireEvent.click(screen.getByTestId('icon-button'));
+    await user.click(screen.getByTestId('icon-button'));
     expect(handleCloseModal).toHaveBeenCalled();
   });
 
-  it('should render PDF viewer when free note is clicked', () => {
+  it('should render PDF viewer when free note is clicked', async () => {
+    const user = userEvent.setup();
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Free Notes' }));
+    await user.click(screen.getByRole('button', { name: 'Free Notes' }));
     expect(screen.getByText(`PDF Viewer: ${notes[0].url}`)).toBeInTheDocument();
   });
 
-  it('should return to notes list when clos icon is clicked in PDF viewer', () => {
+  it('should return to notes list when clos icon is clicked in PDF viewer', async () => {
+    const user = userEvent.setup();
     render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Free Notes' }));
-    fireEvent.click(screen.getByTestId('icon-button'));
+    await user.click(screen.getByRole('button', { name: 'Free Notes' }));
+    await user.click(screen.getByTestId('icon-button'));
 
     expect(screen.getByTestId('notes-list-modal')).toBeInTheDocument();
     expect(screen.queryByText(`PDF Viewer: ${notes[0].url}`)).not.toBeInTheDocument();

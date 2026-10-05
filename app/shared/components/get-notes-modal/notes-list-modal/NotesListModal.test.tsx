@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import NotesListModal from './NotesListModal';
@@ -56,15 +57,17 @@ describe('NotesListModal', () => {
     expect(items[1]).toHaveAttribute('data-note', JSON.stringify(notes[1]));
   });
 
-  it('should call onViewPdf with the selected note', () => {
+  it('should call onViewPdf with the selected note', async () => {
+    const user = userEvent.setup();
     renderComponent();
-    fireEvent.click(screen.getByRole('button', { name: 'freeNotesButton' }));
+    await user.click(screen.getByRole('button', { name: 'freeNotesButton' }));
     expect(pdfHandler).toHaveBeenCalledWith(notes[0]);
   });
 
-  it('should call paidNotesHandler when paid note button is clicked', () => {
+  it('should call paidNotesHandler when paid note button is clicked', async () => {
+    const user = userEvent.setup();
     renderComponent();
-    fireEvent.click(screen.getByTestId('note-btn-paid'));
+    await user.click(screen.getByTestId('note-btn-paid'));
     expect(paidHandler).toHaveBeenCalled();
   });
 

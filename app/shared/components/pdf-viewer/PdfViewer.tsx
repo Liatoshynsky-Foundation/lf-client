@@ -11,14 +11,16 @@ type PdfViewerProps = {
 
 const PdfViewer = ({ note }: PdfViewerProps) => {
   const fileName = note.fileName || note.name || '';
+  const url = note.url ?? '';
+  const title = 'PDF viewer';
 
   return (
     <Box sx={styles.container}>
       <Box sx={styles.viewer}>
-        <iframe src={note.url ?? ''} title="PDF viewer" />
+        <iframe src={url} title={title} />
       </Box>
       <Box>
-        <DownloadButton url={note.url ?? ''} fileName={fileName} />
+        <DownloadButton url={url} fileName={fileName} />
       </Box>
     </Box>
   );
