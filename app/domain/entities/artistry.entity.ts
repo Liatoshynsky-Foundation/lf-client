@@ -58,6 +58,7 @@ export interface Opus extends BaseArtistryEntity {
   title: string;
   creationYear: string;
   endYear?: string | null;
+  datesNote?: string | null;
   slug: string;
   movements?: string[] | null;
   introDescription?: RichContent | null;

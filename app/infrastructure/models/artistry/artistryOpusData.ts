@@ -12,6 +12,7 @@ const opusSchema = new mongoose.Schema<OpusDocument>(
     additionalText: { type: String, default: null },
     creationYear: { type: String, required: true },
     endYear: { type: String, default: null },
+    datesNote: { type: String, default: null },
     genre: { type: translatedFieldSchema, required: true },
     slug: { type: String, required: true },
     introDescription: { type: translatedFieldSchema, default: null },

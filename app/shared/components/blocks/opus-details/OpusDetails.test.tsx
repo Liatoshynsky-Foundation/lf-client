@@ -58,6 +58,7 @@ const baseProps: OpusDetailsProps = {
   name: 'Український квінтет для фортепіано',
   number: 'bo.16',
   year: '1929',
+  datesNote: 'revised after premiere',
   genre: 'Фортепіанний квінтет',
   movements: ['I. Allegro e poco agitato', 'II. Lento e tranquillo'],
   sheetMusic: { name: 'opus.pdf', url: 'https://example.com/opus.pdf' },
@@ -83,6 +84,7 @@ describe('OpusDetails', () => {
     const meta = screen.getByTestId('OpusDetails-meta');
     expect(within(meta).getByTestId('OpusDetails-meta-number')).toHaveTextContent('bo.16');
     expect(within(meta).getByTestId('OpusDetails-meta-date')).toHaveTextContent('1929');
+    expect(within(meta).getByTestId('OpusDetails-meta-date-note')).toHaveTextContent('revised after premiere');
     expect(within(meta).getByTestId('OpusDetails-meta-genre')).toHaveTextContent('Фортепіанний квінтет');
 
     const movements = within(meta).getByTestId('OpusDetails-meta-movements');
@@ -101,10 +103,11 @@ describe('OpusDetails', () => {
   });
 
   it('hides optional sidebar fields when they are not provided', () => {
-    renderOpus({ year: undefined, genre: undefined, movements: [], sheetMusic: undefined });
+    renderOpus({ year: undefined, datesNote: undefined, genre: undefined, movements: [], sheetMusic: undefined });
 
     expect(screen.getByTestId('OpusDetails-meta-number')).toBeInTheDocument();
     expect(screen.queryByTestId('OpusDetails-meta-date')).toBeNull();
+    expect(screen.queryByTestId('OpusDetails-meta-date-note')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-genre')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-movements')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-sheetMusic')).toBeNull();
