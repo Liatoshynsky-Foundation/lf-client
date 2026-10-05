@@ -7,21 +7,20 @@ import {
   translatedTipTapSchema
 } from '~/validators/constants';
 
-const sheetMusicItemSchema = z
+export const sheetMusicItemSchema = z
   .object({
     url: z.string().nullable(),
-    name: z.string().optional(),
+    name: z.string().nullish(),
     fileName: z.string().nullable().optional(),
     publishDate: z.string().optional().nullable()
   })
   .transform((data) => {
-    if (!data.name && data.fileName) {
-      return {
-        ...data,
-        name: data.fileName
-      };
-    }
-    return data;
+    const trimmedName = data.name?.trim();
+    const fallbackForName = data.fileName?.trim() || data.url?.split('/').pop()?.split('?')[0];
+    return {
+      ...data,
+      name: trimmedName || fallbackForName || ''
+    };
   });
 
 const localizedIndexationSchema = z.object({
