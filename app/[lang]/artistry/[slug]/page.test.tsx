@@ -29,8 +29,8 @@ jest.mock('~/layouts/main-layout/MainLayout', () => {
 });
 
 jest.mock('~/shared/components/blocks/opus-details/OpusDetails', () => {
-  const MockOpusDetails = ({ name, compositions, videos, backHref }: OpusDetailsProps) => (
-    <div data-testid="opus-details" data-backhref={backHref}>
+  const MockOpusDetails = ({ name, compositions, videos, backHref, labels }: OpusDetailsProps) => (
+    <div data-testid="opus-details" data-backhref={backHref} data-videostitle={labels?.videosTitle}>
       {`${name}|${compositions?.length ?? 0}|${videos?.length ?? 0}`}
     </div>
   );
@@ -97,5 +97,31 @@ describe('OpusPage', () => {
     getOpusDetailsBySlug.mockResolvedValue(null);
 
     await expect(OpusPage(props)).rejects.toThrow('NEXT_NOT_FOUND');
+  });
+
+  it('uses CMS performancesTitle when provided', async () => {
+    getOpusDetailsBySlug.mockResolvedValue({
+      ...mockDto,
+      performancesTitle: 'ТЕСТ заголовок з CMS'
+    });
+
+    const ui = await OpusPage(props);
+    render(ui);
+
+    const block = screen.getByTestId('opus-details');
+    expect(block).toHaveAttribute('data-videostitle', 'ТЕСТ заголовок з CMS');
+  });
+
+  it('falls back to default i18n title when performancesTitle is empty or whitespace', async () => {
+    getOpusDetailsBySlug.mockResolvedValue({
+      ...mockDto,
+      performancesTitle: '   '
+    });
+
+    const ui = await OpusPage(props);
+    render(ui);
+
+    const block = screen.getByTestId('opus-details');
+    expect(block).toHaveAttribute('data-videostitle', 'videos.title');
   });
 });
