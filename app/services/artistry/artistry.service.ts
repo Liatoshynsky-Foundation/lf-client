@@ -166,7 +166,8 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
       description: opusDetails.description ? opusDetails.description[locale] : null,
       videos: mapVideos(opusDetails.performances ?? null, locale),
       sheetMusic: opusDetails.sheetMusic || null,
-      gallery: mapOpusGallery(opusDetails.gallery, locale)
+      gallery: mapOpusGallery(opusDetails.gallery, locale),
+      performancesTitle: opusDetails.performancesTitle ? opusDetails.performancesTitle[locale] : null
     };
   }
 });

@@ -70,7 +70,8 @@ export const opusSchema = baseArtistrySchema.extend({
   allowIndexation: localizedIndexationSchema.optional(),
   compositions: z.array(compositionSchema),
   performances: z.array(performanceItemSchema).optional().nullable(),
-  gallery: z.array(galleryItemSchema).nullable().optional()
+  gallery: z.array(galleryItemSchema).nullable().optional(),
+  performancesTitle: translatedFieldSchema.nullish()
 });
 
 export const opusListSchema = opusSchema.omit({

@@ -66,4 +66,5 @@ export interface Opus extends BaseArtistryEntity {
   videos?: OpusVideoItem[] | null;
   sheetMusic?: MusicItem | null;
   gallery?: OpusGalleryItem[] | null;
+  performancesTitle?: string | null;
 }
