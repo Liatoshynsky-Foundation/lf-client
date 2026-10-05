@@ -28,6 +28,7 @@ export function mapOpusDetailsToProps(opusDetails: OpusDetailsDTO): OpusDetailsC
     name: opusDetails.name,
     number: opusDetails.number,
     year: opusDetails.year,
+    datesNote: opusDetails.datesNote?.trim() || undefined,
     genre: opusDetails.genre || undefined,
     introDescription: opusDetails.introDescription
       ? (parseTipTapString(opusDetails.introDescription) as TipTapDoc)

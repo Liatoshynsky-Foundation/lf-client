@@ -53,6 +53,15 @@ export const styles: Record<string, SxProps<Theme>> = {
     textUnderlineOffset: '4px'
   },
 
+  metaDateNote: {
+    fontFamily: 'Mulish',
+    fontSize: '18px',
+    fontWeight: 400,
+    lineHeight: '150%',
+    color: 'black',
+    mt: '8px'
+  },
+
   movements: {
     display: 'flex',
     flexDirection: 'column',

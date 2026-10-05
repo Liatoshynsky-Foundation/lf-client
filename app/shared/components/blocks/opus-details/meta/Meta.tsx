@@ -15,13 +15,16 @@ export type MetaLabels = {
 export type MetaProps = {
   number: string;
   year?: string;
+  datesNote?: string | null;
   genre?: string;
   movements?: string[];
   sheetMusic?: MusicItem | null;
   labels: MetaLabels;
 };
 
-const Meta = ({ number, year, genre, movements, sheetMusic, labels }: Readonly<MetaProps>) => {
+const Meta = ({ number, year, datesNote, genre, movements, sheetMusic, labels }: Readonly<MetaProps>) => {
+  const trimmedDatesNote = datesNote?.trim();
+
   return (
     <Box sx={styles.root} data-testid="OpusDetails-meta">
       <Box sx={styles.metaBlock}>
@@ -37,6 +40,11 @@ const Meta = ({ number, year, genre, movements, sheetMusic, labels }: Readonly<M
           <Typography sx={styles.metaValueAccent} data-testid="OpusDetails-meta-date">
             {year}
           </Typography>
+          {trimmedDatesNote && (
+            <Typography sx={styles.metaDateNote} data-testid="OpusDetails-meta-date-note">
+              {trimmedDatesNote}
+            </Typography>
+          )}
         </Box>
       )}
 

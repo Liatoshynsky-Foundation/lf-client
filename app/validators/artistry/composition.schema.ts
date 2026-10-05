@@ -61,6 +61,7 @@ export const opusSchema = baseArtistrySchema.extend({
   title: translatedFieldSchema,
   creationYear: z.string(),
   endYear: z.string().optional().nullable(),
+  datesNote: z.string().optional().nullable(),
   genre: translatedFieldSchema.optional().nullable(),
   slug: z.string(),
   description: translatedFieldSchema.optional().nullable(),
