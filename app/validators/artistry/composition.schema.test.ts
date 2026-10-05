@@ -1,4 +1,4 @@
-import { opusSchema } from './composition.schema';
+import { opusSchema, sheetMusicItemSchema } from './composition.schema';
 
 describe('opusSchema performancesTitle', () => {
   const baseOpusInput = {
@@ -38,7 +38,8 @@ describe('opusSchema performancesTitle', () => {
 
     expect(parsedWithNull.performancesTitle).toBeNull();
     expect(parsedWithoutField.performancesTitle).toBeUndefined();
-import { sheetMusicItemSchema } from './composition.schema';
+  });
+});
 
 describe('sheetMusicItemSchema', () => {
   const baseItem = {
