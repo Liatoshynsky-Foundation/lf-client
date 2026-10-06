@@ -8,7 +8,6 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 
 export interface YermolenkoLinksProps {
   data?: {
-    buttonText: string;
     description: TipTapDoc | string;
     buttons?: Array<{
       shortText: string;
@@ -29,10 +28,9 @@ export default function YermolenkoLinks({ data }: Readonly<YermolenkoLinksProps>
 
   return (
     <BulletTextWithLinks
-      buttonText={data.buttonText}
       description={data.description}
       buttons={safeButtons}
-      showMainButton={true}
+      showMainButton={false}
       sx={{ marginBottom: 12 }}
       showShortButtonsText={false}
     />
