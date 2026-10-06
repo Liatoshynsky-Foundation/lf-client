@@ -1,51 +1,129 @@
 export interface Partner {
   id: string;
-  link: string;
-  img: string;
   name: string;
+  img: string;
+  link: string;
 }
 
-type PartnerRaw = [id: string, name: string, img: string, link: string];
-
-const rawPartners: PartnerRaw[] = [
-  ['musicHouse', 'Національний будинок музики', 'national-music-house.png', 'https://nhm.com.ua/'],
-  ['philharmonic', 'Національна філармонія України', 'national-philharmonic.png', 'https://philarmonia.com.ua/'],
-  ['liatoshynsky', 'Liatoshynsky Space', 'liatoshynsky-space.png', 'https://philarmonia.com.ua/project/ls/'],
-  ['masterKlass', 'Master Klass', 'masterklass.png', 'https://dommk.org/'],
-  ['kolomyia', 'Коломийська філармонія', 'kolomyia-philharmonic.png', 'https://www.facebook.com/kolomyia.filarmonia'],
-  ['axon', 'Axon Partners', 'axon-partners.png', 'https://axon.partners/'],
-  ['espreso', 'Еспресо', 'espreso.png', 'https://espreso.tv/'],
-  ['softserve', 'SoftServe Academy', 'softserve.png', 'https://softserve.academy/'],
-  ['opentech', 'OpenTech', 'opentech.png', 'https://opentech.softserveinc.com/uk'],
-  [
-    'ukrainianInstitute',
-    'Український інститут',
-    'ukrainian-institute.png',
-    'https://ui.org.ua/sectors/antologiya-ukrayinskoyi-kamernoyi-muzyky-borys-lyatoshynskyj-strunni-kvartety/'
-  ],
-  ['diplomaticAcademy', 'Дипломатична академія', 'dip-academy.png', 'https://da.mfa.gov.ua/'],
-  ['sshdir', 'Наукове товариство історії дипломатії', 'sshdir.svg', 'https://sshdir.org.ua/pro-tovarystvo/'],
-  ['lvivOpera', 'Львівська опера', 'lviv-opera.png', 'https://opera.lviv.ua/shows/zolotyy-obruch/'],
-  [
-    'ucmFoundation',
-    'Фундація української класичної музики',
-    'ucm-foundation.png',
-    'https://www.facebook.com/ucmfoundation/'
-  ],
-  [
-    'laboratoria',
-    'Видавництво «Лабораторія»',
-    'laboratoria.png',
-    'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
-  ],
-  ['cowoGuru', 'Cowoguru', 'cowo-guru.png', 'https://www.cowo.guru/'],
-  ['kmbsAlumni', 'Alumni kmbs', 'kmbs-alumni.svg', 'https://alumni.kmbs.ua/'],
-  ['kyivCamerata', 'Київська камерата', 'kyiv-camerata.png', 'https://kyivcamerata.org/ua/ua/']
+export const partnersMock: Partner[] = [
+  {
+    id: 'musicHouse',
+    name: 'Національний будинок музики',
+    img: '/images/partners/national-music-house.png',
+    link: 'https://nhm.com.ua/'
+  },
+  {
+    id: 'philharmonic',
+    name: 'Національна філармонія України',
+    img: '/images/partners/national-philharmonic.png',
+    link: 'https://philarmonia.com.ua/'
+  },
+  {
+    id: 'liatoshynsky',
+    name: 'Liatoshynsky Space',
+    img: '/images/partners/liatoshynsky-space.png',
+    link: 'https://philarmonia.com.ua/project/ls/'
+  },
+  {
+    id: 'masterKlass',
+    name: 'Master Klass',
+    img: '/images/partners/masterklass.png',
+    link: 'https://dommk.org/'
+  },
+  {
+    id: 'kolomyia',
+    name: 'Коломийська філармонія',
+    img: '/images/partners/kolomyia-philharmonic.png',
+    link: 'https://www.facebook.com/kolomyia.filarmonia'
+  },
+  {
+    id: 'axon',
+    name: 'Axon Partners',
+    img: '/images/partners/axon-partners.png',
+    link: 'https://axon.partners/'
+  },
+  {
+    id: 'espreso',
+    name: 'Еспресо',
+    img: '/images/partners/espreso.png',
+    link: 'https://espreso.tv/'
+  },
+  {
+    id: 'softserve',
+    name: 'SoftServe Academy',
+    img: '/images/partners/softserve.png',
+    link: 'https://softserve.academy/'
+  },
+  {
+    id: 'opentech',
+    name: 'OpenTech',
+    img: '/images/partners/opentech.png',
+    link: 'https://opentech.softserveinc.com/uk'
+  },
+  {
+    id: 'ukrainianInstitute',
+    name: 'Український інститут',
+    img: '/images/partners/ukrainian-institute.png',
+    link: 'https://ui.org.ua/sectors/antologiya-ukrayinskoyi-kamernoyi-muzyky-borys-lyatoshynskyj-strunni-kvartety/'
+  },
+  {
+    id: 'diplomaticAcademy',
+    name: 'Дипломатична академія',
+    img: '/images/partners/dip-academy.png',
+    link: 'https://da.mfa.gov.ua/'
+  },
+  {
+    id: 'sshdir',
+    name: 'Наукове товариство історії дипломатії',
+    img: '/images/partners/sshdir.svg',
+    link: 'https://sshdir.org.ua/pro-tovarystvo/'
+  },
+  {
+    id: 'cowoGuru',
+    name: 'Cowoguru',
+    img: '/images/partners/cowo-guru.png',
+    link: 'https://www.cowo.guru/'
+  },
+  {
+    id: 'kmbsAlumni',
+    name: 'Alumni kmbs',
+    img: '/images/partners/kmbs-alumni.svg',
+    link: 'https://alumni.kmbs.ua/'
+  },
+  {
+    id: 'kyivCamerata',
+    name: 'Київська камерата',
+    img: '/images/partners/kyiv-camerata.png',
+    link: 'https://kyivcamerata.org/ua/ua/'
+  },
+  {
+    id: 'lvivOpera',
+    name: 'Львівська опера',
+    img: '/images/partners/lviv-opera.png',
+    link: 'https://opera.lviv.ua/shows/zolotyy-obruch/'
+  },
+  {
+    id: 'ucmFoundation',
+    name: 'Фундація української класичної музики',
+    img: '/images/partners/ucm-foundation.png',
+    link: 'https://www.facebook.com/ucmfoundation/'
+  },
+  {
+    id: 'laboratoria',
+    name: 'Видавництво «Лабораторія»',
+    img: '/images/partners/laboratoria.png',
+    link: 'https://laboratory.ua/products/chasy-zadzerkallya-vybir-borysa-lyatoshynskogo'
+  },
+  {
+    id: 'ostrozkiFoundation',
+    name: 'Благодійний фонд «Фундація імені князів Острозьких»',
+    img: '/images/partners/ostrozki-foundation.png',
+    link: 'https://www.facebook.com/ostrozkifoundation/'
+  },
+  {
+    id: 'insoLviv',
+    name: 'Оркестр INSO-Львів',
+    img: '/images/partners/inso-lviv.svg',
+    link: 'https://insolviv.com/'
+  }
 ];
-
-export const partnersMock: Partner[] = rawPartners.map(([id, name, img, link]) => ({
-  id,
-  name,
-  img: `/images/partners/${img}`,
-  link
-}));
