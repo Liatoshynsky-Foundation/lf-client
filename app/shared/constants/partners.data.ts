@@ -123,7 +123,7 @@ export const partnersMock: Partner[] = [
   {
     id: 'insoLviv',
     name: 'Оркестр INSO-Львів',
-    img: '/images/partners/inso-lviv.svg',
+    img: '/images/partners/inso-lviv.png',
     link: 'https://insolviv.com/'
   }
 ];
