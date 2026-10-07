@@ -13,9 +13,11 @@ const styles = {
   img: {
     objectFit: 'contain',
     width: '100%',
-    maxWidth: '100%',
-    maxHeight: '112px',
-    height: 'auto'
+    maxWidth: '220px',
+    maxHeight: '110px',
+    height: 'auto',
+    margin: '0 auto',
+    display: 'block'
   }
 };
 
