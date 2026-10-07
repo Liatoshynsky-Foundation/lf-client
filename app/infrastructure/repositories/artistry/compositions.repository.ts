@@ -12,7 +12,9 @@ import dbConnect from '~/infrastructure/db/connect';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import { parseArraySafely } from '~/lib/utils/parseArraySafely';
 import { namedFilterHelper } from '~/lib/utils/searchAndFiltersHelpers';
+import logger from '~/middleware/logger/logger';
 import {
   compositionsYearRangeSchema,
   opusListSchema,
@@ -61,7 +63,9 @@ class CompositionsRepositoryImpl implements CompositionRepository {
     const opuses = await Opus.aggregate(buildAllCompositionsPipeline(conditions)).exec();
 
     if (!opuses || opuses.length === 0) return [];
-    return ArraySchema(opusListSchema).parse(opuses);
+    const { validItems, invalidCount } = parseArraySafely(opuses, opusListSchema);
+    if (invalidCount > 0) logger.warn(`[Artistry/Compositions] Skipped ${invalidCount} invalid opus records`);
+    return validItems;
   }
 
   async getOpusBySlug(slug: string): Promise<RawOpusDetailsDTO | null> {
