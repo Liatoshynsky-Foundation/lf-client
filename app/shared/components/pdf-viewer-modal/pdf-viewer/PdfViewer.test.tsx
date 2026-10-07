@@ -4,7 +4,7 @@ import PdfViewer from './PdfViewer';
 
 import { MusicItem } from '~/domain/entities/artistry.entity';
 
-jest.mock('../download-button/DownloadButton', () => ({
+jest.mock('../../download-button/DownloadButton', () => ({
   __esModule: true,
   default: () => <button>Download</button>
 }));

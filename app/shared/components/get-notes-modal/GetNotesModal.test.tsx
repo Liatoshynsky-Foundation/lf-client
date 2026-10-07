@@ -55,7 +55,7 @@ jest.mock('./notes-list-modal/NotesListModal', () => ({
   )
 }));
 
-jest.mock('../pdf-viewer/PdfViewer', () => ({
+jest.mock('../pdf-viewer-modal/pdf-viewer/PdfViewer', () => ({
   __esModule: true,
   default: ({ note }: { note: { url: string } }) => <div>PDF Viewer: {note.url}</div>
 }));
