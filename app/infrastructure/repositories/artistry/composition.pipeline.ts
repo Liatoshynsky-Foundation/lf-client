@@ -228,7 +228,7 @@ export function buildAllCompositionsPipeline(conditions: FilterQuery<OpusDocumen
       {
         $unwind: {
           path: '$compositions',
-          preserveNullAndEmptyArrays: false
+          preserveNullAndEmptyArrays: true
         }
       },
       { $match: { $and: conditions } },
@@ -236,7 +236,11 @@ export function buildAllCompositionsPipeline(conditions: FilterQuery<OpusDocumen
         $group: {
           _id: '$_id',
           root: { $first: '$$ROOT' },
-          compositions: { $push: '$compositions' }
+          compositions: {
+            $push: {
+              $cond: [{ $ifNull: ['$compositions._id', false] }, '$compositions', '$$REMOVE']
+            }
+          }
         }
       },
       {

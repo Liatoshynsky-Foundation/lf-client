@@ -43,6 +43,7 @@ export const CollapsibleRow = <T extends RowData>({
   columns
 }: Readonly<CollapsibleRowProps<T>>) => {
   const t = useTranslations('table');
+  const hasItems = data.length > 0 && !(data[0] as unknown as { isEmptyOpus?: boolean })?.isEmptyOpus;
   const table = useReactTable<T>({
     data,
     columns,
@@ -59,7 +60,9 @@ export const CollapsibleRow = <T extends RowData>({
         aria-expanded={isExpanded}
         onClick={(e) => {
           e.preventDefault();
-          action();
+          if (hasItems) {
+            action();
+          }
         }}
       >
         {columns.map((col, idx) => {
@@ -71,24 +74,26 @@ export const CollapsibleRow = <T extends RowData>({
             return (
               <TableCell key={cellKey} sx={styles.cell}>
                 <Box sx={styles.cellInnerCentered}>
-                  <IconButton
-                    aria-label={isExpanded ? t('collapsibleRow.collapse') : t('collapsibleRow.expand')}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      action();
-                    }}
-                    variant={IconButtonColorVariant.Secondary}
-                    disableRipple
-                    sx={styles.toggleButton}
-                    data-testid="CollapsibleRow-mainOpus-toggle"
-                  >
-                    <Svg
-                      Component={isExpanded ? chevronUp : chevronRight}
-                      stroke={mainHexPallete.brown['700']}
-                      alt="toggle"
-                    />
-                  </IconButton>
+                  {hasItems && (
+                    <IconButton
+                      aria-label={isExpanded ? t('collapsibleRow.collapse') : t('collapsibleRow.expand')}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        action();
+                      }}
+                      variant={IconButtonColorVariant.Secondary}
+                      disableRipple
+                      sx={styles.toggleButton}
+                      data-testid="CollapsibleRow-mainOpus-toggle"
+                    >
+                      <Svg
+                        Component={isExpanded ? chevronUp : chevronRight}
+                        stroke={mainHexPallete.brown['700']}
+                        alt="toggle"
+                      />
+                    </IconButton>
+                  )}
                 </Box>
               </TableCell>
             );
@@ -123,9 +128,8 @@ export const CollapsibleRow = <T extends RowData>({
         })}
       </TableRow>
 
-      {table.getRowModel().rows.map((row) => (
-        <CollapsibleDataRow key={row.id} row={row} isExpanded={isExpanded} />
-      ))}
+      {hasItems &&
+        table.getRowModel().rows.map((row) => <CollapsibleDataRow key={row.id} row={row} isExpanded={isExpanded} />)}
     </>
   );
 };
