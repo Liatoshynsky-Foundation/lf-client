@@ -13,17 +13,21 @@ export type SectionProps = {
 };
 
 const Section = ({ heading, dataTestId, rootSx, children }: Readonly<SectionProps>) => {
+  const trimmedHeading = heading.trim();
+
   return (
     <Box sx={[styles.root, ...sxToArray(rootSx)]} data-testid={dataTestId}>
-      <Box sx={styles.headingRow}>
-        <Box sx={styles.accent} aria-hidden>
-          <Box sx={styles.noteHead} />
-        </Box>
+      {trimmedHeading && (
+        <Box sx={styles.headingRow}>
+          <Box sx={styles.accent} aria-hidden>
+            <Box sx={styles.noteHead} />
+          </Box>
 
-        <Typography component="h2" sx={styles.heading}>
-          {heading}
-        </Typography>
-      </Box>
+          <Typography component="h2" sx={styles.heading}>
+            {trimmedHeading}
+          </Typography>
+        </Box>
+      )}
 
       {children}
     </Box>
