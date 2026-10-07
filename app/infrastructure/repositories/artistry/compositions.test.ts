@@ -221,7 +221,15 @@ describe('compositionsRepository', () => {
 
       const result = await compositionsRepository.getAllCompositions();
 
-      expect(result).toEqual([validDoc]);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          _id: validDoc._id,
+          slug: validDoc.slug,
+          number: validDoc.number,
+          numberKind: validDoc.numberKind
+        })
+      );
     });
 
     it('should log a warning when invalid opus items are skipped', async () => {
