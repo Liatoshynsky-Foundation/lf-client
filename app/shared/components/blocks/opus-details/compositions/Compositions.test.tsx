@@ -61,6 +61,16 @@ describe('Compositions', () => {
     expect(within(list).getByText('Composition 3')).toBeInTheDocument();
   });
 
+  it('renders the compositions list without a heading when heading is blank', () => {
+    render(<Compositions {...baseProps} heading="  " />);
+
+    const section = screen.getByTestId('OpusDetails-compositions');
+    const list = screen.getByTestId('OpusDetails-compositionsList');
+
+    expect(within(section).queryByRole('heading')).toBeNull();
+    expect(within(list).getByText('Composition 1')).toBeInTheDocument();
+  });
+
   it('renders the view notes button only for compositions that have valid sheet music', () => {
     render(<Compositions {...baseProps} />);
 
