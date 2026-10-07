@@ -1,10 +1,10 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useTranslations } from 'next-intl';
 
-import { SvgImage } from '~/components/svg-image/SvgImage';
-import Button from '~/ds-components/button/Button';
+import { IconButton } from '../design-system/all-components/icon-button/IconButton';
+import { SvgImage } from '../svg-image/SvgImage';
+import { IconButtonVariant } from '~/types/enums/common.enums';
 
 import { useDownload } from '~/shared/hooks/use-download/useDownload';
 
@@ -15,17 +15,17 @@ interface DownloadButtonProps {
 
 const DownloadButton = ({ url, fileName }: DownloadButtonProps) => {
   const { download } = useDownload();
-  const t = useTranslations('table.buttons');
 
   return (
     <Box>
-      <Button
+      <IconButton
+        sx={{ backgroundColor: 'transparent' }}
+        type={IconButtonVariant.icon}
+        size="medium"
         onClick={() => download(url, fileName)}
-        size={'medium'}
-        variant={'outlined'}
-        endIcon={<SvgImage src="/icons/download.svg" width={24} height={24} alt="download composition note" />}
-        label={t('downloadMusic')}
-      />
+      >
+        <SvgImage src="/icons/download-white.svg" width={20} height={20} alt="download composition note" />
+      </IconButton>
     </Box>
   );
 };

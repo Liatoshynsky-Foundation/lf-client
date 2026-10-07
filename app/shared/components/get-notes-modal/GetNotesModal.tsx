@@ -10,7 +10,7 @@ import { SvgImage } from '~/components/svg-image/SvgImage';
 import { IconButton } from '~/ds-components/icon-button/IconButton';
 
 import GetNotesForm from '../forms/get-notes-form/GetNotesForm';
-import PdfViewer from '../pdf-viewer/PdfViewer';
+import PdfViewerModal from '../pdf-viewer-modal/PdfViewerModal';
 import { styles } from './GetNotesModal.styles';
 import NotesConfirmModal from './notes-confirmation-modal/NotesConfirmModal';
 import NotesListModal from './notes-list-modal/NotesListModal';
@@ -28,9 +28,11 @@ export type GetNotesModalProps = {
 };
 
 const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModalProps) => {
-  const t = useTranslations('getNotes');
   const [state, setState] = useState(GetNotesState.LIST);
   const [selectedPdf, setSelectedPdf] = useState<MusicItem | null>(null);
+
+  const t = useTranslations('getNotes');
+  const isNotesModalOpen = opened && !Boolean(selectedPdf);
 
   useEffect(() => {
     if (opened) {
@@ -41,15 +43,6 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
 
   let title = null;
   let innards = null;
-
-  const onCloseHandler = () => {
-    if (selectedPdf) {
-      setSelectedPdf(null);
-      return;
-    }
-
-    handleClose();
-  };
 
   switch (state) {
     case GetNotesState.LIST:
@@ -97,15 +90,10 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
           title={t('confirmation.title')}
           subtitle={t('confirmation.subtitle')}
           btnText={t('confirmation.btnText')}
-          onSubmit={onCloseHandler}
+          onSubmit={handleClose}
         />
       );
       break;
-  }
-
-  if (selectedPdf) {
-    title = null;
-    innards = <PdfViewer note={selectedPdf} />;
   }
 
   const paper = () => (
@@ -116,14 +104,17 @@ const GetNotesModal = ({ composition, notes, opened, handleClose }: GetNotesModa
   );
 
   return (
-    <ModalComponent open={opened} onClose={onCloseHandler} sx={styles.backdrop} disableRestoreFocus>
-      <Box sx={{ position: 'relative' }}>
-        <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="large" onClick={onCloseHandler}>
-          <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
-        </IconButton>
-        {paper()}
-      </Box>
-    </ModalComponent>
+    <>
+      <ModalComponent open={isNotesModalOpen} onClose={handleClose} sx={styles.backdrop} disableRestoreFocus>
+        <Box sx={{ position: 'relative' }}>
+          <IconButton sx={styles.closeIcon(state)} type={IconButtonVariant.icon} size="large" onClick={handleClose}>
+            <SvgImage src="/icons/x.svg" alt="Close" width={30} height={30} />
+          </IconButton>
+          {paper()}
+        </Box>
+      </ModalComponent>
+      {selectedPdf && <PdfViewerModal opened handleClose={() => setSelectedPdf(null)} note={selectedPdf} />}
+    </>
   );
 };
 

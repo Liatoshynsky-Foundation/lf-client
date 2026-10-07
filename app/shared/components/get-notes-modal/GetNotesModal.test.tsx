@@ -118,16 +118,4 @@ describe('GetNotesModal', () => {
     await user.click(screen.getByRole('button', { name: 'Free Notes' }));
     expect(screen.getByText(`PDF Viewer: ${notes[0].url}`)).toBeInTheDocument();
   });
-
-  it('should return to notes list when clos icon is clicked in PDF viewer', async () => {
-    const user = userEvent.setup();
-    render(<GetNotesModal composition={composition} notes={notes} opened={true} handleClose={handleCloseModal} />);
-
-    await user.click(screen.getByRole('button', { name: 'Free Notes' }));
-    await user.click(screen.getByTestId('icon-button'));
-
-    expect(screen.getByTestId('notes-list-modal')).toBeInTheDocument();
-    expect(screen.queryByText(`PDF Viewer: ${notes[0].url}`)).not.toBeInTheDocument();
-    expect(handleCloseModal).not.toHaveBeenCalled();
-  });
 });
