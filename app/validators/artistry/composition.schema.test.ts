@@ -1,17 +1,47 @@
 import { opusSchema, sheetMusicItemSchema } from './composition.schema';
 
-describe('opusSchema performancesTitle', () => {
-  const baseOpusInput = {
-    _id: '507f1f77bcf86cd799439011',
-    name: { uk: 'Опус 1', en: 'Opus 1' },
-    title: { uk: 'Струнний квартет', en: 'String Quartet' },
-    number: 1,
-    numberKind: 'op',
-    creationYear: '1920',
-    slug: 'string-quartet-1',
-    compositions: []
-  };
+const baseOpusInput = {
+  _id: '507f1f77bcf86cd799439011',
+  name: { uk: 'Опус 1', en: 'Opus 1' },
+  title: { uk: 'Струнний квартет', en: 'String Quartet' },
+  number: 1,
+  numberKind: 'op',
+  creationYear: '1920',
+  slug: 'string-quartet-1',
+  compositions: []
+};
 
+describe('opusSchema coverImage', () => {
+  it('should accept opus with valid coverImage', () => {
+    const input = {
+      ...baseOpusInput,
+      coverImage: {
+        src: 'https://example.com/cover.jpg',
+        alt: { uk: 'Опис фото', en: 'Photo description' }
+      }
+    };
+
+    const parsed = opusSchema.parse(input);
+
+    expect(parsed.coverImage).toEqual({
+      src: 'https://example.com/cover.jpg',
+      alt: { uk: 'Опис фото', en: 'Photo description' }
+    });
+  });
+
+  it('should accept opus when coverImage is null or undefined', () => {
+    const parsedWithNull = opusSchema.parse({
+      ...baseOpusInput,
+      coverImage: null
+    });
+    const parsedWithoutField = opusSchema.parse(baseOpusInput);
+
+    expect(parsedWithNull.coverImage).toBeNull();
+    expect(parsedWithoutField.coverImage).toBeUndefined();
+  });
+});
+
+describe('opusSchema performancesTitle', () => {
   it('should accept opus with valid localized performancesTitle', () => {
     const input = {
       ...baseOpusInput,

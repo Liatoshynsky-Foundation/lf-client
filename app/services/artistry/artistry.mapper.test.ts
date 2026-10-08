@@ -3,13 +3,15 @@ import {
   extractAndCollectGenres,
   formatOpusNumber,
   mapCompositionsForDetails,
+  mapCoverImage,
   mapMovements,
   mapOpusCompositions,
   mapOpusGallery,
   mapVideos,
   mapYear,
   pickDescription,
-  pickGenre
+  pickGenre,
+  pickSeoDescription
 } from './artistry.mapper';
 
 import { LocalizedTipTap } from '~/lib/utils/tiptapHelpers';
@@ -296,6 +298,89 @@ describe('Artistry Mappers', () => {
 
       extractAndCollectGenres('metal', 'country', set);
       expect(set.has('metal')).toBe(false);
+    });
+  });
+
+  describe('pickSeoDescription', () => {
+    const sampleTipTap: LocalizedTipTap = {
+      uk: JSON.parse(
+        '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Вступний опис твору Бориса Лятошинського."}]}]}'
+      ),
+      en: JSON.parse('{"type":"doc","content":[]}')
+    };
+
+    it('should return metaDescription if provided and not empty', () => {
+      const result = pickSeoDescription('  Кастомний мета опис  ', sampleTipTap, 'uk');
+      expect(result).toBe('Кастомний мета опис');
+    });
+
+    it('should fallback to introDescription text truncated to 160 chars if metaDescription is empty', () => {
+      const longText = 'А'.repeat(200);
+      const longTipTap: LocalizedTipTap = {
+        uk: JSON.parse(
+          `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"${longText}"}]}]}`
+        ),
+        en: JSON.parse('{"type":"doc","content":[]}')
+      };
+
+      const result = pickSeoDescription('', longTipTap, 'uk');
+
+      expect(result).toHaveLength(160);
+      expect(result).toBe('А'.repeat(160));
+    });
+
+    it('should return undefined if both metaDescription and introDescription are missing or empty', () => {
+      const emptyTipTap: LocalizedTipTap = {
+        uk: JSON.parse('{"type":"doc","content":[{"type":"paragraph"}]}'),
+        en: JSON.parse('{"type":"doc","content":[]}')
+      };
+
+      expect(pickSeoDescription(undefined, undefined, 'uk')).toBeUndefined();
+      expect(pickSeoDescription('', emptyTipTap, 'uk')).toBeUndefined();
+    });
+  });
+
+  describe('mapCoverImage', () => {
+    it('should map coverImage with alt for the specified locale', () => {
+      const cover = {
+        src: 'https://example.com/cover.jpg',
+        alt: {
+          uk: 'Опис зображення',
+          en: 'Image description'
+        }
+      };
+
+      const resultUk = mapCoverImage('uk', cover);
+      expect(resultUk).toEqual({
+        src: 'https://example.com/cover.jpg',
+        alt: 'Опис зображення'
+      });
+
+      const resultEn = mapCoverImage('en', cover);
+      expect(resultEn).toEqual({
+        src: 'https://example.com/cover.jpg',
+        alt: 'Image description'
+      });
+    });
+
+    it('should return empty string for alt if alt text for locale is missing', () => {
+      const cover = {
+        src: 'https://example.com/cover.jpg',
+        alt: { uk: 'Опис', en: undefined }
+      };
+
+      // @ts-expect-error - testing missing alt property for locale
+      const result = mapCoverImage('en', cover);
+      expect(result).toEqual({
+        src: 'https://example.com/cover.jpg',
+        alt: ''
+      });
+    });
+
+    it('should return undefined if coverImage or its src is missing', () => {
+      expect(mapCoverImage('uk', undefined)).toBeUndefined();
+      expect(mapCoverImage('uk', null)).toBeUndefined();
+      expect(mapCoverImage('uk', { src: '' })).toBeUndefined();
     });
   });
 });
