@@ -7,6 +7,11 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 
 jest.mock('next/image');
 
+jest.mock('~/shared/components/pdf-viewer-modal/PdfViewerModal', () => ({
+  __esModule: true,
+  default: () => <div>PDF Viewer Modal</div>
+}));
+
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: () => <span data-testid="SvgMock" />
 }));

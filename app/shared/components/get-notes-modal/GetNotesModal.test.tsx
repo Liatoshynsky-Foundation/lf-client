@@ -16,6 +16,11 @@ jest.mock('~/ds-components/icon-button/IconButton', () => ({
   )
 }));
 
+jest.mock('../pdf-viewer-modal/PdfViewerModal', () => ({
+  __esModule: true,
+  default: ({ note }: { note: { url: string } }) => <div>PDF Viewer: {note.url}</div>
+}));
+
 jest.mock('../forms/get-notes-form/GetNotesForm', () => ({
   __esModule: true,
   default: ({ onSuccess }: any) => <button onClick={onSuccess}>GetNotesForm</button>
