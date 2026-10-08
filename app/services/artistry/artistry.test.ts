@@ -261,6 +261,9 @@ describe('ArtistryService', () => {
         sheetMusic: null,
         performancesTitle: 'ТЕСТ заголовок з CMS',
         videos: [],
+        allowIndexation: true,
+        coverImage: undefined,
+        keywords: null,
         compositions: [
           {
             _id: 'c1',
@@ -286,7 +289,7 @@ describe('ArtistryService', () => {
 
       expect(result).toMatchObject({
         introDescription: null,
-        description: null,
+        description: undefined,
         performancesTitle: null,
         datesNote: null,
         videos: [],

@@ -154,3 +154,36 @@ export function extractAndCollectGenres(
     });
   }
 }
+
+export function pickSeoDescription(
+  metaDescription: string | undefined | null,
+  introDescription: LocalizedTipTap | undefined | null,
+  locale: Locale
+): string | undefined {
+  if (metaDescription?.trim()) {
+    return metaDescription.trim();
+  }
+
+  if (introDescription) {
+    const text = introDescription[locale];
+    const parsedText = parseTipTapString(text);
+    const extracted = extractTextFromTipTap(parsedText, locale).trim();
+
+    if (extracted.length > 0) {
+      return extracted.slice(0, 160);
+    }
+  }
+
+  return undefined;
+}
+
+export function mapCoverImage(
+  locale: Locale,
+  coverImage: { src?: string; alt?: LocalizedString | null } | null | undefined
+) {
+  if (!coverImage?.src) return undefined;
+  return {
+    src: coverImage.src,
+    alt: coverImage.alt?.[locale] || ''
+  };
+}

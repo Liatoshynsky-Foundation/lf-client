@@ -2,11 +2,13 @@ import { Metadata } from 'next';
 
 interface CreateSeoMetaProps {
   title: string;
-  description: string;
+  description?: string;
   url: string;
   imageUrl?: string;
+  imageAlt?: string;
   locale?: string;
-  keywords?: string;
+  keywords?: string | string[];
+  allowIndexation?: boolean;
 }
 
 export function createSeoMeta({
@@ -14,8 +16,10 @@ export function createSeoMeta({
   description,
   url,
   imageUrl = '/opengraph-image.png',
+  imageAlt,
   locale = 'uk',
-  keywords
+  keywords,
+  allowIndexation
 }: CreateSeoMetaProps): Metadata {
   const baseUrl = process.env.CLIENT_BASE_URL;
   const fullUrl = `${baseUrl}/${locale}${url}`;
@@ -23,6 +27,10 @@ export function createSeoMeta({
   const locales = ['uk_UA', 'en_US'];
   const currentLocale = locales.find((loc) => loc.startsWith(locale));
   const alternateLocale = locales.find((loc) => loc !== currentLocale);
+
+  const stableImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`;
+
+  const stableImageAlt = imageAlt || title;
 
   return {
     title,
@@ -32,6 +40,14 @@ export function createSeoMeta({
       icon: '/favicon.ico',
       shortcut: '/favicon.ico'
     },
+    ...(allowIndexation !== undefined
+      ? {
+          robots: {
+            index: allowIndexation,
+            follow: allowIndexation
+          }
+        }
+      : {}),
     openGraph: {
       title,
       description,
@@ -42,10 +58,10 @@ export function createSeoMeta({
       type: 'website',
       images: [
         {
-          url: `${baseUrl}${imageUrl}`,
+          url: stableImageUrl,
           width: 1200,
           height: 630,
-          alt: title
+          alt: stableImageAlt
         }
       ]
     },
@@ -53,7 +69,7 @@ export function createSeoMeta({
       card: 'summary_large_image',
       title,
       description,
-      images: [`${baseUrl}${imageUrl}`]
+      images: [stableImageUrl]
     },
     alternates: {
       canonical: fullUrl

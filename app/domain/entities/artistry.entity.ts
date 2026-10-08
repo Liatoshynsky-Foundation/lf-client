@@ -67,4 +67,10 @@ export interface Opus extends BaseArtistryEntity {
   sheetMusic?: MusicItem | null;
   gallery?: OpusGalleryItem[] | null;
   performancesTitle?: string | null;
+  keywords?: string | null;
+  allowIndexation?: boolean;
+  coverImage?: {
+    src: string;
+    alt: string;
+  } | null;
 }

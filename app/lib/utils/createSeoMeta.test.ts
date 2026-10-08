@@ -108,4 +108,70 @@ describe('createSeoMeta', () => {
       });
     }
   });
+
+  it.each([
+    {
+      allowIndexation: false,
+      expectedRobots: { index: false, follow: false }
+    },
+    {
+      allowIndexation: true,
+      expectedRobots: { index: true, follow: true }
+    }
+  ])(
+    'should configure robots as $expectedRobots when allowIndexation is $allowIndexation',
+    ({ allowIndexation, expectedRobots }) => {
+      process.env.CLIENT_BASE_URL = localBaseUrl;
+
+      const metadata = createSeoMeta({
+        title: 'Test Title',
+        description: 'Test Description',
+        url: '/artistry/test',
+        allowIndexation
+      });
+
+      expect(metadata.robots).toEqual(expectedRobots);
+    }
+  );
+
+  it.each([
+    {
+      caseDescription: 'custom imageAlt is provided',
+      imageAlt: 'Custom Alt Text',
+      expectedAlt: 'Custom Alt Text'
+    },
+    {
+      caseDescription: 'imageAlt is omitted (fallback to title)',
+      imageAlt: undefined,
+      expectedAlt: 'Title Fallback'
+    }
+  ])('should set og:image:alt correctly when $caseDescription', ({ imageAlt, expectedAlt }) => {
+    process.env.CLIENT_BASE_URL = localBaseUrl;
+
+    const metadata = createSeoMeta({
+      title: 'Title Fallback',
+      description: 'Description',
+      url: '/artistry/test',
+      imageAlt
+    });
+
+    const ogImages = metadata.openGraph?.images as Array<{ alt?: string }>;
+    expect(ogImages?.[0]?.alt).toBe(expectedAlt);
+  });
+
+  it('should handle absolute imageUrl without prepending baseUrl', () => {
+    process.env.CLIENT_BASE_URL = localBaseUrl;
+    const absoluteImg = 'https://cdn.example.com/cover.jpg';
+
+    const metadata = createSeoMeta({
+      title: 'Test Title',
+      description: 'Test Description',
+      url: '/artistry/test',
+      imageUrl: absoluteImg
+    });
+
+    const ogImages = metadata.openGraph?.images as Array<{ url?: string }>;
+    expect(ogImages?.[0]?.url).toBe(absoluteImg);
+    expect(metadata.twitter?.images).toEqual([absoluteImg]);
+  });
 });

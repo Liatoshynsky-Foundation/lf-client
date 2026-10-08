@@ -44,6 +44,11 @@ const baseArtistrySchema = z.object({
   name: translatedFieldSchema
 });
 
+export const coverImageSchema = z.object({
+  src: z.string(),
+  alt: translatedFieldSchema.optional().nullable()
+});
+
 export const compositionSchema = baseArtistrySchema.extend({
   year: z.number().optional().nullable(),
   genre: z.string().optional().nullable(),
@@ -71,7 +76,8 @@ export const opusSchema = baseArtistrySchema.extend({
   compositions: z.array(compositionSchema),
   performances: z.array(performanceItemSchema).optional().nullable(),
   gallery: z.array(galleryItemSchema).nullable().optional(),
-  performancesTitle: translatedFieldSchema.nullish()
+  performancesTitle: translatedFieldSchema.nullish(),
+  coverImage: coverImageSchema.optional().nullable()
 });
 
 export const opusListSchema = opusSchema.omit({
