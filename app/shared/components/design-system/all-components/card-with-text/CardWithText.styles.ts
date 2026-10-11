@@ -1,8 +1,7 @@
 export const styles = {
   container: {
     width: '294px',
-    minHeight: '386px',
-    height: 'auto',
+    height: '386px',
     backgroundColor: 'yellow.200',
     px: '34px',
     pt: '34px',
@@ -12,8 +11,8 @@ export const styles = {
   content: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100%',
-    justifyContent: 'flex-start'
+    height: '100%',
+    justifyContent: 'space-between'
   },
   contentBox: {
     pt: '14px',
