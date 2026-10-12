@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { SvgImage } from '~/components/svg-image/SvgImage';
@@ -21,19 +21,8 @@ type NotesListItemProps = {
 
 const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProps) => {
   const t = useTranslations('getNotes.notesList');
-  const format = useFormatter();
   const { isMobile, isTablet } = useBreakpoints();
   const title = note.name || note.fileName;
-  const parsedDate = new Date(note.publishDate || '');
-  const isValidDate = !Number.isNaN(parsedDate.getTime());
-
-  const date = isValidDate
-    ? format.dateTime(parsedDate, {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      })
-    : '';
 
   const isCompact = isMobile || isTablet;
   const isFree = !!note.url;
@@ -79,11 +68,7 @@ const NotesListItem = ({ note, buttonText, handler, endIcon }: NotesListItemProp
             <Typography sx={styles.notesTitle}>{title}</Typography>
           </Box>
         )}
-
-        <Typography sx={styles.dateMobile}>{date}</Typography>
       </Box>
-
-      <Typography sx={styles.dateDesktop}>{date}</Typography>
 
       {isCompact ? mobileButton : desktopButton}
     </Box>

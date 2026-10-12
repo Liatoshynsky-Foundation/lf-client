@@ -22,7 +22,7 @@ const NotesListModal = ({ composition, notes, paidNotesHandler }: NotesListModal
         .filter((n) => n.name || n.fileName)
         .map((note, index) => (
           <NotesListItem
-            key={(note.publishDate || '') + index}
+            key={`${note.name || note.fileName || note.url || 'note'}-${index}`}
             note={note}
             endIcon={
               note.url ? <ArrowUpRightIcon width={20} height={20} /> : <MessagesSquareIcon width={20} height={20} />
