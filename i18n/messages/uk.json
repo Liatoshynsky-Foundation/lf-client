@@ -358,7 +358,9 @@
       "dates": "Дати справи",
       "sheets": "Аркушів"
     },
+    "contentDescription": "Склад і зміст документів справи",
     "documents": {
+      "title": "Документи справи",
       "ariaLabel": "Документи справи"
     },
     "navigation": {

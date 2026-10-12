@@ -4,6 +4,7 @@ import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { FundStatus } from '~/domain/dto/funds.dto';
 import { Case } from '~/infrastructure/models/archive/Case';
 import { Fund } from '~/infrastructure/models/archive/Fund';
+import { createTipTapDocFromText } from '~/lib/utils/tiptapHelpers';
 
 jest.mock('~/infrastructure/db/connect', () => ({ __esModule: true, default: jest.fn() }));
 jest.mock('~/infrastructure/models/archive/Fund', () => ({
@@ -169,6 +170,87 @@ describe('fundsRepository', () => {
 
       expect(result).toBeNull();
     });
+
+    it('should use stored cipher when case provides one', async () => {
+      const mockFund = {
+        id: fundId,
+        title: { uk: 'Архівний фонд', en: 'Archive Fund' },
+        status: FundStatus.Published,
+        cases: [
+          {
+            _id: createFakeId(),
+            cipher: 'CUSTOM-1',
+            descriptionNumber: 1,
+            caseNumber: 1,
+            status: FundStatus.Published
+          }
+        ]
+      };
+
+      (Fund.findOne as jest.Mock).mockReturnValue(mockMongooseChain(mockFund));
+
+      const result = await fundsRepository.getFundById(fundId);
+
+      expect(result?.cases[0]?.cipher).toBe('CUSTOM-1');
+    });
+
+    it('should parse characterAndContent given as a TipTap JSON string', async () => {
+      const doc = { type: TipTapNodeTypes.doc, content: [] };
+      const mockFund = {
+        id: fundId,
+        title: { uk: 'Архівний фонд', en: 'Archive Fund' },
+        status: FundStatus.Published,
+        characterAndContent: JSON.stringify(doc),
+        cases: []
+      };
+
+      (Fund.findOne as jest.Mock).mockReturnValue(mockMongooseChain(mockFund));
+
+      const result = await fundsRepository.getFundById(fundId);
+
+      expect(result?.characterAndContent).toEqual({ uk: doc, en: doc });
+    });
+
+    it.each(['Plain text', '{not valid json', '{"type":"paragraph"}'])(
+      'should wrap non-TipTap string %j into a TipTap doc for both locales',
+      async (input) => {
+        const mockFund = {
+          id: fundId,
+          title: { uk: 'Архівний фонд', en: 'Archive Fund' },
+          status: FundStatus.Published,
+          characterAndContent: input,
+          cases: []
+        };
+
+        (Fund.findOne as jest.Mock).mockReturnValue(mockMongooseChain(mockFund));
+
+        const result = await fundsRepository.getFundById(fundId);
+
+        expect(result?.characterAndContent).toEqual({
+          uk: createTipTapDocFromText(input),
+          en: createTipTapDocFromText(input)
+        });
+      }
+    );
+
+    it.each([['   '], [42], [{ uk: '   ', en: 42 }]])(
+      'should return undefined characterAndContent for unusable value %j',
+      async (input) => {
+        const mockFund = {
+          id: fundId,
+          title: { uk: 'Архівний фонд', en: 'Archive Fund' },
+          status: FundStatus.Published,
+          characterAndContent: input,
+          cases: []
+        };
+
+        (Fund.findOne as jest.Mock).mockReturnValue(mockMongooseChain(mockFund));
+
+        const result = await fundsRepository.getFundById(fundId);
+
+        expect(result?.characterAndContent).toBeUndefined();
+      }
+    );
   });
 
   describe('getCaseById', () => {
@@ -226,6 +308,7 @@ describe('fundsRepository', () => {
         caseDate: { uk: '2020', en: '2020' },
         sheetsNumber: 10,
         caseDescriptions: { uk: 'Опис', en: 'Desc' },
+        detailedCaseDescription: { uk: 'Детальний опис', en: 'Detailed description' },
         pdfFile: { url: 'url' },
         status: FundStatus.Published,
         documents: [
@@ -275,6 +358,9 @@ describe('fundsRepository', () => {
       if (!result) {
         throw new Error('Result should be defined');
       }
+
+      expect(result.contentDescription).toBe('Опис');
+      expect(result.detailedCaseDescription).toBe('Детальний опис');
 
       expect(result.prevCase).not.toBeNull();
       expect(result.nextCase).not.toBeNull();

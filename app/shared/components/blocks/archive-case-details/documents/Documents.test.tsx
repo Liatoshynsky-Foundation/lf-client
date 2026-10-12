@@ -8,6 +8,7 @@ describe('Documents', () => {
       { id: 'doc-1', title: 'Документ А' },
       { id: 'doc-2', title: 'Документ Б' }
     ],
+    title: 'Документи справи',
     ariaLabel: 'Документи справи'
   };
 
@@ -20,6 +21,7 @@ describe('Documents', () => {
     const list = screen.getByTestId('ArchiveCaseDetails-documentsList');
     expect(list).toBeInTheDocument();
     expect(list).toHaveAttribute('aria-label', baseProps.ariaLabel);
+    expect(screen.getByText(baseProps.title!)).toBeInTheDocument();
   });
 
   it('renders all documents with correct titles', () => {

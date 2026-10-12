@@ -14,10 +14,7 @@ export const styles: Record<string, SxProps<Theme>> = {
   },
 
   list: {
-    mt: {
-      xs: '40px',
-      sm: '0'
-    },
+    mt: '12px',
     listStyle: 'none',
     counterReset: 'docs-counter',
     display: 'flex',

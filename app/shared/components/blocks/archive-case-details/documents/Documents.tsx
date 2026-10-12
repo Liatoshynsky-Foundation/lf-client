@@ -5,12 +5,14 @@ import { styles } from './Documents.styles';
 
 export type DocumentsProps = {
   documents: ArchiveCaseDocument[];
+  title?: string;
   ariaLabel: string;
 };
 
-const Documents = ({ documents, ariaLabel }: Readonly<DocumentsProps>) => {
+const Documents = ({ documents, title, ariaLabel }: Readonly<DocumentsProps>) => {
   return (
     <Box sx={styles.root} data-testid="ArchiveCaseDetails-documentsColumn">
+      {title && <Typography sx={styles.title}>{title}</Typography>}
       <Box component="ol" sx={styles.list} aria-label={ariaLabel} data-testid="ArchiveCaseDetails-documentsList">
         {documents.map((doc) => (
           <Box component="li" key={doc.id} sx={styles.item}>
