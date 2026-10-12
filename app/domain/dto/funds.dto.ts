@@ -47,6 +47,7 @@ export type CaseDTO = CaseBaseDTO<LocalizedString, LocalizedString, LocalizedStr
 export type AdjacentCaseDTO = Pick<CaseBaseDTO, '_id' | 'name' | 'cipher'>;
 
 export type CaseDetailsDTO = CaseBaseDTO & {
+  detailedCaseDescription: string;
   fundId: string;
   fundNumber: LocalizedString;
   fundTitle: LocalizedString;

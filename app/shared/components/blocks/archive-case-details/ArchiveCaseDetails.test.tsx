@@ -36,6 +36,8 @@ describe('ArchiveCaseDetails', () => {
     metaCode: 'Шифр',
     metaDates: 'Дати справи',
     metaSheets: 'Аркушів',
+    contentDescription: 'Склад і зміст документів справи',
+    documents: 'Документи справи',
     documentsAria: 'Документи справи',
     viewPdf: 'Переглянути PDF',
     prevCase: 'Попередня справа',
@@ -48,6 +50,8 @@ describe('ArchiveCaseDetails', () => {
     dateRange: '1895–1955',
     sheetsCount: 26,
     pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
+    contentDescription: 'Опис справи',
+    detailedCaseDescription: 'Детальний опис справи',
     documents,
     fundHref: `/uk${getDynamicRoute.archiveFund(2)}`,
     prevCase,
@@ -64,6 +68,8 @@ describe('ArchiveCaseDetails', () => {
     expect(screen.getByTestId('ArchiveCaseDetails-back')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveCaseDetails-meta')).toBeInTheDocument();
     expect(screen.getByTestId('ArchiveCaseDetails-documentsColumn')).toBeInTheDocument();
+    expect(screen.getByTestId('ArchiveCaseDetails-contentDescription')).toHaveTextContent('Опис справи');
+    expect(screen.getByTestId('ArchiveCaseDetails-detailedCaseDescription')).toHaveTextContent('Детальний опис справи');
 
     const pdfWrapper = screen.getByTestId('ArchiveCaseDetails-pdfButtonSticky');
     expect(pdfWrapper).toBeInTheDocument();

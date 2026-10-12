@@ -226,6 +226,7 @@ describe('fundsRepository', () => {
         caseDate: { uk: '2020', en: '2020' },
         sheetsNumber: 10,
         caseDescriptions: { uk: 'Опис', en: 'Desc' },
+        detailedCaseDescription: { uk: 'Детальний опис', en: 'Detailed description' },
         pdfFile: { url: 'url' },
         status: FundStatus.Published,
         documents: [
@@ -275,6 +276,9 @@ describe('fundsRepository', () => {
       if (!result) {
         throw new Error('Result should be defined');
       }
+
+      expect(result.contentDescription).toBe('Опис');
+      expect(result.detailedCaseDescription).toBe('Детальний опис');
 
       expect(result.prevCase).not.toBeNull();
       expect(result.nextCase).not.toBeNull();

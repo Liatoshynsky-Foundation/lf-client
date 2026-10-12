@@ -358,7 +358,9 @@
       "dates": "Case dates",
       "sheets": "Sheets"
     },
+    "contentDescription": "Composition and content of case documents",
     "documents": {
+      "title": "Case documents",
       "ariaLabel": "Case documents"
     },
     "navigation": {

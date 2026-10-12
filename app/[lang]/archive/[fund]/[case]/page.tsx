@@ -101,6 +101,8 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
     metaCode: t('meta.code'),
     metaDates: t('meta.dates'),
     metaSheets: t('meta.sheets'),
+    contentDescription: t('contentDescription'),
+    documents: t('documents.title'),
     documentsAria: t('documents.ariaLabel'),
     viewPdf: t('buttons.viewPdf'),
     prevCase: t('navigation.prev'),
@@ -115,6 +117,8 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
         dateRange={caseDetails.dates}
         sheetsCount={caseDetails.sheets ?? undefined}
         pdfUrl={caseDetails.pdfUrl ?? '#'}
+        contentDescription={caseDetails.contentDescription}
+        detailedCaseDescription={caseDetails.detailedCaseDescription}
         documents={documents}
         fundHref={fundHref}
         prevCase={prevCase}

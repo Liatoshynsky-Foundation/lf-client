@@ -37,5 +37,43 @@ export const styles: Record<string, SxProps<Theme>> = {
     zIndex: {
       sm: 1
     }
+  },
+
+  detailsColumn: {
+    gridColumn: {
+      xs: '1 / -1',
+      sm: '4 / -1',
+      md: '6 / -1'
+    },
+    gridRow: {
+      xs: 'auto',
+      sm: '1 / 4'
+    },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '40px',
+    mt: {
+      xs: '40px',
+      sm: 0
+    }
+  },
+
+  descriptionSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
+
+  detailTitle: {
+    fontSize: '16px',
+    lineHeight: '150%',
+    fontWeight: 700
+  },
+
+  detailText: {
+    fontSize: '16px',
+    lineHeight: '150%',
+    color: 'black',
+    fontWeight: 500
   }
 };
