@@ -7,21 +7,20 @@ import {
   translatedTipTapSchema
 } from '~/validators/constants';
 
-const sheetMusicItemSchema = z
+export const sheetMusicItemSchema = z
   .object({
     url: z.string().nullable(),
-    name: z.string().optional(),
+    name: z.string().nullish(),
     fileName: z.string().nullable().optional(),
     publishDate: z.string().optional().nullable()
   })
   .transform((data) => {
-    if (!data.name && data.fileName) {
-      return {
-        ...data,
-        name: data.fileName
-      };
-    }
-    return data;
+    const trimmedName = data.name?.trim();
+    const fallbackForName = data.fileName?.trim() || data.url?.split('/').pop()?.split('?')[0];
+    return {
+      ...data,
+      name: trimmedName || fallbackForName || ''
+    };
   });
 
 const localizedIndexationSchema = z.object({
@@ -45,6 +44,11 @@ const baseArtistrySchema = z.object({
   name: translatedFieldSchema
 });
 
+export const coverImageSchema = z.object({
+  src: z.string(),
+  alt: translatedFieldSchema.optional().nullable()
+});
+
 export const compositionSchema = baseArtistrySchema.extend({
   year: z.number().optional().nullable(),
   genre: z.string().optional().nullable(),
@@ -61,6 +65,7 @@ export const opusSchema = baseArtistrySchema.extend({
   title: translatedFieldSchema,
   creationYear: z.string(),
   endYear: z.string().optional().nullable(),
+  datesNote: z.string().optional().nullable(),
   genre: translatedFieldSchema.optional().nullable(),
   slug: z.string(),
   description: translatedFieldSchema.optional().nullable(),
@@ -70,7 +75,9 @@ export const opusSchema = baseArtistrySchema.extend({
   allowIndexation: localizedIndexationSchema.optional(),
   compositions: z.array(compositionSchema),
   performances: z.array(performanceItemSchema).optional().nullable(),
-  gallery: z.array(galleryItemSchema).nullable().optional()
+  gallery: z.array(galleryItemSchema).nullable().optional(),
+  performancesTitle: translatedFieldSchema.nullish(),
+  coverImage: coverImageSchema.optional().nullable()
 });
 
 export const opusListSchema = opusSchema.omit({

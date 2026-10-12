@@ -33,6 +33,7 @@ describe('Meta', () => {
     expect(screen.getByText('Number Label:')).toBeInTheDocument();
 
     expect(screen.queryByTestId('OpusDetails-meta-date')).toBeNull();
+    expect(screen.queryByTestId('OpusDetails-meta-date-note')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-genre')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-movements')).toBeNull();
     expect(screen.queryByTestId('OpusDetails-meta-sheetMusic')).toBeNull();
@@ -43,6 +44,21 @@ describe('Meta', () => {
 
     expect(screen.getByTestId('OpusDetails-meta-date')).toHaveTextContent('1999');
     expect(screen.getByText('Date Label:')).toBeInTheDocument();
+  });
+
+  it('renders the dates note under the year without an extra label', () => {
+    render(<Meta {...baseProps} year="1999" datesNote=" revised after premiere " />);
+
+    expect(screen.getByTestId('OpusDetails-meta-date')).toHaveTextContent('1999');
+    expect(screen.getByTestId('OpusDetails-meta-date-note')).toHaveTextContent('revised after premiere');
+    expect(screen.queryByText('Уточнення')).toBeNull();
+  });
+
+  it('does not render the dates note when it is blank', () => {
+    render(<Meta {...baseProps} year="1999" datesNote="   " />);
+
+    expect(screen.getByTestId('OpusDetails-meta-date')).toHaveTextContent('1999');
+    expect(screen.queryByTestId('OpusDetails-meta-date-note')).toBeNull();
   });
 
   it('renders the genre field when provided', () => {

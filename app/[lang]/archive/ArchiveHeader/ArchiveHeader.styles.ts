@@ -51,6 +51,16 @@ export const styles = {
     }
   },
 
+  descriptionParagraph: {
+    fontSize: '16px',
+    lineHeight: '150%',
+    margin: '0 0 16px',
+    minHeight: '24px',
+    '&:last-child': {
+      marginBottom: 0
+    }
+  },
+
   searchWrapper: {
     gridColumn: {
       xs: '1 / -1',

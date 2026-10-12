@@ -73,13 +73,20 @@ describe('useGroupedCompositions', () => {
     );
   });
 
-  it('should return empty items array if compositions array is missing or empty', () => {
+  it('should return fallback opus item if compositions array is missing or empty', () => {
     const rawData = [createMockOpusListDTO({ compositions: null })];
 
     const { result } = renderHook(() => useGroupedCompositions(rawData));
 
     expect(result.current).toHaveLength(1);
-    expect(result.current[0].items).toEqual([]);
+    expect(result.current[0].items).toEqual([
+      expect.objectContaining({
+        id: 'opus-1',
+        isEmptyOpus: true,
+        opus: '1',
+        opusName: 'Mock Opus'
+      })
+    ]);
   });
 
   it('should handle optional fields and fallback to defaults if absent', () => {

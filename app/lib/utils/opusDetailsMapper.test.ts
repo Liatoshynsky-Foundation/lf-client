@@ -9,6 +9,7 @@ const opusDetailsDto: OpusDetailsDTO = {
   slug: 'first-opus',
   number: 'op. 1',
   year: '1929',
+  datesNote: '  revised after premiere  ',
   genre: 'Classical',
   movements: ['I. Allegro', 'II. Lento'],
   sheetMusic: { url: 'https://example.com/opus-score.pdf', name: 'opus-score' },
@@ -40,6 +41,7 @@ describe('mapOpusDetailsToProps', () => {
       name: 'First Opus Name',
       number: 'op. 1',
       year: '1929',
+      datesNote: 'revised after premiere',
       genre: 'Classical',
       movements: ['I. Allegro', 'II. Lento'],
       sheetMusic: { url: 'https://example.com/opus-score.pdf', name: 'opus-score' },
@@ -78,6 +80,7 @@ describe('mapOpusDetailsToProps', () => {
       slug: 'slug',
       number: '1',
       year: '2023',
+      datesNote: '   ',
       genre: undefined,
       movements: undefined,
       sheetMusic: undefined,
@@ -91,6 +94,7 @@ describe('mapOpusDetailsToProps', () => {
     expect(result.compositions).toEqual([]);
     expect(result.videos).toEqual([{ id: 'vid1', youTubeId: 'abc1234', title: '' }]);
     expect(result.genre).toBeUndefined();
+    expect(result.datesNote).toBeUndefined();
     expect(result.introDescription).toBeNull();
     expect(result.movements).toBeUndefined();
     expect(result.sheetMusic).toBeNull();

@@ -4,7 +4,17 @@ import { CategoryDTO } from '~/domain/dto/composition.dto';
 import { Category } from '~/infrastructure/models/artistry/artistryCategoriesData';
 import { Opus } from '~/infrastructure/models/artistry/artistryOpusData';
 import { Compositions } from '~/infrastructure/models/artistry/artistryTableData';
+import logger from '~/middleware/logger/logger';
 import { RawCompositionDTO, RawOpusDetailsDTO } from '~/validators/artistry/composition.schema';
+
+jest.mock('~/middleware/logger/logger', () => ({
+  __esModule: true,
+  default: {
+    warn: jest.fn(),
+    error: jest.fn(),
+    info: jest.fn()
+  }
+}));
 
 jest.mock('~/infrastructure/db/connect', () => ({ __esModule: true, default: jest.fn() }));
 
@@ -202,6 +212,36 @@ describe('compositionsRepository', () => {
 
       expect(mockOpus.aggregate).toHaveBeenCalled();
     });
+
+    it('should skip invalid opus items and return only valid ones', async () => {
+      const validDoc = createMockOpusDoc();
+      const invalidDoc = { _id: validMongoId };
+
+      mockOpus.aggregate.mockReturnValue(mockAggregateChain([validDoc, invalidDoc]));
+
+      const result = await compositionsRepository.getAllCompositions();
+
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          _id: validDoc._id,
+          slug: validDoc.slug,
+          number: validDoc.number,
+          numberKind: validDoc.numberKind
+        })
+      );
+    });
+
+    it('should log a warning when invalid opus items are skipped', async () => {
+      const validDoc = createMockOpusDoc();
+      const invalidDoc = { _id: validMongoId };
+
+      mockOpus.aggregate.mockReturnValue(mockAggregateChain([validDoc, invalidDoc]));
+
+      await compositionsRepository.getAllCompositions();
+
+      expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Skipped 1 invalid opus records'));
+    });
   });
 
   describe('getOpusBySlug', () => {
@@ -221,6 +261,16 @@ describe('compositionsRepository', () => {
       const result = await compositionsRepository.getOpusBySlug('valid-slug');
 
       expect(result).toMatchObject({ _id: validMongoId });
+    });
+
+    it('should allow draft resolution for system preview opuses', async () => {
+      const opusMock = createMockOpusDoc({ slug: 'sys-preview-artistry' });
+      mockOpus.findOne.mockReturnValue(mockMongooseChain(opusMock));
+
+      const result = await compositionsRepository.getOpusBySlug('sys-preview-artistry');
+
+      expect(mockOpus.findOne).toHaveBeenCalledWith({ slug: 'sys-preview-artistry' });
+      expect(result).toMatchObject({ slug: 'sys-preview-artistry' });
     });
   });
 });

@@ -48,8 +48,12 @@ export async function generateMetadata({ params }: Readonly<OpusPageProps>): Pro
   }
 
   return createSeoMeta({
-    title: opusDetails.title,
-    description: opusDetails.description ?? '',
+    title: opusDetails.title || opusDetails.name,
+    description: opusDetails.description ?? undefined,
+    keywords: opusDetails.keywords ?? undefined,
+    allowIndexation: opusDetails.allowIndexation,
+    imageUrl: opusDetails.coverImage?.src,
+    imageAlt: opusDetails.coverImage?.alt,
     url: getDynamicRoute.opus(slug),
     locale: lang
   });
@@ -76,7 +80,7 @@ export default async function OpusPage({ params }: Readonly<OpusPageProps>) {
     metaGenre: t('meta.genre'),
     viewSheetMusic: t('buttons.viewSheetMusic'),
     compositionsTitle: t('compositions.title'),
-    videosTitle: t('videos.title'),
+    videosTitle: opusDetails.performancesTitle?.trim() || t('videos.title'),
     placeholderTitle: t('placeholder.title'),
     placeholderSubtitle: t('placeholder.subtitle'),
     placeholderImageAlt: t('placeholder.imageAlt'),

@@ -33,6 +33,7 @@ export interface OpusDetailsProps {
   name: string;
   number: string;
   year?: string;
+  datesNote?: string | null;
   genre?: string;
   movements?: string[];
   sheetMusic?: MusicItem | null;

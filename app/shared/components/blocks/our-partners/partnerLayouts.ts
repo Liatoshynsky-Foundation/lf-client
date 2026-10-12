@@ -46,9 +46,9 @@ export const patterns = {
 };
 
 export const gridConfigs = [
-  { key: 'xxl', min: 'xxl', max: null, columns: 5, rows: 3 },
-  { key: 'xl', min: 'xl', max: 'xxl', columns: 4, rows: 3 },
-  { key: 'lg', min: 'lg', max: 'xl', columns: 4, rows: 3 },
-  { key: 'md', min: 'md', max: 'lg', columns: 3, rows: 4 },
-  { key: 'sm', min: 'sm', max: 'md', columns: 3, rows: 4 }
+  { key: 'xxl', min: 'xxl', max: null, columns: 5, rows: 5 },
+  { key: 'xl', min: 'xl', max: 'xxl', columns: 4, rows: 6 },
+  { key: 'lg', min: 'lg', max: 'xl', columns: 4, rows: 6 },
+  { key: 'md', min: 'md', max: 'lg', columns: 3, rows: 8 },
+  { key: 'sm', min: 'sm', max: 'md', columns: 3, rows: 8 }
 ] as const;

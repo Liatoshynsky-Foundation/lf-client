@@ -16,6 +16,7 @@ const OpusDetails = ({
   name,
   number,
   year,
+  datesNote,
   genre,
   movements,
   sheetMusic,
@@ -38,6 +39,7 @@ const OpusDetails = ({
         <Meta
           number={number}
           year={year}
+          datesNote={datesNote}
           genre={genre}
           movements={movements}
           sheetMusic={sheetMusic}

@@ -32,6 +32,7 @@ const createMockCompositionDetails = (overrides: Partial<RawOpusDetailsDTO> = {}
     creationYear: '1929',
     introDescription: { uk: { type: 'doc', content: [] }, en: { type: 'doc', content: [] } },
     description: { uk: 'SEO Опис', en: 'SEO Desc' },
+    performancesTitle: null,
     compositions: [],
     performances: [],
     gallery: [],
@@ -228,6 +229,7 @@ describe('ArtistryService', () => {
 
     it('should map raw opus details correctly using the artistry mapper', async () => {
       const rawOpus = createMockCompositionDetails({
+        performancesTitle: { uk: 'ТЕСТ заголовок з CMS', en: 'TEST title from CMS' },
         compositions: [
           {
             _id: 'c1',
@@ -237,7 +239,8 @@ describe('ArtistryService', () => {
           }
         ],
         performances: [{ videoUrl: 'https://youtube.com/watch?v=123' }],
-        gallery: [{ _id: 'g1', src: 'img.jpg', altText: { uk: 'Фото', en: 'Photo' } }]
+        gallery: [{ _id: 'g1', src: 'img.jpg', altText: { uk: 'Фото', en: 'Photo' } }],
+        datesNote: '  авторське уточнення  '
       } as RawOpusDetailsDTO);
       compositionsRepoMock.getOpusBySlug.mockResolvedValue(rawOpus);
 
@@ -250,12 +253,17 @@ describe('ArtistryService', () => {
         name: 'Квінтет',
         title: 'Український квінтет',
         year: '1929',
+        datesNote: 'авторське уточнення',
         genre: undefined,
         introDescription: null,
         description: 'SEO Опис',
         movements: undefined,
         sheetMusic: null,
+        performancesTitle: 'ТЕСТ заголовок з CMS',
         videos: [],
+        allowIndexation: true,
+        coverImage: undefined,
+        keywords: null,
         compositions: [
           {
             _id: 'c1',
@@ -272,6 +280,7 @@ describe('ArtistryService', () => {
       const rawOpus = createMockCompositionDetails({
         introDescription: undefined,
         description: undefined,
+        performancesTitle: undefined,
         performances: undefined
       });
       compositionsRepoMock.getOpusBySlug.mockResolvedValue(rawOpus);
@@ -280,7 +289,9 @@ describe('ArtistryService', () => {
 
       expect(result).toMatchObject({
         introDescription: null,
-        description: null,
+        description: undefined,
+        performancesTitle: null,
+        datesNote: null,
         videos: [],
         sheetMusic: null
       });

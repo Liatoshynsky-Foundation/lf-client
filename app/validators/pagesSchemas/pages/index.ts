@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { AboutUsPageSchema } from './about-us.schema';
+import { ArchivePageSchema } from './archive.schema';
 import { ArtistryPageSchema } from './artistry.schema';
 import { BiographyPageSchema } from './biography.schema';
 import { CooperationPageSchema } from './cooperation.schema';
@@ -15,7 +16,8 @@ export const PageSchema = z.discriminatedUnion('pageType', [
   BiographyPageSchema,
   CooperationPageSchema,
   ArtistryPageSchema,
-  WarInUkrainePageSchema
+  WarInUkrainePageSchema,
+  ArchivePageSchema
 ]);
 
 export type Page = z.infer<typeof PageSchema>;

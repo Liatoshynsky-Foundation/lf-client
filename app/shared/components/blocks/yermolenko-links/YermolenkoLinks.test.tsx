@@ -4,7 +4,6 @@ import React from 'react';
 import YermolenkoLinks from './YermolenkoLinks';
 
 interface MockBulletTextProps {
-  buttonText: string;
   showMainButton?: boolean;
   showShortButtonsText?: boolean;
   buttons: Array<{
@@ -18,7 +17,6 @@ jest.mock('~/ds-components/bullet-text-with-links/BulletTextWithLinks', () => ({
   __esModule: true,
   default: (props: MockBulletTextProps) => (
     <div data-testid="bullet-text-with-links">
-      <span data-testid="button-text">{props.buttonText}</span>
       <span data-testid="show-main-button">{String(props.showMainButton)}</span>
       <span data-testid="show-short-buttons-text">{String(props.showShortButtonsText)}</span>
       {props.buttons.map((btn: any, i: number) => (
@@ -40,7 +38,6 @@ describe('YermolenkoLinks', () => {
 
   it('should render BulletTextWithLinks with mapped buttons and fixed display props', () => {
     const data = {
-      buttonText: 'Learn more',
       description: 'Some description',
       buttons: [
         { shortText: 'Short', fullText: 'Full text', link: '/link-1' },
@@ -50,8 +47,7 @@ describe('YermolenkoLinks', () => {
 
     render(<YermolenkoLinks data={data} />);
 
-    expect(screen.getByTestId('button-text')).toHaveTextContent('Learn more');
-    expect(screen.getByTestId('show-main-button')).toHaveTextContent('true');
+    expect(screen.getByTestId('show-main-button')).toHaveTextContent('false');
     expect(screen.getByTestId('show-short-buttons-text')).toHaveTextContent('false');
 
     const buttons = screen.getAllByTestId('button');
@@ -61,7 +57,6 @@ describe('YermolenkoLinks', () => {
 
   it('should default a missing button link to an empty string', () => {
     const data = {
-      buttonText: 'Learn more',
       description: 'Some description',
       buttons: [{ shortText: 'Short', fullText: 'Full text' }]
     };
@@ -72,7 +67,7 @@ describe('YermolenkoLinks', () => {
   });
 
   it('should render with no buttons provided', () => {
-    const data = { buttonText: 'Learn more', description: 'Some description' };
+    const data = { description: 'Some description' };
     render(<YermolenkoLinks data={data} />);
 
     expect(screen.queryByTestId('button')).not.toBeInTheDocument();

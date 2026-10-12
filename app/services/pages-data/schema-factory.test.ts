@@ -23,6 +23,9 @@ jest.mock('~/validators/pagesSchemas/pages/artistry.schema', () => ({
 jest.mock('~/validators/pagesSchemas/pages/war-in-ukraine.schema', () => ({
   WarInUkrainePageSchema: { __schema: 'war-in-ukraine' }
 }));
+jest.mock('~/validators/pagesSchemas/pages/archive.schema', () => ({
+  ArchivePageSchema: { __schema: 'archive' }
+}));
 
 jest.mock('~/validators/constants', () => {
   const { z } = jest.requireActual<typeof import('zod')>('zod');
@@ -52,6 +55,7 @@ jest.mock('~/validators/localization', () => {
 
 import { LocalizeSchema } from '~/validators/localization';
 import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { ArchivePageSchema } from '~/validators/pagesSchemas/pages/archive.schema';
 import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
@@ -69,7 +73,8 @@ describe('SchemaFactory', () => {
     ['biography', 'biography', BiographyPageSchema, undefined],
     ['cooperation', 'cooperation', CooperationPageSchema, undefined],
     ['artistry', 'artistry', ArtistryPageSchema, undefined],
-    ['war-in-ukraine', 'war-in-ukraine', WarInUkrainePageSchema, undefined]
+    ['war-in-ukraine', 'war-in-ukraine', WarInUkrainePageSchema, undefined],
+    ['archive', 'archive', ArchivePageSchema, { allowEmptyFields: ['description'] }]
   ] as const)('returns schema for slug "%s"', (slug, tag, schemaConst, expectedOptions) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 

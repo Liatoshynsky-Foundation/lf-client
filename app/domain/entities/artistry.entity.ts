@@ -58,6 +58,7 @@ export interface Opus extends BaseArtistryEntity {
   title: string;
   creationYear: string;
   endYear?: string | null;
+  datesNote?: string | null;
   slug: string;
   movements?: string[] | null;
   introDescription?: RichContent | null;
@@ -65,4 +66,11 @@ export interface Opus extends BaseArtistryEntity {
   videos?: OpusVideoItem[] | null;
   sheetMusic?: MusicItem | null;
   gallery?: OpusGalleryItem[] | null;
+  performancesTitle?: string | null;
+  keywords?: string | null;
+  allowIndexation?: boolean;
+  coverImage?: {
+    src: string;
+    alt: string;
+  } | null;
 }

@@ -4,13 +4,15 @@ import {
   extractAndCollectGenres,
   formatOpusNumber,
   mapCompositionsForDetails,
+  mapCoverImage,
   mapMovements,
   mapOpusCompositions,
   mapOpusGallery,
   mapVideos,
   mapYear,
   pickDescription,
-  pickGenre
+  pickGenre,
+  pickSeoDescription
 } from './artistry.mapper';
 import { CompositionsTitleFilters } from '~/types/types/tableFilters.types';
 
@@ -157,15 +159,20 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
       name: opusDetails.name[locale],
       title: opusDetails.title[locale],
       year: mapYear(opusDetails),
+      datesNote: opusDetails.datesNote?.trim() || null,
       genre: pickGenre(opusDetails, opusDetails.compositions, locale),
       slug: opusDetails.slug,
       movements: mapMovements(opusDetails.parts ?? null, locale),
       compositions: mapCompositionsForDetails(opusDetails.compositions, locale),
       introDescription: pickDescription(opusDetails.introDescription ?? null, locale),
-      description: opusDetails.description ? opusDetails.description[locale] : null,
+      description: pickSeoDescription(opusDetails.description?.[locale], opusDetails.introDescription, locale),
       videos: mapVideos(opusDetails.performances ?? null, locale),
       sheetMusic: opusDetails.sheetMusic || null,
-      gallery: mapOpusGallery(opusDetails.gallery, locale)
+      gallery: mapOpusGallery(opusDetails.gallery, locale),
+      performancesTitle: opusDetails.performancesTitle ? opusDetails.performancesTitle[locale] : null,
+      keywords: opusDetails.keywords?.[locale] ?? null,
+      allowIndexation: opusDetails.allowIndexation?.[locale] ?? true,
+      coverImage: mapCoverImage(locale, opusDetails.coverImage)
     };
   }
 });
