@@ -262,5 +262,15 @@ describe('compositionsRepository', () => {
 
       expect(result).toMatchObject({ _id: validMongoId });
     });
+
+    it('should allow draft resolution for system preview opuses', async () => {
+      const opusMock = createMockOpusDoc({ slug: 'sys-preview-artistry' });
+      mockOpus.findOne.mockReturnValue(mockMongooseChain(opusMock));
+
+      const result = await compositionsRepository.getOpusBySlug('sys-preview-artistry');
+
+      expect(mockOpus.findOne).toHaveBeenCalledWith({ slug: 'sys-preview-artistry' });
+      expect(result).toMatchObject({ slug: 'sys-preview-artistry' });
+    });
   });
 });

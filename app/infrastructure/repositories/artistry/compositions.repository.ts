@@ -25,6 +25,8 @@ import {
 } from '~/validators/artistry/composition.schema';
 import { ArraySchema, namedFilterSchema, RawCategoryDTO } from '~/validators/constants';
 
+const isSystemPreviewSlug = (slug: string) => slug.startsWith('sys-preview-');
+
 class CompositionsRepositoryImpl implements CompositionRepository {
   async getAllCategories(): Promise<RawCategoryDTO[]> {
     await dbConnect();
@@ -70,9 +72,8 @@ class CompositionsRepositoryImpl implements CompositionRepository {
 
   async getOpusBySlug(slug: string): Promise<RawOpusDetailsDTO | null> {
     await dbConnect();
-    const opus = await Opus.findOne({ slug, status: { $ne: 'draft' } })
-      .populate('compositions')
-      .lean<RawOpusDetailsDTO>();
+    const query = isSystemPreviewSlug(slug) ? { slug } : { slug, status: { $ne: 'draft' } };
+    const opus = await Opus.findOne(query).populate('compositions').lean<RawOpusDetailsDTO>();
     if (!opus) return null;
     return opusSchema.parse(opus);
   }
