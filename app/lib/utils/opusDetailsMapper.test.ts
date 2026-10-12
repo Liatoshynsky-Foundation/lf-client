@@ -59,7 +59,8 @@ describe('mapOpusDetailsToProps', () => {
         {
           id: '63f8b3b7a8b3d6c1b3e8e4a1',
           youTubeId: 'abc123',
-          title: 'Live performance'
+          title: 'Live performance',
+          caption: 'Live performance'
         }
       ]
     });
@@ -92,7 +93,7 @@ describe('mapOpusDetailsToProps', () => {
     });
 
     expect(result.compositions).toEqual([]);
-    expect(result.videos).toEqual([{ id: 'vid1', youTubeId: 'abc1234', title: '' }]);
+    expect(result.videos).toEqual([{ id: 'vid1', youTubeId: 'abc1234', title: '', caption: undefined }]);
     expect(result.genre).toBeUndefined();
     expect(result.datesNote).toBeUndefined();
     expect(result.introDescription).toBeNull();
