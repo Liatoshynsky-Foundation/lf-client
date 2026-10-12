@@ -21,7 +21,8 @@ export function mapOpusDetailsToProps(opusDetails: OpusDetailsDTO): OpusDetailsC
   const videos: OpusVideo[] = (opusDetails.videos || []).map((video) => ({
     id: video._id,
     youTubeId: video.youTubeId,
-    title: video.title || ''
+    title: video.title || '',
+    caption: video.title?.trim() || undefined
   }));
 
   return {

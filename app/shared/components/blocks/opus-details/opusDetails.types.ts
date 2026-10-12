@@ -13,6 +13,7 @@ export type OpusVideo = {
   id: string;
   youTubeId: string;
   title?: string;
+  caption?: string;
 };
 
 export type OpusDetailsLabels = {
