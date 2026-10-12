@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react';
 
 import { BlockRenderer, BlockRendererProps } from './BlockRenderer';
 
+jest.mock('~/shared/components/blocks/managed-page-section/ManagedPageSection', () => ({
+  __esModule: true,
+  default: ({ data }: { data: { title: string } }) => <div data-testid="ManagedPageSection">{data.title}</div>
+}));
+
 const mockedBlocks = {
   IntroSection: {}
 };
@@ -76,5 +81,22 @@ describe('BlockRenderer', () => {
     runSimulation({ blocks: { IntroSection: { hidden: false } } });
 
     expect(screen.getByTestId('intro-section')).toBeInTheDocument();
+  });
+
+  it('should render a managed page section when the block is not in rendererMap', () => {
+    runSimulation({
+      blockId: 'section-1',
+      blocks: {
+        IntroSection: {},
+        'section-1': {
+          kind: 'managedPageSection',
+          title: 'Що хочемо поліпшити',
+          items: []
+        }
+      } as typeof mockedBlocks
+    });
+
+    expect(screen.getByTestId('ManagedPageSection')).toBeInTheDocument();
+    expect(screen.queryByTestId('intro-section')).not.toBeInTheDocument();
   });
 });

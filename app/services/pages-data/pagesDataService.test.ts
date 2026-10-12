@@ -71,6 +71,35 @@ describe('pagesDataService', () => {
       expect(res).toEqual(WrapSuccess(localized));
     });
 
+    it('should drop empty managed sections before schema parse', async () => {
+      const emptyDoc = { type: 'doc', content: [] };
+      const pageWithEmptySection = {
+        slug,
+        blocks: {
+          'section-1': {
+            kind: 'managedPageSection',
+            title: { uk: emptyDoc, en: emptyDoc },
+            items: []
+          }
+        },
+        blocksOrder: ['section-1']
+      } as unknown as RepoPage;
+      const localized = { slug } as unknown as PageDataMap[typeof slug];
+      const schema = z.object({ slug: z.string() }) as unknown as z.ZodType<PageDataMap[typeof slug]>;
+      const parseSpy = jest.spyOn(schema, 'parse').mockReturnValue(localized);
+
+      (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(schema);
+      mockRepo.getBySlug.mockResolvedValue(pageWithEmptySection);
+
+      await service.getPageData(slug, locale);
+
+      expect(parseSpy).toHaveBeenCalledWith({
+        slug,
+        blocks: {},
+        blocksOrder: []
+      });
+    });
+
     it('should handle ZodError validation failure', async () => {
       const schema = z.object({ slug: z.string() }) as unknown as z.ZodType<PageDataMap[typeof slug]>;
       const zodError = new ZodError([{ code: 'custom', path: ['title'], message: 'Required field missing' }]);
