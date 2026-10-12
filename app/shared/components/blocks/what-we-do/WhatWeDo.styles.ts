@@ -1,13 +1,6 @@
-export const iconSizes = {
-  width: {
-    xs: 12,
-    md: 16
-  },
-  height: {
-    xs: 16,
-    md: 16
-  }
-};
+import { bulletIconSizes } from '../section-block.styles';
+
+export const iconSizes = bulletIconSizes;
 
 export const styles = {
   mainContainer: {
