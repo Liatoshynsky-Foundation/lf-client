@@ -1,6 +1,4 @@
-import { bulletIconSizes } from '../section-block.styles';
-
-export const iconSizes = bulletIconSizes;
+export { bulletIconSizes as iconSizes } from '../section-block.styles';
 
 export const styles = {
   mainContainer: {
