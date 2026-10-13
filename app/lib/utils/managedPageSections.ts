@@ -1,13 +1,13 @@
+import type { Locale } from 'next-intl';
+
 import {
   MANAGED_PAGE_SECTION_KIND,
   type ManagedPageSectionBlock,
   type ManagedPageSectionItem
 } from '~/types/page/managed-page-section.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { RichContent } from '~/types/types/tiptap.types';
 
 import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
-
-type Locale = 'uk' | 'en';
 
 export const isManagedPageSectionBlock = (value: unknown): value is ManagedPageSectionBlock<unknown> => {
   if (typeof value !== 'object' || value === null) return false;
@@ -74,5 +74,5 @@ export const prepareManagedPageSections = <T>(page: T, locale: Locale): T => {
   };
 };
 
-export const isLocalizedManagedPageSection = (value: unknown): value is ManagedPageSectionBlock<string | TipTapDoc> =>
+export const isLocalizedManagedPageSection = (value: unknown): value is ManagedPageSectionBlock<RichContent> =>
   isManagedPageSectionBlock(value);

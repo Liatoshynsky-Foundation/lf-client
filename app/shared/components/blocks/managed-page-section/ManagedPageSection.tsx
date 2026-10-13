@@ -11,16 +11,14 @@ import TitleWithDescription from '~/components/title-with-description/TitleWithD
 import { renderData } from '../../tip-tap-content/nodes';
 import { iconSizes, styles } from './ManagedPageSection.styles';
 import { MANAGED_PAGE_SECTION_ITEM_TYPE, type ManagedPageSectionBlock } from '~/types/page/managed-page-section.types';
-import { TipTapDoc } from '~/types/types/tiptap.types';
+import { RichContent } from '~/types/types/tiptap.types';
 import { generateSizesAttribute } from '~/utils/generateSizesAttribute';
 
-type LocalizedContent = string | TipTapDoc;
-
 interface ManagedPageSectionProps {
-  data: ManagedPageSectionBlock<LocalizedContent>;
+  data: ManagedPageSectionBlock<RichContent>;
 }
 
-const SectionItemContent = ({ value }: { value: LocalizedContent }) => <TipTapContent data={renderData(value)} />;
+const SectionItemContent = ({ value }: { value: RichContent }) => <TipTapContent data={renderData(value)} />;
 
 const ManagedPageSection = ({ data }: ManagedPageSectionProps) => {
   const { title, items } = data;
