@@ -148,7 +148,6 @@ describe('FundSummaryHeader', () => {
 
     expect(screen.getByText(/Повернутись до архіву/i)).toBeInTheDocument();
     expect(screen.getByText(/Кількість описів/i)).toBeInTheDocument();
-    expect(screen.getByText(/Мова документів/i)).toBeInTheDocument();
   });
 
   it('should split items into two columns correctly (odd number)', () => {

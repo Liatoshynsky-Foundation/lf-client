@@ -67,8 +67,6 @@ export const mapFundDetailsToSummaryData = (fund: FundDetailsDTO): FundSummaryHe
     createTextSummaryItem({ uk: 'Кількість описів', en: 'Number of inventories' }, String(fund.numberOfDescriptions))
   ];
 
-  appendOptionalTextItem(items, { uk: 'Мова документів', en: 'Language of documents' }, fund.documentLanguages);
-
   items.push(createTextSummaryItem({ uk: 'Кількість справ', en: 'Number of cases' }, String(fund.numberOfCases)));
 
   if (fund.characterAndContent) {
@@ -81,16 +79,10 @@ export const mapFundDetailsToSummaryData = (fund: FundDetailsDTO): FundSummaryHe
   }
 
   appendOptionalTextItem(items, { uk: 'Форма упорядкування', en: 'Form of arrangement' }, fund.organizationForm);
-  appendOptionalTextItem(items, { uk: 'Умови доступу', en: 'Access conditions' }, fund.accessConditions);
   appendOptionalTextItem(
     items,
     { uk: 'Дата утворення документів', en: 'Date of document creation' },
     fund.documentCreationDate
-  );
-  appendOptionalTextItem(
-    items,
-    { uk: 'Відомості про укладача', en: 'Information about the compiler' },
-    fund.compilerInfo
   );
   appendOptionalTextItem(
     items,

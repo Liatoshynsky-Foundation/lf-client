@@ -14,10 +14,7 @@ export interface IFund {
   organizationForm?: LocalizedString;
   documentCreationDate: string;
   chronologicalBoundaries?: string;
-  documentLanguages?: string;
   characterAndContent?: LocalizedTipTapDoc | string;
-  accessConditions?: string;
-  compilerInfo?: string;
   status: FundStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -58,21 +55,9 @@ const fundSchema = new Schema<IFund>(
       type: String,
       default: ''
     },
-    documentLanguages: {
-      type: String,
-      default: ''
-    },
     characterAndContent: {
       uk: { type: Object, required: false, default: undefined },
       en: { type: Object, required: false, default: undefined }
-    },
-    accessConditions: {
-      type: String,
-      default: ''
-    },
-    compilerInfo: {
-      type: String,
-      default: ''
     },
     status: {
       type: String,

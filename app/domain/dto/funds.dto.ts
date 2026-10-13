@@ -22,10 +22,7 @@ export type FundDetailsDTO = FundBaseDTO & {
   organizationForm?: LocalizedString;
   documentCreationDate: string;
   chronologicalBoundaries?: string;
-  documentLanguages?: string;
   characterAndContent?: LocalizedTipTapDoc;
-  accessConditions?: string;
-  compilerInfo?: string;
   cases: CaseDTO[];
 };
 

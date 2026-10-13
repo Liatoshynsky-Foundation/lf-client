@@ -69,13 +69,10 @@ describe('fundsRepository', () => {
         organizationForm: { uk: 'Форма', en: 'Form' },
         documentCreationDate: '2026',
         chronologicalBoundaries: 'Boundaries',
-        documentLanguages: 'UA',
         characterAndContent: {
           uk: { type: TipTapNodeTypes.doc, content: [] },
           en: { type: TipTapNodeTypes.doc, content: [] }
         },
-        accessConditions: 'Open',
-        compilerInfo: 'Compiler',
         status: FundStatus.Published,
         cases: [
           {
