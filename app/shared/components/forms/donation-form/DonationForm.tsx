@@ -17,12 +17,15 @@ import ChevronDown from '~/public/icons/chevron-down.svg';
 import ChevronUp from '~/public/icons/chevron-up.svg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
-const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP'];
+const currencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP', 'PLN', 'AUD', 'CAD'];
 const proposedSum: Record<Currency, number[]> = {
   UAH: [200, 500, 700],
   USD: [10, 25, 50],
   EUR: [10, 20, 50],
-  GBP: [10, 20, 40]
+  GBP: [10, 20, 40],
+  PLN: [50, 100, 200],
+  AUD: [15, 30, 60],
+  CAD: [15, 30, 60]
 };
 
 const MIN_DONATION_AMOUNT = 0;
