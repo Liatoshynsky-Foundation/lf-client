@@ -39,17 +39,11 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
 function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
-  if (typeof fieldValue === 'boolean') {
+  if (path.endsWith('.allowIndexation')) {
     return true;
   }
 
-  if (
-    !fieldValue &&
-    (path.endsWith('.ticketUrl') ||
-      path.endsWith('.canonicalUrl') ||
-      path.endsWith('.keywords') ||
-      path.endsWith('.description'))
-  ) {
+  if (!fieldValue && (path.endsWith('.ticketUrl') || path.endsWith('.canonicalUrl') || path.endsWith('.keywords'))) {
     return true;
   }
 
@@ -58,9 +52,9 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
       path.endsWith('.alt') ||
       path.endsWith('.caption') ||
       path.endsWith('.genre') ||
+      (locale === 'en' && path.endsWith('.description')) ||
       path.endsWith('.canonicalUrl') ||
-      path.endsWith('.keywords') ||
-      path.endsWith('.description');
+      path.endsWith('.keywords');
 
     if (fieldValue === '' && isOptionalField) {
       return true;
