@@ -65,14 +65,14 @@ const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButt
           <Box sx={heroSectionStyles.heroCharacter}>
             <Image
               src={imagesPaths.heroCharacterImage}
-              alt="Hero character photo"
+              alt="Borys Liatoshynsky composer portrait"
               priority
               fill
               quality={90}
               data-testid="hero-character-image"
               style={{
                 objectFit: `${bp.isLaptopAndAbove ? 'contain' : 'cover'}`,
-                objectPosition: 'center'
+                objectPosition: bp.isLaptopAndAbove ? 'center bottom' : 'right bottom'
               }}
             />
           </Box>

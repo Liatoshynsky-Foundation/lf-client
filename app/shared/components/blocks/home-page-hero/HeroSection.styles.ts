@@ -65,14 +65,20 @@ export const heroSectionStyles = {
     position: 'absolute' as const,
     left: {
       sm: '0',
-      md: '-84px'
+      md: '-19px'
     },
     bottom: '0',
-    top: '0',
+    top: {
+      xs: '0',
+      sm: '-22px'
+    },
     width: {
       xs: '100%',
-      sm: '65%'
-    }
+      sm: '60%',
+      md: '45%'
+    },
+    transform: 'rotate(-2deg)',
+    transformOrigin: 'bottom left'
   },
 
   textLogoStyle: {
