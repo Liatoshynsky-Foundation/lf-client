@@ -21,6 +21,7 @@ import { normalizePhoneNumberFromMask } from '~/lib/utils/normalizePhoneNumberFr
 import { useAutoHideMessage } from '~/shared/hooks/use-auto-hide-message/useAutoHideMessage';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useHandlePhoneInput } from '~/shared/hooks/use-handle-phone-input/useHandlePhoneInput';
+import { hasValidEmailParts, nameRegex, normalizeNameSpaces } from '~/validators/contact.schema';
 
 export type ContactFormData = {
   name: string;
@@ -42,9 +43,6 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   const { isMobile, isTablet } = useBreakpoints();
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
-  const nameRegex = /^[\p{L}'’ -]+$/u;
-
-  const normalizeNameSpaces = (value: string) => value.trim().replace(/\s+/g, ' ');
 
   const phoneSchema = z
     .string()
@@ -79,7 +77,8 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
       .email(tErrors('emailInvalid'))
       .refine((value) => !value.includes('-.') && !value.endsWith('-'), {
         message: tErrors('emailInvalid')
-      }),
+      })
+      .refine(hasValidEmailParts, { message: tErrors('emailInvalid') }),
 
     phoneNumber: phoneSchema.optional(),
     message: z
@@ -165,6 +164,7 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
             {...register('email')}
             error={!!errors.email}
             helperText={errors.email?.message}
+            inputProps={{ maxLength: 254 }}
             disabled={disabled}
           />
           <TextField
