@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { mongoObjectIdSchema, translatedFieldSchema } from './constants';
+import { localizedBooleanSchema, mongoObjectIdSchema, translatedFieldSchema } from './constants';
 
 import { EventStatus } from '~/domain/dto/events.dto';
 
@@ -15,6 +15,8 @@ export const eventSchema = z.object({
   _id: mongoObjectIdSchema,
   title: translatedFieldSchema,
   description: translatedFieldSchema,
+  keywords: translatedFieldSchema.optional().nullable(),
+  allowIndexation: localizedBooleanSchema.optional().nullable(),
   content: z.object({
     uk: z.record(z.any()),
     en: z.record(z.any())

@@ -55,6 +55,10 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
     return fieldValue !== '';
   }
 
+  if (typeof fieldValue === 'boolean') {
+    return true;
+  }
+
   if (typeof fieldValue === 'object') {
     return doesTipTapHaveTranslations(fieldValue as z.infer<typeof TipTapDocSchema>);
   }

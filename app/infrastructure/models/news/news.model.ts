@@ -16,6 +16,14 @@ const newsSchema = new Schema<INewsDocument>(
       uk: { type: String },
       en: { type: String }
     },
+    keywords: {
+      uk: { type: String },
+      en: { type: String }
+    },
+    allowIndexation: {
+      uk: { type: Boolean },
+      en: { type: Boolean }
+    },
     content: {
       uk: { type: Object, required: true },
       en: { type: Object, required: true }

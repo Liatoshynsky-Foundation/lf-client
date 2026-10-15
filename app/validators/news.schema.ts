@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { translatedFieldSchema } from './constants';
+import { localizedBooleanSchema, translatedFieldSchema } from './constants';
 
 import { NewsStatus } from '~/domain/dto/news.dto';
 
@@ -49,6 +49,7 @@ export const newsSchema = z.object({
   title: translatedFieldSchema,
   description: translatedFieldSchema,
   keywords: translatedFieldSchema.optional().nullable(),
+  allowIndexation: localizedBooleanSchema.optional().nullable(),
   content: z.object({
     uk: z.record(z.any()),
     en: z.record(z.any())

@@ -31,6 +31,14 @@ export type NewsDTO = {
     uk: string;
     en: string;
   };
+  keywords?: {
+    uk: string;
+    en: string;
+  } | null;
+  allowIndexation?: {
+    uk: boolean;
+    en: boolean;
+  } | null;
   content: {
     uk: object;
     en: object;
