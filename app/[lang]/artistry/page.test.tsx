@@ -73,6 +73,8 @@ describe('Artistry Page', () => {
   it('should generate correct metadata with fallback', async () => {
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
       isError: false,
+      ok: true,
+      data: null,
       value: null
     });
 
@@ -84,7 +86,9 @@ describe('Artistry Page', () => {
   it('should generate metadata with CMS SEO values', async () => {
     const mockCmsData = {
       title: { uk: 'Творчість CMS', en: 'Artistry CMS' },
-      description: { uk: 'Опис творчості', en: 'Artistry description' }
+      description: { uk: 'Опис творчості', en: 'Artistry description' },
+      canonicalUrl: { uk: '/artistry-custom', en: '/en/artistry-custom' },
+      allowIndexation: { uk: true, en: true }
     };
 
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
@@ -99,6 +103,7 @@ describe('Artistry Page', () => {
 
     expect(metadata.title).toBe('Творчість CMS');
     expect(metadata.description).toBe('Опис творчості');
+    expect(metadata.robots).toBe('index, follow');
   });
 
   it('should render UnderDevelopment in production mode', async () => {
@@ -108,6 +113,19 @@ describe('Artistry Page', () => {
     render(ui);
 
     expect(screen.getByTestId('under-dev')).toBeInTheDocument();
+  });
+
+  it('should fallback to default metadata when data resolution fails with error', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: true,
+      error: new Error('Database error')
+    });
+
+    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
+    const metadata = await generateMetadata({ params: mockParamsUk });
+
+    expect(metadata).toBeDefined();
+    expect(metadata.title).toBe('title');
   });
 
   it('should render page content via PageBuilder and BlockRenderer in dev mode', async () => {

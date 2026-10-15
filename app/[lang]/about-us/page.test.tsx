@@ -75,12 +75,29 @@ describe('AbousUs page', () => {
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.aboutUs', '/');
   });
 
+  it('should fallback to default metadata when resolvePageData returns an error', async () => {
+    (getTranslations as jest.Mock).mockResolvedValue((key: string) => `translated_${key}`);
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: true,
+      error: new Error('Failed to load page')
+    });
+
+    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
+    const metadata = await generateMetadata({ params: mockParamsUk });
+
+    expect(metadata.title).toBe('translated_title');
+    expect(metadata.description).toBe('translated_description');
+  });
+
   it('should generate metadata using CMS values when available', async () => {
     (getTranslations as jest.Mock).mockResolvedValue((key: string) => `translated_${key}`);
 
     const mockCmsData = {
       title: { uk: 'Про нас CMS', en: 'About CMS' },
-      description: { uk: 'Опис CMS', en: 'Description CMS' }
+      description: { uk: 'Опис CMS', en: 'Description CMS' },
+      canonicalUrl: { uk: '/custom-about', en: '/en/custom-about' },
+      allowIndexation: { uk: true, en: true }
     };
 
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
@@ -95,6 +112,7 @@ describe('AbousUs page', () => {
 
     expect(metadata.title).toBe('Про нас CMS');
     expect(metadata.description).toBe('Опис CMS');
+    expect(metadata.robots).toBe('index, follow');
   });
 
   it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER with BLOCK_NAMES_MAP', async () => {
