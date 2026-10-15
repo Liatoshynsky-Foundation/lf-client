@@ -3,9 +3,11 @@ import { Locale } from 'next-intl';
 import { PageSlug, SchemaFactory } from './schema-factory';
 
 jest.mock('~/validators/pagesSchemas/pages/about-us.schema', () => ({
+  createAboutUsPageSchema: jest.fn(() => ({ __schema: 'about-us' })),
   AboutUsPageSchema: { __schema: 'about-us' }
 }));
 jest.mock('~/validators/pagesSchemas/pages/privacy-policy.schema', () => ({
+  createPrivacyPolicyPageSchema: jest.fn(() => ({ __schema: 'privacy-policy' })),
   PrivacyPolicyPageSchema: { __schema: 'privacy-policy' }
 }));
 jest.mock('~/validators/pagesSchemas/pages/research.schema', () => ({
@@ -18,9 +20,11 @@ jest.mock('~/validators/pagesSchemas/pages/cooperation.schema', () => ({
   CooperationPageSchema: { __schema: 'cooperation' }
 }));
 jest.mock('~/validators/pagesSchemas/pages/artistry.schema', () => ({
+  createArtistryPageSchema: jest.fn(() => ({ __schema: 'artistry' })),
   ArtistryPageSchema: { __schema: 'artistry' }
 }));
 jest.mock('~/validators/pagesSchemas/pages/war-in-ukraine.schema', () => ({
+  createWarInUkrainePageSchema: jest.fn(() => ({ __schema: 'war-in-ukraine' })),
   WarInUkrainePageSchema: { __schema: 'war-in-ukraine' }
 }));
 jest.mock('~/validators/pagesSchemas/pages/archive.schema', () => ({
@@ -54,35 +58,35 @@ jest.mock('~/validators/localization', () => {
 });
 
 import { LocalizeSchema } from '~/validators/localization';
-import { AboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
-import { ArchivePageSchema } from '~/validators/pagesSchemas/pages/archive.schema';
-import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
-import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
-import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
-import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
-import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
-import { WarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
+import { createAboutUsPageSchema } from '~/validators/pagesSchemas/pages/about-us.schema';
+import { createArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.schema';
+import { createPrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
+import { createWarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
 
 describe('SchemaFactory', () => {
   const locale: Locale = 'uk';
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it.each([
-    ['about-us', 'about-us', AboutUsPageSchema, { allowEmptyFields: ['list'] }],
-    ['privacy-policy', 'privacy-policy', PrivacyPolicyPageSchema, undefined],
-    ['research', 'research', ResearchPageSchema, undefined],
-    ['biography', 'biography', BiographyPageSchema, undefined],
-    ['cooperation', 'cooperation', CooperationPageSchema, undefined],
-    ['artistry', 'artistry', ArtistryPageSchema, undefined],
-    ['war-in-ukraine', 'war-in-ukraine', WarInUkrainePageSchema, undefined],
-    ['archive', 'archive', ArchivePageSchema, { allowEmptyFields: ['description'] }]
-  ] as const)('returns schema for slug "%s"', (slug, tag, schemaConst, expectedOptions) => {
+    ['about-us', 'about-us', createAboutUsPageSchema],
+    ['privacy-policy', 'privacy-policy', createPrivacyPolicyPageSchema],
+    ['research', 'research', null],
+    ['biography', 'biography', null],
+    ['cooperation', 'cooperation', null],
+    ['artistry', 'artistry', createArtistryPageSchema],
+    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema],
+    ['archive', 'archive', null]
+  ] as const)('returns localized schema for slug "%s"', (slug, tag, createSchema) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 
-    if (expectedOptions) {
-      expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining(schemaConst), locale, expectedOptions);
-    } else {
-      expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining(schemaConst), locale);
+    if (createSchema) {
+      expect(createSchema).toHaveBeenCalledWith(locale);
     }
+
+    expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: tag }), locale);
     expect(schema).toEqual({ __schema: tag, locale });
   });
 

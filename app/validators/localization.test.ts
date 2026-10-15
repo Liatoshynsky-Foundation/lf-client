@@ -1,6 +1,7 @@
 import { Locale } from 'next-intl';
 import z from 'zod';
 
+import { createFilledTipTapDoc, emptyTipTapDoc } from './__fixtures__/tiptap.fixtures';
 import { LocalizeSchema } from './localization';
 import { LocalizationErrors } from '~/constants/errors';
 
@@ -17,7 +18,7 @@ describe('LocalizeSchema', () => {
   });
 
   it('should localize the ArchivePage CMS description and allow it to be empty', async () => {
-    const transformer = LocalizeSchema(ArchivePageSchema, 'en' as Locale, { allowEmptyFields: ['description'] });
+    const transformer = LocalizeSchema(ArchivePageSchema, 'en' as Locale);
     const data = {
       _id: '6ab53b4580bb219111c9e999',
       pageType: 'ArchivePage',
@@ -28,7 +29,7 @@ describe('LocalizeSchema', () => {
         PageCaption: {
           description: {
             uk: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Вступ' }] }] },
-            en: { type: 'doc', content: [] }
+            en: emptyTipTapDoc
           }
         }
       }
@@ -36,7 +37,7 @@ describe('LocalizeSchema', () => {
 
     const result = await transformer.parseAsync(data);
 
-    expect(result.blocks.PageCaption.description).toEqual({ type: 'doc', content: [] });
+    expect(result.blocks.PageCaption.description).toEqual(emptyTipTapDoc);
   });
 
   it('should return primitive values untouched', async () => {
@@ -87,6 +88,69 @@ describe('LocalizeSchema', () => {
     expect(result).toEqual({ alt: '', caption: '' });
   });
 
+  it('should allow empty TipTap alt and caption for both locales', async () => {
+    const schema = z.object({
+      photo: z.object({
+        alt: z.unknown(),
+        caption: z.unknown()
+      })
+    });
+    const data = {
+      photo: {
+        alt: { uk: emptyTipTapDoc, en: emptyTipTapDoc },
+        caption: { uk: emptyTipTapDoc, en: emptyTipTapDoc }
+      }
+    };
+
+    await expect(LocalizeSchema(schema, 'uk' as Locale).parseAsync(data)).resolves.toEqual({
+      photo: { alt: emptyTipTapDoc, caption: emptyTipTapDoc }
+    });
+    await expect(LocalizeSchema(schema, 'en' as Locale).parseAsync(data)).resolves.toEqual({
+      photo: { alt: emptyTipTapDoc, caption: emptyTipTapDoc }
+    });
+  });
+
+  it('should allow empty TipTap name and description for Foundation Team members', async () => {
+    const filledTipTap = createFilledTipTapDoc('Олександра');
+    const schema = z.object({
+      members: z.array(
+        z.object({
+          name: z.unknown(),
+          description: z.unknown(),
+          photo: z.object({ alt: z.unknown() })
+        })
+      )
+    });
+    const data = {
+      members: [
+        {
+          name: { uk: filledTipTap, en: emptyTipTapDoc },
+          description: { uk: emptyTipTapDoc, en: emptyTipTapDoc },
+          photo: { alt: { uk: emptyTipTapDoc, en: emptyTipTapDoc } }
+        }
+      ]
+    };
+
+    await expect(LocalizeSchema(schema, 'uk' as Locale).parseAsync(data)).resolves.toEqual({
+      members: [
+        {
+          name: filledTipTap,
+          description: emptyTipTapDoc,
+          photo: { alt: emptyTipTapDoc }
+        }
+      ]
+    });
+    await expect(LocalizeSchema(schema, 'en' as Locale).parseAsync(data)).resolves.toEqual({
+      members: [
+        {
+          name: emptyTipTapDoc,
+          description: emptyTipTapDoc,
+          photo: { alt: emptyTipTapDoc }
+        }
+      ]
+    });
+  });
+
   it('should throw validation error when non-optional fields hold empty string records', async () => {
     const schema = z.object({ title: z.unknown() });
     const transformer = LocalizeSchema(schema, 'en' as Locale);
@@ -121,7 +185,7 @@ describe('LocalizeSchema', () => {
     });
   });
 
-  it('should invalidate tiptap node blocks if arrays contain empty text children keys', async () => {
+  it('should keep empty TipTap text nodes as a valid localized value', async () => {
     const schema = z.object({ body: z.record(z.unknown()) });
     const transformer = LocalizeSchema(schema, 'en' as Locale);
     const data = {
@@ -136,9 +200,7 @@ describe('LocalizeSchema', () => {
         }
       }
     };
-    await expect(transformer.parseAsync(data)).rejects.toThrow(
-      `${LocalizationErrors.MISSING_EN_ERROR} at path: root.body`
-    );
+    await expect(transformer.parseAsync(data)).resolves.toEqual({ body: data.body.en });
   });
 
   it('should fail validation workflows if internal localized mapping returns unsupported boolean type', async () => {
@@ -198,7 +260,7 @@ describe('LocalizeSchema', () => {
     expect(result).toEqual({ body: data.body.en });
   });
 
-  it('should invalidate tiptap doc when all nodes lack a content field', async () => {
+  it('should keep TipTap docs whose nodes lack text content as valid localized values', async () => {
     const schema = z.object({ body: z.record(z.unknown()) });
     const transformer = LocalizeSchema(schema, 'en' as Locale);
     const data = {
@@ -207,9 +269,7 @@ describe('LocalizeSchema', () => {
         uk: { content: [{ type: 'heading' }] }
       }
     };
-    await expect(transformer.parseAsync(data)).rejects.toThrow(
-      `${LocalizationErrors.MISSING_EN_ERROR} at path: root.body`
-    );
+    await expect(transformer.parseAsync(data)).resolves.toEqual({ body: data.body.en });
   });
 
   it('should fallback to en locale when uk field is empty', async () => {

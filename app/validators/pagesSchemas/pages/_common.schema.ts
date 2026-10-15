@@ -1,6 +1,7 @@
+import { Locale } from 'next-intl';
 import { z } from 'zod';
 
-import { translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import { requiredTranslatedTipTapSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
 
 const CropRectSchema = z
   .union([
@@ -53,7 +54,9 @@ export const QuoteSchema = z.object({
   source: translatedFieldSchema
 });
 
-export const TipTapQuoteSchema = z.object({
-  text: translatedTipTapSchema,
-  source: translatedTipTapSchema
-});
+export function createTipTapQuoteSchema(locale: Locale) {
+  return z.object({
+    text: requiredTranslatedTipTapSchema(locale),
+    source: requiredTranslatedTipTapSchema(locale)
+  });
+}
