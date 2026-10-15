@@ -5,6 +5,12 @@ import React from 'react';
 import Artistry, { generateMetadata } from './page';
 import * as envUtils from '~/utils/isProductionMode';
 
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn()
@@ -64,10 +70,35 @@ describe('Artistry Page', () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
-  it('should generate correct metadata', async () => {
-    const metadata = await generateMetadata({ params: mockParams } as any);
+  it('should generate correct metadata with fallback', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      value: null
+    });
+
+    const metadata = await generateMetadata({ params: mockParams });
+    expect(metadata).toBeDefined();
     expect(metadata.title).toBe('title');
-    expect(metadata.description).toBe('description');
+  });
+
+  it('should generate metadata with CMS SEO values', async () => {
+    const mockCmsData = {
+      title: { uk: 'Творчість CMS', en: 'Artistry CMS' },
+      description: { uk: 'Опис творчості', en: 'Artistry description' }
+    };
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: mockCmsData,
+      value: mockCmsData
+    });
+
+    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
+    const metadata = await generateMetadata({ params: mockParamsUk });
+
+    expect(metadata.title).toBe('Творчість CMS');
+    expect(metadata.description).toBe('Опис творчості');
   });
 
   it('should render UnderDevelopment in production mode', async () => {

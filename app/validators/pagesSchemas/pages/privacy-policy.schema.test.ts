@@ -1,3 +1,4 @@
+import { describeSeoFieldsSupport } from './__tests__/testSeoFieldsSupport';
 import { PrivacyPolicyPageSchema } from './privacy-policy.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
@@ -123,4 +124,5 @@ describe('PrivacyPolicyPageSchema regression', () => {
       expect(parsedData.blocks[blockId].hidden).toBe(true);
     });
   });
+  describeSeoFieldsSupport('PrivacyPolicyPageSchema', PrivacyPolicyPageSchema, createMockPayload);
 });

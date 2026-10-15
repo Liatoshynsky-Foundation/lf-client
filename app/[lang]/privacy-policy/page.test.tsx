@@ -9,6 +9,11 @@ interface MockProps {
     title: string;
   };
 }
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
 
 jest.mock('~/components/blocks/privacy-policy/intro-section/IntroSection', () => ({
   __esModule: true,
@@ -75,6 +80,11 @@ describe('PrivacyPolicy page', () => {
   });
 
   it('should correctly generate page metadata', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValue({
+      isError: false,
+      value: null
+    });
+
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.privacyPolicy', '/privacy-policy');
   });
 

@@ -77,7 +77,8 @@ export const testGeneratePageMetadata = async (
     title: 'translated_title',
     description: 'translated_description',
     url: expectedUrl,
-    locale: 'en'
+    locale: 'en',
+    robots: 'index, follow'
   });
 };
 

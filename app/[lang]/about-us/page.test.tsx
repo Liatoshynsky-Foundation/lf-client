@@ -1,9 +1,22 @@
+import { getTranslations } from 'next-intl/server';
+
 import {
   testGeneratePageMetadata,
   testPassLangSlugToPageBuilder,
   testReturnBlockRenderer
 } from '../__mocks__/runCommonPageTests';
 import Home, { generateMetadata } from './page';
+
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => `translated_${key}`),
+  setRequestLocale: jest.fn()
+}));
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -54,7 +67,34 @@ describe('AbousUs page', () => {
   });
 
   it('should correctly generate page metadata', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValue({
+      isError: false,
+      value: null
+    });
+
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.aboutUs', '/');
+  });
+
+  it('should generate metadata using CMS values when available', async () => {
+    (getTranslations as jest.Mock).mockResolvedValue((key: string) => `translated_${key}`);
+
+    const mockCmsData = {
+      title: { uk: 'Про нас CMS', en: 'About CMS' },
+      description: { uk: 'Опис CMS', en: 'Description CMS' }
+    };
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: mockCmsData,
+      value: mockCmsData
+    });
+
+    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
+    const metadata = await generateMetadata({ params: mockParamsUk });
+
+    expect(metadata.title).toBe('Про нас CMS');
+    expect(metadata.description).toBe('Опис CMS');
   });
 
   it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER with BLOCK_NAMES_MAP', async () => {

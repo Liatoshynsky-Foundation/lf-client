@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
@@ -26,5 +27,6 @@ export const ArtistryPageSchema = z.object({
   blocksOrder: z.array(z.string()).min(1),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  _id: mongoObjectIdSchema
+  _id: mongoObjectIdSchema,
+  ...pageSeoFields
 });
