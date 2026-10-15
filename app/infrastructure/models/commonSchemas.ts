@@ -24,3 +24,13 @@ export const carouselImageSchema = new mongoose.Schema({
   altText: { type: translatedFieldSchema, required: true },
   crop: { type: cropSchema, default: null }
 });
+
+export const localizedStringSchema = {
+  uk: { type: String },
+  en: { type: String }
+};
+
+export const localizedBooleanSchema = {
+  uk: { type: Boolean },
+  en: { type: Boolean }
+};

@@ -1,5 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
+import { localizedBooleanSchema, localizedStringSchema } from '../commonSchemas';
+
 import { EventDTO, EventStatus } from '~/domain/dto/events.dto';
 
 export interface IEventDocument extends Omit<EventDTO, '_id'>, Document {}
@@ -30,18 +32,9 @@ const eventSchema = new Schema<IEventDocument>(
       uk: { type: String, required: true },
       en: { type: String, required: true }
     },
-    description: {
-      uk: { type: String },
-      en: { type: String }
-    },
-    keywords: {
-      uk: { type: String },
-      en: { type: String }
-    },
-    allowIndexation: {
-      uk: { type: Boolean },
-      en: { type: Boolean }
-    },
+    description: localizedStringSchema,
+    keywords: localizedStringSchema,
+    allowIndexation: localizedBooleanSchema,
     content: {
       uk: { type: Object, required: true },
       en: { type: Object, required: true }
