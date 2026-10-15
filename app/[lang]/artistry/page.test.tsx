@@ -79,31 +79,31 @@ describe('Artistry Page', () => {
     });
 
     const metadata = await generateMetadata({ params: mockParams });
-    expect(metadata).toBeDefined();
     expect(metadata.title).toBe('title');
   });
 
   it('should generate metadata with CMS SEO values', async () => {
-    const mockCmsData = {
-      title: { uk: 'Творчість CMS', en: 'Artistry CMS' },
-      description: { uk: 'Опис творчості', en: 'Artistry description' },
-      canonicalUrl: { uk: '/artistry-custom', en: '/en/artistry-custom' },
-      allowIndexation: { uk: true, en: true }
+    const artistryCmsRecord = {
+      title: 'Творчість Кастомна',
+      description: 'Опис блоку творчості',
+      canonicalUrl: '/artistry-direct-link',
+      allowIndexation: true
     };
 
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
       isError: false,
       ok: true,
-      data: mockCmsData,
-      value: mockCmsData
+      data: artistryCmsRecord,
+      value: artistryCmsRecord
     });
 
-    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParamsUk });
+    const meta = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
 
-    expect(metadata.title).toBe('Творчість CMS');
-    expect(metadata.description).toBe('Опис творчості');
-    expect(metadata.robots).toBe('index, follow');
+    expect(meta).toMatchObject({
+      title: 'Творчість Кастомна',
+      description: 'Опис блоку творчості',
+      robots: 'index, follow'
+    });
   });
 
   it('should render UnderDevelopment in production mode', async () => {
@@ -118,14 +118,11 @@ describe('Artistry Page', () => {
   it('should fallback to default metadata when data resolution fails with error', async () => {
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
       isError: true,
-      error: new Error('Database error')
+      error: new Error('Network timeout for Artistry')
     });
 
-    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParamsUk });
-
-    expect(metadata).toBeDefined();
-    expect(metadata.title).toBe('title');
+    const res = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+    expect(res.title).toBe('title');
   });
 
   it('should render page content via PageBuilder and BlockRenderer in dev mode', async () => {

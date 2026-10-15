@@ -76,43 +76,41 @@ describe('AbousUs page', () => {
   });
 
   it('should fallback to default metadata when resolvePageData returns an error', async () => {
-    (getTranslations as jest.Mock).mockResolvedValue((key: string) => `translated_${key}`);
-
+    (getTranslations as jest.Mock).mockResolvedValue((token: string) => `static_${token}`);
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
       isError: true,
-      error: new Error('Failed to load page')
+      error: 'Cannot fetch about-us data'
     });
 
-    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParamsUk });
+    const fallbackResponse = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
 
-    expect(metadata.title).toBe('translated_title');
-    expect(metadata.description).toBe('translated_description');
+    expect(fallbackResponse.title).toBe('static_title');
+    expect(fallbackResponse.description).toBe('static_description');
   });
 
   it('should generate metadata using CMS values when available', async () => {
-    (getTranslations as jest.Mock).mockResolvedValue((key: string) => `translated_${key}`);
+    (getTranslations as jest.Mock).mockResolvedValue((token: string) => `static_${token}`);
 
-    const mockCmsData = {
-      title: { uk: 'Про нас CMS', en: 'About CMS' },
-      description: { uk: 'Опис CMS', en: 'Description CMS' },
-      canonicalUrl: { uk: '/custom-about', en: '/en/custom-about' },
+    const aboutPayload = {
+      title: { uk: 'Про Фундацію Офіційно', en: 'About Foundation Official' },
+      description: { uk: 'Головна інформація про організацію', en: 'Main foundation info' },
+      canonicalUrl: { uk: '/foundation-page', en: '/en/foundation-page' },
       allowIndexation: { uk: true, en: true }
     };
 
     (resolvePageData as jest.Mock).mockResolvedValueOnce({
       isError: false,
       ok: true,
-      data: mockCmsData,
-      value: mockCmsData
+      data: aboutPayload,
+      value: aboutPayload
     });
 
-    const mockParamsUk = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParamsUk });
+    const targetParams = Promise.resolve({ lang: 'uk' as const });
+    const output = await generateMetadata({ params: targetParams });
 
-    expect(metadata.title).toBe('Про нас CMS');
-    expect(metadata.description).toBe('Опис CMS');
-    expect(metadata.robots).toBe('index, follow');
+    expect(output.title).toBe('Про Фундацію Офіційно');
+    expect(output.description).toBe('Головна інформація про організацію');
+    expect(output.robots).toBe('index, follow');
   });
 
   it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER with BLOCK_NAMES_MAP', async () => {
