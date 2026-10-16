@@ -76,12 +76,16 @@ export async function getPageMetadata(params: Language['params'], pageConfig: Pa
     ? customCanonical
     : (metadata.alternates?.canonical ?? metadata.openGraph?.url);
 
+  const alternates = finalCanonicalUrl
+    ? {
+        ...metadata.alternates,
+        canonical: finalCanonicalUrl
+      }
+    : metadata.alternates;
+
   return {
     ...metadata,
     robots: allowIndexation ? 'index, follow' : 'noindex, nofollow',
-    alternates: {
-      ...metadata.alternates,
-      canonical: finalCanonicalUrl
-    }
+    ...(alternates && { alternates })
   };
 }
