@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import VolunteerDonation from '~/components/blocks/volunteer-donation/VolunteerDonation';
@@ -7,8 +6,10 @@ import WarInfoSection from '~/components/blocks/war-info/WarInfoSection';
 
 import { WarInUkrainePage } from '~/types/page/pagesBase.type';
 import type { Language } from '~/types/types/language';
-import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isError, UnwrapResult } from '~/types/types/result';
 
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import ImageCarouselSection from '~/shared/components/blocks/image-carousel-section/ImageCarouselSection';
 import PrincipleOfHope from '~/shared/components/blocks/principle-of-hope/PrincipleOfHope';
@@ -17,16 +18,16 @@ import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
-  const { lang } = await params;
-  setRequestLocale(lang);
+  return getPageMetadata(params, {
+    pageTranslationKey: 'meta.pages.warInUkraine',
+    pageRoute: ROUTES.WAR_IN_UKRAINE,
+    fetchPageMetaData: async () => {
+      const { lang } = await params;
+      const pageResult = await resolvePageData('war-in-ukraine', lang);
 
-  const t = await getTranslations('meta.pages.warInUkraine');
-
-  return createSeoMeta({
-    title: t('title'),
-    description: t('description'),
-    url: ROUTES.WAR_IN_UKRAINE,
-    locale: lang
+      if (isError(pageResult)) return null;
+      return UnwrapResult(pageResult);
+    }
   });
 }
 

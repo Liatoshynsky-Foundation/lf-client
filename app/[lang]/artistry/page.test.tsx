@@ -5,6 +5,12 @@ import React from 'react';
 import Artistry, { generateMetadata } from './page';
 import * as envUtils from '~/utils/isProductionMode';
 
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn()
@@ -64,10 +70,40 @@ describe('Artistry Page', () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
-  it('should generate correct metadata', async () => {
-    const metadata = await generateMetadata({ params: mockParams } as any);
+  it('should generate correct metadata with fallback', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: null,
+      value: null
+    });
+
+    const metadata = await generateMetadata({ params: mockParams });
     expect(metadata.title).toBe('title');
-    expect(metadata.description).toBe('description');
+  });
+
+  it('should generate metadata with CMS SEO values', async () => {
+    const artistryCmsRecord = {
+      title: 'Творчість Кастомна',
+      description: 'Опис блоку творчості',
+      canonicalUrl: '/artistry-direct-link',
+      allowIndexation: true
+    };
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: artistryCmsRecord,
+      value: artistryCmsRecord
+    });
+
+    const meta = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+
+    expect(meta).toMatchObject({
+      title: 'Творчість Кастомна',
+      description: 'Опис блоку творчості',
+      robots: 'index, follow'
+    });
   });
 
   it('should render UnderDevelopment in production mode', async () => {
@@ -77,6 +113,16 @@ describe('Artistry Page', () => {
     render(ui);
 
     expect(screen.getByTestId('under-dev')).toBeInTheDocument();
+  });
+
+  it('should fallback to default metadata when data resolution fails with error', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: true,
+      error: new Error('Network timeout for Artistry')
+    });
+
+    const res = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+    expect(res.title).toBe('title');
   });
 
   it('should render page content via PageBuilder and BlockRenderer in dev mode', async () => {

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import FoundationFounders from '~/components/blocks/FoundationFounders/FoundationFounders';
@@ -11,24 +10,26 @@ import WhatWeDo from '~/components/blocks/what-we-do/WhatWeDo';
 
 import { AboutUsPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
-import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isError, UnwrapResult } from '~/types/types/result';
 
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { IntroSection } from '~/shared/components/blocks/IntroSection/IntroSection';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
-  const { lang } = await params;
-  setRequestLocale(lang);
+  return getPageMetadata(params, {
+    pageTranslationKey: 'meta.pages.aboutUs',
+    pageRoute: ROUTES.HOME,
+    fetchPageMetaData: async () => {
+      const { lang } = await params;
+      const pageResult = await resolvePageData('about-us', lang);
 
-  const t = await getTranslations('meta.pages.aboutUs');
-
-  return createSeoMeta({
-    title: t('title'),
-    description: t('description'),
-    url: ROUTES.HOME,
-    locale: lang
+      if (isError(pageResult)) return null;
+      return UnwrapResult(pageResult);
+    }
   });
 }
 
