@@ -208,7 +208,7 @@
         "year": "Рік створення"
       },
       "name": {
-        "composition": "Усі Композиції"
+        "composition": "Усі композиції"
       },
       "notFound": {
         "title": "Ой! ПоРожНьО",
@@ -385,7 +385,7 @@
       "title": ""
     },
     "videos": {
-      "title": "Версії виконання опусу:",
+      "title": "Виконання",
       "thumbnailAlt": "Відео виконання опусу на YouTube"
     },
     "placeholder": {

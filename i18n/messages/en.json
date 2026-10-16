@@ -197,7 +197,7 @@
     },
     "columns": {
       "opus": "Opus",
-      "name": "Name",
+      "name": "Title",
       "year": "Year",
       "genre": "Genre"
     },
@@ -205,10 +205,10 @@
       "filters": {
         "category": "Category",
         "genre": "Genre",
-        "year": "Year of composition"
+        "year": "Year of Composition"
       },
       "name": {
-        "composition": "All compositions"
+        "composition": "All Compositions"
       },
       "notFound": {
         "title": "OoPs! NoThinG HeRe",
@@ -385,7 +385,7 @@
       "title": "Compositions:"
     },
     "videos": {
-      "title": "Opus performance versions:",
+      "title": "Performances",
       "thumbnailAlt": "Opus performance video on YouTube"
     },
     "placeholder": {

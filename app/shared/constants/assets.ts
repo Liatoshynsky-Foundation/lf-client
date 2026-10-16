@@ -10,5 +10,5 @@ export const IMAGES = {
   WAR_IN_UKRAINE_CAROUSEL: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/war-in-ukraine-carousel-${index}.png`,
   BIOGRAPHY_LIATOSHYNSKY_HERO_SECTION: `${PUBLIC_STORAGE_BASE_URL}/photos/biography-liatoshynsky-hero-section.png`,
   MAIN_BIOGRAPHY_GALLERY: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/main-biography-gallery-${index}.png`,
-  MEDIA_LF_OFFICE: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/media-lf-office-${index}.png`
+  MEDIA_LF_OFFICE: (index: number) => `${PUBLIC_STORAGE_BASE_URL}/photos/media-lf-office-${index}.webp`
 } as const;
