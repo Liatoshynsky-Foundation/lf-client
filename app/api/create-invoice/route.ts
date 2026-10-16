@@ -4,6 +4,7 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 import { v4 as uuidv4 } from 'uuid';
 
 import { errors } from '~/constants/errors';
+import { Currency } from '~/types/types/common.types';
 import { WayforPayInvoice } from '~/types/types/wayForPay';
 import { errorResponse } from '~/utils/apiResponse';
 
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
       return errorResponse(['Invalid donation amount. Amount must be at least 1.'], 400);
     }
 
-    const allowedCurrencies = ['UAH', 'USD', 'EUR'];
+    const allowedCurrencies: Currency[] = ['UAH', 'USD', 'EUR', 'GBP', 'PLN', 'AUD', 'CAD'];
     const finalCurrency = currency ?? 'UAH';
     if (!allowedCurrencies.includes(finalCurrency)) {
       return errorResponse(['Unsupported currency'], 400);

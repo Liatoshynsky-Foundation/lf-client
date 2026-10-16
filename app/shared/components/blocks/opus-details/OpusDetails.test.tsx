@@ -18,7 +18,7 @@ const labels: OpusDetailsLabels = {
   metaGenre: 'Жанр:',
   viewSheetMusic: 'Переглянути ноти',
   compositionsTitle: 'Твори:',
-  videosTitle: 'Версії виконання опусу:',
+  videosTitle: 'Виконання',
   placeholderTitle: 'СкоРо БуДе',
   placeholderSubtitle: 'Ця сторінка ще доповнюється.',
   placeholderImageAlt: 'Кіт-архіваріус',
