@@ -11,6 +11,11 @@ export const translatedFieldSchema = z.object({
   en: z.string()
 });
 
+export const localizedBooleanSchema = z.object({
+  uk: z.boolean(),
+  en: z.boolean()
+});
+
 export const translatedTipTapSchema = z.object({
   uk: z.union([TipTapDocSchema, z.string()]),
   en: z.union([TipTapDocSchema, z.string()])
