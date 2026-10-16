@@ -1,6 +1,10 @@
+import { Locale } from 'next-intl';
 import { z } from 'zod';
 
-import { TipTapDocSchema } from './pagesSchemas/tiptap.schema';
+import { LocalizationErrors } from '~/constants/errors';
+
+import { hasTipTapLocaleContent } from '~/validators/localization.utils';
+import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 export const hrefSchema = z.string().refine((val) => /^\/[^\s]*$/.test(val) || /^https?:\/\//.test(val), {
   message: 'Must be a valid relative or absolute URL'
@@ -15,6 +19,32 @@ export const translatedTipTapSchema = z.object({
   uk: z.union([TipTapDocSchema, z.string()]),
   en: z.union([TipTapDocSchema, z.string()])
 });
+
+export const localizedTipTapDocSchema = z.object({
+  uk: TipTapDocSchema,
+  en: TipTapDocSchema
+});
+
+function refineRequiredTipTapLocale(locale: Locale) {
+  return (value: { uk: unknown; en: unknown }, ctx: z.RefinementCtx) => {
+    if (hasTipTapLocaleContent(value[locale])) {
+      return;
+    }
+
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR
+    });
+  };
+}
+
+export function requiredTranslatedTipTapSchema(locale: Locale) {
+  return translatedTipTapSchema.superRefine(refineRequiredTipTapLocale(locale));
+}
+
+export function requiredLocalizedTipTapDocSchema(locale: Locale) {
+  return localizedTipTapDocSchema.superRefine(refineRequiredTipTapLocale(locale));
+}
 
 export const translatedLinkSchema = z.object({
   label: translatedFieldSchema,
