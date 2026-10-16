@@ -5,6 +5,9 @@ import { Language } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
+const ABSOLUTE_URL_REGEX = /^https?:\/\//i;
+const isAbsoluteUrl = (url: string): boolean => ABSOLUTE_URL_REGEX.test(url);
+
 export interface PageMetadataConfig {
   pageTranslationKey: string;
   pageRoute: string;
@@ -44,8 +47,13 @@ export async function getPageMetadata(params: Language['params'], pageConfig: Pa
   const title = typeof rawTitle === 'string' && rawTitle.trim() !== '' ? rawTitle : t('title');
   const description =
     typeof rawDescription === 'string' && rawDescription.trim() !== '' ? rawDescription : t('description');
-  const canonicalUrl =
-    typeof rawCanonicalUrl === 'string' && rawCanonicalUrl.trim() !== '' ? rawCanonicalUrl : pageConfig.pageRoute;
+
+  const customCanonical =
+    typeof rawCanonicalUrl === 'string' && rawCanonicalUrl.trim() !== '' ? rawCanonicalUrl.trim() : null;
+
+  const hasAbsoluteCanonical = Boolean(customCanonical && isAbsoluteUrl(customCanonical));
+
+  const seoMetaUrl = hasAbsoluteCanonical ? pageConfig.pageRoute : (customCanonical ?? pageConfig.pageRoute);
   const allowIndexation = typeof rawAllowIndexation === 'boolean' ? rawAllowIndexation : true;
 
   const keywords =
@@ -59,13 +67,21 @@ export async function getPageMetadata(params: Language['params'], pageConfig: Pa
   const metadata = createSeoMeta({
     title,
     description,
-    url: canonicalUrl,
+    url: seoMetaUrl,
     locale: lang,
     ...(keywords && { keywords })
   });
 
+  const finalCanonicalUrl = hasAbsoluteCanonical
+    ? customCanonical
+    : (metadata.alternates?.canonical ?? metadata.openGraph?.url);
+
   return {
     ...metadata,
-    robots: allowIndexation ? 'index, follow' : 'noindex, nofollow'
+    robots: allowIndexation ? 'index, follow' : 'noindex, nofollow',
+    alternates: {
+      ...metadata.alternates,
+      canonical: finalCanonicalUrl
+    }
   };
 }

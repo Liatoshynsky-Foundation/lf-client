@@ -41,5 +41,18 @@ export function describeSeoFieldsSupport(
 
       expect(result.success).toBe(false);
     });
+
+    it('should validate successfully with migrated empty string values', () => {
+      const migratedData = {
+        ...getBaseValidData(),
+        description: { uk: '', en: '' },
+        keywords: { uk: '', en: '' },
+        canonicalUrl: { uk: '', en: '' },
+        allowIndexation: { uk: true, en: true }
+      };
+
+      const result = schema.safeParse(migratedData);
+      expect(result.success).toBe(true);
+    });
   });
 }

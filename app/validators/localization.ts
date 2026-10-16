@@ -43,7 +43,14 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
     return true;
   }
 
-  if (!fieldValue && (path.endsWith('.ticketUrl') || path.endsWith('.canonicalUrl') || path.endsWith('.keywords'))) {
+  if (
+    !fieldValue &&
+    (path.endsWith('.ticketUrl') ||
+      path.endsWith('.canonicalUrl') ||
+      path.endsWith('.keywords') ||
+      path === 'root.description' ||
+      path.endsWith('.description'))
+  ) {
     return true;
   }
 
@@ -53,6 +60,7 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
       path.endsWith('.caption') ||
       path.endsWith('.genre') ||
       (locale === 'en' && path.endsWith('.description')) ||
+      path === 'root.description' ||
       path.endsWith('.canonicalUrl') ||
       path.endsWith('.keywords');
 

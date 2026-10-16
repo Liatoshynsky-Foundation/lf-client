@@ -43,11 +43,12 @@ describe('getPageMetadata', () => {
     expect(createSeoMeta).toHaveBeenCalledWith({
       title: 'ДоСлІдЖЕннЯ ТА НауКовІ РоБотИ',
       description: 'Науковий опис досліджень',
-      url: 'https://liatoshynsky.com/uk/research',
+      url: '/uk/research',
       locale: 'uk',
       keywords: ['лятошинський', 'дослідження', 'архів']
     });
     expect(result.robots).toBe('index, follow');
+    expect(result.alternates?.canonical).toBe('https://liatoshynsky.com/uk/research');
   });
 
   it('should extract correct language when CMS data provides a localized object { uk, en }', async () => {
@@ -137,5 +138,19 @@ describe('getPageMetadata', () => {
     });
 
     expect(result.robots).toBe('noindex, nofollow');
+  });
+
+  it('should preserve absolute canonical URL without prepending baseUrl/locale', async () => {
+    const mockDataWithAbsoluteUrl = {
+      canonicalUrl: 'https://site.ua/custom-canonical-page'
+    };
+
+    const result = await getPageMetadata(mockParamsUk, {
+      pageTranslationKey: 'meta.pages.test',
+      pageRoute: '/default-route',
+      fetchPageMetaData: jest.fn().mockResolvedValue(mockDataWithAbsoluteUrl)
+    });
+
+    expect(result.alternates?.canonical).toBe('https://site.ua/custom-canonical-page');
   });
 });
