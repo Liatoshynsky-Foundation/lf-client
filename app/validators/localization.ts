@@ -39,7 +39,17 @@ function doesTipTapHaveTranslations(root: z.infer<typeof TipTapDocSchema>): bool
 function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, path: string): boolean {
   const fieldValue = value[locale];
 
-  if (!fieldValue && path.endsWith('.ticketUrl')) {
+  if (path.endsWith('.allowIndexation')) {
+    return true;
+  }
+
+  if (
+    !fieldValue &&
+    (path.endsWith('.ticketUrl') ||
+      path.endsWith('.canonicalUrl') ||
+      path.endsWith('.keywords') ||
+      path === 'root.description')
+  ) {
     return true;
   }
 
@@ -48,7 +58,11 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
       path.endsWith('.alt') ||
       path.endsWith('.caption') ||
       path.endsWith('.genre') ||
-      (locale === 'en' && path.endsWith('.description'));
+      (locale === 'en' && path.endsWith('.description')) ||
+      path === 'root.description' ||
+      path.endsWith('.canonicalUrl') ||
+      path.endsWith('.keywords');
+
     if (fieldValue === '' && isOptionalField) {
       return true;
     }
@@ -61,6 +75,7 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
 
   return false;
 }
+
 function translationErrorFactory(locale: Locale, path: string): Error {
   const baseMessage = locale === 'en' ? LocalizationErrors.MISSING_EN_ERROR : LocalizationErrors.MISSING_UK_ERROR;
   return new Error(`${baseMessage} at path: ${path}`);

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import type { VolunteerDonationProps } from '~/components/blocks/volunteer-donation/VolunteerDonation';
@@ -9,9 +9,14 @@ import WarInUkraine, { generateMetadata } from './page';
 import type { WarInUkrainePage } from '~/types/page/pagesBase.type';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import type { ImageCarouselSectionProps } from '~/shared/components/blocks/image-carousel-section/ImageCarouselSection';
 import type { PrincipleOfHopeProps } from '~/shared/components/blocks/principle-of-hope/PrincipleOfHope';
 import type { YermolenkoLinksProps } from '~/shared/components/blocks/yermolenko-links/YermolenkoLinks';
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
 
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
@@ -109,23 +114,57 @@ describe('WarInUkraine page', () => {
   });
 
   describe('generateMetadata', () => {
-    it('should build SEO metadata from translations for the given locale', async () => {
+    it('should build SEO metadata from translations when CMS data is absent', async () => {
+      (resolvePageData as jest.Mock).mockResolvedValueOnce({
+        isError: false,
+        value: null
+      });
+
       const metadata = await generateMetadata({ params: mockParams });
 
       expect(setRequestLocale).toHaveBeenCalledWith('uk');
-      expect(getTranslations).toHaveBeenCalledWith('meta.pages.warInUkraine');
-      expect(createSeoMeta).toHaveBeenCalledWith({
-        title: 'title',
-        description: 'description',
-        url: expect.any(String),
-        locale: 'uk'
+      expect(createSeoMeta).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'title',
+          description: 'description',
+          locale: 'uk'
+        })
+      );
+      expect(metadata).toEqual(
+        expect.objectContaining({
+          title: 'title',
+          description: 'description',
+          locale: 'uk'
+        })
+      );
+    });
+
+    it('should build SEO metadata from CMS values when available', async () => {
+      const mockData = {
+        title: { uk: 'Війна в Україні CMS', en: 'War in Ukraine CMS' },
+        description: { uk: 'Опис війни', en: 'War description' },
+        canonicalUrl: { uk: '/war-custom', en: '/en/war-custom' },
+        allowIndexation: { uk: true, en: true }
+      };
+
+      (resolvePageData as jest.Mock).mockResolvedValueOnce({
+        isError: false,
+        ok: true,
+        data: mockData,
+        value: mockData
       });
-      expect(metadata).toEqual({
-        title: 'title',
-        description: 'description',
-        url: expect.any(String),
-        locale: 'uk'
-      });
+
+      const metadata = await generateMetadata({ params: mockParams });
+
+      expect(metadata).toEqual(
+        expect.objectContaining({
+          title: 'Війна в Україні CMS',
+          description: 'Опис війни',
+          url: '/war-custom',
+          locale: 'uk',
+          robots: 'index, follow'
+        })
+      );
     });
   });
 

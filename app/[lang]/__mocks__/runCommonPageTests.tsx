@@ -73,12 +73,15 @@ export const testGeneratePageMetadata = async (
     locale: 'en'
   });
 
-  expect(meta).toEqual({
-    title: 'translated_title',
-    description: 'translated_description',
-    url: expectedUrl,
-    locale: 'en'
-  });
+  expect(meta).toEqual(
+    expect.objectContaining({
+      title: 'translated_title',
+      description: 'translated_description',
+      url: expectedUrl,
+      locale: 'en',
+      robots: 'index, follow'
+    })
+  );
 };
 
 interface TestReturnBlockRendererArgs {
