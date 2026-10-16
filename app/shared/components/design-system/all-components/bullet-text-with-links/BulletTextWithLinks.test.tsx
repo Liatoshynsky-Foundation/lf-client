@@ -26,7 +26,6 @@ jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
 }));
 
 jest.mock('~/public/icons/arrow-up-right.svg', () => <div />);
-jest.mock('~/public/icons/facebook.svg', () => <div />);
 
 describe('BulletTextWithlinks component', () => {
   const useBreakpointsMock = useBreakpoints as jest.Mock;
