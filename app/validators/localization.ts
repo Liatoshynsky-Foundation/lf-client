@@ -48,8 +48,7 @@ function validTranslatedField(value: TranslatedField<unknown>, locale: Locale, p
     (path.endsWith('.ticketUrl') ||
       path.endsWith('.canonicalUrl') ||
       path.endsWith('.keywords') ||
-      path === 'root.description' ||
-      path.endsWith('.description'))
+      path === 'root.description')
   ) {
     return true;
   }
