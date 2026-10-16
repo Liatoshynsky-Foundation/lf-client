@@ -63,15 +63,9 @@ export const heroSectionStyles = {
 
   heroCharacter: {
     position: 'absolute' as const,
-    left: {
-      sm: '0',
-      md: '-19px'
-    },
+    left: '0',
     bottom: '0',
-    top: {
-      xs: '0',
-      sm: '-22px'
-    },
+    top: '0',
     width: {
       xs: '100%',
       sm: '60%',
