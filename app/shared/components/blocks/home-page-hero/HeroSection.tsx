@@ -23,7 +23,7 @@ export type Props = {
 
 const imagesPaths = {
   heroBackgroundImage: '/images/main-page-hero-section/main-hero-background-image.webp',
-  heroCharacterImage: '/images/main-page-hero-section/main-hero-character-image.webp',
+  heroCharacterImage: '/images/main-page-hero-section/main-hero-character-image.png',
   textLogo: '/images/main-page-hero-section/textLogo.svg',
   pauseIcon: '/images/main-page-hero-section/pause-icon.svg',
   playIcon: '/images/main-page-hero-section/play-icon.svg'
