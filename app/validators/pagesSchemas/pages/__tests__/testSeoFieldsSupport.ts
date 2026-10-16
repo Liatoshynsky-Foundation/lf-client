@@ -12,7 +12,7 @@ export function describeSeoFieldsSupport(
   schema: z.ZodTypeAny,
   getBaseValidData: () => Record<string, unknown>
 ) {
-  describe(`${schemaName} - SEO fields support`, () => {
+  describe(`${schemaName} SEO fields support`, () => {
     it('should validate successfully without SEO fields (backwards compatibility)', () => {
       const dataWithoutSeo = getBaseValidData();
       const result = schema.safeParse(dataWithoutSeo);
@@ -56,3 +56,9 @@ export function describeSeoFieldsSupport(
     });
   });
 }
+
+describe('testSeoFieldsSupport helper', () => {
+  it('should be defined as a reusable testing utility', () => {
+    expect(describeSeoFieldsSupport).toBeDefined();
+  });
+});
