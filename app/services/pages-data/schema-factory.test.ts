@@ -77,8 +77,7 @@ describe('SchemaFactory', () => {
     ['biography', 'biography', null],
     ['cooperation', 'cooperation', null],
     ['artistry', 'artistry', createArtistryPageSchema],
-    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema],
-    ['archive', 'archive', null]
+    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema]
   ] as const)('returns localized schema for slug "%s"', (slug, tag, createSchema) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 
@@ -88,6 +87,15 @@ describe('SchemaFactory', () => {
 
     expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: tag }), locale);
     expect(schema).toEqual({ __schema: tag, locale });
+  });
+
+  it('returns localized archive schema with allowEmptyFields for description', () => {
+    const schema = SchemaFactory('archive', locale);
+
+    expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: 'archive' }), locale, {
+      allowEmptyFields: ['description']
+    });
+    expect(schema).toEqual({ __schema: 'archive', locale });
   });
 
   it('returns undefined for unknown slug', () => {

@@ -10,6 +10,8 @@ type TipTapLikeDoc = {
 
 const OPTIONAL_EMPTY_STRING_PATH_SUFFIXES = ['.alt', '.caption', '.genre'] as const;
 
+const OPTIONAL_EMPTY_TIPTAP_IMAGE_SUFFIXES = ['.alt', '.caption'] as const;
+
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -31,9 +33,18 @@ export function isOptionalEmptyStringPath(path: string, locale: Locale): boolean
   return locale === 'en' && path.endsWith('.description');
 }
 
+export function isOptionalEmptyTipTapPath(path: string): boolean {
+  if (OPTIONAL_EMPTY_TIPTAP_IMAGE_SUFFIXES.some((suffix) => path.endsWith(suffix))) {
+    return true;
+  }
+
+  const isTeamMemberPath = path.includes('.members[');
+  return isTeamMemberPath && (path.endsWith('.name') || path.endsWith('.description'));
+}
+
 export function doesTipTapHaveTranslations(root: TipTapLikeDoc): boolean {
   if (!Array.isArray(root.content)) {
-    return false;
+    return true;
   }
 
   for (const node of root.content) {
@@ -69,7 +80,11 @@ export function hasLocalizedContent(fieldValue: unknown, path: string, locale: L
   }
 
   if (isRecord(fieldValue)) {
-    return true;
+    if (isOptionalEmptyTipTapPath(path)) {
+      return true;
+    }
+
+    return doesTipTapHaveTranslations(fieldValue);
   }
 
   return false;

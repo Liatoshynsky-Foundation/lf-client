@@ -8,6 +8,7 @@ type TranslatedField<T> = Record<Locale, T>;
 
 export type LocalizeOptions = {
   fallbackFields?: readonly string[];
+  allowEmptyFields?: readonly string[];
 };
 
 export type Localize<T> =
@@ -46,6 +47,10 @@ function resolveTranslation(
     if (hasLocalizedContent(value[fallbackLocale], path, fallbackLocale)) {
       return value[fallbackLocale];
     }
+  }
+
+  if (options?.allowEmptyFields?.includes(fieldKey)) {
+    return value[locale];
   }
 
   throw translationErrorFactory(locale, path);

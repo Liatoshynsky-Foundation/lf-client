@@ -38,7 +38,10 @@ const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageData
   artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(createArtistryPageSchema(locale)))), locale),
   'war-in-ukraine': (locale) =>
     LocalizeSchema(NoTime(NoIDSchema(NoPageType(createWarInUkrainePageSchema(locale)))), locale),
-  archive: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale)
+  archive: (locale) =>
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale, {
+      allowEmptyFields: ['description']
+    })
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {

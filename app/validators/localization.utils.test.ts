@@ -7,6 +7,7 @@ import {
   hasLocalizedContent,
   hasTipTapLocaleContent,
   isOptionalEmptyStringPath,
+  isOptionalEmptyTipTapPath,
   isRecord
 } from './localization.utils';
 
@@ -44,9 +45,8 @@ describe('localization.utils', () => {
   });
 
   describe('doesTipTapHaveTranslations', () => {
-    it('returns false for empty docs and missing content', () => {
+    it('returns false for empty docs and blank text nodes', () => {
       expect(doesTipTapHaveTranslations(emptyTipTapDoc)).toBe(false);
-      expect(doesTipTapHaveTranslations({ type: 'doc' })).toBe(false);
       expect(
         doesTipTapHaveTranslations({
           type: 'doc',
@@ -55,8 +55,25 @@ describe('localization.utils', () => {
       ).toBe(false);
     });
 
-    it('returns true when a text node has content', () => {
+    it('returns true when content is missing or a text node has content', () => {
+      expect(doesTipTapHaveTranslations({ type: 'doc' })).toBe(true);
       expect(doesTipTapHaveTranslations(createFilledTipTapDoc('Опис'))).toBe(true);
+    });
+  });
+
+  describe('isOptionalEmptyTipTapPath', () => {
+    it('allows Foundation Team member name/description and image alt/caption', () => {
+      expect(isOptionalEmptyTipTapPath('root.blocks.FoundationFounders.members[0].name')).toBe(true);
+      expect(isOptionalEmptyTipTapPath('root.blocks.FoundationFounders.members[0].description')).toBe(true);
+      expect(isOptionalEmptyTipTapPath('root.blocks.FoundationFounders.members[0].photo.alt')).toBe(true);
+      expect(isOptionalEmptyTipTapPath('root.photo.caption')).toBe(true);
+    });
+
+    it('rejects unrelated TipTap paths such as mission/privacy list items', () => {
+      expect(isOptionalEmptyTipTapPath('root.blocks.OurMission.list[0]')).toBe(false);
+      expect(isOptionalEmptyTipTapPath('root.blocks.Cookies.list[1]')).toBe(false);
+      expect(isOptionalEmptyTipTapPath('root.blocks.Cookies.description')).toBe(false);
+      expect(isOptionalEmptyTipTapPath('root.title')).toBe(false);
     });
   });
 
@@ -73,9 +90,13 @@ describe('localization.utils', () => {
   });
 
   describe('hasLocalizedContent', () => {
-    it('allows empty TipTap objects for any path', () => {
-      expect(hasLocalizedContent(emptyTipTapDoc, 'root.title', 'uk' as Locale)).toBe(true);
+    it('allows empty TipTap only on scoped optional paths', () => {
       expect(hasLocalizedContent(emptyTipTapDoc, 'root.photo.alt', 'en' as Locale)).toBe(true);
+      expect(
+        hasLocalizedContent(emptyTipTapDoc, 'root.blocks.FoundationFounders.members[0].name', 'uk' as Locale)
+      ).toBe(true);
+      expect(hasLocalizedContent(emptyTipTapDoc, 'root.title', 'uk' as Locale)).toBe(false);
+      expect(hasLocalizedContent(emptyTipTapDoc, 'root.blocks.OurMission.list[0]', 'uk' as Locale)).toBe(false);
     });
 
     it('allows empty English description strings and rejects empty Ukrainian ones', () => {
