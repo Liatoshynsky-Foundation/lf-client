@@ -6,7 +6,7 @@ import { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 
 const ABSOLUTE_URL_REGEX = /^https?:\/\//i;
-const isAbsoluteUrl = (url: string): boolean => ABSOLUTE_URL_REGEX.test(url);
+const isAbsoluteUrl = (url?: string | null): boolean => (url ? ABSOLUTE_URL_REGEX.test(url) : false);
 
 export interface PageMetadataConfig {
   pageTranslationKey: string;
@@ -14,55 +14,63 @@ export interface PageMetadataConfig {
   fetchPageMetaData?: () => Promise<Record<string, unknown> | null | undefined>;
 }
 
+function getLocalizedValue<T>(val: unknown, lang: string): T | undefined {
+  if (val === undefined || val === null) return undefined;
+  if (typeof val === 'object' && lang in (val as Record<string, unknown>)) {
+    return (val as Record<string, T>)[lang];
+  }
+  return val as T;
+}
+
+async function loadPageData(
+  fetcher?: () => Promise<Record<string, unknown> | null | undefined>
+): Promise<Record<string, unknown> | null> {
+  if (!fetcher) return null;
+  try {
+    const data = await fetcher();
+    return (data as Record<string, unknown>) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function parseKeywords(rawKeywords?: string): string[] | undefined {
+  if (typeof rawKeywords !== 'string' || rawKeywords.trim() === '') {
+    return undefined;
+  }
+  return rawKeywords
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function resolveFallbackText(rawText: unknown, fallback: string): string {
+  return typeof rawText === 'string' && rawText.trim() !== '' ? rawText.trim() : fallback;
+}
+
 export async function getPageMetadata(params: Language['params'], pageConfig: PageMetadataConfig): Promise<Metadata> {
   const { lang } = await params;
   setRequestLocale(lang);
 
   const t = await getTranslations(pageConfig.pageTranslationKey as unknown as Parameters<typeof getTranslations>[0]);
+  const pageData = await loadPageData(pageConfig.fetchPageMetaData);
 
-  let pageData: Record<string, unknown> | null = null;
-  if (pageConfig.fetchPageMetaData) {
-    try {
-      const data = await pageConfig.fetchPageMetaData();
-      pageData = (data as Record<string, unknown>) ?? null;
-    } catch {
-      pageData = null;
-    }
-  }
+  const rawTitle = getLocalizedValue<string>(pageData?.title, lang);
+  const rawDescription = getLocalizedValue<string>(pageData?.description, lang);
+  const rawCanonicalUrl = getLocalizedValue<string>(pageData?.canonicalUrl, lang);
+  const rawAllowIndexation = getLocalizedValue<boolean>(pageData?.allowIndexation, lang);
+  const rawKeywords = getLocalizedValue<string>(pageData?.keywords, lang);
 
-  const getValue = <T>(val: unknown): T | undefined => {
-    if (val === undefined || val === null) return undefined;
-    if (typeof val === 'object' && lang in (val as Record<string, unknown>)) {
-      return (val as Record<string, T>)[lang];
-    }
-    return val as T;
-  };
-
-  const rawTitle = getValue<string>(pageData?.title);
-  const rawDescription = getValue<string>(pageData?.description);
-  const rawCanonicalUrl = getValue<string>(pageData?.canonicalUrl);
-  const rawAllowIndexation = getValue<boolean>(pageData?.allowIndexation);
-  const rawKeywords = getValue<string>(pageData?.keywords);
-
-  const title = typeof rawTitle === 'string' && rawTitle.trim() !== '' ? rawTitle : t('title');
-  const description =
-    typeof rawDescription === 'string' && rawDescription.trim() !== '' ? rawDescription : t('description');
+  const title = resolveFallbackText(rawTitle, t('title'));
+  const description = resolveFallbackText(rawDescription, t('description'));
 
   const customCanonical =
     typeof rawCanonicalUrl === 'string' && rawCanonicalUrl.trim() !== '' ? rawCanonicalUrl.trim() : null;
-
-  const hasAbsoluteCanonical = Boolean(customCanonical && isAbsoluteUrl(customCanonical));
+  const hasAbsoluteCanonical = isAbsoluteUrl(customCanonical);
 
   const seoMetaUrl = hasAbsoluteCanonical ? pageConfig.pageRoute : (customCanonical ?? pageConfig.pageRoute);
   const allowIndexation = typeof rawAllowIndexation === 'boolean' ? rawAllowIndexation : true;
-
-  const keywords =
-    typeof rawKeywords === 'string' && rawKeywords.trim() !== ''
-      ? rawKeywords
-          .split(',')
-          .map((item: string) => item.trim())
-          .filter(Boolean)
-      : undefined;
+  const keywords = parseKeywords(rawKeywords);
 
   const metadata = createSeoMeta({
     title,
