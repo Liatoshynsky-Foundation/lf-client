@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import MusicTableSection from '~/components/tables/CompositionTable/MusicTableSection';
@@ -8,24 +8,26 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { ArtistryPage } from '~/types/page/pagesBase.type';
 import { Language } from '~/types/types/language';
-import { createSeoMeta } from '~/utils/createSeoMeta';
+import { isError, UnwrapResult } from '~/types/types/result';
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
-  const { lang } = await params;
-  setRequestLocale(lang);
+  return getPageMetadata(params, {
+    pageTranslationKey: 'meta.pages.artistry',
+    pageRoute: ROUTES.ARTISTRY,
+    fetchPageMetaData: async () => {
+      const { lang } = await params;
+      const pageResult = await resolvePageData('artistry', lang);
 
-  const t = await getTranslations('meta.pages.artistry');
-
-  return createSeoMeta({
-    title: t('title'),
-    description: t('description'),
-    url: ROUTES.ARTISTRY,
-    locale: lang
+      if (isError(pageResult)) return null;
+      return UnwrapResult(pageResult);
+    }
   });
 }
 

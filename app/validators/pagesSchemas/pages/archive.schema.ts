@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import { mongoObjectIdSchema, translatedTipTapSchema } from '~/validators/constants';
@@ -18,5 +19,6 @@ export const ArchivePageSchema = z.object({
   blocks: ArchiveBlocksSchema,
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  _id: mongoObjectIdSchema
+  _id: mongoObjectIdSchema,
+  ...pageSeoFields
 });
