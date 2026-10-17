@@ -52,6 +52,8 @@ export interface TipTapDoc {
   content: TipTapElement[];
 }
 
+export type RichContent = string | TipTapDoc;
+
 export type LocalizedTipTapDoc = Record<Locale, TipTapDoc>;
 
 export type TipTapNode = TipTapDoc | HeadingNode | ParagraphNode | TextNode | MultiLangNode;

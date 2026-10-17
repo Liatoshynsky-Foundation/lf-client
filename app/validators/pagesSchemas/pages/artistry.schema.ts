@@ -4,6 +4,7 @@ import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
 const TitleWithQuoteBlockSchema = z.object({
   title: translatedTipTapSchema,
@@ -13,10 +14,12 @@ const TitleWithQuoteBlockSchema = z.object({
 
 const MusicTableSectionBlockSchema = z.object({});
 
-const ArtistryBlocks = z.object({
-  TitleWithQuote: TitleWithQuoteBlockSchema,
-  MusicTableSection: MusicTableSectionBlockSchema
-});
+const ArtistryBlocks = withManagedPageSections(
+  z.object({
+    TitleWithQuote: TitleWithQuoteBlockSchema,
+    MusicTableSection: MusicTableSectionBlockSchema
+  })
+);
 
 export const ArtistryPageSchema = z.object({
   pageType: z.literal('ArtistryPage'),

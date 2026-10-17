@@ -9,6 +9,7 @@ import {
   OptionalCaptionImageSchema,
   TipTapQuoteSchema
 } from '~/validators/pagesSchemas/pages/_common.schema';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 const IntroSectionBlockSchema = z.object({
@@ -74,15 +75,17 @@ const FoundationFoundersBlockSchema = z.object({
   hidden: z.boolean().optional()
 });
 
-const AboutUsBlock = z.object({
-  IntroSection: IntroSectionBlockSchema,
-  FoundationInfo: FoundationInfoBlockSchema,
-  OurMission: OurMissionBlockSchema,
-  OurGoals: OurGoalsBlockSchema,
-  LiatoshynskyOffice: LiatoshynskyOfficeBlockSchema,
-  WhatWeDo: WhatWeDoBlockSchema,
-  FoundationFounders: FoundationFoundersBlockSchema
-});
+const AboutUsBlock = withManagedPageSections(
+  z.object({
+    IntroSection: IntroSectionBlockSchema,
+    FoundationInfo: FoundationInfoBlockSchema,
+    OurMission: OurMissionBlockSchema,
+    OurGoals: OurGoalsBlockSchema,
+    LiatoshynskyOffice: LiatoshynskyOfficeBlockSchema,
+    WhatWeDo: WhatWeDoBlockSchema,
+    FoundationFounders: FoundationFoundersBlockSchema
+  })
+);
 
 export const AboutUsPageSchema = z.object({
   pageType: z.literal('AboutUsPage'),

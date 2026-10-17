@@ -4,6 +4,7 @@ import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 import { TipTapDocSchema } from '~/validators/pagesSchemas/tiptap.schema';
 
 const HiddenBlockSchema = z.object({
@@ -87,19 +88,21 @@ const ContactUsBlockSchema = hideableBlock({
   description: z.object({ uk: TipTapDocSchema, en: TipTapDocSchema })
 });
 
-const PrivacyPolicyBlock = z.object({
-  IntroSection: IntroSectionBlockSchema,
-  DataWeCollect: DataWeCollectBlockSchema,
-  DataUsage: DataUsageBlockSchema,
-  Cookies: CookiesBlockSchema,
-  GoogleAuth: GoogleAuthBlockSchema,
-  SocialNetworks: SocialNetworksBlockSchema,
-  TargetedAds: TargetedAdsBlockSchema,
-  NewsletterSubscription: NewsletterSubscriptionBlockSchema,
-  DataRetention: DataRetentionBlockSchema,
-  UserRights: UserRightsBlockSchema,
-  ContactUs: ContactUsBlockSchema
-});
+const PrivacyPolicyBlock = withManagedPageSections(
+  z.object({
+    IntroSection: IntroSectionBlockSchema,
+    DataWeCollect: DataWeCollectBlockSchema,
+    DataUsage: DataUsageBlockSchema,
+    Cookies: CookiesBlockSchema,
+    GoogleAuth: GoogleAuthBlockSchema,
+    SocialNetworks: SocialNetworksBlockSchema,
+    TargetedAds: TargetedAdsBlockSchema,
+    NewsletterSubscription: NewsletterSubscriptionBlockSchema,
+    DataRetention: DataRetentionBlockSchema,
+    UserRights: UserRightsBlockSchema,
+    ContactUs: ContactUsBlockSchema
+  })
+);
 
 export const PrivacyPolicyPageSchema = z.object({
   pageType: z.literal('PrivacyPolicyPage'),
