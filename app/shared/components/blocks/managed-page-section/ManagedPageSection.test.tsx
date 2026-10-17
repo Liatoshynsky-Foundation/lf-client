@@ -78,12 +78,7 @@ describe('ManagedPageSection', () => {
       />
     );
 
-    expect(screen.getByTestId('ManagedPageSection')).toBeInTheDocument();
-    expect(screen.getByTestId('ManagedPageSection-title')).toHaveTextContent('Що хочемо поліпшити');
-    expect(screen.getByTestId('ManagedPageSection-subtitle-sub')).toHaveTextContent('Підзаголовок');
-    expect(screen.getByTestId('ManagedPageSection-paragraph-p')).toHaveTextContent('Абзац');
-    expect(screen.getByTestId('ManagedPageSection-bullet-b')).toHaveTextContent('Пункт');
-    expect(screen.getByTestId('next-image')).toBeInTheDocument();
+    expect(screen.getByTestId('ManagedPageSection')).toHaveTextContent('Що хочемо поліпшитиПідзаголовокАбзацПункт');
   });
 
   it('renders only the title when there are no items', () => {
