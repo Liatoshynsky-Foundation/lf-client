@@ -56,6 +56,8 @@ const mockedFormatDate = formatIsoDateToDdMmYy as jest.Mock;
 const mockNews = {
   title: 'Тестова новина',
   description: 'Опис тестової новини',
+  keywords: 'новина',
+  allowIndexation: false,
   coverImage: { src: 'https://example.com/image.jpg', alt: 'Test' },
   publishedAt: '2024-05-01T00:00:00.000Z',
   content: {
@@ -87,7 +89,9 @@ describe('generateMetadata', () => {
       description: mockNews.description,
       url: '/news/test-slug',
       imageUrl: mockNews.coverImage.src,
-      locale: 'uk'
+      locale: 'uk',
+      keywords: mockNews.keywords,
+      allowIndexation: false
     });
     expect(metadata).toEqual(
       expect.objectContaining({

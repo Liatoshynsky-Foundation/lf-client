@@ -19,6 +19,8 @@ export type EventDTO = {
   _id: string;
   title: LocalizedString;
   description: LocalizedString;
+  keywords?: Record<'uk' | 'en', string> | null;
+  allowIndexation?: Record<'uk' | 'en', boolean> | null;
   content: {
     uk: object;
     en: object;
