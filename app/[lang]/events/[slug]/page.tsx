@@ -112,7 +112,9 @@ export async function generateMetadata({ params }: Readonly<EventDetailPageProps
     description: event.description,
     url: `/events/${slug}`,
     imageUrl: event.coverImage.src,
-    locale: lang
+    locale: lang,
+    keywords: event.keywords ?? undefined,
+    allowIndexation: event.allowIndexation ?? undefined
   });
 }
 
