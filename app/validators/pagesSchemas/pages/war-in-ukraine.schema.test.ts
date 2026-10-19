@@ -2,11 +2,13 @@ import { describeSeoFieldsSupport } from './__tests__/testSeoFieldsSupport';
 import { WarInUkrainePageSchema } from './war-in-ukraine.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
+import { createFilledTipTapDoc } from '~/validators/__fixtures__/tiptap.fixtures';
+
 describe('WarInUkrainePageSchema regression', () => {
   const dummyText = { uk: 'текст', en: 'text' };
   const dummyTipTap = {
-    uk: { type: 'doc', content: [] },
-    en: { type: 'doc', content: [] }
+    uk: createFilledTipTapDoc('текст'),
+    en: createFilledTipTapDoc('text')
   };
 
   const getMockPayload = () => ({
