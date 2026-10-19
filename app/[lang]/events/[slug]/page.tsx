@@ -19,11 +19,13 @@ type EventDetailPageProps = { params: Promise<EventDetailPageParams> };
 
 function formatTimeFromIso(iso: string | null | undefined): string | null {
   if (!iso) return null;
-  const match = /T(\d{2}):(\d{2})/.exec(iso);
-  if (match) return `${match[1]}:${match[2]}`;
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return null;
-  return `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+  return date.toLocaleTimeString('uk-UA', {
+    timeZone: 'Europe/Kyiv',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 }
 
 function EventRegistrationBlock({
