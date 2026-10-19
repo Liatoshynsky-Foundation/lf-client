@@ -12,7 +12,6 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { sxToArray } from '~/lib/utils/sxToArray';
 import ArrowUpRight from '~/public/icons/arrow-up-right.svg';
-import FacebookIcon from '~/public/icons/facebook.svg';
 import { Svg } from '~/shared/components/colored-svg/ColoredSvg';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { commonSx } from '~/shared/styles/commonSx';
@@ -103,15 +102,7 @@ export default function BulletTextWithLinks({
             variant="outlined"
             size="medium"
             endIcon={
-              <Svg
-                Component={FacebookIcon}
-                fill="none"
-                alt="icon"
-                color="#000"
-                width="24px"
-                height="24px"
-                sx={styles.icon}
-              />
+              <Svg Component={ArrowUpRight} alt="icon" color="#190d03" width="20px" height="20px" sx={styles.icon} />
             }
           >
             {showShortButtonsText && isMobile ? button.shortText[locale] : button.fullText[locale]}

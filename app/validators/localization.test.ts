@@ -205,13 +205,16 @@ describe('LocalizeSchema', () => {
     );
   });
 
-  it('should fail validation workflows if internal localized mapping returns unsupported boolean type', async () => {
-    const schema = z.object({ status: z.unknown() });
+  it('should localize boolean fields', async () => {
+    const schema = z.object({
+      status: z.object({
+        uk: z.boolean(),
+        en: z.boolean()
+      })
+    });
     const transformer = LocalizeSchema(schema, 'en' as Locale);
-    const data = { status: { en: true } };
-    await expect(transformer.parseAsync(data)).rejects.toThrow(
-      `${LocalizationErrors.MISSING_EN_ERROR} at path: root.status`
-    );
+    const data = { status: { uk: false, en: true } };
+    await expect(transformer.parseAsync(data)).resolves.toEqual({ status: true });
   });
 
   it('should fail validation workflows if internal localized mapping returns unsupported number type', async () => {

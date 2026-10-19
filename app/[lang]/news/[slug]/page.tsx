@@ -36,7 +36,8 @@ export async function generateMetadata({ params }: Readonly<NewsDetailPageProps>
     url: `/news/${slug}`,
     imageUrl: news.coverImage.src,
     locale: lang,
-    keywords: news.keywords ?? undefined
+    keywords: news.keywords ?? undefined,
+    allowIndexation: news.allowIndexation ?? undefined
   });
 }
 

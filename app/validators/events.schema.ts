@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { mongoObjectIdSchema, translatedFieldSchema } from './constants';
+import { localizedBooleanSchema, mongoObjectIdSchema, translatedFieldSchema } from './constants';
 import { cropRectSchema } from './news.schema';
 
 import { EventStatus } from '~/domain/dto/events.dto';
@@ -34,6 +34,8 @@ export const eventSchema = z.object({
 
   title: translatedFieldSchema,
   description: translatedFieldSchema,
+  keywords: translatedFieldSchema.optional().nullable(),
+  allowIndexation: localizedBooleanSchema.optional().nullable(),
 
   content: z.object({
     uk: z.record(z.any()),
@@ -48,9 +50,6 @@ export const eventSchema = z.object({
 
   eventLink: z.string().optional().nullable(),
   ticketUrl: z.record(z.any()).optional().nullable(),
-  keywords: z.record(z.any()).optional().nullable(),
-  allowIndexation: z.record(z.any()).optional().nullable(),
-
   createdAt: z.coerce
     .date()
     .optional()

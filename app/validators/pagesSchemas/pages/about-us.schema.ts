@@ -1,6 +1,7 @@
 import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
 import {
@@ -103,7 +104,8 @@ export function createAboutUsPageSchema(locale: Locale) {
     blocksOrder: z.array(z.string()).min(1),
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
-    _id: mongoObjectIdSchema
+    _id: mongoObjectIdSchema,
+    ...pageSeoFields
   });
 }
 

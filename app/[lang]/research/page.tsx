@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import ResearchAndScientificWork from '~/components/research-and-scientific-work/ResearchAndScientificWork';
@@ -9,25 +9,25 @@ import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import { Language } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
-import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
-  const { lang } = await params;
-  setRequestLocale(lang);
+  return getPageMetadata(params, {
+    pageTranslationKey: 'meta.pages.research',
+    pageRoute: ROUTES.RESEARCH,
+    fetchPageMetaData: async () => {
+      const { lang } = await params;
+      const pageResult = await resolvePageData('research', lang);
 
-  const t = await getTranslations('meta.pages.research');
-
-  return createSeoMeta({
-    title: t('title'),
-    description: t('description'),
-    url: ROUTES.RESEARCH,
-    locale: lang
+      if (isError(pageResult)) return null;
+      return UnwrapResult(pageResult);
+    }
   });
 }
 

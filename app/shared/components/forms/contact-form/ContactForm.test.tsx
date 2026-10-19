@@ -31,7 +31,9 @@ jest.mock('next-intl', () => ({
       emailInvalid: 'Введіть коректну email-адресу',
       phoneNumberInvalid: 'Перевірте формат номера телефону',
       messageMinLength: 'Напишіть кілька слів у повідомленні',
-      policyRequired: 'Щоб продовжити, потрібно дати згоду'
+      policyRequired: 'Щоб продовжити, потрібно дати згоду',
+      nameRequired: 'Будь ласка, введіть своє ім’я',
+      messageRequired: 'Напишіть кілька слів у повідомленні'
     };
     return messages[key] || key;
   }
@@ -101,6 +103,40 @@ describe('ContactForm', () => {
       expect(screen.getByText('Перевірте формат номера телефону')).toBeInTheDocument();
       expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
     });
+  });
+
+  it('should show required errors for whitespace-only name, email and message', async () => {
+    fillInput('Імя', ' ');
+    fillInput('Електронна адреса (email) *', ' ');
+    fillInput('Ваше повідомлення *', ' ');
+    submitForm();
+
+    await waitFor(() => {
+      expect(screen.getByText('Будь ласка, введіть своє ім’я')).toBeInTheDocument();
+      expect(screen.getByText('Будь ласка, вкажіть вашу електронну адресу')).toBeInTheDocument();
+      expect(screen.getByText('Напишіть кілька слів у повідомленні')).toBeInTheDocument();
+    });
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['local part exceeds 64 characters', `${'a'.repeat(65)}@gmail.com`],
+    ['domain label exceeds 63 characters', `test@${'a'.repeat(64)}.com`],
+    [
+      'total email length exceeds 254 characters',
+      `${'a'.repeat(64)}@${'b'.repeat(63)}.${'c'.repeat(63)}.${'d'.repeat(62)}`
+    ]
+  ])('should reject email when %s', async (_, email) => {
+    fillInput('Імя', 'Vlad');
+    fillInput('Електронна адреса (email) *', email);
+    fillInput('Ваше повідомлення *', 'Досить довге повідомлення');
+    fireEvent.click(screen.getByRole('checkbox'));
+    submitForm();
+
+    await waitFor(() => {
+      expect(screen.getByText('Введіть коректну email-адресу')).toBeInTheDocument();
+    });
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it('should call onSubmit callback when submit button is clicked', async () => {

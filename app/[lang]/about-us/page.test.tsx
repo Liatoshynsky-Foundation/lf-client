@@ -1,9 +1,22 @@
+import { getTranslations } from 'next-intl/server';
+
 import {
   testGeneratePageMetadata,
   testPassLangSlugToPageBuilder,
   testReturnBlockRenderer
 } from '../__mocks__/runCommonPageTests';
 import Home, { generateMetadata } from './page';
+
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+
+jest.mock('next-intl/server', () => ({
+  getTranslations: jest.fn().mockResolvedValue((key: string) => `translated_${key}`),
+  setRequestLocale: jest.fn()
+}));
+
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
 
 jest.mock('~/components/blocks/FoundationFounders/FoundationFounders', () => ({
   __esModule: true,
@@ -54,7 +67,50 @@ describe('AbousUs page', () => {
   });
 
   it('should correctly generate page metadata', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValue({
+      isError: false,
+      value: null
+    });
+
     await testGeneratePageMetadata(generateMetadata, 'meta.pages.aboutUs', '/');
+  });
+
+  it('should fallback to default metadata when resolvePageData returns an error', async () => {
+    (getTranslations as jest.Mock).mockResolvedValue((token: string) => `static_${token}`);
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: true,
+      error: 'Cannot fetch about-us data'
+    });
+
+    const fallbackResponse = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+
+    expect(fallbackResponse.title).toBe('static_title');
+    expect(fallbackResponse.description).toBe('static_description');
+  });
+
+  it('should generate metadata using CMS values when available', async () => {
+    (getTranslations as jest.Mock).mockResolvedValue((token: string) => `static_${token}`);
+
+    const aboutPayload = {
+      title: { uk: 'Про Фундацію Офіційно', en: 'About Foundation Official' },
+      description: { uk: 'Головна інформація про організацію', en: 'Main foundation info' },
+      canonicalUrl: { uk: '/foundation-page', en: '/en/foundation-page' },
+      allowIndexation: { uk: true, en: true }
+    };
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: aboutPayload,
+      value: aboutPayload
+    });
+
+    const targetParams = Promise.resolve({ lang: 'uk' as const });
+    const output = await generateMetadata({ params: targetParams });
+
+    expect(output.title).toBe('Про Фундацію Офіційно');
+    expect(output.description).toBe('Головна інформація про організацію');
+    expect(output.robots).toBe('index, follow');
   });
 
   it('should return BlockRenderer with correct page data, blocks & BLOCKS_RENDERER with BLOCK_NAMES_MAP', async () => {

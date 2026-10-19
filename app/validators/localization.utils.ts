@@ -30,6 +30,10 @@ export function isOptionalEmptyStringPath(path: string, locale: Locale): boolean
     return true;
   }
 
+  if (path === 'root.description' || path.endsWith('.canonicalUrl') || path.endsWith('.keywords')) {
+    return true;
+  }
+
   return locale === 'en' && path.endsWith('.description');
 }
 
@@ -71,12 +75,26 @@ export function hasTipTapLocaleContent(value: unknown): boolean {
 }
 
 export function hasLocalizedContent(fieldValue: unknown, path: string, locale: Locale): boolean {
-  if (!fieldValue && path.endsWith('.ticketUrl')) {
+  if (path.endsWith('.allowIndexation')) {
+    return true;
+  }
+
+  if (
+    !fieldValue &&
+    (path.endsWith('.ticketUrl') ||
+      path.endsWith('.canonicalUrl') ||
+      path.endsWith('.keywords') ||
+      path === 'root.description')
+  ) {
     return true;
   }
 
   if (typeof fieldValue === 'string') {
     return fieldValue !== '' || isOptionalEmptyStringPath(path, locale);
+  }
+
+  if (typeof fieldValue === 'boolean') {
+    return true;
   }
 
   if (isRecord(fieldValue)) {
