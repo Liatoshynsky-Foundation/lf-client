@@ -17,6 +17,7 @@ import {
   ImageSchema,
   OptionalCaptionImageSchema
 } from '~/validators/pagesSchemas/pages/_common.schema';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
 export function createAboutUsPageSchema(locale: Locale) {
   const requiredTipTap = requiredTranslatedTipTapSchema(locale);
@@ -85,15 +86,17 @@ export function createAboutUsPageSchema(locale: Locale) {
     hidden: z.boolean().optional()
   });
 
-  const AboutUsBlock = z.object({
-    IntroSection: IntroSectionBlockSchema,
-    FoundationInfo: FoundationInfoBlockSchema,
-    OurMission: OurMissionBlockSchema,
-    OurGoals: OurGoalsBlockSchema,
-    LiatoshynskyOffice: LiatoshynskyOfficeBlockSchema,
-    WhatWeDo: WhatWeDoBlockSchema,
-    FoundationFounders: FoundationFoundersBlockSchema
-  });
+  const AboutUsBlock = withManagedPageSections(
+    z.object({
+      IntroSection: IntroSectionBlockSchema,
+      FoundationInfo: FoundationInfoBlockSchema,
+      OurMission: OurMissionBlockSchema,
+      OurGoals: OurGoalsBlockSchema,
+      LiatoshynskyOffice: LiatoshynskyOfficeBlockSchema,
+      WhatWeDo: WhatWeDoBlockSchema,
+      FoundationFounders: FoundationFoundersBlockSchema
+    })
+  );
 
   return z.object({
     pageType: z.literal('AboutUsPage'),

@@ -11,6 +11,7 @@ import {
   requiredTranslatedTipTapSchema,
   translatedFieldSchema
 } from '~/validators/constants';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
 const HiddenBlockSchema = z.object({
   hidden: z.boolean().optional()
@@ -92,19 +93,21 @@ export function createPrivacyPolicyPageSchema(locale: Locale) {
     description: requiredTipTapDoc
   });
 
-  const PrivacyPolicyBlock = z.object({
-    IntroSection: IntroSectionBlockSchema,
-    DataWeCollect: DataWeCollectBlockSchema,
-    DataUsage: DataUsageBlockSchema,
-    Cookies: CookiesBlockSchema,
-    GoogleAuth: GoogleAuthBlockSchema,
-    SocialNetworks: SocialNetworksBlockSchema,
-    TargetedAds: TargetedAdsBlockSchema,
-    NewsletterSubscription: NewsletterSubscriptionBlockSchema,
-    DataRetention: DataRetentionBlockSchema,
-    UserRights: UserRightsBlockSchema,
-    ContactUs: ContactUsBlockSchema
-  });
+  const PrivacyPolicyBlock = withManagedPageSections(
+    z.object({
+      IntroSection: IntroSectionBlockSchema,
+      DataWeCollect: DataWeCollectBlockSchema,
+      DataUsage: DataUsageBlockSchema,
+      Cookies: CookiesBlockSchema,
+      GoogleAuth: GoogleAuthBlockSchema,
+      SocialNetworks: SocialNetworksBlockSchema,
+      TargetedAds: TargetedAdsBlockSchema,
+      NewsletterSubscription: NewsletterSubscriptionBlockSchema,
+      DataRetention: DataRetentionBlockSchema,
+      UserRights: UserRightsBlockSchema,
+      ContactUs: ContactUsBlockSchema
+    })
+  );
 
   return z.object({
     pageType: z.literal('PrivacyPolicyPage'),

@@ -6,6 +6,7 @@ import { PageDataMap } from '~/types/page/pagesBase.type';
 import { Result, WrapError, WrapSuccess } from '~/types/types/result';
 
 import { PagesDataRepository } from '~/infrastructure/repositories/pages-data/pagesData.repo';
+import { prepareManagedPageSections } from '~/lib/utils/managedPageSections';
 import logger from '~/middleware/logger/logger';
 
 const makeComposed = (get: PagesDataRepository['getBySlug']) => {
@@ -21,7 +22,7 @@ const makeComposed = (get: PagesDataRepository['getBySlug']) => {
     }
 
     try {
-      return WrapSuccess(schema.parse(page));
+      return WrapSuccess(schema.parse(prepareManagedPageSections(page, locale)));
     } catch (err) {
       if (err instanceof ZodError) {
         logger.error(`[PagesDataService] Schema validation failed for slug "${slug}" [${locale}]:`, err.flatten());

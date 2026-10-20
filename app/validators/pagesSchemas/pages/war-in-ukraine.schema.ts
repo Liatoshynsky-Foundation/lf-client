@@ -10,6 +10,7 @@ import {
   requiredTranslatedTipTapSchema,
   translatedFieldSchema
 } from '~/validators/constants';
+import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
 export function createWarInUkrainePageSchema(locale: Locale) {
   const requiredTipTap = requiredTranslatedTipTapSchema(locale);
@@ -25,39 +26,41 @@ export function createWarInUkrainePageSchema(locale: Locale) {
     value: z.string()
   });
 
-  const WarInUkraineBlocks = z.object({
-    WarInfo: z.object({
-      hidden: z.boolean().optional(),
-      title: translatedFieldSchema.optional(),
-      description: requiredTipTap
-    }),
-    PrincipleOfHope: z.object({
-      hidden: z.boolean().optional(),
-      buttonText: translatedFieldSchema,
-      buttonLink: z.string().optional().or(z.literal('')),
-      description: requiredTipTap,
-      buttons: z.array(ButtonItemSchema)
-    }),
-    WarCarousel: z
-      .object({
+  const WarInUkraineBlocks = withManagedPageSections(
+    z.object({
+      WarInfo: z.object({
         hidden: z.boolean().optional(),
-        images: z.array(CarouselImageSchema).optional()
+        title: translatedFieldSchema.optional(),
+        description: requiredTipTap
+      }),
+      PrincipleOfHope: z.object({
+        hidden: z.boolean().optional(),
+        buttonText: translatedFieldSchema,
+        buttonLink: z.string().optional().or(z.literal('')),
+        description: requiredTipTap,
+        buttons: z.array(ButtonItemSchema)
+      }),
+      WarCarousel: z
+        .object({
+          hidden: z.boolean().optional(),
+          images: z.array(CarouselImageSchema).optional()
+        })
+        .optional(),
+      YermolenkoLinks: z.object({
+        hidden: z.boolean().optional(),
+        buttonText: translatedFieldSchema,
+        description: requiredTipTap,
+        buttons: z.array(ButtonItemSchema)
+      }),
+      VolunteerDonation: z.object({
+        hidden: z.boolean().optional(),
+        title: translatedFieldSchema,
+        imageSrc: z.string(),
+        caption: translatedFieldSchema,
+        paymentMethods: z.array(PaymentMethodSchema)
       })
-      .optional(),
-    YermolenkoLinks: z.object({
-      hidden: z.boolean().optional(),
-      buttonText: translatedFieldSchema,
-      description: requiredTipTap,
-      buttons: z.array(ButtonItemSchema)
-    }),
-    VolunteerDonation: z.object({
-      hidden: z.boolean().optional(),
-      title: translatedFieldSchema,
-      imageSrc: z.string(),
-      caption: translatedFieldSchema,
-      paymentMethods: z.array(PaymentMethodSchema)
     })
-  });
+  );
 
   return z.object({
     pageType: z.literal('WarInUkrainePage'),
