@@ -76,7 +76,6 @@ export const opusSchema = baseArtistrySchema.extend({
   compositions: z.array(compositionSchema),
   performances: z.array(performanceItemSchema).optional().nullable(),
   gallery: z.array(galleryItemSchema).nullable().optional(),
-  performancesTitle: translatedFieldSchema.nullish(),
   coverImage: coverImageSchema.optional().nullable()
 });
 

@@ -100,11 +100,8 @@ describe('OpusPage', () => {
     await expect(OpusPage(props)).rejects.toThrow('NEXT_NOT_FOUND');
   });
 
-  it('uses the localized videos.title heading regardless of performancesTitle on the opus', async () => {
-    getOpusDetailsBySlug.mockResolvedValue({
-      ...mockDto,
-      performancesTitle: 'ТЕСТ заголовок з CMS'
-    });
+  it('uses the localized videos.title heading for videos', async () => {
+    getOpusDetailsBySlug.mockResolvedValue(mockDto);
 
     const ui = await OpusPage(props);
     render(ui);
