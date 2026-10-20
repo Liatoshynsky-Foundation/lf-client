@@ -100,22 +100,10 @@ describe('OpusPage', () => {
     await expect(OpusPage(props)).rejects.toThrow('NEXT_NOT_FOUND');
   });
 
-  it('uses CMS performancesTitle when provided', async () => {
+  it('uses the localized videos.title heading regardless of performancesTitle on the opus', async () => {
     getOpusDetailsBySlug.mockResolvedValue({
       ...mockDto,
       performancesTitle: 'ТЕСТ заголовок з CMS'
-    });
-
-    const ui = await OpusPage(props);
-    render(ui);
-
-    expect(screen.getByRole('heading', { level: 2, name: 'ТЕСТ заголовок з CMS' })).toBeInTheDocument();
-  });
-
-  it('falls back to default i18n title when performancesTitle is empty or whitespace', async () => {
-    getOpusDetailsBySlug.mockResolvedValue({
-      ...mockDto,
-      performancesTitle: '   '
     });
 
     const ui = await OpusPage(props);
