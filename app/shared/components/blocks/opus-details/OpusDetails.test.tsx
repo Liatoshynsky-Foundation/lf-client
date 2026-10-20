@@ -18,7 +18,7 @@ const labels: OpusDetailsLabels = {
   metaGenre: 'Жанр:',
   viewSheetMusic: 'Переглянути ноти',
   compositionsTitle: 'Твори:',
-  videosTitle: 'Версії виконання опусу:',
+  videosTitle: 'Виконання',
   placeholderTitle: 'СкоРо БуДе',
   placeholderSubtitle: 'Ця сторінка ще доповнюється.',
   placeholderImageAlt: 'Кіт-архіваріус',
@@ -36,7 +36,7 @@ const compositions: OpusComposition[] = [
 ];
 
 const videos: OpusVideo[] = [
-  { id: 'v1', youTubeId: 'abc123', title: 'Виконання 1' },
+  { id: 'v1', youTubeId: 'abc123', title: 'Виконання 1', caption: 'Прем’єра опери “Золотий обруч” у Львові, 2025' },
   { id: 'v2', youTubeId: 'def456' }
 ];
 
@@ -174,6 +174,18 @@ describe('OpusDetails', () => {
     expect(iframe).toHaveAttribute('allowfullscreen');
 
     expect(within(screen.getByTestId('OpusDetails-video-v2')).getByTitle('Відео на YouTube')).toBeInTheDocument();
+  });
+
+  it('renders a caption below a video and omits blank captions', () => {
+    renderOpus({
+      videos: [
+        { id: 'v1', youTubeId: 'abc123', caption: 'Підпис до відео' },
+        { id: 'v2', youTubeId: 'def456', caption: '   ' }
+      ]
+    });
+
+    expect(screen.getByTestId('OpusDetails-video-caption-v1')).toHaveTextContent('Підпис до відео');
+    expect(screen.queryByTestId('OpusDetails-video-caption-v2')).toBeNull();
   });
 
   it('does not render the video gallery when there are no videos', () => {

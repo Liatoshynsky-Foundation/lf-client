@@ -18,6 +18,8 @@ const eventSchema = new Schema<IEventDocument>(
   {
     title: localizedString({ required: true }),
     description: localizedString(),
+    keywords: localizedString({ default: null }),
+    allowIndexation: localizedString({ type: Boolean, default: null }),
     content: localizedObject({ required: true }),
     slug: { type: String, required: true, index: true, unique: true },
     coverImage: {

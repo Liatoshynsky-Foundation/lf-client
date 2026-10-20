@@ -14,7 +14,7 @@ export const sheetMusicItemSchema = z
     fileName: z.string().nullable().optional(),
     publishDate: z.string().optional().nullable()
   })
-  .transform((data) => {
+  .transform(({ publishDate: _publishDate, ...data }) => {
     const trimmedName = data.name?.trim();
     const fallbackForName = data.fileName?.trim() || data.url?.split('/').pop()?.split('?')[0];
     return {

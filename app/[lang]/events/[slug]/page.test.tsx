@@ -60,6 +60,8 @@ const mockBlocks = [
 const mockEvent = {
   title: 'Тестова подія',
   description: 'Опис тестової події',
+  keywords: 'подія',
+  allowIndexation: false,
   coverImage: { src: 'https://example.com/image.jpg' },
   publishedAt: '2024-05-01T00:00:00.000Z',
   eventDateTimeStart: '2024-05-10T16:00:00.000Z',
@@ -88,7 +90,9 @@ describe('generateMetadata', () => {
       description: mockEvent.description,
       url: '/events/test-slug',
       imageUrl: mockEvent.coverImage.src,
-      locale: 'uk'
+      locale: 'uk',
+      keywords: 'подія',
+      allowIndexation: false
     });
     expect(metadata).toEqual(expect.objectContaining({ title: mockEvent.title }));
   });
@@ -327,7 +331,7 @@ describe('EventRegistrationBlock', () => {
     });
 
     expect(getByText('eventTimeLabel')).toBeInTheDocument();
-    expect(getByText('16:00-18:00')).toBeInTheDocument();
+    expect(getByText('19:00-21:00')).toBeInTheDocument();
   });
 
   it('shows only start time HH:MM when dateTimeEnd is null', async () => {
@@ -336,10 +340,10 @@ describe('EventRegistrationBlock', () => {
       eventDateTimeEnd: null
     });
 
-    expect(getByText('16:00')).toBeInTheDocument();
+    expect(getByText('19:00')).toBeInTheDocument();
   });
 
-  it('does not show time section when dateTimeStart has no valid time pattern', async () => {
+  it('does not show time section when dateTimeStart is an invalid date string', async () => {
     const { queryByText } = await renderRegistrationBlock({
       eventDateTimeStart: 'no-time-here',
       eventDateTimeEnd: null

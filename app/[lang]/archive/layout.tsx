@@ -1,23 +1,24 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
 import type { Language } from '~/types/types/language';
+import { isError, UnwrapResult } from '~/types/types/result';
 
-import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 export async function generateMetadata({ params }: Language): Promise<Metadata> {
-  const { lang } = await params;
-  setRequestLocale(lang);
+  return getPageMetadata(params, {
+    pageTranslationKey: 'meta.pages.archive',
+    pageRoute: ROUTES.ARCHIVE,
+    fetchPageMetaData: async () => {
+      const { lang } = await params;
+      const pageResult = await resolvePageData('archive', lang);
 
-  const t = await getTranslations('meta.pages.archive');
-
-  return createSeoMeta({
-    title: t('title'),
-    description: t('description'),
-    url: ROUTES.ARCHIVE,
-    locale: lang
+      if (isError(pageResult)) return null;
+      return UnwrapResult(pageResult);
+    }
   });
 }
 

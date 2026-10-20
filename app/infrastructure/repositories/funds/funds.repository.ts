@@ -173,10 +173,7 @@ export const fundsRepository: FundsRepository = {
       organizationForm: normalizeLocalizedString(fund.organizationForm),
       documentCreationDate: fund.documentCreationDate ?? '',
       chronologicalBoundaries: fund.chronologicalBoundaries,
-      documentLanguages: fund.documentLanguages,
       characterAndContent: normalizeLocalizedTipTapDoc(fund.characterAndContent),
-      accessConditions: fund.accessConditions,
-      compilerInfo: fund.compilerInfo,
       status: fund.status,
       cases: cases
         .sort((a, b) => getCaseOrder(a) - getCaseOrder(b))
@@ -254,6 +251,7 @@ export const fundsRepository: FundsRepository = {
       dates: getLocalizedUk(caseDoc.caseDate ?? caseDoc.dates),
       sheets: caseDoc.sheetsNumber ?? caseDoc.sheets ?? null,
       contentDescription: getLocalizedUk(caseDoc.caseDescriptions ?? caseDoc.contentDescription),
+      detailedCaseDescription: getLocalizedUk(caseDoc.detailedCaseDescription),
       pdfUrl: caseDoc.pdfFile?.url ?? caseDoc.pdfUrl ?? null,
       fundId: toObjectIdString(caseDoc.fundId),
       fundNumber: createFundNumberLabel(fund.id),

@@ -31,7 +31,7 @@ export type ButtonData = {
   shortText?: string;
 };
 
-export type Currency = 'UAH' | 'USD' | 'EUR' | 'GBP';
+export type Currency = 'UAH' | 'USD' | 'EUR' | 'GBP' | 'PLN' | 'AUD' | 'CAD';
 export type DonateType = 'donation' | 'subscription';
 
 export type LinkIcon = {

@@ -186,7 +186,7 @@ export default function MusicTableSection() {
         tableContainerSx={{ mt: { xs: '80px', md: '88px', xl: '152px' }, mb: { xs: '120px', md: '160px' } }}
       />
       <GetNotesModal
-        key={modalNotes[0]?.publishDate || ''}
+        key={modalNotes.map((note) => note.name || note.fileName || note.url || 'note').join('-') || 'empty'}
         composition={compositionName}
         notes={modalNotes}
         handleClose={handleCloseModal}

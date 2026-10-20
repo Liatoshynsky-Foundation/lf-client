@@ -23,6 +23,8 @@ export type ArchiveCaseDetailsLabels = {
   metaCode: string;
   metaDates: string;
   metaSheets: string;
+  contentDescription: string;
+  documents: string;
   documentsAria: string;
   viewPdf: string;
   prevCase: string;
@@ -35,6 +37,8 @@ export interface ArchiveCaseDetailsProps {
   dateRange: string;
   sheetsCount?: number;
   pdfUrl: string;
+  contentDescription?: string;
+  detailedCaseDescription?: string;
   documents: ArchiveCaseDocument[];
   fundHref: string;
   prevCase?: ArchiveAdjacentCase;
@@ -48,6 +52,8 @@ const ArchiveCaseDetails = ({
   dateRange,
   sheetsCount,
   pdfUrl,
+  contentDescription,
+  detailedCaseDescription,
   documents,
   fundHref,
   prevCase,
@@ -78,7 +84,29 @@ const ArchiveCaseDetails = ({
           <PdfButton href={pdfUrl} label={labels.viewPdf} dataTestId="ArchiveCaseDetails-pdfButton" />
         </Box>
 
-        <Documents documents={documents} ariaLabel={labels.documentsAria} />
+        <Box sx={styles.detailsColumn}>
+          {contentDescription && (
+            <Box sx={styles.descriptionSection} data-testid="ArchiveCaseDetails-contentDescription">
+              <Typography variant="h6" sx={styles.detailTitle}>
+                {labels.contentDescription}
+              </Typography>
+              <Typography sx={styles.detailText}>{contentDescription}</Typography>
+            </Box>
+          )}
+
+          {detailedCaseDescription && (
+            <Box sx={styles.descriptionSection} data-testid="ArchiveCaseDetails-detailedCaseDescription">
+              <Typography variant="h6" sx={styles.detailTitle}>
+                {labels.documents}
+              </Typography>
+              <Typography sx={styles.detailText}>{detailedCaseDescription}</Typography>
+            </Box>
+          )}
+
+          {documents.length > 0 && (
+            <Documents documents={documents} title={labels.documents} ariaLabel={labels.documentsAria} />
+          )}
+        </Box>
       </Box>
 
       <Navigation prevCase={prevCase} nextCase={nextCase} prevLabel={labels.prevCase} nextLabel={labels.nextCase} />

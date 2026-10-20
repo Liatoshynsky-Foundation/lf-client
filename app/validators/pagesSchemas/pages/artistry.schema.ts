@@ -1,33 +1,42 @@
+import { Locale } from 'next-intl';
 import { z } from 'zod';
 
+import { pageSeoFields } from './seo.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
-import { mongoObjectIdSchema, translatedFieldSchema, translatedTipTapSchema } from '~/validators/constants';
+import { mongoObjectIdSchema, requiredTranslatedTipTapSchema, translatedFieldSchema } from '~/validators/constants';
 import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
-const TitleWithQuoteBlockSchema = z.object({
-  title: translatedTipTapSchema,
-  quoteText: translatedTipTapSchema,
-  sourceText: translatedTipTapSchema
-});
+export function createArtistryPageSchema(locale: Locale) {
+  const requiredTipTap = requiredTranslatedTipTapSchema(locale);
 
-const MusicTableSectionBlockSchema = z.object({});
+  const TitleWithQuoteBlockSchema = z.object({
+    title: requiredTipTap,
+    quoteText: requiredTipTap,
+    sourceText: requiredTipTap
+  });
 
-const ArtistryBlocks = withManagedPageSections(
-  z.object({
-    TitleWithQuote: TitleWithQuoteBlockSchema,
-    MusicTableSection: MusicTableSectionBlockSchema
-  })
-);
+  const MusicTableSectionBlockSchema = z.object({});
 
-export const ArtistryPageSchema = z.object({
-  pageType: z.literal('ArtistryPage'),
-  slug: z.string(),
-  title: translatedFieldSchema,
-  status: z.nativeEnum(PageStatus),
-  blocks: ArtistryBlocks,
-  blocksOrder: z.array(z.string()).min(1),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  _id: mongoObjectIdSchema
-});
+  const ArtistryBlocks = withManagedPageSections(
+    z.object({
+      TitleWithQuote: TitleWithQuoteBlockSchema,
+      MusicTableSection: MusicTableSectionBlockSchema
+    })
+  );
+
+  return z.object({
+    pageType: z.literal('ArtistryPage'),
+    slug: z.string(),
+    title: translatedFieldSchema,
+    status: z.nativeEnum(PageStatus),
+    blocks: ArtistryBlocks,
+    blocksOrder: z.array(z.string()).min(1),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+    _id: mongoObjectIdSchema,
+    ...pageSeoFields
+  });
+}
+
+export const ArtistryPageSchema = createArtistryPageSchema('uk');

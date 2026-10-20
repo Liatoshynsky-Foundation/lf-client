@@ -1,48 +1,54 @@
+import { describeSeoFieldsSupport } from './__tests__/testSeoFieldsSupport';
 import { WarInUkrainePageSchema } from './war-in-ukraine.schema';
 import { PageStatus } from '~/types/enums/common.enums';
 
+import { createFilledTipTapDoc } from '~/validators/__fixtures__/tiptap.fixtures';
+
 describe('WarInUkrainePageSchema regression', () => {
-  it('should preserve the "hidden" visibility flag on blocks', () => {
-    const dummyText = { uk: 'текст', en: 'text' };
-    const dummyTipTap = {
-      uk: { type: 'doc', content: [] },
-      en: { type: 'doc', content: [] }
-    };
+  const dummyText = { uk: 'текст', en: 'text' };
+  const dummyTipTap = {
+    uk: createFilledTipTapDoc('текст'),
+    en: createFilledTipTapDoc('text')
+  };
 
-    const mockPayload = {
-      _id: '507f1f77bcf86cd799439011',
-      pageType: 'WarInUkrainePage',
-      slug: 'war-in-ukraine',
-      title: dummyText,
-      status: PageStatus.Published,
-      blocksOrder: ['WarInfo', 'PrincipleOfHope', 'YermolenkoLinks', 'VolunteerDonation'],
-      blocks: {
-        WarInfo: {
-          hidden: true,
-          title: dummyText,
-          description: dummyTipTap
-        },
-        PrincipleOfHope: {
-          buttonText: dummyText,
-          description: dummyTipTap,
-          buttons: []
-        },
-        YermolenkoLinks: {
-          buttonText: dummyText,
-          description: dummyTipTap,
-          buttons: []
-        },
-        VolunteerDonation: {
-          title: dummyText,
-          imageSrc: '/placeholder.jpg',
-          caption: dummyText,
-          paymentMethods: []
-        }
+  const getMockPayload = () => ({
+    _id: '507f1f77bcf86cd799439011',
+    pageType: 'WarInUkrainePage',
+    slug: 'war-in-ukraine',
+    title: dummyText,
+    status: PageStatus.Published,
+    blocksOrder: ['WarInfo', 'PrincipleOfHope', 'YermolenkoLinks', 'VolunteerDonation'],
+    blocks: {
+      WarInfo: {
+        hidden: true,
+        title: dummyText,
+        description: dummyTipTap
+      },
+      PrincipleOfHope: {
+        buttonText: dummyText,
+        description: dummyTipTap,
+        buttons: []
+      },
+      YermolenkoLinks: {
+        buttonText: dummyText,
+        description: dummyTipTap,
+        buttons: []
+      },
+      VolunteerDonation: {
+        title: dummyText,
+        imageSrc: '/placeholder.jpg',
+        caption: dummyText,
+        paymentMethods: []
       }
-    };
+    }
+  });
 
+  it('should preserve the "hidden" visibility flag on blocks', () => {
+    const mockPayload = getMockPayload();
     const parsedData = WarInUkrainePageSchema.parse(mockPayload);
 
     expect(parsedData.blocks.WarInfo.hidden).toBe(true);
   });
+
+  describeSeoFieldsSupport('WarInUkrainePageSchema', WarInUkrainePageSchema, getMockPayload);
 });

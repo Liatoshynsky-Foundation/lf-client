@@ -113,7 +113,6 @@
                         "organizationForm": { "uk": "Хронологічний", "en": "Chronological" },
                         "documentCreationDate": "1920-1968",
                         "chronologicalBoundaries": "1920-1968 рр.",
-                        "documentLanguages": "Українська, російська",
                         "characterAndContent": {
                           "uk": {
                             "type": "doc",
@@ -134,8 +133,6 @@
                             ]
                           }
                         },
-                        "accessConditions": "Вільний доступ",
-                        "compilerInfo": "Упорядник: Фундація Лятошинського",
                         "status": "published",
                         "cases": [
                           {
@@ -289,7 +286,6 @@
           "organizationForm": { "$ref": "#/components/schemas/LocalizedString" },
           "documentCreationDate": { "type": "string", "description": "Document creation date range" },
           "chronologicalBoundaries": { "type": "string", "description": "Chronological boundaries" },
-          "documentLanguages": { "type": "string", "description": "Languages of documents" },
           "characterAndContent": {
             "type": "object",
             "description": "Localized TipTap character and content description",
@@ -298,8 +294,6 @@
               "en": { "$ref": "#/components/schemas/TipTapDoc" }
             }
           },
-          "accessConditions": { "type": "string", "description": "Access conditions" },
-          "compilerInfo": { "type": "string", "description": "Compiler information" },
           "status": { "$ref": "#/components/schemas/FundStatus" },
           "cases": {
             "type": "array",

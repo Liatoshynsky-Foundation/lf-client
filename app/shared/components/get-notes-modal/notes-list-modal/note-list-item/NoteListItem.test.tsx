@@ -87,9 +87,10 @@ describe('NotesListItem', () => {
     mockUseBreakpoints.mockReturnValue(getMockBreakpoints());
   });
 
-  it('should render note title, date, and button on desktop viewports', () => {
+  it('should render note title and button without a date on desktop viewports', () => {
     renderComponent();
     expect(screen.getByText('test-note')).toBeInTheDocument();
+    expect(screen.queryByText('2023-01-01T00:00:00.000Z')).not.toBeInTheDocument();
     expect(screen.getByTestId('svg-image')).toHaveAttribute('alt', 'test-note');
   });
 

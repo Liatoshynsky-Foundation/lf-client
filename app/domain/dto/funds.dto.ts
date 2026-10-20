@@ -22,10 +22,7 @@ export type FundDetailsDTO = FundBaseDTO & {
   organizationForm?: LocalizedString;
   documentCreationDate: string;
   chronologicalBoundaries?: string;
-  documentLanguages?: string;
   characterAndContent?: LocalizedTipTapDoc;
-  accessConditions?: string;
-  compilerInfo?: string;
   cases: CaseDTO[];
 };
 
@@ -47,6 +44,7 @@ export type CaseDTO = CaseBaseDTO<LocalizedString, LocalizedString, LocalizedStr
 export type AdjacentCaseDTO = Pick<CaseBaseDTO, '_id' | 'name' | 'cipher'>;
 
 export type CaseDetailsDTO = CaseBaseDTO & {
+  detailedCaseDescription: string;
   fundId: string;
   fundNumber: LocalizedString;
   fundTitle: LocalizedString;

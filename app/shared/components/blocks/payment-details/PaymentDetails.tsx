@@ -29,6 +29,8 @@ function PaymentDetails() {
     };
   }, []);
 
+  const fields = paymentFields[currency === 'uah' ? 'uah' : 'other'];
+
   return (
     <Box data-testid="PaymentDetails">
       <ButtonGroup
@@ -48,7 +50,7 @@ function PaymentDetails() {
       />
 
       <Box sx={styles.paymentDetailsContainer}>
-        {paymentFields.map(({ label, key, isIban }) => (
+        {fields.map(({ label, key, isIban }) => (
           <Box sx={styles.paymentDetailsRow} key={label}>
             <Typography component="h6" variant="customSemiBold20">
               {label}
@@ -58,7 +60,7 @@ function PaymentDetails() {
               <CopyLink
                 hint={t('copyHint')}
                 size="large"
-                value={selectedPaymentDetails[key]}
+                value={selectedPaymentDetails[key] ?? ''}
                 forceShowCopyIcon={true}
                 sx={styles.iban}
                 iconSx={styles.ibanIcon}

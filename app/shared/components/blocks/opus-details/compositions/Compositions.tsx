@@ -55,7 +55,9 @@ const Compositions = ({ heading, compositions, viewSheetMusicLabel }: Readonly<C
       </Box>
 
       <GetNotesModal
-        key={modalNotes ? modalNotes[0]?.publishDate || '' : 'empty'}
+        key={
+          modalNotes ? modalNotes.map((note) => note.name || note.fileName || note.url || 'note').join('-') : 'empty'
+        }
         composition={compositionName}
         notes={modalNotes || []}
         opened={!!modalNotes}

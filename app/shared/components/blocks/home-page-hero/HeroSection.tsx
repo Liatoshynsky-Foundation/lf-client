@@ -22,7 +22,7 @@ export type Props = {
 };
 
 const imagesPaths = {
-  heroBackgroundImage: '/images/main-page-hero-section/main-hero-background-image.png',
+  heroBackgroundImage: '/images/main-page-hero-section/main-hero-background-image.webp',
   heroCharacterImage: '/images/main-page-hero-section/main-hero-character-image.png',
   textLogo: '/images/main-page-hero-section/textLogo.svg',
   pauseIcon: '/images/main-page-hero-section/pause-icon.svg',
@@ -65,14 +65,14 @@ const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButt
           <Box sx={heroSectionStyles.heroCharacter}>
             <Image
               src={imagesPaths.heroCharacterImage}
-              alt="Hero character photo"
+              alt="Borys Liatoshynsky composer portrait"
               priority
               fill
               quality={90}
               data-testid="hero-character-image"
               style={{
                 objectFit: `${bp.isLaptopAndAbove ? 'contain' : 'cover'}`,
-                objectPosition: 'center'
+                objectPosition: bp.isLaptopAndAbove ? 'center bottom' : 'right bottom'
               }}
             />
           </Box>

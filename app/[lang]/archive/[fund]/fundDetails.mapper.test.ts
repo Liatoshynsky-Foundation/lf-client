@@ -34,10 +34,7 @@ const fund: FundDetailsDTO = {
   organizationForm: { uk: 'тематико-хронологічна', en: 'thematic-chronological' },
   documentCreationDate: '1895-1971',
   chronologicalBoundaries: '1895-1971',
-  documentLanguages: 'українська, польська',
   characterAndContent,
-  accessConditions: 'Доступ вільний',
-  compilerInfo: 'Ірина Тукова',
   status: FundStatus.Published,
   cases: [
     {
@@ -74,13 +71,14 @@ describe('fundDetails.mapper', () => {
   it('should map fund details to FundSummaryHeader data', () => {
     const result = mapFundDetailsToSummaryData(fund);
 
-    expect(result.items).toHaveLength(9);
+    expect(result.items).toHaveLength(6);
     expect(result.items[0]?.title.uk).toBe('Кількість описів');
     expect(result.items[0]?.description.uk.content[0]?.content?.[0]).toEqual({
       type: TipTapNodeTypes.text,
       text: '2'
     });
-    expect(result.items[3]?.description).toBe(characterAndContent);
+    expect(result.items[2]?.title.uk).toBe('Характер і зміст документів');
+    expect(result.items[2]?.description).toEqual(characterAndContent);
   });
 
   it('should skip empty optional summary fields', () => {
@@ -88,9 +86,6 @@ describe('fundDetails.mapper', () => {
       ...fund,
       organizationForm: undefined,
       characterAndContent: undefined,
-      documentLanguages: '',
-      accessConditions: '',
-      compilerInfo: undefined,
       chronologicalBoundaries: ''
     });
 

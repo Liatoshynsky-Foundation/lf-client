@@ -64,6 +64,8 @@ const mockCaseDetails = {
   dates: '1895–1955',
   sheets: 26,
   pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
+  contentDescription: 'Опис справи',
+  detailedCaseDescription: 'Детальний опис справи',
   documents: [
     { _id: 'doc-1', text: 'Документ А' },
     { _id: 'doc-2', text: 'Документ Б' }
@@ -158,6 +160,8 @@ describe('ArchiveCasePage', () => {
     expect(props.dateRange).toBe(mockCaseDetails.dates);
     expect(props.sheetsCount).toBe(mockCaseDetails.sheets);
     expect(props.pdfUrl).toBe(mockCaseDetails.pdfUrl);
+    expect(props.contentDescription).toBe(mockCaseDetails.contentDescription);
+    expect(props.detailedCaseDescription).toBe(mockCaseDetails.detailedCaseDescription);
     expect(props.fundHref).toBe(`/${lang}${getDynamicRoute.archiveFund('2')}`);
 
     expect(props.documents).toEqual([
@@ -179,6 +183,8 @@ describe('ArchiveCasePage', () => {
 
     expect(props.labels).toEqual({
       back: 'back',
+      contentDescription: 'contentDescription',
+      documents: 'documents.title',
       metaCode: 'meta.code',
       metaDates: 'meta.dates',
       metaSheets: 'meta.sheets',
@@ -210,6 +216,8 @@ describe('ArchiveCasePage', () => {
       dates: '1900–2000',
       sheets: null,
       pdfUrl: null,
+      contentDescription: '',
+      detailedCaseDescription: '',
       documents: undefined,
       prevCase: undefined,
       nextCase: undefined
@@ -229,6 +237,8 @@ describe('ArchiveCasePage', () => {
     expect(props.documents).toEqual([]);
     expect(props.sheetsCount).toBeUndefined();
     expect(props.pdfUrl).toBe('#');
+    expect(props.contentDescription).toBe('');
+    expect(props.detailedCaseDescription).toBe('');
     expect(props.prevCase).toBeUndefined();
     expect(props.nextCase).toBeUndefined();
   });

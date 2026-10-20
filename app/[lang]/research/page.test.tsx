@@ -6,6 +6,10 @@ import ResearchPage, { generateMetadata } from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
 import * as envUtils from '~/utils/isProductionMode';
 
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
+}));
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn()
@@ -61,10 +65,34 @@ describe('Research Page', () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
-  it('should generate correct metadata', async () => {
-    const metadata = await generateMetadata({ params: mockParams });
-    expect(metadata).toBeDefined();
+  it('should generate correct metadata using fallback when CMS has no data', async () => {
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      value: null
+    });
+
+    const metadata = await generateMetadata({ params: mockParams } as any);
     expect(metadata.title).toBe('title');
+    expect(metadata.description).toBe('description');
+  });
+
+  it('should generate correct metadata using CMS SEO values', async () => {
+    const mockCmsData = {
+      title: { uk: 'Дослідження CMS', en: 'Research CMS' },
+      description: { uk: 'Опис досліджень', en: 'Research description' },
+      allowIndexation: { uk: true, en: true }
+    };
+
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({
+      isError: false,
+      ok: true,
+      data: mockCmsData,
+      value: mockCmsData
+    });
+
+    const metadata = await generateMetadata({ params: mockParams } as any);
+    expect(metadata.title).toBe('Дослідження CMS');
+    expect(metadata.description).toBe('Опис досліджень');
   });
 
   it('should render all components when data is successfully fetched', async () => {
