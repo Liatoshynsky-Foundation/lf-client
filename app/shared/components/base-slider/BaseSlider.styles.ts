@@ -14,7 +14,11 @@ const commonNavButton = {
   margin: '0 !important',
   '&:after': { content: '""' },
   '&:before': { content: '""' },
-  '& .swiper-navigation-icon': { display: 'none' }
+  '& .swiper-navigation-icon': { display: 'none' },
+  '&:focus-visible': {
+    outline: '3px solid #000000',
+    outlineOffset: '2px'
+  }
 };
 
 export const baseSliderStyles = {
