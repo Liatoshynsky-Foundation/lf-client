@@ -32,7 +32,6 @@ const createMockCompositionDetails = (overrides: Partial<RawOpusDetailsDTO> = {}
     creationYear: '1929',
     introDescription: { uk: { type: 'doc', content: [] }, en: { type: 'doc', content: [] } },
     description: { uk: 'SEO Опис', en: 'SEO Desc' },
-    performancesTitle: null,
     compositions: [],
     performances: [],
     gallery: [],
@@ -229,7 +228,6 @@ describe('ArtistryService', () => {
 
     it('should map raw opus details correctly using the artistry mapper', async () => {
       const rawOpus = createMockCompositionDetails({
-        performancesTitle: { uk: 'ТЕСТ заголовок з CMS', en: 'TEST title from CMS' },
         compositions: [
           {
             _id: 'c1',
@@ -259,7 +257,6 @@ describe('ArtistryService', () => {
         description: 'SEO Опис',
         movements: undefined,
         sheetMusic: null,
-        performancesTitle: 'ТЕСТ заголовок з CMS',
         videos: [],
         allowIndexation: true,
         coverImage: undefined,
@@ -280,7 +277,6 @@ describe('ArtistryService', () => {
       const rawOpus = createMockCompositionDetails({
         introDescription: undefined,
         description: undefined,
-        performancesTitle: undefined,
         performances: undefined
       });
       compositionsRepoMock.getOpusBySlug.mockResolvedValue(rawOpus);
@@ -290,7 +286,6 @@ describe('ArtistryService', () => {
       expect(result).toMatchObject({
         introDescription: null,
         description: undefined,
-        performancesTitle: null,
         datesNote: null,
         videos: [],
         sheetMusic: null
