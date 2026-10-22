@@ -2,9 +2,22 @@ export const styles = {
   wrapper: {
     position: 'relative'
   },
+  equalizer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: { xs: '2.5px', sm: '4px' },
+    width: { xs: '22px', sm: '32px' },
+    height: { xs: '18px', sm: '30px' },
+    '& > div': {
+      transform: { xs: 'scaleY(0.7)', sm: 'scaleY(1)' }
+    }
+  },
   eqButton: {
-    color: 'red.900',
-    padding: '6px 8px',
+    color: 'black',
+    width: { xs: '40px', sm: 'auto' },
+    height: { xs: '40px', sm: 'auto' },
+    padding: { xs: 0, sm: '6px 8px' },
     borderRadius: '20px',
     transition: 'background-color 0.2s ease',
     outline: 'none',
@@ -15,9 +28,9 @@ export const styles = {
     }
   },
   icon: {
-    width: 2,
-    borderRadius: 1,
-    backgroundColor: 'red.900'
+    width: '2px',
+    borderRadius: '1px',
+    backgroundColor: 'black'
   },
   iconStatic: {
     fontSize: 28

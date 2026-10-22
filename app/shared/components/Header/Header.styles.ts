@@ -41,7 +41,7 @@ export const styles = {
     zIndex: theme.zIndex.headerAppBar
   },
   navigationContainer: {
-    marginRight: { xl: '35px', xxl: '70px' },
+    marginRight: { xs: '8px', xl: '35px', xxl: '70px' },
     fontSize: { md: '15px', lg: '16px' }
   },
   rightActionsContainer: {
