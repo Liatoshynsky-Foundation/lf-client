@@ -30,6 +30,9 @@ jest.mock('~/validators/pagesSchemas/pages/war-in-ukraine.schema', () => ({
 jest.mock('~/validators/pagesSchemas/pages/archive.schema', () => ({
   ArchivePageSchema: { __schema: 'archive' }
 }));
+jest.mock('~/validators/pagesSchemas/pages/publications.schema', () => ({
+  PublicationsPageSchema: { __schema: 'publications' }
+}));
 
 jest.mock('~/validators/constants', () => {
   const { z } = jest.requireActual<typeof import('zod')>('zod');
@@ -77,7 +80,8 @@ describe('SchemaFactory', () => {
     ['biography', 'biography', null],
     ['cooperation', 'cooperation', null],
     ['artistry', 'artistry', createArtistryPageSchema],
-    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema]
+    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema],
+    ['publications', 'publications', null]
   ] as const)('returns localized schema for slug "%s"', (slug, tag, createSchema) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 

@@ -11,6 +11,7 @@ import { createArtistryPageSchema } from '~/validators/pagesSchemas/pages/artist
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { createPrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
+import { PublicationsPageSchema } from '~/validators/pagesSchemas/pages/publications.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 import { createWarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
 
@@ -22,7 +23,8 @@ export const PAGE_SLUGS = [
   'cooperation',
   'artistry',
   'war-in-ukraine',
-  'archive'
+  'archive',
+  'publications'
 ] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];
 
@@ -41,7 +43,8 @@ const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageData
   archive: (locale) =>
     LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale, {
       allowEmptyFields: ['description']
-    })
+    }),
+  publications: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PublicationsPageSchema))), locale)
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {
