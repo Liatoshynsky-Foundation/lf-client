@@ -2,22 +2,26 @@ export const styles = {
   popoverPaper: {
     backgroundColor: 'grey.900',
     color: 'white',
-    borderRadius: '16px',
+    borderRadius: { xs: '24px', sm: '16px' },
     padding: '16px',
-    minWidth: 320,
-    maxWidth: '370px',
+    width: { xs: '272px', sm: 'auto' },
+    minWidth: { xs: 0, sm: 320 },
+    maxWidth: { xs: 'calc(100vw - 32px)', sm: '370px' },
+    marginTop: { xs: '8px', sm: 0 },
+    boxSizing: 'border-box',
     overflow: 'hidden'
   },
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 1.5
+    gap: { xs: '12px', sm: 1.5 }
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 2
+    gap: 2,
+    minHeight: { xs: '24px', sm: 'auto' }
   },
   timeText: {
     fontSize: '14px',
@@ -40,8 +44,8 @@ export const styles = {
     backgroundColor: 'grey.700',
     borderRadius: 2,
     cursor: 'pointer',
-    marginTop: 1,
-    marginBottom: 1
+    marginTop: { xs: 0, sm: 1 },
+    marginBottom: { xs: '4px', sm: 1 }
   },
   progressLine: {
     position: 'absolute',
@@ -63,8 +67,9 @@ export const styles = {
   controls: {
     display: 'flex',
     alignItems: 'center',
-    gap: 24,
-    marginTop: 1
+    justifyContent: { xs: 'space-between', sm: 'initial' },
+    gap: { xs: 0, sm: 24 },
+    marginTop: { xs: '2px', sm: 1 }
   },
   playPauseButton: {
     backgroundColor: 'white',
@@ -81,14 +86,14 @@ export const styles = {
     }
   },
   allTracksButton: {
-    flex: 1,
+    flex: { xs: '0 0 124px', sm: 1 },
     backgroundColor: 'white',
     color: 'black',
     borderRadius: '24px',
     textTransform: 'none',
     fontWeight: 500,
     height: 40,
-    width: '111px',
+    width: { xs: '124px', sm: '111px' },
     '&:hover': {
       backgroundColor: 'grey.350'
     },

@@ -21,10 +21,12 @@ export default function RightActionsPanel({ supportButtonData, scrollDirection }
   const { isMobile } = useBreakpoints();
 
   return (
-    <Box sx={!isMobile ? styles.backgroundContainer : undefined}>
-      <Box sx={styles.controls(isMobile)}>
+    <Box sx={styles.backgroundContainer}>
+      <Box sx={styles.controls}>
         <AudioPlayer />
-        <LanguageSwitcher variant="icon" scrollDirection={scrollDirection} />
+        <Box sx={styles.languageSwitcher(isMobile)}>
+          <LanguageSwitcher variant="icon" scrollDirection={scrollDirection} />
+        </Box>
       </Box>
       <SupportButton data={supportButtonData} isMobile={isMobile} />
     </Box>
