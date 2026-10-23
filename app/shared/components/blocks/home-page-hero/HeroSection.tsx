@@ -40,8 +40,10 @@ const HeroSection: React.FC<Props> = ({ heroQuote, heroQuoteSource, playbackButt
       <BoxButton
         testID="hero-playback-button"
         onClick={() => {
-          togglePlay();
-          openPlayer();
+          if (bp.isDesktop) {
+            togglePlay();
+            openPlayer();
+          }
         }}
         cursorContent={{
           text: isPlaying ? playbackButton.stopPlayback : playbackButton.startPlayback,

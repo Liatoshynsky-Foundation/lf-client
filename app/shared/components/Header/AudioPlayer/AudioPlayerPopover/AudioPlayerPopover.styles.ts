@@ -8,7 +8,6 @@ export const styles = {
     minWidth: { xs: 0, sm: 320 },
     maxWidth: { xs: 'calc(100vw - 32px)', sm: '370px' },
     marginTop: { xs: '8px', sm: 0 },
-    marginLeft: { xs: '8px', sm: 0 },
     boxSizing: 'border-box',
     overflow: 'hidden'
   },
