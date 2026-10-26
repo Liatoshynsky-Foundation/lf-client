@@ -75,6 +75,16 @@ describe('ContactForm', () => {
     expect(screen.getByLabelText('Ваше повідомлення *')).toBeInTheDocument();
   });
 
+  it('should focus the name input on mount', () => {
+    expect(screen.getByLabelText('Імя')).toHaveFocus();
+  });
+
+  it('focuses the name input when the focus event is dispatched', () => {
+    window.dispatchEvent(new Event('focus-contact-name'));
+
+    expect(screen.getByLabelText('Імя')).toHaveFocus();
+  });
+
   it('should render a checkbox with privacy policy link', () => {
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
 
