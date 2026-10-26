@@ -187,7 +187,7 @@ export default function AudioPlayer() {
           aria-haspopup="dialog"
           ref={buttonRef}
         >
-          <Box display="flex" alignItems="center" gap={0.5} height={30}>
+          <Box sx={styles.equalizer}>
             {stickHeights.map(({ id, height }, i) => (
               <Box
                 key={id}

@@ -105,6 +105,8 @@ describe('HeroSection', () => {
     });
     (useBreakpoints as jest.Mock).mockReturnValue({
       isLaptopAndAbove: true,
+      isDesktop: true,
+      isLaptop: false,
       isMobile: false,
       isTablet: false
     });
@@ -125,6 +127,8 @@ describe('HeroSection', () => {
   it('should render content with specific styles on mobile or tablet breakpoints', () => {
     (useBreakpoints as jest.Mock).mockReturnValue({
       isLaptopAndAbove: false,
+      isDesktop: false,
+      isLaptop: false,
       isMobile: true,
       isTablet: false
     });
@@ -144,6 +148,40 @@ describe('HeroSection', () => {
 
     expect(mockTogglePlay).toHaveBeenCalledTimes(1);
     expect(mockOpenPlayer).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not trigger audio controls in hero section on tablet', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({
+      isDesktop: false,
+      isLaptopAndAbove: false,
+      isLaptop: false,
+      isTablet: true,
+      isMobile: false
+    });
+
+    render(<HeroSection {...defaultProps} />);
+
+    fireEvent.click(screen.getByTestId('hero-playback-button'));
+
+    expect(mockTogglePlay).not.toHaveBeenCalled();
+    expect(mockOpenPlayer).not.toHaveBeenCalled();
+  });
+
+  it('should not trigger audio controls in hero section on mobile', () => {
+    (useBreakpoints as jest.Mock).mockReturnValue({
+      isDesktop: false,
+      isLaptopAndAbove: false,
+      isLaptop: false,
+      isTablet: false,
+      isMobile: true
+    });
+
+    render(<HeroSection {...defaultProps} />);
+
+    fireEvent.click(screen.getByTestId('hero-playback-button'));
+
+    expect(mockTogglePlay).not.toHaveBeenCalled();
+    expect(mockOpenPlayer).not.toHaveBeenCalled();
   });
 
   it('should adjust internal conditions when context audio state is playing', () => {
