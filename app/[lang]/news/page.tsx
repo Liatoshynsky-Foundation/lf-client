@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
     pageRoute: ROUTES.NEWS,
     fetchPageMetaData: async () => {
       const { lang } = await params;
-      const pageResult = await resolvePageData('publications', lang);
+      const pageResult = await resolvePageData('news', lang);
 
       if (isError(pageResult)) return null;
       return UnwrapResult(pageResult);
@@ -41,7 +41,7 @@ const News = async ({ params }: Readonly<Language>) => {
     return <UnderDevelopment />;
   }
 
-  const pageResult = await resolvePageData('publications', lang);
+  const pageResult = await resolvePageData('news', lang);
 
   if (isError(pageResult)) {
     return ErrorPageFactory(pageResult.error);

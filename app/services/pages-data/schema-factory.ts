@@ -24,7 +24,7 @@ export const PAGE_SLUGS = [
   'artistry',
   'war-in-ukraine',
   'archive',
-  'publications'
+  'news'
 ] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];
 
@@ -44,7 +44,7 @@ const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageData
     LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale, {
       allowEmptyFields: ['description']
     }),
-  publications: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PublicationsPageSchema))), locale)
+  news: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PublicationsPageSchema))), locale)
 };
 
 export function SchemaFactory<S extends PageSlug>(slug: S, locale: Locale): z.ZodType<PageDataMap[S]> | undefined {

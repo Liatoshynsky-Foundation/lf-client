@@ -54,7 +54,7 @@ export interface PageDataMap {
   artistry: ArtistryPage;
   'war-in-ukraine': WarInUkrainePage;
   archive: ArchivePage;
-  publications: PublicationsPage;
+  news: PublicationsPage;
 }
 
 export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;

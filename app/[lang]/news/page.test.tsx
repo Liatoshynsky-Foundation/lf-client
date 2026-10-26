@@ -147,7 +147,7 @@ describe('News page', () => {
     expect(screen.getByTestId('MediaIntroSection')).toBeInTheDocument();
     expect(screen.getByTestId('MediaCenter')).toBeInTheDocument();
 
-    expect(resolvePageData).toHaveBeenCalledWith('publications', 'uk');
+    expect(resolvePageData).toHaveBeenCalledWith('news', 'uk');
     expect(mockNewsService.getAllPublishedNews).toHaveBeenCalledWith('uk');
     expect(mockEventService.getAllPublishedEvents).toHaveBeenCalledWith('uk');
     expect(mockMediaMentionService.getAllPublishedMediaMentions).toHaveBeenCalled();
