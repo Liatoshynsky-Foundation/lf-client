@@ -52,14 +52,6 @@ function resolveTranslation(
   if (options?.allowEmptyFields?.includes(fieldKey)) {
     return value[locale];
   }
-  const fallbackLocale = locale === 'en' ? 'uk' : 'en';
-  if (hasLocalizedContent(value[fallbackLocale], path, fallbackLocale)) {
-    return value[fallbackLocale];
-  }
-
-  if (value[locale] !== undefined) {
-    return value[locale];
-  }
 
   throw translationErrorFactory(locale, path);
 }
