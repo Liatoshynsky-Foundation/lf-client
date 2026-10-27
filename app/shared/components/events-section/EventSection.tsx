@@ -49,7 +49,7 @@ const EventSection: React.FC<Props> = ({
     const cardProps = mapEventToCardProps(
       event,
       locale,
-      t('completedEvent'),
+      t('pastEvent'),
       viewLabel,
       regLabel,
       isDesktop ? 'text' : 'numeric'
