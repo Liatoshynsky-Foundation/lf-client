@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 import ActionsHelp from './ActionsHelp';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import type { MaybeLocalizedField } from '~/types/types/language';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 jest.mock('swiper/react', () => ({
   Swiper: ({ children }: { children: React.ReactNode }) => <div data-testid="mock-swiper">{children}</div>,
@@ -25,8 +26,8 @@ jest.mock('~/ds-components/text-card/TextCard', () => ({
     description,
     locale = 'en'
   }: {
-    title: string | { en: string; uk: string };
-    description: string | { en: string; uk: string };
+    title: MaybeLocalizedField;
+    description: MaybeLocalizedField;
     locale?: 'en' | 'uk';
   }) => (
     <div data-testid="text-card">
@@ -38,15 +39,7 @@ jest.mock('~/ds-components/text-card/TextCard', () => ({
 
 jest.mock('~/ds-components/button-card/ButtonCard', () => ({
   __esModule: true,
-  default: ({
-    text,
-    link,
-    dataTestId
-  }: {
-    text: string | { en: string; uk: string };
-    link: string;
-    dataTestId?: string;
-  }) => (
+  default: ({ text, link, dataTestId }: { text: MaybeLocalizedField; link: string; dataTestId?: string }) => (
     <a data-testid={dataTestId || 'button-card'} href={link}>
       {typeof text === 'string' ? text : text.en}
     </a>
