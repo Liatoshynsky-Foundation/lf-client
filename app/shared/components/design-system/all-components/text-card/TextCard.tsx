@@ -1,12 +1,13 @@
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 
 import { styles } from './TextCard.styles';
+import type { StringOrLocalizedString } from '~/types/types/language';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
 
 interface TextCardProps {
-  title: string | { en: string; uk: string };
-  description: string | { en: string; uk: string };
+  title: StringOrLocalizedString;
+  description: StringOrLocalizedString;
   sx?: SxProps<Theme>;
   locale?: 'en' | 'uk';
 }

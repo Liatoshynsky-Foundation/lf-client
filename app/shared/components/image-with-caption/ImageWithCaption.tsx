@@ -10,6 +10,7 @@ import TipTapContent from '~/components/tip-tap-content/TipTapContent';
 import { styles } from './ImageWithCaption.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { ElementSizes } from '~/types/types/common.types';
+import type { StringOrLocalizedString } from '~/types/types/language';
 
 import { type CropRect } from '~/lib/utils/cropUtils';
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
@@ -23,12 +24,10 @@ export interface BorderProps {
   color?: string;
 }
 
-type LocalizedString = Record<Locale, string>;
-
 interface ImageWithCaptionProps {
   src: string;
-  alt: string | LocalizedString | JSONContent;
-  caption: string | LocalizedString | JSONContent | null;
+  alt: StringOrLocalizedString | JSONContent;
+  caption: StringOrLocalizedString | JSONContent | null;
   crop?: CropRect | null;
   sizes: ElementSizes;
   border?: BorderProps;
@@ -87,7 +86,7 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
 
   const resolvedAltText = isTipTapDoc(alt)
     ? extractTextFromTipTap(alt, locale)
-    : getPlainString(alt as string | LocalizedString, locale);
+    : getPlainString(alt as StringOrLocalizedString, locale);
 
   if (!src) return null;
 
@@ -118,7 +117,7 @@ const ImageWithCaption: React.FC<ImageWithCaptionProps> = ({
             className={captionClassName}
             sx={[styles.caption(sizes, align), captionSx].flat() as TypographyProps['sx']}
           >
-            {getPlainString(caption as string | LocalizedString, locale)}
+            {getPlainString(caption as StringOrLocalizedString, locale)}
           </Typography>
         ))}
     </Box>
