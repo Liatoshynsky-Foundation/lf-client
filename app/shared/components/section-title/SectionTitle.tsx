@@ -8,19 +8,18 @@ import React, { useMemo } from 'react';
 import TipTapContent from '../tip-tap-content/TipTapContent';
 import { imageSizes, styles } from './SectionTitle.styles';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import type { StringOrLocalizedString } from '~/types/types/language';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 import { sxToArray } from '~/utils/sxToArray';
 
 import { generateSizesAttribute } from '~/lib/utils/generateSizesAttribute';
 import { getPlainString, isTipTapDoc } from '~/lib/utils/tiptapHelpers';
 
-type LocalizedString = Record<Locale, string>;
-
 interface SectionTitleProps {
   icon?: boolean;
   mb?: number | string;
   gridColumn?: object;
-  title: string | LocalizedString | TipTapDoc;
+  title: StringOrLocalizedString | TipTapDoc;
   sx?: SxProps<Theme>;
   dataTestId?: string;
 }

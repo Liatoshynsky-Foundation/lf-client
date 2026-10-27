@@ -1,13 +1,13 @@
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 
 import { styles } from './TextCard.styles';
-import type { MaybeLocalizedField } from '~/types/types/language';
+import type { StringOrLocalizedString } from '~/types/types/language';
 
 import { sxToArray } from '~/lib/utils/sxToArray';
 
 interface TextCardProps {
-  title: MaybeLocalizedField;
-  description: MaybeLocalizedField;
+  title: StringOrLocalizedString;
+  description: StringOrLocalizedString;
   sx?: SxProps<Theme>;
   locale?: 'en' | 'uk';
 }

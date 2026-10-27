@@ -4,6 +4,9 @@ export interface Language {
   readonly params: Promise<{ readonly lang: Locale }>;
 }
 
-export type LocalizedField = Record<Locale, string>;
+export type LocalizedString = {
+  uk: string;
+  en: string;
+};
 
-export type MaybeLocalizedField = string | LocalizedField;
+export type StringOrLocalizedString = string | LocalizedString;

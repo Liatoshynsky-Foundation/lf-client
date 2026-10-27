@@ -11,20 +11,20 @@ import ButtonCard from '~/ds-components/button-card/ButtonCard';
 import TextCard from '~/ds-components/text-card/TextCard';
 
 import { styles } from './ActionsHelp.styles';
-import type { LocalizedField } from '~/types/types/language';
+import type { LocalizedString } from '~/types/types/language';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { commonSx } from '~/shared/styles/commonSx';
 
 interface ActionsHelpProps {
-  title: LocalizedField;
+  title: LocalizedString;
   subtitle: TipTapDoc;
   paperItems: {
-    title: LocalizedField;
-    description: LocalizedField;
+    title: LocalizedString;
+    description: LocalizedString;
   }[];
   paperButton: {
-    text: LocalizedField;
+    text: LocalizedString;
     link: string;
   };
 }

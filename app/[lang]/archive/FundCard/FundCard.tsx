@@ -4,20 +4,20 @@ import { Box, Typography } from '@mui/material';
 import { useLocale } from 'next-intl';
 
 import { styles } from './FundCard.styles';
-import type { MaybeLocalizedField } from '~/types/types/language';
+import type { StringOrLocalizedString } from '~/types/types/language';
 
 import { Link } from '~/i18n/navigation';
 import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 export interface FundCardProps {
   id: number;
-  number: MaybeLocalizedField;
-  title: MaybeLocalizedField;
+  number: StringOrLocalizedString;
+  title: StringOrLocalizedString;
 }
 
 export default function FundCard({ id, number, title }: Readonly<FundCardProps>) {
   const locale = useLocale();
-  function getLocalizedText(text: MaybeLocalizedField) {
+  function getLocalizedText(text: StringOrLocalizedString) {
     if (typeof text === 'string') {
       return text;
     }

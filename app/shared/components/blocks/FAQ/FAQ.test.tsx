@@ -3,7 +3,7 @@ import { ComponentType } from 'react';
 
 import Faq from './FAQ';
 import { faqItems } from './FAQ.consts';
-import type { LocalizedField } from '~/types/types/language';
+import type { LocalizedString } from '~/types/types/language';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -61,8 +61,8 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
 }));
 
 type FaqItem = {
-  title: LocalizedField;
-  content: LocalizedField;
+  title: LocalizedString;
+  content: LocalizedString;
 };
 
 const mockFaqData = {
