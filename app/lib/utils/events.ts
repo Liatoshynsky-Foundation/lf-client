@@ -17,7 +17,7 @@ export const sortEvents = (events: RawEventItem[], now = Date.now()) => {
     .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) >= now)
     .sort((a, b) => new Date(a.eventDateTimeStart || 0).getTime() - new Date(b.eventDateTimeStart || 0).getTime());
 
-  const completedEvents = events
+  const pastEvents = events
     .filter((e) => getEventTimestamp(e.eventDateTimeEnd, e.eventDateTimeStart) < now)
     .sort((a, b) => {
       const dateA = getEventTimestamp(a.eventDateTimeEnd, a.eventDateTimeStart);
@@ -25,7 +25,7 @@ export const sortEvents = (events: RawEventItem[], now = Date.now()) => {
       return dateB - dateA;
     });
 
-  return [...upcomingEvents, ...completedEvents];
+  return [...upcomingEvents, ...pastEvents];
 };
 
 export const mapEventToCardProps = (

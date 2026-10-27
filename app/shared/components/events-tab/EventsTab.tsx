@@ -77,7 +77,7 @@ const EventsTab = ({ eventsData, itemsPerPage = 6, tabSx }: EventsTabProps) => {
         const cardProps = mapEventToCardProps(
           event,
           locale,
-          t('completedEvent'),
+          t('pastEvent'),
           tEvents('viewButton'),
           tEvents('registerButton'),
           'numeric'
