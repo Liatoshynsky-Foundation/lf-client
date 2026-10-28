@@ -31,18 +31,42 @@ export type PageSlug = (typeof PAGE_SLUGS)[number];
 export const isPageSlug = (slug: string): slug is PageSlug => PAGE_SLUGS.includes(slug as PageSlug);
 
 const schemaFactories: { [K in PageSlug]: (locale: Locale) => z.ZodType<PageDataMap[K]> } = {
-  'about-us': (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(createAboutUsPageSchema(locale)))), locale),
+  'about-us': (locale) =>
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(createAboutUsPageSchema(locale)))), locale, {
+      allowEmptyFields: [
+        'blocks.OurMission.list',
+        'blocks.WhatWeDo.items.title',
+        'blocks.WhatWeDo.items.description',
+        'blocks.OurGoals.goals.title',
+        'blocks.OurGoals.goals.description'
+      ]
+    }),
   'privacy-policy': (locale) =>
-    LocalizeSchema(NoTime(NoIDSchema(NoPageType(createPrivacyPolicyPageSchema(locale)))), locale),
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(createPrivacyPolicyPageSchema(locale)))), locale, {
+      allowEmptyFields: [
+        'blocks.DataUsage.list',
+        'blocks.Cookies.list',
+        'blocks.DataWeCollect.sections.list',
+        'blocks.UserRights.list'
+      ]
+    }),
   research: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(ResearchPageSchema))), locale),
   biography: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(BiographyPageSchema))), locale),
   cooperation: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(CooperationPageSchema))), locale),
   artistry: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(createArtistryPageSchema(locale)))), locale),
   'war-in-ukraine': (locale) =>
-    LocalizeSchema(NoTime(NoIDSchema(NoPageType(createWarInUkrainePageSchema(locale)))), locale),
+    LocalizeSchema(NoTime(NoIDSchema(NoPageType(createWarInUkrainePageSchema(locale)))), locale, {
+      allowEmptyFields: [
+        'blocks.PrincipleOfHope.buttons.shortText',
+        'blocks.PrincipleOfHope.buttons.fullText',
+        'blocks.YermolenkoLinks.buttons.shortText',
+        'blocks.YermolenkoLinks.buttons.fullText',
+        'blocks.VolunteerDonation.paymentMethods.label'
+      ]
+    }),
   archive: (locale) =>
     LocalizeSchema(NoTime(NoIDSchema(NoPageType(ArchivePageSchema))), locale, {
-      allowEmptyFields: ['description']
+      allowEmptyFields: ['blocks.PageCaption.description']
     }),
   news: (locale) => LocalizeSchema(NoTime(NoIDSchema(NoPageType(PublicationsPageSchema))), locale)
 };
