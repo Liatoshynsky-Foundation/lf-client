@@ -15,12 +15,18 @@ interface MockCarouselProps {
     alt: string;
   }>;
   infiniteLoop?: boolean;
+  autoScroll?: boolean;
 }
 
 jest.mock('~/shared/components/design-system/all-components/carousel/Carousel', () => ({
   __esModule: true,
-  default: ({ images, infiniteLoop }: MockCarouselProps) => (
-    <div data-testid="mock-carousel" data-images-count={images.length} data-infinite={infiniteLoop}>
+  default: ({ images, infiniteLoop, autoScroll }: MockCarouselProps) => (
+    <div
+      data-testid="mock-carousel"
+      data-images-count={images.length}
+      data-infinite={infiniteLoop}
+      data-auto-scroll={autoScroll}
+    >
       {images.map((img) => (
         <img key={img.id} src={img.src} alt={img.alt} />
       ))}
@@ -42,6 +48,12 @@ describe('ImageCarouselSection', () => {
 
     expect(carousel).toHaveAttribute('data-images-count', '3');
     expect(carousel).toHaveAttribute('data-infinite', 'true');
+    expect(carousel).toHaveAttribute('data-auto-scroll', 'false');
+  });
+
+  it('enables automatic playback when requested', () => {
+    render(<ImageCarouselSection autoScroll />);
+    expect(screen.getByTestId('mock-carousel')).toHaveAttribute('data-auto-scroll', 'true');
   });
 
   it('should render default images with correct alt text', () => {

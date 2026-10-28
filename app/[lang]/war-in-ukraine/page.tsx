@@ -46,7 +46,7 @@ const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
 const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
   WarInfo: ({ blocks }) => <WarInfoSection data={blocks.WarInfo} />,
   PrincipleOfHope: ({ blocks }) => <PrincipleOfHope data={blocks.PrincipleOfHope} />,
-  WarCarousel: ({ blocks }) => <ImageCarouselSection data={blocks.WarCarousel} />,
+  WarCarousel: ({ blocks }) => <ImageCarouselSection data={blocks.WarCarousel} autoScroll />,
   YermolenkoLinks: ({ blocks }) => <YermolenkoLinks data={blocks.YermolenkoLinks} />,
   VolunteerDonation: ({ blocks }) => <VolunteerDonation data={blocks.VolunteerDonation} />
 };

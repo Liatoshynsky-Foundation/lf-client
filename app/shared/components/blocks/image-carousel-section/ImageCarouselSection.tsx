@@ -13,6 +13,7 @@ import { IMAGES } from '~/shared/constants/assets';
 import { isValidUrl } from '~/shared/utils/isValidUrl';
 
 export type ImageCarouselSectionProps = BoxProps & {
+  autoScroll?: boolean;
   data?: {
     images?: Array<{
       id?: string | number;
@@ -25,7 +26,7 @@ export type ImageCarouselSectionProps = BoxProps & {
   };
 };
 
-const ImageCarouselSection: React.FC<ImageCarouselSectionProps> = ({ sx, data, ...props }) => {
+const ImageCarouselSection: React.FC<ImageCarouselSectionProps> = ({ sx, data, autoScroll = false, ...props }) => {
   const t = useTranslations('warCarousel');
   const locale = useLocale() as 'uk' | 'en';
 
@@ -82,7 +83,7 @@ const ImageCarouselSection: React.FC<ImageCarouselSectionProps> = ({ sx, data, .
 
   return (
     <Box sx={[styles.carouselSectionContainer, ...sxToArray(sx)]} {...props}>
-      <Carousel images={carouselImages} infiniteLoop={true} />
+      <Carousel images={carouselImages} infiniteLoop={true} autoScroll={autoScroll} />
     </Box>
   );
 };

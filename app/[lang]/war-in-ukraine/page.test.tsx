@@ -35,7 +35,9 @@ jest.mock('~/components/blocks/war-info/WarInfoSection', () => ({
 jest.mock('~/shared/components/blocks/image-carousel-section/ImageCarouselSection', () => ({
   __esModule: true,
   default: (props: ImageCarouselSectionProps) => (
-    <div data-testid="image-carousel-section">{JSON.stringify(props.data)}</div>
+    <div data-testid="image-carousel-section" data-auto-scroll={props.autoScroll}>
+      {JSON.stringify(props.data)}
+    </div>
   )
 }));
 
@@ -176,6 +178,7 @@ describe('WarInUkraine page', () => {
       expect(screen.getByTestId('war-info')).toHaveTextContent('War info data');
       expect(screen.getByTestId('principle-of-hope')).toHaveTextContent('Hope');
       expect(screen.getByTestId('image-carousel-section')).toBeInTheDocument();
+      expect(screen.getByTestId('image-carousel-section')).toHaveAttribute('data-auto-scroll', 'true');
       expect(screen.getByTestId('yermolenko-links')).toHaveTextContent('Links');
       expect(screen.getByTestId('volunteer-donation')).toHaveTextContent('Donate');
     });
