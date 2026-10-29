@@ -195,14 +195,15 @@ describe('NewsDetailPage', () => {
     expect(mockedFormatDate).not.toHaveBeenCalled();
   });
 
-  it('uses locale from getLocale for fetching news', async () => {
+  it('uses route lang when fetching news, regardless of request locale', async () => {
     const { getLocale } = jest.requireMock('next-intl/server');
-    (getLocale as jest.Mock).mockResolvedValue('en');
+    (getLocale as jest.Mock).mockResolvedValue('uk');
+
     mockGetNewsBySlug.mockResolvedValue(mockNews);
     mockedFormatDate.mockReturnValue('01.05.24');
 
     await NewsDetailPage({
-      params: Promise.resolve({ lang: 'uk', slug: 'test-slug' })
+      params: Promise.resolve({ lang: 'en', slug: 'test-slug' })
     });
 
     expect(mockGetNewsBySlug).toHaveBeenCalledWith('test-slug', 'en');

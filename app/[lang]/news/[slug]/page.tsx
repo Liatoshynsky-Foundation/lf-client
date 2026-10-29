@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { Locale } from 'next-intl';
-import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { ArticleDetail } from '~/components/blocks/article-detail/ArticleDetail';
 import type { BlockNoteBlock } from '~/components/blocks/article-detail/BlockNoteContent';
@@ -44,12 +44,11 @@ export async function generateMetadata({ params }: Readonly<NewsDetailPageProps>
 export default async function NewsDetailPage({ params }: Readonly<NewsDetailPageProps>) {
   const { lang, slug } = await params;
   setRequestLocale(lang);
-  const locale = await getLocale();
 
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
 
-  const news = await newsService.getNewsBySlug(slug, locale as Locale);
+  const news = await newsService.getNewsBySlug(slug, lang);
 
   if (!news) notFound();
 
