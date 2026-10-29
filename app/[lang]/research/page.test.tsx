@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
 import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
@@ -67,6 +68,7 @@ describe('Research Page', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (getTranslations as jest.Mock).mockResolvedValue((key: string) => key);
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
