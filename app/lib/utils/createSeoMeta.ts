@@ -28,9 +28,10 @@ export function createSeoMeta({
   const currentLocale = locales.find((loc) => loc.startsWith(locale));
   const alternateLocale = locales.find((loc) => loc !== currentLocale);
 
-  const stableImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`;
-
   const stableImageAlt = imageAlt || title;
+  const passedImageUrl = imageUrl?.trim() || '';
+  const resolvedImageUrl = passedImageUrl || '/opengraph-image.png';
+  const stableImageUrl = resolvedImageUrl.startsWith('http') ? resolvedImageUrl : `${baseUrl}${resolvedImageUrl}`;
 
   return {
     title,

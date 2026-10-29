@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Readonly<NewsDetailPageProps>
     title: news.title,
     description: news.description,
     url: `/news/${slug}`,
-    imageUrl: news.coverImage.src,
+    imageUrl: news.coverImage?.src,
     locale: lang,
     keywords: news.keywords ?? undefined,
     allowIndexation: news.allowIndexation ?? undefined

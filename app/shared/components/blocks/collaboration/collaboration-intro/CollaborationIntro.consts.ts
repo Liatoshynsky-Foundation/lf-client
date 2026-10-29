@@ -2,28 +2,30 @@ import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 
 export const collaborationIntroPageData = {
   uk: {
-    title: 'СпіВпРацЯ',
-    subtitle: 'Разом ми можемо більше',
+    title: 'Співпраця',
+    subtitle: 'Спільна робота',
     contentAbove: makeDoc([
       normalText(
-        'Ми віримо, що українська класична музика має звучати у світі — від Варшави до Нью-Йорку, Токіо та Абу Дабі. Фундація Лятошинського створена для того, щоб зберігати спадщину Бориса Лятошинського та підтримувати нові імена. І ця місія можлива лише у партнерстві з вами — людьми, які розділяють наші цінності.'
+        'Проєкти Фундації передбачають співпрацю з фахівцями та інституціями різного профілю. Залежно від завдання ми шукаємо партнерів або долучаємося до проєктів, запропонованих іншими.'
       )
     ]),
     content: makeDoc([
-      normalText('Кожен наш партнер стає частиною історії української музики, яка продовжує звучати попри війну.')
+      normalText(
+        'Формати співпраці можуть бути різними — конкретний формат визначається змістом і завданнями кожного проєкту.'
+      )
     ])
   },
   en: {
-    title: 'Cooperation',
-    subtitle: 'Together we can do more',
+    title: 'Collaboration',
+    subtitle: 'Working Together',
     contentAbove: makeDoc([
       normalText(
-        'We believe that Ukrainian classical music should be heard around the world — from Warsaw to New York, Tokyo, and Abu Dhabi. The Liatoshynsky Foundation was created to preserve the legacy of Borys Liatoshynsky and to support new names in classical music. This mission is possible only in partnership with people like you — those who share our values.'
+        'The Foundation’s projects involve collaboration with professionals and institutions from a range of fields. Depending on the project, we either seek partners or join projects initiated by others.'
       )
     ]),
     content: makeDoc([
       normalText(
-        'Each of our partners becomes part of the history of Ukrainian music, which continues to resonate despite the war.'
+        'Collaboration can take different forms, with the specific format determined by the nature and objectives of each project.'
       )
     ])
   }
