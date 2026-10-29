@@ -18,7 +18,9 @@ describe('LocalizeSchema', () => {
   });
 
   it('should localize the ArchivePage CMS description and allow it to be empty', async () => {
-    const transformer = LocalizeSchema(ArchivePageSchema, 'en' as Locale, { allowEmptyFields: ['description'] });
+    const transformer = LocalizeSchema(ArchivePageSchema, 'en' as Locale, {
+      allowEmptyFields: ['blocks.PageCaption.description']
+    });
     const data = {
       _id: '6ab53b4580bb219111c9e999',
       pageType: 'ArchivePage',
@@ -38,6 +40,33 @@ describe('LocalizeSchema', () => {
     const result = await transformer.parseAsync(data);
 
     expect(result.blocks.PageCaption.description).toEqual(emptyTipTapDoc);
+  });
+
+  it('should reject empty content when its path is not included in allowEmptyFields', async () => {
+    const schema = z.object({
+      blocks: z.object({
+        PageCaption: z.object({
+          description: z.unknown()
+        })
+      })
+    });
+
+    const transformer = LocalizeSchema(schema, 'en', { allowEmptyFields: ['blocks.OtherSection.description'] });
+
+    const data = {
+      blocks: {
+        PageCaption: {
+          description: {
+            uk: createFilledTipTapDoc('Вступ'),
+            en: emptyTipTapDoc
+          }
+        }
+      }
+    };
+
+    await expect(transformer.parseAsync(data)).rejects.toThrow(
+      `${LocalizationErrors.MISSING_EN_ERROR} at path: root.blocks.PageCaption.description`
+    );
   });
 
   it('should return primitive values untouched', async () => {
