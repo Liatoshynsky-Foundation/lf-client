@@ -1,7 +1,7 @@
 'use client';
 
 import debounce from 'lodash.debounce';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { tableParamsToQuery } from '~/lib/utils/paramsToQuery';
@@ -15,27 +15,33 @@ type SetParamType<P extends TableParams> = <K extends keyof P>(key: K, value: P[
 export function useTableFilters<P extends TableParams>(initialParams: P) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const draftId = searchParams.get('draftId');
 
   const [params, setParams] = useState<P>(initialParams);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    router.replace(pathname, { scroll: false });
-  }, [router, pathname]);
+    const url = draftId ? `${pathname}?${new URLSearchParams({ draftId })}` : pathname;
+    router.replace(url, { scroll: false });
+  }, [router, pathname, draftId]);
 
   const syncUrl = useCallback(
     (nextParams: P) => {
       const qs = tableParamsToQuery(nextParams);
+      const params = new URLSearchParams(qs.replace(/^\?/, ''));
 
-      if (!qs) {
-        router.replace(pathname, { scroll: false });
-        return;
+      if (draftId) {
+        params.set('draftId', draftId);
       }
 
-      const url = `${pathname}${qs}`;
+      const query = params.toString();
+      const url = query ? `${pathname}?${query}` : pathname;
+
       router.replace(url, { scroll: false });
     },
-    [router, pathname]
+    [router, pathname, draftId]
   );
 
   useEffect(() => {

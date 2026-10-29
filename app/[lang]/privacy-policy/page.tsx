@@ -14,22 +14,24 @@ import TargetedAds from '~/components/blocks/privacy-policy/targeted-ads/Targete
 import UserRights from '~/components/blocks/privacy-policy/user-rights/UserRights';
 
 import { PrivacyPolicyPage } from '~/types/page/pagesBase.type';
-import { Language } from '~/types/types/language';
+import { LocalizedPageProps } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 
+import { getDraftId } from '~/lib/utils/getDraftId';
 import { getPageMetadata } from '~/lib/utils/getPageMetadata';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
-export async function generateMetadata({ params }: Language): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: LocalizedPageProps): Promise<Metadata> {
   return getPageMetadata(params, {
     pageTranslationKey: 'meta.pages.privacyPolicy',
     pageRoute: ROUTES.PRIVACY_POLICY,
     fetchPageMetaData: async () => {
       const { lang } = await params;
-      const pageResult = await resolvePageData('privacy-policy', lang);
+      const query = await searchParams;
+      const pageResult = await resolvePageData('privacy-policy', lang, getDraftId(query));
 
       if (isError(pageResult)) return null;
       return UnwrapResult(pageResult);
@@ -56,13 +58,15 @@ const BLOCKS_RENDERER: Record<keyof PrivacyPolicyPage['blocks'], (data: Renderer
   ContactUs: ({ blocks }) => <ContactUs data={blocks.ContactUs} />
 };
 
-export default async function PrivacyPolicy({ params }: Readonly<Language>) {
+export default async function PrivacyPolicy({ params, searchParams }: Readonly<LocalizedPageProps>) {
   const { lang } = await params;
 
   return (
     <PageBuilder<PrivacyPolicyPage>
       lang={lang}
       slug="privacy-policy"
+      pathname={`/${lang}/${ROUTES.PRIVACY_POLICY}`}
+      searchParams={searchParams}
       renderBlock={({ blockId, blocks, title, uniqueRenderKey }) => (
         <BlockRenderer
           key={uniqueRenderKey}

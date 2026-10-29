@@ -6,13 +6,14 @@ import type { PageSlug } from './schema-factory';
 
 import { createRequestContainer } from '~/di/container';
 
-export async function resolvePageData<S extends PageSlug>(slug: S, locale: Locale) {
+export async function resolvePageData<S extends PageSlug>(slug: S, locale: Locale, draftId?: string) {
   const { isEnabled } = await draftMode();
   const container = createRequestContainer();
+  if (isEnabled) {
+    const draftPagesDataService = container.resolve('draftPagesDataService');
+    return draftPagesDataService.getPageData(slug, locale, draftId);
+  }
 
-  const selectedPagesService = isEnabled
-    ? container.resolve('draftPagesDataService')
-    : container.resolve('pagesDataService');
-
-  return selectedPagesService.getPageData(slug, locale);
+  const pagesDataService = container.resolve('pagesDataService');
+  return pagesDataService.getPageData(slug, locale);
 }

@@ -13,10 +13,19 @@ const getBySlugFactory = (model: typeof PageModel, status: PageStatus) => async 
   return PageZodSchema.parse(page);
 };
 
+const getBySlugAndIdFactory =
+  (model: typeof PageModel, status: PageStatus) => async (slug: PageSlug, draftId?: string) => {
+    if (!draftId || !/^[a-f\d]{24}$/i.test(draftId)) return;
+    await dbConnect();
+    const page = await model.findOne({ _id: draftId, slug, status }).lean().exec();
+    if (!page) return;
+    return PageZodSchema.parse(page);
+  };
+
 function newPagesDataRepo() {
   return {
     getBySlug: getBySlugFactory(PageModel, PageStatus.Published),
-    getDraftBySlug: getBySlugFactory(DraftPageModel, PageStatus.Draft)
+    getDraftBySlugAndId: getBySlugAndIdFactory(DraftPageModel, PageStatus.Draft)
   };
 }
 

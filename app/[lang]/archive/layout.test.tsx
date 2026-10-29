@@ -28,7 +28,7 @@ describe('ArchiveLayout', () => {
     });
 
     const mockParams = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParams });
+    const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
 
     expect(setRequestLocale).toHaveBeenCalledWith('uk');
     expect(metadata).toBeDefined();
@@ -49,7 +49,7 @@ describe('ArchiveLayout', () => {
     });
 
     const mockParams = Promise.resolve({ lang: 'uk' as const });
-    const metadata = await generateMetadata({ params: mockParams });
+    const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
 
     expect(metadata).toBeDefined();
     expect(metadata.title).toBe('Архів CMS');

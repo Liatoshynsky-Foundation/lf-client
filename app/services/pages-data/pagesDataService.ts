@@ -1,6 +1,7 @@
 import { Locale } from 'next-intl';
 import { ZodError } from 'zod';
 
+import { PAGES_DATA_ERROR_CODES, PagesDataErrorCode } from './pagesDataErrorCodes';
 import { PageSlug, SchemaFactory } from './schema-factory';
 import { PageDataMap } from '~/types/page/pagesBase.type';
 import { Result, WrapError, WrapSuccess } from '~/types/types/result';
@@ -9,11 +10,13 @@ import { PagesDataRepository } from '~/infrastructure/repositories/pages-data/pa
 import { prepareManagedPageSections } from '~/lib/utils/managedPageSections';
 import logger from '~/middleware/logger/logger';
 
-const makeComposed = (get: PagesDataRepository['getBySlug']) => {
-  return async <S extends PageSlug>(slug: S, locale: Locale): Promise<Result<PageDataMap[S]>> => {
-    const page = await get(slug);
+type PageGetter = (slug: PageSlug, draftId?: string) => ReturnType<PagesDataRepository['getBySlug']>;
+
+const makeComposed = (get: PageGetter, notFoundCode: PagesDataErrorCode) => {
+  return async <S extends PageSlug>(slug: S, locale: Locale, draftId?: string): Promise<Result<PageDataMap[S]>> => {
+    const page = await get(slug, draftId);
     if (!page) {
-      return WrapError(`No page found with slug: ${slug}`);
+      return WrapError(`No page found with slug: ${slug}`, notFoundCode);
     }
 
     const schema = SchemaFactory(slug, locale);
@@ -47,9 +50,9 @@ interface PagesDataServiceDeps {
 }
 
 export const createPagesDataService = ({ pagesDataRepo }: PagesDataServiceDeps) => ({
-  getPageData: makeComposed(pagesDataRepo.getBySlug)
+  getPageData: makeComposed(pagesDataRepo.getBySlug, PAGES_DATA_ERROR_CODES.PAGE_NOT_FOUND)
 });
 
 export const createDraftPagesDataService = ({ pagesDataRepo }: PagesDataServiceDeps) => ({
-  getPageData: makeComposed(pagesDataRepo.getDraftBySlug)
+  getPageData: makeComposed(pagesDataRepo.getDraftBySlugAndId, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND)
 });
