@@ -111,7 +111,7 @@ export async function generateMetadata({ params }: Readonly<EventDetailPageProps
     title: event.title,
     description: event.description,
     url: `/events/${slug}`,
-    imageUrl: event.coverImage.src,
+    imageUrl: event.coverImage?.src,
     locale: lang,
     keywords: event.keywords ?? undefined,
     allowIndexation: event.allowIndexation ?? undefined

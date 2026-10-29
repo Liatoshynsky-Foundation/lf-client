@@ -7,11 +7,12 @@ import { styles } from './BiographyGallery.styles';
 import { buildFrameImages } from './buildBiographyFrameImages';
 
 type MockImageProps = {
-  caption?: string;
+  caption?: unknown;
+  captionClassName?: string;
 };
 
 const ImageWithCaptionMock = jest.fn(({ caption }: MockImageProps) => (
-  <div data-testid="image-with-caption" data-caption={caption} />
+  <div data-testid="image-with-caption" data-caption={JSON.stringify(caption)} />
 ));
 
 jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
@@ -143,5 +144,27 @@ describe('BiographyGallery Folder 100% Coverage', () => {
       expect(wrapper).toHaveAttribute('role', 'img');
       expect(wrapper.getAttribute('aria-label')).toBeTruthy();
     });
+  });
+
+  it('uses alt text as hover caption when photo has no caption', () => {
+    const photo = biographyGalleryPhotos[2];
+    expect(photo.caption).toBeNull();
+
+    render(<BiographyGallery images={buildFrameImages([photo])} frameRepeats={1} />);
+
+    expect(ImageWithCaptionMock).toHaveBeenCalledWith(
+      expect.objectContaining({ caption: photo.alt, captionClassName: 'bioCaption--real' })
+    );
+  });
+
+  it('keeps original caption when it is provided', () => {
+    const photo = biographyGalleryPhotos[0];
+    expect(photo.caption).not.toBeNull();
+
+    render(<BiographyGallery images={buildFrameImages([photo])} frameRepeats={1} />);
+
+    expect(ImageWithCaptionMock).toHaveBeenCalledWith(
+      expect.objectContaining({ caption: photo.caption, captionClassName: 'bioCaption--real' })
+    );
   });
 });

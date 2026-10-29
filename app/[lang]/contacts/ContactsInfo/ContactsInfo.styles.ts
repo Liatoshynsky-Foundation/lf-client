@@ -32,6 +32,11 @@ export const styles = {
     maxWidth: '305px'
   },
 
+  description: {
+    mt: '16px',
+    maxWidth: '450px'
+  },
+
   contactsInfoWrapper: {
     pt: { xs: '80px', lg: '116px' }
   },

@@ -13,6 +13,7 @@ import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-s
 interface IContactInfoProps {
   title?: string;
   titleTag?: 'h1' | 'h2';
+  description?: string;
   formTitle?: string;
   contacts: {
     phone: string;
@@ -24,6 +25,7 @@ interface IContactInfoProps {
 export default function ContactsInfo({
   title,
   titleTag = 'h1',
+  description,
   formTitle,
   contacts,
   socialLinks
@@ -41,6 +43,11 @@ export default function ContactsInfo({
           ) : (
             <Typography sx={styles.titleMain} variant="h1" component={titleTag} data-testid="ContactsInfo-title">
               {t('contacts')}
+            </Typography>
+          )}
+          {description && (
+            <Typography variant="body1" component="p" sx={styles.description} data-testid="ContactsInfo-description">
+              {description}
             </Typography>
           )}
           <Box sx={styles.contactsDetails}>

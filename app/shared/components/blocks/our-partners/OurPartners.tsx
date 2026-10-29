@@ -13,7 +13,7 @@ import { partnersMock } from '~/shared/constants/partners.data';
 import { commonSx } from '~/shared/styles/commonSx';
 
 export default function OurPartners() {
-  const t = useTranslations('warSupport.ourPartners');
+  const t = useTranslations('collaboration.ourPartners');
 
   const partners = partnersMock;
 
