@@ -39,9 +39,11 @@ describe('CollaborationInfo component with real data', () => {
 
     const tiptapBlocks = screen.getAllByTestId('tiptap-mock');
 
-    const expectedText = 'Any financial contribution made to the Foundation';
+    const expectedText = 'Charitable contributions may support the Foundation’s ongoing work';
     expect(tiptapBlocks[0]).toHaveTextContent(new RegExp(expectedText, 'i'));
 
-    expect(tiptapBlocks[1]).toHaveTextContent(/We understand that everyone has different/i);
+    expect(tiptapBlocks[1]).toHaveTextContent(/Over the course of the Foundation’s work/i);
+    expect(tiptapBlocks[2]).toHaveTextContent(/The involvement of partners and patrons/i);
+    expect(tiptapBlocks[3]).toHaveTextContent(/For each joint project/i);
   });
 });
