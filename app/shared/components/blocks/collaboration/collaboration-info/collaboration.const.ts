@@ -1,6 +1,6 @@
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { boldText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 
 type LocalizedTipTapDoc = {
   uk: TipTapDoc;
@@ -10,51 +10,38 @@ type LocalizedTipTapDoc = {
 export const infoDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Будь-який фінансовий внесок у Фундацію здійснюється прозоро та відповідно до статуту нашої громадської організації. Всі отримані кошти цільово спрямовуються на реалізацію місії Фундації: розвиток української музики, збереження та популяризацію спадщини Бориса Лятошинського, а також підтримку нових мистецьких ініціатив. Таким чином, '
-    ),
-    boldText('кожна ваша гривня працює на спільну справу'),
-    normalText(' і наближає нашу мету.')
+      'Благодійні внески можуть підтримувати поточну роботу Фундації або бути спрямовані на конкретний проєкт. Отримані кошти використовуються відповідно до статутних завдань Фундації.'
+    )
   ]),
   en: makeDoc([
     normalText(
-      // eslint-disable-next-line quotes
-      `Any financial contribution made to the Foundation is executed transparently and in accordance with the charter of our public organization. All funds received are purposefully directed towards implementation of the Foundation's mission: the development of Ukrainian music, the preservation and popularization of Borys Liatoshynsky's legacy and the support of new art initiatives. Thus, `
-    ),
-    boldText('every hryvnia you donate works towards our common cause'),
-    normalText(' and brings us closer to our goal.')
+      'Charitable contributions may support the Foundation’s ongoing work or be directed towards a specific project. All funds received are used in accordance with the Foundation’s statutory objectives.'
+    )
   ])
 };
 
 export const supportDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    normalText('Ми розуміємо, що можливості й бажання допомоги в усіх різні. Тому '),
-    boldText('формат підтримки можемо узгодити індивідуально.'),
     normalText(
-      ' Це може бути як разова допомога для окремого проєкту, так і довготривале партнерство. У будь-якому випадку, ми цінуємо кожен внесок і кожну ініціативу, незалежно від масштабу чи тривалості.'
+      'За час роботи Фундації ми реалізовували проєкти в різних форматах співпраці — як ініціатори та партнери. Цей досвід дає змогу визначати формат роботи відповідно до завдань кожного конкретного проєкту.'
     )
   ]),
   en: makeDoc([
-    normalText('We understand that everyone has different capacities and desires to help. Therefore, '),
-    boldText('the format of support can be agreed upon individually.'),
     normalText(
-      ' This can be either one-time donation for a specific project or a long-term partnership. In any case, we value every contribution and every initiative, regardless of its scale or duration.'
+      'Over the course of the Foundation’s work, we have carried out projects through different forms of collaboration, both as initiators and as partners. This experience allows us to determine the most appropriate way of working for the objectives of each individual project.'
     )
   ])
 };
 
 export const partnersDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    normalText('Ми з повагою та вдячністю ставимось до всіх наших партнерів і благодійників. '),
-    boldText('Кожен партнер буде представлений на нашому сайті:'),
     normalText(
-      '  у спеціальному блоці ми розміщуємо клікабельні логотипи партнерських організацій, щоб відвідувачі могли дізнатися більше про наших друзів. Окремо відведено блок для меценатів — людей і компаній, завдяки яким наша діяльність отримує фінансову підтримку. Імена меценатів (за їхньою згодою) ми публікуємо з глибокою вдячністю.'
+      'Участь партнерів і меценатів у проєктах Фундації зазначається в наших виданнях, інформаційних матеріалах та інших формах публічної комунікації. Формат представлення залежить від характеру співпраці та конкретного проєкту.'
     )
   ]),
   en: makeDoc([
-    normalText('We treat all our partners and benefactors with respect and gratitude. '),
-    boldText('Every partner will be featured on our website:'),
     normalText(
-      ' we place clickable logos of partner organisations in a special section so that visitors can learn more about our friends. A separate block is reserved for patrons—individuals and companies who provide financial support for our activities. We publish the names of our patrons (with their consent) with deep gratitude.'
+      'The involvement of partners and patrons in the Foundation’s projects is acknowledged in our publications, information materials, and other forms of public communication. The form of acknowledgement depends on the nature of the collaboration and the specific project.'
     )
   ])
 };
@@ -62,12 +49,12 @@ export const partnersDoc: LocalizedTipTapDoc = {
 export const partnershipDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Якщо Вам близькі наші цінності й бажання розвивати українську музичну спадщину, станьте нашим партнером. Ми будемо раді обговорити будь-які пропозиції. Напишіть нам на електронну пошту або скористайтеся формою на сайті, щоб розпочати діалог. Дякуємо за увагу і сподіваємося на плідну співпрацю!'
+      'Для кожного спільного проєкту ми заздалегідь визначаємо завдання сторін, обсяг їхньої участі та відповідальності. За потреби домовленості закріплюються угодою.'
     )
   ]),
   en: makeDoc([
     normalText(
-      'If you share our values and desire to develop Ukrainian musical heritage, please consider becoming our partner. We will be delighted to discuss any proposals. Write to us via email or use the contact form on our website to start a dialogue. Thank you for your interest, and we look forward to a fruitful cooperation!'
+      'For each joint project, we agree in advance on the responsibilities of each party, the scope of their involvement, and their respective obligations. Where necessary, these arrangements are formalised in an agreement.'
     )
   ])
 };
