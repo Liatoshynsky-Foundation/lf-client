@@ -22,9 +22,17 @@ interface CarouselProps {
   images: CarouselImage[];
   initialIndex?: number;
   infiniteLoop?: boolean;
+  autoScroll?: boolean;
+  autoScrollInterval?: number;
 }
 
-const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselProps) => {
+const Carousel = ({
+  images,
+  initialIndex = 0,
+  infiniteLoop = false,
+  autoScroll = false,
+  autoScrollInterval = 3000
+}: CarouselProps) => {
   const [failedImageIds, setFailedImageIds] = useState<Set<string | number>>(new Set());
 
   const validImages = React.useMemo(() => {
@@ -60,6 +68,13 @@ const Carousel = ({ images, initialIndex = 0, infiniteLoop = false }: CarouselPr
       return prev < total - 1 ? prev + 1 : prev;
     });
   }, [total, infiniteLoop]);
+
+  useEffect(() => {
+    if (!autoScroll || total <= 1) return;
+
+    const timer = setTimeout(goToNext, autoScrollInterval);
+    return () => clearTimeout(timer);
+  }, [autoScroll, autoScrollInterval, activeIndex, total, goToNext]);
 
   const goToPrev = useCallback(() => {
     if (total === 0) return;
