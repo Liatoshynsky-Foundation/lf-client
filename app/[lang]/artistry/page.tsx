@@ -7,23 +7,25 @@ import TitleWithQuote from '~/components/title-with-quote/TitleWithQuote';
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
 
 import { ArtistryPage } from '~/types/page/pagesBase.type';
-import { Language } from '~/types/types/language';
+import { LocalizedPageProps } from '~/types/types/language';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { isProductionMode } from '~/utils/isProductionMode';
 
+import { getDraftId } from '~/lib/utils/getDraftId';
 import { getPageMetadata } from '~/lib/utils/getPageMetadata';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import { BlockRenderer } from '~/shared/components/blocks/block-renderer/BlockRenderer';
 import { ROUTES } from '~/shared/components/constants/routes';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
-export async function generateMetadata({ params }: Language): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: LocalizedPageProps): Promise<Metadata> {
   return getPageMetadata(params, {
     pageTranslationKey: 'meta.pages.artistry',
     pageRoute: ROUTES.ARTISTRY,
     fetchPageMetaData: async () => {
       const { lang } = await params;
-      const pageResult = await resolvePageData('artistry', lang);
+      const query = await searchParams;
+      const pageResult = await resolvePageData('artistry', lang, getDraftId(query));
 
       if (isError(pageResult)) return null;
       return UnwrapResult(pageResult);
@@ -45,7 +47,7 @@ const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProp
   MusicTableSection: () => <MusicTableSection />
 };
 
-export default async function Artistry({ params }: Readonly<Language>) {
+export default async function Artistry({ params, searchParams }: Readonly<LocalizedPageProps>) {
   const { lang } = await params;
   setRequestLocale(lang);
 
@@ -57,6 +59,8 @@ export default async function Artistry({ params }: Readonly<Language>) {
     <PageBuilder<ArtistryPage>
       lang={lang}
       slug="artistry"
+      pathname={`/${lang}/${ROUTES.ARTISTRY}`}
+      searchParams={searchParams}
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => {
         return (
           <BlockRenderer

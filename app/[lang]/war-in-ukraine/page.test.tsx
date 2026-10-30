@@ -5,6 +5,7 @@ import React from 'react';
 import type { VolunteerDonationProps } from '~/components/blocks/volunteer-donation/VolunteerDonation';
 import type { WarInfoSectionProps } from '~/components/blocks/war-info/WarInfoSection';
 
+import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
 import WarInUkraine, { generateMetadata } from './page';
 import type { WarInUkrainePage } from '~/types/page/pagesBase.type';
 import { createSeoMeta } from '~/utils/createSeoMeta';
@@ -54,6 +55,10 @@ jest.mock('~/shared/components/blocks/principle-of-hope/PrincipleOfHope', () => 
 jest.mock('~/shared/components/blocks/yermolenko-links/YermolenkoLinks', () => ({
   __esModule: true,
   default: (props: YermolenkoLinksProps) => <div data-testid="yermolenko-links">{JSON.stringify(props.data)}</div>
+}));
+
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
 }));
 
 interface MockBlockRendererProps {
@@ -122,7 +127,7 @@ describe('WarInUkraine page', () => {
         value: null
       });
 
-      const metadata = await generateMetadata({ params: mockParams });
+      const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
 
       expect(setRequestLocale).toHaveBeenCalledWith('uk');
       expect(createSeoMeta).toHaveBeenCalledWith(
@@ -156,7 +161,7 @@ describe('WarInUkraine page', () => {
         value: mockData
       });
 
-      const metadata = await generateMetadata({ params: mockParams });
+      const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
 
       expect(metadata).toEqual(
         expect.objectContaining({
@@ -172,7 +177,7 @@ describe('WarInUkraine page', () => {
 
   describe('default export', () => {
     it('should render every mapped block through the BlockRenderer', async () => {
-      const element = await WarInUkraine({ params: mockParams });
+      const element = await WarInUkraine({ params: mockParams, searchParams: Promise.resolve({}) });
       render(element);
 
       expect(screen.getByTestId('war-info')).toHaveTextContent('War info data');
@@ -184,10 +189,14 @@ describe('WarInUkraine page', () => {
     });
 
     it('should render nothing for a block id with no matching renderer', async () => {
-      const element = await WarInUkraine({ params: mockParams });
+      const element = await WarInUkraine({ params: mockParams, searchParams: Promise.resolve({}) });
       const { container } = render(element);
 
       expect(container.querySelectorAll('[data-testid]')).toHaveLength(6);
+    });
+
+    it('should pass the draft ID to resolvePageData', async () => {
+      await testPassDraftIdToResolvePageData(generateMetadata, 'war-in-ukraine', 'draft-123');
     });
   });
 });

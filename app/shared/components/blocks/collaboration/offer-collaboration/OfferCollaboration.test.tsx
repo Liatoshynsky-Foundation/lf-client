@@ -7,7 +7,8 @@ jest.mock('next-intl/server', () => ({
   getLocale: jest.fn().mockResolvedValue('uk'),
   getTranslations: jest.fn().mockImplementation(async (namespace) => {
     const translations: Record<string, string> = {
-      'collaboration.offerCollaboration.title': 'Співпраця',
+      'collaboration.offerCollaboration.title': 'Зв’яжіться з нами:',
+      'collaboration.offerCollaboration.description': 'Ми відкриті до різних форм співпраці',
       'collaboration.offerCollaboration.formTitle': 'Запропонувати співпрацю'
     };
 
@@ -51,9 +52,10 @@ jest.mock('~/shared/components/paper-component/PaperComponent', () => ({
 
 jest.mock('~/[lang]/contacts/ContactsInfo/ContactsInfo', () => ({
   __esModule: true,
-  default: ({ title, formTitle, titleTag, contacts, socialLinks }: any) => (
+  default: ({ title, description, formTitle, titleTag, contacts, socialLinks }: any) => (
     <div data-testid="contacts-info">
       {titleTag === 'h2' ? <h2>{title}</h2> : <h1>{title}</h1>}
+      <p>{description}</p>
       <span>{formTitle}</span>
       <div>{contacts.email}</div>
       <div>{socialLinks[0].platform}</div>
@@ -72,7 +74,8 @@ describe('OfferCollaboration', () => {
     expect(screen.getByTestId('paper')).toBeInTheDocument();
     expect(screen.getByTestId('contacts-info')).toBeInTheDocument();
 
-    expect(screen.getByRole('heading', { level: 2, name: 'Співпраця' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Зв’яжіться з нами:' })).toBeInTheDocument();
+    expect(screen.getByText('Ми відкриті до різних форм співпраці')).toBeInTheDocument();
     expect(screen.getByText('Запропонувати співпрацю')).toBeInTheDocument();
 
     expect(screen.getByText(/test@example\.com/)).toBeInTheDocument();

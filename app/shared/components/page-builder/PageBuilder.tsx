@@ -3,11 +3,15 @@ import React from 'react';
 
 import UnderDevelopment from '../under-development/UnderDevelopment';
 import { AboutUsPage, ArtistryPage, PrivacyPolicyPage, WarInUkrainePage } from '~/types/page/pagesBase.type';
-import { isError, UnwrapResult } from '~/types/types/result';
+import { SearchParams } from '~/types/types/language';
+import { isError, isErrorCode, UnwrapResult } from '~/types/types/result';
 
 import { PageNotFound } from '~/[lang]/[...unknown-route]/page-not-found/PageNotFound';
 import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
+import { getDraftId } from '~/lib/utils/getDraftId';
 import { isProductionMode } from '~/lib/utils/isProductionMode';
+import { redirectToDisablePreview } from '~/lib/utils/redirectToDisablePreview';
+import { PAGES_DATA_ERROR_CODES } from '~/services/pages-data/pagesDataErrorCodes';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
 
@@ -16,6 +20,8 @@ export type PossiblePages = AboutUsPage | PrivacyPolicyPage | ArtistryPage | War
 export interface PageBuilderProps<TPages extends PossiblePages> {
   lang: 'en' | 'uk';
   slug: TPages['slug'];
+  pathname: string;
+  searchParams?: Promise<SearchParams>;
   renderBlock: ({
     blockId,
     blocks,
@@ -39,6 +45,8 @@ const isValidSlug = (slug: string): slug is ValidSlug => {
 export default async function PageBuilder<TPages extends PossiblePages>({
   lang,
   slug,
+  pathname,
+  searchParams,
   renderBlock
 }: Readonly<PageBuilderProps<TPages>>) {
   setRequestLocale(lang);
@@ -47,8 +55,12 @@ export default async function PageBuilder<TPages extends PossiblePages>({
   }
 
   if (!isValidSlug(slug)) return null;
+  const query = (await searchParams) ?? {};
+  const pageResult = await resolvePageData(slug, lang, getDraftId(query));
 
-  const pageResult = await resolvePageData(slug, lang);
+  if (isErrorCode(pageResult, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND)) {
+    redirectToDisablePreview(pathname, query);
+  }
 
   if (isError(pageResult)) {
     return ErrorPageFactory(pageResult.error);

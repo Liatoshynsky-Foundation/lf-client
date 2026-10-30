@@ -1,10 +1,14 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
+import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
 import ResearchPage, { generateMetadata } from './page';
 import { WrapError, WrapSuccess } from '~/types/types/result';
 import * as envUtils from '~/utils/isProductionMode';
+
+import { getDraftId } from '~/lib/utils/getDraftId';
 
 jest.mock('~/services/pages-data/resolvePageData', () => ({
   resolvePageData: jest.fn()
@@ -19,7 +23,9 @@ jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: jest.fn()
 }));
 
-jest.mock('~/services/pages-data/resolvePageData');
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
+}));
 
 jest.mock('~/lib/utils/errorPageFactory', () => ({
   ErrorPageFactory: jest.fn((err) => <div data-testid="error-page">Error: {err}</div>)
@@ -62,6 +68,7 @@ describe('Research Page', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (getTranslations as jest.Mock).mockResolvedValue((key: string) => key);
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
@@ -71,7 +78,7 @@ describe('Research Page', () => {
       value: null
     });
 
-    const metadata = await generateMetadata({ params: mockParams } as any);
+    const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
     expect(metadata.title).toBe('title');
     expect(metadata.description).toBe('description');
   });
@@ -90,7 +97,7 @@ describe('Research Page', () => {
       value: mockCmsData
     });
 
-    const metadata = await generateMetadata({ params: mockParams } as any);
+    const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
     expect(metadata.title).toBe('Дослідження CMS');
     expect(metadata.description).toBe('Опис досліджень');
   });
@@ -104,18 +111,21 @@ describe('Research Page', () => {
       })
     );
 
-    const ui = await ResearchPage({ params: mockParams });
+    const ui = await ResearchPage({ params: mockParams, searchParams: Promise.resolve({}) });
     render(ui);
 
     expect(await screen.findByText('Hero Section')).toBeInTheDocument();
     expect(await screen.findByText('Work Table Section')).toBeInTheDocument();
-    expect(resolvePageData).toHaveBeenCalledWith('research', 'uk');
+    expect(resolvePageData).toHaveBeenCalledWith('research', 'uk', undefined);
   });
 
   it('should render only the table when hero section data is missing', async () => {
     resolvePageData.mockResolvedValueOnce(WrapSuccess({ blocks: {} }));
 
-    const ui = await ResearchPage({ params: Promise.resolve({ lang: 'en' as const }) });
+    const ui = await ResearchPage({
+      params: Promise.resolve({ lang: 'en' as const }),
+      searchParams: Promise.resolve({})
+    });
     render(ui);
 
     expect(screen.queryByText('Hero Section')).not.toBeInTheDocument();
@@ -125,7 +135,7 @@ describe('Research Page', () => {
   it('should render UnderDevelopment in production mode', async () => {
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(true);
 
-    const ui = await ResearchPage({ params: mockParams });
+    const ui = await ResearchPage({ params: mockParams, searchParams: Promise.resolve({}) });
     render(ui);
 
     expect(screen.getByTestId('under-dev')).toBeInTheDocument();
@@ -134,7 +144,7 @@ describe('Research Page', () => {
   it('should render ErrorPage when page result is error', async () => {
     resolvePageData.mockResolvedValueOnce(WrapError('No page found'));
 
-    const ui = await ResearchPage({ params: mockParams });
+    const ui = await ResearchPage({ params: mockParams, searchParams: Promise.resolve({}) });
     render(ui);
 
     expect(screen.getByTestId('error-page')).toHaveTextContent('Error: No page found');
@@ -143,9 +153,30 @@ describe('Research Page', () => {
   it('should render PageNotFound when page is null', async () => {
     resolvePageData.mockResolvedValueOnce(WrapSuccess(null));
 
-    const ui = await ResearchPage({ params: mockParams });
+    const ui = await ResearchPage({ params: mockParams, searchParams: Promise.resolve({}) });
     render(ui);
 
     expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
+  });
+
+  it('should pass the draft ID to resolvePageData when generating metadata', async () => {
+    await testPassDraftIdToResolvePageData(generateMetadata, 'research', 'draft-123');
+  });
+
+  it('should pass the draft ID to resolvePageData when fetching page content', async () => {
+    const draftId = 'draft-123';
+    const searchParams = { draftId };
+
+    (getDraftId as jest.Mock).mockReturnValue(draftId);
+    resolvePageData.mockResolvedValueOnce(WrapSuccess({ blocks: {} }));
+
+    const ui = await ResearchPage({
+      params: mockParams,
+      searchParams: Promise.resolve(searchParams)
+    });
+    render(ui);
+
+    expect(getDraftId).toHaveBeenCalledWith(searchParams);
+    expect(resolvePageData).toHaveBeenCalledWith('research', 'uk', draftId);
   });
 });
