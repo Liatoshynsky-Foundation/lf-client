@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
+import { useSearchParams } from 'next/navigation';
 
 import { useTableFilters } from './useTableFilters';
 
@@ -7,8 +8,10 @@ const replaceMock = jest.fn();
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ replace: replaceMock }),
   usePathname: () => '/test',
-  useSearchParams: () => new URLSearchParams('search=initial&author=1&author=2')
+  useSearchParams: jest.fn()
 }));
+
+const useSearchParamsMock = useSearchParams as jest.Mock;
 
 jest.mock('~/lib/utils/paramsToQuery', () => ({
   tableParamsToQuery: jest.fn((params) => {
@@ -35,6 +38,8 @@ describe('useTableFilters', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    useSearchParamsMock.mockReturnValue(new URLSearchParams('search=initial&author=1&author=2'));
   });
 
   test('initializes params from initialParams (URL is ignored)', () => {
@@ -99,5 +104,23 @@ describe('useTableFilters', () => {
     });
 
     expect(replaceMock).toHaveBeenLastCalledWith('/test', { scroll: false });
+  });
+
+  test('preserves draftId when initializing URL', () => {
+    useSearchParamsMock.mockReturnValue(new URLSearchParams('draftId=abc123&search=initial'));
+    renderHook(() => useTableFilters(initialParams));
+    expect(replaceMock).toHaveBeenCalledWith('/test?draftId=abc123', { scroll: false });
+  });
+
+  test('preserves draftId when syncing filter changes', () => {
+    useSearchParamsMock.mockReturnValue(new URLSearchParams('draftId=abc123'));
+    const { result } = renderHook(() => useTableFilters(initialParams));
+    act(() => {
+      result.current.setParam('search', 'hello');
+    });
+
+    expect(replaceMock).toHaveBeenLastCalledWith('/test?search=hello&yearFrom=1900&yearTo=2024&draftId=abc123', {
+      scroll: false
+    });
   });
 });

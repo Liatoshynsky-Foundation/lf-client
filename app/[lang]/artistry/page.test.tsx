@@ -1,7 +1,9 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
+import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
 import Artistry, { generateMetadata } from './page';
 import * as envUtils from '~/utils/isProductionMode';
 
@@ -62,11 +64,16 @@ jest.mock('~/shared/components/page-builder/PageBuilder', () => {
   };
 });
 
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
+}));
+
 describe('Artistry Page', () => {
   const mockParams = Promise.resolve({ lang: 'en' as const });
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (getTranslations as jest.Mock).mockResolvedValue((key: string) => key);
     (envUtils.isProductionMode as jest.Mock).mockReturnValue(false);
   });
 
@@ -78,7 +85,7 @@ describe('Artistry Page', () => {
       value: null
     });
 
-    const metadata = await generateMetadata({ params: mockParams });
+    const metadata = await generateMetadata({ params: mockParams, searchParams: Promise.resolve({}) });
     expect(metadata.title).toBe('title');
   });
 
@@ -97,7 +104,10 @@ describe('Artistry Page', () => {
       value: artistryCmsRecord
     });
 
-    const meta = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+    const meta = await generateMetadata({
+      params: Promise.resolve({ lang: 'uk' as const }),
+      searchParams: Promise.resolve({})
+    });
 
     expect(meta).toMatchObject({
       title: 'Творчість Кастомна',
@@ -121,7 +131,10 @@ describe('Artistry Page', () => {
       error: new Error('Network timeout for Artistry')
     });
 
-    const res = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+    const res = await generateMetadata({
+      params: Promise.resolve({ lang: 'uk' as const }),
+      searchParams: Promise.resolve({})
+    });
     expect(res.title).toBe('title');
   });
 
@@ -131,5 +144,9 @@ describe('Artistry Page', () => {
     expect(screen.getByTestId('mock-page-builder')).toBeInTheDocument();
     expect(screen.getByTestId('title-with-quote')).toBeInTheDocument();
     expect(screen.getByTestId('music-table')).toBeInTheDocument();
+  });
+
+  it('should pass the draft ID to resolvePageData', async () => {
+    await testPassDraftIdToResolvePageData(generateMetadata, 'artistry', 'draft-123');
   });
 });
