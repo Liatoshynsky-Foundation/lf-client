@@ -80,7 +80,7 @@ export default async function OpusPage({ params }: Readonly<OpusPageProps>) {
     metaGenre: t('meta.genre'),
     viewSheetMusic: t('buttons.viewSheetMusic'),
     compositionsTitle: t('compositions.title'),
-    videosTitle: opusDetails.performancesTitle?.trim() || t('videos.title'),
+    videosTitle: t('videos.title'),
     placeholderTitle: t('placeholder.title'),
     placeholderSubtitle: t('placeholder.subtitle'),
     placeholderImageAlt: t('placeholder.imageAlt'),

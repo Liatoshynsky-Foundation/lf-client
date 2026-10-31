@@ -169,7 +169,6 @@ export const createArtistryService = ({ compositionsRepo }: ArtistryServiceDeps)
       videos: mapVideos(opusDetails.performances ?? null, locale),
       sheetMusic: opusDetails.sheetMusic || null,
       gallery: mapOpusGallery(opusDetails.gallery, locale),
-      performancesTitle: opusDetails.performancesTitle ? opusDetails.performancesTitle[locale] : null,
       keywords: opusDetails.keywords?.[locale] ?? null,
       allowIndexation: opusDetails.allowIndexation?.[locale] ?? true,
       coverImage: mapCoverImage(locale, opusDetails.coverImage)
