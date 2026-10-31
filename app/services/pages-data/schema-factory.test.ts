@@ -30,6 +30,9 @@ jest.mock('~/validators/pagesSchemas/pages/war-in-ukraine.schema', () => ({
 jest.mock('~/validators/pagesSchemas/pages/archive.schema', () => ({
   ArchivePageSchema: { __schema: 'archive' }
 }));
+jest.mock('~/validators/pagesSchemas/pages/publications.schema', () => ({
+  PublicationsPageSchema: { __schema: 'news' }
+}));
 
 jest.mock('~/validators/constants', () => {
   const { z } = jest.requireActual<typeof import('zod')>('zod');
@@ -71,31 +74,65 @@ describe('SchemaFactory', () => {
   });
 
   it.each([
-    ['about-us', 'about-us', createAboutUsPageSchema],
-    ['privacy-policy', 'privacy-policy', createPrivacyPolicyPageSchema],
-    ['research', 'research', null],
-    ['biography', 'biography', null],
-    ['cooperation', 'cooperation', null],
-    ['artistry', 'artistry', createArtistryPageSchema],
-    ['war-in-ukraine', 'war-in-ukraine', createWarInUkrainePageSchema]
-  ] as const)('returns localized schema for slug "%s"', (slug, tag, createSchema) => {
+    [
+      'about-us',
+      'about-us',
+      [
+        'blocks.OurMission.list',
+        'blocks.WhatWeDo.items.title',
+        'blocks.WhatWeDo.items.description',
+        'blocks.OurGoals.goals.title',
+        'blocks.OurGoals.goals.description'
+      ]
+    ],
+    [
+      'privacy-policy',
+      'privacy-policy',
+      ['blocks.DataUsage.list', 'blocks.Cookies.list', 'blocks.DataWeCollect.sections.list', 'blocks.UserRights.list']
+    ],
+    [
+      'war-in-ukraine',
+      'war-in-ukraine',
+      [
+        'blocks.PrincipleOfHope.buttons.shortText',
+        'blocks.PrincipleOfHope.buttons.fullText',
+        'blocks.YermolenkoLinks.buttons.shortText',
+        'blocks.YermolenkoLinks.buttons.fullText',
+        'blocks.VolunteerDonation.paymentMethods.label'
+      ]
+    ],
+    ['archive', 'archive', ['blocks.PageCaption.description']]
+  ] as const)('passes allowEmptyFields for slug "%s"', (slug, tag, allowEmptyFields) => {
     const schema = SchemaFactory(slug as PageSlug, locale);
 
-    if (createSchema) {
-      expect(createSchema).toHaveBeenCalledWith(locale);
-    }
+    expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: tag }), locale, {
+      allowEmptyFields
+    });
+    expect(schema).toEqual({ __schema: tag, locale });
+  });
+
+  it.each([
+    ['research', 'research'],
+    ['biography', 'biography'],
+    ['cooperation', 'cooperation'],
+    ['artistry', 'artistry'],
+    ['news', 'news']
+  ] as const)('returns localized schema for slug "%s"', (slug, tag) => {
+    const schema = SchemaFactory(slug as PageSlug, locale);
 
     expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: tag }), locale);
     expect(schema).toEqual({ __schema: tag, locale });
   });
 
-  it('returns localized archive schema with allowEmptyFields for description', () => {
-    const schema = SchemaFactory('archive', locale);
+  it.each([
+    ['about-us', createAboutUsPageSchema],
+    ['privacy-policy', createPrivacyPolicyPageSchema],
+    ['artistry', createArtistryPageSchema],
+    ['war-in-ukraine', createWarInUkrainePageSchema]
+  ] as const)('calls the page schema factory with locale for "%s"', (slug, createSchema) => {
+    SchemaFactory(slug, locale);
 
-    expect(LocalizeSchema).toHaveBeenCalledWith(expect.objectContaining({ __schema: 'archive' }), locale, {
-      allowEmptyFields: ['description']
-    });
-    expect(schema).toEqual({ __schema: 'archive', locale });
+    expect(createSchema).toHaveBeenCalledWith(locale);
   });
 
   it('returns undefined for unknown slug', () => {

@@ -10,6 +10,7 @@ import { styles } from './AudioPlayerPopover.styles';
 import { calculateProgress, formatTime } from '~/utils/audioPlayer';
 
 import { ROUTES } from '~/shared/components/constants/routes';
+import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 interface AudioPlayerPopoverProps {
   anchorEl: HTMLButtonElement | null;
   isPlaying: boolean;
@@ -38,6 +39,7 @@ const AudioPlayerPopover = ({
   const progressRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const playButtonRef = useRef<HTMLButtonElement | null>(null);
+  const { isMobile } = useBreakpoints();
 
   const isOpen = Boolean(anchorEl);
 
@@ -115,8 +117,8 @@ const AudioPlayerPopover = ({
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       onClose={onClose}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: isMobile ? 'right' : 'center' }}
+      transformOrigin={{ vertical: 'top', horizontal: isMobile ? 'right' : 'center' }}
       PaperProps={{ sx: styles.popoverPaper }}
     >
       <Box sx={styles.container}>

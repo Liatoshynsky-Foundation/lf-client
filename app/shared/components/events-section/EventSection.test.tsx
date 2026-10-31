@@ -25,7 +25,7 @@ jest.mock('@mui/material', () => {
 
 jest.mock('next-intl', () => ({
   useLocale: () => 'uk',
-  useTranslations: () => (key: string) => (key === 'completedEvent' ? 'Завершена подія' : key)
+  useTranslations: () => (key: string) => (key === 'pastEvent' ? 'Завершена подія' : key)
 }));
 
 jest.mock('swiper/react', () => ({

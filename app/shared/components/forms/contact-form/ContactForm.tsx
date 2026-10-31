@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import InfoErrorIcon from 'public/icons/info-error.svg';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -43,6 +43,21 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   const { isMobile, isTablet } = useBreakpoints();
   const { handlePhoneInput, hasError } = useHandlePhoneInput();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+
+  const focusNameInput = () => {
+    nameInputRef.current?.focus();
+  };
+
+  useEffect(() => {
+    focusNameInput();
+
+    window.addEventListener('focus-contact-name', focusNameInput);
+
+    return () => {
+      window.removeEventListener('focus-contact-name', focusNameInput);
+    };
+  }, []);
 
   const phoneSchema = z
     .string()
@@ -151,6 +166,7 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
           <TextField
             label={t('name')}
             {...nameField}
+            inputRef={nameInputRef}
             onBlur={handleNameBlur}
             error={!!errors.name || (isNameAtMaxLength && showNameMaxMessage)}
             helperText={

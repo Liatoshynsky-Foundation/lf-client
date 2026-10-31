@@ -1,7 +1,7 @@
 {
   "collaborations": {
     "metaData": "Liatoshynsky collaborations",
-    "text": "Collaborations"
+    "text": "Collaboration"
   },
   "footer": {
     "donationButton": "Support the Foundation",
@@ -80,7 +80,7 @@
     "goHome": "Return to home",
     "viewMore": "View More",
     "copied": "Copied",
-    "completedEvent": "Completed event",
+    "pastEvent": "PAST EVENT",
     "publishedAtLabel": "Published:",
     "skipToMainContent": "Skip to main content",
     "loading": "Loading"
@@ -179,15 +179,20 @@
   },
   "collaboration": {
     "offerCollaboration": {
-      "title": "We are open to collaboration, inquiries, and dialogue:",
-      "formTitle": "Offer collaboration"
+      "title": "Get in touch:",
+      "description": "We are open to different forms of collaboration within the Foundation’s areas of work. If you would like to propose a joint project or offer professional, in-kind, or financial support, please get in touch: email us or use the form on our website.",
+      "formTitle": "Propose a Collaboration"
     },
     "collaborationInfo": {
-      "title": "Charitable donations - for mission development",
+      "title": "Charitable Contributions",
       "supportButton": "Support the Foundation",
-      "supportTitle": "Flexible and personalized support",
-      "partnersTitle": "Recognition of partners and patrons",
-      "partnershipTitle": "Join the partnership"
+      "supportTitle": "Collaboration Experience",
+      "partnersTitle": "Partners and Patrons",
+      "partnershipTitle": "Terms of Collaboration"
+    },
+    "ourPartners": {
+      "title": "Our Partners",
+      "description": "We present the organisations and companies with which the Foundation has collaborated since its establishment."
     }
   },
   "table": {
@@ -460,8 +465,8 @@
         "description": "Learn how the Liatoshynsky Foundation operates during the war in Ukraine and which initiatives it supports."
       },
       "cooperation": {
-        "title": "Cooperation",
-        "description": "Information about cooperation opportunities with the Liatoshynsky Foundation for partners, donors, and patrons."
+        "title": "Collaboration",
+        "description": "Information about collaboration opportunities with the Liatoshynsky Foundation for partners, donors, and patrons."
       },
       "archive": {
         "title": "Archive",

@@ -152,8 +152,6 @@ describe('MediaCenter Component Full Coverage', () => {
   });
 
   it('should verify constants content directly (for 100% media.const.ts)', () => {
-    expect(mediaData.mediaBigDoc.uk.type).toBe('doc');
-    expect(mediaData.mediaSmallDoc.en.type).toBe('doc');
     expect(mediaData.mockNewsList[0].status).toBe('published');
   });
 });

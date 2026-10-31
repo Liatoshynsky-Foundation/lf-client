@@ -208,7 +208,7 @@ describe('EventsTab', () => {
 
     const items = screen.getAllByTestId('event-item');
     expect(items[0]).toHaveTextContent('End Date Event');
-    expect(screen.queryByText('completedEvent')).not.toBeInTheDocument();
+    expect(screen.queryByText('pastEvent')).not.toBeInTheDocument();
   });
 
   it('should handle upcoming events with null eventDateTimeStart but future eventDateTimeEnd', () => {

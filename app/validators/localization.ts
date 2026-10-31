@@ -20,6 +20,16 @@ export type Localize<T> =
         ? { [K in keyof T]: Localize<T[K]> }
         : T;
 
+function normalizePath(path: string) {
+  return path.replace(/^root\.?/, '').replace(/\[\d+\]/g, '');
+}
+
+function isAllowedEmptyPath(path: string, options?: LocalizeOptions): boolean {
+  const normalizedPath = normalizePath(path);
+
+  return options?.allowEmptyFields?.some((allowedPath) => normalizePath(allowedPath) === normalizedPath) ?? false;
+}
+
 function isTranslatedField(value: unknown, locale: Locale): value is TranslatedField<unknown> {
   return isRecord(value) && locale in value;
 }
@@ -49,7 +59,7 @@ function resolveTranslation(
     }
   }
 
-  if (options?.allowEmptyFields?.includes(fieldKey)) {
+  if (isAllowedEmptyPath(path, options)) {
     return value[locale];
   }
 

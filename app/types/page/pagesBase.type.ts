@@ -9,6 +9,7 @@ import { ArtistryPageSchema } from '~/validators/pagesSchemas/pages/artistry.sch
 import { BiographyPageSchema } from '~/validators/pagesSchemas/pages/biography.schema';
 import { CooperationPageSchema } from '~/validators/pagesSchemas/pages/cooperation.schema';
 import { PrivacyPolicyPageSchema } from '~/validators/pagesSchemas/pages/privacy-policy.schema';
+import { PublicationsPageSchema } from '~/validators/pagesSchemas/pages/publications.schema';
 import { ResearchPageSchema } from '~/validators/pagesSchemas/pages/research.schema';
 import { WarInUkrainePageSchema } from '~/validators/pagesSchemas/pages/war-in-ukraine.schema';
 
@@ -20,6 +21,7 @@ export type CooperationPageBase = ExcludeDBFields<z.infer<typeof CooperationPage
 export type ArtistryPageBase = ExcludeDBFields<z.infer<typeof ArtistryPageSchema>>;
 export type WarInUkrainePageBase = ExcludeDBFields<z.infer<typeof WarInUkrainePageSchema>>;
 export type ArchivePageBase = ExcludeDBFields<z.infer<typeof ArchivePageSchema>>;
+export type PublicationsPageBase = ExcludeDBFields<z.infer<typeof PublicationsPageSchema>>;
 
 export interface PageBaseMap {
   'about-us': AboutUsPageBase;
@@ -30,6 +32,7 @@ export interface PageBaseMap {
   artistry: ArtistryPageBase;
   'war-in-ukraine': WarInUkrainePageBase;
   archive: ArchivePageBase;
+  publications: PublicationsPageBase;
 }
 
 export type AboutUsPage = Localize<AboutUsPageBase>;
@@ -40,6 +43,7 @@ export type CooperationPage = Localize<CooperationPageBase>;
 export type ArtistryPage = Localize<ArtistryPageBase>;
 export type WarInUkrainePage = Localize<WarInUkrainePageBase>;
 export type ArchivePage = Localize<ArchivePageBase>;
+export type PublicationsPage = Localize<PublicationsPageBase>;
 
 export interface PageDataMap {
   'about-us': AboutUsPage;
@@ -50,6 +54,7 @@ export interface PageDataMap {
   artistry: ArtistryPage;
   'war-in-ukraine': WarInUkrainePage;
   archive: ArchivePage;
+  news: PublicationsPage;
 }
 
 export type PageForSlug<S extends PageSlug> = S extends PageSlug ? PageDataMap[S] : never;

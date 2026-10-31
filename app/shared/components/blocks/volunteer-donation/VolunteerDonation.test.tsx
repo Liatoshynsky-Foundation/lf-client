@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 import VolunteerDonation from './VolunteerDonation';
+import type { StringOrLocalizedString } from '~/types/types/language';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
@@ -33,7 +34,7 @@ jest.mock('~/components/image-with-caption/ImageWithCaption', () => ({
 
 jest.mock('~/components/section-title/SectionTitle', () => ({
   __esModule: true,
-  default: ({ title }: { title: string | { en: string; uk: string } }) => (
+  default: ({ title }: { title: StringOrLocalizedString }) => (
     <h2 data-testid="section-title">{typeof title === 'string' ? title : title.en}</h2>
   )
 }));

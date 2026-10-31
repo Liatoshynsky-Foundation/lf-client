@@ -386,10 +386,21 @@ gitGraph
 [![@premiumderyn](https://avatars.githubusercontent.com/u/219176726?v=4&size=250)](https://github.com/premiumderyn)
 [![@dianajnxv](https://avatars.githubusercontent.com/u/121499947?v=4&size=250)](https://github.com/dianajnxv)
 
+#### Team UA-5355
+
+[![@nikoletta17](https://avatars.githubusercontent.com/u/207587778?v=4&size=250)](https://github.com/nikoletta17)
+[![@glib-pronin](https://avatars.githubusercontent.com/u/189390197?v=4&size=250)](https://github.com/glib-pronin)
+[![@SofiiaMal](https://avatars.githubusercontent.com/u/188685976?v=4&size=250)](https://github.com/SofiiaMal)
+[![@OleksiiStrotskyi](https://avatars.githubusercontent.com/u/290760136?v=4&size=250)](https://github.com/OleksiiStrotskyi)
+[![@03102909](https://avatars.githubusercontent.com/u/204791636?v=4&size=250)](https://github.com/03102909)
+[![@Ann00012](https://avatars.githubusercontent.com/u/173189440?v=4&size=250)](https://github.com/Ann00012)
+<a href="https://github.com/yarl1k"><img src="https://avatars.githubusercontent.com/u/207349912?v=4" width="250" alt="@yarl1k"></a>
+
 ### DevOps team
 
 [![@qwqw-333](https://avatars.githubusercontent.com/u/132368159?v=4&size=250)](https://github.com/qwqw-333)
 <a href="https://github.com/denchik911"><img src="https://avatars.githubusercontent.com/u/61146063?v=4" width="250" alt="@denchik911"></a>
+<a href="https://github.com/Taras4568"><img src="https://avatars.githubusercontent.com/u/137615339?v=4" width="250" alt="@Taras4568"></a>
 
 ### Designer team
 

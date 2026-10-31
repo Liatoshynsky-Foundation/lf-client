@@ -5,7 +5,6 @@ import MediaIntroSection from './MediaIntroSection';
 
 // mock next-intl
 jest.mock('next-intl', () => ({
-  useLocale: jest.fn(),
   useTranslations: jest.fn()
 }));
 
@@ -15,23 +14,15 @@ jest.mock('~/shared/components/design-system/all-components/content-block/Conten
   default: ({ description }: { description: string }) => <div data-testid="ContentBlock">{description}</div>
 }));
 
-// mock media.const
-jest.mock('~/shared/components/blocks/media-center/media.const', () => ({
-  mediaBigDoc: {
-    en: 'Big media text EN',
-    uk: 'Big media text UK'
-  },
-  mediaSmallDoc: {
-    en: 'Small media text EN',
-    uk: 'Small media text UK'
-  }
-}));
-
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 describe('MediaIntroSection', () => {
+  const mockData = {
+    publicationsIntro: 'First paragraph from CMS',
+    publicationsOutro: 'Second paragraph from CMS'
+  };
+
   beforeEach(() => {
-    (useLocale as jest.Mock).mockReturnValue('en');
     (useTranslations as jest.Mock).mockReturnValue((key: string) => {
       const translations: Record<string, string> = {
         title: 'Media Center'
@@ -45,19 +36,19 @@ describe('MediaIntroSection', () => {
   });
 
   it('should render translated title', () => {
-    render(<MediaIntroSection />);
+    render(<MediaIntroSection data={mockData} />);
 
     expect(screen.getByRole('heading', { name: 'Media Center' })).toBeInTheDocument();
   });
 
   it('should render big and small media content blocks for current locale', () => {
-    render(<MediaIntroSection />);
+    render(<MediaIntroSection data={mockData} />);
 
     const blocks = screen.getAllByTestId('ContentBlock');
 
     expect(blocks).toHaveLength(2);
 
-    expect(blocks[0]).toHaveTextContent('Big media text EN');
-    expect(blocks[1]).toHaveTextContent('Small media text EN');
+    expect(blocks[0]).toHaveTextContent('First paragraph from CMS');
+    expect(blocks[1]).toHaveTextContent('Second paragraph from CMS');
   });
 });

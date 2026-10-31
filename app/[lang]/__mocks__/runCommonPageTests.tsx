@@ -2,9 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { Language } from '~/types/types/language';
+import { LocalizedPageProps } from '~/types/types/language';
 
 import { createSeoMeta } from '~/lib/utils/createSeoMeta';
+import { getDraftId } from '~/lib/utils/getDraftId';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
 import PageBuilder from '~/shared/components/page-builder/PageBuilder';
 
 jest.mock('~/shared/components/page-builder/PageBuilder');
@@ -26,14 +28,15 @@ jest.mock('~/shared/components/constants/routes', () => ({
 }));
 
 export const testPassLangSlugToPageBuilder = async (
-  PageComponent: ({ params }: Readonly<Language>) => Promise<React.JSX.Element>,
+  PageComponent: ({ params }: Readonly<LocalizedPageProps>) => Promise<React.JSX.Element>,
   slug: string,
   lang: 'uk' | 'en' = 'uk'
 ) => {
   const ui = await PageComponent({
     params: Promise.resolve({
       lang
-    })
+    }),
+    searchParams: Promise.resolve({})
   });
 
   render(ui);
@@ -52,13 +55,13 @@ export const testPassLangSlugToPageBuilder = async (
 };
 
 export const testGeneratePageMetadata = async (
-  generateMetadata: (params: Readonly<Language>) => Promise<Metadata>,
+  generateMetadata: (params: Readonly<LocalizedPageProps>) => Promise<Metadata>,
   translationKey: string,
   expectedUrl: string
 ) => {
   const mockT = jest.fn((key) => `translated_${key}`);
   (getTranslations as jest.Mock).mockResolvedValueOnce(mockT);
-  const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }) });
+  const meta = await generateMetadata({ params: Promise.resolve({ lang: 'en' }), searchParams: Promise.resolve({}) });
   expect(setRequestLocale).toHaveBeenCalledWith('en');
 
   expect(getTranslations).toHaveBeenCalledWith(translationKey);
@@ -85,7 +88,7 @@ export const testGeneratePageMetadata = async (
 };
 
 interface TestReturnBlockRendererArgs {
-  PageComponent: ({ params }: Readonly<Language>) => Promise<React.JSX.Element>;
+  PageComponent: ({ params }: Readonly<LocalizedPageProps>) => Promise<React.JSX.Element>;
   rendererKeys: string[];
   namesMap?: Record<string, string>;
   title?: string;
@@ -97,7 +100,7 @@ export const testReturnBlockRenderer = async ({
   namesMap,
   title
 }: TestReturnBlockRendererArgs) => {
-  const Page = await PageComponent({ params: Promise.resolve({ lang: 'en' }) });
+  const Page = await PageComponent({ params: Promise.resolve({ lang: 'en' }), searchParams: Promise.resolve({}) });
   const mockBlocks = { IntroSection: { title: 'Test' } } as unknown;
 
   const renderedBlockElement = Page.props.renderBlock({
@@ -127,4 +130,29 @@ export const testReturnBlockRenderer = async ({
   }
 
   expect(renderedBlockElement.props).toEqual(expect.objectContaining(expectedProps));
+};
+
+export const testPassDraftIdToResolvePageData = async (
+  generateMetadata: (props: Readonly<LocalizedPageProps>) => Promise<Metadata>,
+  slug: string,
+  draftId: string,
+  lang: 'uk' | 'en' = 'uk'
+) => {
+  const searchParams = { draftId };
+
+  (getTranslations as jest.Mock).mockResolvedValue((key: string) => key);
+
+  (getDraftId as jest.Mock).mockReturnValue(draftId);
+  (resolvePageData as jest.Mock).mockResolvedValue({
+    isError: true,
+    error: 'Test error'
+  });
+
+  await generateMetadata({
+    params: Promise.resolve({ lang }),
+    searchParams: Promise.resolve(searchParams)
+  });
+
+  expect(getDraftId).toHaveBeenCalledWith(searchParams);
+  expect(resolvePageData).toHaveBeenCalledWith(slug, lang, draftId);
 };

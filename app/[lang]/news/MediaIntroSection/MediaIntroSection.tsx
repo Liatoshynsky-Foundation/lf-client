@@ -1,13 +1,18 @@
 import { Box, Typography } from '@mui/material';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 import { styles } from './MediaIntroSection.styles';
+import { PublicationsPage } from '~/types/page/pagesBase.type';
 
-import { mediaBigDoc, mediaSmallDoc } from '~/shared/components/blocks/media-center/media.const';
 import ContentBlock from '~/shared/components/design-system/all-components/content-block/ContentBlock';
 
-export default function MediaIntroSection() {
-  const locale = useLocale();
+type PublicationsIntroData = PublicationsPage['blocks']['PublicationsIntro'];
+
+interface MediaIntroSectionProps {
+  readonly data: PublicationsIntroData;
+}
+
+export default function MediaIntroSection({ data }: MediaIntroSectionProps) {
   const t = useTranslations('media');
 
   return (
@@ -18,8 +23,8 @@ export default function MediaIntroSection() {
         </Typography>
       </Box>
       <Box sx={styles.textBlockContainer}>
-        <ContentBlock textSx={styles.longText} description={mediaBigDoc[locale]} />
-        <ContentBlock textSx={{ gridColumn: '1 / -1', mt: '16px' }} description={mediaSmallDoc[locale]} />
+        <ContentBlock textSx={styles.longText} description={data.publicationsIntro} />
+        <ContentBlock textSx={{ gridColumn: '1 / -1', mt: '16px' }} description={data.publicationsOutro} />
       </Box>
     </Box>
   );

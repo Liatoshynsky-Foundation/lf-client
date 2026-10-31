@@ -35,7 +35,7 @@ export const foundationParagraph2: LocalizedNode = {
 
 export const foundationButtonText: LocalizedString = {
   uk: 'Більше про фундацію',
-  en: 'More about the foundation'
+  en: 'More about the Foundation'
 };
 
 export const foundationSectionData = {
