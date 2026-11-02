@@ -48,7 +48,7 @@ const BLOCK_NAMES_MAP: Record<string, keyof RendererProps['blocks']> = {
 const BLOCKS_RENDERER: Record<keyof RendererProps['blocks'], (data: RendererProps) => React.JSX.Element> = {
   WarInfo: ({ blocks }) => <WarInfoSection data={blocks.WarInfo} />,
   PrincipleOfHope: ({ blocks }) => <PrincipleOfHope data={blocks.PrincipleOfHope} />,
-  WarCarousel: ({ blocks }) => <ImageCarouselSection data={blocks.WarCarousel} />,
+  WarCarousel: ({ blocks }) => <ImageCarouselSection data={blocks.WarCarousel} autoScroll />,
   YermolenkoLinks: ({ blocks }) => <YermolenkoLinks data={blocks.YermolenkoLinks} />,
   VolunteerDonation: ({ blocks }) => <VolunteerDonation data={blocks.VolunteerDonation} />
 };
@@ -60,7 +60,7 @@ export default async function WarInUkraine({ params, searchParams }: Readonly<Lo
     <PageBuilder<WarInUkrainePage>
       lang={lang}
       slug="war-in-ukraine"
-      pathname={`/${lang}/${ROUTES.WAR_IN_UKRAINE}`}
+      pathname={`/${lang}${ROUTES.WAR_IN_UKRAINE}`}
       searchParams={searchParams}
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
         <BlockRenderer

@@ -59,7 +59,7 @@ export default async function Artistry({ params, searchParams }: Readonly<Locali
     <PageBuilder<ArtistryPage>
       lang={lang}
       slug="artistry"
-      pathname={`/${lang}/${ROUTES.ARTISTRY}`}
+      pathname={`/${lang}${ROUTES.ARTISTRY}`}
       searchParams={searchParams}
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => {
         return (
