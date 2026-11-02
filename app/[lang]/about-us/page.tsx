@@ -66,7 +66,7 @@ export default async function Home({ params, searchParams }: Readonly<LocalizedP
     <PageBuilder<AboutUsPage>
       lang={lang}
       slug="about-us"
-      pathname={`/${lang}/${ROUTES.ABOUT_US}`}
+      pathname={`/${lang}${ROUTES.ABOUT_US}`}
       searchParams={searchParams}
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
         <BlockRenderer
