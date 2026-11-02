@@ -35,7 +35,7 @@
     "flubber": "^0.4.2",
     "framer-motion": "^12.31.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.15.0",
+    "mongoose": "^8.19.1",
     "next": "15.4.6",
     "next-intl": "^4.1.0",
     "nodemailer": "^8.0.1",
