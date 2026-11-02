@@ -3,7 +3,7 @@
 import { Box, TextField, Typography } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Svg } from '~/components/colored-svg/ColoredSvg';
 import TipTapContent from '~/components/tip-tap-content/TipTapContent';
@@ -15,6 +15,7 @@ import SearchIcon from '~/public/icons/search-static.svg';
 import { renderData } from '~/shared/components/tip-tap-content/nodes';
 
 export interface ArchiveHeaderProps {
+  description: string | TipTapDoc | null;
   onSearch?: (query: string) => void;
   dataTestId?: string;
 }
@@ -31,30 +32,14 @@ const renderDescriptionParagraph = (children: React.ReactNode) => (
   <Typography sx={styles.descriptionParagraph}>{children}</Typography>
 );
 
-export default function ArchiveHeader({ onSearch, dataTestId = 'ArchiveHeader' }: Readonly<ArchiveHeaderProps>) {
+export default function ArchiveHeader({
+  description,
+  onSearch,
+  dataTestId = 'ArchiveHeader'
+}: Readonly<ArchiveHeaderProps>) {
   const t = useTranslations('archivePage');
   const locale = useLocale();
-  const [description, setDescription] = useState<string | TipTapDoc | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const loadDescription = async () => {
-      try {
-        const response = await fetch(`/api/page?pageName=archive&lang=${locale}`);
-        if (!response.ok) return;
-
-        const result = await response.json();
-        if (result.ok) {
-          setDescription(result.value?.blocks?.PageCaption?.description ?? null);
-        }
-      } catch {
-        setDescription(null);
-      }
-    };
-
-    void loadDescription();
-  }, [locale]);
-
   const debouncedOnSearch = useMemo(
     () =>
       debounce((value: string) => {
