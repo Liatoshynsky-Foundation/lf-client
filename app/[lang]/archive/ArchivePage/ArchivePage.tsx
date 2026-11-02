@@ -41,7 +41,7 @@ interface ArchivePageProps {
   description: string | TipTapDoc | null;
 }
 
-export default function ArchivePage({ description }: ArchivePageProps) {
+export default function ArchivePage({ description }: Readonly<ArchivePageProps>) {
   const t = useTranslations('common');
   const { isMobile, isTablet, isLaptop, isDesktop } = useBreakpoints();
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export default function ArchivePage({ description }: ArchivePageProps) {
       }
     };
 
-    loadFunds();
+    void loadFunds();
   }, [locale]);
 
   if (error) {
