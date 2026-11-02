@@ -12,9 +12,11 @@ type MockTipTapContentProps = {
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} alt={props.alt || 'image'} data-testid="next-image" />
-  )
+  default: ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean }) => {
+    const imgProps = { ...props };
+    delete imgProps.fill;
+    return <img {...imgProps} alt={alt || 'image'} data-testid="next-image" />;
+  }
 }));
 
 jest.mock('~/shared/components/tip-tap-content/nodes', () => ({

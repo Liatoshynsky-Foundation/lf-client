@@ -6,7 +6,12 @@ import Carousel from './Carousel';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, onError }: React.ComponentProps<'img'>) => <img src={src} alt={alt} onError={onError} />
+  default: ({ src, alt, onError, ...props }: React.ComponentProps<'img'> & { fill?: boolean }) => {
+    const imgProps = { ...props };
+    delete imgProps.fill;
+
+    return <img src={src} alt={alt} onError={onError} {...imgProps} />;
+  }
 }));
 
 jest.mock('~/ds-components/arrow-carousel/ArrowCarousel', () => ({
