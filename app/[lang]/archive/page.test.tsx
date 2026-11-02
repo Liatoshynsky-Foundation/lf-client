@@ -14,10 +14,6 @@ jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn()
 }));
 
-jest.mock('~/lib/utils/errorPageFactory', () => ({
-  ErrorPageFactory: jest.fn(() => <div>Error page</div>)
-}));
-
 jest.mock('~/lib/utils/getDraftId', () => ({
   getDraftId: jest.fn()
 }));
@@ -42,13 +38,14 @@ jest.mock('~/types/types/result', () => ({
   UnwrapResult: jest.fn()
 }));
 
-jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
-  PageNotFound: () => <div>Page not found</div>
-}));
-
 jest.mock('./ArchivePage/ArchivePage', () => ({
   __esModule: true,
-  default: ({ description }: { description: string | null }) => <div>{description}</div>
+  default: ({ description }: { description: string | null }) => (
+    <div>
+      <div>Archive page</div>
+      {description}
+    </div>
+  )
 }));
 
 describe('Archive page', () => {
@@ -122,20 +119,17 @@ describe('Archive page', () => {
     expect(screen.getByText('Archive description')).toBeInTheDocument();
   });
 
-  it('should render error page when page data fetching fails', async () => {
+  it('should render archive page when page data fetching fails', async () => {
     jest.mocked(isError).mockReturnValue(true);
-    const ArchiveComponent = await Archive({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
+
+    const ArchiveComponent = await Archive({
+      params: mockPromiseParams,
+      searchParams: Promise.resolve({})
+    });
+
     render(ArchiveComponent);
 
-    expect(screen.getByText('Error page')).toBeInTheDocument();
-  });
-
-  it('should render PageNotFound when archive page does not exist', async () => {
-    (UnwrapResult as jest.Mock).mockReturnValue(null);
-    const ArchiveComponent = await Archive({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
-    render(ArchiveComponent);
-
-    expect(screen.getByText('Page not found')).toBeInTheDocument();
+    expect(screen.getByText('Archive page')).toBeInTheDocument();
   });
 
   it('should pass the draft ID to resolvePageData when fetching page content', async () => {

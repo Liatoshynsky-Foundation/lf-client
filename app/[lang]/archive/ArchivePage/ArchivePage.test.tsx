@@ -262,4 +262,10 @@ describe('Archive Page', () => {
 
     expect(screen.getByText('Archive description')).toBeInTheDocument();
   });
+
+  it('should render ArchiveHeader without description', () => {
+    renderWithTheme(<ArchivePage description={null} />);
+
+    expect(screen.getByTestId('ArchiveHeader')).toBeInTheDocument();
+  });
 });

@@ -1,12 +1,10 @@
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 
-import { PageNotFound } from '../[...unknown-route]/page-not-found/PageNotFound';
 import ArchivePage from './ArchivePage/ArchivePage';
 import { LocalizedPageProps } from '~/types/types/language';
 import { isError, isErrorCode, UnwrapResult } from '~/types/types/result';
 
-import { ErrorPageFactory } from '~/lib/utils/errorPageFactory';
 import { getDraftId } from '~/lib/utils/getDraftId';
 import { getPageMetadata } from '~/lib/utils/getPageMetadata';
 import { redirectToDisablePreview } from '~/lib/utils/redirectToDisablePreview';
@@ -41,15 +39,12 @@ const Archive = async ({ params, searchParams }: Readonly<LocalizedPageProps>) =
   }
 
   if (isError(pageResult)) {
-    return ErrorPageFactory(pageResult.error);
+    return <ArchivePage description={null} />;
   }
 
   const page = UnwrapResult(pageResult);
 
-  if (!page) {
-    return <PageNotFound />;
-  }
-  return <ArchivePage description={page.blocks.PageCaption.description} />;
+  return <ArchivePage description={page?.blocks?.PageCaption?.description ?? null} />;
 };
 
 export default Archive;
