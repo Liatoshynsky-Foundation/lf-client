@@ -1,0 +1,46 @@
+name: release-please
+
+on:
+  push:
+    branches:
+      - develop
+      - 'release/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: release-please-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # If you need CI to trigger on bot PRs/releases, uncomment token and use a PAT:
+      # env:
+      #   RP_TOKEN: ${{ secrets.RELEASE_PLEASE_PAT }}
+
+      - name: Release PR only (develop)
+        if: ${{ github.ref_name == 'develop' }}
+        uses: googleapis/release-please-action@v4
+        with:
+          # token: ${{ env.RP_TOKEN }}  # optional
+          target-branch: develop
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          # develop: do NOT publish a GitHub Release / tag
+          skip-github-release: true
+
+      - name: Full release (release/*)
+        if: ${{ startsWith(github.ref_name, 'release/') }}
+        uses: googleapis/release-please-action@v4
+        with:
+          # token: ${{ env.RP_TOKEN }}  # optional
+          # tag + GitHub Release will be created when Release PR is merged
+          target-branch: ${{ github.ref_name }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
