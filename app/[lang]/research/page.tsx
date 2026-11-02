@@ -47,7 +47,7 @@ export default async function ResearchPage({ params, searchParams }: Readonly<Lo
   const pageResult = await resolvePageData('research', lang, getDraftId(query));
 
   if (isErrorCode(pageResult, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND)) {
-    redirectToDisablePreview(`/${lang}/${ROUTES.RESEARCH}`, query);
+    redirectToDisablePreview(`/${lang}${ROUTES.RESEARCH}`, query);
   }
 
   if (isError(pageResult)) {

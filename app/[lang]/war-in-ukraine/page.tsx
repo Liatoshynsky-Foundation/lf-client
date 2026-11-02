@@ -60,7 +60,7 @@ export default async function WarInUkraine({ params, searchParams }: Readonly<Lo
     <PageBuilder<WarInUkrainePage>
       lang={lang}
       slug="war-in-ukraine"
-      pathname={`/${lang}/${ROUTES.WAR_IN_UKRAINE}`}
+      pathname={`/${lang}${ROUTES.WAR_IN_UKRAINE}`}
       searchParams={searchParams}
       renderBlock={({ blockId, blocks, uniqueRenderKey }) => (
         <BlockRenderer

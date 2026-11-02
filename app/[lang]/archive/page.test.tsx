@@ -160,6 +160,6 @@ describe('Archive page', () => {
         searchParams: Promise.resolve(searchParams)
       })
     ).rejects.toThrow('REDIRECT_TO_DISABLE_PREVIEW');
-    expect(redirectToDisablePreview).toHaveBeenCalledWith(`/${mockParams.lang}/${ROUTES.ARCHIVE}`, searchParams);
+    expect(redirectToDisablePreview).toHaveBeenCalledWith('/uk/archive', searchParams);
   });
 });

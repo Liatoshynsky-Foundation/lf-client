@@ -65,7 +65,7 @@ export default async function PrivacyPolicy({ params, searchParams }: Readonly<L
     <PageBuilder<PrivacyPolicyPage>
       lang={lang}
       slug="privacy-policy"
-      pathname={`/${lang}/${ROUTES.PRIVACY_POLICY}`}
+      pathname={`/${lang}${ROUTES.PRIVACY_POLICY}`}
       searchParams={searchParams}
       renderBlock={({ blockId, blocks, title, uniqueRenderKey }) => (
         <BlockRenderer

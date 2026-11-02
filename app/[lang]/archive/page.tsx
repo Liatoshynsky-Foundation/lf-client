@@ -37,7 +37,7 @@ const Archive = async ({ params, searchParams }: Readonly<LocalizedPageProps>) =
   const pageResult = await resolvePageData('archive', lang, getDraftId(query));
 
   if (isErrorCode(pageResult, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND)) {
-    redirectToDisablePreview(`/${lang}/${ROUTES.ARCHIVE}`, query);
+    redirectToDisablePreview(`/${lang}${ROUTES.ARCHIVE}`, query);
   }
 
   if (isError(pageResult)) {

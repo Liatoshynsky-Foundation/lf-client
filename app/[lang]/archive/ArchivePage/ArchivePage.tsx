@@ -61,7 +61,6 @@ export default function ArchivePage({ description }: Readonly<ArchivePageProps>)
 
         const result = await response.json();
         setFunds(result.data);
-        console.log(result.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {

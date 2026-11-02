@@ -49,7 +49,7 @@ const News = async ({ params, searchParams }: Readonly<LocalizedPageProps>) => {
   const pageResult = await resolvePageData('news', lang, getDraftId(query));
 
   if (isErrorCode(pageResult, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND)) {
-    redirectToDisablePreview(`/${lang}/${ROUTES.NEWS}`, query);
+    redirectToDisablePreview(`/${lang}${ROUTES.NEWS}`, query);
   }
 
   if (isError(pageResult)) {
