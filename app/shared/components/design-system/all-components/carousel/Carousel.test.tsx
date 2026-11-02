@@ -1,14 +1,12 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
 
 import Carousel from './Carousel';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, onError, ...props }: React.ComponentProps<'img'>) => (
-    <img src={src} alt={alt} onError={onError} {...props} />
-  )
+  default: ({ src, alt, onError }: React.ComponentProps<'img'>) => <img src={src} alt={alt} onError={onError} />
 }));
 
 jest.mock('~/ds-components/arrow-carousel/ArrowCarousel', () => ({
@@ -34,6 +32,99 @@ describe('Carousel', () => {
     { id: 2, src: '/image2.jpg', alt: 'Image 2' },
     { id: 3, src: '/image3.jpg', alt: 'Image 3' }
   ];
+
+  describe('automatic playback', () => {
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
+
+    const advanceSlide = () => {
+      act(() => jest.advanceTimersByTime(3000));
+    };
+
+    it('advances every three seconds and loops back to the first photo', () => {
+      render(<Carousel images={mockImages} infiniteLoop autoScroll />);
+
+      for (const index of [1, 2, 0]) {
+        advanceSlide();
+        expect(screen.getByTestId(`carousel-image-${index}`)).toHaveAttribute('data-active', 'true');
+        expect(screen.getByTestId(`carousel-dot-${index}`)).toHaveAttribute('data-active', 'true');
+      }
+      expect(screen.getByTestId('carousel-caption')).toHaveTextContent('Test Carousel Title');
+    });
+
+    it('leaves automatic playback disabled by default', () => {
+      render(<Carousel images={mockImages} infiniteLoop />);
+      advanceSlide();
+      expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+    });
+
+    it.each([
+      { control: 'arrow', navigate: () => fireEvent.click(screen.getByTestId('arrow-right')) },
+      { control: 'dot', navigate: () => fireEvent.click(screen.getByTestId('carousel-dot-1')) },
+      { control: 'image', navigate: () => fireEvent.click(screen.getByTestId('carousel-image-1')) },
+      { control: 'keyboard', navigate: () => fireEvent.keyDown(document, { key: 'ArrowRight' }) },
+      {
+        control: 'swipe',
+        navigate: () => {
+          const slide = screen.getByTestId('carousel-image-0');
+          fireEvent.touchStart(slide, { targetTouches: [{ clientX: 300 }] });
+          fireEvent.touchMove(slide, { targetTouches: [{ clientX: 100 }] });
+          fireEvent.touchEnd(slide);
+        }
+      }
+    ])('continues after $control navigation', ({ navigate }) => {
+      render(<Carousel images={mockImages} infiniteLoop autoScroll />);
+      act(() => jest.advanceTimersByTime(2000));
+      navigate();
+
+      expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
+      act(() => jest.advanceTimersByTime(1000));
+      expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
+      act(() => jest.advanceTimersByTime(2000));
+      expect(screen.getByTestId('carousel-image-2')).toHaveAttribute('data-active', 'true');
+    });
+
+    it.each([0, 1])('does not start a timer for %i photos', (count) => {
+      render(<Carousel images={mockImages.slice(0, count)} infiniteLoop autoScroll />);
+      expect(jest.getTimerCount()).toBe(0);
+    });
+
+    it('reschedules playback when the interval changes', () => {
+      const { rerender } = render(<Carousel images={mockImages} infiniteLoop autoScroll />);
+      act(() => jest.advanceTimersByTime(2000));
+      rerender(<Carousel images={mockImages} infiniteLoop autoScroll autoScrollInterval={5000} />);
+
+      act(() => jest.advanceTimersByTime(4999));
+      expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+      act(() => jest.advanceTimersByTime(1));
+      expect(screen.getByTestId('carousel-image-1')).toHaveAttribute('data-active', 'true');
+    });
+
+    it('uses the updated image count when photos fail to load', () => {
+      render(<Carousel images={mockImages} initialIndex={1} infiniteLoop autoScroll />);
+      fireEvent.error(screen.getByAltText('Image 3'));
+      advanceSlide();
+      expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+
+      fireEvent.error(screen.getByAltText('Image 2'));
+      expect(jest.getTimerCount()).toBe(0);
+      advanceSlide();
+      expect(screen.getByTestId('carousel-image-0')).toHaveAttribute('data-active', 'true');
+    });
+
+    it('cleans up the timer when disabled or unmounted', () => {
+      const { rerender, unmount } = render(<Carousel images={mockImages} infiniteLoop autoScroll />);
+      expect(jest.getTimerCount()).toBe(1);
+
+      rerender(<Carousel images={mockImages} infiniteLoop autoScroll={false} />);
+      expect(jest.getTimerCount()).toBe(0);
+
+      rerender(<Carousel images={mockImages} infiniteLoop autoScroll />);
+      expect(jest.getTimerCount()).toBe(1);
+      unmount();
+      expect(jest.getTimerCount()).toBe(0);
+    });
+  });
 
   it('should render carousel elements correctly', () => {
     render(<Carousel images={mockImages} />);
