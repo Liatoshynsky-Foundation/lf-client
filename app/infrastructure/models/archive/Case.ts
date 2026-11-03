@@ -1,3 +1,4 @@
+import type { JSONContent } from '@tiptap/core';
 import { model, models, Schema, Types } from 'mongoose';
 
 import type { LocalizedString } from '~/types/types/common.types';
@@ -19,7 +20,7 @@ export interface ICase {
   caseDate?: LocalizedString;
   sheetsNumber?: number | null;
   caseDescriptions?: LocalizedString;
-  detailedCaseDescription?: LocalizedString | null;
+  detailedCaseDescription?: LocalizedRichText | null;
   pdfFile?: CasePdfFile | null;
   status?: FundStatus;
   cipher?: string;
@@ -33,10 +34,23 @@ export interface ICase {
   updatedAt: Date;
 }
 
+export interface LocalizedRichText {
+  uk: JSONContent;
+  en: JSONContent;
+}
+
 const localizedStringSchema = {
   uk: { type: String, default: '' },
   en: { type: String, default: '' }
 };
+
+const localizedRichTextSchema = new Schema(
+  {
+    uk: { type: Schema.Types.Mixed, default: null },
+    en: { type: Schema.Types.Mixed, default: null }
+  },
+  { _id: false }
+);
 
 const casePdfFileSchema = new Schema<CasePdfFile>(
   {
@@ -71,7 +85,7 @@ const caseSchema = new Schema<ICase>(
     },
     caseDescriptions: localizedStringSchema,
     detailedCaseDescription: {
-      type: localizedStringSchema,
+      type: localizedRichTextSchema,
       default: null
     },
     pdfFile: {

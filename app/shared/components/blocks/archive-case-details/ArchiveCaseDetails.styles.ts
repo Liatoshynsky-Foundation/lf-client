@@ -74,6 +74,16 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '16px',
     lineHeight: '150%',
     color: 'black',
-    fontWeight: 500
+    fontWeight: 500,
+    '& p, & span, & li': {
+      fontSize: 'inherit',
+      lineHeight: 'inherit',
+      color: 'inherit',
+      fontWeight: 'inherit',
+      marginBottom: '12px'
+    },
+    '&:last-child': {
+      marginBottom: 0
+    }
   }
 };

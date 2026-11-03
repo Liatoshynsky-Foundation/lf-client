@@ -296,6 +296,7 @@ describe('fundsRepository', () => {
     });
 
     it('should return full case details with navigation and documents', async () => {
+      const detailedDoc = { type: TipTapNodeTypes.doc, content: [] };
       const mockCaseDoc = {
         _id: caseId,
         fundId: fundObjectId,
@@ -305,7 +306,10 @@ describe('fundsRepository', () => {
         caseDate: { uk: '2020', en: '2020' },
         sheetsNumber: 10,
         caseDescriptions: { uk: 'Опис', en: 'Desc' },
-        detailedCaseDescription: { uk: 'Детальний опис', en: 'Detailed description' },
+        detailedCaseDescription: {
+          uk: detailedDoc,
+          en: detailedDoc
+        },
         pdfFile: { url: 'url' },
         status: FundStatus.Published,
         documents: [
@@ -357,7 +361,10 @@ describe('fundsRepository', () => {
       }
 
       expect(result.contentDescription).toBe('Опис');
-      expect(result.detailedCaseDescription).toBe('Детальний опис');
+      expect(result.detailedCaseDescription).toEqual({
+        uk: detailedDoc,
+        en: detailedDoc
+      });
 
       expect(result.prevCase).not.toBeNull();
       expect(result.nextCase).not.toBeNull();

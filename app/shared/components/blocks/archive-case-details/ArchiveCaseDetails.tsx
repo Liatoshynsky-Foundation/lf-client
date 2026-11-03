@@ -1,11 +1,14 @@
 import { Box, Typography } from '@mui/material';
+import { useLocale } from 'next-intl';
 
+import TipTapContent from '../../tip-tap-content/TipTapContent';
 import { styles } from './ArchiveCaseDetails.styles';
 import BackLink from './back-link/BackLink';
 import Documents from './documents/Documents';
 import Meta from './meta/Meta';
 import Navigation from './navigation/Navigation';
 import PdfButton from './pdf-button/PdfButton';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
 export interface ArchiveCaseDocument {
   id: string;
@@ -38,7 +41,7 @@ export interface ArchiveCaseDetailsProps {
   sheetsCount?: number;
   pdfUrl: string;
   contentDescription?: string;
-  detailedCaseDescription?: string;
+  detailedCaseDescription?: TipTapDoc | null;
   documents: ArchiveCaseDocument[];
   fundHref: string;
   prevCase?: ArchiveAdjacentCase;
@@ -60,6 +63,7 @@ const ArchiveCaseDetails = ({
   nextCase,
   labels
 }: Readonly<ArchiveCaseDetailsProps>) => {
+  const locale = useLocale();
   return (
     <Box sx={styles.gridContainer} data-testid="ArchiveCaseDetails">
       <BackLink href={fundHref} label={labels.back} dataTestId="ArchiveCaseDetails-back" />
@@ -99,7 +103,9 @@ const ArchiveCaseDetails = ({
               <Typography variant="h6" sx={styles.detailTitle}>
                 {labels.documents}
               </Typography>
-              <Typography sx={styles.detailText}>{detailedCaseDescription}</Typography>
+              <Box sx={styles.detailText}>
+                <TipTapContent data={detailedCaseDescription} locale={locale} />
+              </Box>
             </Box>
           )}
 

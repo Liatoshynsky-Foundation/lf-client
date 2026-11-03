@@ -109,6 +109,10 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
     nextCase: t('navigation.next')
   };
 
+  const currentDetailedDescription = caseDetails.detailedCaseDescription
+    ? (caseDetails.detailedCaseDescription[lang as 'uk' | 'en'] ?? caseDetails.detailedCaseDescription.uk)
+    : undefined;
+
   return (
     <MainLayout withLines>
       <ArchiveCaseDetails
@@ -118,7 +122,7 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
         sheetsCount={caseDetails.sheets ?? undefined}
         pdfUrl={caseDetails.pdfUrl ?? '#'}
         contentDescription={caseDetails.contentDescription}
-        detailedCaseDescription={caseDetails.detailedCaseDescription}
+        detailedCaseDescription={currentDetailedDescription}
         documents={documents}
         fundHref={fundHref}
         prevCase={prevCase}

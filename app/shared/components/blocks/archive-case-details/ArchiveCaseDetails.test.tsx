@@ -6,11 +6,30 @@ import ArchiveCaseDetails, {
   type ArchiveCaseDetailsLabels,
   type ArchiveCaseDocument
 } from './ArchiveCaseDetails';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { getDynamicRoute } from '~/shared/components/constants/routes';
 
 jest.mock('~/shared/components/colored-svg/ColoredSvg', () => ({
   Svg: () => <span data-testid="SvgMock" />
+}));
+
+jest.mock('next-intl', () => ({
+  useLocale: () => 'uk',
+  useTranslations: () => (key: string) => key,
+  useFormatter: () => ({
+    dateTime: (val: unknown) => val,
+    number: (val: unknown) => val,
+    relativeTime: (val: unknown) => val
+  })
+}));
+
+jest.mock('~/components/tip-tap-content/TipTapContent', () => ({
+  __esModule: true,
+  default: ({ data }: { data: any }) => (
+    <div data-testid="TipTapContent-mock">{data?.content?.[0]?.content?.[0]?.text || 'Mocked Tiptap Content'}</div>
+  )
 }));
 
 describe('ArchiveCaseDetails', () => {
@@ -51,7 +70,20 @@ describe('ArchiveCaseDetails', () => {
     sheetsCount: 26,
     pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
     contentDescription: 'Опис справи',
-    detailedCaseDescription: 'Детальний опис справи',
+    detailedCaseDescription: {
+      type: TipTapNodeTypes.doc,
+      content: [
+        {
+          type: TipTapNodeTypes.paragraph,
+          content: [
+            {
+              type: TipTapNodeTypes.text,
+              text: 'Детальний опис справи'
+            }
+          ]
+        }
+      ]
+    } as TipTapDoc,
     documents,
     fundHref: `/uk${getDynamicRoute.archiveFund(2)}`,
     prevCase,
