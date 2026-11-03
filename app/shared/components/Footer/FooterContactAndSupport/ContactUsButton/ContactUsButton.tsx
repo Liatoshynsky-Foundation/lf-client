@@ -22,6 +22,8 @@ const ContactUsButton: React.FC<ContactUsDataProps> = ({ data }) => {
     if (normalizePath(pathname) === normalizePath(targetPath)) {
       event.preventDefault();
       window.dispatchEvent(new Event('focus-contact-name'));
+    } else {
+      sessionStorage.setItem('focus-contact-name', 'true');
     }
   };
 

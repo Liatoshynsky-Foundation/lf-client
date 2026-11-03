@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import InfoErrorIcon from 'public/icons/info-error.svg';
 import { useEffect, useRef, useState } from 'react';
@@ -37,6 +38,7 @@ type ContactFormProps = {
 };
 
 function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>) {
+  const pathname = usePathname() ?? '';
   const t = useTranslations('contactForm');
   const tErrors = useTranslations('contactForm.errors');
   const tConfirmation = useTranslations('contactForm.confirmation');
@@ -50,14 +52,17 @@ function ContactForm({ onSubmit, disabled = false }: Readonly<ContactFormProps>)
   };
 
   useEffect(() => {
-    focusNameInput();
+    if (pathname.endsWith(ROUTES.CONTACTS) && sessionStorage.getItem('focus-contact-name') === 'true') {
+      sessionStorage.removeItem('focus-contact-name');
+      focusNameInput();
+    }
 
     window.addEventListener('focus-contact-name', focusNameInput);
 
     return () => {
       window.removeEventListener('focus-contact-name', focusNameInput);
     };
-  }, []);
+  }, [pathname]);
 
   const phoneSchema = z
     .string()
