@@ -44,8 +44,7 @@ const Frame: React.FC<FrameProps> = ({ images, interactive, locale, onPauseChang
   return (
     <Box sx={styles.frame} data-testid="BiographyGallery-frame" aria-hidden={!interactive}>
       {images.map((img) => {
-        const hasCaption = Boolean(img.caption);
-        const captionForRender = hasCaption ? img.caption : ' ';
+        const captionForRender = img.caption ?? img.alt;
 
         return (
           <Box
@@ -78,8 +77,8 @@ const Frame: React.FC<FrameProps> = ({ images, interactive, locale, onPauseChang
                 width: '100%',
                 height: img.sizes.height
               }}
-              captionClassName={hasCaption ? 'bioCaption--real' : 'bioCaption--placeholder'}
-              captionSx={[styles.captionBase, hasCaption ? styles.captionAnimated : { opacity: 0 }]}
+              captionClassName="bioCaption--real"
+              captionSx={[styles.captionBase, styles.captionAnimated]}
               dataTestId={`BiographyGallery-image-${img.id}`}
             />
           </Box>

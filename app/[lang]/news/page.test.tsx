@@ -2,11 +2,13 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { getLocale } from 'next-intl/server';
 
+import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
 import News, { generateMetadata } from './page';
 import { isError, UnwrapResult } from '~/types/types/result';
 import { isProductionMode } from '~/utils/isProductionMode';
 
 import { createRequestContainer } from '~/di/container';
+import { getDraftId } from '~/lib/utils/getDraftId';
 import { getPageMetadata } from '~/lib/utils/getPageMetadata';
 import { resolvePageData } from '~/services/pages-data/resolvePageData';
 
@@ -49,6 +51,7 @@ jest.mock('~/services/pages-data/resolvePageData', () => ({
 
 jest.mock('~/types/types/result', () => ({
   isError: jest.fn(),
+  isErrorCode: jest.fn(),
   UnwrapResult: jest.fn()
 }));
 
@@ -58,6 +61,16 @@ jest.mock('~/lib/utils/getPageMetadata', () => ({
 
 jest.mock('../[...unknown-route]/page-not-found/PageNotFound', () => ({
   PageNotFound: () => <div data-testid="PageNotFound" />
+}));
+
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
+}));
+
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn(),
+  getLocale: jest.fn(),
+  getTranslations: jest.fn()
 }));
 
 describe('News page', () => {
@@ -111,7 +124,7 @@ describe('News page', () => {
   });
 
   it('should generate correct metadata', async () => {
-    const metadata = await generateMetadata({ params: mockPromiseParams });
+    const metadata = await generateMetadata({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
 
     expect(getPageMetadata).toHaveBeenCalledWith(
       mockPromiseParams,
@@ -130,7 +143,7 @@ describe('News page', () => {
   it('should render UnderDevelopment when production mode is enabled', async () => {
     (isProductionMode as jest.Mock).mockReturnValue(true);
 
-    const NewsComponent = await News({ params: mockPromiseParams });
+    const NewsComponent = await News({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
     render(NewsComponent);
 
     expect(screen.getByTestId('UnderDevelopment')).toBeInTheDocument();
@@ -140,14 +153,14 @@ describe('News page', () => {
   it('should render page content when production mode is disabled', async () => {
     (isProductionMode as jest.Mock).mockReturnValue(false);
 
-    const NewsComponent = await News({ params: mockPromiseParams });
+    const NewsComponent = await News({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
     render(NewsComponent);
 
     expect(screen.getByTestId('MainLayout')).toBeInTheDocument();
     expect(screen.getByTestId('MediaIntroSection')).toBeInTheDocument();
     expect(screen.getByTestId('MediaCenter')).toBeInTheDocument();
 
-    expect(resolvePageData).toHaveBeenCalledWith('news', 'uk');
+    expect(resolvePageData).toHaveBeenCalledWith('news', 'uk', undefined);
     expect(mockNewsService.getAllPublishedNews).toHaveBeenCalledWith('uk');
     expect(mockEventService.getAllPublishedEvents).toHaveBeenCalledWith('uk');
     expect(mockMediaMentionService.getAllPublishedMediaMentions).toHaveBeenCalled();
@@ -158,7 +171,7 @@ describe('News page', () => {
       blocks: {}
     });
 
-    const NewsComponent = await News({ params: mockPromiseParams });
+    const NewsComponent = await News({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
     render(NewsComponent);
 
     expect(screen.queryByTestId('MediaIntroSection')).not.toBeInTheDocument();
@@ -168,10 +181,38 @@ describe('News page', () => {
   it('should render PageNotFound when publications page does not exist', async () => {
     (UnwrapResult as jest.Mock).mockReturnValue(null);
 
-    const NewsComponent = await News({ params: mockPromiseParams });
+    const NewsComponent = await News({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
     render(NewsComponent);
 
     expect(screen.getByTestId('PageNotFound')).toBeInTheDocument();
     expect(screen.queryByTestId('MainLayout')).not.toBeInTheDocument();
+  });
+
+  it('should pass the draft ID to resolvePageData', async () => {
+    (getPageMetadata as jest.Mock).mockImplementationOnce(
+      async (_params: unknown, options: { fetchPageMetaData: () => Promise<unknown> }) => {
+        await options.fetchPageMetaData();
+        return {};
+      }
+    );
+    await testPassDraftIdToResolvePageData(generateMetadata, 'news', 'draft-123');
+  });
+
+  it('should pass the draft ID to resolvePageData when fetching page content', async () => {
+    const draftId = 'draft-123';
+    const searchParams = { draftId };
+
+    (getDraftId as jest.Mock).mockReturnValue(draftId);
+    (resolvePageData as jest.Mock).mockResolvedValueOnce({});
+
+    const NewsComponent = await News({
+      params: mockPromiseParams,
+      searchParams: Promise.resolve(searchParams)
+    });
+
+    render(NewsComponent);
+
+    expect(getDraftId).toHaveBeenCalledWith(searchParams);
+    expect(resolvePageData).toHaveBeenCalledWith('news', 'uk', draftId);
   });
 });

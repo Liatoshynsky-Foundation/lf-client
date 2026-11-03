@@ -19,7 +19,7 @@ jobs:
     with:
       project-name: lf-client
       node-version: "22"
-      mongodb-version: "8"
+      mongodb-version: "8.2"
       run-build: true
       run-tests: true
       run-security-scan: true

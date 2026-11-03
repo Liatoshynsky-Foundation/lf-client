@@ -1,5 +1,6 @@
 import {
   testGeneratePageMetadata,
+  testPassDraftIdToResolvePageData,
   testPassLangSlugToPageBuilder,
   testReturnBlockRenderer
 } from '../__mocks__/runCommonPageTests';
@@ -70,6 +71,10 @@ jest.mock('~/components/blocks/privacy-policy/contact-us/ContactUs', () => ({
   default: ({ data }: MockProps) => <div>ContactUs section: {data.title}</div>
 }));
 
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
+}));
+
 describe('PrivacyPolicy page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -106,5 +111,9 @@ describe('PrivacyPolicy page', () => {
       ],
       title: 'Global Title'
     });
+  });
+
+  it('should pass the draft ID to resolvePageData', async () => {
+    await testPassDraftIdToResolvePageData(generateMetadata, 'privacy-policy', 'draft-123');
   });
 });

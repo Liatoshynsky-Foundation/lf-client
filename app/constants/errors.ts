@@ -48,7 +48,8 @@ export const errors = {
   EVENT_FETCH_BY_SLUG_FAILED: 'Failed to fetch event by slug',
   USE_AUDIO_PLAYER_OUTSIDE_PROVIDER: 'useAudioPlayer must be used within AudioPlayerProvider',
   NOT_FOUND: 'This resource was not found',
-  CAPTCHA_FAILED: 'Captcha verification failed'
+  CAPTCHA_FAILED: 'Captcha verification failed',
+  INVALID_RETURN_URL: 'Invalid return URL'
 };
 
 export const envErrors = {
