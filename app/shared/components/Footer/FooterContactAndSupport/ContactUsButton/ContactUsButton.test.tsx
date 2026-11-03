@@ -21,6 +21,7 @@ describe('ContactUsButton', () => {
 
   afterEach(() => {
     cleanup();
+    sessionStorage.removeItem('focus-contact-name');
     jest.clearAllMocks();
   });
 
@@ -49,7 +50,7 @@ describe('ContactUsButton', () => {
     dispatchSpy.mockRestore();
   });
 
-  it('should not dispatch focus event when clicked on another page', () => {
+  it('should save focus intent when clicked on another page', () => {
     mockUsePathname.mockReturnValue('/uk/news');
 
     render(<ContactUsButton data={data} />);
@@ -59,6 +60,7 @@ describe('ContactUsButton', () => {
     fireEvent.click(screen.getByRole('button', { name: /contact us/i }));
 
     expect(dispatchSpy).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'focus-contact-name' }));
+    expect(sessionStorage.getItem('focus-contact-name')).toBe('true');
 
     dispatchSpy.mockRestore();
   });

@@ -1,11 +1,15 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import { ROUTES } from '../../constants/routes';
 import ContactForm from './ContactForm';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
+
+jest.mock('next/navigation', () => ({
+  usePathname: jest.fn(() => '/en/contacts')
+}));
 
 jest.mock('public/icons/info-error.svg', () => {
   return function InfoErrorIcon() {
@@ -62,6 +66,7 @@ const onSubmit = jest.fn();
 describe('ContactForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    sessionStorage.removeItem('focus-contact-name');
     render(<ContactForm onSubmit={onSubmit} />);
   });
 
@@ -75,8 +80,18 @@ describe('ContactForm', () => {
     expect(screen.getByLabelText('Ваше повідомлення *')).toBeInTheDocument();
   });
 
-  it('should focus the name input on mount', () => {
+  it('should not focus the name input on mount without a focus intent', () => {
+    expect(screen.getByLabelText('Імя')).not.toHaveFocus();
+  });
+
+  it('should focus the name input on Contacts page when focus intent exists', () => {
+    cleanup();
+    sessionStorage.setItem('focus-contact-name', 'true');
+
+    render(<ContactForm onSubmit={onSubmit} />);
+
     expect(screen.getByLabelText('Імя')).toHaveFocus();
+    expect(sessionStorage.getItem('focus-contact-name')).toBeNull();
   });
 
   it('focuses the name input when the focus event is dispatched', () => {
