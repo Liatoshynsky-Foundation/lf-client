@@ -231,7 +231,7 @@
       },
       "columns": {
         "name": "Title",
-        "author": "Author",
+        "author": "Author(s) / Compiler(s)",
         "year": "Year"
       },
       "buttons": {
