@@ -61,8 +61,10 @@ import {
   renderYearCell,
   RenderYearHeader
 } from './WorkTableCells';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
+import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
 
 const setDesktop = () =>
   mockUseBreakpoints.mockReturnValue({
@@ -91,19 +93,29 @@ const setMobile = () =>
     isLaptopAndAbove: false
   });
 
-const createMockCellContext = <T,>(value: T): CellContext<ScientificWorkTableRow, unknown> =>
+const createMockCellContext = <T,>(value: T): CellContext<ResearchWorkTableRow, unknown> =>
   ({
     getValue: jest.fn().mockReturnValue(value),
     row: { original: {} as WorkTable }
-  }) as unknown as CellContext<ScientificWorkTableRow, unknown>;
+  }) as unknown as CellContext<ResearchWorkTableRow, unknown>;
 
 const createMockActionCellContext = (
-  original: Partial<ScientificWorkTableRow>
-): CellContext<ScientificWorkTableRow, unknown> =>
+  original: Partial<ResearchWorkTableRow>
+): CellContext<ResearchWorkTableRow, unknown> =>
   ({
     getValue: jest.fn(),
-    row: { original: original as ScientificWorkTableRow }
-  }) as unknown as CellContext<ScientificWorkTableRow, unknown>;
+    row: { original: original as ResearchWorkTableRow }
+  }) as unknown as CellContext<ResearchWorkTableRow, unknown>;
+
+const mockTipTapDoc: TipTapDoc = {
+  type: TipTapNodeTypes.doc,
+  content: [
+    {
+      type: TipTapNodeTypes.paragraph,
+      content: [{ type: TipTapNodeTypes.text, text: 'John Doe' }]
+    }
+  ]
+};
 
 describe('WorkTable Components', () => {
   beforeEach(() => {
@@ -128,14 +140,15 @@ describe('WorkTable Components', () => {
 
   describe('Cell Renderers', () => {
     it('should render name cell with provided value', () => {
-      const mockInfo = createMockCellContext('Sample Work Title');
+      const mockInfo = createMockCellContext(mockTipTapDoc);
       render(renderNameCell(mockInfo));
-      expect(screen.getByText('Sample Work Title')).toBeInTheDocument();
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
     it('should render author cell with max width', () => {
-      const mockInfo = createMockCellContext('John Doe');
+      const mockInfo = createMockCellContext(mockTipTapDoc);
       render(renderAuthorCell(mockInfo));
-      expect(screen.getByText('John Doe')).toHaveStyle({ maxWidth: '192px' });
+      const { container } = render(renderAuthorCell(mockInfo));
+      expect(container.firstChild).toHaveStyle({ maxWidth: '192px' });
     });
     it('should render year cell with value', () => {
       render(renderYearCell('2023'));
@@ -144,22 +157,6 @@ describe('WorkTable Components', () => {
   });
 
   describe('RenderActionCell', () => {
-    it('should render IconButton (img alt="view") on tablet for preview', () => {
-      setTablet();
-      const mockInfo = createMockActionCellContext({ isPreview: true });
-      render(<RenderActionCell {...mockInfo} />);
-      expect(screen.getByAltText('view')).toBeInTheDocument();
-      expect(screen.queryByText('view')).not.toBeInTheDocument();
-    });
-
-    it('should render IconButton (img alt="view") on mobile for preview', () => {
-      setMobile();
-      const mockInfo = createMockActionCellContext({ isPreview: true });
-      render(<RenderActionCell {...mockInfo} />);
-      expect(screen.getByAltText('view')).toBeInTheDocument();
-      expect(screen.queryByText('view')).not.toBeInTheDocument();
-    });
-
     it('should render link Button with LogOutIcon on desktop when url exists', () => {
       setDesktop();
       const mockInfo = createMockActionCellContext({ url: 'https://example.com' });
@@ -189,6 +186,22 @@ describe('WorkTable Components', () => {
       const mockInfo = createMockActionCellContext({});
       const { container } = render(<RenderActionCell {...mockInfo} />);
       expect(container.firstChild).toBeNull();
+    });
+
+    it('should render link Button with PDF URL when url is not provided', () => {
+      const mockInfo = createMockActionCellContext({
+        pdfFile: {
+          filename: 'research.pdf',
+          url: 'https://example.com/research.pdf',
+          mimeType: 'application/pdf'
+        }
+      });
+
+      render(<RenderActionCell {...mockInfo} />);
+
+      const link = screen.getByText('goto').closest('a');
+
+      expect(link).toHaveAttribute('href', 'https://example.com/research.pdf');
     });
   });
 });

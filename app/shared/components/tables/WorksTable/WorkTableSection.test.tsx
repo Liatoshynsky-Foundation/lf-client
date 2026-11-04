@@ -14,7 +14,6 @@ const tableMock = [
 
 const staticFiltersData = {
   authors: [{ key: 'a1', name: 'Author1' }],
-  titles: [{ title: 'Some title' }],
   yearRange: { minYear: 1900, maxYear: 2024 }
 };
 
@@ -267,17 +266,25 @@ describe('WorkTableSection', () => {
     expect(screen.getByTestId('max-year')).toHaveTextContent(new Date().getFullYear().toString());
   });
 
-  it('should execution callback function inside selectTitles to map and transform options cleanly', () => {
+  it('maps descriptions from API response to autocomplete options', () => {
     render(<WorkTableSection />);
 
     expect(storedSelectFn).toBeInstanceOf(Function);
 
     if (storedSelectFn) {
       const mockRawPayload = {
-        titles: [{ _id: 'id1', name: 'mapped title testing' }]
+        descriptions: [
+          { _id: 'id1', description: 'mapped description testing' },
+          { _id: 'id2', description: 'another description', type: 'research' }
+        ]
       };
+
       const resultingMapping = storedSelectFn(mockRawPayload);
-      expect(resultingMapping).toEqual([{ _id: 'id1', name: 'mapped title testing', type: 'composition' }]);
+
+      expect(resultingMapping).toEqual([
+        { _id: 'id1', name: 'mapped description testing', type: 'composition' },
+        { _id: 'id2', name: 'another description', type: 'research' }
+      ]);
     }
   });
 

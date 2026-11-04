@@ -7,8 +7,8 @@ export type WorkTableFilters = {
   yearTo: number | null;
 };
 
-export type ScientificFiltersType = {
-  titles: { _id: string; title: string }[];
+export type ResearchFiltersType = {
+  bibliographicDescriptions: { _id: string; description: string }[];
   authors: { key: string; name: string }[];
   yearRange: { minYear: number; maxYear: number };
 };
@@ -27,4 +27,4 @@ export type CompositionsFilters = {
 };
 
 export type CompositionsTitleFilters = Partial<CompositionsFilters>;
-export type ScientificWorksTitleFilters = Partial<WorkTableFilters>;
+export type ResearchWorksDescriptionFilters = Partial<WorkTableFilters>;
