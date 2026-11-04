@@ -1,3 +1,5 @@
+import '../researchWorksRouteMocks';
+
 import { GET } from './route';
 import { errors } from '~/constants/errors';
 
@@ -5,28 +7,8 @@ import { createRequestContainer } from '~/di/container';
 import { parseFilters } from '~/lib/utils/filters/parseFilters';
 import logger from '~/middleware/logger/logger';
 
-jest.mock('next/server', () => ({
-  NextResponse: {
-    json: jest.fn((body, init) => ({
-      status: init?.status ?? 200,
-      json: async () => body
-    }))
-  }
-}));
-
-jest.mock('~/di/container', () => ({
-  createRequestContainer: jest.fn()
-}));
-
 jest.mock('~/lib/utils/filters/parseFilters', () => ({
   parseFilters: jest.fn()
-}));
-
-jest.mock('~/middleware/logger/logger', () => ({
-  __esModule: true,
-  default: {
-    error: jest.fn()
-  }
 }));
 
 describe('GET /api/research-works/data', () => {
