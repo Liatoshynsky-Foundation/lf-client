@@ -110,7 +110,7 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
   };
 
   const currentDetailedDescription = caseDetails.detailedCaseDescription
-    ? (caseDetails.detailedCaseDescription[lang as 'uk' | 'en'] ?? caseDetails.detailedCaseDescription.uk)
+    ? (caseDetails.detailedCaseDescription[lang as Locale] ?? caseDetails.detailedCaseDescription.uk)
     : undefined;
 
   return (

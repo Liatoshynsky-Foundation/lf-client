@@ -1,7 +1,6 @@
-import type { JSONContent } from '@tiptap/core';
 import { model, models, Schema, Types } from 'mongoose';
 
-import type { LocalizedString } from '~/types/types/common.types';
+import type { LocalizedRichText, LocalizedString } from '~/types/types/common.types';
 
 import { FundStatus } from '~/domain/dto/funds.dto';
 
@@ -32,11 +31,6 @@ export interface ICase {
   order?: number;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface LocalizedRichText {
-  uk: JSONContent;
-  en: JSONContent;
 }
 
 const localizedStringSchema = {
