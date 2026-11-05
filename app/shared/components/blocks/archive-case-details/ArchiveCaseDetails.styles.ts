@@ -1,3 +1,4 @@
+import { typographyClasses } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 
 import { commonSx } from '~/shared/styles/commonSx';
@@ -74,6 +75,17 @@ export const styles: Record<string, SxProps<Theme>> = {
     fontSize: '16px',
     lineHeight: '150%',
     color: 'black',
-    fontWeight: 500
+    fontWeight: 500,
+    [`& > *, & > .${typographyClasses.root}`]: {
+      fontSize: 'inherit',
+      lineHeight: 'inherit',
+      color: 'inherit',
+      fontWeight: 'inherit',
+      marginBottom: '12px'
+    },
+
+    '& > :last-child': {
+      marginBottom: 0
+    }
   }
 };

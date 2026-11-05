@@ -1,6 +1,6 @@
 import { model, models, Schema, Types } from 'mongoose';
 
-import type { LocalizedString } from '~/types/types/common.types';
+import type { LocalizedRichText, LocalizedString } from '~/types/types/common.types';
 
 import { FundStatus } from '~/domain/dto/funds.dto';
 
@@ -19,7 +19,7 @@ export interface ICase {
   caseDate?: LocalizedString;
   sheetsNumber?: number | null;
   caseDescriptions?: LocalizedString;
-  detailedCaseDescription?: LocalizedString | null;
+  detailedCaseDescription?: LocalizedRichText | null;
   pdfFile?: CasePdfFile | null;
   status?: FundStatus;
   cipher?: string;
@@ -37,6 +37,14 @@ const localizedStringSchema = {
   uk: { type: String, default: '' },
   en: { type: String, default: '' }
 };
+
+const localizedRichTextSchema = new Schema(
+  {
+    uk: { type: Schema.Types.Mixed, default: null },
+    en: { type: Schema.Types.Mixed, default: null }
+  },
+  { _id: false }
+);
 
 const casePdfFileSchema = new Schema<CasePdfFile>(
   {
@@ -71,7 +79,7 @@ const caseSchema = new Schema<ICase>(
     },
     caseDescriptions: localizedStringSchema,
     detailedCaseDescription: {
-      type: localizedStringSchema,
+      type: localizedRichTextSchema,
       default: null
     },
     pdfFile: {
