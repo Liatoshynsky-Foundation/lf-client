@@ -85,6 +85,7 @@ describe('ContactsInfo', () => {
     render(
       <ContactsInfo
         title="Collaboration"
+        description="A description"
         formTitle="Offer collaboration"
         contacts={contacts}
         socialLinks={socialLinks}
@@ -92,6 +93,7 @@ describe('ContactsInfo', () => {
     );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Collaboration' })).toBeInTheDocument();
+    expect(screen.getByTestId('ContactsInfo-description')).toHaveTextContent('A description');
     expect(screen.getByText('Offer collaboration')).toBeInTheDocument();
   });
 

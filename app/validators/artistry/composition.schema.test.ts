@@ -41,8 +41,8 @@ describe('opusSchema coverImage', () => {
   });
 });
 
-describe('opusSchema performancesTitle', () => {
-  it('should accept opus with valid localized performancesTitle', () => {
+describe('opusSchema legacy performancesTitle handling', () => {
+  it('should safely parse and ignore legacy performancesTitle if present in DB data', () => {
     const input = {
       ...baseOpusInput,
       performancesTitle: {
@@ -51,23 +51,9 @@ describe('opusSchema performancesTitle', () => {
       }
     };
 
-    const parsed = opusSchema.parse(input);
+    const parsed = opusSchema.parse(input) as typeof input;
 
-    expect(parsed.performancesTitle).toEqual({
-      uk: 'ТЕСТ заголовок з CMS',
-      en: 'TEST title from CMS'
-    });
-  });
-
-  it('should accept opus when performancesTitle is null or undefined', () => {
-    const parsedWithNull = opusSchema.parse({
-      ...baseOpusInput,
-      performancesTitle: null
-    });
-    const parsedWithoutField = opusSchema.parse(baseOpusInput);
-
-    expect(parsedWithNull.performancesTitle).toBeNull();
-    expect(parsedWithoutField.performancesTitle).toBeUndefined();
+    expect(parsed.performancesTitle).toBeUndefined();
   });
 });
 

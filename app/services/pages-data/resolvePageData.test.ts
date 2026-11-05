@@ -36,7 +36,7 @@ describe('resolvePageData', () => {
     const result = await resolvePageData('about-us', 'uk');
 
     expect(mockContainer.resolve).toHaveBeenCalledWith('draftPagesDataService');
-    expect(mockDraftService.getPageData).toHaveBeenCalledWith('about-us', 'uk');
+    expect(mockDraftService.getPageData).toHaveBeenCalledWith('about-us', 'uk', undefined);
     expect(mockProdService.getPageData).not.toHaveBeenCalled();
     expect(result).toEqual({ some: 'data' });
   });
@@ -51,5 +51,18 @@ describe('resolvePageData', () => {
     expect(mockProdService.getPageData).toHaveBeenCalledWith('about-us', 'uk');
     expect(mockDraftService.getPageData).not.toHaveBeenCalled();
     expect(result).toEqual({ other: 'data' });
+  });
+
+  it('should pass draftId to draftPagesDataService when draftMode is enabled', async () => {
+    (draftMode as jest.Mock).mockResolvedValue({ isEnabled: true });
+    mockDraftService.getPageData.mockResolvedValue({ some: 'draft data' });
+    const draftId = '6a58788c165dd8fd57f6b3e2';
+
+    const result = await resolvePageData('about-us', 'uk', draftId);
+
+    expect(mockContainer.resolve).toHaveBeenCalledWith('draftPagesDataService');
+    expect(mockDraftService.getPageData).toHaveBeenCalledWith('about-us', 'uk', draftId);
+    expect(mockProdService.getPageData).not.toHaveBeenCalled();
+    expect(result).toEqual({ some: 'draft data' });
   });
 });

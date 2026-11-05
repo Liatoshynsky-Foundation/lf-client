@@ -88,16 +88,8 @@ export default function FoundationInfo({ data }: { readonly data: IFoundationInf
             src={image.generatedSrc}
             alt={imageAltText}
             crop={image.crop}
-            fill={false}
-            width={410}
-            height={490}
-            imageStyle={{
-              width: '100%',
-              height: 'auto',
-              objectFit: 'cover',
-              objectPosition: 'top',
-              position: 'relative'
-            }}
+            fill
+            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 410px"
           />
         )}
       </Box>

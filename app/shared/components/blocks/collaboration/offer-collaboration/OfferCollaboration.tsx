@@ -19,6 +19,7 @@ export default async function OfferCollaboration() {
         <ContactsInfo
           title={t('title')}
           titleTag="h2"
+          description={t('description')}
           formTitle={t('formTitle')}
           contacts={contacts}
           socialLinks={socialLinks}

@@ -1,258 +1,159 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { render, screen } from '@testing-library/react';
-import React, { Component, type ReactNode } from 'react';
+import { setRequestLocale } from 'next-intl/server';
 
-import Archive from './page';
+import Archive, { generateMetadata } from './page';
+import { isError, isErrorCode, UnwrapResult } from '~/types/types/result';
 
-const theme = createTheme();
+import { getDraftId } from '~/lib/utils/getDraftId';
+import { getPageMetadata } from '~/lib/utils/getPageMetadata';
+import { redirectToDisablePreview } from '~/lib/utils/redirectToDisablePreview';
+import { resolvePageData } from '~/services/pages-data/resolvePageData';
+import { ROUTES } from '~/shared/components/constants/routes';
 
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
-
-class TestErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
-  override state = { hasError: false, error: null as Error | null };
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  override render() {
-    if (this.state.hasError && this.state.error) {
-      return <div data-testid="error-boundary-fallback">{this.state.error.message}</div>;
-    }
-    return this.props.children;
-  }
-}
-
-const mockBreakpoints = {
-  isMobile: false,
-  isTablet: false,
-  isLaptop: false,
-  isDesktop: true
-};
-
-jest.mock('~/hooks/use-breakpoints/useBreakpoints', () => ({
-  __esModule: true,
-  default: () => mockBreakpoints
+jest.mock('next-intl/server', () => ({
+  setRequestLocale: jest.fn()
 }));
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
-  useLocale: () => 'en'
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
 }));
 
-const setParam = jest.fn();
-const debouncedSetParam = jest.fn();
-const resetFilters = jest.fn();
+jest.mock('~/lib/utils/getPageMetadata', () => ({
+  getPageMetadata: jest.fn()
+}));
 
-let mockSearchValue = '';
-
-jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
-  useTableFilters: () => ({
-    params: {
-      get search() {
-        return mockSearchValue;
-      }
-    },
-    setParam,
-    debouncedSetParam,
-    resetFilters
+jest.mock('~/lib/utils/redirectToDisablePreview', () => ({
+  redirectToDisablePreview: jest.fn(() => {
+    throw new Error('REDIRECT_TO_DISABLE_PREVIEW');
   })
 }));
 
-jest.mock('~/layouts/main-layout/MainLayout', () => ({
-  __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <div data-testid="MainLayout">{children}</div>
+jest.mock('~/services/pages-data/resolvePageData', () => ({
+  resolvePageData: jest.fn()
 }));
 
-jest.mock('./ArchiveHeader/ArchiveHeader', () => ({
+jest.mock('~/types/types/result', () => ({
+  isError: jest.fn(),
+  isErrorCode: jest.fn(),
+  UnwrapResult: jest.fn()
+}));
+
+jest.mock('./ArchivePage/ArchivePage', () => ({
   __esModule: true,
-  default: ({ onSearch }: { onSearch: (query: string) => void }) => (
-    <div data-testid="ArchiveHeader">
-      <button data-testid="trigger-search" onClick={() => onSearch('test')}>
-        Search
-      </button>
+  default: ({ description }: { description: string | null }) => (
+    <div>
+      <div>Archive page</div>
+      {description}
     </div>
   )
 }));
 
-jest.mock('./FundCard/FundCard', () => ({
-  __esModule: true,
-  default: ({ id, number, title }: { id: number; number: Record<string, string>; title: Record<string, string> }) => (
-    <div data-testid={`FundCard-${id}`}>
-      <div data-testid={`FundCard-${id}-number`}>{number.en}</div>
-      <div data-testid={`FundCard-${id}-title`}>{title.en}</div>
-    </div>
-  )
-}));
+describe('Archive page', () => {
+  const mockParams = { lang: 'uk' as const };
+  const mockPromiseParams = Promise.resolve(mockParams);
 
-globalThis.fetch = jest.fn();
-
-describe('Archive Page', () => {
-  let consoleErrorSpy: jest.SpyInstance;
-
-  beforeAll(() => {
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
-  afterAll(() => {
-    consoleErrorSpy.mockRestore();
-  });
+  const mockPage = {
+    blocks: {
+      PageCaption: {
+        description: 'Archive description'
+      }
+    }
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockSearchValue = '';
-    mockBreakpoints.isMobile = false;
-    mockBreakpoints.isTablet = false;
-    mockBreakpoints.isLaptop = false;
-    mockBreakpoints.isDesktop = true;
 
-    (globalThis.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        data: [
-          { id: 1, number: { en: 'Fund 1', uk: 'Фонд 1' }, title: { en: 'Audio Records', uk: 'Аудіозаписи' } },
-          {
-            id: 2,
-            number: { en: 'Fund 2', uk: 'Фонд 2' },
-            title: { en: 'Personal Documents', uk: 'Особисті документи' }
-          },
-          { id: 3, number: { en: 'Fund 3', uk: 'Фонд 3' }, title: { en: 'Letters', uk: 'Листи' } }
-        ]
+    (getDraftId as jest.Mock).mockReturnValue(undefined);
+    (resolvePageData as jest.Mock).mockResolvedValue({});
+    jest.mocked(isError).mockReturnValue(false);
+    jest.mocked(isErrorCode).mockReturnValue(false);
+    (UnwrapResult as jest.Mock).mockReturnValue(mockPage);
+
+    (getPageMetadata as jest.Mock).mockResolvedValue({
+      title: 'Archive title',
+      description: 'Archive meta description'
+    });
+  });
+
+  it('should generate correct metadata', async () => {
+    const metadata = await generateMetadata({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
+
+    expect(getPageMetadata).toHaveBeenCalledWith(
+      mockPromiseParams,
+      expect.objectContaining({
+        pageTranslationKey: 'meta.pages.archive',
+        pageRoute: ROUTES.ARCHIVE,
+        fetchPageMetaData: expect.any(Function)
       })
+    );
+    expect(metadata).toEqual({
+      title: 'Archive title',
+      description: 'Archive meta description'
     });
   });
 
-  it('should render the page shell', () => {
-    renderWithTheme(<Archive />);
-    expect(screen.getByTestId('ArchivePage')).toBeInTheDocument();
-    expect(screen.getByTestId('ArchiveHeader')).toBeInTheDocument();
+  it('should pass the draft ID to resolvePageData when generating metadat', async () => {
+    const draftId = 'draft-123';
+    const searchParams = { draftId };
+
+    (getDraftId as jest.Mock).mockReturnValue(draftId);
+    (getPageMetadata as jest.Mock).mockImplementation(
+      async (_params: unknown, options: { fetchPageMetaData: () => Promise<unknown> }) => {
+        await options.fetchPageMetaData();
+        return {};
+      }
+    );
+
+    await generateMetadata({ params: mockPromiseParams, searchParams: Promise.resolve(searchParams) });
+
+    expect(getDraftId).toHaveBeenCalledWith(searchParams);
+    expect(resolvePageData).toHaveBeenCalledWith('archive', 'uk', draftId);
   });
 
-  it('should show loader initially and hide it after funds load', async () => {
-    renderWithTheme(<Archive />);
+  it('should set request locale and render archive content', async () => {
+    const ArchiveComponent = await Archive({ params: mockPromiseParams, searchParams: Promise.resolve({}) });
+    render(ArchiveComponent);
 
-    expect(screen.getByTestId('ArchivePage-loader')).toBeInTheDocument();
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
-
-    expect(screen.queryByTestId('ArchivePage-fundsGrid')).not.toBeInTheDocument();
-
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-    expect(screen.queryByTestId('ArchivePage-loader')).not.toBeInTheDocument();
+    expect(setRequestLocale).toHaveBeenCalledWith('uk');
+    expect(resolvePageData).toHaveBeenCalledWith('archive', 'uk', undefined);
+    expect(screen.getByText('Archive description')).toBeInTheDocument();
   });
 
-  it('should load and display fund cards', async () => {
-    renderWithTheme(<Archive />);
+  it('should render archive page when page data fetching fails', async () => {
+    jest.mocked(isError).mockReturnValue(true);
 
-    expect(await screen.findByTestId('FundCard-1')).toBeInTheDocument();
-    expect(screen.getByTestId('FundCard-2')).toBeInTheDocument();
-    expect(screen.getByTestId('FundCard-3')).toBeInTheDocument();
-  });
-
-  it('should handle response not ok error to cover lines 74-75 and 81-83', async () => {
-    (globalThis.fetch as jest.Mock).mockResolvedValue({
-      ok: false
+    const ArchiveComponent = await Archive({
+      params: mockPromiseParams,
+      searchParams: Promise.resolve({})
     });
 
-    renderWithTheme(
-      <TestErrorBoundary>
-        <Archive />
-      </TestErrorBoundary>
-    );
+    render(ArchiveComponent);
 
-    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Failed to fetch funds');
+    expect(screen.getByText('Archive page')).toBeInTheDocument();
   });
 
-  it('should handle generic error instances inside catch block', async () => {
-    (globalThis.fetch as jest.Mock).mockRejectedValue(new Error('Network Crash'));
+  it('should pass the draft ID to resolvePageData when fetching page content', async () => {
+    const draftId = 'draft-123';
+    const searchParams = { draftId };
+    (getDraftId as jest.Mock).mockReturnValue(draftId);
 
-    renderWithTheme(
-      <TestErrorBoundary>
-        <Archive />
-      </TestErrorBoundary>
-    );
+    const ArchiveComponent = await Archive({ params: mockPromiseParams, searchParams: Promise.resolve(searchParams) });
+    render(ArchiveComponent);
 
-    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Network Crash');
+    expect(getDraftId).toHaveBeenCalledWith(searchParams);
+    expect(resolvePageData).toHaveBeenCalledWith('archive', 'uk', draftId);
   });
 
-  it('should handle unknown thrown types inside catch block', async () => {
-    (globalThis.fetch as jest.Mock).mockRejectedValue('String Error');
+  it('should redirect when draft is not found', async () => {
+    const searchParams = { draftId: 'draft-123' };
+    jest.mocked(isErrorCode).mockReturnValue(true);
 
-    renderWithTheme(
-      <TestErrorBoundary>
-        <Archive />
-      </TestErrorBoundary>
-    );
-
-    expect(await screen.findByTestId('error-boundary-fallback')).toHaveTextContent('Unknown error');
-  });
-
-  it('should adapt column rendering and padding on isMobile breakpoint to complete branch coverage', async () => {
-    mockBreakpoints.isMobile = true;
-    mockBreakpoints.isDesktop = false;
-
-    renderWithTheme(<Archive />);
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-  });
-
-  it('should adapt column rendering and padding on isTablet breakpoint to complete branch coverage', async () => {
-    mockBreakpoints.isTablet = true;
-    mockBreakpoints.isDesktop = false;
-
-    renderWithTheme(<Archive />);
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-  });
-
-  it('should adapt column rendering and padding on isLaptop breakpoint to complete branch coverage', async () => {
-    mockBreakpoints.isLaptop = true;
-    mockBreakpoints.isDesktop = false;
-
-    renderWithTheme(<Archive />);
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-  });
-
-  it('should trigger default branch inside getNumColumns when all breakpoints are false to complete coverage', async () => {
-    mockBreakpoints.isMobile = false;
-    mockBreakpoints.isTablet = false;
-    mockBreakpoints.isLaptop = false;
-    mockBreakpoints.isDesktop = false;
-
-    renderWithTheme(<Archive />);
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
-  });
-
-  it.each([
-    {
-      description: 'search param',
-      search: 'audio',
-      expectedId: 'FundCard-1',
-      unexpectedIds: ['FundCard-2', 'FundCard-3']
-    },
-    {
-      description: 'search param in title',
-      search: 'audio',
-      expectedId: 'FundCard-1',
-      unexpectedIds: ['FundCard-2', 'FundCard-3']
-    },
-    {
-      description: 'search param in number',
-      search: 'fund 2',
-      expectedId: 'FundCard-2',
-      unexpectedIds: ['FundCard-1', 'FundCard-3']
-    }
-  ])('should filter funds based on $description', async ({ search, expectedId, unexpectedIds }) => {
-    mockSearchValue = search;
-    renderWithTheme(<Archive />);
-
-    expect(await screen.findByTestId(expectedId)).toBeInTheDocument();
-    unexpectedIds.forEach((id) => {
-      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
-    });
-  });
-
-  it('should render Archive component without crashing when search is triggered', async () => {
-    renderWithTheme(<Archive />);
-    expect(await screen.findByTestId('ArchivePage-fundsGrid')).toBeInTheDocument();
+    await expect(
+      Archive({
+        params: mockPromiseParams,
+        searchParams: Promise.resolve(searchParams)
+      })
+    ).rejects.toThrow('REDIRECT_TO_DISABLE_PREVIEW');
+    expect(redirectToDisablePreview).toHaveBeenCalledWith('/uk/archive', searchParams);
   });
 });

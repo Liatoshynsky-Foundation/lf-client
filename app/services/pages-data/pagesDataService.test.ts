@@ -1,6 +1,7 @@
 import { Locale } from 'next-intl';
 import { z, ZodError } from 'zod';
 
+import { PAGES_DATA_ERROR_CODES } from './pagesDataErrorCodes';
 import { createDraftPagesDataService, createPagesDataService } from './pagesDataService';
 import { SchemaFactory } from './schema-factory';
 import type { PageDataMap } from '~/types/page/pagesBase.type';
@@ -23,7 +24,7 @@ describe('pagesDataService', () => {
 
   const mockRepo: jest.Mocked<PagesDataRepository> = {
     getBySlug: jest.fn(),
-    getDraftBySlug: jest.fn()
+    getDraftBySlugAndId: jest.fn()
   };
 
   beforeEach(() => {
@@ -42,8 +43,8 @@ describe('pagesDataService', () => {
 
       const res = await service.getPageData(slug, locale);
 
-      expect(res).toEqual(WrapError(`No page found with slug: ${slug}`));
-      expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
+      expect(res).toEqual(WrapError(`No page found with slug: ${slug}`, PAGES_DATA_ERROR_CODES.PAGE_NOT_FOUND));
+      expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug, undefined);
     });
 
     it('should return error if schema is undefined', async () => {
@@ -65,7 +66,7 @@ describe('pagesDataService', () => {
 
       const res = await service.getPageData(slug, locale);
 
-      expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug);
+      expect(mockRepo.getBySlug).toHaveBeenCalledWith(slug, undefined);
       expect(SchemaFactory).toHaveBeenCalledWith(slug, locale);
       expect(parseSpy).toHaveBeenCalledWith(repoPage);
       expect(res).toEqual(WrapSuccess(localized));
@@ -165,18 +166,30 @@ describe('pagesDataService', () => {
       draftService = createDraftPagesDataService({ pagesDataRepo: mockRepo });
     });
 
-    it('should fetch data using getDraftBySlug method', async () => {
+    it('should fetch data using getDraftBySlugAndId method', async () => {
+      const draftId = '6a58788c165dd8fd57f6b3e2';
       const localized = { slug } as unknown as PageDataMap[typeof slug];
       const schema = z.object({ slug: z.string() }) as unknown as z.ZodType<PageDataMap[typeof slug]>;
       jest.spyOn(schema, 'parse').mockReturnValue(localized);
 
       (SchemaFactory as jest.MockedFunction<typeof SchemaFactory>).mockReturnValue(schema);
-      mockRepo.getDraftBySlug.mockResolvedValue(repoPage);
+      mockRepo.getDraftBySlugAndId.mockResolvedValue(repoPage);
 
-      const res = await draftService.getPageData(slug, locale);
+      const res = await draftService.getPageData(slug, locale, draftId);
 
-      expect(mockRepo.getDraftBySlug).toHaveBeenCalledWith(slug);
+      expect(mockRepo.getDraftBySlugAndId).toHaveBeenCalledWith(slug, draftId);
       expect(res).toEqual(WrapSuccess(localized));
+    });
+
+    it('should return DRAFT_NOT_FOUND when draft is missing', async () => {
+      const draftId = '6a58788c165dd8fd57f6b3e2';
+      mockRepo.getDraftBySlugAndId.mockResolvedValue(undefined);
+
+      const res = await draftService.getPageData(slug, locale, draftId);
+
+      expect(mockRepo.getDraftBySlugAndId).toHaveBeenCalledWith(slug, draftId);
+      expect(res).toEqual(WrapError(`No page found with slug: ${slug}`, PAGES_DATA_ERROR_CODES.DRAFT_NOT_FOUND));
+      expect(SchemaFactory).not.toHaveBeenCalled();
     });
   });
 });

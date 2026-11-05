@@ -10,3 +10,9 @@ export type LocalizedString = {
 };
 
 export type StringOrLocalizedString = string | LocalizedString;
+
+export type SearchParams = Record<string, string | string[] | undefined>;
+
+export type LocalizedPageProps = Language & {
+  readonly searchParams: Promise<SearchParams>;
+};

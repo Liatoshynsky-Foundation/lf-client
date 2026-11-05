@@ -87,6 +87,7 @@ describe('pagesDataRepository', () => {
   });
 
   it('should return parsed draft page when found and valid', async () => {
+    const draftId = '507f1f77bcf86cd799439011';
     const mockDbData = { _id: 'db_id', slug, pageType: 'AboutUsPage', status: PageStatus.Draft, blocks: {} };
     const mockParsed = { ...mockDbData };
 
@@ -96,29 +97,31 @@ describe('pagesDataRepository', () => {
 
     mockedParse.mockReturnValue(mockParsed);
 
-    const result = await pagesDataRepository.getDraftBySlug(slug);
+    const result = await pagesDataRepository.getDraftBySlugAndId(slug, draftId);
 
-    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft, _id: draftId });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(mockDbData);
     expect(result).toEqual(mockParsed);
   });
 
   it('should return null when draft page is not found', async () => {
+    const draftId = '507f1f77bcf86cd799439011';
     const execMock = jest.fn().mockResolvedValue(null);
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
     mockedFindOneDraft.mockReturnValue({ lean: leanMock });
 
-    const result = await pagesDataRepository.getDraftBySlug(slug);
+    const result = await pagesDataRepository.getDraftBySlugAndId(slug, draftId);
 
     expect(result).toBeUndefined();
-    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft, _id: draftId });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).not.toHaveBeenCalled();
   });
 
   it('should throw when draft page fails validation', async () => {
-    const invalidDb = { _id: 'x', slug, pageType: 'AboutUsPage' };
+    const draftId = '507f1f77bcf86cd799439011';
+    const invalidDb = { _id: draftId, slug, pageType: 'AboutUsPage' };
     const execMock = jest.fn().mockResolvedValue(invalidDb);
     const leanMock = jest.fn().mockReturnValue({ exec: execMock });
     mockedFindOneDraft.mockReturnValue({ lean: leanMock });
@@ -128,8 +131,8 @@ describe('pagesDataRepository', () => {
       throw err;
     });
 
-    await expect(pagesDataRepository.getDraftBySlug(slug)).rejects.toThrow(err);
-    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft });
+    await expect(pagesDataRepository.getDraftBySlugAndId(slug, draftId)).rejects.toThrow(err);
+    expect(mockedFindOneDraft).toHaveBeenCalledWith({ slug, status: PageStatus.Draft, _id: draftId });
     expect(leanMock).toHaveBeenCalled();
     expect(mockedParse).toHaveBeenCalledWith(invalidDb);
   });

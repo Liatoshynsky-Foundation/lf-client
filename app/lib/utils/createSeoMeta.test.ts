@@ -174,4 +174,32 @@ describe('createSeoMeta', () => {
     expect(ogImages?.[0]?.url).toBe(absoluteImg);
     expect(metadata.twitter?.images).toEqual([absoluteImg]);
   });
+
+  it.each([
+    { description: 'empty string', imageUrl: '' },
+    { description: 'whitespace only', imageUrl: '   ' }
+  ])('should fallback to opengraph-image.png when imageUrl is $description', ({ imageUrl }) => {
+    process.env.CLIENT_BASE_URL = localBaseUrl;
+
+    const metadata = createSeoMeta({
+      title: 'Empty Image Test',
+      description: 'Test Description',
+      url: '/artistry/test',
+      imageUrl
+    });
+
+    const expectedFallbackUrl = `${localBaseUrl}/opengraph-image.png`;
+
+    const ogImages = metadata.openGraph?.images as Array<{
+      url?: string;
+      height?: number;
+      width?: number;
+      alt?: string;
+    }>;
+    expect(ogImages?.[0]?.url).toBe(expectedFallbackUrl);
+
+    if (metadata.twitter?.images) {
+      expect(metadata.twitter.images).toEqual([expectedFallbackUrl]);
+    }
+  });
 });

@@ -50,8 +50,8 @@ export function createAboutUsPageSchema(locale: Locale) {
     title: requiredTipTap,
     goals: z.array(
       z.object({
-        title: requiredTipTap,
-        description: requiredTipTap
+        title: translatedTipTapSchema,
+        description: translatedTipTapSchema
       })
     ),
     hidden: z.boolean().optional()
@@ -66,8 +66,8 @@ export function createAboutUsPageSchema(locale: Locale) {
     title: requiredTipTap,
     items: z.array(
       z.object({
-        title: requiredTipTap,
-        description: requiredTipTap
+        title: translatedTipTapSchema,
+        description: translatedTipTapSchema
       })
     ),
     hidden: z.boolean().optional()

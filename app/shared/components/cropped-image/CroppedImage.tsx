@@ -52,9 +52,10 @@ export default function CroppedImage({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        width: shouldFill ? '100%' : width || '100%',
-        height: shouldFill ? '100%' : height || '100%',
-        aspectRatio: width && height && !shouldFill ? `${width} / ${height}` : 'auto'
+        width: '100%',
+        maxWidth: width ? `${width}px` : '100%',
+        height: shouldFill ? '100%' : 'auto',
+        aspectRatio: width && height ? `${width} / ${height}` : 'auto'
       }}
     >
       {isValidCrop ? (

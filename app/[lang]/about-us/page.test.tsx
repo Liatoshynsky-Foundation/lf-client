@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import {
   testGeneratePageMetadata,
+  testPassDraftIdToResolvePageData,
   testPassLangSlugToPageBuilder,
   testReturnBlockRenderer
 } from '../__mocks__/runCommonPageTests';
@@ -57,6 +58,10 @@ jest.mock('~/components/blocks/what-we-do/WhatWeDo', () => ({
   default: ({ data }: any) => <div>WhatWeDo section: {data.title}</div>
 }));
 
+jest.mock('~/lib/utils/getDraftId', () => ({
+  getDraftId: jest.fn()
+}));
+
 describe('AbousUs page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -82,7 +87,10 @@ describe('AbousUs page', () => {
       error: 'Cannot fetch about-us data'
     });
 
-    const fallbackResponse = await generateMetadata({ params: Promise.resolve({ lang: 'uk' as const }) });
+    const fallbackResponse = await generateMetadata({
+      params: Promise.resolve({ lang: 'uk' as const }),
+      searchParams: Promise.resolve({})
+    });
 
     expect(fallbackResponse.title).toBe('static_title');
     expect(fallbackResponse.description).toBe('static_description');
@@ -106,7 +114,7 @@ describe('AbousUs page', () => {
     });
 
     const targetParams = Promise.resolve({ lang: 'uk' as const });
-    const output = await generateMetadata({ params: targetParams });
+    const output = await generateMetadata({ params: targetParams, searchParams: Promise.resolve({}) });
 
     expect(output.title).toBe('Про Фундацію Офіційно');
     expect(output.description).toBe('Головна інформація про організацію');
@@ -135,5 +143,9 @@ describe('AbousUs page', () => {
         founders: 'FoundationFounders'
       }
     });
+  });
+
+  it('should pass the draft ID to resolvePageData', async () => {
+    await testPassDraftIdToResolvePageData(generateMetadata, 'about-us', 'draft-123');
   });
 });

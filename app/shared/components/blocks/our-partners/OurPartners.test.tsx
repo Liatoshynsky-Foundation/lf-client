@@ -15,8 +15,9 @@ interface PartnerGridProps {
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
-      'ourPartners.title': 'Our Partners',
-      'ourPartners.description': 'Фундація Лятошинського щиро відкрита до партнерства і цінує будь-яку підтримку'
+      title: 'Our Partners',
+      description:
+        'We present the organisations and companies with which the Foundation has collaborated since its establishment.'
     };
     return translations[key] ?? key;
   }
@@ -58,12 +59,14 @@ describe('OurPartners', () => {
 
   it('should render translated title using SectionTitle', () => {
     render(<OurPartners />);
-    expect(screen.getByTestId('section-title')).toHaveTextContent('title');
+    expect(screen.getByTestId('section-title')).toHaveTextContent('Our Partners');
   });
 
   it('should render translated description', () => {
     render(<OurPartners />);
-    expect(screen.getByTestId('content-block-description')).toHaveTextContent('description');
+    expect(screen.getByTestId('content-block-description')).toHaveTextContent(
+      'We present the organisations and companies with which the Foundation has collaborated since its establishment.'
+    );
   });
 
   it('should render the first two xs partners', () => {
