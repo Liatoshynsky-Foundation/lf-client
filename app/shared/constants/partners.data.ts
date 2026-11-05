@@ -72,5 +72,11 @@ export const partnersMock: Partner[] = [
     'ostrozki-foundation.png',
     'https://www.facebook.com/ostrozkifoundation/'
   ),
-  createPartner('insoLviv', 'Оркестр INSO-Львів', 'inso-lviv.png', 'https://insolviv.com/')
+  createPartner('insoLviv', 'Оркестр INSO-Львів', 'inso-lviv.png', 'https://insolviv.com/'),
+  createPartner(
+    'ukrainianHouse',
+    'Національний центр «Український Дім»',
+    'ukrainian-house.png',
+    'https://www.facebook.com/share/p/19oEzAwbid/'
+  )
 ];
