@@ -10,7 +10,6 @@ import { mainHexPallete } from '~/ds-components/theme/colors';
 
 import TipTapContent from '../../tip-tap-content/TipTapContent';
 import { IconButtonColorVariant } from '~/types/enums/common.enums';
-import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
@@ -67,7 +66,7 @@ export const renderNameCell = (info: CellContext<ResearchWorkTableRow, unknown>)
       }
     }}
   >
-    <TipTapContent data={info.getValue<TipTapDoc>()} />
+    <TipTapContent data={info.row.original.name} />
   </Box>
 );
 
@@ -80,7 +79,7 @@ export const renderAuthorCell = (info: CellContext<ResearchWorkTableRow, unknown
       }
     }}
   >
-    <TipTapContent data={info.getValue<TipTapDoc>()} />
+    <TipTapContent data={info.row.original.author} />
   </Box>
 );
 

@@ -20,6 +20,7 @@ import { ResearchFiltersType, WorkTableFilters } from '~/types/types/tableFilter
 
 import { SearchAutocompleteDTO } from '~/domain/dto/composition.dto';
 import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
+import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -97,10 +98,16 @@ export const WorkTableSection = () => {
 
   let columns = useMemo<ColumnDef<ResearchWorkTableRow>[]>(
     () => [
-      { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: renderNameCell, sortingFn: 'alphanumeric' },
+      {
+        id: 'name',
+        accessorFn: (row) => extractTextFromTipTap(row.name),
+        header: RenderNameHeader,
+        cell: renderNameCell,
+        sortingFn: 'alphanumeric'
+      },
       {
         id: 'author',
-        accessorKey: 'author',
+        accessorFn: (row) => extractTextFromTipTap(row.author),
         header: RenderAuthorHeader,
         cell: renderAuthorCell,
         sortingFn: 'alphanumeric'

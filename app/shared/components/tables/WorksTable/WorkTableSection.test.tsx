@@ -2,7 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { WorkTableSection } from './WorkTableSection';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
+import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
@@ -31,7 +33,11 @@ interface EnhancedTableProps {
   tableName: string;
   Filters: React.ReactNode;
   Search: React.ReactNode;
-  columns: { id: string; cell?: (info: { row: { original: { year: number } } }) => React.ReactNode }[];
+  columns: {
+    id: string;
+    accessorFn?: (row: ResearchWorkTableRow) => unknown;
+    cell?: (info: { row: { original: { year: number } } }) => React.ReactNode;
+  }[];
 }
 
 interface TableFiltersProps {
@@ -51,6 +57,8 @@ interface FilterSelectProps {
   onAdd: (v: unknown, l: unknown, all: string[]) => void;
   onRemove: (v: unknown, l: unknown, all: string[]) => void;
 }
+
+let capturedColumns: EnhancedTableProps['columns'] = [];
 
 jest.mock('next-intl', () => ({
   __esModule: true,
@@ -124,6 +132,7 @@ jest.mock('~/shared/hooks/use-table-data/useTableData', () => ({
 jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => ({
   __esModule: true,
   EnhancedTable: ({ data, tableName, Filters, Search, columns }: EnhancedTableProps) => {
+    capturedColumns = columns;
     const yearColumn = columns.find((c) => c.id === 'sortableYear');
     return (
       <div data-testid="enhanced-table">
@@ -358,5 +367,30 @@ describe('WorkTableSection', () => {
 
     render(<WorkTableSection />);
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
+  });
+
+  it('should extract plain text from TipTap documents for name and author columns', () => {
+    render(<WorkTableSection />);
+    const nameColumn = capturedColumns.find((column) => column.id === 'name');
+    const authorColumn = capturedColumns.find((column) => column.id === 'author');
+
+    const row: ResearchWorkTableRow = {
+      id: '1',
+      name: {
+        type: TipTapNodeTypes.doc,
+        content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'Research Work' }] }]
+      },
+      author: {
+        type: TipTapNodeTypes.doc,
+        content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'John Doe' }] }]
+      },
+      sortableYear: 2024,
+      year: '2024',
+      url: null,
+      pdfFile: null
+    };
+
+    expect(nameColumn?.accessorFn?.(row)).toBe('Research Work');
+    expect(authorColumn?.accessorFn?.(row)).toBe('John Doe');
   });
 });

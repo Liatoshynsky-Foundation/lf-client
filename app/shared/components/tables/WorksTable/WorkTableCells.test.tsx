@@ -2,8 +2,6 @@ import type { CellContext } from '@tanstack/react-table';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import type { WorkTable } from '~/types/types/enhancedTable';
-
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key
 }));
@@ -96,7 +94,9 @@ const setMobile = () =>
 const createMockCellContext = <T,>(value: T): CellContext<ResearchWorkTableRow, unknown> =>
   ({
     getValue: jest.fn().mockReturnValue(value),
-    row: { original: {} as WorkTable }
+    row: {
+      original: { name: value, author: value } as Pick<ResearchWorkTableRow, 'name' | 'author'> as ResearchWorkTableRow
+    }
   }) as unknown as CellContext<ResearchWorkTableRow, unknown>;
 
 const createMockActionCellContext = (
