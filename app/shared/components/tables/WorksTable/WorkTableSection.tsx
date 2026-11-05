@@ -16,10 +16,11 @@ import {
   RenderYearHeader
 } from './WorkTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
-import { ScientificFiltersType, WorkTableFilters } from '~/types/types/tableFilters.types';
+import { ResearchFiltersType, WorkTableFilters } from '~/types/types/tableFilters.types';
 
 import { SearchAutocompleteDTO } from '~/domain/dto/composition.dto';
-import { ScientificWorkTableRow } from '~/domain/dto/scientificWorks.dto';
+import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
+import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
 import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
@@ -42,29 +43,35 @@ export const WorkTableSection = () => {
     yearTo: null
   });
 
-  const { data: staticFilters } = useFetchStaticFilters<ScientificFiltersType>(ApiRoutes.SCIENTIFIC_WORKS_FILTERS);
+  const { data: staticFilters } = useFetchStaticFilters<ResearchFiltersType>(ApiRoutes.RESEARCH_WORKS_FILTERS);
 
   const defaultMinYear = staticFilters?.yearRange?.minYear ?? 1900;
   const defaultMaxYear = staticFilters?.yearRange?.maxYear ?? new Date().getFullYear();
 
-  const { data, isLoading } = useTableData<ScientificWorkTableRow, WorkTableFilters>(
-    ApiRoutes.SCIENTIFIC_WORKS_DATA,
+  const { data, isLoading } = useTableData<ResearchWorkTableRow, WorkTableFilters>(
+    ApiRoutes.RESEARCH_WORKS_DATA,
     params
   );
 
-  const selectTitles = useCallback((json: unknown) => {
-    const rawTitles = (json as { titles?: Array<SearchAutocompleteDTO & { title?: string }> })?.titles ?? [];
-    return rawTitles.map((t) => ({
-      _id: t._id,
-      name: t.name || t.title || '',
-      type: t.type ?? 'composition'
+  const selectDescriptions = useCallback((json: unknown) => {
+    const descriptions =
+      (
+        json as {
+          descriptions?: Array<{ _id: string; description: string; type?: string }>;
+        }
+      )?.descriptions ?? [];
+
+    return descriptions.map((item) => ({
+      _id: item._id,
+      name: item.description,
+      type: item.type ?? 'composition'
     })) as SearchAutocompleteDTO[];
   }, []);
 
-  const { options: titleOptions } = useFilterAutocomplete<WorkTableFilters, SearchAutocompleteDTO>({
-    endpoint: ApiRoutes.SCIENTIFIC_WORKS_TITLES,
+  const { options: descriptionOptions } = useFilterAutocomplete<WorkTableFilters, SearchAutocompleteDTO>({
+    endpoint: ApiRoutes.RESEARCH_WORKS_DESCRIPTIONS,
     params,
-    select: selectTitles
+    select: selectDescriptions
   });
 
   const bp = useBreakpoints();
@@ -89,12 +96,18 @@ export const WorkTableSection = () => {
     [setParam]
   );
 
-  let columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
+  let columns = useMemo<ColumnDef<ResearchWorkTableRow>[]>(
     () => [
-      { id: 'name', accessorKey: 'name', header: RenderNameHeader, cell: renderNameCell, sortingFn: 'alphanumeric' },
+      {
+        id: 'name',
+        accessorFn: (row) => extractTextFromTipTap(row.name),
+        header: RenderNameHeader,
+        cell: renderNameCell,
+        sortingFn: 'alphanumeric'
+      },
       {
         id: 'author',
-        accessorKey: 'author',
+        accessorFn: (row) => extractTextFromTipTap(row.author),
         header: RenderAuthorHeader,
         cell: renderAuthorCell,
         sortingFn: 'alphanumeric'
@@ -114,7 +127,7 @@ export const WorkTableSection = () => {
 
   const hideColumnsOnSmallScreen = useMemo(() => new Set(['author', 'sortableYear']), []);
 
-  columns = useMemo<ColumnDef<ScientificWorkTableRow>[]>(
+  columns = useMemo<ColumnDef<ResearchWorkTableRow>[]>(
     () => (bp.isTablet || bp.isMobile ? columns.filter((c) => !hideColumnsOnSmallScreen.has(String(c.id))) : columns),
     [bp.isTablet, bp.isMobile, columns, hideColumnsOnSmallScreen]
   );
@@ -179,7 +192,7 @@ export const WorkTableSection = () => {
   );
 
   return (
-    <EnhancedTable<ScientificWorkTableRow>
+    <EnhancedTable<ResearchWorkTableRow>
       data={data}
       noResults={<TableNoResultsFound />}
       loading={isLoading}
@@ -191,7 +204,7 @@ export const WorkTableSection = () => {
         <Search
           search={params.search}
           setSearch={(value) => debouncedSetParam('search', value)}
-          options={titleOptions}
+          options={descriptionOptions}
         />
       }
       Filters={

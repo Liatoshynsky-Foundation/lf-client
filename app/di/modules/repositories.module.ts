@@ -8,7 +8,7 @@ import newMediaMentionRepository from '~/infrastructure/repositories/media-menti
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 import newNewsRepository from '~/infrastructure/repositories/news/news.repository';
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
-import newScientificWorksRepo from '~/infrastructure/repositories/scientific-works/scientificWorks.repository';
+import newResearchWorksRepo from '~/infrastructure/repositories/research-works/researchWorks.repository';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
 
 export type RepositoriesModule = {
@@ -16,7 +16,7 @@ export type RepositoriesModule = {
   navigationRepo: ReturnType<typeof newNavigationRepository>;
   compositionsRepo: ReturnType<typeof newCompositionsRepo>;
   pagesDataRepo: ReturnType<typeof newPagesDataRepo>;
-  scientificWorksRepo: ReturnType<typeof newScientificWorksRepo>;
+  researchWorksRepo: ReturnType<typeof newResearchWorksRepo>;
   fundsRepository: ReturnType<typeof newFundsRepository>;
   newsRepository: ReturnType<typeof newNewsRepository>;
   mediaMentionRepository: ReturnType<typeof newMediaMentionRepository>;
@@ -30,7 +30,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     navigationRepo: asFunction(newNavigationRepository).scoped(),
     compositionsRepo: asFunction(newCompositionsRepo).scoped(),
     pagesDataRepo: asFunction(newPagesDataRepo).scoped(),
-    scientificWorksRepo: asFunction(newScientificWorksRepo).scoped(),
+    researchWorksRepo: asFunction(newResearchWorksRepo).scoped(),
     fundsRepository: asFunction(newFundsRepository).scoped(),
     newsRepository: asFunction(newNewsRepository).scoped(),
     mediaMentionRepository: asFunction(newMediaMentionRepository).scoped(),

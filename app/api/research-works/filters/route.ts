@@ -1,22 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { errors } from '~/constants/errors';
 
 import { createRequestContainer } from '~/di/container';
-import { parseLocale } from '~/lib/utils/translation/parseLocale';
 import logger from '~/middleware/logger/logger';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const params = req.nextUrl.searchParams;
-    const locale = parseLocale(params);
-
     const container = createRequestContainer();
-    const scientificWorksService = container.resolve('scientificService');
+    const researchWorksService = container.resolve('researchService');
 
     const [yearRange, authors] = await Promise.all([
-      scientificWorksService.getScientificWorksYearRange(),
-      scientificWorksService.getAllAuthors(locale)
+      researchWorksService.getResearchWorksYearRange(),
+      researchWorksService.getAllAuthors()
     ]);
 
     return NextResponse.json({
@@ -24,7 +20,7 @@ export async function GET(req: NextRequest) {
       authors
     });
   } catch (error) {
-    logger.error('[API:GET:scientific-works:filters] Failed to fetch scientific works filters', error);
+    logger.error('[API:GET:research-works:filters] Failed to fetch research works filters', error);
 
     return NextResponse.json(
       {

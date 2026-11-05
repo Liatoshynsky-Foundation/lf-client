@@ -2,7 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { WorkTableSection } from './WorkTableSection';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 
+import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/useFetchStaticFilters';
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
@@ -14,7 +16,6 @@ const tableMock = [
 
 const staticFiltersData = {
   authors: [{ key: 'a1', name: 'Author1' }],
-  titles: [{ title: 'Some title' }],
   yearRange: { minYear: 1900, maxYear: 2024 }
 };
 
@@ -32,7 +33,11 @@ interface EnhancedTableProps {
   tableName: string;
   Filters: React.ReactNode;
   Search: React.ReactNode;
-  columns: { id: string; cell?: (info: { row: { original: { year: number } } }) => React.ReactNode }[];
+  columns: {
+    id: string;
+    accessorFn?: (row: ResearchWorkTableRow) => unknown;
+    cell?: (info: { row: { original: { year: number } } }) => React.ReactNode;
+  }[];
 }
 
 interface TableFiltersProps {
@@ -52,6 +57,8 @@ interface FilterSelectProps {
   onAdd: (v: unknown, l: unknown, all: string[]) => void;
   onRemove: (v: unknown, l: unknown, all: string[]) => void;
 }
+
+let capturedColumns: EnhancedTableProps['columns'] = [];
 
 jest.mock('next-intl', () => ({
   __esModule: true,
@@ -125,6 +132,7 @@ jest.mock('~/shared/hooks/use-table-data/useTableData', () => ({
 jest.mock('~/shared/components/enhanced-table/EnhancedTable', () => ({
   __esModule: true,
   EnhancedTable: ({ data, tableName, Filters, Search, columns }: EnhancedTableProps) => {
+    capturedColumns = columns;
     const yearColumn = columns.find((c) => c.id === 'sortableYear');
     return (
       <div data-testid="enhanced-table">
@@ -267,17 +275,25 @@ describe('WorkTableSection', () => {
     expect(screen.getByTestId('max-year')).toHaveTextContent(new Date().getFullYear().toString());
   });
 
-  it('should execution callback function inside selectTitles to map and transform options cleanly', () => {
+  it('maps descriptions from API response to autocomplete options', () => {
     render(<WorkTableSection />);
 
     expect(storedSelectFn).toBeInstanceOf(Function);
 
     if (storedSelectFn) {
       const mockRawPayload = {
-        titles: [{ _id: 'id1', name: 'mapped title testing' }]
+        descriptions: [
+          { _id: 'id1', description: 'mapped description testing' },
+          { _id: 'id2', description: 'another description', type: 'research' }
+        ]
       };
+
       const resultingMapping = storedSelectFn(mockRawPayload);
-      expect(resultingMapping).toEqual([{ _id: 'id1', name: 'mapped title testing', type: 'composition' }]);
+
+      expect(resultingMapping).toEqual([
+        { _id: 'id1', name: 'mapped description testing', type: 'composition' },
+        { _id: 'id2', name: 'another description', type: 'research' }
+      ]);
     }
   });
 
@@ -351,5 +367,30 @@ describe('WorkTableSection', () => {
 
     render(<WorkTableSection />);
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
+  });
+
+  it('should extract plain text from TipTap documents for name and author columns', () => {
+    render(<WorkTableSection />);
+    const nameColumn = capturedColumns.find((column) => column.id === 'name');
+    const authorColumn = capturedColumns.find((column) => column.id === 'author');
+
+    const row: ResearchWorkTableRow = {
+      id: '1',
+      name: {
+        type: TipTapNodeTypes.doc,
+        content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'Research Work' }] }]
+      },
+      author: {
+        type: TipTapNodeTypes.doc,
+        content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'John Doe' }] }]
+      },
+      sortableYear: 2024,
+      year: '2024',
+      url: null,
+      pdfFile: null
+    };
+
+    expect(nameColumn?.accessorFn?.(row)).toBe('Research Work');
+    expect(authorColumn?.accessorFn?.(row)).toBe('John Doe');
   });
 });
