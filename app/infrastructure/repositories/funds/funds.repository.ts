@@ -50,7 +50,9 @@ const parseTipTapDoc = (value: unknown): TipTapDoc | undefined => {
   }
 };
 
-const normalizeLocalizedTipTapDoc = (value: IFund['characterAndContent']): LocalizedTipTapDoc | undefined => {
+const normalizeLocalizedTipTapDoc = (
+  value: IFund['characterAndContent'] | ICase['detailedCaseDescription']
+): LocalizedTipTapDoc | undefined => {
   if (!value) return undefined;
 
   if (typeof value === 'string') {
@@ -251,7 +253,7 @@ export const fundsRepository: FundsRepository = {
       dates: getLocalizedUk(caseDoc.caseDate ?? caseDoc.dates),
       sheets: caseDoc.sheetsNumber ?? caseDoc.sheets ?? null,
       contentDescription: getLocalizedUk(caseDoc.caseDescriptions ?? caseDoc.contentDescription),
-      detailedCaseDescription: getLocalizedUk(caseDoc.detailedCaseDescription),
+      detailedCaseDescription: normalizeLocalizedTipTapDoc(caseDoc.detailedCaseDescription),
       pdfUrl: caseDoc.pdfFile?.url ?? caseDoc.pdfUrl ?? null,
       fundId: toObjectIdString(caseDoc.fundId),
       fundNumber: createFundNumberLabel(fund.id),

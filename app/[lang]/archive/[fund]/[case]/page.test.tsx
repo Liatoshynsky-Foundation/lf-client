@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import ArchiveCasePage, { generateMetadata } from './page';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
+import type { TipTapDoc } from '~/types/types/tiptap.types';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 
 import type { ArchiveCaseDetailsProps } from '~/shared/components/blocks/archive-case-details/ArchiveCaseDetails';
@@ -58,6 +60,37 @@ jest.mock('~/utils/createSeoMeta', () => ({
 const mockedNotFound = notFound as unknown as jest.Mock;
 const mockedCreateSeoMeta = createSeoMeta as unknown as jest.Mock;
 
+const mockLocalizedDetailedDoc = {
+  uk: {
+    type: TipTapNodeTypes.doc,
+    content: [
+      {
+        type: TipTapNodeTypes.paragraph,
+        content: [
+          {
+            type: TipTapNodeTypes.text,
+            text: 'Детальний опис справи'
+          }
+        ]
+      }
+    ]
+  },
+  en: {
+    type: TipTapNodeTypes.doc,
+    content: [
+      {
+        type: TipTapNodeTypes.paragraph,
+        content: [
+          {
+            type: TipTapNodeTypes.text,
+            text: 'Детальний опис справи'
+          }
+        ]
+      }
+    ]
+  }
+} as Record<string, TipTapDoc>;
+
 const mockCaseDetails = {
   name: 'Case name from backend',
   cipher: 'Ф. 2, оп. 1, спр. 3',
@@ -65,7 +98,7 @@ const mockCaseDetails = {
   sheets: 26,
   pdfUrl: 'https://example.com/f2-op1-spr3.pdf',
   contentDescription: 'Опис справи',
-  detailedCaseDescription: 'Детальний опис справи',
+  detailedCaseDescription: mockLocalizedDetailedDoc,
   documents: [
     { _id: 'doc-1', text: 'Документ А' },
     { _id: 'doc-2', text: 'Документ Б' }
@@ -161,7 +194,7 @@ describe('ArchiveCasePage', () => {
     expect(props.sheetsCount).toBe(mockCaseDetails.sheets);
     expect(props.pdfUrl).toBe(mockCaseDetails.pdfUrl);
     expect(props.contentDescription).toBe(mockCaseDetails.contentDescription);
-    expect(props.detailedCaseDescription).toBe(mockCaseDetails.detailedCaseDescription);
+    expect(props.detailedCaseDescription).toEqual(mockLocalizedDetailedDoc.uk);
     expect(props.fundHref).toBe(`/${lang}${getDynamicRoute.archiveFund('2')}`);
 
     expect(props.documents).toEqual([
@@ -217,7 +250,7 @@ describe('ArchiveCasePage', () => {
       sheets: null,
       pdfUrl: null,
       contentDescription: '',
-      detailedCaseDescription: '',
+      detailedCaseDescription: null,
       documents: undefined,
       prevCase: undefined,
       nextCase: undefined
@@ -238,7 +271,7 @@ describe('ArchiveCasePage', () => {
     expect(props.sheetsCount).toBeUndefined();
     expect(props.pdfUrl).toBe('#');
     expect(props.contentDescription).toBe('');
-    expect(props.detailedCaseDescription).toBe('');
+    expect(props.detailedCaseDescription).toBeUndefined();
     expect(props.prevCase).toBeUndefined();
     expect(props.nextCase).toBeUndefined();
   });

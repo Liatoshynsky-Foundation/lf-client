@@ -1,4 +1,5 @@
 import { Breakpoint } from '@mui/material';
+import { JSONContent } from '@tiptap/core';
 
 import { SocialMediaTypes } from '~/types/enums/common.enums';
 
@@ -48,3 +49,8 @@ export type contactsData = {
 export type Cookies = {
   analytics: boolean;
 };
+
+export interface LocalizedRichText {
+  uk: JSONContent;
+  en: JSONContent;
+}
