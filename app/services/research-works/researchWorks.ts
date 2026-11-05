@@ -2,7 +2,19 @@ import { WorkTableFilters } from '~/types/types/tableFilters.types';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { ResearchWorksRepository } from '~/infrastructure/repositories/research-works/researchWorks.repo';
-import { extractTextFromTipTap, parseTipTapString } from '~/lib/utils/tiptapHelpers';
+import { createTipTapDocFromText, extractTextFromTipTap, parseTipTapString } from '~/lib/utils/tiptapHelpers';
+
+const parseResearchWorkContent = (value: string): TipTapDoc => {
+  const parsed = parseTipTapString(value);
+  if (typeof parsed === 'string') {
+    return createTipTapDocFromText(parsed);
+  }
+
+  if (Array.isArray(parsed)) {
+    return createTipTapDocFromText(parsed.map(({ text }) => text).join('\n'));
+  }
+  return parsed;
+};
 
 export const createResearchWorksService = ({ researchWorksRepo }: { researchWorksRepo: ResearchWorksRepository }) => ({
   async getAllAuthors() {
@@ -42,8 +54,8 @@ export const createResearchWorksService = ({ researchWorksRepo }: { researchWork
 
     return works.map((work) => ({
       id: work._id.toString(),
-      name: JSON.parse(work.bibliographicDescription) as TipTapDoc,
-      author: JSON.parse(work.author) as TipTapDoc,
+      name: parseResearchWorkContent(work.bibliographicDescription),
+      author: parseResearchWorkContent(work.author),
       sortableYear: Number(work.year),
       year: work.year,
       url: work.url ?? null,

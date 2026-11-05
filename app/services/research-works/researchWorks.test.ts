@@ -4,11 +4,22 @@ import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { ResearchWorkStatus } from '~/domain/dto/researchWorks.dto';
 import { ResearchWorksRepository } from '~/infrastructure/repositories/research-works/researchWorks.repo';
-import { extractTextFromTipTap, parseTipTapString } from '~/lib/utils/tiptapHelpers';
+import { createTipTapDocFromText, extractTextFromTipTap, parseTipTapString } from '~/lib/utils/tiptapHelpers';
 
 jest.mock('~/lib/utils/tiptapHelpers', () => ({
   extractTextFromTipTap: jest.fn(),
-  parseTipTapString: jest.fn()
+  parseTipTapString: jest.fn(),
+  createTipTapDocFromText: jest.fn((text: string) => ({
+    type: 'doc',
+    content: text
+      ? [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text }]
+          }
+        ]
+      : []
+  }))
 }));
 
 describe('createResearchWorksService', () => {
@@ -151,6 +162,43 @@ describe('createResearchWorksService', () => {
         years: undefined,
         search: filters.search
       });
+    });
+
+    it('should convert legacy plain text into TipTap documents', async () => {
+      researchWorksRepo.getAllResearchWorks.mockResolvedValue([
+        {
+          _id: '507f1f77bcf86cd799439011',
+          bibliographicDescription: 'Legacy description',
+          author: 'John Doe',
+          status: ResearchWorkStatus.Published,
+          year: '2020',
+          url: null,
+          pdfFile: null
+        }
+      ]);
+      (parseTipTapString as jest.Mock).mockImplementation((value) => value);
+      const result = await service.getAllResearchWorks(filters);
+
+      expect(result[0].name).toEqual(createTipTapDocFromText('Legacy description'));
+      expect(result[0].author).toEqual(createTipTapDocFromText('John Doe'));
+    });
+
+    it('should handle malformed TipTap JSON without throwing', async () => {
+      researchWorksRepo.getAllResearchWorks.mockResolvedValue([
+        {
+          _id: '507f1f77bcf86cd799439011',
+          bibliographicDescription: '{"type":"doc","content":',
+          author: 'John Doe',
+          status: ResearchWorkStatus.Published,
+          year: '2020',
+          url: null,
+          pdfFile: null
+        }
+      ]);
+      (parseTipTapString as jest.Mock).mockImplementation((value) => value);
+      const result = await service.getAllResearchWorks(filters);
+
+      expect(result[0].name).toEqual(createTipTapDocFromText('{"type":"doc","content":'));
     });
   });
 });
