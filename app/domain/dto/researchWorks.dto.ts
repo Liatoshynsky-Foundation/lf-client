@@ -17,7 +17,6 @@ export type ResearchWorkPdfFile = {
 export type ResearchWorkTableRow = {
   id: string;
   name: TipTapDoc;
-  author: TipTapDoc;
   sortableYear: number;
   year: string;
   url: string | null;

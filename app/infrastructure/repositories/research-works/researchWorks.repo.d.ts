@@ -4,12 +4,7 @@ import { ResearchWorksDescriptionFilters } from '~/types/types/tableFilters.type
 export type YearRange = { minYear: number; maxYear: number };
 
 export interface ResearchWorksRepository {
-  getAllAuthors(): Promise<string[]>;
   getAllBibliographicDescriptions(filters: ResearchWorksDescriptionFilters): Promise<string[]>;
   getResearchWorksYearRange(): Promise<YearRange>;
-  getAllResearchWorks(params: {
-    years?: [number, number];
-    author?: string[];
-    search?: string;
-  }): Promise<ResearchWorkDb[]>;
+  getAllResearchWorks(params: { years?: [number, number]; search?: string }): Promise<ResearchWorkDb[]>;
 }

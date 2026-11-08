@@ -37,7 +37,6 @@ describe('researchWorkSchema', () => {
   const validResearchWork = {
     _id: '507f1f77bcf86cd799439011',
     bibliographicDescription: 'Research work description',
-    author: 'John Doe',
     year: '2020',
     keywords: 'music, history',
     pdfFile: {
@@ -66,7 +65,7 @@ describe('researchWorkSchema', () => {
   it('should reject research work with missing required fields', () => {
     const researchWork = {
       ...validResearchWork,
-      author: undefined
+      bibliographicDescription: undefined
     };
     expect(researchWorkSchema.safeParse(researchWork).success).toBe(false);
   });

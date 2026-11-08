@@ -38,15 +38,6 @@ export const RenderNameHeader = () => {
   );
 };
 
-export const RenderAuthorHeader = () => {
-  const t = useTranslations('table.work.columns');
-  return (
-    <Typography variant="customBold16" color={mainHexPallete.blue[700]}>
-      {t('author')}
-    </Typography>
-  );
-};
-
 export const RenderYearHeader = () => {
   const t = useTranslations('table.work.columns');
   return (
@@ -67,19 +58,6 @@ export const renderNameCell = (info: CellContext<ResearchWorkTableRow, unknown>)
     }}
   >
     <TipTapContent data={info.row.original.name} />
-  </Box>
-);
-
-export const renderAuthorCell = (info: CellContext<ResearchWorkTableRow, unknown>) => (
-  <Box
-    sx={{
-      maxWidth: '192px',
-      '& p': {
-        typography: 'customMedium16'
-      }
-    }}
-  >
-    <TipTapContent data={info.row.original.author} />
   </Box>
 );
 

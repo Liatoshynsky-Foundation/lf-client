@@ -38,7 +38,6 @@ describe('ResearchWorksRepository', () => {
     {
       _id: '507f1f77bcf86cd799439011',
       bibliographicDescription: '{"type":"doc","content":[]}',
-      author: '{"type":"doc","content":[]}',
       status: ResearchWorkStatus.Published,
       year: '2020'
     }
@@ -62,20 +61,6 @@ describe('ResearchWorksRepository', () => {
     jest.clearAllMocks();
   });
 
-  describe('getAllAuthors', () => {
-    it('should return distinct published authors', async () => {
-      const authors = ['John Doe', 'Jane Doe'];
-      mockDistinctResult(authors);
-      const result = await repo.getAllAuthors();
-
-      expect(result).toEqual(authors);
-      expect(dbConnect).toHaveBeenCalledTimes(1);
-      expect(ResearchWorks.distinct).toHaveBeenCalledWith('author', {
-        status: ResearchWorkStatus.Published
-      });
-    });
-  });
-
   describe('getAllBibliographicDescriptions', () => {
     it('should return distinct descriptions with all filters applied', async () => {
       const descriptions = ['description 1', 'description 2'];
@@ -84,7 +69,6 @@ describe('ResearchWorksRepository', () => {
 
       await repo.getAllBibliographicDescriptions({
         search: 'research',
-        author: ['John Doe'],
         yearFrom: 2000,
         yearTo: 2020
       });
@@ -98,7 +82,6 @@ describe('ResearchWorksRepository', () => {
               $options: 'i'
             }
           },
-          { author: { $in: ['John Doe'] } },
           { year: { $gte: '2000', $lte: '2020' } }
         ]
       });
@@ -138,6 +121,7 @@ describe('ResearchWorksRepository', () => {
       const result = await repo.getAllBibliographicDescriptions();
 
       expect(result).toEqual(descriptions);
+      expect(dbConnect).toHaveBeenCalledTimes(1);
       expect(ResearchWorks.distinct).toHaveBeenCalledWith('bibliographicDescription', {
         $and: [{ status: ResearchWorkStatus.Published }]
       });
@@ -196,7 +180,6 @@ describe('ResearchWorksRepository', () => {
       jest.mocked(researchWorksSchema.parse).mockReturnValue(works);
 
       const result = await repo.getAllResearchWorks({
-        author: ['John Doe'],
         years: [2000, 2020],
         search: 'research'
       });
@@ -213,7 +196,6 @@ describe('ResearchWorksRepository', () => {
               $options: 'i'
             }
           },
-          { author: { $in: ['John Doe'] } },
           { year: { $gte: '2000', $lte: '2020' } }
         ]
       });

@@ -34,7 +34,6 @@ describe('GET /api/research-works/descriptions', () => {
     const descriptions = ['Description 1', 'Description 2'];
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: {
         min: 2000,
         max: 2020
@@ -47,16 +46,14 @@ describe('GET /api/research-works/descriptions', () => {
     expect(await response.json()).toEqual({ descriptions });
     expect(mockGetAllBibliographicDescriptions).toHaveBeenCalledWith({
       search: undefined,
-      author: undefined,
       yearFrom: 2000,
       yearTo: 2020
     });
   });
 
-  it('should pass search, author and year filters to service', async () => {
+  it('should pass search and year filters to service', async () => {
     (parseFilters as jest.Mock).mockReturnValue({
       search: 'Ukrainian music',
-      author: ['John Doe'],
       years: {
         min: 1990,
         max: 2020
@@ -68,7 +65,6 @@ describe('GET /api/research-works/descriptions', () => {
     expect(response.status).toBe(200);
     expect(mockGetAllBibliographicDescriptions).toHaveBeenCalledWith({
       search: 'Ukrainian music',
-      author: ['John Doe'],
       yearFrom: 1990,
       yearTo: 2020
     });
@@ -78,7 +74,6 @@ describe('GET /api/research-works/descriptions', () => {
     const error = new Error('Database error');
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: undefined
     });
     mockGetAllBibliographicDescriptions.mockRejectedValue(error);

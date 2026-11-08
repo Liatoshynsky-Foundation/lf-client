@@ -10,12 +10,11 @@ import { useFetchStaticFilters } from '~/shared/hooks/use-fetch-static-filters/u
 import { useTableFilters } from '~/shared/hooks/use-table-filters/useTableFilters';
 
 const tableMock = [
-  { id: '1', name: 'Work 1', author: 'A', sortableYear: 2000, year: 2000 },
-  { id: '2', name: 'Work 2', author: 'B', sortableYear: 1980, year: 1980 }
+  { id: '1', name: 'Work 1', sortableYear: 2000, year: 2000 },
+  { id: '2', name: 'Work 2', sortableYear: 1980, year: 1980 }
 ];
 
 const staticFiltersData = {
-  authors: [{ key: 'a1', name: 'Author1' }],
   yearRange: { minYear: 1900, maxYear: 2024 }
 };
 
@@ -50,12 +49,6 @@ interface YearNumericFilterProps {
   maxYear: number;
   onChangeCommitted: (v: [number, number]) => void;
   onChange: (v: [number, number]) => void;
-}
-
-interface FilterSelectProps {
-  label: string;
-  onAdd: (v: unknown, l: unknown, all: string[]) => void;
-  onRemove: (v: unknown, l: unknown, all: string[]) => void;
 }
 
 let capturedColumns: EnhancedTableProps['columns'] = [];
@@ -112,7 +105,6 @@ jest.mock('~/shared/hooks/use-table-filters/useTableFilters', () => ({
   useTableFilters: jest.fn(() => ({
     params: {
       search: '',
-      author: [],
       yearFrom: null,
       yearTo: null
     },
@@ -183,24 +175,9 @@ jest.mock('~/shared/components/tables/WorksTable/filters/YearNumericFilter', () 
   )
 }));
 
-jest.mock('~/shared/components/design-system/all-components/selector/FilterSelect', () => ({
-  FilterSelect: ({ label, onAdd, onRemove }: FilterSelectProps) => (
-    <div data-testid={`filter-select-${label}`}>
-      <button data-testid={`add-${label}`} onClick={() => onAdd(null, null, ['a1'])}>
-        add-{label}
-      </button>
-      <button data-testid={`remove-${label}`} onClick={() => onRemove(null, null, [])}>
-        remove-{label}
-      </button>
-    </div>
-  )
-}));
-
 jest.mock('./WorkTableCells', () => ({
   RenderNameHeader: () => <div />,
   renderNameCell: () => <div />,
-  RenderAuthorHeader: () => <div />,
-  renderAuthorCell: () => <div />,
   RenderYearHeader: () => <div />,
   renderYearCell: (year: number) => <div data-testid="inner-year-cell">{year}</div>,
   RenderActionCell: () => <div />
@@ -222,7 +199,7 @@ describe('WorkTableSection', () => {
       isLaptopAndAbove: true
     });
     (useTableFilters as jest.Mock).mockReturnValue({
-      params: { search: '', author: [], yearFrom: null, yearTo: null },
+      params: { search: '', yearFrom: null, yearTo: null },
       setParam: mockSetParam,
       debouncedSetParam: mockDebouncedSetParam,
       resetFilters: mockResetFilters
@@ -297,14 +274,11 @@ describe('WorkTableSection', () => {
     }
   });
 
-  it('should remove elements on filter select event change and push payload update back to state controller', () => {
+  it('should not render the authors filter', () => {
     render(<WorkTableSection />);
 
-    fireEvent.click(screen.getByTestId('add-author'));
-    expect(mockSetParam).toHaveBeenCalledWith('author', ['a1']);
-
-    fireEvent.click(screen.getByTestId('remove-author'));
-    expect(mockSetParam).toHaveBeenCalledWith('author', []);
+    expect(screen.queryByTestId('filter-author')).not.toBeInTheDocument();
+    expect(screen.getByTestId('filter-year')).toBeInTheDocument();
   });
 
   it('should slice out specific static column ids layout if current platform breaks target tablet or mobile bounds', () => {
@@ -335,9 +309,9 @@ describe('WorkTableSection', () => {
     expect(screen.getByTestId('inner-year-cell')).toHaveTextContent('2026');
   });
 
-  it('should activate filters count markers if authors tracking param list holds entries', () => {
+  it('should activate filters count markers if year range differs from default bounds', () => {
     (useTableFilters as jest.Mock).mockReturnValueOnce({
-      params: { search: '', author: ['a1'], yearFrom: 1950, yearTo: 2010 },
+      params: { search: '', yearFrom: 1950, yearTo: 2010 },
       setParam: mockSetParam,
       debouncedSetParam: mockDebouncedSetParam,
       resetFilters: mockResetFilters
@@ -349,7 +323,7 @@ describe('WorkTableSection', () => {
 
   it('should cover line 123 branch condition when yearTo parameter is active and differs from default bounds', () => {
     (useTableFilters as jest.Mock).mockReturnValueOnce({
-      params: { search: '', author: [], yearFrom: 1900, yearTo: 2015 },
+      params: { search: '', yearFrom: 1900, yearTo: 2015 },
       setParam: mockSetParam,
       debouncedSetParam: mockDebouncedSetParam,
       resetFilters: mockResetFilters
@@ -359,17 +333,7 @@ describe('WorkTableSection', () => {
     expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
   });
 
-  it('should cover line 138 fallback branch when static filters author object array payload resolves to undefined', () => {
-    (useFetchStaticFilters as jest.Mock).mockReturnValueOnce({
-      data: { ...staticFiltersData, authors: undefined },
-      isLoading: false
-    });
-
-    render(<WorkTableSection />);
-    expect(screen.getByTestId('enhanced-table')).toBeInTheDocument();
-  });
-
-  it('should extract plain text from TipTap documents for name and author columns', () => {
+  it('should extract plain text from TipTap documents for name column and not render author column', () => {
     render(<WorkTableSection />);
     const nameColumn = capturedColumns.find((column) => column.id === 'name');
     const authorColumn = capturedColumns.find((column) => column.id === 'author');
@@ -380,10 +344,6 @@ describe('WorkTableSection', () => {
         type: TipTapNodeTypes.doc,
         content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'Research Work' }] }]
       },
-      author: {
-        type: TipTapNodeTypes.doc,
-        content: [{ type: TipTapNodeTypes.paragraph, content: [{ type: TipTapNodeTypes.text, text: 'John Doe' }] }]
-      },
       sortableYear: 2024,
       year: '2024',
       url: null,
@@ -391,6 +351,6 @@ describe('WorkTableSection', () => {
     };
 
     expect(nameColumn?.accessorFn?.(row)).toBe('Research Work');
-    expect(authorColumn?.accessorFn?.(row)).toBe('John Doe');
+    expect(authorColumn).toBeUndefined();
   });
 });

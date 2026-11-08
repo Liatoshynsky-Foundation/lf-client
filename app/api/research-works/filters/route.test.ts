@@ -8,10 +8,8 @@ import logger from '~/middleware/logger/logger';
 
 describe('GET /api/research-works/filters', () => {
   const mockGetResearchWorksYearRange = jest.fn();
-  const mockGetAllAuthors = jest.fn();
   const mockResolve = jest.fn().mockReturnValue({
-    getResearchWorksYearRange: mockGetResearchWorksYearRange,
-    getAllAuthors: mockGetAllAuthors
+    getResearchWorksYearRange: mockGetResearchWorksYearRange
   });
 
   beforeEach(() => {
@@ -21,32 +19,22 @@ describe('GET /api/research-works/filters', () => {
     });
   });
 
-  it('should return research works year range and authors', async () => {
+  it('should return research works year range without authors', async () => {
     const yearRange = {
       minYear: 1990,
       maxYear: 2020
     };
-    const authors = [
-      { id: '1', name: 'John Doe' },
-      { id: '2', name: 'John Doe' }
-    ];
     mockGetResearchWorksYearRange.mockResolvedValue(yearRange);
-    mockGetAllAuthors.mockResolvedValue(authors);
     const response = await GET();
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({
-      yearRange,
-      authors
-    });
+    expect(await response.json()).toEqual({ yearRange });
     expect(mockGetResearchWorksYearRange).toHaveBeenCalledTimes(1);
-    expect(mockGetAllAuthors).toHaveBeenCalledTimes(1);
   });
 
   it('should return 500 and log error when service fails', async () => {
     const error = new Error('Database error');
     mockGetResearchWorksYearRange.mockRejectedValue(error);
-    mockGetAllAuthors.mockResolvedValue([]);
     const response = await GET();
 
     expect(response.status).toBe(500);

@@ -231,12 +231,10 @@
     "work": {
       "name": "All documents",
       "filters": {
-        "author": "Author",
         "yearLabel": "Year written"
       },
       "columns": {
         "name": "Title",
-        "author": "Author(s) / Compiler(s)",
         "year": "Year"
       },
       "buttons": {

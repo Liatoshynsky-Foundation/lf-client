@@ -6,22 +6,13 @@ import { useCallback, useMemo } from 'react';
 
 import TableNoResultsFound from '../CompositionTable/no-results-found/TableNoResultsFound';
 import { getWorkTableColumnWidths } from './getColumnWidth';
-import {
-  RenderActionCell,
-  renderAuthorCell,
-  RenderAuthorHeader,
-  renderNameCell,
-  RenderNameHeader,
-  renderYearCell,
-  RenderYearHeader
-} from './WorkTableCells';
+import { RenderActionCell, renderNameCell, RenderNameHeader, renderYearCell, RenderYearHeader } from './WorkTableCells';
 import { ApiRoutes } from '~/constants/routes/api-routes';
 import { ResearchFiltersType, WorkTableFilters } from '~/types/types/tableFilters.types';
 
 import { SearchAutocompleteDTO } from '~/domain/dto/composition.dto';
 import { ResearchWorkTableRow } from '~/domain/dto/researchWorks.dto';
 import { extractTextFromTipTap } from '~/lib/utils/tiptapHelpers';
-import { FilterSelect } from '~/shared/components/design-system/all-components/selector/FilterSelect';
 import { TableFilters } from '~/shared/components/design-system/all-components/table-filters/TableFilters';
 import { EnhancedTable } from '~/shared/components/enhanced-table/EnhancedTable';
 import { Search } from '~/shared/components/search/Search';
@@ -38,7 +29,6 @@ export const WorkTableSection = () => {
 
   const { params, setParam, debouncedSetParam, resetFilters } = useTableFilters<WorkTableFilters>({
     search: '',
-    author: [],
     yearFrom: null,
     yearTo: null
   });
@@ -106,13 +96,6 @@ export const WorkTableSection = () => {
         sortingFn: 'alphanumeric'
       },
       {
-        id: 'author',
-        accessorFn: (row) => extractTextFromTipTap(row.author),
-        header: RenderAuthorHeader,
-        cell: renderAuthorCell,
-        sortingFn: 'alphanumeric'
-      },
-      {
         id: 'sortableYear',
         accessorKey: 'sortableYear',
         header: RenderYearHeader,
@@ -125,7 +108,7 @@ export const WorkTableSection = () => {
     []
   );
 
-  const hideColumnsOnSmallScreen = useMemo(() => new Set(['author', 'sortableYear']), []);
+  const hideColumnsOnSmallScreen = useMemo(() => new Set(['sortableYear']), []);
 
   columns = useMemo<ColumnDef<ResearchWorkTableRow>[]>(
     () => (bp.isTablet || bp.isMobile ? columns.filter((c) => !hideColumnsOnSmallScreen.has(String(c.id))) : columns),
@@ -136,30 +119,11 @@ export const WorkTableSection = () => {
     (params.yearFrom !== null && params.yearFrom !== defaultMinYear) ||
     (params.yearTo !== null && params.yearTo !== defaultMaxYear);
 
-  const isAuthorActive = params.author.length > 0;
-
-  const activeFiltersCount = params.author.length + (isYearActive ? 1 : 0);
+  const activeFiltersCount = isYearActive ? 1 : 0;
   const isAnyFilterActive = activeFiltersCount > 0;
 
   const filters = useMemo(
     () => [
-      {
-        id: 'author',
-        isActive: isAuthorActive,
-        element: (
-          <FilterSelect
-            label={tFilters('author')}
-            options={(staticFilters?.authors ?? []).map((a) => ({
-              value: a.key,
-              label: a.name
-            }))}
-            defaultValues={params.author}
-            onAdd={(v, l, all) => setParam('author', all)}
-            onRemove={(v, l, all) => setParam('author', all)}
-            variant="filled"
-          />
-        )
-      },
       {
         id: 'year',
         isActive: isYearActive,
@@ -176,19 +140,7 @@ export const WorkTableSection = () => {
         )
       }
     ],
-    [
-      isAuthorActive,
-      tFilters,
-      staticFilters?.authors,
-      params.author,
-      params.yearFrom,
-      params.yearTo,
-      isYearActive,
-      defaultMinYear,
-      defaultMaxYear,
-      handleYearChange,
-      setParam
-    ]
+    [tFilters, params.yearFrom, params.yearTo, isYearActive, defaultMinYear, defaultMaxYear, handleYearChange]
   );
 
   return (

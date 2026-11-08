@@ -35,7 +35,6 @@ describe('GET /api/research-works/data', () => {
     const researchWorks = [{ id: '1', name: 'Research work' }];
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: {
         min: 2000,
         max: 2020
@@ -48,7 +47,6 @@ describe('GET /api/research-works/data', () => {
     expect(await response.json()).toEqual(researchWorks);
     expect(mockGetAllResearchWorks).toHaveBeenCalledWith({
       search: undefined,
-      author: undefined,
       yearFrom: 2000,
       yearTo: 2020
     });
@@ -57,7 +55,6 @@ describe('GET /api/research-works/data', () => {
   it('should pass null when year filters are missing', async () => {
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: undefined
     });
     mockGetAllResearchWorks.mockResolvedValue([]);
@@ -66,16 +63,14 @@ describe('GET /api/research-works/data', () => {
     expect(response.status).toBe(200);
     expect(mockGetAllResearchWorks).toHaveBeenCalledWith({
       search: undefined,
-      author: undefined,
       yearFrom: null,
       yearTo: null
     });
   });
 
-  it('should pass search and author filters to service', async () => {
+  it('should pass search and year filters to service', async () => {
     (parseFilters as jest.Mock).mockReturnValue({
       search: 'Ukrainian music',
-      author: ['John Doe'],
       years: {
         min: 1990,
         max: 2020
@@ -87,7 +82,6 @@ describe('GET /api/research-works/data', () => {
     expect(response.status).toBe(200);
     expect(mockGetAllResearchWorks).toHaveBeenCalledWith({
       search: 'Ukrainian music',
-      author: ['John Doe'],
       yearFrom: 1990,
       yearTo: 2020
     });
@@ -96,11 +90,10 @@ describe('GET /api/research-works/data', () => {
   it('should pass searchParams to parseFilters', async () => {
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: undefined
     });
     mockGetAllResearchWorks.mockResolvedValue([]);
-    const request = mockRequest('http://localhost/api/research-works/data?search=test&author=John');
+    const request = mockRequest('http://localhost/api/research-works/data?search=test');
     await GET(request);
 
     expect(parseFilters).toHaveBeenCalledWith(request.nextUrl.searchParams);
@@ -110,7 +103,6 @@ describe('GET /api/research-works/data', () => {
     const error = new Error('Database error');
     (parseFilters as jest.Mock).mockReturnValue({
       search: undefined,
-      author: undefined,
       years: undefined
     });
     mockGetAllResearchWorks.mockRejectedValue(error);
