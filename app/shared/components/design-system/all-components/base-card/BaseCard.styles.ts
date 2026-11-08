@@ -1,5 +1,7 @@
 import { oswald } from '~/ds-components/theme/Theme';
 
+export const NEWS_CARD_ASPECT_RATIO = 501 / 320;
+
 const ellipsisStyles = {
   display: '-webkit-box',
   WebkitBoxOrient: 'vertical',
@@ -26,7 +28,7 @@ export const styles = {
   imageContainer: {
     position: 'relative',
     width: '100%',
-    aspectRatio: '501 / 320',
+    aspectRatio: `${NEWS_CARD_ASPECT_RATIO}`,
     overflow: 'hidden',
     clipPath: 'polygon(0% 5.5%, 100% 0%, 100% 94.5%, 0% 100%)',
     maxWidth: {
@@ -69,7 +71,7 @@ export const styles = {
 
   image: {
     objectFit: 'cover' as const,
-    objectPosition: '45% 48%'
+    objectPosition: 'center'
   },
 
   fallbackImage: {
@@ -78,7 +80,7 @@ export const styles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover' as const,
-    objectPosition: '45% 48%'
+    objectPosition: 'center'
   },
 
   content: {
