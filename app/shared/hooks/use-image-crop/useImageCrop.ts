@@ -71,7 +71,7 @@ export function useImageCrop(crop?: CropRect | null, options: UseImageCropOption
   }, []);
 
   const croppedImgStyle = useMemo((): React.CSSProperties => {
-    if (!natSize.w || !natSize.h || !containerSize.w || !containerSize.h || !crop || !crop.width || !crop.height) {
+    if (!natSize.w || !natSize.h || !containerSize.w || !containerSize.h || !crop?.width || !crop?.height) {
       return { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' };
     }
     return buildCropStyle(crop, natSize.w, natSize.h, containerSize.w, containerSize.h, safeInsetY);
