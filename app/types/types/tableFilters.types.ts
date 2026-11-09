@@ -2,14 +2,12 @@ import { CategoryNameDTO, TitlesDTO } from '~/domain/dto/table.dto';
 
 export type WorkTableFilters = {
   search: string;
-  author: string[];
   yearFrom: number | null;
   yearTo: number | null;
 };
 
 export type ResearchFiltersType = {
   bibliographicDescriptions: { _id: string; description: string }[];
-  authors: { key: string; name: string }[];
   yearRange: { minYear: number; maxYear: number };
 };
 

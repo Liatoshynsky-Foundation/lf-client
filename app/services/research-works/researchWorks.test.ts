@@ -24,7 +24,6 @@ jest.mock('~/lib/utils/tiptapHelpers', () => ({
 
 describe('createResearchWorksService', () => {
   const researchWorksRepo = {
-    getAllAuthors: jest.fn(),
     getAllBibliographicDescriptions: jest.fn(),
     getResearchWorksYearRange: jest.fn(),
     getAllResearchWorks: jest.fn()
@@ -41,32 +40,11 @@ describe('createResearchWorksService', () => {
     jest.clearAllMocks();
   });
 
-  describe('getAllAuthors', () => {
-    it('should return normalized authors', async () => {
-      const authors = ['{"type":"doc","content":[]}'];
-      researchWorksRepo.getAllAuthors.mockResolvedValue(authors);
-      (parseTipTapString as jest.Mock).mockReturnValue(tipTapDoc);
-      (extractTextFromTipTap as jest.Mock).mockReturnValue('John Doe');
-      const result = await service.getAllAuthors();
-
-      expect(result).toEqual([
-        {
-          key: authors[0],
-          name: 'John Doe'
-        }
-      ]);
-      expect(researchWorksRepo.getAllAuthors).toHaveBeenCalledTimes(1);
-      expect(parseTipTapString).toHaveBeenCalledWith(authors[0]);
-      expect(extractTextFromTipTap).toHaveBeenCalledWith(tipTapDoc);
-    });
-  });
-
   describe('getAllBibliographicDescriptions', () => {
     it('should return normalized bibliographic descriptions', async () => {
       const descriptions = ['{"type":"doc","content":[]}'];
       const filters: WorkTableFilters = {
         search: 'research',
-        author: ['John Doe'],
         yearFrom: 2000,
         yearTo: 2020
       };
@@ -104,7 +82,6 @@ describe('createResearchWorksService', () => {
   describe('getAllResearchWorks', () => {
     const filters: WorkTableFilters = {
       search: 'research',
-      author: ['John Doe'],
       yearFrom: 2000,
       yearTo: 2020
     };
@@ -112,7 +89,6 @@ describe('createResearchWorksService', () => {
     const researchWork = {
       _id: '507f1f77bcf86cd799439011',
       bibliographicDescription: '{"type":"doc","content":[]}',
-      author: '{"type":"doc","content":[]}',
       status: ResearchWorkStatus.Published,
       year: '2020',
       url: 'https://example.com/research',
@@ -130,7 +106,6 @@ describe('createResearchWorksService', () => {
         {
           id: '507f1f77bcf86cd799439011',
           name: JSON.parse(researchWork.bibliographicDescription),
-          author: JSON.parse(researchWork.author),
           sortableYear: 2020,
           year: '2020',
           url: 'https://example.com/research',
@@ -144,7 +119,6 @@ describe('createResearchWorksService', () => {
       await service.getAllResearchWorks(filters);
 
       expect(researchWorksRepo.getAllResearchWorks).toHaveBeenCalledWith({
-        author: filters.author,
         years: [2000, 2020],
         search: filters.search
       });
@@ -158,7 +132,6 @@ describe('createResearchWorksService', () => {
       });
 
       expect(researchWorksRepo.getAllResearchWorks).toHaveBeenCalledWith({
-        author: filters.author,
         years: undefined,
         search: filters.search
       });
@@ -169,7 +142,6 @@ describe('createResearchWorksService', () => {
         {
           _id: '507f1f77bcf86cd799439011',
           bibliographicDescription: 'Legacy description',
-          author: 'John Doe',
           status: ResearchWorkStatus.Published,
           year: '2020',
           url: null,
@@ -180,7 +152,6 @@ describe('createResearchWorksService', () => {
       const result = await service.getAllResearchWorks(filters);
 
       expect(result[0].name).toEqual(createTipTapDocFromText('Legacy description'));
-      expect(result[0].author).toEqual(createTipTapDocFromText('John Doe'));
     });
 
     it('should handle malformed TipTap JSON without throwing', async () => {
@@ -188,7 +159,6 @@ describe('createResearchWorksService', () => {
         {
           _id: '507f1f77bcf86cd799439011',
           bibliographicDescription: '{"type":"doc","content":',
-          author: 'John Doe',
           status: ResearchWorkStatus.Published,
           year: '2020',
           url: null,

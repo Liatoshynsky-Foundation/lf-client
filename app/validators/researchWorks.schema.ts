@@ -13,7 +13,6 @@ export const researchWorkPdfFileSchema = z.object({
 export const researchWorkSchema = z.object({
   _id: mongoObjectIdSchema,
   bibliographicDescription: z.string(),
-  author: z.string(),
   year: z.string(),
   keywords: z.string().nullish(),
   pdfFile: researchWorkPdfFileSchema.nullish(),

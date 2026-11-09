@@ -10,15 +10,9 @@ export async function GET() {
     const container = createRequestContainer();
     const researchWorksService = container.resolve('researchService');
 
-    const [yearRange, authors] = await Promise.all([
-      researchWorksService.getResearchWorksYearRange(),
-      researchWorksService.getAllAuthors()
-    ]);
+    const yearRange = await researchWorksService.getResearchWorksYearRange();
 
-    return NextResponse.json({
-      yearRange,
-      authors
-    });
+    return NextResponse.json({ yearRange });
   } catch (error) {
     logger.error('[API:GET:research-works:filters] Failed to fetch research works filters', error);
 

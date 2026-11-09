@@ -10,18 +10,10 @@ import { searchHelper } from '~/lib/utils/searchAndFiltersHelpers';
 import { researchWorksSchema } from '~/validators/researchWorks.schema';
 
 const researchWorksRepository = {
-  async getAllAuthors(): Promise<string[]> {
-    await dbConnect();
-
-    return ResearchWorks.distinct('author', {
-      status: ResearchWorkStatus.Published
-    });
-  },
-
   async getAllBibliographicDescriptions(filters: ResearchWorksDescriptionFilters = {}): Promise<string[]> {
     await dbConnect();
 
-    const { yearFrom, yearTo, author, search } = filters;
+    const { yearFrom, yearTo, search } = filters;
 
     const conditions: FilterQuery<ResearchWorkDb>[] = [{ status: ResearchWorkStatus.Published }];
 
@@ -29,12 +21,6 @@ const researchWorksRepository = {
       const pattern = searchHelper(search);
       conditions.push({
         bibliographicDescription: { $regex: pattern, $options: 'i' }
-      });
-    }
-
-    if (author?.length) {
-      conditions.push({
-        author: { $in: author }
       });
     }
 
@@ -84,12 +70,10 @@ const researchWorksRepository = {
   },
 
   async getAllResearchWorks({
-    author,
     years,
     search = ''
   }: {
     years?: [number, number];
-    author?: string[];
     search?: string;
   }): Promise<ResearchWorkDb[]> {
     await dbConnect();
@@ -101,12 +85,6 @@ const researchWorksRepository = {
 
       conditions.push({
         bibliographicDescription: { $regex: pattern, $options: 'i' }
-      });
-    }
-
-    if (author?.length) {
-      conditions.push({
-        author: { $in: author }
       });
     }
 

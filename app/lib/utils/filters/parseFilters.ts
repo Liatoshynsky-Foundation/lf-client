@@ -1,6 +1,5 @@
 export interface ParsedFilters {
   categories: string[];
-  author: string[];
   years: { min: number; max: number };
   search: string;
 }
@@ -9,7 +8,6 @@ export function parseFilters(params: URLSearchParams): ParsedFilters {
   const currentYear = new Date().getFullYear();
 
   const categories = params.getAll('category');
-  const author = params.getAll('author');
 
   const yearFrom = params.get('yearFrom');
   const yearTo = params.get('yearTo');
@@ -18,13 +16,11 @@ export function parseFilters(params: URLSearchParams): ParsedFilters {
 
   const filters: ParsedFilters = {
     categories: [],
-    author: [],
     years: { min: 1900, max: currentYear },
     search
   };
 
   if (categories.length) filters.categories = categories;
-  if (author.length) filters.author = author;
 
   if (yearFrom || yearTo) {
     const parsedFrom = yearFrom ? Number(yearFrom) : undefined;

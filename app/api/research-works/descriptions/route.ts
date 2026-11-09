@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
 
     const filters = {
       search: rawFilters.search,
-      author: rawFilters.author,
       yearFrom: rawFilters.years?.min ?? null,
       yearTo: rawFilters.years?.max ?? null
     };

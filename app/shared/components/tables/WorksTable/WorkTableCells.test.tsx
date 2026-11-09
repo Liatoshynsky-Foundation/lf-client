@@ -50,15 +50,7 @@ jest.mock('public/icons/log-out.svg', () => {
   return LogOutIconMock;
 });
 
-import {
-  RenderActionCell,
-  renderAuthorCell,
-  RenderAuthorHeader,
-  renderNameCell,
-  RenderNameHeader,
-  renderYearCell,
-  RenderYearHeader
-} from './WorkTableCells';
+import { RenderActionCell, renderNameCell, RenderNameHeader, renderYearCell, RenderYearHeader } from './WorkTableCells';
 import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
@@ -95,7 +87,7 @@ const createMockCellContext = <T,>(value: T): CellContext<ResearchWorkTableRow, 
   ({
     getValue: jest.fn().mockReturnValue(value),
     row: {
-      original: { name: value, author: value } as Pick<ResearchWorkTableRow, 'name' | 'author'> as ResearchWorkTableRow
+      original: { name: value } as Pick<ResearchWorkTableRow, 'name'> as ResearchWorkTableRow
     }
   }) as unknown as CellContext<ResearchWorkTableRow, unknown>;
 
@@ -128,10 +120,6 @@ describe('WorkTable Components', () => {
       render(<RenderNameHeader />);
       expect(screen.getByText('name')).toBeInTheDocument();
     });
-    it('should render author header with correct text', () => {
-      render(<RenderAuthorHeader />);
-      expect(screen.getByText('author')).toBeInTheDocument();
-    });
     it('should render year header with correct text', () => {
       render(<RenderYearHeader />);
       expect(screen.getByText('year')).toBeInTheDocument();
@@ -143,12 +131,6 @@ describe('WorkTable Components', () => {
       const mockInfo = createMockCellContext(mockTipTapDoc);
       render(renderNameCell(mockInfo));
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-    it('should render author cell with max width', () => {
-      const mockInfo = createMockCellContext(mockTipTapDoc);
-      render(renderAuthorCell(mockInfo));
-      const { container } = render(renderAuthorCell(mockInfo));
-      expect(container.firstChild).toHaveStyle({ maxWidth: '192px' });
     });
     it('should render year cell with value', () => {
       render(renderYearCell('2023'));

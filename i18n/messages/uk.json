@@ -231,12 +231,10 @@
     "work": {
       "name": "Усі документи",
       "filters": {
-        "author": "Автор",
         "yearLabel": "Рік написання"
       },
       "columns": {
         "name": "Назва",
-        "author": "Автор(и) / Упорядник(и)",
         "year": "Рік"
       },
       "buttons": {

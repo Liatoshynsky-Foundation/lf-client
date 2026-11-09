@@ -17,17 +17,6 @@ const parseResearchWorkContent = (value: string): TipTapDoc => {
 };
 
 export const createResearchWorksService = ({ researchWorksRepo }: { researchWorksRepo: ResearchWorksRepository }) => ({
-  async getAllAuthors() {
-    const authors = await researchWorksRepo.getAllAuthors();
-
-    const normalized = authors.map((author) => ({
-      key: author,
-      name: extractTextFromTipTap(parseTipTapString(author))
-    }));
-
-    return normalized;
-  },
-
   async getAllBibliographicDescriptions(filters: WorkTableFilters) {
     const descriptions = await researchWorksRepo.getAllBibliographicDescriptions(filters);
 
@@ -42,12 +31,11 @@ export const createResearchWorksService = ({ researchWorksRepo }: { researchWork
   },
 
   async getAllResearchWorks(filters: WorkTableFilters) {
-    const { author, yearFrom, yearTo, search } = filters;
+    const { yearFrom, yearTo, search } = filters;
 
     const years: [number, number] | undefined = yearFrom != null && yearTo != null ? [yearFrom, yearTo] : undefined;
 
     const works = await researchWorksRepo.getAllResearchWorks({
-      author,
       years,
       search
     });
@@ -55,7 +43,6 @@ export const createResearchWorksService = ({ researchWorksRepo }: { researchWork
     return works.map((work) => ({
       id: work._id.toString(),
       name: parseResearchWorkContent(work.bibliographicDescription),
-      author: parseResearchWorkContent(work.author),
       sortableYear: Number(work.year),
       year: work.year,
       url: work.url ?? null,
