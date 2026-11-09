@@ -34,4 +34,17 @@ describe('CustomLink', () => {
     );
     expect(screen.getByAltText('play icon')).toBeInTheDocument();
   });
+
+  it('should render link with target and rel attributes', () => {
+    render(
+      <CustomLink path="/" target="_blank" rel="noopener noreferrer">
+        External Link
+      </CustomLink>
+    );
+
+    const link = screen.getByRole('link', { name: /external link/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
 });

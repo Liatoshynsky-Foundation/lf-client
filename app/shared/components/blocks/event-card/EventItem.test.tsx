@@ -176,6 +176,9 @@ describe('EventItem', () => {
     const secondaryLink = screen.getByText(secondaryAction.label).closest('a');
     expect(secondaryLink).not.toBeNull();
     expect(secondaryLink).toHaveAttribute('href', secondaryAction.href);
+
+    expect(secondaryLink).toHaveAttribute('target', '_blank');
+    expect(secondaryLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('renders only primary CTA when a single action is provided', () => {
