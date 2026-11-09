@@ -15,6 +15,8 @@ export interface CustomLinkProps {
   labelSx?: SxProps<Theme>;
   dataTestId?: string;
   ariaLabel?: string;
+  target?: React.HTMLAttributeAnchorTarget;
+  rel?: string;
 }
 
 const CustomLink: React.FC<CustomLinkProps> = ({
@@ -25,7 +27,9 @@ const CustomLink: React.FC<CustomLinkProps> = ({
   sx,
   labelSx,
   dataTestId,
-  ariaLabel
+  ariaLabel,
+  target,
+  rel
 }) => {
   const buttonSx = [linkStyles.button, ...sxToArray(sx)];
   const typoSx = [linkStyles.typography, ...sxToArray(labelSx)];
@@ -42,6 +46,8 @@ const CustomLink: React.FC<CustomLinkProps> = ({
       to={path}
       data-testid={dataTestId}
       aria-label={ariaLabel}
+      target={target}
+      rel={rel}
     >
       <Typography sx={typoSx}>{children}</Typography>
     </Button>

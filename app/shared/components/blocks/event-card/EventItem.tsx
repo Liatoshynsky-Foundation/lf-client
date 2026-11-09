@@ -235,6 +235,8 @@ const EventItem = ({
                 }
                 ariaLabel={secondaryAction.label}
                 data-testid="EventItem-secondaryCta"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {secondaryAction.label}
               </CustomLink>
