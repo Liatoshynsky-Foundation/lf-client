@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { getLocale } from 'next-intl/server';
 
 import { testPassDraftIdToResolvePageData } from '../__mocks__/runCommonPageTests';
 import News, { generateMetadata } from './page';
@@ -18,11 +17,6 @@ jest.mock('~/di/container', () => ({
 
 jest.mock('~/utils/isProductionMode', () => ({
   isProductionMode: jest.fn()
-}));
-
-jest.mock('next-intl/server', () => ({
-  setRequestLocale: jest.fn(),
-  getLocale: jest.fn()
 }));
 
 jest.mock('~/components/under-development/UnderDevelopment', () => ({
@@ -69,7 +63,6 @@ jest.mock('~/lib/utils/getDraftId', () => ({
 
 jest.mock('next-intl/server', () => ({
   setRequestLocale: jest.fn(),
-  getLocale: jest.fn(),
   getTranslations: jest.fn()
 }));
 
@@ -109,7 +102,7 @@ describe('News page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (createRequestContainer as jest.Mock).mockReturnValue(mockContainer);
-    (getLocale as jest.Mock).mockResolvedValue('uk');
+    (getDraftId as jest.Mock).mockReturnValue(undefined);
 
     (resolvePageData as jest.Mock).mockResolvedValue({});
     (isError as unknown as jest.Mock).mockReturnValue(false);
@@ -214,5 +207,21 @@ describe('News page', () => {
 
     expect(getDraftId).toHaveBeenCalledWith(searchParams);
     expect(resolvePageData).toHaveBeenCalledWith('news', 'uk', draftId);
+  });
+
+  it('should pass the locale from route params to all services', async () => {
+    const englishParams = Promise.resolve({ lang: 'en' as const });
+
+    const NewsComponent = await News({
+      params: englishParams,
+      searchParams: Promise.resolve({})
+    });
+
+    render(NewsComponent);
+
+    expect(resolvePageData).toHaveBeenCalledWith('news', 'en', undefined);
+    expect(mockNewsService.getAllPublishedNews).toHaveBeenCalledWith('en');
+    expect(mockEventService.getAllPublishedEvents).toHaveBeenCalledWith('en');
+    expect(mockMediaMentionService.getAllPublishedMediaMentions).toHaveBeenCalledWith('en');
   });
 });
