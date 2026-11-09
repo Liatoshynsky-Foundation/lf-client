@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getLocale, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
 import UnderDevelopment from '~/components/under-development/UnderDevelopment';
@@ -40,7 +40,6 @@ const News = async ({ params, searchParams }: Readonly<LocalizedPageProps>) => {
   const { lang } = await params;
   const query = await searchParams;
   setRequestLocale(lang);
-  const locale = await getLocale();
 
   if (isProductionMode()) {
     return <UnderDevelopment />;
@@ -67,9 +66,9 @@ const News = async ({ params, searchParams }: Readonly<LocalizedPageProps>) => {
   const newsService = container.resolve('newsService');
   const mediaMentionService = container.resolve('mediaMentionService');
 
-  const newsData = await newsService.getAllPublishedNews(locale);
-  const eventsData = await eventService.getAllPublishedEvents(locale);
-  const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions(lang as 'uk' | 'en');
+  const newsData = await newsService.getAllPublishedNews(lang);
+  const eventsData = await eventService.getAllPublishedEvents(lang);
+  const mediaMentionsData = await mediaMentionService.getAllPublishedMediaMentions(lang);
 
   return (
     <MainLayout>
