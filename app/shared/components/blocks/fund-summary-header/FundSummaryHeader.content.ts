@@ -62,7 +62,7 @@ export const fundSummaryBacklinkText: Record<Locale, string> = {
 
 export const fundSummaryTitle: Record<Locale, string> = {
   uk: 'Фонд 2. Особисті документи',
-  en: 'Fund 2. Personal Documents'
+  en: 'Fonds 2. Personal Documents'
 };
 
 export const fundSummaryContent = {
@@ -70,8 +70,8 @@ export const fundSummaryContent = {
     createFundItem('Кількість описів', 'Number of inventories', '2', '2'),
     createFundItem('Кількість справ', 'Number of cases', '9', '9'),
     createFundItem(
-      'Характер і зміст документів',
-      'Nature and content of documents',
+      'Опис фонду',
+      'Fonds Description',
       'Документи про освіту, трудову діяльність, нагороди, автобіографічні матеріали, військову службу, членство в організаціях, поїздки за кордон тощо.',
       'Documents about education, work activity, awards, autobiographical materials, military service, membership in organizations, trips abroad, etc.'
     ),

@@ -8,8 +8,8 @@ describe('Documents', () => {
       { id: 'doc-1', title: 'Документ А' },
       { id: 'doc-2', title: 'Документ Б' }
     ],
-    title: 'Документи справи',
-    ariaLabel: 'Документи справи'
+    title: 'Перелік документів справи',
+    ariaLabel: 'Перелік документів справи'
   };
 
   it('renders wrapper and ordered list with data-testids', () => {
@@ -32,7 +32,7 @@ describe('Documents', () => {
   });
 
   it('renders no items when documents array is empty', () => {
-    render(<Documents documents={[]} ariaLabel="Документи справи" />);
+    render(<Documents documents={[]} ariaLabel="Перелік документів справи" />);
 
     const list = screen.getByTestId('ArchiveCaseDetails-documentsList');
     expect(list.childElementCount).toBe(0);

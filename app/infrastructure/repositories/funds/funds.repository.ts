@@ -20,7 +20,7 @@ const toObjectIdString = (id: { toString(): string } | string): string => id.toS
 
 const createFundNumberLabel = (id: number): LocalizedString => ({
   uk: `Фонд ${id}`,
-  en: `Fund ${id}`
+  en: `Fonds ${id}`
 });
 
 const isTipTapDoc = (value: unknown): value is TipTapDoc =>

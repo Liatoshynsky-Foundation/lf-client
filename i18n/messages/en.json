@@ -361,10 +361,10 @@
       "dates": "Case dates",
       "sheets": "Sheets"
     },
-    "contentDescription": "Composition and content of case documents",
+    "contentDescription": "Scope and Content",
     "documents": {
-      "title": "Case documents",
-      "ariaLabel": "Case documents"
+      "title": "List of Documents",
+      "ariaLabel": "List of Documents"
     },
     "navigation": {
       "prev": "Previous case",

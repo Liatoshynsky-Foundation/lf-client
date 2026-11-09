@@ -49,7 +49,7 @@ describe('fundsRepository', () => {
       expect(result).toEqual([
         {
           id: 1,
-          number: { uk: 'Фонд 1', en: 'Fund 1' },
+          number: { uk: 'Фонд 1', en: 'Fonds 1' },
           title: { uk: 'Фонд 1', en: 'Fund 1' },
           status: FundStatus.Published
         }
@@ -110,7 +110,7 @@ describe('fundsRepository', () => {
       }
 
       expect(Fund.findOne).toHaveBeenCalledWith({ id: fundId, status: FundStatus.Published });
-      expect(result.number).toEqual({ uk: `Фонд ${fundId}`, en: `Fund ${fundId}` });
+      expect(result.number).toEqual({ uk: `Фонд ${fundId}`, en: `Fonds ${fundId}` });
       expect(result.organizationForm).toEqual({ uk: 'Форма', en: 'Form' });
       expect(result.characterAndContent).toEqual(mockFund.characterAndContent);
 
@@ -292,7 +292,7 @@ describe('fundsRepository', () => {
       expect(result.documents).toEqual([]);
       expect(result.prevCase).toBeNull();
       expect(result.nextCase).toBeNull();
-      expect(result.fundNumber).toEqual({ en: 'Fund 1', uk: 'Фонд 1' });
+      expect(result.fundNumber).toEqual({ en: 'Fonds 1', uk: 'Фонд 1' });
     });
 
     it('should return full case details with navigation and documents', async () => {

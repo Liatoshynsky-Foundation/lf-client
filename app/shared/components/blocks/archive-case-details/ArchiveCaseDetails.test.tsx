@@ -55,9 +55,9 @@ describe('ArchiveCaseDetails', () => {
     metaCode: 'Шифр',
     metaDates: 'Дати справи',
     metaSheets: 'Аркушів',
-    contentDescription: 'Склад і зміст документів справи',
-    documents: 'Документи справи',
-    documentsAria: 'Документи справи',
+    contentDescription: 'Зміст документів справи',
+    documents: 'Перелік документів справи',
+    documentsAria: 'Перелік документів справи',
     viewPdf: 'Переглянути PDF',
     prevCase: 'Попередня справа',
     nextCase: 'Наступна справа'
