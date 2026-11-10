@@ -9,7 +9,8 @@ import {
   mongoObjectIdSchema,
   requiredLocalizedTipTapDocSchema,
   requiredTranslatedTipTapSchema,
-  translatedFieldSchema
+  translatedFieldSchema,
+  translatedTipTapSchema
 } from '~/validators/constants';
 import { withManagedPageSections } from '~/validators/pagesSchemas/pages/managed-page-section.schema';
 
@@ -55,24 +56,24 @@ export function createPrivacyPolicyPageSchema(locale: Locale) {
   });
 
   const GoogleAuthBlockSchema = hideableBlock({
-    title: translatedFieldSchema,
+    title: translatedTipTapSchema,
     description: requiredTipTapDoc,
     list: z.array(localizedTipTapDocSchema),
     note: requiredTipTapDoc
   });
 
   const SocialNetworksBlockSchema = hideableBlock({
-    title: translatedFieldSchema,
+    title: translatedTipTapSchema,
     description: requiredTipTapDoc
   });
 
   const TargetedAdsBlockSchema = hideableBlock({
-    title: translatedFieldSchema,
+    title: translatedTipTapSchema,
     description: requiredTipTapDoc
   });
 
   const NewsletterSubscriptionBlockSchema = hideableBlock({
-    title: translatedFieldSchema,
+    title: translatedTipTapSchema,
     description: requiredTipTapDoc
   });
 
