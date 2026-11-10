@@ -8,7 +8,15 @@ import { DocumentRecord } from '~/types/types/document.types';
 import { IconButton } from '~/shared/components/design-system/all-components/icon-button/IconButton';
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
-export default function TableCard({ id, cipher, name, dates, sheets, contentDescription }: Readonly<DocumentRecord>) {
+export default function TableCard({
+  id,
+  cipher,
+  name,
+  dates,
+  sheets,
+  contentDescription,
+  pdfUrl
+}: Readonly<DocumentRecord>) {
   const t = useTranslations('table.documents');
   return (
     <Box key={id} sx={styles.card}>
@@ -39,14 +47,23 @@ export default function TableCard({ id, cipher, name, dates, sheets, contentDesc
           <Typography sx={styles.content}>{contentDescription}</Typography>
         </Box>
       </Box>
-      <Box sx={styles.buttonsBox}>
-        <Button variant="outlined" size="medium" color="primary">
-          {t('buttons.mobileView')}
-        </Button>
-        <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={{ bgcolor: 'none' }}>
-          <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
-        </IconButton>
-      </Box>
+      {pdfUrl && (
+        <Box sx={styles.buttonsBox}>
+          <Button
+            variant="outlined"
+            size="medium"
+            color="primary"
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t('buttons.mobileView')}
+          </Button>
+          <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={{ bgcolor: 'none' }}>
+            <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 }

@@ -16,7 +16,8 @@ const mockRecord = {
   name: 'Документи про освіту',
   dates: '1895–1955',
   sheets: 11,
-  contentDescription: 'Метричні виписки, довідки'
+  contentDescription: 'Метричні виписки, довідки',
+  pdfUrl: 'https://example.com/case-1.pdf'
 };
 
 describe('TableCard', () => {
@@ -28,5 +29,20 @@ describe('TableCard', () => {
     expect(screen.getByText(mockRecord.dates)).toBeInTheDocument();
     expect(screen.getByText(mockRecord.sheets.toString())).toBeInTheDocument();
     expect(screen.getByText(mockRecord.contentDescription)).toBeInTheDocument();
+  });
+
+  test('should render a PDF link that opens in a new tab when the case has a PDF', () => {
+    render(<TableCard {...mockRecord} />);
+
+    const link = screen.getByRole('link', { name: 'buttons.mobileView' });
+    expect(link).toHaveAttribute('href', mockRecord.pdfUrl);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should not render the PDF button when the case has no PDF', () => {
+    render(<TableCard {...mockRecord} pdfUrl={null} />);
+
+    expect(screen.queryByText('buttons.mobileView')).not.toBeInTheDocument();
   });
 });
