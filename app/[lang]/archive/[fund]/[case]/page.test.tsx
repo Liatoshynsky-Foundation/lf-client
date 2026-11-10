@@ -269,7 +269,7 @@ describe('ArchiveCasePage', () => {
 
     expect(props.documents).toEqual([]);
     expect(props.sheetsCount).toBeUndefined();
-    expect(props.pdfUrl).toBe('#');
+    expect(props.pdfUrl).toBeNull();
     expect(props.contentDescription).toBe('');
     expect(props.detailedCaseDescription).toBeUndefined();
     expect(props.prevCase).toBeUndefined();

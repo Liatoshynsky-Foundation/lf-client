@@ -39,7 +39,7 @@ export interface ArchiveCaseDetailsProps {
   index: string;
   dateRange: string;
   sheetsCount?: number;
-  pdfUrl: string;
+  pdfUrl?: string | null;
   contentDescription?: string;
   detailedCaseDescription?: TipTapDoc | null;
   documents: ArchiveCaseDocument[];
@@ -84,9 +84,11 @@ const ArchiveCaseDetails = ({
           }}
         />
 
-        <Box sx={styles.pdfButtonWrapper} data-testid="ArchiveCaseDetails-pdfButtonSticky">
-          <PdfButton href={pdfUrl} label={labels.viewPdf} dataTestId="ArchiveCaseDetails-pdfButton" />
-        </Box>
+        {pdfUrl && (
+          <Box sx={styles.pdfButtonWrapper} data-testid="ArchiveCaseDetails-pdfButtonSticky">
+            <PdfButton href={pdfUrl} label={labels.viewPdf} dataTestId="ArchiveCaseDetails-pdfButton" />
+          </Box>
+        )}
 
         <Box sx={styles.detailsColumn}>
           {contentDescription && (
