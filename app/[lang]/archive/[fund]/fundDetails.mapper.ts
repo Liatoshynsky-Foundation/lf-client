@@ -70,12 +70,7 @@ export const mapFundDetailsToSummaryData = (fund: FundDetailsDTO): FundSummaryHe
   items.push(createTextSummaryItem({ uk: 'Кількість справ', en: 'Number of cases' }, String(fund.numberOfCases)));
 
   if (fund.characterAndContent) {
-    items.push(
-      createSummaryItem(
-        { uk: 'Характер і зміст документів', en: 'Nature and content of documents' },
-        fund.characterAndContent
-      )
-    );
+    items.push(createSummaryItem({ uk: 'Опис фонду', en: 'Fonds Description' }, fund.characterAndContent));
   }
 
   appendOptionalTextItem(items, { uk: 'Форма упорядкування', en: 'Form of arrangement' }, fund.organizationForm);

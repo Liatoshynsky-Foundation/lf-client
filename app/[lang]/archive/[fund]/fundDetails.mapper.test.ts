@@ -77,7 +77,7 @@ describe('fundDetails.mapper', () => {
       type: TipTapNodeTypes.text,
       text: '2'
     });
-    expect(result.items[2]?.title.uk).toBe('Характер і зміст документів');
+    expect(result.items[2]?.title).toEqual({ uk: 'Опис фонду', en: 'Fonds Description' });
     expect(result.items[2]?.description).toEqual(characterAndContent);
   });
 
