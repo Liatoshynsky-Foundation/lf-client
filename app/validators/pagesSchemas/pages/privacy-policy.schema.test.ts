@@ -124,5 +124,31 @@ describe('PrivacyPolicyPageSchema regression', () => {
       expect(parsedData.blocks[blockId].hidden).toBe(true);
     });
   });
+
+  it('should accept rich text (TipTap) titles saved by the admin panel', () => {
+    const mockPayload = createMockPayload();
+    const tipTapTitle = mockPayload.blocks.Cookies.title;
+    const { blocks } = mockPayload;
+
+    const payloadWithTipTapTitles = {
+      ...mockPayload,
+      blocks: {
+        ...blocks,
+        GoogleAuth: { ...blocks.GoogleAuth, title: tipTapTitle },
+        SocialNetworks: { ...blocks.SocialNetworks, title: tipTapTitle },
+        TargetedAds: { ...blocks.TargetedAds, title: tipTapTitle },
+        NewsletterSubscription: { ...blocks.NewsletterSubscription, title: tipTapTitle }
+      }
+    };
+
+    expect(() => PrivacyPolicyPageSchema.parse(payloadWithTipTapTitles)).not.toThrow();
+
+    const localizedSchema = LocalizeSchema(NoTime(NoIDSchema(NoPageType(PrivacyPolicyPageSchema))), 'uk');
+    const parsedData = localizedSchema.parse(payloadWithTipTapTitles);
+
+    AFFECTED_HIDDEN_BLOCKS.forEach((blockId) => {
+      expect(parsedData.blocks[blockId].title).toEqual(tipTapTitle.uk);
+    });
+  });
   describeSeoFieldsSupport('PrivacyPolicyPageSchema', PrivacyPolicyPageSchema, createMockPayload);
 });
