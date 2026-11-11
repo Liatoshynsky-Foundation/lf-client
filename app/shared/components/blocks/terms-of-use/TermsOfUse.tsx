@@ -16,7 +16,7 @@ import { styles } from '~/shared/components/Quote/Quote.styles';
 import { IMAGES } from '~/shared/constants/assets';
 import { commonSx } from '~/shared/styles/commonSx';
 
-const TermsOfUse = ({ email }: { readonly email?: string }) => {
+const TermsOfUse = () => {
   const t = useTranslations('termsOfUse');
   const locale = useLocale();
 
@@ -62,6 +62,16 @@ const TermsOfUse = ({ email }: { readonly email?: string }) => {
                 >
                   {t('quote')}
                 </Typography>
+                <Typography
+                  sx={{
+                    ...styles.mainText('white', 'left'),
+                    fontWeight: 700,
+                    mt: { xs: '16px', md: '24px' }
+                  }}
+                  data-testid="TermsOfUse-quoteAuthor"
+                >
+                  {t('quoteAuthor')}
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -74,7 +84,7 @@ const TermsOfUse = ({ email }: { readonly email?: string }) => {
             marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
           }}
         />
-        <TermsContent email={email} />
+        <TermsContent />
       </Box>
     </>
   );

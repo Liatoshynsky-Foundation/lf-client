@@ -9,7 +9,6 @@ import type { Language } from '~/types/types/language';
 import { createSeoMeta } from '~/utils/createSeoMeta';
 import { isProductionMode } from '~/utils/isProductionMode';
 
-import { createRootContainer } from '~/di/container';
 import MainLayout from '~/layouts/main-layout/MainLayout';
 import { ROUTES } from '~/shared/components/constants/routes';
 
@@ -28,11 +27,7 @@ export async function generateMetadata({ params }: Language): Promise<Metadata> 
 }
 
 export default async function Terms({ params }: Language) {
-  const { lang } = await params;
-  const container = createRootContainer();
-  const footerService = container.resolve('footerService');
-
-  const footerData = await footerService.getFooterData(lang);
+  await params;
 
   if (isProductionMode()) {
     return <UnderDevelopment />;
@@ -40,7 +35,7 @@ export default async function Terms({ params }: Language) {
 
   return (
     <MainLayout withLines>
-      <TermsOfUse email={footerData.contacts.email} />
+      <TermsOfUse />
     </MainLayout>
   );
 }

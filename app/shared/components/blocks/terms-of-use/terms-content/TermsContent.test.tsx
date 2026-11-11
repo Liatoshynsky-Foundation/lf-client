@@ -83,22 +83,28 @@ describe('TermsContent', () => {
     expect(screen.getByText('buttons.archive.short')).toBeInTheDocument();
   });
 
-  it('should render license link with provided dynamic email in mailto href', () => {
-    const testEmail = 'custom-partner@foundation.org';
-    render(<TermsContent email={testEmail} />);
-
-    const lists = screen.getAllByTestId('list');
-    const licenseBlock = lists.find((el) => el.textContent?.includes(`mailto:${testEmail}`));
-
-    expect(licenseBlock).toBeDefined();
-  });
-
-  it('should fallback to default email in license link when email prop is omitted', () => {
+  it('should render all section titles from the updated terms', () => {
     render(<TermsContent />);
 
-    const lists = screen.getAllByTestId('list');
-    const licenseBlock = lists.find((el) => el.textContent?.includes('mailto:liatoshynsky@gmail.com'));
+    expect(screen.getByText('libraryAccessTitle')).toBeInTheDocument();
+    expect(screen.getByText('copyrightTitle')).toBeInTheDocument();
+    expect(screen.getByText('materialsUsageTitle')).toBeInTheDocument();
+  });
 
-    expect(licenseBlock).toBeDefined();
+  it('should not render removed sections (registration, behavior, respect to authors)', () => {
+    render(<TermsContent />);
+
+    expect(screen.queryByText('registerTitle')).not.toBeInTheDocument();
+    expect(screen.queryByText('behaviorTitle')).not.toBeInTheDocument();
+    expect(screen.queryByText('respectAuthorsTitle')).not.toBeInTheDocument();
+  });
+
+  it('should render the UACRR contacts link and links to the contacts page', () => {
+    render(<TermsContent />);
+
+    const descriptions = screen.getAllByTestId('description').map((el) => el.textContent ?? '');
+
+    expect(descriptions.some((text) => text.includes('https://uacrr.org.ua/contacts.html'))).toBe(true);
+    expect(descriptions.filter((text) => text.includes('"href":"/uk/contacts"')).length).toBeGreaterThanOrEqual(2);
   });
 });
