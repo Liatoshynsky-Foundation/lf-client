@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useLayoutEffect, useRef } from 'react';
 
 import BaseCard, { Variant } from '../base-card/BaseCard';
@@ -32,6 +32,7 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
   const shouldScrollRef = useRef(false);
 
   const t = useTranslations('common');
+  const locale = useLocale();
 
   useLayoutEffect(() => {
     if (!shouldScrollRef.current) return;
@@ -60,7 +61,7 @@ function MediaList({ mediaData, itemsPerPage = 9, variant, dataTestId }: Readonl
           const href =
             variant === 'press' && 'url' in newsItem && typeof newsItem.url === 'string'
               ? newsItem.url
-              : `/${variant}/${newsItem.slug ?? newsItem._id}`;
+              : `/${locale}/${variant}/${newsItem.slug ?? newsItem._id}`;
 
           return (
             <BaseCard

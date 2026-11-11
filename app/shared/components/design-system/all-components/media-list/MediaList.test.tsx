@@ -5,7 +5,10 @@ import MediaList from './MediaList';
 
 import { getDynamicRoute } from '~/shared/components/constants/routes';
 
+const mockUseLocale = jest.fn();
+
 jest.mock('next-intl', () => ({
+  useLocale: () => mockUseLocale(),
   useTranslations: () => (key: string) => (key === 'viewMore' ? 'Переглянути більше' : key)
 }));
 
@@ -76,6 +79,7 @@ describe('MediaList Component', () => {
       handlePageChange: jest.fn(),
       handleLoadMore: jest.fn()
     });
+    mockUseLocale.mockReturnValue('uk');
   });
 
   it('should render list of cards correctly', () => {
@@ -88,7 +92,7 @@ describe('MediaList Component', () => {
     const cards = screen.getAllByTestId('base-card');
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveTextContent('News 1');
-    expect(cards[0]).toHaveAttribute('data-href', getDynamicRoute.newsItem('1'));
+    expect(cards[0]).toHaveAttribute('data-href', `/uk${getDynamicRoute.newsItem('1')}`);
   });
 
   it('should render "Load More" button when hasMore is true', () => {
@@ -168,7 +172,35 @@ describe('MediaList Component', () => {
 
     render(<MediaList mediaData={dataWithSlug as any} variant="news" dataTestId="news" />);
 
-    expect(screen.getByTestId('base-card')).toHaveAttribute('data-href', getDynamicRoute.newsItem('my-news-slug'));
+    expect(screen.getByTestId('base-card')).toHaveAttribute(
+      'data-href',
+      `/uk${getDynamicRoute.newsItem('my-news-slug')}`
+    );
+  });
+
+  it('should include the current locale in the news item href', () => {
+    mockUseLocale.mockReturnValue('en');
+
+    render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
+
+    const cards = screen.getAllByTestId('base-card');
+
+    expect(cards[0]).toHaveAttribute('data-href', '/en/news/1');
+    expect(cards[1]).toHaveAttribute('data-href', '/en/news/2');
+  });
+
+  it('should update news item href when locale changes', () => {
+    mockUseLocale.mockReturnValue('uk');
+
+    const { rerender } = render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
+
+    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', '/uk/news/1');
+
+    mockUseLocale.mockReturnValue('en');
+
+    rerender(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
+
+    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', '/en/news/1');
   });
 
   it('should pass crop to BaseCard when coverImage has crop', () => {
