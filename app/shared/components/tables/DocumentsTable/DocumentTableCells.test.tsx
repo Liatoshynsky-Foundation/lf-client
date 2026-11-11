@@ -29,7 +29,7 @@ jest.mock('~/shared/hooks/use-breakpoints/useBreakpoints', () => jest.fn());
 const mockUseBreakpoints = useBreakpoints as jest.Mock;
 
 jest.mock('~/shared/components/design-system/all-components/icon-button/IconButton', () => ({
-  IconButton: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+  IconButton: ({ children, href }: { children: React.ReactNode; href?: string }) => <a href={href}>{children}</a>
 }));
 
 jest.mock('~/shared/components/svg-image/SvgImage', () => ({
@@ -52,7 +52,7 @@ const mockRecord: DocumentRecord = {
   dates: '2020',
   sheets: 3,
   contentDescription: 'Some content',
-  pdfUrl: null
+  pdfUrl: 'https://example.com/case-1.pdf'
 };
 
 describe('DocumentsTableCells', () => {
@@ -109,11 +109,11 @@ describe('DocumentsTableCells', () => {
   });
 
   describe('RenderActionCell', () => {
-    it('should render nothing if sheets is null', () => {
+    it('should render nothing if the case has no PDF', () => {
       mockUseBreakpoints.mockReturnValue({ isLaptop: false });
       mockUseMediaQuery.mockReturnValue(false);
 
-      const record = { ...mockRecord, sheets: null };
+      const record = { ...mockRecord, pdfUrl: null };
       const cell = RenderActionCell({ row: { original: record } } as CellContext<DocumentRecord, unknown>);
       const { container } = render(<>{cell}</>);
       expect(container).toBeEmptyDOMElement();
@@ -125,7 +125,10 @@ describe('DocumentsTableCells', () => {
 
       const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
-      expect(screen.getByText('view')).toBeInTheDocument();
+      const link = screen.getByRole('link', { name: 'view' });
+      expect(link).toHaveAttribute('href', mockRecord.pdfUrl);
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     });
 
     it('should render correct button for small desktop', () => {
@@ -134,7 +137,7 @@ describe('DocumentsTableCells', () => {
 
       const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
-      expect(screen.getByText('shortView')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'shortView' })).toHaveAttribute('href', mockRecord.pdfUrl);
     });
 
     it('should render icon button for laptop', () => {
@@ -144,6 +147,7 @@ describe('DocumentsTableCells', () => {
       const cell = RenderActionCell({ row: { original: mockRecord } } as CellContext<DocumentRecord, unknown>);
       render(<>{cell}</>);
       expect(screen.getByText('menu')).toBeInTheDocument();
+      expect(screen.getByRole('link')).toHaveAttribute('href', mockRecord.pdfUrl);
     });
   });
 });

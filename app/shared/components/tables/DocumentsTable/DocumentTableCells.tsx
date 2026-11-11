@@ -109,7 +109,9 @@ export const RenderActionCell = (info: CellContext<DocumentRecord, unknown>) => 
   const isSmallDesktop = useMediaQuery('(min-width:1280px) and (max-width:1447px)');
   const isLargeDesktop = useMediaQuery('(min-width:1448px)');
 
-  if (row.sheets !== null) {
+  if (row.pdfUrl) {
+    const pdfLinkProps = { href: row.pdfUrl, target: '_blank', rel: 'noopener noreferrer' };
+
     return (
       <Box
         sx={{
@@ -123,17 +125,22 @@ export const RenderActionCell = (info: CellContext<DocumentRecord, unknown>) => 
         }}
       >
         {isLargeDesktop && (
-          <Button variant="outlined" size="medium" color="primary">
+          <Button variant="outlined" size="medium" color="primary" {...pdfLinkProps}>
             {t('view')}
           </Button>
         )}
         {isSmallDesktop && (
-          <Button variant="outlined" size="small" color="primary">
+          <Button variant="outlined" size="small" color="primary" {...pdfLinkProps}>
             {t('shortView')}
           </Button>
         )}
         {isLaptop && (
-          <IconButton size="small" variant={IconButtonColorVariant.Secondary} sx={iconButtonSecondaryPlainSx}>
+          <IconButton
+            size="small"
+            variant={IconButtonColorVariant.Secondary}
+            sx={iconButtonSecondaryPlainSx}
+            {...pdfLinkProps}
+          >
             <SvgImage src="/icons/ellipsis-vertical.svg" alt="menu" width={24} height={24} />
           </IconButton>
         )}

@@ -114,6 +114,13 @@ describe('ArchiveCaseDetails', () => {
     expect(pdfButton).toHaveTextContent(labels.viewPdf);
   });
 
+  it('hides the PDF button when the case has no PDF', () => {
+    render(<ArchiveCaseDetails {...baseProps} pdfUrl={null} />);
+
+    expect(screen.queryByTestId('ArchiveCaseDetails-pdfButtonSticky')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('ArchiveCaseDetails-pdfButton')).not.toBeInTheDocument();
+  });
+
   it('renders navigation when prevCase / nextCase are provided', () => {
     render(<ArchiveCaseDetails {...baseProps} />);
 

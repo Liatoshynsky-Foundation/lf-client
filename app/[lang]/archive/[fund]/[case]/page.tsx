@@ -120,7 +120,7 @@ export default async function ArchiveCasePage({ params }: Readonly<ArchiveCasePa
         index={caseDetails.cipher}
         dateRange={caseDetails.dates}
         sheetsCount={caseDetails.sheets ?? undefined}
-        pdfUrl={caseDetails.pdfUrl ?? '#'}
+        pdfUrl={caseDetails.pdfUrl}
         contentDescription={caseDetails.contentDescription}
         detailedCaseDescription={currentDetailedDescription}
         documents={documents}
