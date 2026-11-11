@@ -2,19 +2,7 @@
 import { Box } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
-import {
-  archiveDoc,
-  behaviorListKeys,
-  getLicenseDoc,
-  meaningDoc,
-  privacyDoc,
-  registerDoc,
-  registerListKeys,
-  rightsDoc,
-  rightsManagementDoc,
-  supportDoc,
-  testDoc
-} from '../terms.const.';
+import { archiveDoc, copyrightDoc, libraryDoc, licenseDoc, rightsManagementDoc, supportDoc } from '../terms.const.';
 import ButtonContentBlock from './button-content-block/ButtonContentBlock';
 
 import { ROUTES } from '~/shared/components/constants/routes';
@@ -24,8 +12,9 @@ import { IMAGES } from '~/shared/constants/assets';
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 import { commonSx } from '~/shared/styles/commonSx';
 
-const TermsContent = ({ email }: { readonly email?: string }) => {
-  const licenseDoc = getLicenseDoc(email);
+const SECTION_SPACING = { xs: '80px', sm: '104px', md: '128px', lg: '144px' };
+
+const TermsContent = () => {
   const t = useTranslations('termsOfUse');
   const locale = useLocale();
   const { isMobile } = useBreakpoints();
@@ -42,7 +31,7 @@ const TermsContent = ({ email }: { readonly email?: string }) => {
         buttonText={isMobile ? t('buttons.library.short') : t('buttons.library.full')}
         buttonColor="tertiary"
         link={ROUTES.ARTISTRY}
-        content={testDoc[locale]}
+        content={libraryDoc[locale]}
         containerSx={{ marginBottom: { xs: '32px', md: '40px' } }}
         sx={{ maxWidth: { xs: '258px', sm: '308px' }, minWidth: { xs: '258px', sm: '308px' } }}
       />
@@ -60,17 +49,25 @@ const TermsContent = ({ email }: { readonly email?: string }) => {
       />
 
       <ContentBlock
-        description={t('archiveUsage')}
+        description={t('archiveCitation')}
         containerSx={{
           ...commonSx.layout.standardGrid,
-          marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
+          marginBottom: '32px'
         }}
-        dataTestId="TermsContent-archiveUsageDescription"
+        dataTestId="TermsContent-archiveCitationDescription"
+      />
+      <ContentBlock
+        description={t('archiveReproduction')}
+        containerSx={{
+          ...commonSx.layout.standardGrid,
+          marginBottom: SECTION_SPACING
+        }}
+        dataTestId="TermsContent-archiveReproductionDescription"
       />
       <Box
         sx={{
           height: { xs: '157px', sm: '250px', md: '340px', lg: '440px', xl: '470px', xxl: '567px', ultra: '626px' },
-          mb: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
+          mb: SECTION_SPACING
         }}
         data-testid="TermsContent-imageBlock"
       >
@@ -87,12 +84,12 @@ const TermsContent = ({ email }: { readonly email?: string }) => {
         dataTestId="TermsContent-copyrightTitle"
       />
       <ContentBlock
-        description={rightsDoc[locale]}
+        description={copyrightDoc[locale]}
         containerSx={{
           ...commonSx.layout.standardGrid,
           marginBottom: '32px'
         }}
-        dataTestId="TermsContent-copyrightRightsDescription"
+        dataTestId="TermsContent-copyrightDescription"
       />
       <ContentBlock
         description={rightsManagementDoc[locale]}
@@ -103,130 +100,33 @@ const TermsContent = ({ email }: { readonly email?: string }) => {
         dataTestId="TermsContent-copyrightManagementDescription"
       />
       <ContentBlock
-        description={meaningDoc[locale]}
+        description={licenseDoc[locale]}
         containerSx={{
           ...commonSx.layout.standardGrid,
-          marginBottom: '32px'
+          marginBottom: SECTION_SPACING
         }}
-        dataTestId="TermsContent-copyrightMeaningDescription"
+        dataTestId="TermsContent-copyrightLicenseDescription"
       />
       <ContentBlock
-        list={licenseDoc[locale]}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: '32px'
-        }}
-        dataTestId="TermsContent-copyrightLicenseList"
-      />
-      <ContentBlock
-        description={t('paidNotes')}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: '32px'
-        }}
-        dataTestId="TermsContent-copyrightPaidNotesDescription"
-      />
-      <ContentBlock containerSx={{ marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' } }} />
-      <ContentBlock
-        title={t('registerTitle')}
+        title={t('materialsUsageTitle')}
         containerSx={{ marginBottom: '16px' }}
-        dataTestId="TermsContent-registerTitle"
+        dataTestId="TermsContent-materialsUsageTitle"
       />
       <ContentBlock
-        description={registerDoc[locale]}
+        description={t('noRepublishing')}
         containerSx={{
           ...commonSx.layout.standardGrid,
           marginBottom: '32px'
         }}
-        dataTestId="TermsContent-registerDescription"
-      />
-
-      {registerListKeys.map((key, i) => (
-        <ContentBlock
-          key={`${i}-${key}`}
-          list={t(key)}
-          containerSx={{
-            ...commonSx.layout.standardGrid,
-            mb: i === registerListKeys.length - 1 ? { xs: '32px' } : { xs: '24px', md: '32px' }
-          }}
-          dataTestId={`TermsContent-registerList-${key}`}
-        />
-      ))}
-
-      <ContentBlock
-        description={privacyDoc[locale]}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
-        }}
-        dataTestId="TermsContent-registerPrivacyDescription"
-      />
-      <ContentBlock
-        title={t('behaviorTitle')}
-        containerSx={{ marginBottom: '16px' }}
-        dataTestId="TermsContent-behaviorTitle"
-      />
-      <ContentBlock
-        description={t('behaviorIntro')}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: '32px'
-        }}
-        dataTestId="TermsContent-behaviorIntroDescription"
-      />
-
-      <Box data-testid="TermsContent-behaviorRules">
-        {behaviorListKeys.map((key, i) => (
-          <ContentBlock
-            key={`${i}-${key}`}
-            list={t(key)}
-            containerSx={{
-              ...commonSx.layout.standardGrid,
-              mb:
-                i === behaviorListKeys.length - 1
-                  ? { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
-                  : { xs: '24px', md: '32px' }
-            }}
-            dataTestId={`TermsContent-behaviorList-${key}`}
-          />
-        ))}
-      </Box>
-      <ContentBlock
-        title={t('supportTitle')}
-        containerSx={{ marginBottom: '16px' }}
-        dataTestId="TermsContent-supportTitle"
+        dataTestId="TermsContent-noRepublishingDescription"
       />
       <ContentBlock
         description={supportDoc[locale]}
         containerSx={{
           ...commonSx.layout.standardGrid,
-          marginBottom: { xs: '80px', sm: '104px', md: '128px', lg: '144px' }
-        }}
-        dataTestId="TermsContent-supportDescription"
-      />
-      <ContentBlock
-        title={t('respectAuthorsTitle')}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: '16px'
-        }}
-        dataTestId="TermsContent-respectAuthorsTitle"
-      />
-      <ContentBlock
-        description={t('respectAuthorsIntro')}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
-          marginBottom: '16px'
-        }}
-        dataTestId="TermsContent-respectAuthorsIntroDescription"
-      />
-      <ContentBlock
-        description={t('respectAuthorsOutro')}
-        containerSx={{
-          ...commonSx.layout.standardGrid,
           pb: { xs: '120px', md: '160px' }
         }}
-        dataTestId="TermsContent-respectAuthorsOutroDescription"
+        dataTestId="TermsContent-supportDescription"
       />
     </Box>
   );

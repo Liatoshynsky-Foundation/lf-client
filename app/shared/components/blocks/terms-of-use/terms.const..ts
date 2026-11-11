@@ -1,6 +1,6 @@
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
-import { boldText, linkText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
+import { linkText, makeDoc, normalText } from '~/lib/utils/tiptapHelpers';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 type LocalizedTipTapDoc = {
@@ -8,164 +8,124 @@ type LocalizedTipTapDoc = {
   en: TipTapDoc;
 };
 
-export const registerListKeys = ['downloadNotes', 'saveNotes', 'subscribeNews'] as const;
-export const behaviorListKeys = ['useResponsibly', 'noSharing', 'noPublicPosting'] as const;
+const UACRR_CONTACTS_URL = 'https://uacrr.org.ua/contacts.html';
+const UK_CONTACTS_HREF = `/uk${ROUTES.CONTACTS}`;
+const EN_CONTACTS_HREF = `/en${ROUTES.CONTACTS}`;
 
 export const introDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    boldText('Вітаємо на сайті Фундації Лятошинського!'),
     normalText(
-      ' Радіємо, що ви зацікавилися українською музикою і спадщиною Бориса Лятошинського. Цей розділ створений для того, щоб користувачі сайту – виконавці, дослідники, слухачі – '
-    ),
-    boldText('легко орієнтувалися'),
-    normalText(' в доступі до архіву, правилах використання матеріалів і роботі сайту загалом.')
+      'Цей розділ містить основні правила користування сайтом Фундації Лятошинського. Тут описано доступ до цифрової нотної бібліотеки й архівних матеріалів, умови їх використання та питання авторського права. Інформація стосується всіх відвідувачів сайту.'
+    )
   ]),
   en: makeDoc([
-    boldText('Welcome to the Liatoshynsky Foundation website!'),
     normalText(
-      ' We are glad that you are interested in Ukrainian music and the legacy of Borys Liatoshynsky. This section is designed so that performers, researchers, and listeners can '
-    ),
-    boldText('easily navigate'),
-    normalText(' the archive, usage rules, and the overall operation of the site.')
+      'This section outlines the main terms for using the Liatoshynsky Foundation website. It covers access to the digital sheet music library and archival materials, how they may be used, and copyright. These terms apply to all website visitors.'
+    )
   ])
 };
 
-export const testDoc: LocalizedTipTapDoc = {
+export const rulesDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    boldText('Цифрова нотна бібліотека'),
-    normalText(' Фундації доступна усім '),
-    boldText('зареєстрованим користувачам'),
     normalText(
-      ' для особистого некомерційного використання. Це означає, що ви можете переглядати, завантажувати та використовувати ноти для навчання, дослідження та виконання.'
+      'Фундація Лятошинського залишає за собою право оновлювати умови користування сайтом без попереднього повідомлення. Рекомендуємо періодично ознайомлюватися з актуальною редакцією Умов користування, щоб бути в курсі чинних правил користування сайтом та використання розміщених на ньому нотних і архівних матеріалів.'
     )
   ]),
   en: makeDoc([
-    boldText('The Digital Music Library'),
-    normalText(' of the Foundation is available to all '),
-    boldText('registered users'),
     normalText(
-      ' for personal non-commercial use. This means you can view, download, and use the scores for learning, research, and performance.'
+      'The Liatoshynsky Foundation reserves the right to update these Terms of Use without prior notice. We recommend reviewing the latest version periodically to stay informed about the current rules governing the use of the website and the sheet music and archival materials available on it.'
     )
+  ])
+};
+
+export const libraryDoc: LocalizedTipTapDoc = {
+  uk: makeDoc([
+    normalText(
+      'Цифрова нотна бібліотека Фундації Лятошинського надає доступ до нотних видань творів Бориса Лятошинського для навчання, дослідження та виконання. Нотні матеріали, доступні для вільного завантаження, можна завантажити безпосередньо зі сторінки «Творчість Лятошинського». Щоб отримати матеріали, які не перебувають у відкритому доступі, заповніть і надішліть відповідну '
+    ),
+    linkText('форму запиту', UK_CONTACTS_HREF),
+    normalText('.')
+  ]),
+  en: makeDoc([
+    normalText(
+      'The Liatoshynsky Foundation’s digital sheet music library provides access to published scores of works by Borys Liatoshynsky for study, research, and performance. Sheet music available for free download can be downloaded directly from the “Liatoshynsky’s Works” page. To obtain materials that are not publicly available, please complete and submit the '
+    ),
+    linkText('request form', EN_CONTACTS_HREF),
+    normalText('.')
   ])
 };
 
 export const archiveDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    boldText('Архів Фундації'),
     normalText(
-      ' — це окрема колекція цифрових копій документів, що стосуються життя і творчості композитора: листів, рукописів, афіш, фотографій, партитур тощо. Матеріали архіву надаються для ознайомлення та дослідницької роботи. Архів поповнюється поступово — ми постійно оцифровуємо та додаємо нові документи.'
+      'Цифровий архів містить документи з Архіву Кабінету-музею Бориса Лятошинського: листування, нотні та інші рукописи, афіші, фотографії й матеріали, пов’язані з життям і творчістю композитора. Архів відкритий для ознайомлення та дослідження й поступово поповнюється новими цифровими копіями матеріалів.'
     )
   ]),
   en: makeDoc([
-    boldText('The Foundation Archive'),
     normalText(
-      ' is a separate collection of digital copies of documents related to the life and work of the composer: letters, manuscripts, posters, photographs, scores, and more. The archive is intended for familiarization and research purposes. It is updated gradually as we digitize and add new documents.'
+      'The digital archive contains documents from the Archive of the Borys Liatoshynsky Studio-Museum, including correspondence, musical and other manuscripts, posters, photographs, and materials related to the composer’s life and work. The archive is open for consultation and research and is gradually being expanded with new digital copies of materials.'
     )
   ])
 };
 
-export const rightsDoc: LocalizedTipTapDoc = {
+export const copyrightDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Права на використання творів Бориса Лятошинського захищені законом. Їх публічне виконання, запис, тиражування чи включення до інших продуктів (наприклад, фільмів або мультимедіа) '
+      'Твори Бориса Лятошинського охороняються законодавством про авторське право. Для їх публічного виконання, запису, трансляції, відтворення або використання в аудіовізуальних і мультимедійних проєктах необхідно отримати дозвіл відповідного правовласника або належну ліцензію, крім випадків, коли закон дозволяє таке використання без дозволу. Щоб уточнити порядок отримання дозволу для запланованого використання, зверніться до Фундації через '
     ),
-    boldText('можливе лише після відповідного ліцензування.')
+    linkText('форму зворотного зв’язку', UK_CONTACTS_HREF),
+    normalText(' або безпосередньо за контактними даними, зазначеними у футері сайту.')
   ]),
   en: makeDoc([
     normalText(
-      'The rights to use the works of Borys Liatoshynsky are protected by law. Their public performance, recording, reproduction, or inclusion in other products (such as films or multimedia) '
+      'Works by Borys Liatoshynsky are protected by copyright law. You must obtain permission from the relevant rights holder or an appropriate licence to perform, record, broadcast, reproduce, or use them in audiovisual and multimedia projects, except where the law allows such use without permission. To clarify how to obtain permission for your intended use, contact the Foundation through the '
     ),
-    boldText('is only possible after appropriate licensing.')
+    linkText('feedback form', EN_CONTACTS_HREF),
+    normalText(' or directly using the contact details in the website footer.')
   ])
 };
 
 export const rightsManagementDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    normalText('Управління авторськими правами на творчий доробок Бориса Лятошинського передано '),
-    boldText('Українській Агенції Авторських і Суміжних Прав (УААСП) головою фундації та правовласницею Тетяною Гомон.')
+    normalText(
+      'Майновими авторськими правами на твори Бориса Лятошинського управляє Українська агенція з авторських та суміжних прав (УААСП) на підставі договору з правовласницею Тетяною Гомон, головою Фундації Лятошинського.'
+    )
   ]),
   en: makeDoc([
-    normalText('The management of copyright for the creative works of Borys Liatoshynsky has been transferred to '),
-    boldText(
-      'the Ukrainian Agency of Copyright and Related Rights (UAASP) by the Foundation’s head and rights holder Tetiana Homon.'
+    normalText(
+      'The Ukrainian Agency of Copyright and Related Rights (UACRR) administers the economic rights to Borys Liatoshynsky’s works under an agreement with the rights holder, Tetiana Homon, Chair of the Liatoshynsky Foundation.'
     )
   ])
 };
 
-export const privacyDoc: LocalizedTipTapDoc = {
+export const licenseDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
-    normalText('Уся персональна інформація захищена відповідно до '),
-    linkText('Політики конфіденційності', ROUTES.PRIVACY_POLICY)
+    normalText(
+      'Щоб отримати дозвіл на публічне виконання, запис або трансляцію творів Бориса Лятошинського, а також на їх використання у фільмах та інших проєктах, зверніться до УААСП: '
+    ),
+    linkText(UACRR_CONTACTS_URL, UACRR_CONTACTS_URL)
   ]),
   en: makeDoc([
-    normalText('All personal information is protected in accordance with the '),
-    linkText('Privacy Policy', ROUTES.PRIVACY_POLICY)
+    normalText(
+      'To obtain permission to publicly perform, record, or broadcast Borys Liatoshynsky’s works, or to use them in films and other projects, contact UACRR: '
+    ),
+    linkText(UACRR_CONTACTS_URL, UACRR_CONTACTS_URL)
   ])
 };
 
 export const supportDoc: LocalizedTipTapDoc = {
   uk: makeDoc([
     normalText(
-      'Ми прагнемо забезпечити стабільну роботу сайту. Якщо ви помітили технічну помилку або маєте труднощі з доступом до матеріалів — '
+      'Якщо Вам не вдається отримати доступ до матеріалів або Ви помітили технічну помилку на сайті, зверніться до Фундації через '
     ),
-    linkText('напишіть нам', ROUTES.CONTACTS),
-    normalText('.')
+    linkText('форму зворотного зв’язку', UK_CONTACTS_HREF),
+    normalText(' або безпосередньо за контактними даними, зазначеними у футері сайту.')
   ]),
   en: makeDoc([
     normalText(
-      'We strive to ensure the stable operation of the site. If you notice a technical error or have difficulty accessing the materials — '
+      'If you have difficulty accessing materials or notice a technical issue on the website, please contact the Foundation through the '
     ),
-    linkText('contact us', ROUTES.CONTACTS),
-    normalText('.')
+    linkText('feedback form', EN_CONTACTS_HREF),
+    normalText(' or directly using the contact details in the website footer.')
   ])
 };
-
-export const registerDoc: LocalizedTipTapDoc = {
-  uk: makeDoc([boldText('Для доступу до нотного архіву необхідно зареєструватися. Після реєстрації ви зможете:')]),
-  en: makeDoc([
-    boldText('To access the sheet music archive, you need to register. After registration, you will be able to:')
-  ])
-};
-
-export const meaningDoc: LocalizedTipTapDoc = {
-  uk: makeDoc([boldText('Що це означає для вас:')]),
-  en: makeDoc([boldText('What this means for you:')])
-};
-
-export const rulesDoc: LocalizedTipTapDoc = {
-  uk: makeDoc([
-    normalText('Користуючись цим сайтом, '),
-    boldText('ви погоджуєтесь із правилами'),
-    normalText(
-      ', викладеними нижче. Вони покликані зробити користування сайтом зручним, безпечним і прозорим для всіх. Ми можемо час від часу оновлювати ці правила, тому рекомендуємо повертатися до цього розділу, особливо якщо ви плануєте використання архівних матеріалів.'
-    )
-  ]),
-  en: makeDoc([
-    normalText('By using this site, '),
-    boldText('you agree to the rules'),
-    normalText(
-      ' outlined below. They are intended to make using the site convenient, safe, and transparent for everyone. We may update these rules from time to time, so we recommend checking this section, especially if you plan to use archival materials.'
-    )
-  ])
-};
-
-export const getLicenseDoc = (email = 'liatoshynsky@gmail.com'): LocalizedTipTapDoc => ({
-  uk: makeDoc([
-    normalText('Якщо ви є '),
-    boldText('організатором концерту'),
-    normalText(
-      ' або плануєте трансляцію творів Лятошинського — зверніться до УААСП для оформлення відповідної ліцензії за '
-    ),
-    linkText('електронною адресою', `mailto:${email}`),
-    normalText('.')
-  ]),
-  en: makeDoc([
-    normalText('If you are an '),
-    boldText('organizer of a concert'),
-    normalText(
-      ' or plan to broadcast Liatoshynsky’s works — please contact the UAASP to obtain the appropriate license via '
-    ),
-    linkText('email', `mailto:${email}`),
-    normalText('.')
-  ])
-});

@@ -28,6 +28,7 @@ jest.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       title: 'Умови користування сайтом',
       quote: 'Цитата тестова',
+      quoteAuthor: 'Фундація Лятошинського',
       generalProvisionsTitle: 'General Provisions:'
     };
     return translations[key] || key;
@@ -83,6 +84,7 @@ describe('TermsOfUse', () => {
     const skewedBlock = screen.getByTestId('skewed-block');
     expect(skewedBlock).toBeInTheDocument();
     expect(screen.getByText(/Цитата тестова/i)).toBeInTheDocument();
+    expect(screen.getByTestId('TermsOfUse-quoteAuthor')).toHaveTextContent('Фундація Лятошинського');
   });
 
   it('should render ContentBlock with General Provisions', () => {
