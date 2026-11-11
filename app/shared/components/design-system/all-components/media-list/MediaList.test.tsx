@@ -185,8 +185,8 @@ describe('MediaList Component', () => {
 
     const cards = screen.getAllByTestId('base-card');
 
-    expect(cards[0]).toHaveAttribute('data-href', '/en/news/1');
-    expect(cards[1]).toHaveAttribute('data-href', '/en/news/2');
+    expect(cards[0]).toHaveAttribute('data-href', `/en${getDynamicRoute.newsItem('1')}`);
+    expect(cards[1]).toHaveAttribute('data-href', `/en${getDynamicRoute.newsItem('2')}`);
   });
 
   it('should update news item href when locale changes', () => {
@@ -194,13 +194,13 @@ describe('MediaList Component', () => {
 
     const { rerender } = render(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
-    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', '/uk/news/1');
+    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', `/uk${getDynamicRoute.newsItem('1')}`);
 
     mockUseLocale.mockReturnValue('en');
 
     rerender(<MediaList mediaData={mockData as any} variant="news" dataTestId="news" />);
 
-    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', '/en/news/1');
+    expect(screen.getAllByTestId('base-card')[0]).toHaveAttribute('data-href', `/en${getDynamicRoute.newsItem('1')}`);
   });
 
   it('should pass crop to BaseCard when coverImage has crop', () => {
