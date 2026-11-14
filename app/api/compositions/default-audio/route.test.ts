@@ -41,6 +41,14 @@ class TestResponse {
   }
 }
 
+const mockGetMainCompositionSourceUrl = jest.fn();
+
+jest.mock('~/di/container', () => ({
+  createRequestContainer: jest.fn(() => ({
+    resolve: () => ({ getMainCompositionSourceUrl: mockGetMainCompositionSourceUrl })
+  }))
+}));
+
 jest.mock('~/middleware/logger/logger', () => ({
   __esModule: true,
   default: {
@@ -66,6 +74,7 @@ describe('Default composition audio route', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetMainCompositionSourceUrl.mockResolvedValue(DEFAULT_COMPOSITION_SOURCE_URL);
   });
 
   afterAll(() => {
@@ -102,6 +111,28 @@ describe('Default composition audio route', () => {
     expect(response.headers.get('Content-Range')).toBe('bytes 0-41/42');
     expect(response.headers.get('Accept-Ranges')).toBe('bytes');
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=604800, immutable');
+  });
+
+  it('should stream the main composition when it is set by the administrator', async () => {
+    const mainCompositionUrl = 'https://example.com/compositions/main.mp3';
+    mockGetMainCompositionSourceUrl.mockResolvedValueOnce(mainCompositionUrl);
+    fetchMock.mockResolvedValueOnce(
+      new Response('audio-data', {
+        status: 200,
+        headers: {
+          'Content-Type': 'audio/mpeg'
+        }
+      })
+    );
+
+    const response = await GET({ headers: { get: () => null } } as unknown as Request);
+
+    expect(fetchMock).toHaveBeenCalledWith(mainCompositionUrl, {
+      method: 'GET',
+      headers: {},
+      next: { revalidate: 0 }
+    });
+    expect(response.status).toBe(200);
   });
 
   it('should default accept-ranges to bytes when R2 omits it', async () => {
