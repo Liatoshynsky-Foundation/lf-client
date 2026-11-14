@@ -54,6 +54,14 @@ jest.mock('~/shared/providers/QueryProvider', () => {
   return MockQuery;
 });
 
+const mockGetInitialTrack = jest.fn();
+
+jest.mock('~/di/container', () => ({
+  createRequestContainer: jest.fn(() => ({
+    resolve: () => ({ getInitialTrack: mockGetInitialTrack })
+  }))
+}));
+
 jest.mock('~/shared/context/AudioPlayerContext', () => {
   const MockAudio = ({ children }: any) => <>{children}</>;
   MockAudio.displayName = 'AudioPlayerProvider';
@@ -74,6 +82,7 @@ describe('RootLayout', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockedHasLocale.mockReturnValue(true);
+    mockGetInitialTrack.mockResolvedValue({ src: '/api/compositions/default-audio', trackName: 'Track' });
     mockedCookies.mockReturnValue({
       get: jest.fn().mockReturnValue({ value: JSON.stringify({ consent: true }) })
     });
@@ -86,6 +95,15 @@ describe('RootLayout', () => {
     });
 
     expect(Result.type).toBe('html');
+  });
+
+  it('should load the initial audio track for the player', async () => {
+    await RootLayout({
+      children: <div />,
+      params: mockParams
+    });
+
+    expect(mockGetInitialTrack).toHaveBeenCalled();
   });
 
   it('should have correct structure without failing render', async () => {

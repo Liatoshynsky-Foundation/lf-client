@@ -14,6 +14,7 @@ import ThemeProvider from '~/ds-components/theme/ThemeProvider';
 import { styles } from './layout.styles';
 import { Cookies } from '~/types/types/common.types';
 
+import { createRequestContainer } from '~/di/container';
 import { routing } from '~/i18n/routing';
 import logger from '~/middleware/logger/logger';
 import CookieModalWrapper from '~/shared/components/cookie-modal/CookieModalWrapper';
@@ -137,6 +138,8 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
     }
   }
 
+  const initialTrack = await createRequestContainer().resolve('audioPlayerService').getInitialTrack();
+
   return (
     <html lang={lang}>
       <head>
@@ -147,7 +150,7 @@ export default async function RootLayout({ children, params }: RootLayoutParams)
           <NextIntlClientProvider>
             <ThemeProvider>
               <QueryProvider>
-                <AudioPlayerProvider>
+                <AudioPlayerProvider initialSrc={initialTrack.src} initialTrackName={initialTrack.trackName}>
                   <IntroAnimationProvider>
                     <SkipToMainContentLink />
                     <Box sx={styles.container}>

@@ -18,9 +18,19 @@ export type AudioPlayerContextType = {
 
 export const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
 
-export const AudioPlayerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [src, setSrc] = useState(DEFAULT_COMPOSITION_URL);
-  const [trackName, setTrackName] = useState(DEFAULT_COMPOSITION_NAME);
+type AudioPlayerProviderProps = {
+  children: React.ReactNode;
+  initialSrc?: string;
+  initialTrackName?: string;
+};
+
+export const AudioPlayerProvider = ({
+  children,
+  initialSrc = DEFAULT_COMPOSITION_URL,
+  initialTrackName = DEFAULT_COMPOSITION_NAME
+}: AudioPlayerProviderProps) => {
+  const [src, setSrc] = useState(initialSrc);
+  const [trackName, setTrackName] = useState(initialTrackName);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const playTrack = useCallback((newSrc: string, newTrackName: string) => {

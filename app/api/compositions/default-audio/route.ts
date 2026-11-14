@@ -1,5 +1,4 @@
-import { DEFAULT_COMPOSITION_SOURCE_URL } from '~/constants/audioPlayer';
-
+import { createRequestContainer } from '~/di/container';
 import logger from '~/middleware/logger/logger';
 
 const AUDIO_CACHE_CONTROL = 'public, max-age=604800, immutable';
@@ -18,7 +17,9 @@ const getCacheControl = (status: number) =>
 export async function GET(request: Request) {
   try {
     const rangeHeader = request.headers.get('range');
-    const audioResponse = await fetch(DEFAULT_COMPOSITION_SOURCE_URL, {
+    const audioPlayerService = createRequestContainer().resolve('audioPlayerService');
+    const sourceUrl = await audioPlayerService.getMainCompositionSourceUrl();
+    const audioResponse = await fetch(sourceUrl, {
       method: 'GET',
       headers: rangeHeader ? { Range: rangeHeader } : {},
       next: { revalidate: 0 }

@@ -40,6 +40,18 @@ describe('AudioPlayerContext', () => {
     expect(screen.getByTestId('isPlayerOpen').textContent).toBe('false');
   });
 
+  it('should start with the initial track passed to the provider', () => {
+    render(
+      <AudioPlayerProvider initialSrc="/api/compositions/default-audio?v=asset-id" initialTrackName="Поема про ліс">
+        <TestComponent />
+      </AudioPlayerProvider>
+    );
+
+    expect(screen.getByTestId('src').textContent).toBe('/api/compositions/default-audio?v=asset-id');
+    expect(screen.getByTestId('trackName').textContent).toBe('Поема про ліс');
+    expect(screen.getByTestId('isPlaying').textContent).toBe('false');
+  });
+
   it('should update state when playTrack is called', async () => {
     renderTestComponent();
     await userEvent.click(screen.getByText('Play'));
