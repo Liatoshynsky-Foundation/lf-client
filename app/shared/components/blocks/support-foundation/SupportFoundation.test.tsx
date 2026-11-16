@@ -17,6 +17,8 @@ jest.mock('../payment-details/PaymentDetails', () => ({
 const tMock = Object.assign(
   jest.fn((key: string) => {
     if (key === 'title') return 'Support the Foundation';
+    if (key === 'methods.wayForPay') return 'Quick Online Payment via WayForPay';
+    if (key === 'methods.iban') return 'Bank Transfer (IBAN)';
     return `__${key}__`;
   }),
   {
@@ -63,6 +65,18 @@ describe('SupportFoundation', () => {
     const boldTexts = Array.from(boldTags).map((el) => el.textContent);
 
     expect(boldTexts).toEqual(expect.arrayContaining(['directly', 'banking details below']));
+  });
+
+  it('should render payment methods on separate lines', () => {
+    render(<SupportFoundation />);
+
+    const methods = screen.getByTestId('SupportFoundation-infoSection-methods');
+
+    expect(methods).toHaveTextContent('Quick Online Payment via WayForPay');
+    expect(methods).toHaveTextContent('Bank Transfer (IBAN)');
+    expect(methods.querySelectorAll('br')).toHaveLength(2);
+    expect(tMock).toHaveBeenCalledWith('methods.wayForPay');
+    expect(tMock).toHaveBeenCalledWith('methods.iban');
   });
 
   it('should render the DonationForm component', () => {

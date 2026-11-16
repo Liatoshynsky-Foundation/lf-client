@@ -13,7 +13,6 @@ import { createSeoMeta } from '~/lib/utils/createSeoMeta';
 import ActionsHelp from '~/shared/components/blocks/actions-help/ActionsHelp';
 import { getActionsHelpData } from '~/shared/components/blocks/actions-help/ActionsHelp.consts';
 import Faq from '~/shared/components/blocks/FAQ/FAQ';
-import { faqItems } from '~/shared/components/blocks/FAQ/FAQ.consts';
 import SupportFoundation from '~/shared/components/blocks/support-foundation/SupportFoundation';
 import { ROUTES } from '~/shared/components/constants/routes';
 import MainLayout from '~/shared/layouts/main-layout/MainLayout';
@@ -50,8 +49,7 @@ export default async function SupportUs({ params }: SupportUsProps) {
     contacts: {
       phone: footerData.contacts.phone,
       email: footerData.contacts.email
-    },
-    faq: faqItems
+    }
   };
 
   const actionsHelpData = await getActionsHelpData();

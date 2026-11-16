@@ -2,8 +2,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { ComponentType } from 'react';
 
 import Faq from './FAQ';
-import { faqItems } from './FAQ.consts';
-import type { LocalizedString } from '~/types/types/language';
 
 import useBreakpoints from '~/shared/hooks/use-breakpoints/useBreakpoints';
 
@@ -19,15 +17,20 @@ let currentLocale = 'en';
 
 jest.mock('next-intl', () => ({
   useLocale: () => currentLocale,
-  useTranslations: () => (key: string) => {
+  useTranslations: () => {
     const translations: Record<string, string> = {
       title: 'FAQ Title',
       'subtitle.question': 'Have a question?',
       'subtitle.answer': 'Here is the answer',
-      phoneCopiedAlert: 'Phone copied!'
+      phoneCopiedAlert: 'Phone copied!',
+      'items.refund.title': 'Refund question',
+      'items.refund.content': 'Refund answer'
     };
 
-    return translations[key] || key;
+    const translate = (key: string) => translations[key] || key;
+    translate.rich = (key: string) => translations[key] || key;
+
+    return translate;
   }
 }));
 
@@ -60,17 +63,11 @@ jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   )
 }));
 
-type FaqItem = {
-  title: LocalizedString;
-  content: LocalizedString;
-};
-
 const mockFaqData = {
   contacts: {
     phone: '+3800000000',
     email: 'test@email.com'
-  },
-  faq: faqItems as unknown as FaqItem[]
+  }
 };
 
 describe('FAQ component', () => {
@@ -86,45 +83,14 @@ describe('FAQ component', () => {
     jest.clearAllMocks();
   });
 
-  it('should render the section title and subtitles and read constants', async () => {
-    const { initFaqBabelCoverage } = await import('./FAQ.consts');
-    initFaqBabelCoverage();
-
-    expect(faqItems).toBeDefined();
-    expect(faqItems.length).toBeGreaterThan(0);
-
+  it('should render the section title, subtitles, and translated FAQ item', () => {
     render(<Faq data={mockFaqData} />);
 
     expect(screen.getByText('FAQ Title')).toBeInTheDocument();
     expect(screen.getByText('Have a question?')).toBeInTheDocument();
     expect(screen.getByText('Here is the answer')).toBeInTheDocument();
-  });
-
-  it('should render FAQ items with english locale', () => {
-    expect(faqItems).toContainEqual(
-      expect.objectContaining({
-        title: expect.any(Object),
-        content: expect.any(Object)
-      })
-    );
-
-    render(<Faq data={mockFaqData} />);
-    const firstItem = faqItems[0];
-    if (firstItem?.title && firstItem?.content) {
-      expect(screen.getByText(String(firstItem.title.en))).toBeInTheDocument();
-      expect(screen.getAllByText(String(firstItem.content.en))).not.toHaveLength(0);
-    }
-  });
-
-  it('should render FAQ items with ukrainian locale', () => {
-    currentLocale = 'uk';
-    render(<Faq data={mockFaqData} />);
-
-    const firstItem = faqItems[0];
-    if (firstItem?.title && firstItem?.content) {
-      expect(screen.getByText(String(firstItem.title.uk))).toBeInTheDocument();
-      expect(screen.getAllByText(String(firstItem.content.uk))).not.toHaveLength(0);
-    }
+    expect(screen.getByText('Refund question')).toBeInTheDocument();
+    expect(screen.getByText('Refund answer')).toBeInTheDocument();
   });
 
   it('should copy phone when clicking CopyLink', () => {

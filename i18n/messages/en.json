@@ -56,7 +56,7 @@
     }
   },
   "donationForm": {
-    "donationTitle": "QUICK DONATION:",
+    "donationTitle": "QUICK CONTRIBUTION:",
     "donationDescription": "Choose an amount to support the Foundation",
     "subscribeTitle": "SUBSCRIBE:",
     "donationSwitch": "Donation",
@@ -129,16 +129,86 @@
   "supportUs": {
     "donation": {
       "title": "SupPorT The FoUndaTioN",
-      "subTitle": "All contributions go <b>directly</b> to the Liatoshynsky Foundation account and are used to support its mission. Choose a currency convenient for you - <b>the transfer details are below</b>:"
+      "subTitle": "Charitable contributions are transferred <b>directly</b> to the Liatoshynsky Foundation’s bank account and are used to support its ongoing work and cultural projects. We accept contributions from around the world in any currency convenient for you. Choose your preferred payment method:",
+      "methods": {
+        "wayForPay": "<b>Quick Online Payment (via WayForPay):</b> Make a contribution in a single click using a card issued by any bank worldwide, Apple Pay or Google Pay. The system automatically converts your currency into Ukrainian hryvnias without additional fees.",
+        "iban": "<b>Bank Transfer (IBAN):</b> Make a direct transfer through your online banking service. Select the appropriate currency below to obtain the relevant bank details (for domestic payments within Ukraine or international SWIFT transfers)."
+      }
     },
     "payment": {
       "copyHint": "IBAN is copied"
     },
     "faq": {
       "title": "Frequently Asked Questions:",
+      "items": {
+        "refund": {
+          "title": "Can I request a refund of my charitable contribution?",
+          "content": "The Liatoshynsky Foundation is a non-profit organisation supported in part by voluntary donations and contributions from patrons. All funds received are used to carry out the Foundation’s statutory activities. Information about the projects we undertake and raise funds for is published on our website and social media pages. By making a charitable contribution to a specific Foundation project, you agree that the funds may be reallocated and used for other projects. Charitable contributions are non-refundable."
+        },
+        "usage": {
+          "title": "What are charitable contributions used for?",
+          "content": "Charitable contributions support the Foundation’s ongoing work and projects, including the preparation and publication of music editions, research, work with the archive of the Borys Liatoshynsky Studio-Museum, and concert, educational and other projects."
+        },
+        "waysToDonate": {
+          "title": "How can I make a charitable contribution?",
+          "intro": "You can support the Foundation in two convenient ways.",
+          "bankTransfer": {
+            "title": "<b>Bank Transfer (IBAN) via Online Banking</b>",
+            "description": "You can make a direct transfer through your banking app (Privat24, monobank, etc.). We have bank accounts for receiving charitable contributions from Ukraine and abroad:",
+            "byCountry": {
+              "national": "<b>Ukrainian hryvnias (UAH)</b> — for quick transfers within Ukraine.",
+              "international": "<b>Foreign currencies (USD, EUR, GBP and PLN)</b> — for charitable contributions from anywhere in the world via SWIFT."
+            },
+            "advice": "When making your first payment, you can also set up a recurring monthly transfer through your online banking service to support our work on a regular basis."
+          },
+          "wayForPay": {
+            "title": "<b>Quick Online Payment via WayForPay on Our Website</b>",
+            "description": "The easiest way to make a contribution in a single click, without copying bank details. Simply click the ‘Make a Contribution’ button on our website and choose your preferred payment method:",
+            "methods": {
+              "card": "<b>Bank cards</b> issued anywhere in the world (Visa / Mastercard).",
+              "googlePay": "<b>Digital wallets:</b> Apple Pay or Google Pay.",
+              "multicurrency": "<b>Multiple currencies:</b> The system automatically accepts payments in UAH, USD, EUR and other currencies, with the funds credited to our account in Ukrainian hryvnias. If your card is denominated in another currency, your bank will automatically convert the payment at the applicable exchange rate."
+            }
+          }
+        },
+        "cardSafety": {
+          "title": "Is it safe to enter my bank card details?",
+          "description": "Yes, it is completely safe. Our website does not collect, access or store your bank card details. When you click the ‘Support’ button, you are redirected to a secure payment page operated by WayForPay, a certified international payment service. Your data is protected using the highest security standards:",
+          "standards": {
+            "pci": "<b>International PCI DSS certification:</b> This is the highest security standard in the electronic payments industry, with compliance assessed annually by independent auditors. Visa and Mastercard also use this standard.",
+            "encryption": "<b>Data encryption:</b> All transactions are protected by SSL/TLS encryption protocols, preventing unauthorised parties from intercepting your information.",
+            "3d": "<b>3D Secure technology:</b> Each initial payment is verified using a one-time code in your banking app or via SMS."
+          },
+          "alternative": "<b>An alternative to entering card details:</b> If you prefer not to enter your card number manually, you can use Apple Pay or Google Pay instead. Your payment is then authorised using Face ID or your fingerprint, while your card details remain securely encrypted on your device."
+        },
+        "monthlySetup": {
+          "title": "How do I set up a monthly donation to the Liatoshynsky Foundation?",
+          "content": "The Liatoshynsky Foundation is a non-profit organisation supported in part by voluntary donations and contributions from patrons. All funds received are used to carry out the Foundation’s statutory activities. Information about the projects we undertake and raise funds for is published on our website and social media pages. By making a charitable contribution to a specific Foundation project, you agree that the funds may be reallocated and used for other projects. Charitable contributions are non-refundable."
+        },
+        "monthlyCancel": {
+          "title": "I have signed up for a monthly payment, but I want to cancel it. How do I do that?",
+          "content": "The Liatoshynsky Foundation is a non-profit organisation supported in part by voluntary donations and contributions from patrons. All funds received are used to carry out the Foundation’s statutory activities. Information about the projects we undertake and raise funds for is published on our website and social media pages. By making a charitable contribution to a specific Foundation project, you agree that the funds may be reallocated and used for other projects. Charitable contributions are non-refundable."
+        },
+        "monthlyChange": {
+          "title": "How can I change the amount of help or the bank card details for monthly support?",
+          "content": "The Liatoshynsky Foundation is a non-profit organisation supported in part by voluntary donations and contributions from patrons. All funds received are used to carry out the Foundation’s statutory activities. Information about the projects we undertake and raise funds for is published on our website and social media pages. By making a charitable contribution to a specific Foundation project, you agree that the funds may be reallocated and used for other projects. Charitable contributions are non-refundable."
+        },
+        "otherSupport": {
+          "title": "How can I help if I cannot make a contribution?",
+          "content": "There are many ways to support the Liatoshynsky Foundation beyond financial contributions. You can volunteer your time and skills, help spread awareness about our mission, or participate in our events and campaigns. Every form of support is valuable and appreciated."
+        },
+        "reports": {
+          "title": "Where can I view the report on the use of collected funds?",
+          "content": "You can view the report on the use of collected funds on our website under the \"Transparency\" section."
+        },
+        "partnership": {
+          "title": "How can I become a partner of the Liatoshynsky Foundation?",
+          "content": "The Liatoshynsky Foundation is a non-profit organisation supported in part by voluntary donations and contributions from patrons. All funds received are used to carry out the Foundation’s statutory activities. Information about the projects we undertake and raise funds for is published on our website and social media pages. By making a charitable contribution to a specific Foundation project, you agree that the funds may be reallocated and used for other projects. Charitable contributions are non-refundable."
+        }
+      },
       "subtitle": {
-        "question": "Didn't find the answer you were looking for?",
-        "answer": "Contact us in a way convenient for you:"
+        "question": "Haven’t found the answer you’re looking for?",
+        "answer": "Contact us by phone or email, whichever you prefer:"
       },
       "phoneCopiedAlert": "Copied"
     }
