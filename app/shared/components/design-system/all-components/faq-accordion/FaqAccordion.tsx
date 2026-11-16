@@ -1,12 +1,12 @@
 'use client';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { SvgImage } from '~/shared/components/svg-image/SvgImage';
 
 export interface FaqAccordionProps {
   title: string;
-  content: string;
+  content: ReactNode;
 }
 
 export const FaqAccordion: React.FC<FaqAccordionProps> = ({ title, content }) => {
@@ -51,7 +51,9 @@ export const FaqAccordion: React.FC<FaqAccordionProps> = ({ title, content }) =>
         <Typography variant="customSemiBold18">{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography variant="customMedium18">{content}</Typography>
+        <Typography variant="customMedium18" component="div">
+          {content}
+        </Typography>
       </AccordionDetails>
     </Accordion>
   );
