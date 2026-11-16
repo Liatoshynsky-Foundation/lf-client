@@ -4,6 +4,9 @@ import React from 'react';
 
 import SupportFoundation from './SupportFoundation';
 
+const WAY_FOR_PAY_TEXT = 'Quick Online Payment via WayForPay';
+const IBAN_TEXT = 'Bank Transfer (IBAN)';
+
 jest.mock('../../forms/donation-form/DonationForm', () => ({
   __esModule: true,
   default: () => <div data-testid="donation-form" />
@@ -17,12 +20,14 @@ jest.mock('../payment-details/PaymentDetails', () => ({
 const tMock = Object.assign(
   jest.fn((key: string) => {
     if (key === 'title') return 'Support the Foundation';
-    if (key === 'methods.wayForPay') return 'Quick Online Payment via WayForPay';
-    if (key === 'methods.iban') return 'Bank Transfer (IBAN)';
+    if (key === 'methods.wayForPay') return WAY_FOR_PAY_TEXT;
+    if (key === 'methods.iban') return IBAN_TEXT;
     return `__${key}__`;
   }),
   {
-    rich: (key: string, tags: { [name: string]: (chunks: React.ReactNode) => React.ReactNode }) => {
+    rich: jest.fn((key: string, tags: { [name: string]: (chunks: React.ReactNode) => React.ReactNode }) => {
+      if (key === 'methods.wayForPay') return WAY_FOR_PAY_TEXT;
+      if (key === 'methods.iban') return IBAN_TEXT;
       if (key !== 'subTitle') return `__${key}__`;
 
       return (
@@ -31,7 +36,7 @@ const tMock = Object.assign(
           the transfer
         </>
       );
-    }
+    })
   }
 );
 
@@ -70,13 +75,13 @@ describe('SupportFoundation', () => {
   it('should render payment methods on separate lines', () => {
     render(<SupportFoundation />);
 
-    const methods = screen.getByTestId('SupportFoundation-infoSection-methods');
+    const subtitle = screen.getByTestId('SupportFoundation-infoSection-subtitle');
 
-    expect(methods).toHaveTextContent('Quick Online Payment via WayForPay');
-    expect(methods).toHaveTextContent('Bank Transfer (IBAN)');
-    expect(methods.querySelectorAll('br')).toHaveLength(2);
-    expect(tMock).toHaveBeenCalledWith('methods.wayForPay');
-    expect(tMock).toHaveBeenCalledWith('methods.iban');
+    expect(subtitle).toHaveTextContent(WAY_FOR_PAY_TEXT);
+    expect(subtitle).toHaveTextContent(IBAN_TEXT);
+    expect(subtitle.querySelectorAll('br')).toHaveLength(4);
+    expect(tMock.rich).toHaveBeenCalledWith('methods.wayForPay', expect.anything());
+    expect(tMock.rich).toHaveBeenCalledWith('methods.iban', expect.anything());
   });
 
   it('should render the DonationForm component', () => {
