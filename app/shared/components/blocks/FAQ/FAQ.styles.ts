@@ -68,5 +68,32 @@ export const styles: Record<string, SxProps<Theme>> = {
     display: 'flex',
     flexDirection: 'column',
     gap: '24px'
+  },
+  orderedList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    m: '16px 0 0',
+    pl: '24px'
+  },
+  nestedList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    mt: '8px',
+    ml: '24px',
+    p: 0,
+    listStyle: 'none',
+    '& > li': {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '8px',
+      '&::before': {
+        content: '"•"',
+        flex: '0 0 16px',
+        fontWeight: 700,
+        lineHeight: '150%'
+      }
+    }
   }
 };

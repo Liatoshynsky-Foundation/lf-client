@@ -1,44 +1,45 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import SectionTitle from '~/components/section-title/SectionTitle';
 import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
 
 import { ContactLink } from '../../contact-link/ContactLink';
+import { renderBold } from '../../rich-text/RichTextComponents';
+import type { FaqItemKey } from './FAQ.consts';
+import { faqItemKeys } from './FAQ.consts';
 import { styles } from './FAQ.styles';
+import { CardSafety } from './FAQCardSafety';
+import { WaysToDonate } from './FAQWaysToDonate';
 
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
 import { commonSx } from '~/shared/styles/commonSx';
-
-type FaqItemProps = {
-  title: {
-    en: string;
-    uk: string;
-  };
-  content: {
-    en: string;
-    uk: string;
-  };
-};
 
 type FaqProps = {
   contacts: {
     phone: string;
     email: string;
   };
-  faq: readonly FaqItemProps[];
 };
 
 export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.Element => {
-  const { contacts, faq } = data;
+  const { contacts } = data;
 
   const t = useTranslations('supportUs.faq');
-  const locale = useLocale() as 'en' | 'uk';
 
+  const getFaqItemContent = (itemKey: FaqItemKey) => {
+    if (itemKey === 'waysToDonate') {
+      return <WaysToDonate />;
+    }
+    if (itemKey === 'cardSafety') {
+      return <CardSafety />;
+    }
+    return t.rich(`items.${itemKey}.content`, { b: renderBold });
+  };
   return (
     <Box sx={styles.gridContainer} data-testid="Faq">
       <SectionTitle
@@ -73,9 +74,10 @@ export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.
         </Box>
       </Box>
       <Box sx={styles.faq}>
-        {faq.map((item) => (
-          <FaqAccordion key={item.title[locale]} title={item.title[locale]} content={item.content[locale]} />
-        ))}
+        {faqItemKeys.map((itemKey) => {
+          const content = getFaqItemContent(itemKey);
+          return <FaqAccordion key={itemKey} title={t(`items.${itemKey}.title`)} content={content} />;
+        })}
       </Box>
     </Box>
   );

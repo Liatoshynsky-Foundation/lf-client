@@ -1,4 +1,4 @@
-import { TipTapMarkType, TipTapNodeTypes } from '~/types/enums/common.enums';
+import { TipTapNodeTypes } from '~/types/enums/common.enums';
 import { TipTapDoc } from '~/types/types/tiptap.types';
 
 import { getNavigationLink } from '~/lib/utils/navigationHelper';
@@ -6,8 +6,8 @@ import { ROUTES } from '~/shared/components/constants/routes';
 
 export const actionsHelpPageData = {
   title: {
-    uk: 'Допомогти справами',
-    en: 'Help with actions'
+    uk: 'Долучитися до проєктів',
+    en: 'Get Involved in Our Projects'
   },
   subtitle: {
     type: TipTapNodeTypes.doc,
@@ -18,20 +18,8 @@ export const actionsHelpPageData = {
           {
             type: TipTapNodeTypes.multiLangText,
             text: {
-              uk: 'Нам дуже потрібні люди — з вашою експертизою, енергією і дрібкою часу, адже саме ваша участь допомагає українській музиці ставати помітнішою у світі. А що ',
-              en: 'We really need people — with your expertise, energy and a bit of time, because it is your participation that helps Ukrainian music become more visible in the world. And the more '
-            }
-          },
-          {
-            type: TipTapNodeTypes.multiLangText,
-            text: { uk: 'гучніше й впевненіше', en: 'louder and more confident' },
-            marks: [{ type: TipTapMarkType.bold }]
-          },
-          {
-            type: TipTapNodeTypes.multiLangText,
-            text: {
-              uk: ' вона звучить, то більше людей розуміють і підтримують нас — на всіх рівнях.',
-              en: ' the louder it sounds, the more people understand and support us — at all levels.'
+              uk: 'До проєктів Фундації можна долучитися не лише фінансово. Нам потрібна професійна допомога в різних напрямах — від перекладів і роботи з текстами до фото, відео та цифрових матеріалів.',
+              en: 'You can support the Foundation’s projects in ways other than financially. We welcome professional assistance in various areas, from translation and editorial work to photography, video production and digital content.'
             }
           }
         ]
@@ -45,8 +33,8 @@ export const actionsHelpPageData = {
         en: 'Translate'
       },
       description: {
-        uk: 'Знаєте мови? Допоможіть перекласти програмки, статті чи інтерв’ю, щоб про Лятошинського читали й за межами України.',
-        en: 'Do you know languages? Help translate programs, articles or interviews so that people outside of Ukraine can read about Lyatoshinskiy.'
+        uk: 'Матеріали Фундації — програмки, статті, тексти для сайту та інші публікації — потребують перекладу іноземними мовами.',
+        en: 'The Foundation’s materials—concert programmes, articles, website texts and other publications—need to be translated into foreign languages.'
       }
     },
     {
@@ -55,25 +43,25 @@ export const actionsHelpPageData = {
         en: 'Tell a Story'
       },
       description: {
-        uk: 'Можете написати статтю, зробити інтерв’ю чи залучити медіа? Це допоможе українській музиці звучати для ширшої аудиторії.',
-        en: 'Can you write an article, conduct an interview or engage media? This will help Ukrainian music be heard by a wider audience.'
+        uk: 'Ми співпрацюємо з авторами, редакторами та журналістами для підготовки текстів, інтерв’ю та інших матеріалів.',
+        en: 'We collaborate with authors, editors and journalists to prepare texts, interviews and other materials.'
       }
     },
     {
       title: {
         uk: 'Зафільмувати',
-        en: 'Film'
+        en: 'Photograph and Film'
       },
       description: {
-        uk: 'Знімаєте події чи монтуєте короткі ролики? Ваші навички дуже потрібні для наших соцмереж, афіш і презентацій.',
-        en: 'Are you filming events or editing short videos? Your skills are very needed for our social media, posters and presentations.'
+        uk: 'Концерти, виставки та інші події потребують фото- й відеодокументації, а також монтажу матеріалів для подальшого використання.',
+        en: 'Concerts, exhibitions and other events require photographic and video documentation, as well as editing for future use.'
       }
     }
   ],
   paperButton: {
     text: {
-      uk: 'Дізнатися більше',
-      en: 'Learn more'
+      uk: 'Дізнатися більше про співпрацю',
+      en: 'Learn more about collaboration'
     },
     link: ROUTES.HOME
   }

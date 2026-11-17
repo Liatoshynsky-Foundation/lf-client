@@ -17,7 +17,7 @@ jest.mock('~/shared/components/blocks/actions-help/ActionsHelp.consts', () => {
 
   return {
     getActionsHelpData: jest.fn().mockResolvedValue({
-      title: 'Допомогти справами',
+      title: 'Долучитися до проєктів',
       subtitle: {},
       paperItems: [],
       paperButton: {
