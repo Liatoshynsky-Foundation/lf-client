@@ -10,3 +10,4 @@ export const faqItemKeys = [
   'reports',
   'partnership'
 ] as const;
+export type FaqItemKey = (typeof faqItemKeys)[number];

@@ -9,6 +9,7 @@ import { FaqAccordion } from '~/ds-components/faq-accordion/FaqAccordion';
 
 import { ContactLink } from '../../contact-link/ContactLink';
 import { renderBold } from '../../rich-text/RichTextComponents';
+import type { FaqItemKey } from './FAQ.consts';
 import { faqItemKeys } from './FAQ.consts';
 import { styles } from './FAQ.styles';
 import { CardSafety } from './FAQCardSafety';
@@ -29,6 +30,16 @@ export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.
   const { contacts } = data;
 
   const t = useTranslations('supportUs.faq');
+
+  const getFaqItemContent = (itemKey: FaqItemKey) => {
+    if (itemKey === 'waysToDonate') {
+      return <WaysToDonate />;
+    }
+    if (itemKey === 'cardSafety') {
+      return <CardSafety />;
+    }
+    return t.rich(`items.${itemKey}.content`, { b: renderBold });
+  };
   return (
     <Box sx={styles.gridContainer} data-testid="Faq">
       <SectionTitle
@@ -64,15 +75,7 @@ export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.
       </Box>
       <Box sx={styles.faq}>
         {faqItemKeys.map((itemKey) => {
-          const content =
-            itemKey === 'waysToDonate' ? (
-              <WaysToDonate />
-            ) : itemKey === 'cardSafety' ? (
-              <CardSafety />
-            ) : (
-              t.rich(`items.${itemKey}.content`, { b: renderBold })
-            );
-
+          const content = getFaqItemContent(itemKey);
           return <FaqAccordion key={itemKey} title={t(`items.${itemKey}.title`)} content={content} />;
         })}
       </Box>
