@@ -135,11 +135,11 @@ export function BiographyContent({ data }: Readonly<BiographyContentProps>) {
     const yearTitle = block.yearTitle?.trim();
 
     return (
-      <Fragment key={block.yearTitle ?? `block-${blockIndex}`}>
+      <Fragment key={block.id ?? block.yearTitle ?? `block-${blockIndex}`}>
         {yearTitle && <YearWithLine year={yearTitle} />}
 
         {block.items.map((item, itemIndex) => {
-          const key = `${item.type}-${blockIndex}-${itemIndex}`;
+          const key = item.id ?? `${item.type}-${blockIndex}-${itemIndex}`;
 
           switch (item.type) {
             case ContentType.ChronologyList:

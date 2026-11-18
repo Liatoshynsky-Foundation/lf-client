@@ -105,6 +105,18 @@ describe('HeroSection', () => {
     expect(screen.getByText('ЖиТтєПиС ЛятОшИнсьКогО')).toBeInTheDocument();
   });
 
+  it('should render the title from the page data', () => {
+    render(<HeroSection data={{ ...biographyHeroData, title: 'Життєпис з бази' }} years={['1960']} />);
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Життєпис з бази' })).toBeInTheDocument();
+  });
+
+  it('should fall back to the translated title when the page data has no title', () => {
+    render(<HeroSection data={{ ...biographyHeroData, title: undefined }} years={['1960']} />);
+
+    expect(screen.getByRole('heading', { level: 1, name: 'ЖиТтєПиС ЛятОшИнсьКогО' })).toBeInTheDocument();
+  });
+
   it('should render quote block with correct text', () => {
     renderHero();
 

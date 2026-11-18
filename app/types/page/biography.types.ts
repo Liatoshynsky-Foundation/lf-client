@@ -40,6 +40,7 @@ interface BaseExpertBlock {
   source: string;
 }
 export interface BiographyContentItemBaseProps<T extends ContentType = ContentType> {
+  id?: string;
   type: T;
 }
 export interface ChronologyList extends BiographyContentItemBaseProps<ContentType.ChronologyList> {
@@ -60,6 +61,7 @@ export interface FullWidthImage extends BiographyContentItemBaseProps<ContentTyp
 export type BiographyContentItem = ChronologyList | ExcerptBlockItem | OnlyImageBlock | FullWidthImage;
 
 export interface BiographyContentBlock {
+  id?: string;
   yearTitle: string | null;
   items: BiographyContentItem[];
 }
@@ -78,6 +80,7 @@ interface HeroImage {
   caption: HeroImageCaption;
 }
 export interface HeroSectionBlock {
+  title?: string;
   quote: BaseQuoteBlock;
   image: HeroImage;
   biographyText: TipTapDoc;
