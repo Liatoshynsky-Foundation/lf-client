@@ -37,13 +37,17 @@ const ChronologyListItemSchema = z.object({
   description: LocalizedTipTapDocSchema
 });
 
+const sectionIdSchema = z.string().optional();
+
 const ChronologyListSchema = z.object({
+  id: sectionIdSchema,
   type: z.literal(ContentType.ChronologyList),
   listItems: z.array(ChronologyListItemSchema),
   additionalImage: AdvancedImageSchema.optional()
 });
 
 const ExcerptBlockItemSchema = z.object({
+  id: sectionIdSchema,
   type: z.literal(ContentType.ExcerptBlockItem),
   quote: z.object({
     text: translatedFieldSchema,
@@ -52,12 +56,14 @@ const ExcerptBlockItemSchema = z.object({
 });
 
 const OnlyImageBlockSchema = z.object({
+  id: sectionIdSchema,
   type: z.literal(ContentType.OnlyImageBlock),
   mainImage: AdvancedImageSchema,
   additionalImage: AdvancedImageSchema.optional()
 });
 
 const FullWidthImageSchema = z.object({
+  id: sectionIdSchema,
   type: z.literal(ContentType.FullWidthImage),
   image: ImageSchema
 });
@@ -70,6 +76,7 @@ const BiographyContentItemSchema = z.discriminatedUnion('type', [
 ]);
 
 const BiographyContentBlockSchema = z.object({
+  id: z.string().optional(),
   yearTitle: z.string().nullable(),
   items: z.array(BiographyContentItemSchema)
 });
@@ -89,6 +96,7 @@ const HeroImageSchema = z
   }));
 
 const HeroSectionBlockSchema = z.object({
+  title: translatedFieldSchema.optional(),
   image: HeroImageSchema,
   quote: QuoteSchema,
   biographyText: LocalizedTipTapDocSchema,

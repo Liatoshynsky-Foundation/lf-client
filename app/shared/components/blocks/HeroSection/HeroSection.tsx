@@ -22,7 +22,7 @@ export function HeroSection({ data, years }: Readonly<HeroSectionProps>) {
         <Box sx={heroSectionStyles.titleWithQuoteContainer} data-testid="HeroSection-titleWithQuoteContainer">
           <Box data-testid="HeroSection-title">
             <Typography variant="h1" sx={heroSectionStyles.title}>
-              {t('title')}
+              {data.title || t('title')}
             </Typography>
           </Box>
 
