@@ -11,5 +11,6 @@ export const ApiRoutes = {
   CREATE_INVOICE: '/api/create-invoice',
   TURNSTILE: '/api/config',
   CONTACT: '/api/contact',
-  FUNDS: '/api/funds'
+  FUNDS: '/api/funds',
+  PAYMENT_DETAILS: '/api/payment-details'
 } as const;

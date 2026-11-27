@@ -9,6 +9,7 @@ import newMediaMentionRepository from '~/infrastructure/repositories/media-menti
 import newNavigationRepository from '~/infrastructure/repositories/navigation/navigation.repository';
 import newNewsRepository from '~/infrastructure/repositories/news/news.repository';
 import newPagesDataRepo from '~/infrastructure/repositories/pages-data/pagesData.repository';
+import newPaymentDetailsRepository from '~/infrastructure/repositories/payment-details/paymentDetails.repository';
 import newResearchWorksRepo from '~/infrastructure/repositories/research-works/researchWorks.repository';
 import newDonationOrderRepository from '~/infrastructure/repositories/way-for-pay/donationOrder.repository';
 
@@ -24,6 +25,7 @@ export type RepositoriesModule = {
   eventRepository: ReturnType<typeof newEventRepository>;
   donationOrderRepository: ReturnType<typeof newDonationOrderRepository>;
   assetRepository: ReturnType<typeof newAssetRepository>;
+  paymentDetailsRepository: ReturnType<typeof newPaymentDetailsRepository>;
 };
 
 export const registerRepositoriesFor = (container: AwilixContainer) => {
@@ -38,6 +40,7 @@ export const registerRepositoriesFor = (container: AwilixContainer) => {
     mediaMentionRepository: asFunction(newMediaMentionRepository).scoped(),
     eventRepository: asFunction(newEventRepository).scoped(),
     donationOrderRepository: asFunction(newDonationOrderRepository).scoped(),
-    assetRepository: asFunction(newAssetRepository).scoped()
+    assetRepository: asFunction(newAssetRepository).scoped(),
+    paymentDetailsRepository: asFunction(newPaymentDetailsRepository).scoped()
   });
 };
