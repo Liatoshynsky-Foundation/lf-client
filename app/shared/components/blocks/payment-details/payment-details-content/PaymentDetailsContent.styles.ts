@@ -63,6 +63,8 @@ export const styles = {
     alignItems: 'flex-start',
     textAlign: 'left',
     color: 'text.primary',
+    whiteSpace: 'normal',
+    minWidth: 0,
     overflowWrap: 'anywhere',
     wordBreak: 'break-word',
     '&:focus, &:focus-visible': {
