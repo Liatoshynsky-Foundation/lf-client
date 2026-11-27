@@ -1,75 +1,45 @@
 'use client';
-import { Box, Button, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { Box, Button } from '@mui/material';
+import { useState } from 'react';
 
 import ButtonGroup from '~/ds-components/button-group/ButtonGroup';
-import CopyLink from '~/ds-components/copy-link/CopyLink';
 
-import { currencyList, currencyType, paymentDetails, paymentFields } from './constants';
+import PaymentDetailsContent from './payment-details-content/PaymentDetailsContent';
 import { styles } from './PaymentDetails.styles';
 
+import { usePaymentDetails } from '~/shared/hooks/use-payment-details/usePaymentDetails';
+
 function PaymentDetails() {
-  const [currency, setCurrency] = useState<currencyType>('uah');
-  const selectedPaymentDetails = useMemo(() => paymentDetails[currency], [currency]);
-  const t = useTranslations('supportUs.payment');
+  const { tabs } = usePaymentDetails();
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const switcherSx = useMemo(() => {
-    const buttonsCount = currencyList.length;
+  if (tabs.length === 0) return null;
 
-    return {
-      ...styles.buttonGroup,
-      '& [aria-label="indicator"]': {
-        ...styles.buttonGroup['& [aria-label="indicator"]'],
-        width: {
-          xs: `calc((100% - 8px) / ${buttonsCount})`,
-          sm: '66px'
-        }
-      }
-    };
-  }, []);
-
-  const fields = paymentFields[currency === 'uah' ? 'uah' : 'other'];
+  const activeTab = tabs[activeIndex] ?? tabs[0];
 
   return (
     <Box data-testid="PaymentDetails">
-      <ButtonGroup
-        sx={switcherSx}
-        defaultActiveButton={0}
-        buttons={currencyList.map((currency) => (
-          <Button
-            sx={styles.currencyBtn}
-            value={currency}
-            key={currency}
-            onClick={() => setCurrency(currency as currencyType)}
-          >
-            {currency.toUpperCase()}
-          </Button>
-        ))}
-        data-testid="PaymentDetails-currencySwitcher"
-      />
+      <Box sx={styles.tabsScroller}>
+        <ButtonGroup
+          sx={styles.buttonGroup}
+          activeButton={activeIndex}
+          buttons={tabs.map((tab, index) => (
+            <Button
+              sx={styles.currencyBtn}
+              value={tab.id}
+              key={tab.id}
+              aria-pressed={index === activeIndex}
+              onClick={() => setActiveIndex(index)}
+            >
+              {tab.name}
+            </Button>
+          ))}
+          data-testid="PaymentDetails-currencySwitcher"
+        />
+      </Box>
 
-      <Box sx={styles.paymentDetailsContainer}>
-        {fields.map(({ label, key, isIban }) => (
-          <Box sx={styles.paymentDetailsRow} key={label}>
-            <Typography component="h6" variant="customSemiBold20">
-              {label}
-            </Typography>
-
-            {isIban ? (
-              <CopyLink
-                hint={t('copyHint')}
-                size="large"
-                value={selectedPaymentDetails[key] ?? ''}
-                forceShowCopyIcon={true}
-                sx={styles.iban}
-                iconSx={styles.ibanIcon}
-              />
-            ) : (
-              <Typography variant="customSemiBold20">{selectedPaymentDetails[key]}</Typography>
-            )}
-          </Box>
-        ))}
+      <Box sx={styles.paymentDetailsContainer} data-testid="PaymentDetails-content">
+        <PaymentDetailsContent content={activeTab.content} />
       </Box>
     </Box>
   );

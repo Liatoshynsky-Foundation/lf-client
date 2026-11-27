@@ -9,6 +9,7 @@ import { createHeaderService } from '~/services/header/headerService';
 import { createMediaMentionService } from '~/services/media-mentions/mediaMentionService';
 import { createNewsService } from '~/services/news/newsService';
 import { createDraftPagesDataService, createPagesDataService } from '~/services/pages-data/pagesDataService';
+import { createPaymentDetailsService } from '~/services/payment-details/paymentDetailsService';
 import { createResearchWorksService } from '~/services/research-works/researchWorks';
 
 export type ComposedServicesModule = {
@@ -23,6 +24,7 @@ export type ComposedServicesModule = {
   mediaMentionService: ReturnType<typeof createMediaMentionService>;
   eventService: ReturnType<typeof createEventService>;
   audioPlayerService: ReturnType<typeof createAudioPlayerService>;
+  paymentDetailsService: ReturnType<typeof createPaymentDetailsService>;
 };
 
 export const registerComposedServicesFor = (container: AwilixContainer) => {
@@ -47,6 +49,8 @@ export const registerComposedServicesFor = (container: AwilixContainer) => {
 
     eventService: asFunction(createEventService).scoped(),
 
-    audioPlayerService: asFunction(createAudioPlayerService).scoped()
+    audioPlayerService: asFunction(createAudioPlayerService).scoped(),
+
+    paymentDetailsService: asFunction(createPaymentDetailsService).scoped()
   });
 };
