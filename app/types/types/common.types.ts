@@ -39,7 +39,7 @@ export type LinkIcon = {
   link: string;
 };
 
-export type ContactValue = string | null | undefined;
+export type ContactValue = string | null;
 
 export type contactsData = {
   foundationName?: ContactValue;
