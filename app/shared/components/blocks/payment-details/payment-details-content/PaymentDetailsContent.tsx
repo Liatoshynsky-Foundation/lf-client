@@ -84,7 +84,14 @@ const renderNode = (node: JSONContent, path: string): React.ReactNode => {
       return (
         <Box component="td" sx={styles.value}>
           {value ? (
-            <CopyLink value={value} size="large" forceShowCopyIcon sx={styles.copyLink} iconSx={styles.copyIcon} />
+            <CopyLink
+              value={value}
+              size="large"
+              delay={2000}
+              forceShowCopyIcon
+              sx={styles.copyLink}
+              iconSx={styles.copyIcon}
+            />
           ) : null}
         </Box>
       );
