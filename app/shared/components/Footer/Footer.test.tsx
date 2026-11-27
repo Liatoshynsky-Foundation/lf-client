@@ -133,6 +133,25 @@ describe('Footer component', () => {
     expect(screen.getByText(/Donate Now/i)).toBeInTheDocument();
   });
 
+  it('omits empty contact and social media containers while preserving other footer content', async () => {
+    const containerInstance = createRequestContainer();
+    const serviceInstance = containerInstance.resolve('footerService');
+    (serviceInstance.getFooterData as jest.Mock).mockResolvedValueOnce({
+      contacts: { foundationName: '  ', email: null, phone: '\t', address: '' },
+      socialLinks: [],
+      supportButtonLink: '/donate',
+      publicInfo: { text: '© 2025 My Company', links: [] },
+      navigation: []
+    });
+
+    render(await Footer());
+
+    expect(screen.queryByTestId('Footer-socialMediaContainer')).not.toBeInTheDocument();
+    expect(screen.queryByText('Test Foundation')).not.toBeInTheDocument();
+    expect(screen.getByText(/Donate Now/i)).toBeInTheDocument();
+    expect(screen.getByText(/© 2025 My Company/i)).toBeInTheDocument();
+  });
+
   it('should process donation button short text translation formatting when language is non english', async () => {
     (getLocale as jest.Mock).mockResolvedValue('uk');
 

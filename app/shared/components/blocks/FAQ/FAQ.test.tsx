@@ -137,4 +137,22 @@ describe('FAQ component', () => {
     expect(emailLink).not.toBeNull();
     expect(emailLink).toHaveAttribute('href', `mailto:${mockFaqData.contacts.email}`);
   });
+
+  it('hides empty contact details while keeping the FAQ visible', () => {
+    render(<Faq data={{ contacts: { phone: '  ', email: null } }} />);
+
+    expect(screen.queryByTestId('Faq-question')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('Faq-phoneLink')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('Faq-emailLink')).not.toBeInTheDocument();
+    expect(screen.getByText('FAQ Title')).toBeInTheDocument();
+    expect(screen.getByText('Refund question')).toBeInTheDocument();
+    expect(screen.getByText('Refund answer')).toBeInTheDocument();
+  });
+
+  it('hides only an empty contact when another is populated', () => {
+    render(<Faq data={{ contacts: { phone: '', email: mockFaqData.contacts.email } }} />);
+
+    expect(screen.queryByTestId('Faq-phoneLink')).not.toBeInTheDocument();
+    expect(screen.getByTestId('Faq-emailLink')).toBeInTheDocument();
+  });
 });

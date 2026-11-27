@@ -7,6 +7,7 @@ import OfferCollaborationForm from '~/components/forms/offer-collaboration-form/
 
 import { styles } from './ContactsInfo.styles';
 
+import { hasContactValue } from '~/lib/utils/contactValue';
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
 import FooterSocialMedia, { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
 
@@ -16,8 +17,8 @@ interface IContactInfoProps {
   description?: string;
   formTitle?: string;
   contacts: {
-    phone: string;
-    email: string;
+    phone?: string | null;
+    email?: string | null;
   };
   socialLinks: LinkIcon[];
 }
@@ -31,6 +32,8 @@ export default function ContactsInfo({
   socialLinks
 }: Readonly<IContactInfoProps>) {
   const t = useTranslations('contactsInfoPage');
+  const hasPhone = hasContactValue(contacts.phone);
+  const hasEmail = hasContactValue(contacts.email);
 
   return (
     <Box sx={styles.root} data-testid="ContactsInfo">
@@ -50,34 +53,42 @@ export default function ContactsInfo({
               {description}
             </Typography>
           )}
-          <Box sx={styles.contactsDetails}>
-            <Box sx={styles.contacts} data-testid="ContactsInfo-phoneSection">
-              <ContactLink
-                type="phone"
-                label={t('phoneNumber')}
-                value={contacts.phone}
-                direction="column"
-                valueSx={styles.contactLabel}
-                data-testid="ContactsInfo-phoneLink"
-              />
+          {(hasPhone || hasEmail) && (
+            <Box sx={styles.contactsDetails}>
+              {hasPhone && (
+                <Box sx={styles.contacts} data-testid="ContactsInfo-phoneSection">
+                  <ContactLink
+                    type="phone"
+                    label={t('phoneNumber')}
+                    value={contacts.phone!}
+                    direction="column"
+                    valueSx={styles.contactLabel}
+                    data-testid="ContactsInfo-phoneLink"
+                  />
+                </Box>
+              )}
+              {hasEmail && (
+                <Box sx={styles.contacts} data-testid="ContactsInfo-emailSection">
+                  <ContactLink
+                    type="email"
+                    label={t('email')}
+                    value={contacts.email!}
+                    direction="column"
+                    valueSx={styles.contactLabel}
+                    data-testid="ContactsInfo-emailLink"
+                  />
+                </Box>
+              )}
             </Box>
-            <Box sx={styles.contacts} data-testid="ContactsInfo-emailSection">
-              <ContactLink
-                type="email"
-                label={t('email')}
-                value={contacts.email}
-                direction="column"
-                valueSx={styles.contactLabel}
-                data-testid="ContactsInfo-emailLink"
-              />
+          )}
+          {socialLinks.length > 0 && (
+            <Box sx={styles.socialMediaWrapper} data-testid="ContactsInfo-socialMediaSection">
+              <Typography variant="subtitle1" component="p" data-testid="ContactsInfo-socialMediaLabel">
+                {t('socialMedia')}:
+              </Typography>
+              <FooterSocialMedia media={socialLinks} />
             </Box>
-          </Box>
-          <Box sx={styles.socialMediaWrapper} data-testid="ContactsInfo-socialMediaSection">
-            <Typography variant="subtitle1" component="p" data-testid="ContactsInfo-socialMediaLabel">
-              {t('socialMedia')}:
-            </Typography>
-            <FooterSocialMedia media={socialLinks} />
-          </Box>
+          )}
         </Box>
         <OfferCollaborationForm
           sx={styles.formWrapper}

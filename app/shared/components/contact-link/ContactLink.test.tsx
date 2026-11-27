@@ -59,17 +59,17 @@ describe('ContactLink component', () => {
   it('should render phone link with tel: on mobile', () => {
     mockedUseBreakpoints.mockReturnValue({ isMobile: true });
 
-    render(<ContactLink type="phone" value="+380123456789" useNativeLink={true} />);
+    render(<ContactLink type="phone" value="+380671234567" useNativeLink={true} />);
 
-    const link = screen.getByText('+380123456789');
-    expect(link).toHaveAttribute('href', 'tel:+380123456789');
+    const link = screen.getByText('+38 067 123 4567');
+    expect(link).toHaveAttribute('href', 'tel:+380671234567');
   });
 
   it('should render phone value on desktop', () => {
     render(<ContactLink type="phone" value="+380123456789" />);
     const copyLink = screen.getByTestId('mock-copy-link');
     expect(copyLink).toBeInTheDocument();
-    expect(copyLink).toHaveTextContent('+380123456789');
+    expect(copyLink).toHaveTextContent('+38 012 345 6789');
   });
 
   it('should render icon when provided', () => {
@@ -117,7 +117,7 @@ describe('ContactLink component', () => {
   it('should cover the execution of preventDefault when clicking a disabled native link', () => {
     render(<ContactLink type="phone" value="+380123456789" useNativeLink={true} disabled={true} />);
 
-    const link = screen.getByText('+380123456789');
+    const link = screen.getByText('+38 012 345 6789');
 
     const mockPreventDefault = jest.fn();
     const customEvent = createEvent.click(link);

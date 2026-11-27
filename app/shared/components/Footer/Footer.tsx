@@ -15,6 +15,7 @@ import FooterContactAndSupport from './FooterContactAndSupport/FooterContactAndS
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 
 import { createRequestContainer } from '~/di/container';
+import { hasContactValue } from '~/lib/utils/contactValue';
 import { mapFooterNavigation } from '~/lib/utils/footerNavigationMapper';
 import { ROUTES } from '~/shared/components/constants/routes';
 
@@ -32,6 +33,7 @@ export default async function Footer() {
     navigation?.[1]?.links?.find((link: { label: string; href: string }) => link.href === ROUTES.CONTACTS)?.href ?? '';
 
   const enhancedNavigation = await mapFooterNavigation(navigation);
+  const hasContactInfo = Object.values(contacts).some(hasContactValue);
 
   return (
     <Box component="footer" sx={styles.footerContainer} id="footer">
@@ -46,15 +48,17 @@ export default async function Footer() {
           <Logo variant="footer" />
         </Box>
 
-        <Box sx={styles.contactInfoWrapper}>
-          <FooterContactInfo
-            alertMsg={tFooter('phoneCopiedAlert')}
-            contacts={contacts}
-            labels={{
-              phoneLabel: tFooter('phoneLabel')
-            }}
-          />
-        </Box>
+        {hasContactInfo && (
+          <Box sx={styles.contactInfoWrapper}>
+            <FooterContactInfo
+              alertMsg={tFooter('phoneCopiedAlert')}
+              contacts={contacts}
+              labels={{
+                phoneLabel: tFooter('phoneLabel')
+              }}
+            />
+          </Box>
+        )}
 
         <Box sx={styles.contactAndSupportWrapper}>
           <FooterContactAndSupport
@@ -70,9 +74,11 @@ export default async function Footer() {
           />
         </Box>
 
-        <Box sx={styles.socialWrapper}>
-          <FooterSocialMedia media={socialLinks} />
-        </Box>
+        {socialLinks.length > 0 && (
+          <Box sx={styles.socialWrapper} data-testid="Footer-socialMediaContainer">
+            <FooterSocialMedia media={socialLinks} />
+          </Box>
+        )}
 
         <Box sx={styles.navigationWrapper}>
           <FooterNavigation sections={enhancedNavigation} />

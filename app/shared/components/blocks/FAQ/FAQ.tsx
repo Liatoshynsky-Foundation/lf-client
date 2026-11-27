@@ -15,19 +15,22 @@ import { styles } from './FAQ.styles';
 import { CardSafety } from './FAQCardSafety';
 import { WaysToDonate } from './FAQWaysToDonate';
 
+import { hasContactValue } from '~/lib/utils/contactValue';
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone.svg';
 import { commonSx } from '~/shared/styles/commonSx';
 
 type FaqProps = {
   contacts: {
-    phone: string;
-    email: string;
+    phone?: string | null;
+    email?: string | null;
   };
 };
 
 export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.Element => {
   const { contacts } = data;
+  const hasPhone = hasContactValue(contacts.phone);
+  const hasEmail = hasContactValue(contacts.email);
 
   const t = useTranslations('supportUs.faq');
 
@@ -51,28 +54,34 @@ export const Faq = ({ data }: { readonly data: Readonly<FaqProps> }): React.JSX.
         gridColumn={{ xs: '2/4 ', sm: '4 / -1', md: '6 / -1' }}
         dataTestId="Faq-titleContainer"
       />
-      <Box sx={styles.contacts}>
-        <Typography sx={styles.typography} data-testid="Faq-question">
-          {t('subtitle.question')}
-        </Typography>
-        <Typography sx={styles.typography} data-testid="Faq-answer">
-          {t('subtitle.answer')}
-        </Typography>
-        <Box sx={styles.contactsList}>
-          <Box sx={styles.contactsItem}>
-            <ContactLink
-              type="phone"
-              icon={PhoneIcon}
-              value={contacts.phone}
-              alertMsg={t('phoneCopiedAlert')}
-              dataTestid="Faq-phoneLink"
-            />
-          </Box>
-          <Box sx={styles.contactsItem}>
-            <ContactLink type="email" icon={MailIcon} value={contacts.email} dataTestid="Faq-emailLink" />
+      {(hasPhone || hasEmail) && (
+        <Box sx={styles.contacts}>
+          <Typography sx={styles.typography} data-testid="Faq-question">
+            {t('subtitle.question')}
+          </Typography>
+          <Typography sx={styles.typography} data-testid="Faq-answer">
+            {t('subtitle.answer')}
+          </Typography>
+          <Box sx={styles.contactsList}>
+            {hasPhone && (
+              <Box sx={styles.contactsItem}>
+                <ContactLink
+                  type="phone"
+                  icon={PhoneIcon}
+                  value={contacts.phone!}
+                  alertMsg={t('phoneCopiedAlert')}
+                  dataTestid="Faq-phoneLink"
+                />
+              </Box>
+            )}
+            {hasEmail && (
+              <Box sx={styles.contactsItem}>
+                <ContactLink type="email" icon={MailIcon} value={contacts.email!} dataTestid="Faq-emailLink" />
+              </Box>
+            )}
           </Box>
         </Box>
-      </Box>
+      )}
       <Box sx={styles.faq}>
         {faqItemKeys.map((itemKey) => {
           const content = getFaqItemContent(itemKey);

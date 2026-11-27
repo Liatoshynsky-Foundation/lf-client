@@ -23,16 +23,20 @@ export const createFooterService = ({ navigationRepo, foundationInfoRepo }: Foot
       navigationRepo.getFooterNavigation()
     ]);
 
-    const addressInfo = LocalizeSchema(contactInfoSchema, locale).parse(contactInfo);
-    const brandingInfo = LocalizeSchema(NoSupportButtonLink(brandingInfoSchema), locale).parse(brandingInfoRaw);
+    const addressInfo = LocalizeSchema(contactInfoSchema, locale, { allowEmptyFields: ['address'] }).parse(
+      contactInfo
+    ) as { email?: string; phone?: string; address?: string };
+    const brandingInfo = LocalizeSchema(NoSupportButtonLink(brandingInfoSchema), locale, {
+      allowEmptyFields: ['foundationName']
+    }).parse(brandingInfoRaw) as { foundationName?: string };
     const publicInfo = LocalizeSchema(publicInfoSchema, locale).parse(publicInfoRaw);
     const navigationData = ArraySchema(LocalizeSchema(navigationSchema, locale)).parse(navigationRaw);
 
     return {
       contacts: {
         foundationName: brandingInfo.foundationName,
-        email: contactInfo.email,
-        phone: contactInfo.phone,
+        email: addressInfo.email,
+        phone: addressInfo.phone,
         address: addressInfo.address
       },
       socialLinks: contactInfo.socialLinks ?? [],
