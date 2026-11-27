@@ -39,11 +39,13 @@ export type LinkIcon = {
   link: string;
 };
 
+export type ContactValue = string | null | undefined;
+
 export type contactsData = {
-  foundationName: string;
-  address: string;
-  phone: string;
-  email: string;
+  foundationName?: ContactValue;
+  address?: ContactValue;
+  phone?: ContactValue;
+  email?: ContactValue;
 };
 
 export type Cookies = {

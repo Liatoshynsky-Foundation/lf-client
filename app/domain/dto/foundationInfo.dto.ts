@@ -9,7 +9,7 @@ export type ContactInfoDTO = {
   }[];
 };
 export type FoundationNameDTO = {
-  foundationName: string;
+  foundationName?: string;
 };
 
 export type SupportButtonLinkDTO = {

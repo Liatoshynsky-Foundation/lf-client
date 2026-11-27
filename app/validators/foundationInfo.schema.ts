@@ -2,15 +2,32 @@ import { z } from 'zod';
 
 import { hrefSchema, translatedFieldSchema, translatedLinkSchema } from './constants';
 
+const normalizeOptionalContactValue = (value: unknown) =>
+  value === null || (typeof value === 'string' && !value.trim()) ? undefined : value;
+
+const optionalContactStringSchema = z.preprocess(normalizeOptionalContactValue, z.string().optional());
+const optionalEmailSchema = z.preprocess(normalizeOptionalContactValue, z.string().email().optional());
+
+const optionalTranslatedContactFieldSchema = z.preprocess(
+  (value) => (value === null ? undefined : value),
+  z
+    .object({
+      uk: optionalContactStringSchema,
+      en: optionalContactStringSchema
+    })
+    .transform(({ uk, en }) => ({ uk, en }))
+    .optional()
+);
+
 export const brandingInfoSchema = z.object({
-  foundationName: translatedFieldSchema,
+  foundationName: optionalTranslatedContactFieldSchema,
   supportButtonLink: hrefSchema.optional()
 });
 
 export const contactInfoSchema = z.object({
-  email: z.string().email().optional(),
-  phone: z.string().optional(),
-  address: translatedFieldSchema,
+  email: optionalEmailSchema,
+  phone: optionalContactStringSchema,
+  address: optionalTranslatedContactFieldSchema,
   socialLinks: z
     .array(
       z.object({

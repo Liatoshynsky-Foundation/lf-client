@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { styles } from './NavContactsSection.styles';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
+import { hasContactValue } from '~/lib/utils/contactValue';
 import MailIcon from '~/public/icons/mail.svg';
 import PhoneIcon from '~/public/icons/phone-call.svg';
 import { ContactLink } from '~/shared/components/contact-link/ContactLink';
@@ -18,54 +19,64 @@ interface ContactsSectionProps {
 
 export const ContactsSection = ({ contacts, socialLinks, isMobile }: ContactsSectionProps) => {
   const t = useTranslations('contactsInfoPage');
+  const hasPhone = hasContactValue(contacts.phone);
+  const hasEmail = hasContactValue(contacts.email);
 
   return (
     <>
       {isMobile && <LanguageSwitcher variant="mobile" data-testid="ContactsSection-languageSwitcher" />}
 
-      <Box data-testid="ContactsSection-links" sx={styles.links}>
-        <Box sx={styles.contactLink}>
-          <ContactLink
-            data-testid="ContactsSection-phoneLink"
-            type="phone"
-            label={isMobile ? undefined : t('phoneNumber')}
-            value={contacts.phone}
-            direction={isMobile ? 'row' : 'column'}
-            icon={isMobile ? PhoneIcon : undefined}
-            iconSx={styles.icon}
-            labelSx={styles.contactLabel}
-            copyLinkSize="small"
-            iconColor="rgba(65, 43, 33, 0.8)"
+      {(hasPhone || hasEmail) && (
+        <Box data-testid="ContactsSection-links" sx={styles.links}>
+          {hasPhone && (
+            <Box sx={styles.contactLink}>
+              <ContactLink
+                data-testid="ContactsSection-phoneLink"
+                type="phone"
+                label={isMobile ? undefined : t('phoneNumber')}
+                value={contacts.phone!}
+                direction={isMobile ? 'row' : 'column'}
+                icon={isMobile ? PhoneIcon : undefined}
+                iconSx={styles.icon}
+                labelSx={styles.contactLabel}
+                copyLinkSize="small"
+                iconColor="rgba(65, 43, 33, 0.8)"
+              />
+            </Box>
+          )}
+
+          {hasEmail && (
+            <Box sx={styles.contactLink}>
+              <ContactLink
+                data-testid="ContactsSection-emailLink"
+                type="email"
+                label={isMobile ? undefined : t('email')}
+                value={contacts.email!}
+                direction={isMobile ? 'row' : 'column'}
+                icon={isMobile ? MailIcon : undefined}
+                iconSx={styles.icon}
+                labelSx={styles.contactLabel}
+                copyLinkSize="small"
+                iconColor="rgba(65, 43, 33, 0.8)"
+              />
+            </Box>
+          )}
+        </Box>
+      )}
+
+      {socialLinks.length > 0 && (
+        <Box data-testid="ContactsSection-socialMedia" sx={styles.socialMediaBox}>
+          <Typography data-testid="ContactsSection-socialMedia-title" sx={styles.mediaTitles}>
+            {t('socialMedia')}:
+          </Typography>
+
+          <FooterSocialMedia
+            data-testid="ContactsSection-socialMedia-list"
+            media={socialLinks}
+            containerSx={{ gap: { xs: '18px', sm: '14px', md: '16px' } }}
           />
         </Box>
-
-        <Box sx={styles.contactLink}>
-          <ContactLink
-            data-testid="ContactsSection-emailLink"
-            type="email"
-            label={isMobile ? undefined : t('email')}
-            value={contacts.email}
-            direction={isMobile ? 'row' : 'column'}
-            icon={isMobile ? MailIcon : undefined}
-            iconSx={styles.icon}
-            labelSx={styles.contactLabel}
-            copyLinkSize="small"
-            iconColor="rgba(65, 43, 33, 0.8)"
-          />
-        </Box>
-      </Box>
-
-      <Box data-testid="ContactsSection-socialMedia" sx={styles.socialMediaBox}>
-        <Typography data-testid="ContactsSection-socialMedia-title" sx={styles.mediaTitles}>
-          {t('socialMedia')}:
-        </Typography>
-
-        <FooterSocialMedia
-          data-testid="ContactsSection-socialMedia-list"
-          media={socialLinks}
-          containerSx={{ gap: { xs: '18px', sm: '14px', md: '16px' } }}
-        />
-      </Box>
+      )}
     </>
   );
 };

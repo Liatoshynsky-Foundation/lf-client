@@ -18,6 +18,16 @@ type ContactLinkDirection = 'row' | 'column';
 type ContactIconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 type IconSize = keyof typeof iconSizes;
 
+function formatPhoneForDisplay(value: string) {
+  const digits = value.replace(/\D/g, '');
+
+  if (!digits.startsWith('380') || digits.length !== 12) {
+    return value;
+  }
+
+  return `+38 ${digits.slice(2, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}`;
+}
+
 interface ContactLinkProps {
   type: ContactLinkType;
   value: string;
@@ -57,6 +67,7 @@ export const ContactLink = ({
 
   const hasLabelOutside = !!label && !isMobile;
 
+  const displayValue = type === 'phone' ? formatPhoneForDisplay(value) : value;
   const href = type === 'phone' ? `tel:${value.replace(/\s+/g, '')}` : `mailto:${value}`;
 
   return (
@@ -104,11 +115,11 @@ export const ContactLink = ({
                 if (disabled) e.preventDefault();
               }}
             >
-              {value}
+              {displayValue}
             </Typography>
           ) : (
             <CopyLink
-              value={value}
+              value={displayValue}
               hrefType={type}
               size={copyLinkSize}
               hint={alertMsg}

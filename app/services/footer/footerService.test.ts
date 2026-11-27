@@ -2,9 +2,33 @@ import type { Locale } from 'next-intl';
 
 import { createFooterService } from './footerService';
 
+import type { FoundationInfoRepository } from '~/infrastructure/repositories/foundation-info/foundationInfo.repo';
+import type { NavigationRepository } from '~/infrastructure/repositories/navigation/navigation.repo';
 import { ROUTES } from '~/shared/components/constants/routes';
 
 describe('footerService (composed)', () => {
+  type LocalizedRawValue = {
+    uk?: string | null;
+    en?: string | null;
+  };
+
+  type RawContactInfo = {
+    email?: string | null;
+    phone?: string | null;
+    address?: LocalizedRawValue | null;
+    socialLinks?:
+      | {
+          platform: string;
+          link: string;
+          icon: string;
+        }[]
+      | null;
+  };
+
+  type RawBrandingInfo = {
+    foundationName?: LocalizedRawValue | null;
+  };
+
   const mockContactInfo = {
     email: 'test@example.com',
     phone: '+380123456789',
@@ -64,8 +88,8 @@ describe('footerService (composed)', () => {
   };
 
   const foundationInfoServiceMock = {
-    getContactInfo: jest.fn().mockResolvedValue(mockContactInfo),
-    getBrandingInfo: jest.fn().mockResolvedValue(mockBrandingInfoRaw),
+    getContactInfo: jest.fn<Promise<RawContactInfo>, []>().mockResolvedValue(mockContactInfo),
+    getBrandingInfo: jest.fn<Promise<RawBrandingInfo>, []>().mockResolvedValue(mockBrandingInfoRaw),
     getSupportButtonLink: jest.fn().mockResolvedValue(mockSupportButtonData),
     getPublicInfo: jest.fn().mockResolvedValue(mockPublicInfoRaw)
   };
@@ -77,8 +101,8 @@ describe('footerService (composed)', () => {
   };
 
   const footerService = createFooterService({
-    foundationInfoRepo: foundationInfoServiceMock as unknown as any,
-    navigationRepo: navigationServiceMock as unknown as any
+    foundationInfoRepo: foundationInfoServiceMock as unknown as FoundationInfoRepository,
+    navigationRepo: navigationServiceMock as unknown as NavigationRepository
   });
 
   afterEach(() => {
@@ -120,6 +144,70 @@ describe('footerService (composed)', () => {
     expect(foundationInfoServiceMock.getSupportButtonLink).toHaveBeenCalled();
     expect(foundationInfoServiceMock.getPublicInfo).toHaveBeenCalled();
     expect(navigationServiceMock.getFooterNavigation).toHaveBeenCalled();
+  });
+
+  it('should treat null and whitespace-only contacts as empty without using another locale', async () => {
+    const contactInfo = {
+      ...mockContactInfo,
+      email: null,
+      phone: ' \t ',
+      address: { uk: 'Українська адреса', en: '  ' }
+    };
+    const brandingInfo = {
+      foundationName: { uk: 'Українська назва', en: '  ' }
+    };
+    foundationInfoServiceMock.getContactInfo.mockResolvedValueOnce(contactInfo);
+    foundationInfoServiceMock.getBrandingInfo.mockResolvedValueOnce(brandingInfo);
+
+    const englishResult = await footerService.getFooterData('en' as Locale);
+
+    expect(englishResult.contacts).toEqual({
+      foundationName: undefined,
+      email: undefined,
+      phone: undefined,
+      address: undefined
+    });
+
+    foundationInfoServiceMock.getContactInfo.mockResolvedValueOnce(contactInfo);
+    foundationInfoServiceMock.getBrandingInfo.mockResolvedValueOnce(brandingInfo);
+    const ukrainianResult = await footerService.getFooterData('uk' as Locale);
+
+    expect(ukrainianResult.contacts.foundationName).toBe('Українська назва');
+    expect(ukrainianResult.contacts.address).toBe('Українська адреса');
+  });
+
+  it('should accept missing localized contact fields', async () => {
+    foundationInfoServiceMock.getContactInfo.mockResolvedValueOnce({
+      ...mockContactInfo,
+      phone: undefined,
+      email: undefined,
+      address: undefined
+    });
+    foundationInfoServiceMock.getBrandingInfo.mockResolvedValueOnce({ foundationName: undefined });
+
+    const result = await footerService.getFooterData('uk' as Locale);
+
+    expect(result.contacts).toEqual({
+      foundationName: undefined,
+      email: undefined,
+      phone: undefined,
+      address: undefined
+    });
+  });
+
+  it('should hide localized contact fields when the current language value is missing', async () => {
+    foundationInfoServiceMock.getContactInfo.mockResolvedValueOnce({
+      ...mockContactInfo,
+      address: { uk: 'Українська адреса' }
+    });
+    foundationInfoServiceMock.getBrandingInfo.mockResolvedValueOnce({
+      foundationName: { uk: 'Українська назва' }
+    });
+
+    const result = await footerService.getFooterData('en' as Locale);
+
+    expect(result.contacts.foundationName).toBeUndefined();
+    expect(result.contacts.address).toBeUndefined();
   });
 
   it('should return empty socialLinks if not provided', async () => {

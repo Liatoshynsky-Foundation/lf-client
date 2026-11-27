@@ -2,9 +2,13 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import React, { JSX } from 'react';
 
+import type OfferCollaborationForm from '~/components/forms/offer-collaboration-form/OfferCollaborationForm';
+
 import ContactsInfo from './ContactsInfo';
 
 import type { LinkIcon } from '~/shared/components/Footer/footer-social-media/FooterSocialMedia';
+
+type MockOfferCollaborationFormProps = React.ComponentProps<typeof OfferCollaborationForm>;
 
 jest.mock('~/components/colored-svg/ColoredSvg', () => ({
   Svg: ({ Component, ...props }: { Component: React.ComponentType }) => <Component {...props} />
@@ -31,7 +35,7 @@ jest.mock('~/shared/components/forms/contact-form/ContactForm', () => ({
 
 jest.mock('~/components/forms/offer-collaboration-form/OfferCollaborationForm', () => ({
   __esModule: true,
-  default: ({ formTitle, formSubtitle, sx }: any) => (
+  default: ({ formTitle, formSubtitle, sx }: MockOfferCollaborationFormProps) => (
     <div data-testid="OfferCollaborationForm" data-sx={JSON.stringify(sx)}>
       <h5>{formTitle}</h5>
       <div>{formSubtitle}</div>
@@ -128,5 +132,22 @@ describe('ContactsInfo', () => {
     render(<ContactsInfo contacts={contacts} socialLinks={socialLinks} />);
     expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 5, name: 'Contact form' })).toBeInTheDocument();
+  });
+
+  it('hides empty contact fields while keeping the form and social media visible', () => {
+    render(<ContactsInfo contacts={{ phone: '  ', email: null }} socialLinks={socialLinks} />);
+
+    expect(screen.queryByTestId('ContactsInfo-phoneSection')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('ContactsInfo-emailSection')).not.toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
+    expect(screen.getByTestId('ContactsInfo-socialMediaSection')).toBeInTheDocument();
+  });
+
+  it('omits empty social media while keeping unrelated contact page content', () => {
+    render(<ContactsInfo contacts={{ phone: '', email: null }} socialLinks={[]} />);
+
+    expect(screen.queryByTestId('ContactsInfo-socialMediaSection')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('ContactsInfo-socialMediaLabel')).not.toBeInTheDocument();
+    expect(screen.getByTestId('OfferCollaborationForm')).toBeInTheDocument();
   });
 });

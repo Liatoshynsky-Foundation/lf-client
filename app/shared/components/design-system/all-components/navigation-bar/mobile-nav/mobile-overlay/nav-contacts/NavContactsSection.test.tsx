@@ -4,6 +4,16 @@ import { render, screen } from '@testing-library/react';
 import { ContactsSection } from './NavContactsSection';
 import { contactsData, LinkIcon } from '~/types/types/common.types';
 
+type MockContactLinkProps = {
+  type: 'phone' | 'email';
+  label?: string;
+  value: string;
+};
+
+type MockFooterSocialMediaProps = {
+  media: LinkIcon[];
+};
+
 jest.mock('~/shared/components/design-system/all-components/language-switcher/LanguageSwitcher', () => ({
   __esModule: true,
   default: ({ variant }: { variant: string }) => (
@@ -13,21 +23,21 @@ jest.mock('~/shared/components/design-system/all-components/language-switcher/La
 
 jest.mock('~/shared/components/contact-link/ContactLink', () => ({
   __esModule: true,
-  ContactLink: (props: any) => (
-    <div data-testid={`mock-contact-${props.type}`}>
-      {props.label && <span>{props.label}</span>}
-      <span>{props.value}</span>
+  ContactLink: ({ type, label, value }: MockContactLinkProps) => (
+    <div data-testid={`mock-contact-${type}`}>
+      {label && <span>{label}</span>}
+      <span>{value}</span>
     </div>
   )
 }));
 
 jest.mock('~/shared/components/Footer/footer-social-media/FooterSocialMedia', () => ({
   __esModule: true,
-  default: ({ media }: { media: any[] }) => (
+  default: ({ media }: MockFooterSocialMediaProps) => (
     <div data-testid="mock-footer-social-media">
-      {media.map((m) => (
-        <a key={m.link} href={m.link}>
-          {m.icon}
+      {media.map(({ link, icon }) => (
+        <a key={link} href={link}>
+          {icon}
         </a>
       ))}
     </div>
@@ -59,8 +69,8 @@ const socialLinks: LinkIcon[] = [
 describe('ContactsSection', () => {
   test('should render phone and email links', () => {
     render(<ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile={false} />);
-    expect(screen.getByTestId('mock-contact-phone')).toHaveTextContent(contacts.phone);
-    expect(screen.getByTestId('mock-contact-email')).toHaveTextContent(contacts.email);
+    expect(screen.getByTestId('mock-contact-phone')).toHaveTextContent(contacts.phone!);
+    expect(screen.getByTestId('mock-contact-email')).toHaveTextContent(contacts.email!);
   });
 
   test('should render labels in desktop mode', () => {
@@ -71,7 +81,7 @@ describe('ContactsSection', () => {
 
   test('should not render labels in mobile mode', () => {
     render(<ContactsSection contacts={contacts} socialLinks={socialLinks} isMobile />);
-    expect(screen.getByTestId('mock-contact-phone')).toHaveTextContent(contacts.phone);
+    expect(screen.getByTestId('mock-contact-phone')).toHaveTextContent(contacts.phone!);
     expect(screen.queryByText(/Phone number/i)).not.toBeInTheDocument();
   });
 
@@ -82,6 +92,28 @@ describe('ContactsSection', () => {
     expect(links[0]).toHaveAttribute('href', 'https://instagram.com');
     expect(links[1]).toHaveAttribute('href', 'https://facebook.com');
     expect(screen.getByText(/We are on social media/i)).toBeInTheDocument();
+  });
+
+  test('hides empty contacts while keeping social media visible', () => {
+    render(
+      <ContactsSection
+        contacts={{ ...contacts, phone: null, email: ' \t ' }}
+        socialLinks={socialLinks}
+        isMobile={false}
+      />
+    );
+
+    expect(screen.queryByTestId('ContactsSection-links')).not.toBeInTheDocument();
+    expect(screen.getByTestId('ContactsSection-socialMedia')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-footer-social-media')).toBeInTheDocument();
+  });
+
+  test('omits the social media container and label when there are no links', () => {
+    render(<ContactsSection contacts={{ phone: '', email: null }} socialLinks={[]} isMobile={false} />);
+
+    expect(screen.queryByTestId('ContactsSection-links')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('ContactsSection-socialMedia')).not.toBeInTheDocument();
+    expect(screen.queryByText(/We are on social media/i)).not.toBeInTheDocument();
   });
 
   test('should render language switcher only on mobile', () => {
