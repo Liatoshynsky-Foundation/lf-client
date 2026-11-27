@@ -39,13 +39,17 @@ const renderMarks = (text: string, marks: JSONContent['marks'] = []): React.Reac
     }
   }, text);
 
-const renderChildren = (node: JSONContent): React.ReactNode =>
-  node.content?.map((child, index) => <React.Fragment key={index}>{renderNode(child)}</React.Fragment>);
+const renderChildren = (node: JSONContent, path: string): React.ReactNode =>
+  node.content?.map((child, position) => {
+    const childPath = `${path}.${position}`;
 
-const renderNode = (node: JSONContent): React.ReactNode => {
+    return <React.Fragment key={childPath}>{renderNode(child, childPath)}</React.Fragment>;
+  });
+
+const renderNode = (node: JSONContent, path: string): React.ReactNode => {
   switch (node.type) {
     case 'doc':
-      return renderChildren(node);
+      return renderChildren(node, path);
     case 'text':
       return renderMarks(node.text ?? '', node.marks);
     case 'hardBreak':
@@ -53,25 +57,25 @@ const renderNode = (node: JSONContent): React.ReactNode => {
     case 'paragraph':
       return (
         <Typography component="p" variant="customSemiBold20" sx={styles.paragraph}>
-          {renderChildren(node)}
+          {renderChildren(node, path)}
         </Typography>
       );
     case 'table':
       return (
         <Box component="table" sx={styles.table}>
-          <tbody>{renderChildren(node)}</tbody>
+          <tbody>{renderChildren(node, path)}</tbody>
         </Box>
       );
     case 'tableRow':
       return (
         <Box component="tr" sx={styles.row}>
-          {renderChildren(node)}
+          {renderChildren(node, path)}
         </Box>
       );
     case 'tableHeader':
       return (
         <Box component="th" scope="row" sx={styles.label}>
-          {renderChildren(node)}
+          {renderChildren(node, path)}
         </Box>
       );
     case 'tableCell': {
@@ -86,14 +90,14 @@ const renderNode = (node: JSONContent): React.ReactNode => {
       );
     }
     default:
-      return renderChildren(node);
+      return renderChildren(node, path);
   }
 };
 
 function PaymentDetailsContent({ content }: PaymentDetailsContentProps) {
   return (
     <Box sx={styles.content} data-testid="PaymentDetailsContent">
-      {renderNode(content)}
+      {renderNode(content, 'doc')}
     </Box>
   );
 }
