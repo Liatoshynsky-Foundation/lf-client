@@ -104,12 +104,22 @@ describe('newsRepository', () => {
 
       const result = await newsRepository.getNewsBySlug('test-news-slug');
 
-      expect(NewsModel.findOne).toHaveBeenCalledWith({ slug: 'test-news-slug' });
+      expect(NewsModel.findOne).toHaveBeenCalledWith({ slug: 'test-news-slug', status: NewsStatus.Published });
 
       if (!result) throw new Error('Result is null');
 
       expect(result._id).toBe(validNewsData._id);
       expect(result.slug).toBe(validNewsData.slug);
+    });
+
+    it('should query without status filter when includeUnpublished is true', async () => {
+      const hiddenNews = { ...validNewsData, status: NewsStatus.Hidden };
+      (NewsModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(hiddenNews));
+
+      const result = await newsRepository.getNewsBySlug('test-news-slug', true);
+
+      expect(NewsModel.findOne).toHaveBeenCalledWith({ slug: 'test-news-slug' });
+      expect(result).toEqual(hiddenNews);
     });
 
     it('should return single news without validation if it contains invalid fields', async () => {

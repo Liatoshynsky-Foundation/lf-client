@@ -14,10 +14,11 @@ const newsRepository = {
     return news ?? [];
   },
 
-  async getNewsBySlug(slug: string) {
+  async getNewsBySlug(slug: string, includeUnpublished = false) {
     await dbConnect();
 
-    return await NewsModel.findOne({ slug }).lean();
+    const filter = includeUnpublished ? { slug } : { slug, status: NewsStatus.Published };
+    return await NewsModel.findOne(filter).lean();
   }
 };
 

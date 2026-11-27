@@ -137,7 +137,7 @@ describe('newsService', () => {
       expect(result).not.toBeNull();
       expect(result?.title).toBe('Заголовок');
       expect(result?.content).toHaveProperty('type', 'doc');
-      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('news-1');
+      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('news-1', false);
     });
 
     it('should return null if news is not found', async () => {
@@ -164,7 +164,15 @@ describe('newsService', () => {
 
       await newsService.getNewsBySlug('specific-slug', locale);
 
-      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('specific-slug');
+      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('specific-slug', false);
+    });
+
+    it('should forward includeUnpublished flag to repository', async () => {
+      newsRepositoryMock.getNewsBySlug.mockResolvedValue(null);
+
+      await newsService.getNewsBySlug('draft-slug', locale, true);
+
+      expect(newsRepositoryMock.getNewsBySlug).toHaveBeenCalledWith('draft-slug', true);
     });
 
     it('should return null and log error if repository or parsing throws error (catch block coverage)', async () => {

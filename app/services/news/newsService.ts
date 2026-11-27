@@ -37,9 +37,9 @@ export const createNewsService = ({ newsRepository }: NewsServiceDeps) => ({
     }
   },
 
-  async getNewsBySlug(slug: string, locale: Locale) {
+  async getNewsBySlug(slug: string, locale: Locale, includeUnpublished = false) {
     try {
-      const news = await newsRepository.getNewsBySlug(slug);
+      const news = await newsRepository.getNewsBySlug(slug, includeUnpublished);
       if (!news) return null;
 
       return LocalizeSchema(newsSchema, locale).parse(news);
