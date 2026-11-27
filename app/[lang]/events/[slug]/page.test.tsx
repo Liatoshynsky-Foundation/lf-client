@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import type { ArticleDetailProps } from '~/components/blocks/article-detail/ArticleDetail';
@@ -11,6 +12,10 @@ import { formatIsoDateToDdMmYy, parseIsoDate } from '~/lib/utils/parseIsoDate';
 const mockGetEventBySlug = jest.fn();
 
 let capturedArticleDetailProps: ArticleDetailProps | undefined;
+
+jest.mock('next/headers', () => ({
+  draftMode: jest.fn()
+}));
 
 jest.mock('next/navigation', () => ({
   notFound: jest.fn(() => {
@@ -48,6 +53,7 @@ jest.mock('~/components/blocks/article-detail/ArticleDetail', () => ({
   }
 }));
 
+const mockedDraftMode = draftMode as jest.Mock;
 const mockedNotFound = notFound as unknown as jest.Mock;
 const mockedCreateSeoMeta = createSeoMeta as unknown as jest.Mock;
 const mockedFormatDate = formatIsoDateToDdMmYy as jest.Mock;
@@ -75,6 +81,7 @@ describe('generateMetadata', () => {
   beforeEach(() => {
     mockGetEventBySlug.mockReset();
     mockedCreateSeoMeta.mockClear();
+    mockedDraftMode.mockResolvedValue({ isEnabled: false });
   });
 
   it('returns full metadata when event is found', async () => {
@@ -84,7 +91,7 @@ describe('generateMetadata', () => {
       params: Promise.resolve({ lang: 'uk', slug: 'test-slug' })
     });
 
-    expect(mockGetEventBySlug).toHaveBeenCalledWith('test-slug', 'uk');
+    expect(mockGetEventBySlug).toHaveBeenCalledWith('test-slug', 'uk', false);
     expect(mockedCreateSeoMeta).toHaveBeenCalledWith({
       title: mockEvent.title,
       description: mockEvent.description,
@@ -112,6 +119,17 @@ describe('generateMetadata', () => {
     });
     expect(metadata).toEqual(expect.objectContaining({ title: 'Event not found' }));
   });
+
+  it('includes unpublished event when draftMode is enabled', async () => {
+    mockedDraftMode.mockResolvedValue({ isEnabled: true });
+    mockGetEventBySlug.mockResolvedValue(mockEvent);
+
+    await generateMetadata({
+      params: Promise.resolve({ lang: 'uk', slug: 'hidden-event' })
+    });
+
+    expect(mockGetEventBySlug).toHaveBeenCalledWith('hidden-event', 'uk', true);
+  });
 });
 
 describe('EventDetailPage', () => {
@@ -120,6 +138,7 @@ describe('EventDetailPage', () => {
     mockedNotFound.mockClear();
     mockedFormatDate.mockReset();
     mockedParseIsoDate.mockReset();
+    mockedDraftMode.mockResolvedValue({ isEnabled: false });
     capturedArticleDetailProps = undefined;
 
     const { getLocale } = jest.requireMock('next-intl/server');
@@ -187,7 +206,19 @@ describe('EventDetailPage', () => {
 
     await EventDetailPage({ params: Promise.resolve({ lang: 'uk', slug: 'test-slug' }) });
 
-    expect(mockGetEventBySlug).toHaveBeenCalledWith('test-slug', 'uk');
+    expect(mockGetEventBySlug).toHaveBeenCalledWith('test-slug', 'uk', false);
+  });
+
+  it('passes includeUnpublished=true when draftMode is enabled for admin preview', async () => {
+    mockedDraftMode.mockResolvedValue({ isEnabled: true });
+    mockGetEventBySlug.mockResolvedValue(mockEvent);
+    mockedFormatDate.mockReturnValue('27.11.26');
+
+    const jsx = await EventDetailPage({ params: Promise.resolve({ lang: 'uk', slug: 'hidden-event' }) });
+    render(jsx);
+
+    expect(mockGetEventBySlug).toHaveBeenCalledWith('hidden-event', 'uk', true);
+    expect(screen.getByTestId('ArticleDetail')).toBeInTheDocument();
   });
 
   it('provides registrationBlock when eventDateTimeStart is set without registerUrl', async () => {
@@ -280,6 +311,7 @@ describe('EventRegistrationBlock', () => {
     mockGetEventBySlug.mockReset();
     mockedFormatDate.mockReset();
     mockedParseIsoDate.mockReset();
+    mockedDraftMode.mockResolvedValue({ isEnabled: false });
     capturedArticleDetailProps = undefined;
 
     const { getLocale } = jest.requireMock('next-intl/server');

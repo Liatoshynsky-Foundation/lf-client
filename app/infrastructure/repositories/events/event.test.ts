@@ -81,16 +81,30 @@ describe('eventRepository', () => {
   });
 
   describe('getEventBySlug', () => {
-    it('should query by slug', async () => {
+    it('should query published event by slug by default', async () => {
       (EventModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(validEventData));
 
       const result = await eventRepository.getEventBySlug('test-event-slug');
 
       expect(dbConnect).toHaveBeenCalled();
       expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'test-event-slug'
+        slug: 'test-event-slug',
+        status: EventStatus.Published
       });
       expect(result).toEqual(validEventData);
+    });
+
+    it('should query without status filter when includeUnpublished is true', async () => {
+      const hiddenEvent = { ...validEventData, status: EventStatus.Hidden };
+      (EventModel.findOne as jest.Mock).mockReturnValue(mockMongooseChain(hiddenEvent));
+
+      const result = await eventRepository.getEventBySlug('test-event-slug', true);
+
+      expect(dbConnect).toHaveBeenCalled();
+      expect(EventModel.findOne).toHaveBeenCalledWith({
+        slug: 'test-event-slug'
+      });
+      expect(result).toEqual(hiddenEvent);
     });
   });
 });

@@ -17,10 +17,11 @@ const eventRepository = {
     return events ?? [];
   },
 
-  async getEventBySlug(slug: string) {
+  async getEventBySlug(slug: string, includeUnpublished = false) {
     await dbConnect();
 
-    return EventModel.findOne({ slug }).lean();
+    const filter = includeUnpublished ? { slug } : { slug, status: EventStatus.Published };
+    return EventModel.findOne(filter).lean();
   }
 };
 

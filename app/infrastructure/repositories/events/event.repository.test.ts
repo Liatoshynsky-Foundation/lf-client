@@ -82,9 +82,27 @@ describe('eventRepository', () => {
 
       expect(dbConnect).toHaveBeenCalledTimes(1);
       expect(EventModel.findOne).toHaveBeenCalledWith({
-        slug: 'target-slug'
+        slug: 'target-slug',
+        status: EventStatus.Published
       });
       expect(result).toEqual(mockEvent);
+    });
+
+    it('should query without status filter when includeUnpublished is true', async () => {
+      const mockHiddenEvent = { _id: '123', slug: 'target-slug', status: EventStatus.Hidden, title: 'Target' };
+      const mockLean = jest.fn().mockResolvedValue(mockHiddenEvent);
+
+      (EventModel.findOne as jest.Mock).mockReturnValue({
+        lean: mockLean
+      });
+
+      const result = await repository.getEventBySlug('target-slug', true);
+
+      expect(dbConnect).toHaveBeenCalledTimes(1);
+      expect(EventModel.findOne).toHaveBeenCalledWith({
+        slug: 'target-slug'
+      });
+      expect(result).toEqual(mockHiddenEvent);
     });
 
     it('should return null if no event matches the slug', async () => {

@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import type { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Locale } from 'next-intl';
@@ -94,9 +95,10 @@ export async function generateMetadata({ params }: Readonly<EventDetailPageProps
   const { lang, slug } = await params;
   setRequestLocale(lang);
 
+  const { isEnabled: isDraftMode } = await draftMode();
   const container = createRequestContainer();
   const eventService = container.resolve('eventService');
-  const event = await eventService.getEventBySlug(slug, lang);
+  const event = await eventService.getEventBySlug(slug, lang, isDraftMode);
 
   if (!event) {
     return createSeoMeta({
@@ -121,10 +123,11 @@ export async function generateMetadata({ params }: Readonly<EventDetailPageProps
 export default async function EventDetailPage({ params }: Readonly<EventDetailPageProps>) {
   const { lang, slug } = await params;
   setRequestLocale(lang);
+  const { isEnabled: isDraftMode } = await draftMode();
   const container = createRequestContainer();
   const eventService = container.resolve('eventService');
 
-  const event = await eventService.getEventBySlug(slug, lang);
+  const event = await eventService.getEventBySlug(slug, lang, isDraftMode);
 
   if (!event) notFound();
 
