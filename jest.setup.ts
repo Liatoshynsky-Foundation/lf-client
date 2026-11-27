@@ -60,6 +60,10 @@ jest.mock('next-intl/routing', () => ({
   defineRouting: (config: Record<string, unknown>) => config
 }));
 
+jest.mock('next/headers', () => ({
+  draftMode: jest.fn().mockResolvedValue({ isEnabled: false })
+}));
+
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn().mockResolvedValue((key: string) => key),
   setRequestLocale: jest.fn().mockResolvedValue(() => undefined)

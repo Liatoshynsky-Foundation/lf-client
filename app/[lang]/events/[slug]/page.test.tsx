@@ -13,10 +13,6 @@ const mockGetEventBySlug = jest.fn();
 
 let capturedArticleDetailProps: ArticleDetailProps | undefined;
 
-jest.mock('next/headers', () => ({
-  draftMode: jest.fn()
-}));
-
 jest.mock('next/navigation', () => ({
   notFound: jest.fn(() => {
     throw new Error('NOT_FOUND');
