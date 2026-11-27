@@ -38,9 +38,9 @@ export const createEventService = ({ eventRepository }: EventServiceDeps) => ({
     }
   },
 
-  async getEventBySlug(slug: string, locale: Locale) {
+  async getEventBySlug(slug: string, locale: Locale, includeUnpublished = false) {
     try {
-      const event = await eventRepository.getEventBySlug(slug);
+      const event = await eventRepository.getEventBySlug(slug, includeUnpublished);
       if (!event) return null;
 
       return LocalizeSchema(eventSchema, locale).parse(event);

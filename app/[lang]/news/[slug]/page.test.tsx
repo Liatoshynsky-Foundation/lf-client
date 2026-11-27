@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import type { ArticleDetailProps } from '~/components/blocks/article-detail/ArticleDetail';
@@ -49,6 +50,7 @@ jest.mock('~/components/blocks/article-detail/ArticleDetail', () => ({
   }
 }));
 
+const mockedDraftMode = draftMode as jest.Mock;
 const mockedNotFound = notFound as unknown as jest.Mock;
 const mockedCreateSeoMeta = createSeoMeta as unknown as jest.Mock;
 const mockedFormatDate = formatIsoDateToDdMmYy as jest.Mock;
@@ -74,6 +76,7 @@ describe('generateMetadata', () => {
   beforeEach(() => {
     mockGetNewsBySlug.mockReset();
     mockedCreateSeoMeta.mockClear();
+    mockedDraftMode.mockResolvedValue({ isEnabled: false });
   });
 
   it('returns full metadata when news is found', async () => {
@@ -83,7 +86,7 @@ describe('generateMetadata', () => {
       params: Promise.resolve({ lang: 'uk', slug: 'test-slug' })
     });
 
-    expect(mockGetNewsBySlug).toHaveBeenCalledWith('test-slug', 'uk');
+    expect(mockGetNewsBySlug).toHaveBeenCalledWith('test-slug', 'uk', false);
     expect(mockedCreateSeoMeta).toHaveBeenCalledWith({
       title: mockNews.title,
       description: mockNews.description,
@@ -108,7 +111,7 @@ describe('generateMetadata', () => {
       params: Promise.resolve({ lang: 'uk', slug: 'missing-slug' })
     });
 
-    expect(mockGetNewsBySlug).toHaveBeenCalledWith('missing-slug', 'uk');
+    expect(mockGetNewsBySlug).toHaveBeenCalledWith('missing-slug', 'uk', false);
     expect(mockedCreateSeoMeta).toHaveBeenCalledWith({
       title: 'News not found',
       description: '',
@@ -122,6 +125,17 @@ describe('generateMetadata', () => {
       })
     );
   });
+
+  it('includes unpublished news when draftMode is enabled', async () => {
+    mockedDraftMode.mockResolvedValue({ isEnabled: true });
+    mockGetNewsBySlug.mockResolvedValue(mockNews);
+
+    await generateMetadata({
+      params: Promise.resolve({ lang: 'uk', slug: 'hidden-slug' })
+    });
+
+    expect(mockGetNewsBySlug).toHaveBeenCalledWith('hidden-slug', 'uk', true);
+  });
 });
 
 describe('NewsDetailPage', () => {
@@ -129,6 +143,7 @@ describe('NewsDetailPage', () => {
     mockGetNewsBySlug.mockReset();
     mockedNotFound.mockClear();
     mockedFormatDate.mockReset();
+    mockedDraftMode.mockResolvedValue({ isEnabled: false });
     capturedArticleDetailProps = undefined;
     articleDetailCallCount = 0;
 
@@ -206,6 +221,21 @@ describe('NewsDetailPage', () => {
       params: Promise.resolve({ lang: 'en', slug: 'test-slug' })
     });
 
-    expect(mockGetNewsBySlug).toHaveBeenCalledWith('test-slug', 'en');
+    expect(mockGetNewsBySlug).toHaveBeenCalledWith('test-slug', 'en', false);
+  });
+
+  it('passes includeUnpublished=true when draftMode is enabled for admin preview', async () => {
+    mockedDraftMode.mockResolvedValue({ isEnabled: true });
+    mockGetNewsBySlug.mockResolvedValue(mockNews);
+    mockedFormatDate.mockReturnValue('27.11.26');
+
+    const jsx = await NewsDetailPage({
+      params: Promise.resolve({ lang: 'uk', slug: 'hidden-slug' })
+    });
+
+    render(jsx);
+
+    expect(mockGetNewsBySlug).toHaveBeenCalledWith('hidden-slug', 'uk', true);
+    expect(screen.getByTestId('ArticleDetail')).toBeInTheDocument();
   });
 });

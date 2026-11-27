@@ -138,7 +138,7 @@ describe('eventService', () => {
       const result = await eventService.getEventBySlug('missing-slug', locale);
 
       expect(result).toBeNull();
-      expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('missing-slug');
+      expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('missing-slug', false);
     });
 
     it('returns localized event for uk locale', async () => {
@@ -208,7 +208,15 @@ describe('eventService', () => {
 
       await eventService.getEventBySlug('specific-slug', locale);
 
-      expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('specific-slug');
+      expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('specific-slug', false);
+    });
+
+    it('forwards includeUnpublished flag to repository', async () => {
+      eventRepositoryMock.getEventBySlug.mockResolvedValue(null);
+
+      await eventService.getEventBySlug('draft-slug', locale, true);
+
+      expect(eventRepositoryMock.getEventBySlug).toHaveBeenCalledWith('draft-slug', true);
     });
 
     it('returns null and logs an error when repository throws', async () => {

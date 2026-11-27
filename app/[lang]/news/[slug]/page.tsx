@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import type { Locale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -17,9 +18,10 @@ export async function generateMetadata({ params }: Readonly<NewsDetailPageProps>
   const { lang, slug } = await params;
   setRequestLocale(lang);
 
+  const { isEnabled: isDraftMode } = await draftMode();
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
-  const news = await newsService.getNewsBySlug(slug, lang);
+  const news = await newsService.getNewsBySlug(slug, lang, isDraftMode);
 
   if (!news) {
     return createSeoMeta({
@@ -45,10 +47,11 @@ export default async function NewsDetailPage({ params }: Readonly<NewsDetailPage
   const { lang, slug } = await params;
   setRequestLocale(lang);
 
+  const { isEnabled: isDraftMode } = await draftMode();
   const container = createRequestContainer();
   const newsService = container.resolve('newsService');
 
-  const news = await newsService.getNewsBySlug(slug, lang);
+  const news = await newsService.getNewsBySlug(slug, lang, isDraftMode);
 
   if (!news) notFound();
 
